@@ -22,6 +22,9 @@ class LocalStorageUtility{
     var userBridgeStatusePostedAt = [String : [NSDate]]()
     var userBridgeTypes = [String : [String]]()
     
+    func SagarXime(){
+        
+    }
     func getBridgePairings(friendIds:[String]) {
         let noOfFriends = friendIds.count
         getFriendsInfo(friendIds)
