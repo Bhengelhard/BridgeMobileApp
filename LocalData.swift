@@ -8,7 +8,7 @@
 
 import Foundation
 class LocalData {
-    
+    // comment 
     var username:String? = nil
     var friendlist: [String]? = nil
     var mainProfilePicture: NSData? = nil
