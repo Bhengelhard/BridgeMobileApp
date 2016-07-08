@@ -1,0 +1,493 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1B0E053E1D1A597C00FEF514 /* MessagesTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */; };
+		1B4A11F71D1C4547002FB859 /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */; };
+		1B4A11FD1D1C5F56002FB859 /* NewMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */; };
+		1B4A11FF1D1C8A67002FB859 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B4A11FE1D1C8A67002FB859 /* camera.png */; };
+		1B4A12011D1C8C94002FB859 /* camera_icon_small.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1B4A12001D1C8C94002FB859 /* camera_icon_small.jpg */; };
+		1B82A0841D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */; };
+		1B915A971D25E5DB004E0E8E /* blue_dot_small.gif in Resources */ = {isa = PBXBuildFile; fileRef = 1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */; };
+		1BA782271D11FE47000B0B3C /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA782261D11FE47000B0B3C /* LocalData.swift */; };
+		1BC1C53A1D2C20EF009BF004 /* BridgeNewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1C5391D2C20EF009BF004 /* BridgeNewViewController.swift */; };
+		1BE5C1EB1D06010600D6AA81 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */; };
+		1BE5C1EF1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1ED1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework */; };
+		1BE5C1F21D06024400D6AA81 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F01D06024400D6AA81 /* FBSDKCoreKit.framework */; };
+		1BE5C1F31D06024400D6AA81 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F11D06024400D6AA81 /* FBSDKLoginKit.framework */; };
+		1BE5C1F61D060CAF00D6AA81 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F41D060CAF00D6AA81 /* Bolts.framework */; };
+		1BE5C1F71D060CAF00D6AA81 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F51D060CAF00D6AA81 /* Parse.framework */; };
+		1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */; };
+		1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */; };
+		1BE888D71D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */; };
+		1BF5A6C31D1FAB1800EE6B95 /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */; };
+		1BF5A6C51D2174DF00EE6B95 /* NewBridgeStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */; };
+		1BF5A6C71D231B7C00EE6B95 /* iconCancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */; };
+		1BF692CA1D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692C81D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld */; };
+		1BF692D31D09E1950030B6D0 /* Users+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D11D09E1950030B6D0 /* Users+CoreDataProperties.swift */; };
+		1BF692D41D09E1950030B6D0 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D21D09E1950030B6D0 /* Users.swift */; };
+		1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D71D09E32B0030B6D0 /* DataController.swift */; };
+		1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DA1D0B13E400F79E00 /* UserInfo.swift */; };
+		1BF998DD1D0B158E00F79E00 /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DC1D0B158E00F79E00 /* PairInfo.swift */; };
+		1BF998DF1D0B315F00F79E00 /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */; };
+		1BFDE4E31D174E1300D91C6F /* bridgeVector.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1BFDE4E21D174E1300D91C6F /* bridgeVector.jpg */; };
+		814C3ACB1B69877600E307BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814C3AC81B69877600E307BB /* Images.xcassets */; };
+		81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81761A49E0D500E65899 /* libsqlite3.dylib */; };
+		81BA81791A49E0DB00E65899 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81781A49E0DB00E65899 /* AudioToolbox.framework */; };
+		81BA817B1A49E0E500E65899 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */; };
+		81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */; };
+		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
+		CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */; };
+		CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829461CAA26D900DC86C9 /* ViewController.swift */; };
+		CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */; };
+		CB6A329B1CC996F400FADB13 /* BentonSans-Light copy.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */; };
+		CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */; };
+		CB6A329F1CE260CB00FADB13 /* login_with_facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = CB6A329E1CE260CB00FADB13 /* login_with_facebook.png */; };
+		CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */; };
+		CBEFCD671CE35DB900695B15 /* suzy's_profile_picture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */; };
+		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
+		CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD761CEDED9600695B15 /* Main.storyboard */; };
+		CBEFCD7D1CEF93BA00695B15 /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD7C1CEF93BA00695B15 /* ProfileTableViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableCell.swift; sourceTree = SOURCE_ROOT; };
+		1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageViewController.swift; sourceTree = SOURCE_ROOT; };
+		1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
+		1B4A11FE1D1C8A67002FB859 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = Resources/camera.png; sourceTree = SOURCE_ROOT; };
+		1B4A12001D1C8C94002FB859 /* camera_icon_small.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = camera_icon_small.jpg; sourceTree = "<group>"; };
+		1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen-shot-2012-04-26-at-10-40-51-am.png"; sourceTree = "<group>"; };
+		1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = blue_dot_small.gif; sourceTree = "<group>"; };
+		1BA782261D11FE47000B0B3C /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalData.swift; sourceTree = "<group>"; };
+		1BC1C5391D2C20EF009BF004 /* BridgeNewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeNewViewController.swift; sourceTree = SOURCE_ROOT; };
+		1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
+		1BE5C1ED1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
+		1BE5C1F01D06024400D6AA81 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		1BE5C1F11D06024400D6AA81 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		1BE5C1F41D060CAF00D6AA81 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		1BE5C1F51D060CAF00D6AA81 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageUtility.swift; sourceTree = "<group>"; };
+		1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = SOURCE_ROOT; };
+		1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Editing-Rectangle-Stroked-icon.png"; sourceTree = "<group>"; };
+		1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = Resources/TransitionManager.swift; sourceTree = SOURCE_ROOT; };
+		1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewBridgeStatusViewController.swift; path = Resources/NewBridgeStatusViewController.swift; sourceTree = SOURCE_ROOT; };
+		1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconCancel.png; sourceTree = "<group>"; };
+		1BF692C91D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyBridgeAppDataModel.xcdatamodel; sourceTree = "<group>"; };
+		1BF692D11D09E1950030B6D0 /* Users+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Users+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1BF692D21D09E1950030B6D0 /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
+		1BF692D71D09E32B0030B6D0 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = MyBridgeApp/DataController.swift; sourceTree = SOURCE_ROOT; };
+		1BF998DA1D0B13E400F79E00 /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		1BF998DC1D0B158E00F79E00 /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PairInfo.swift; sourceTree = "<group>"; };
+		1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoPair.swift; sourceTree = "<group>"; };
+		1BFDE4E21D174E1300D91C6F /* bridgeVector.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridgeVector.jpg; sourceTree = "<group>"; };
+		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		814C3AC91B69877600E307BB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81BA81451A49DA1800E65899 /* MyBridgeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyBridgeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		81BA81761A49E0D500E65899 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		81BA81781A49E0DB00E65899 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
+		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
+		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
+		CB5829461CAA26D900DC86C9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MyBridgeApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
+		CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleMessageViewController.swift; path = MyBridgeApp/SingleMessageViewController.swift; sourceTree = SOURCE_ROOT; };
+		CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light copy.otf"; sourceTree = "<group>"; };
+		CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadPageViewController.swift; path = MyBridgeApp/LoadPageViewController.swift; sourceTree = SOURCE_ROOT; };
+		CB6A329E1CE260CB00FADB13 /* login_with_facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = login_with_facebook.png; path = Images.xcassets/login_with_facebook.png; sourceTree = "<group>"; };
+		CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MyBridgeApp/MessagesViewController.swift; sourceTree = SOURCE_ROOT; };
+		CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "suzy's_profile_picture.jpg"; path = "Images.xcassets/suzy's_profile_picture.jpg"; sourceTree = "<group>"; };
+		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		CBEFCD761CEDED9600695B15 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
+		CBEFCD7C1CEF93BA00695B15 /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = MyBridgeApp/ProfileTableViewController.swift; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		81BA81421A49DA1800E65899 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BE5C1EB1D06010600D6AA81 /* ParseUI.framework in Frameworks */,
+				1BE5C1F31D06024400D6AA81 /* FBSDKLoginKit.framework in Frameworks */,
+				1BE5C1F71D060CAF00D6AA81 /* Parse.framework in Frameworks */,
+				81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */,
+				81BA817B1A49E0E500E65899 /* SystemConfiguration.framework in Frameworks */,
+				81BA81791A49E0DB00E65899 /* AudioToolbox.framework in Frameworks */,
+				81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */,
+				1BE5C1F21D06024400D6AA81 /* FBSDKCoreKit.framework in Frameworks */,
+				1BE5C1EF1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework in Frameworks */,
+				1BE5C1F61D060CAF00D6AA81 /* Bolts.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		814C3AC51B69877600E307BB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */,
+				1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */,
+				1B4A12001D1C8C94002FB859 /* camera_icon_small.jpg */,
+				1B4A11FE1D1C8A67002FB859 /* camera.png */,
+				1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */,
+				1BFDE4E21D174E1300D91C6F /* bridgeVector.jpg */,
+				1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */,
+				CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */,
+				CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */,
+				CB6A329E1CE260CB00FADB13 /* login_with_facebook.png */,
+				814C3AC81B69877600E307BB /* Images.xcassets */,
+				814C3AC91B69877600E307BB /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		81BA813C1A49DA1800E65899 = {
+			isa = PBXGroup;
+			children = (
+				1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */,
+				1BA782261D11FE47000B0B3C /* LocalData.swift */,
+				1BF998DA1D0B13E400F79E00 /* UserInfo.swift */,
+				1BF998DC1D0B158E00F79E00 /* PairInfo.swift */,
+				1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */,
+				1BF692D11D09E1950030B6D0 /* Users+CoreDataProperties.swift */,
+				1BF692D21D09E1950030B6D0 /* Users.swift */,
+				1BF692C81D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld */,
+				81BA81471A49DA1800E65899 /* MyBridgeApp */,
+				814C3AC51B69877600E307BB /* Resources */,
+				81BA816A1A49DB5600E65899 /* Frameworks */,
+				81BA81461A49DA1800E65899 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		81BA81461A49DA1800E65899 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				81BA81451A49DA1800E65899 /* MyBridgeApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		81BA81471A49DA1800E65899 /* MyBridgeApp */ = {
+			isa = PBXGroup;
+			children = (
+				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
+				1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */,
+				CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */,
+				CB5829461CAA26D900DC86C9 /* ViewController.swift */,
+				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
+				1BC1C5391D2C20EF009BF004 /* BridgeNewViewController.swift */,
+				1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */,
+				1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */,
+				1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */,
+				1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */,
+				CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */,
+				1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */,
+				CBEFCD7C1CEF93BA00695B15 /* ProfileTableViewController.swift */,
+				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
+				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
+				1BF692D71D09E32B0030B6D0 /* DataController.swift */,
+				CBEFCD761CEDED9600695B15 /* Main.storyboard */,
+			);
+			name = MyBridgeApp;
+			path = ParseStarterProject;
+			sourceTree = "<group>";
+		};
+		81BA816A1A49DB5600E65899 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1BE5C1F41D060CAF00D6AA81 /* Bolts.framework */,
+				1BE5C1F51D060CAF00D6AA81 /* Parse.framework */,
+				1BE5C1F01D06024400D6AA81 /* FBSDKCoreKit.framework */,
+				1BE5C1F11D06024400D6AA81 /* FBSDKLoginKit.framework */,
+				1BE5C1ED1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework */,
+				1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */,
+				81BA81751A49E0C500E65899 /* System Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		81BA81751A49E0C500E65899 /* System Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */,
+				81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */,
+				81BA81781A49E0DB00E65899 /* AudioToolbox.framework */,
+				81BA81761A49E0D500E65899 /* libsqlite3.dylib */,
+			);
+			name = "System Frameworks";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		81BA81441A49DA1800E65899 /* MyBridgeApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81BA81641A49DA1800E65899 /* Build configuration list for PBXNativeTarget "MyBridgeApp" */;
+			buildPhases = (
+				81BA81411A49DA1800E65899 /* Sources */,
+				81BA81421A49DA1800E65899 /* Frameworks */,
+				81BA81431A49DA1800E65899 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyBridgeApp;
+			productName = ParseStarterProject;
+			productReference = 81BA81451A49DA1800E65899 /* MyBridgeApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		81BA813D1A49DA1800E65899 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = Parse;
+				TargetAttributes = {
+					81BA81441A49DA1800E65899 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 81BA81401A49DA1800E65899 /* Build configuration list for PBXProject "MyBridgeApp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 81BA813C1A49DA1800E65899;
+			productRefGroup = 81BA81461A49DA1800E65899 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				81BA81441A49DA1800E65899 /* MyBridgeApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		81BA81431A49DA1800E65899 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */,
+				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
+				1BFDE4E31D174E1300D91C6F /* bridgeVector.jpg in Resources */,
+				1BE888D71D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png in Resources */,
+				1B915A971D25E5DB004E0E8E /* blue_dot_small.gif in Resources */,
+				1B4A11FF1D1C8A67002FB859 /* camera.png in Resources */,
+				CB6A329B1CC996F400FADB13 /* BentonSans-Light copy.otf in Resources */,
+				CBEFCD671CE35DB900695B15 /* suzy's_profile_picture.jpg in Resources */,
+				1B4A12011D1C8C94002FB859 /* camera_icon_small.jpg in Resources */,
+				1B82A0841D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png in Resources */,
+				CB6A329F1CE260CB00FADB13 /* login_with_facebook.png in Resources */,
+				1BF5A6C71D231B7C00EE6B95 /* iconCancel.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		81BA81411A49DA1800E65899 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B4A11FD1D1C5F56002FB859 /* NewMessageTableCell.swift in Sources */,
+				1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */,
+				CBEFCD7D1CEF93BA00695B15 /* ProfileTableViewController.swift in Sources */,
+				1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */,
+				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
+				1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */,
+				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
+				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
+				1B4A11F71D1C4547002FB859 /* NewMessageViewController.swift in Sources */,
+				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
+				1BF5A6C31D1FAB1800EE6B95 /* TransitionManager.swift in Sources */,
+				1BF692D31D09E1950030B6D0 /* Users+CoreDataProperties.swift in Sources */,
+				1BF5A6C51D2174DF00EE6B95 /* NewBridgeStatusViewController.swift in Sources */,
+				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
+				1BF692CA1D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
+				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
+				1B0E053E1D1A597C00FEF514 /* MessagesTableCell.swift in Sources */,
+				CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */,
+				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
+				1BF692D41D09E1950030B6D0 /* Users.swift in Sources */,
+				1BF998DD1D0B158E00F79E00 /* PairInfo.swift in Sources */,
+				1BF998DF1D0B315F00F79E00 /* UserInfoPair.swift in Sources */,
+				1BC1C53A1D2C20EF009BF004 /* BridgeNewViewController.swift in Sources */,
+				1BA782271D11FE47000B0B3C /* LocalData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		81BA81621A49DA1800E65899 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		81BA81631A49DA1800E65899 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		81BA81651A49DA1800E65899 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					/Users/BHEngelhard/Desktop/ParseSDK,
+					/Users/BHEngelhard/Desktop/FacebookSDK,
+				);
+				INFOPLIST_FILE = Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Blake.myBridgeApp;
+				PRODUCT_NAME = MyBridgeApp;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		81BA81661A49DA1800E65899 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					/Users/BHEngelhard/Desktop/ParseSDK,
+					/Users/BHEngelhard/Desktop/FacebookSDK,
+				);
+				INFOPLIST_FILE = Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Blake.myBridgeApp;
+				PRODUCT_NAME = MyBridgeApp;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		81BA81401A49DA1800E65899 /* Build configuration list for PBXProject "MyBridgeApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81BA81621A49DA1800E65899 /* Debug */,
+				81BA81631A49DA1800E65899 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81BA81641A49DA1800E65899 /* Build configuration list for PBXNativeTarget "MyBridgeApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81BA81651A49DA1800E65899 /* Debug */,
+				81BA81661A49DA1800E65899 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1BF692C81D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1BF692C91D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodel */,
+			);
+			currentVersion = 1BF692C91D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodel */;
+			path = MyBridgeAppDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 81BA813D1A49DA1800E65899 /* Project object */;
+}
