@@ -21,9 +21,73 @@ class LocalStorageUtility{
     var userBridgeStatuses = [String : [String]]()
     var userBridgeStatusePostedAt = [String : [NSDate]]()
     var userBridgeTypes = [String : [String]]()
-    
-    func SagarXime(){
-        
+    var objectsDownloaded = 0
+    var totalObjects = 0
+    var result = true
+    func ifNotFriends(friend1:String, friend2:String) -> Bool{
+        var result = true
+        if userFriendList[friend1] != nil {
+            if userFriendList[friend1]!.contains(friend2){
+                result = false
+            }
+        }
+        if userFriendList[friend2] != nil {
+            if userFriendList[friend2]!.contains(friend1){
+                result = false
+            }
+        }
+        return result
+    }
+    func ifHaveCommonInterest(friend1:String, friend2:String) -> Bool {
+        var businessInterest = false
+        var loveInterest = false
+        var friendshipInterest = false
+        if userBusinessInterest[friend1] != nil && userBusinessInterest[friend2] != nil {
+            if userBusinessInterest[friend1]! && userBusinessInterest[friend2]! {
+                businessInterest = true
+            }
+        }
+        if userLoveInterest[friend1] != nil && userLoveInterest[friend2] != nil {
+            if userLoveInterest[friend1]! && userLoveInterest[friend2]! {
+                loveInterest = true
+            }
+        }
+        if userFriendshipInterest[friend1] != nil && userFriendshipInterest[friend2] != nil {
+            if userFriendshipInterest[friend1]! && userFriendshipInterest[friend2]! {
+                friendshipInterest = true
+            }
+        }
+        return (businessInterest || loveInterest || friendshipInterest)
+
+    }
+    func runBridgeAlgorithm(friendList:[String]){
+        var ignoredPairings = [[String]]()
+        if let builtBridges = PFUser.currentUser()?["built_bridges"] {
+            let builtBridges2 = builtBridges as! [[String]]
+            ignoredPairings = ignoredPairings + builtBridges2
+        }
+        if let rejectedBridges = PFUser.currentUser()?["rejected_bridges"] {
+            let rejectedBridges2 = rejectedBridges as! [[String]]
+            ignoredPairings = ignoredPairings + rejectedBridges2
+        }
+        var friendPairings =  [[String]]()
+        for friend1 in friendList {
+            for friend2 in friendList {
+                let containedInIgnoredPairings = ignoredPairings.contains {$0 == [friend1, friend2]} || ignoredPairings.contains {$0 == [friend2, friend1]}
+                
+                let PreviouslyDisplayedUser = friendPairings.contains {$0 == [friend1, friend2]} || friendPairings.contains {$0 == [friend2, friend1]}
+                
+                
+                if PreviouslyDisplayedUser == false && friend1 != friend2 &&
+                    containedInIgnoredPairings == false  {
+                    if !userFriendList[friend1]!.contains(friend2) && !userFriendList[friend2]!.contains(friend1) && ifNotFriends(friend1,friend2: friend2) && ifHaveCommonInterest(friend1,friend2: friend2){
+                        
+                    }
+                }
+                
+            }
+            
+        }
     }
     func getBridgePairings(friendIds:[String]) {
         let noOfFriends = friendIds.count
@@ -33,6 +97,7 @@ class LocalStorageUtility{
                 self.userBridgeStatuses.count < noOfFriends {
                 
             }
+            self.runBridgeAlgorithm(friendIds)
             
         }
     }
@@ -460,7 +525,7 @@ class LocalStorageUtility{
                     bridge_status = ob as? String
                 }
                 
-                user = PairInfo(name:name, mainProfilePicture: main_profile_picture, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId )
+                user = PairInfo(name:name, mainProfilePicture: main_profile_picture, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil )
             }
         }
         catch {
@@ -557,8 +622,9 @@ class LocalStorageUtility{
         }
     }
     
-//    func getBridgePairings(){
-//        var ignoredPairings = [[String]]()
+    func getBridgePairings(){
+        getBridgePairingsFromCloud()
+//             var ignoredPairings = [[String]]()
 //        
 //        if let builtBridges = PFUser.currentUser()?["built_bridges"] {
 //            let builtBridges2 = builtBridges as! [[String]]
@@ -572,6 +638,17 @@ class LocalStorageUtility{
 //        var friendPairings =  [[String]]()
 //        
 //        if let friendList = PFUser.currentUser()?["friend_list"] as? [String] {
+//            print("ratings")
+//            PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
+//                (response: AnyObject?, error: NSError?) -> Void in
+//                if let ratings = response as? String {
+//                    print(ratings)
+//                }
+//                else {
+//                    print(error)
+//                }
+//            }
+//
 //            var pairings = [UserInfoPair]()
 //            for friend1 in friendList {
 //                if friendPairings.count >= 10 {
@@ -604,6 +681,187 @@ class LocalStorageUtility{
 //            localData.setPairings(pairings)
 //            localData.synchronize()
 //        }
-//        
-//    }
+        
+    }
+    func waitForCardsToBeDownloaded() -> Bool {
+        
+//        print("totalObjects == objectsDownloaded \(totalObjects) == \(objectsDownloaded)")
+//        if objectsDownloaded > 0 && totalObjects == objectsDownloaded {
+//            result = false
+//        }
+        return result
+    }
+    func getBridgePairingsFromCloud(){
+        if let _ = PFUser.currentUser()?.objectId {
+        let query = PFQuery(className:"BridgePairings")
+        query.whereKey("user_objectIds", equalTo:(PFUser.currentUser()?.objectId)!)
+//        let err = NSErrorPointer()
+//        totalObjects =  query.countObjects(err)
+        print("totalObjects \(totalObjects)")
+           do {
+                let results = try query.findObjects()
+           // query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+                                //if let results = results {
+                                    print("Hi")
+                                    var pairings = [UserInfoPair]()
+                                    for result in results {
+                                        var user1:PairInfo? = nil
+                                        var user2:PairInfo? = nil
+                                        var name1:String? = nil
+                                        var name2:String? = nil
+                                        if let ob = result["user1_name"] {
+                                            name1 = ob as? String
+                
+                                        }
+                                        if let ob = result["user2_name"] {
+                                            name2 = ob as? String
+                                        }
+                                        print("name2 - \(name2)")
+                                        var location1:[Double]? = nil
+                                        var location2:[Double]? = nil
+                                        if let ob = result["user_locations"] as? [PFGeoPoint]{
+                                            location1 = [ob[0].latitude, ob[0].longitude]
+                                            location2 = [ob[1].latitude, ob[1].longitude]
+                                        }
+                                        print("location1 - \(location2)")
+                                        var profilePicture1:NSData? = nil
+                                        var profilePicture2:NSData? = nil
+//                                        if let ob = result["user1_profile_picture"] {
+//                                            profilePicture1 = try ob.getData()
+//                                        }
+//                                        if let ob = result["user2_profile_picture"] {
+//                                            profilePicture2 = try ob.getData()
+//                                        }
+//                                        if let ob = result["user1_profile_picture"] {
+//                                            do {
+//                                                profilePicture1 = try ob.getData()
+//                                            }
+//                                            catch {
+//                                                print("Photo not downloaded")
+//                                            }
+//                                        }
+//                                        if let ob = result["user2_profile_picture"] {
+//                                            do {
+//                                                profilePicture2 = try ob.getData()
+//                                            }
+//                                            catch {
+//                                                print("Photo not downloaded")
+//                                            }
+//                                            
+//                                        }
+//                                        if let ob = result["user2_profile_picture"] {
+//                                            profilePicture2 =  ob as? PFFile
+//                                        }
+                
+                                        var bridgeStatus1:String? = nil
+                                        var bridgeStatus2:String? = nil
+                                        if let ob = result["user1_bridge_status"] {
+                                            bridgeStatus1 =  ob as? String
+                                        }
+                                        if let ob = result["user2_bridge_status"] {
+                                            bridgeStatus2 =  ob as? String
+                                        }
+                
+                
+                                        var bridgeType1:String? = nil
+                                        var bridgeType2:String? = nil
+                                        if let ob = result["bridge_type"] {
+                                            bridgeType1 =  ob as? String
+                                            bridgeType2 =  ob as? String
+                                        }
+                
+                
+                                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: nil,  bridgeType: bridgeType1)
+                                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: nil,  bridgeType: bridgeType2)
+                                        let userInfoPair = UserInfoPair(user1: user1, user2: user2)
+                                        pairings.append(userInfoPair)
+                                        
+                                    }
+                                    let localData = LocalData()
+                                    localData.setPairings(pairings)
+                                    localData.synchronize()
+                
+            
+            }
+            catch {
+                
+            }
+//        query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+//            if error == nil {
+//                print("Hi")
+//                if let results = results {
+//                    print("Hi")
+//                    var pairings = [UserInfoPair]()
+//                    for result in results {
+//                        var user1:PairInfo? = nil
+//                        var user2:PairInfo? = nil
+//                        var name1:String? = nil
+//                        var name2:String? = nil
+//                        if let ob = result["user1_name"] {
+//                            name1 = ob as? String
+//                            
+//                        }
+//                        if let ob = result["user2_name"] {
+//                            name2 = ob as? String
+//                        }
+//                        print("name1 - \(name1)")
+//                        var location1:[Double]? = nil
+//                        var location2:[Double]? = nil
+//                        if let ob = result["user_locations"] as? [PFGeoPoint]{
+//                            location1 = [ob[0].latitude, ob[0].longitude]
+//                            location2 = [ob[1].latitude, ob[1].longitude]
+//                        }
+//                        print("location1 - \(location1)")
+//                        var profilePicture1:PFFile? = nil
+//                        var profilePicture2:PFFile? = nil
+//                        if let ob = result["user1_profile_picture"] {
+//                            profilePicture1 =  ob as? PFFile
+//                        }
+//                        if let ob = result["user2_profile_picture"] {
+//                            profilePicture2 =  ob as? PFFile
+//                        }
+//                        
+//                        var bridgeStatus1:String? = nil
+//                        var bridgeStatus2:String? = nil
+//                        if let ob = result["user1_bridge_status"] {
+//                            bridgeStatus1 =  ob as? String
+//                        }
+//                        if let ob = result["user2_bridge_status"] {
+//                            bridgeStatus2 =  ob as? String
+//                        }
+//                        
+//                        
+//                        var bridgeType1:String? = nil
+//                        var bridgeType2:String? = nil
+//                        if let ob = result["bridge_type"] {
+//                            bridgeType1 =  ob as? String
+//                            bridgeType2 =  ob as? String
+//                        }
+//                        
+//                        
+//                        user1 = PairInfo(name:name1, mainProfilePicture: nil, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: nil, profilePicturePFFile:  profilePicture1, bridgeType: bridgeType1)
+//                        user2 = PairInfo(name:name2, mainProfilePicture: nil, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: nil, profilePicturePFFile:  profilePicture2, bridgeType: bridgeType2)
+//                        let userInfoPair = UserInfoPair(user1: user1, user2: user2)
+//                        pairings.append(userInfoPair)
+//                        
+//                    }
+//                    let localData = LocalData()
+//                    localData.setPairings(pairings)
+//                    localData.synchronize()
+//                
+//
+//                }
+//            }
+//            else {
+//                print("bye")
+//            }
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+//                self.result  = false
+//            }
+//        })
+       // }
+            //})
+        
+    }
+    }
 }

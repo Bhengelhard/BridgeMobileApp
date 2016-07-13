@@ -258,6 +258,10 @@ class BridgeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        let localStorageUtility = LocalStorageUtility()
+//        while localStorageUtility.waitForCardsToBeDownloaded(){
+//            
+//        }
         let bridgePairings = LocalData().getPairings()
         if let bridgePairings = bridgePairings {
             nameSet = [String]()
@@ -336,18 +340,45 @@ class BridgeViewController: UIViewController {
                 else {
                     statusSet2.append("Nah")
                 }
-                if let profilePicture = pairing.user1?.mainProfilePicture {
-                    photoSet.append(profilePicture)
+                if let mainProfilePicture = pairing.user1?.mainProfilePicture {
+                    photoSet.append(mainProfilePicture)
                 }
                 else {
-                    //statusSet2.append("Nah")
+                    let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
+                    photoSet.append(mainProfilePicture)
                 }
-                if let profilePicture = pairing.user2?.mainProfilePicture {
-                    photoSet2.append(profilePicture)
+                if let mainProfilePicture = pairing.user2?.mainProfilePicture {
+                    photoSet2.append(mainProfilePicture)
                 }
                 else {
-                    //statusSet2.append("Nah")
+                    let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
+                    photoSet2.append(mainProfilePicture)
                 }
+
+//                if let profilePicturePFFile = pairing.user1?.profilePicturePFFile {
+//                    do {
+//                    let data = try profilePicturePFFile.getData()
+//                    photoSet.append(data)
+//                    }
+//                    catch {
+//                        print("Photo not downloaded")
+//                    }
+//                }
+//                else {
+//                    //statusSet2.append("Nah")
+//                }
+//                if let profilePicturePFFile = pairing.user2?.profilePicturePFFile {
+//                    do {
+//                        let data = try profilePicturePFFile.getData()
+//                        photoSet2.append(data)
+//                    }
+//                    catch {
+//                        print("Photo not downloaded")
+//                    }
+//                }
+//                else {
+//                    //statusSet2.append("Nah")
+//                }
 
 
                 colorSet.append(colorSetMaster[i])
