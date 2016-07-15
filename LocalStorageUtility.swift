@@ -720,10 +720,10 @@ class LocalStorageUtility{
         }
         if let _ = PFUser.currentUser()?.objectId {
         let query = PFQuery(className:"BridgePairings")
-        query.whereKey("user_objectIds", equalTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
+        query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
         query.whereKey("checked_out", equalTo: false)
         query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
-        query.limit = 1
+        query.limit = 2
 //        let err = NSErrorPointer()
 //        totalObjects =  query.countObjects(err)
         print("totalObjects \(totalObjects)")

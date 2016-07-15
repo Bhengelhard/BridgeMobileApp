@@ -16,7 +16,7 @@ class BridgeViewController: UIViewController {
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     let cardWidth = UIScreen.mainScreen().bounds.width*0.8
-    let cardHeight = UIScreen.mainScreen().bounds.height*0.30
+    let cardHeight = UIScreen.mainScreen().bounds.height*0.37
     var nameSet = ["Peter", "Jackson", "Johnny", "Bravo", "Dezz"]
     var nameSet2 = ["Peter", "Jackson", "Johnny", "Bravo", "Dezz"]
     var locationSet = ["Moscow", "Brlin", "Paris", "Mumbai", "Tel Aviv"]
@@ -589,51 +589,57 @@ class BridgeViewController: UIViewController {
          lowerDeckCards = [UIView?](count: colorSet.count + 1, repeatedValue: nil)
          upperDeckCards = [UIView?](count: colorSet.count + 1, repeatedValue: nil)
         let nameFrame = CGRectMake(0.05*cardWidth,0.10*cardHeight,0.55*cardWidth,0.20*cardHeight)
-        let locationFrame = CGRectMake(0.60*cardWidth,0.10*cardHeight,0.40*cardWidth,0.20*cardHeight)
-        let statusFrame = CGRectMake(0.05*cardWidth,0.31*cardHeight,0.95*cardWidth,0.34*cardHeight)
-        let photoFrame = CGRectMake(0.39*cardWidth,0.55*cardHeight,0.22*cardWidth,0.32*cardHeight)
+        let locationFrame = CGRectMake(0.05*cardWidth,0.31*cardHeight,0.55*cardWidth,0.20*cardHeight)
+        let statusFrame = CGRectMake(0.05*cardWidth,0.55*cardHeight,0.95*cardWidth,0.45*cardHeight)
+        let photoFrame = CGRectMake(0,0, cardWidth, cardHeight)
         
         for i in (0..<nextCardToShow).reverse() {
-            let upperDeckFrame : CGRect = CGRectMake(screenWidth*(0.08 + ( CGFloat(nextCardToShow - i + 1) * 0.02)),screenHeight*(0.17 - ( CGFloat(nextCardToShow - i + 1) * 0.01)), screenWidth*0.8,screenHeight*0.30)
+            let upperDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*(0.16), screenWidth*0.8,screenHeight*0.37)
             
-            let lowerDeckFrame : CGRect = CGRectMake(screenWidth*(0.08 + ( CGFloat(nextCardToShow - i + 1) * 0.02)),screenHeight*(0.60 - ( CGFloat(nextCardToShow - i + 1) * 0.01)), screenWidth*0.8,screenHeight*0.30)
+            let lowerDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*(0.54), screenWidth*0.8,screenHeight*0.37)
             
             let upperDeckNameLabel = UILabel(frame: nameFrame)
             upperDeckNameLabel.text = nameSet[i]
+            upperDeckNameLabel.textColor = UIColor.whiteColor()
             let upperDeckLocationLabel = UILabel(frame: locationFrame)
             upperDeckLocationLabel.text = locationSet[i]
+            upperDeckLocationLabel.textColor = UIColor.whiteColor()
             let upperDeckStatusLabel = UILabel(frame: statusFrame)
             upperDeckStatusLabel.text = statusSet[i]
+            upperDeckStatusLabel.textColor = UIColor.whiteColor()
             let upperDeckPhotoView = UIImageView(frame: photoFrame)
             upperDeckPhotoView.image = UIImage(data: photoSet[i])
-            upperDeckPhotoView.layer.cornerRadius = upperDeckPhotoView.frame.size.width/2.0
-            upperDeckPhotoView.clipsToBounds = true
+           
             
             let lowerDeckNameLabel = UILabel(frame: nameFrame)
             lowerDeckNameLabel.text = nameSet2[i]
+            lowerDeckNameLabel.textColor = UIColor.whiteColor()
             let lowerDeckLocationLabel = UILabel(frame: locationFrame)
             lowerDeckLocationLabel.text = locationSet2[i]
+            lowerDeckLocationLabel.textColor = UIColor.whiteColor()
             let lowerDeckStatusLabel = UILabel(frame: statusFrame)
             lowerDeckStatusLabel.text = statusSet2[i]
+            lowerDeckStatusLabel.textColor = UIColor.whiteColor()
             let lowerDeckPhotoView = UIImageView(frame: photoFrame)
             lowerDeckPhotoView.image = UIImage(data: photoSet2[i])
-            lowerDeckPhotoView.layer.cornerRadius = lowerDeckPhotoView.frame.size.width/2.0
-            lowerDeckPhotoView.clipsToBounds = true
+           
             
             let upperDeckCard = UIView(frame:upperDeckFrame)
+            upperDeckCard.addSubview(upperDeckPhotoView)
             upperDeckCard.addSubview(upperDeckNameLabel)
             upperDeckCard.addSubview(upperDeckLocationLabel)
             upperDeckCard.addSubview(upperDeckStatusLabel)
-            upperDeckCard.addSubview(upperDeckPhotoView)
+            
             upperDeckCard.backgroundColor = colorSet[i]
             upperDeckCards[i] = upperDeckCard
             
             
             let lowerDeckCard = UIView(frame:lowerDeckFrame)
+            lowerDeckCard.addSubview(lowerDeckPhotoView)
             lowerDeckCard.addSubview(lowerDeckNameLabel)
             lowerDeckCard.addSubview(lowerDeckLocationLabel)
             lowerDeckCard.addSubview(lowerDeckStatusLabel)
-            lowerDeckCard.addSubview(lowerDeckPhotoView)
+            
             lowerDeckCard.backgroundColor = colorSet[i]
             lowerDeckCards[i] = lowerDeckCard
             
@@ -642,28 +648,72 @@ class BridgeViewController: UIViewController {
             lowerDeckCard.layer.cornerRadius = 8.0
             lowerDeckCard.clipsToBounds = true
             
-            view.addSubview(upperDeckCard)
-            view.addSubview(lowerDeckCard)
+            let superDeckFrame : CGRect = CGRectMake(0,0, screenWidth,screenHeight)
+            let superDeckView = UIView(frame:superDeckFrame)
+            superDeckView.addSubview(upperDeckCard)
+            superDeckView.addSubview(lowerDeckCard)
+            let gesture = UIPanGestureRecognizer(target: self, action: Selector("isDragged:"))
+            superDeckView.addGestureRecognizer(gesture)
+            superDeckView.userInteractionEnabled = true
+            view.addSubview(superDeckView)
             
         }
-        nextPairButton = UIButton(frame: CGRectMake(screenWidth*0.08 ,screenHeight*0.47, screenWidth*0.4,screenHeight*0.07))
-        nextPairButton!.backgroundColor = .grayColor()
-        
-        nextPairButton!.setTitle("Next Pair", forState: .Normal)
-        nextPairButton!.addTarget(self, action: #selector(BridgeViewController.nextPairButtonTapped), forControlEvents: .TouchUpInside)
-        self.view.addSubview(nextPairButton!)
-        
-        bridgeButton = UIButton(frame: CGRectMake(screenWidth*0.52 ,screenHeight*0.47, screenWidth*0.4,screenHeight*0.07))
-        bridgeButton!.backgroundColor = .blueColor()
-        bridgeButton!.setTitle("Bridge", forState: .Normal)
-        bridgeButton!.addTarget(self, action: #selector(BridgeViewController.bridgeButtonTapped), forControlEvents: .TouchUpInside)
-        self.view.addSubview(bridgeButton!)
         
         
         
         // Do any additional setup after loading the view, typically from a nib.
     }
-    
+    func isDragged(gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translationInView(self.view)
+        let superDeckView = gesture.view!
+        
+        superDeckView.center = CGPoint(x: self.view.bounds.width / 2 + translation.x, y: self.view.bounds.height / 2 + translation.y)
+        let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
+        let scale = min(100 / abs(xFromCenter), 1)
+        var rotation = CGAffineTransformMakeRotation(xFromCenter / 200)
+        var stretch = CGAffineTransformScale(rotation, scale, scale)
+        superDeckView.transform = stretch
+        
+        if gesture.state == UIGestureRecognizerState.Ended {
+            
+            if superDeckView.center.x < 100 {
+                
+                print("Not chosen")
+                if var bridgePairings = bridgePairings {
+                    let objectId = bridgePairings[0].user1?.objectId
+                    let query = PFQuery(className:"BridgePairings")
+                    query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
+                        if let result = result {
+                            result["checked_out"] = false
+                            result.saveInBackground()
+                        }
+                        
+                    })
+                    self.bridgePairings!.removeAtIndex(0)
+                    print("bridgePairings.count - \(bridgePairings.count)")
+                    let localData = LocalData()
+                    localData.setPairings(self.bridgePairings!)
+                    localData.synchronize()
+                    downloadMoreCards()
+                }
+
+                
+                superDeckView.removeFromSuperview()
+                
+            } else if superDeckView.center.x > self.view.bounds.width - 100 {
+                
+                print("Chosen")
+                superDeckView.removeFromSuperview()
+                
+            }
+            rotation = CGAffineTransformMakeRotation(0)
+            stretch = CGAffineTransformScale(rotation, 1, 1)
+            superDeckView.transform = stretch
+            superDeckView.center = CGPoint(x: self.view.bounds.width / 2, y: self.view.bounds.height / 2)
+            
+        }
+
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

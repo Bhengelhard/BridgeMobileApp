@@ -234,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "490225712.330379"
+            timestampString = "490297370.370605"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "642"
-            endingLineNumber = "642"
+            startingLineNumber = "648"
+            endingLineNumber = "648"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "490225712.330379"
+            timestampString = "490297370.370605"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "638"
-            endingLineNumber = "638"
+            startingLineNumber = "644"
+            endingLineNumber = "644"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
@@ -314,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "490225712.330379"
+            timestampString = "490297370.370605"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "631"
-            endingLineNumber = "631"
+            startingLineNumber = "636"
+            endingLineNumber = "636"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
