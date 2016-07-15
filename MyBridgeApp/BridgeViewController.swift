@@ -679,23 +679,23 @@ class BridgeViewController: UIViewController {
             if superDeckView.center.x < 100 {
                 
                 print("Not chosen")
-                if var bridgePairings = bridgePairings {
-                    let objectId = bridgePairings[0].user1?.objectId
-                    let query = PFQuery(className:"BridgePairings")
-                    query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
-                        if let result = result {
-                            result["checked_out"] = false
-                            result.saveInBackground()
-                        }
-                        
-                    })
-                    self.bridgePairings!.removeAtIndex(0)
-                    print("bridgePairings.count - \(bridgePairings.count)")
-                    let localData = LocalData()
-                    localData.setPairings(self.bridgePairings!)
-                    localData.synchronize()
-                    downloadMoreCards()
-                }
+//                if var bridgePairings = bridgePairings {
+//                    let objectId = bridgePairings[0].user1?.objectId
+//                    let query = PFQuery(className:"BridgePairings")
+//                    query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
+//                        if let result = result {
+//                            result["checked_out"] = false
+//                            result.saveInBackground()
+//                        }
+//                        
+//                    })
+//                    self.bridgePairings!.removeAtIndex(0)
+//                    print("bridgePairings.count - \(bridgePairings.count)")
+//                    let localData = LocalData()
+//                    localData.setPairings(self.bridgePairings!)
+//                    localData.synchronize()
+//                    downloadMoreCards()
+//                }
 
                 
                 superDeckView.removeFromSuperview()
@@ -703,6 +703,24 @@ class BridgeViewController: UIViewController {
             } else if superDeckView.center.x > self.view.bounds.width - 100 {
                 
                 print("Chosen")
+//                if var bridgePairings = bridgePairings {
+//                    let objectId = bridgePairings[0].user1?.objectId
+//                    let query = PFQuery(className:"BridgePairings")
+//                    query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
+//                        if let result = result {
+//                            result["checked_out"] = false
+//                            result.saveInBackground()
+//                        }
+//                        
+//                    })
+//                    self.bridgePairings!.removeAtIndex(0)
+//                    print("bridgePairings.count - \(bridgePairings.count)")
+//                    let localData = LocalData()
+//                    localData.setPairings(self.bridgePairings!)
+//                    localData.synchronize()
+//                    downloadMoreCards()
+//                }
+
                 superDeckView.removeFromSuperview()
                 
             }
