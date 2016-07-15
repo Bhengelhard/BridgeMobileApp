@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import Parse
 import MapKit
 class BridgeViewController: UIViewController {
+    var bridgePairings:[UserInfoPair]? = nil
     var lowerDeckCards = [UIView?](count: 5, repeatedValue: nil)
     var upperDeckCards = [UIView?](count: 5, repeatedValue: nil)
     let screenWidth = UIScreen.mainScreen().bounds.width
@@ -26,6 +28,7 @@ class BridgeViewController: UIViewController {
     var totalNoOfCards = 0
     var nextCardToShow = 0
     var noOfCardsThrown = 0
+    let localStorageUtility = LocalStorageUtility()
     var colorSet = [ UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0), UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)]
     let colorSetMaster = [ UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0), UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0), UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0), UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)]
     var nextPairButton:UIButton? = nil
@@ -33,12 +36,113 @@ class BridgeViewController: UIViewController {
     var minimumCards = 4
     
     
-    
+    func downloadMoreCards() {
+        var count = 0
+        let c = self.bridgePairings?.count
+        if let c = c {
+            if c > 0 {
+                count = c 
+            }
+        }
+        localStorageUtility.getBridgePairingsFromCloud()
+        bridgePairings = LocalData().getPairings()
+        
+        if let bridgePairings = bridgePairings {
+        print("bridgePairings.count - \(bridgePairings.count)")
+        totalNoOfCards += bridgePairings.count - c!
+        for i in count ..< (bridgePairings.count) {
+        let pairing = bridgePairings[i]
+        if let name = pairing.user1?.name {
+            print(name)
+            nameSet.append(name)
+        }
+        else {
+            nameSet.append("Man has no name")
+        }
+        if let name = pairing.user2?.name {
+            print(name)
+            nameSet2.append(name)
+        }
+        else {
+            nameSet2.append("Man has no name")
+        }
+        if let location_values = pairing.user1?.location {
+            locationSet.append("Location has no name")
+            
+            
+        }
+        else {
+            locationSet.append("Location has no name")
+        }
+        if let location_values = pairing.user2?.location {
+            locationSet2.append("Location has no name")
+            
+            
+        }
+        else {
+            locationSet2.append("Location has no name")
+        }
+        
+        if let bridgeStatus = pairing.user1?.bridgeStatus {
+            statusSet.append(bridgeStatus)
+        }
+        else {
+            statusSet.append("Nah")
+        }
+        if let bridgeStatus = pairing.user2?.bridgeStatus {
+            statusSet2.append(bridgeStatus)
+        }
+        else {
+            statusSet2.append("Nah")
+        }
+        if let mainProfilePicture = pairing.user1?.mainProfilePicture {
+            photoSet.append(mainProfilePicture)
+        }
+        else {
+            let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
+            photoSet.append(mainProfilePicture)
+        }
+        if let mainProfilePicture = pairing.user2?.mainProfilePicture {
+            photoSet2.append(mainProfilePicture)
+        }
+        else {
+            let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
+            photoSet2.append(mainProfilePicture)
+        }
+        
+        
+        colorSet.append(colorSetMaster[i])
+        }
+        }
+
+    }
     func bridgeButtonTapped(sender: UIButton!) {
         bridgeButton?.userInteractionEnabled = false
         nextPairButton?.userInteractionEnabled = false
         var upperDeckCard = UIView()
         var lowerDeckCard = UIView()
+        
+        // add a new Card to the deck if one exists
+        if noOfCardsThrown < totalNoOfCards {
+            if var bridgePairings = bridgePairings {
+                let objectId = bridgePairings[0].user1?.objectId
+                let query = PFQuery(className:"BridgePairings")
+                query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
+                    if let result = result {
+                        result["checked_out"] = true
+                        result.saveInBackground()
+                    }
+                    
+                })
+                self.bridgePairings!.removeAtIndex(0)
+                print("bridgePairings.count - \(bridgePairings.count)")
+                let localData = LocalData()
+                localData.setPairings(self.bridgePairings!)
+                localData.synchronize()
+                downloadMoreCards()
+            }
+        }
+        
         if nextCardToShow < totalNoOfCards {
             let nameFrame = CGRectMake(0.05*cardWidth,0.10*cardHeight,0.55*cardWidth,0.20*cardHeight)
             let locationFrame = CGRectMake(0.60*cardWidth,0.10*cardHeight,0.40*cardWidth,0.20*cardHeight)
@@ -68,7 +172,8 @@ class BridgeViewController: UIViewController {
             upperDeckCard.addSubview(upperDeckStatusLabel)
             upperDeckCard.addSubview(upperDeckPhotoView)
             upperDeckCard.backgroundColor = colorSet[nextCardToShow]
-            upperDeckCards[minimumCards] = upperDeckCard
+            
+            //upperDeckCards[minimumCards] = upperDeckCard
             
             
             lowerDeckCard = UIView(frame:lowerDeckFrame)
@@ -88,9 +193,14 @@ class BridgeViewController: UIViewController {
         }
         
         print("nextCardToShow - \(nextCardToShow), self.minimumCards - \(self.minimumCards), noOfCardsThrown - \(noOfCardsThrown), totalNoOfCards - \(totalNoOfCards)  ")
+        // save the positions of the top most card before it is shifted
         let upperDeckFrame0 = self.upperDeckCards[0]!.frame
         let lowerDeckFrame0 = self.lowerDeckCards[0]!.frame
+        
+        // animate the deck only if there are any cards
         if noOfCardsThrown < totalNoOfCards {
+            
+            // shift the top most card left
             UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
                 
                 print("trans")
@@ -101,41 +211,61 @@ class BridgeViewController: UIViewController {
             
             
             UIView.animateWithDuration(1.0, delay: 0.3, options: .CurveEaseOut, animations: {
+                // place the new card in the 5th card's poition
                 if self.nextCardToShow < self.totalNoOfCards{
                     self.view.insertSubview(upperDeckCard, belowSubview: self.upperDeckCards[self.minimumCards-1]!)
                     self.view.insertSubview(lowerDeckCard, belowSubview: self.lowerDeckCards[self.minimumCards-1]!)
-                }
-                if self.minimumCards > 2 {
+                    // animate all but the first card one level forward
                     for i in (2..<self.minimumCards + 1).reverse() {
                         self.upperDeckCards[i]?.frame = self.upperDeckCards[i-1]!.frame
                         self.lowerDeckCards[i]?.frame = self.lowerDeckCards[i-1]!.frame
                     }
-                }
-                if self.minimumCards >= 2 {
+                    // animate the second card to the saved position
                     self.upperDeckCards[1]?.frame = upperDeckFrame0
                     self.lowerDeckCards[1]?.frame = lowerDeckFrame0
+                    
+                }
+                    
+                else {
+                    // animate all but the first card one level forward
+                    if self.minimumCards > 2 {
+                        for i in (2..<self.minimumCards + 1).reverse() {
+                            self.upperDeckCards[i]?.frame = self.upperDeckCards[i-1]!.frame
+                            self.lowerDeckCards[i]?.frame = self.lowerDeckCards[i-1]!.frame
+                        }
+                    }
+                    // animate the second card to the saved position
+                    if self.minimumCards >= 2 {
+                        self.upperDeckCards[1]?.frame = upperDeckFrame0
+                        self.lowerDeckCards[1]?.frame = lowerDeckFrame0
+                    }
                 }
                 }, completion: {  finished in
                     if self.minimumCards > 0 {
+                        // remove the top most card from the deck
                         self.upperDeckCards[0]!.removeFromSuperview()
                         self.lowerDeckCards[0]!.removeFromSuperview()
-                        if self.minimumCards > 1 {
+                        
+                        if self.nextCardToShow < self.totalNoOfCards || self.minimumCards > 1{
+                            // move all cards in the deck one postion up
                             print("shifting")
-                            for i in 0..<self.minimumCards - 1{
+                            for i in 0..<self.minimumCards {
                                 self.upperDeckCards[i] = self.upperDeckCards[i+1]
                                 self.lowerDeckCards[i] = self.lowerDeckCards[i+1]
                             }
-                            if self.nextCardToShow < self.totalNoOfCards {
-                            self.upperDeckCards[self.minimumCards - 1] = self.upperDeckCards[self.minimumCards]
-                            self.lowerDeckCards[self.minimumCards - 1] = self.lowerDeckCards[self.minimumCards]
-                            }
+                            
                         }
+//                        else if self.minimumCards > 1 {
+//                            // move all cards in the deck one postion up
+//                            print("shifting")
+//                            for i in 0..<self.minimumCards {
+//                                self.upperDeckCards[i] = self.upperDeckCards[i+1]
+//                                self.lowerDeckCards[i] = self.lowerDeckCards[i+1]
+//                            }
+//                        }
                     }
                     self.nextCardToShow += 1
-                    if  self.nextCardToShow <= self.totalNoOfCards {
-                        self.minimumCards = 4
-                    }
-                    else {
+                    if  self.nextCardToShow > self.totalNoOfCards {
                         self.minimumCards -= 1
                     }
                     self.bridgeButton?.userInteractionEnabled = true
@@ -145,12 +275,36 @@ class BridgeViewController: UIViewController {
         }
         noOfCardsThrown += 1
         
+        
+
     }
     func nextPairButtonTapped(sender: UIButton!) {
         bridgeButton?.userInteractionEnabled = false
         nextPairButton?.userInteractionEnabled = false
         var upperDeckCard = UIView()
         var lowerDeckCard = UIView()
+        
+        // update Parse database and LocalStorage, download more cards
+        if noOfCardsThrown < totalNoOfCards {
+        if var bridgePairings = bridgePairings {
+            let objectId = bridgePairings[0].user1?.objectId
+            let query = PFQuery(className:"BridgePairings")
+            query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
+                if let result = result {
+                    result["checked_out"] = false
+                    result.saveInBackground()
+                }
+                
+            })
+            self.bridgePairings!.removeAtIndex(0)
+            print("bridgePairings.count - \(bridgePairings.count)")
+            let localData = LocalData()
+            localData.setPairings(self.bridgePairings!)
+            localData.synchronize()
+            downloadMoreCards()
+        }
+        }
+        // add a new Card to the deck if one exists
         if nextCardToShow < totalNoOfCards {
             let nameFrame = CGRectMake(0.05*cardWidth,0.10*cardHeight,0.55*cardWidth,0.20*cardHeight)
             let locationFrame = CGRectMake(0.60*cardWidth,0.10*cardHeight,0.40*cardWidth,0.20*cardHeight)
@@ -165,6 +319,9 @@ class BridgeViewController: UIViewController {
             let upperDeckStatusLabel = UILabel(frame: statusFrame)
             upperDeckStatusLabel.text = statusSet[nextCardToShow]
             let upperDeckPhotoView = UIImageView(frame: photoFrame)
+            upperDeckPhotoView.image = UIImage(data: photoSet[nextCardToShow])
+            upperDeckPhotoView.layer.cornerRadius = upperDeckPhotoView.frame.size.width/2.0
+            upperDeckPhotoView.clipsToBounds = true
             
             let lowerDeckNameLabel = UILabel(frame: nameFrame)
             lowerDeckNameLabel.text = nameSet2[nextCardToShow]
@@ -173,6 +330,9 @@ class BridgeViewController: UIViewController {
             let lowerDeckStatusLabel = UILabel(frame: statusFrame)
             lowerDeckStatusLabel.text = statusSet2[nextCardToShow]
             let lowerDeckPhotoView = UIImageView(frame: photoFrame)
+            lowerDeckPhotoView.image = UIImage(data: photoSet[nextCardToShow])
+            lowerDeckPhotoView.layer.cornerRadius = lowerDeckPhotoView.frame.size.width/2.0
+            lowerDeckPhotoView.clipsToBounds = true
             
             upperDeckCard = UIView(frame:upperDeckFrame)
             upperDeckCard.addSubview(upperDeckNameLabel)
@@ -180,7 +340,6 @@ class BridgeViewController: UIViewController {
             upperDeckCard.addSubview(upperDeckStatusLabel)
             upperDeckCard.addSubview(upperDeckPhotoView)
             upperDeckCard.backgroundColor = colorSet[nextCardToShow]
-            upperDeckCards[minimumCards] = upperDeckCard
             
             
             lowerDeckCard = UIView(frame:lowerDeckFrame)
@@ -200,9 +359,14 @@ class BridgeViewController: UIViewController {
         }
         
         print("nextCardToShow - \(nextCardToShow), self.minimumCards - \(self.minimumCards), noOfCardsThrown - \(noOfCardsThrown), totalNoOfCards - \(totalNoOfCards)  ")
+        // save the positions of the top most card before it is shifted
         let upperDeckFrame0 = self.upperDeckCards[0]!.frame
         let lowerDeckFrame0 = self.lowerDeckCards[0]!.frame
+        
+        // animate the deck only if there are any cards
         if noOfCardsThrown < totalNoOfCards {
+            
+            // shift the top most card left
             UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
                 
                 print("trans")
@@ -213,37 +377,54 @@ class BridgeViewController: UIViewController {
             
             
             UIView.animateWithDuration(1.0, delay: 0.3, options: .CurveEaseOut, animations: {
+                // place the new card in the last + 1 card's poition
+                // animate if a new card is added
                 if self.nextCardToShow < self.totalNoOfCards{
                     self.view.insertSubview(upperDeckCard, belowSubview: self.upperDeckCards[self.minimumCards-1]!)
                     self.view.insertSubview(lowerDeckCard, belowSubview: self.lowerDeckCards[self.minimumCards-1]!)
+                    // animate all but the first card one level forward
+                    for i in (2..<self.minimumCards + 1).reverse() {
+                        self.upperDeckCards[i]?.frame = self.upperDeckCards[i-1]!.frame
+                        self.lowerDeckCards[i]?.frame = self.lowerDeckCards[i-1]!.frame
+                    }
+                    // animate the second card to the saved position
+                    self.upperDeckCards[1]?.frame = upperDeckFrame0
+                    self.lowerDeckCards[1]?.frame = lowerDeckFrame0
+
                 }
+                // animate if a new card is  not added; could do without "if else construct" it but if minimumCards is < 2 it will not work wiithout it
+                else {
+                // animate all but the first card one level forward
                 if self.minimumCards > 2 {
                     for i in (2..<self.minimumCards + 1).reverse() {
                         self.upperDeckCards[i]?.frame = self.upperDeckCards[i-1]!.frame
                         self.lowerDeckCards[i]?.frame = self.lowerDeckCards[i-1]!.frame
                     }
                 }
+                // animate the second card to the saved position
                 if self.minimumCards >= 2 {
                     self.upperDeckCards[1]?.frame = upperDeckFrame0
                     self.lowerDeckCards[1]?.frame = lowerDeckFrame0
                 }
+                }
                 }, completion: {  finished in
                     if self.minimumCards > 0 {
+                        // remove the top most card from the deck
                         self.upperDeckCards[0]!.removeFromSuperview()
                         self.lowerDeckCards[0]!.removeFromSuperview()
-                        if self.minimumCards > 1 {
+                        // move all cards in the deck one postion up
+                        if self.nextCardToShow < self.totalNoOfCards || self.minimumCards > 1{
                             print("shifting")
                             for i in 0..<self.minimumCards {
                                 self.upperDeckCards[i] = self.upperDeckCards[i+1]
                                 self.lowerDeckCards[i] = self.lowerDeckCards[i+1]
                             }
+
                         }
+
                     }
                     self.nextCardToShow += 1
-                    if  self.nextCardToShow <= self.totalNoOfCards {
-                        self.minimumCards = 4
-                    }
-                    else {
+                    if  self.nextCardToShow > self.totalNoOfCards {
                         self.minimumCards -= 1
                     }
                     self.bridgeButton?.userInteractionEnabled = true
@@ -258,11 +439,20 @@ class BridgeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        let localStorageUtility = LocalStorageUtility()
-//        while localStorageUtility.waitForCardsToBeDownloaded(){
-//            
-//        }
-        let bridgePairings = LocalData().getPairings()
+        //        while localStorageUtility.waitForCardsToBeDownloaded(){
+        //
+        //        }
+        //
+        
+        
+//        localStorageUtility.getBridgePairingsFromCloud()
+//        bridgePairings = LocalData().getPairings()
+
+        bridgePairings = LocalData().getPairings()
+        if (bridgePairings == nil || bridgePairings?.count < 1) {
+        localStorageUtility.getBridgePairingsFromCloud()
+        bridgePairings = LocalData().getPairings()
+        }
         if let bridgePairings = bridgePairings {
             nameSet = [String]()
             nameSet2 = [String]()
@@ -403,10 +593,10 @@ class BridgeViewController: UIViewController {
         let statusFrame = CGRectMake(0.05*cardWidth,0.31*cardHeight,0.95*cardWidth,0.34*cardHeight)
         let photoFrame = CGRectMake(0.39*cardWidth,0.55*cardHeight,0.22*cardWidth,0.32*cardHeight)
         
-        for i in 0..<nextCardToShow {
-            let upperDeckFrame : CGRect = CGRectMake(screenWidth*(0.08 + ( CGFloat(i) * 0.02)),screenHeight*(0.17 - ( CGFloat(i) * 0.01)), screenWidth*0.8,screenHeight*0.30)
+        for i in (0..<nextCardToShow).reverse() {
+            let upperDeckFrame : CGRect = CGRectMake(screenWidth*(0.08 + ( CGFloat(nextCardToShow - i + 1) * 0.02)),screenHeight*(0.17 - ( CGFloat(nextCardToShow - i + 1) * 0.01)), screenWidth*0.8,screenHeight*0.30)
             
-            let lowerDeckFrame : CGRect = CGRectMake(screenWidth*(0.08 + ( CGFloat(i) * 0.02)),screenHeight*(0.60 - ( CGFloat(i) * 0.01)), screenWidth*0.8,screenHeight*0.30)
+            let lowerDeckFrame : CGRect = CGRectMake(screenWidth*(0.08 + ( CGFloat(nextCardToShow - i + 1) * 0.02)),screenHeight*(0.60 - ( CGFloat(nextCardToShow - i + 1) * 0.01)), screenWidth*0.8,screenHeight*0.30)
             
             let upperDeckNameLabel = UILabel(frame: nameFrame)
             upperDeckNameLabel.text = nameSet[i]
@@ -436,7 +626,7 @@ class BridgeViewController: UIViewController {
             upperDeckCard.addSubview(upperDeckStatusLabel)
             upperDeckCard.addSubview(upperDeckPhotoView)
             upperDeckCard.backgroundColor = colorSet[i]
-            upperDeckCards[nextCardToShow-1-i] = upperDeckCard
+            upperDeckCards[i] = upperDeckCard
             
             
             let lowerDeckCard = UIView(frame:lowerDeckFrame)
@@ -445,7 +635,7 @@ class BridgeViewController: UIViewController {
             lowerDeckCard.addSubview(lowerDeckStatusLabel)
             lowerDeckCard.addSubview(lowerDeckPhotoView)
             lowerDeckCard.backgroundColor = colorSet[i]
-            lowerDeckCards[nextCardToShow-1-i] = lowerDeckCard
+            lowerDeckCards[i] = lowerDeckCard
             
             upperDeckCard.layer.cornerRadius = 8.0
             upperDeckCard.clipsToBounds = true
