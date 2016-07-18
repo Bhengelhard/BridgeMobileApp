@@ -711,7 +711,7 @@ class LocalStorageUtility{
 //        }
         return result
     }
-    func getBridgePairingsFromCloud(){
+    func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
 //        var pairings = [UserInfoPair]()
         let bridgePairings = LocalData().getPairings()
         var pairings = [UserInfoPair]()
@@ -720,10 +720,13 @@ class LocalStorageUtility{
         }
         if let _ = PFUser.currentUser()?.objectId {
         let query = PFQuery(className:"BridgePairings")
-        query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
+        query.whereKey("user_objectIds", equalTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
         query.whereKey("checked_out", equalTo: false)
         query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
-        query.limit = 2
+        if (typeOfCards != "All") {
+            query.whereKey("bridge_type", equalTo: typeOfCards)
+        }
+        query.limit = maxNoOfCards
 //        let err = NSErrorPointer()
 //        totalObjects =  query.countObjects(err)
         print("totalObjects \(totalObjects)")
