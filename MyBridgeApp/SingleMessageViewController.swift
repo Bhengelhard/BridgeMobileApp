@@ -229,8 +229,19 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 print(error)
                 
             } else if let results = results {
-                self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText","bridgeType":"bridgeType","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification"]
-                    self.messageContentArray.append(["messageText":"messageText","bridgeType":"bridgeType","senderName":"senderName", "timestamp":"timestamp","isNotification":false])
+                self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId"]
+                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId"])
+                
+                self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId"]
+                self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId"])
+                
+                self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId"]
+                self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId"])
+                
+
+                
+                var previousSenderName = ""
+                var previousSenderId = ""
                 for result in results {
                     var messageText = ""
                     if let ob = result["message_text"] as? String {
@@ -245,7 +256,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         isNotification = ob
                     }
                     var senderName = ""
+                    var senderId = ""
                     if let ob = result["sender"] as? String {
+                        senderId = ob
                         let queryForName = PFQuery(className: "_User")
                         do{
                             let userObject = try queryForName.getObjectWithId(ob)
@@ -286,8 +299,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         timestamp = dateFormatter.stringFromDate(date)+">"
                         
                     }
-                    self.messageContentArrayMapping[(result.objectId!)]=["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":isNotification]
-                    self.messageContentArray.append(["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp,"isNotification":isNotification])
+                    self.messageContentArrayMapping[(result.objectId!)]=["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":isNotification, "senderId":senderId, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId ]
+                    self.messageContentArray.append(["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp,"isNotification":isNotification, "senderId":senderId, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId])
+                    previousSenderName = senderName
+                    previousSenderId = senderId
                 }
                 
             }
@@ -302,12 +317,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         super.viewDidLoad()
         navigationBar.title = singleMessageTitle
         singleMessageTableView.registerClass(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
-//        if previousViewController == "MessagesViewController"   {
-//            
-//            updateMessages()
-//            
-//        }
-//        else 
         if isSeguedFromMessages   {
             print("calling1")
             messageId = newMessageId
@@ -353,19 +362,46 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         return messageContentArray.count
         
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        var addSenderName = false
+        let senderNameLabel = UITextView(frame: CGRectZero)
+        if ( (messageContentArray[indexPath.row]["senderName"] as? String)! != (messageContentArray[indexPath.row]["previousSenderName"] as? String)!) {
+            addSenderName = true
+        }
+        if addSenderName {
+            senderNameLabel.text = (messageContentArray[indexPath.row]["senderName"] as? String)!
+            senderNameLabel.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width/2, 25)
+            let fixedWidth = senderNameLabel.frame.size.width
+            senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+            let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+            var newFrame = senderNameLabel.frame
+            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height + CGFloat(1))
+            senderNameLabel.frame = newFrame
+        }
+
+        let messageTextLabel = UITextView(frame: CGRectZero)
+        messageTextLabel.text = (messageContentArray[indexPath.row]["messageText"] as? String)!
+        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2, 0, UIScreen.mainScreen().bounds.width/2, 25)
+        let fixedWidth = messageTextLabel.frame.size.width
+        messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+        let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+        var newFrame = messageTextLabel.frame
+        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+        print("tableView \(indexPath.row) : \(newFrame.height)")
+        return newFrame.height + senderNameLabel.frame.height
+
         
-//        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "cell")
-//        
-//        cell.textLabel?.text = messageTextArray[indexPath.row]
-//        
-//        cell.selectionStyle = UITableViewCellSelectionStyle.None
+    }
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(SingleMessageTableCell), forIndexPath: indexPath) as! SingleMessageTableCell
         let singleMessageContent = SingleMessageContent(messageContent: messageContentArray[indexPath.row])
-        print("messageContentArray[indexPath.row] - \(messageContentArray[indexPath.row])")
+        //print("messageContentArray[indexPath.row] - \(messageContentArray[indexPath.row])")
         cell.singleMessageContent = singleMessageContent
-        
+        //print("cell \(indexPath.row) \(cell.frame.height)")
         return cell
+        
         
     }
     
