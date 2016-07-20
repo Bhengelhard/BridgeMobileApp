@@ -227,7 +227,7 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     
-      override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         self.getFriendNames()
         
@@ -252,12 +252,10 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
 
         // Do any additional setup after loading the view.
     }
-   
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-   
 
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         navigationBar.hidden = true
@@ -359,7 +357,7 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredPositions.count
     }
-     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NewMessageTableCell
         cell.name.text = self.friendNames[filteredPositions[indexPath.row]]
        

@@ -12,17 +12,18 @@ import Parse
 //var segueFromExitedMessage = false
 
 class SingleMessageViewController: UIViewController, UITableViewDelegate {
-
-    
     @IBOutlet weak var messageText: UITextField!
     @IBOutlet weak var navigationBar: UINavigationItem!
     
     var messageTextArray = [String]()
     var newMessageId = String()
     var isSeguedFromNewMessage = false
+    var isSeguedFromBridgePage = false
+    var isSeguedFromMessages = false
+    var messageContentArrayMapping = [String:[String:AnyObject]]()
+    var messageContentArray = [[String:AnyObject]]()
     @IBOutlet weak var singleMessageTableView: UITableView!
     @IBOutlet weak var sendButton: UIBarButtonItem!
-    
     @IBAction func sendMessage(sender: UIButton) {
         
         if messageText.text != "" {
@@ -67,55 +68,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         }
         
     }
-    
-    
-    
-    func updateMessages() {
-        
-        //querying for messages
-        print("messageId is \(messageId)")
-        let query: PFQuery = PFQuery(className: "SingleMessages")
-        
-        query.whereKey("message_id", equalTo: messageId)
-        
-        //query.whereKey("ids_in_message", equalTo: idsInMessage)
-        
-        query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
-            
-            //Clear the messagesArray
-            self.messageTextArray = [String]()
-            
-            //retrive messages and update messageTextArray
-            if let error = error {
-                
-                print(error)
-                
-            } else if let results = results {
-                
-                for result in results {
-                    
-                    let singleMessageText:String? = (result as PFObject)["message_text"] as? String
-                    
-                    if singleMessageText != nil {
-                        
-                        self.messageTextArray.append(singleMessageText!)
-                        
-                    }
-                    
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    
-                    self.singleMessageTableView.reloadData()
-                    
-                })
-                
-            }
-            
-        })
-        
-    }
-    
     @IBAction func exitMessage(sender: AnyObject) {
         
         //create the alert controller
@@ -142,10 +94,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 } else {
                     
                     /*dispatch_async(dispatch_get_main_queue(), {
-                        
-                        segueFromExitedMessage = true
-                        
-                    })*/
+                     
+                     segueFromExitedMessage = true
+                     
+                     })*/
                     
                     let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
                     let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
@@ -179,20 +131,20 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 
             })
             /*var newIdsInMessage = [String]()
-            for ID in idsInMessage {
-                
-                if ID != PFUser.currentUser()?.objectId {
-                    
-                    newIdsInMessage.append(ID)
-                    
-                }
-            
-            }
-            
-            //var message = PFObject(outDataWithClassName: "Messages", objectId: "ids")
-            /*var messages = PFObject(className: "Messages")
-            //messages.
-            messages.saveInBackground()*/*/
+             for ID in idsInMessage {
+             
+             if ID != PFUser.currentUser()?.objectId {
+             
+             newIdsInMessage.append(ID)
+             
+             }
+             
+             }
+             
+             //var message = PFObject(outDataWithClassName: "Messages", objectId: "ids")
+             /*var messages = PFObject(className: "Messages")
+             //messages.
+             messages.saveInBackground()*/*/
             
             //self.dismissViewControllerAnimated(true, completion: nil)
             
@@ -215,70 +167,203 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         self.presentViewController(alert, animated: true, completion: nil)
         
     }
+    func updateTitle(){
+        var stringOfNames = ""
+        let query: PFQuery = PFQuery(className: "Messages")
+        query.getObjectInBackgroundWithId(newMessageId) { (result: PFObject?, error: NSError?) -> Void in
+            if error == nil {
+                print("newMessageId - \(self.newMessageId)")
+                if let result = result {
+                    let currentUserId = (PFUser.currentUser()?.objectId)! as String
+                    let participantObjectIds = result["ids_in_message"] as! [String]
+                    let participantObjectIdsWithoutCurentUser = participantObjectIds.filter({$0 != currentUserId})
+                    print("participantObjectIdsWithoutCurentUser \(participantObjectIdsWithoutCurentUser)")
+                    let query: PFQuery = PFQuery(className: "_User")
+                    query.whereKey("objectId", containedIn: participantObjectIdsWithoutCurentUser)
+                    query.findObjectsInBackgroundWithBlock({ (objects:[PFObject]?, err: NSError?) in
+                        if err == nil {
+                            if let objects = objects {
+                                var i = 0
+                                for object in objects {
+                                    if var name = object["name"] as? String{
+                                        if objects.count > 2 && i < objects.count - 2 {
+                                            var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
+                                            stringOfNames = stringOfNames + fullNameArr[0] + " , "
+                                            
+                                        } else if objects.count >= 2 && i == objects.count - 2 {
+                                            var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
+                                            stringOfNames = stringOfNames + fullNameArr[0] + " & "
+                                            
+                                        }
+                                        else {
+                                            if objects.count > 1{
+                                                name = name.characters.split{$0 == " "}.map(String.init)[0]
+                                            }
+                                            stringOfNames = stringOfNames + name
+                                        }
+                                        i += 1
+
+                                    }
+                                }
+                            }
+                        }
+                        dispatch_async(dispatch_get_main_queue(), {
+                            print(stringOfNames)
+                            self.navigationBar.title = stringOfNames
+                        })
+
+                    })
+                    
+                }
+            }
+        }
+    }
     
+    func updateMessages() {
+    
+        print("messageId is \(messageId)")
+        let query: PFQuery = PFQuery(className: "SingleMessages")
+        query.whereKey("message_id", equalTo: messageId)
+        query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+            if let error = error {
+                print(error)
+                
+            } else if let results = results {
+                self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText","bridgeType":"bridgeType","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification"]
+                    self.messageContentArray.append(["messageText":"messageText","bridgeType":"bridgeType","senderName":"senderName", "timestamp":"timestamp","isNotification":false])
+                for result in results {
+                    var messageText = ""
+                    if let ob = result["message_text"] as? String {
+                        messageText = ob
+                    }
+                    var bridgeType = ""
+                    if let ob = result["bridge_type"] as? String {
+                        bridgeType = ob
+                    }
+                    var isNotification = false
+                    if let ob = result["is_notification"] as? Bool {
+                        isNotification = ob
+                    }
+                    var senderName = ""
+                    if let ob = result["sender"] as? String {
+                        let queryForName = PFQuery(className: "_User")
+                        do{
+                            let userObject = try queryForName.getObjectWithId(ob)
+                            if let name = userObject["name"] as? String {
+                                senderName = name
+                            }
+                        }
+                        catch{
+                            
+                        }
+                        
+                    }
+                    var timestamp = ""
+                    let dateFormatter = NSDateFormatter()
+                    dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
+                    let calendar = NSCalendar.currentCalendar()
+                    let date = result.createdAt!
+                    let components = calendar.components([.Month, .Day, .Year, .WeekOfYear],
+                            fromDate: date, toDate: NSDate(), options: NSCalendarOptions.WrapComponents)
+                    if components.day > 7 {
+                        let dateFormatter = NSDateFormatter()
+                        dateFormatter.dateFormat = "MM/dd/yyy"
+                        timestamp = dateFormatter.stringFromDate(date)+">"
+                    }
+                    else if components.day > 2 {
+                        let calendar = NSCalendar.currentCalendar()
+                        let date = result.createdAt!
+                        let components = calendar.components([.Weekday],
+                            fromDate: date)
+                        timestamp = String(getWeekDay(components.weekday))+">"
+                    }
+                    else if components.day > 1 {
+                        timestamp = "Yesterday"+">"
+                    }
+                    else {
+                        let dateFormatter = NSDateFormatter()
+                        dateFormatter.dateFormat = "hh:mm:ss"
+                        timestamp = dateFormatter.stringFromDate(date)+">"
+                        
+                    }
+                    self.messageContentArrayMapping[(result.objectId!)]=["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":isNotification]
+                    self.messageContentArray.append(["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp,"isNotification":isNotification])
+                }
+                
+            }
+            dispatch_async(dispatch_get_main_queue(), {
+                self.singleMessageTableView.reloadData()
+            })
+
+        })
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar.title = singleMessageTitle
+        singleMessageTableView.registerClass(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
 //        if previousViewController == "MessagesViewController"   {
 //            
 //            updateMessages()
 //            
 //        }
 //        else 
-        if isSeguedFromNewMessage   {
+        if isSeguedFromMessages   {
+            print("calling1")
             messageId = newMessageId
             updateMessages()
+            self.updateTitle()
             
         }
-        
-        
-        //create singleMessage class in DB where row is created for each message sent with Sender (currentUser), MessageId (Id from Messages Class), MessageContent (TextField), recievers (recievers - current user) are displayed on title
-        
-        /*var query: PFQuery = PFQuery(className: "Messages")
-        
-        query.whereKey("objectId", containedIn: )
-        query.limit = 2
-        
-        query.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) in
+
+        else if isSeguedFromNewMessage   {
+            print("calling2")
+            messageId = newMessageId
+            updateMessages()
+            self.updateTitle()
             
-            if error != nil {
-                
-                print(error)
-                
-            } else if let objects = objects {
-                
-                for object in objects {
-                    
-                    
-                    
-                }
-                    
-                
-            }
+        }
+        else if isSeguedFromBridgePage   {
+            messageId = newMessageId
+            print("calling3")
+            updateMessages()
+            self.updateTitle()
+//            let seconds = 4.0
+//            let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+//            let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+//            
+//            dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+//                
+//            })
+
             
-        }*/
+            
+        }
 
         // Do any additional setup after loading the view.
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return messageTextArray.count
+        //return messageTextArray.count
+        print("messageContentArray.count - \(messageContentArray.count)")
+        return messageContentArray.count
         
     }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "cell")
-        
-        cell.textLabel?.text = messageTextArray[indexPath.row]
-        
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+//        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "cell")
+//        
+//        cell.textLabel?.text = messageTextArray[indexPath.row]
+//        
+//        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(SingleMessageTableCell), forIndexPath: indexPath) as! SingleMessageTableCell
+        let singleMessageContent = SingleMessageContent(messageContent: messageContentArray[indexPath.row])
+        print("messageContentArray[indexPath.row] - \(messageContentArray[indexPath.row])")
+        cell.singleMessageContent = singleMessageContent
         
         return cell
         

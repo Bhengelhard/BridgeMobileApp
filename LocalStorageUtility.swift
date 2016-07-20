@@ -532,7 +532,7 @@ class LocalStorageUtility{
                     bridge_status = ob as? String
                 }
                 
-                user = PairInfo(name:name, mainProfilePicture: main_profile_picture, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil )
+                user = PairInfo(name:name, mainProfilePicture: main_profile_picture, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil, userId: nil )
             }
         }
         catch {
@@ -720,7 +720,7 @@ class LocalStorageUtility{
         }
         if let _ = PFUser.currentUser()?.objectId {
         let query = PFQuery(className:"BridgePairings")
-        query.whereKey("user_objectIds", equalTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
+        query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
         query.whereKey("checked_out", equalTo: false)
         query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
         if (typeOfCards != "All") {
@@ -793,6 +793,13 @@ class LocalStorageUtility{
                                             objectId1 =  ob as String
                                             objectId2 =  ob as String
                                         }
+                                        var userId1:String? = nil
+                                        var userId2:String? = nil
+                                        if let ob = result["user_objectIds"] as? [String] {
+                                            userId1 =  ob[0]
+                                            userId2 =  ob[1]
+                                        }
+
                                         result["checked_out"]  = true
                                         if let _ = result["shown_to"] {
                                             if var ar = result["shown_to"] as? [String] {
@@ -809,10 +816,11 @@ class LocalStorageUtility{
                                         }
                                         result.saveInBackground()
                 
-                                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1)
-                                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2)
+                                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1)
+                                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2)
                                         let userInfoPair = UserInfoPair(user1: user1, user2: user2)
                                         pairings.append(userInfoPair)
+                                        print("userId1, userId2 - \(userId1),\(userId2)")
                                         
                                     }
                                     let localData = LocalData()

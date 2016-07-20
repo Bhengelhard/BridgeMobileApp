@@ -16,7 +16,8 @@ class PairInfo:NSObject, NSCoding {
     var bridgeStatus:String? = nil
 //    var profilePicturePFFile:PFFile? = nil
     var bridgeType:String? = nil
-    init( name:String?, mainProfilePicture: NSData?, profilePictures: [NSData]?, location:[Double]?, bridgeStatus:String?, objectId:String?,bridgeType:String?  ) { //, profilePicturePFFile:PFFile?
+    var userId:String? = nil
+    init( name:String?, mainProfilePicture: NSData?, profilePictures: [NSData]?, location:[Double]?, bridgeStatus:String?, objectId:String?,bridgeType:String?,userId:String? ) { //, profilePicturePFFile:PFFile?
         self.name = name
         self.mainProfilePicture = mainProfilePicture
         self.profilePictures = profilePictures
@@ -25,6 +26,7 @@ class PairInfo:NSObject, NSCoding {
         self.objectId = objectId
 //        self.profilePicturePFFile = profilePicturePFFile
         self.bridgeType = bridgeType
+        self.userId = userId
         
     }
     
@@ -37,8 +39,9 @@ class PairInfo:NSObject, NSCoding {
         let objectId = aDecoder.decodeObjectForKey("objectId") as! String?
         //let profilePicturePFFile = aDecoder.decodeObjectForKey("profilePicturePFFile") as! PFFile?
         let bridgeType = aDecoder.decodeObjectForKey("bridgeType") as! String?
+        let userId = aDecoder.decodeObjectForKey("userId") as! String?
         self.init(name: name, mainProfilePicture: mainProfilePicture, profilePictures: profilePictures,
-                  location: location, bridgeStatus: bridgeStatus, objectId:objectId, bridgeType: bridgeType)
+                  location: location, bridgeStatus: bridgeStatus, objectId:objectId, bridgeType: bridgeType, userId:userId )
         //, profilePicturePFFile: profilePicturePFFile
     }
     
@@ -51,6 +54,7 @@ class PairInfo:NSObject, NSCoding {
         aCoder.encodeObject(objectId, forKey: "objectId")
        // aCoder.encodeObject(profilePicturePFFile, forKey: "profilePicturePFFile")
         aCoder.encodeObject(bridgeType, forKey: "bridgeType")
+        aCoder.encodeObject(userId, forKey: "userId")
         
     }
     

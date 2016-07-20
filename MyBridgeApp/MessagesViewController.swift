@@ -53,6 +53,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var refresher:UIRefreshControl!
     var pagingSpinner : UIActivityIndicatorView!
     var runBackgroundThread = true
+    var segueToSingleMessage = false
+    var singleMessageId = ""
+    let transitionManager = TransitionManager()
+    
     @IBAction func friendshipTapped(sender: AnyObject) {
        toolbarTapped = true
         filteredPositions = [Int]()
@@ -108,6 +112,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
            self.runBackgroundThread = false
+        if segueToSingleMessage {
+            print(" prepareForSegue was Called")
+            segueToSingleMessage = false
+            let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
+            singleMessageVC.transitioningDelegate = self.transitionManager
+            singleMessageVC.isSeguedFromMessages = true
+            singleMessageVC.newMessageId = self.singleMessageId
+        }
+
     }
     func startBackgroundThread() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
@@ -323,8 +336,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text!)
     }
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         /*refresher = UIRefreshControl()
@@ -365,16 +376,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         pagingSpinner.hidesWhenStopped = true
         tableView.tableFooterView = pagingSpinner
     }
-    
     override func viewDidAppear(animated: Bool) {
         
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         //print ("indexPath - \(indexPath.row) & noOfElementsFetched - \(noOfElementsFetched)" )
         if (indexPath.row == noOfElementsFetched - 1) && (noOfElementsFetched < totalElements) {
         print ("noOfElementsFetched, totalElements = \(noOfElementsFetched) & \(totalElements)")
@@ -382,15 +391,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         refresh()
         }
     }
-
-
-     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
-   
-     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //print("numberOfRowsInSection \( IDsOfMessages.count + 1) \(LocalData().getUsername())")
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
@@ -514,6 +519,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
 
         singleMessageTitle = (currentCell.participants?.text)!
+        singleMessageId = IDsOfMessages[indexPath.row ]
         messageId = IDsOfMessages[indexPath.row ]
         
         //previousViewController = "MessagesViewController"
@@ -543,10 +549,13 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
         }
+        segueToSingleMessage = true
         performSegueWithIdentifier("showSingleMessageFromMessages", sender: self)
     
         
     }
+
+
 
     
 

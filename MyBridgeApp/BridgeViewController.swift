@@ -11,32 +11,19 @@ import Parse
 import MapKit
 class BridgeViewController: UIViewController {
     var bridgePairings:[UserInfoPair]? = nil
-    var lowerDeckCards = [UIView?](count: 5, repeatedValue: nil)
-    var upperDeckCards = [UIView?](count: 5, repeatedValue: nil)
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     let cardWidth = UIScreen.mainScreen().bounds.width*0.8
     let cardHeight = UIScreen.mainScreen().bounds.height*0.37
-    var nameSet = ["Peter", "Jackson", "Johnny", "Bravo", "Dezz"]
-    var nameSet2 = ["Peter", "Jackson", "Johnny", "Bravo", "Dezz"]
-    var locationSet = ["Moscow", "Brlin", "Paris", "Mumbai", "Tel Aviv"]
-    var locationSet2 = ["Moscow", "Brlin", "Paris", "Mumbai", "Tel Aviv"]
-    var statusSet = ["Business","Love","Friendship","Business", "Love"]
-    var statusSet2 = ["Business","Love","Friendship","Business", "Love"]
-    var photoSet = [NSData]()
-    var photoSet2 = [NSData]()
     var totalNoOfCards = 0
-    var nextCardToShow = 0
-    var noOfCardsThrown = 0
     var stackOfCards = [UIView]()
     let localStorageUtility = LocalStorageUtility()
-    var colorSet = [ UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0), UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)]
-    let colorSetMaster = [ UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0), UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0), UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0), UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0), UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0), UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)]
-    var nextPairButton:UIButton? = nil
-    var bridgeButton:UIButton? = nil
-    var minimumCards = 4
     var currentTypeOfCardsOnDisplay = typesOfCard.All
     var lastCardInStack:UIView = UIView()
+    
+    var segueToSingleMessage = false
+    var messageId = ""
+    let transitionManager = TransitionManager()
     enum typesOfCard {
         case All
         case Business
@@ -74,7 +61,7 @@ class BridgeViewController: UIViewController {
             return typesOfCard.Friendship
         }
     }
-        func convertBridgeTypeStringToColorTypeEnum(typeOfCard:String) -> typesOfColor {
+    func convertBridgeTypeStringToColorTypeEnum(typeOfCard:String) -> typesOfColor {
             switch (typeOfCard) {
                 
             case "Business":
@@ -396,6 +383,7 @@ class BridgeViewController: UIViewController {
         
     }
     func bridged(){
+        let bridgePairings = LocalData().getPairings()
         if var bridgePairings = bridgePairings {
             var x = 0
             for i in 0 ..< (bridgePairings.count) {
@@ -410,15 +398,36 @@ class BridgeViewController: UIViewController {
             query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
                 if let result = result {
                     result["checked_out"] = true
+                    result["bridged"] = true
                     result.saveInBackground()
                 }
             })
+            let message = PFObject(className: "Messages")
+            let currentUserId = PFUser.currentUser()?.objectId
+            message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
+            print("userId1, userId2 - \((bridgePairings[x].user1?.userId)!),\((bridgePairings[x].user2?.userId)!)")
+            message["bridge_builder"] = currentUserId
+            do {
+                try message.save()
+                self.messageId = message.objectId!
+            }
+            catch {
+                
+            }
+//            message.saveInBackgroundWithBlock({ (success, error) in
+//                print("new Message Created")
+            
+//            })
             self.bridgePairings!.removeAtIndex(x)
             print("bridgePairings.count - \(bridgePairings.count)")
             let localData = LocalData()
             localData.setPairings(self.bridgePairings!)
             localData.synchronize()
             downloadMoreCards(1)
+            segueToSingleMessage = true
+            performSegueWithIdentifier("showSingleMessage", sender: nil)
+
+
         }
 
     }
@@ -437,6 +446,7 @@ class BridgeViewController: UIViewController {
             query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
                 if let result = result {
                     result["checked_out"] = false
+                    result["bridged"] =  false
                     result.saveInBackground()
                 }
             })
@@ -473,18 +483,29 @@ class BridgeViewController: UIViewController {
                 print("bridged")
                 bridged()
             }
-            
+            if removeCard {
+                superDeckView.removeFromSuperview()
+            }
+            else {
             rotation = CGAffineTransformMakeRotation(0)
             stretch = CGAffineTransformScale(rotation, 1, 1)
             superDeckView.transform = stretch
             superDeckView.center = CGPoint(x: self.view.bounds.width / 2, y: self.view.bounds.height / 2)
-            if removeCard {
-                stackOfCards.removeAtIndex(0)
-                superDeckView.removeFromSuperview()
             }
         }
         
     }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segueToSingleMessage {
+            print("was Called")
+            segueToSingleMessage = false
+            let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
+            singleMessageVC.transitioningDelegate = self.transitionManager
+            singleMessageVC.isSeguedFromBridgePage = true
+            singleMessageVC.newMessageId = self.messageId
+        }
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

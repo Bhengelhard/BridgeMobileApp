@@ -25,6 +25,8 @@
 		1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */; };
 		1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */; };
 		1BE888D71D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */; };
+		1BF57CEB1D3E9308005F2DE7 /* SingleMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */; };
+		1BF57CED1D3E9404005F2DE7 /* SingleMessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */; };
 		1BF5A6C31D1FAB1800EE6B95 /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */; };
 		1BF5A6C51D2174DF00EE6B95 /* NewBridgeStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */; };
 		1BF5A6C71D231B7C00EE6B95 /* iconCancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */; };
@@ -74,6 +76,8 @@
 		1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageUtility.swift; sourceTree = "<group>"; };
 		1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = SOURCE_ROOT; };
 		1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Editing-Rectangle-Stroked-icon.png"; sourceTree = "<group>"; };
+		1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
+		1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = Resources/TransitionManager.swift; sourceTree = SOURCE_ROOT; };
 		1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewBridgeStatusViewController.swift; path = Resources/NewBridgeStatusViewController.swift; sourceTree = SOURCE_ROOT; };
 		1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconCancel.png; sourceTree = "<group>"; };
@@ -188,6 +192,8 @@
 				CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */,
 				1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */,
 				CBEFCD7C1CEF93BA00695B15 /* ProfileTableViewController.swift */,
+				1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */,
+				1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */,
 				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
 				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
 				1BF692D71D09E32B0030B6D0 /* DataController.swift */,
@@ -303,7 +309,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B4A11FD1D1C5F56002FB859 /* NewMessageTableCell.swift in Sources */,
+				1BF57CED1D3E9404005F2DE7 /* SingleMessageContent.swift in Sources */,
 				1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */,
+				1BF57CEB1D3E9308005F2DE7 /* SingleMessageTableCell.swift in Sources */,
 				CBEFCD7D1CEF93BA00695B15 /* ProfileTableViewController.swift in Sources */,
 				1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
