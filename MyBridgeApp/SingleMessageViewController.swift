@@ -211,6 +211,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 print(error)
                 
             } else if let results = results {
+                 self.messageContentArrayMapping = [String:[String:AnyObject]]()
+                 self.messageContentArray = [[String:AnyObject]]()
+
                 if results.count < 1 {
                     self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
                     self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])

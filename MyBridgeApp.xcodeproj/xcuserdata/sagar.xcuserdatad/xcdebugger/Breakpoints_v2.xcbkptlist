@@ -504,11 +504,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/SingleMessageViewController.swift"
-            timestampString = "490743493.801537"
+            timestampString = "490744176.070034"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
             landmarkName = "updateMessages()"
             landmarkType = "5">
          </BreakpointContent>
@@ -568,11 +568,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/SingleMessageViewController.swift"
-            timestampString = "490743493.801537"
+            timestampString = "490744176.070034"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "386"
-            endingLineNumber = "386"
+            startingLineNumber = "389"
+            endingLineNumber = "389"
             landmarkName = "tableView(_:heightForRowAtIndexPath:)"
             landmarkType = "5">
          </BreakpointContent>
