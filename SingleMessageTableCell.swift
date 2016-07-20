@@ -16,6 +16,7 @@ class SingleMessageTableCell: UITableViewCell {
     var timestampLabel: UILabel!
     var senderId:String = ""
     var addSenderName = false
+    var addTimestamp = false
     var singleMessageContent: SingleMessageContent? {
         didSet {
             if let s = singleMessageContent {
@@ -27,6 +28,12 @@ class SingleMessageTableCell: UITableViewCell {
                 if (senderId != PFUser.currentUser()?.objectId) && (singleMessageContent?.senderId != singleMessageContent?.previousSenderId )  {
                     addSenderName = true
                     contentView.addSubview(senderNameLabel)
+                }
+                if let t = s.showTimestamp{
+                    if t{
+                        addTimestamp = true
+                        contentView.addSubview(timestampLabel)
+                    }
                 }
 
                 setNeedsLayout()
@@ -48,14 +55,14 @@ class SingleMessageTableCell: UITableViewCell {
         contentView.addSubview(messageTextLabel)
         
         senderNameLabel = UITextView(frame: CGRectZero)
-        senderNameLabel.textAlignment = .Center
-        senderNameLabel.textColor = UIColor.blackColor()
+        senderNameLabel.textAlignment = .Left
+        senderNameLabel.textColor = UIColor.whiteColor()
         senderNameLabel.userInteractionEnabled = false
-        senderNameLabel.backgroundColor = UIColor.grayColor()
+        senderNameLabel.backgroundColor = UIColor.lightGrayColor()
         
         timestampLabel = UILabel(frame: CGRectZero)
         timestampLabel.textAlignment = .Center
-        timestampLabel.textColor = UIColor.whiteColor()
+        timestampLabel.textColor = UIColor.lightGrayColor()
         //contentView.addSubview(timestampLabel)
     }
     
@@ -72,7 +79,7 @@ class SingleMessageTableCell: UITableViewCell {
         super.layoutSubviews()
         var y = CGFloat(0)
         if addSenderName {
-            senderNameLabel.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width/2, 25)
+            senderNameLabel.frame = CGRectMake(1, 0, UIScreen.mainScreen().bounds.width/3, 15)
             let fixedWidth = senderNameLabel.frame.size.width
             senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
             let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
@@ -88,7 +95,7 @@ class SingleMessageTableCell: UITableViewCell {
         messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2, y, UIScreen.mainScreen().bounds.width/2, 25)
         }
         else {
-            messageTextLabel.frame = CGRectMake(0, y, UIScreen.mainScreen().bounds.width/2, 25)
+            messageTextLabel.frame = CGRectMake(1, y, UIScreen.mainScreen().bounds.width/2, 25)
         }
         let fixedWidth = messageTextLabel.frame.size.width
         messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
@@ -99,6 +106,14 @@ class SingleMessageTableCell: UITableViewCell {
         messageTextLabel.layer.borderWidth = 1
         messageTextLabel.layer.cornerRadius = 5
         messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.CGColor
+        y += newFrame.height + 2
+        if addTimestamp {
+            timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
+            timestampLabel.layer.borderWidth = 1
+            timestampLabel.layer.cornerRadius = 10
+            timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
+        }
+
         print("Cell : \(newFrame.height)")
     }
     override func awakeFromNib() {

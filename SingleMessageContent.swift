@@ -17,6 +17,7 @@ class SingleMessageContent {
     var previousSenderName: String?
     var previousSenderId: String?
     var timestamp: String?
+    var showTimestamp: Bool?
     var isNotification: Bool?
     init(messageContent: [String: AnyObject]) {
         if let m = messageContent["messageText"] as? String {
@@ -43,14 +44,14 @@ class SingleMessageContent {
         else {
             senderId = ""
         }
-        if let s = messageContent["previousSenderName"] as? String {
-            previousSenderName = s
+        if let p = messageContent["previousSenderName"] as? String {
+            previousSenderName = p
         }
         else {
             previousSenderName = ""
         }
-        if let s = messageContent["previousSenderId"] as? String {
-            previousSenderId = s
+        if let p = messageContent["previousSenderId"] as? String {
+            previousSenderId = p
         }
         else {
             previousSenderId = ""
@@ -67,6 +68,13 @@ class SingleMessageContent {
         else {
             isNotification = false
         }
+        if let s = messageContent["showTimestamp"] as? Bool {
+            showTimestamp = s
+        }
+        else {
+            showTimestamp = false
+        }
+
         
         
     }
@@ -74,7 +82,7 @@ class SingleMessageContent {
     var backgroundColor: UIColor {
         if senderId == PFUser.currentUser()?.objectId {
             print("bridgeType == PFUser.currentUser()?.objectId")
-            return UIColor.grayColor()
+            return UIColor.lightGrayColor()
         }
         else if bridgeType == "Business" {
             return UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)
@@ -87,7 +95,7 @@ class SingleMessageContent {
             return UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0)
         }
         print("bridgeType == UIColor.grayColor")
-        return UIColor.grayColor()
+        return UIColor.lightGrayColor()
     }
     
    
