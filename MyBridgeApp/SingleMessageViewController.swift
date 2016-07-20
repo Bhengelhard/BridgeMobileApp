@@ -211,17 +211,16 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 print(error)
                 
             } else if let results = results {
-//                self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
-//                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])
-//                
-//                self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false]
-//                self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false])
-//                
-//                self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
-//                self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])
-//                
-
-                
+                if results.count < 1 {
+                    self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
+                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])
+                    
+                    self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false]
+                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false])
+                    
+                    self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
+                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])
+                }
                 var previousSenderName = ""
                 var previousSenderId = ""
                 var showTimestamp = true
@@ -400,7 +399,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         }
 
         print("tableView \(indexPath.row) : \(newFrame.height)")
-        return newFrame.height + senderNameLabel.frame.height + timestampLabel.frame.height + CGFloat(3)
+        return newFrame.height + senderNameLabel.frame.height + timestampLabel.frame.height + CGFloat(8)
 
         
     }

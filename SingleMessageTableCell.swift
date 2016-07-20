@@ -63,6 +63,8 @@ class SingleMessageTableCell: UITableViewCell {
         timestampLabel = UILabel(frame: CGRectZero)
         timestampLabel.textAlignment = .Center
         timestampLabel.textColor = UIColor.lightGrayColor()
+        timestampLabel.font = timestampLabel.font.fontWithSize(10)
+
         //contentView.addSubview(timestampLabel)
     }
     
