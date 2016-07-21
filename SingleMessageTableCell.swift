@@ -34,12 +34,12 @@ class SingleMessageTableCell: UITableViewCell {
                 }
                 if let t = s.showTimestamp{
                     if t == true{
-                        print("timeStamp after \(s.messageText)")
+                        //print("timeStamp after \(s.messageText)")
                         addTimestamp = true
-                        timestampLabel.hidden = false
                         contentView.addSubview(timestampLabel)
                         
                     }
+                    
                 }
 
                 setNeedsLayout()
@@ -71,7 +71,6 @@ class SingleMessageTableCell: UITableViewCell {
         timestampLabel.textAlignment = .Center
         timestampLabel.textColor = UIColor.lightGrayColor()
         timestampLabel.font = timestampLabel.font.fontWithSize(10)
-        timestampLabel.hidden = true
 
         //contentView.addSubview(timestampLabel)
     }
@@ -121,7 +120,7 @@ class SingleMessageTableCell: UITableViewCell {
         messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.CGColor
         y += newFrame.height + 2
         if addTimestamp == true {
-            //print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
+            print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
             timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
             timestampLabel.layer.borderWidth = 1
             timestampLabel.layer.cornerRadius = 10

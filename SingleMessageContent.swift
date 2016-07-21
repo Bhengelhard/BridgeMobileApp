@@ -82,7 +82,7 @@ class SingleMessageContent {
     var backgroundColor: UIColor {
         if senderId == PFUser.currentUser()?.objectId {
            //print("bridgeType == PFUser.currentUser()?.objectId")
-            return UIColor.clearColor()
+            return UIColor.lightGrayColor()
         }
         else if bridgeType == "Business" {
             return UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)

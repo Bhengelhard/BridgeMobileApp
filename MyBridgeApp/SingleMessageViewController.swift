@@ -439,7 +439,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(SingleMessageTableCell), forIndexPath: indexPath) as! SingleMessageTableCell
+//        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(SingleMessageTableCell), forIndexPath: indexPath) as! SingleMessageTableCell
+        let cell = SingleMessageTableCell()
         let messageContent = messageContentArrayMapping[singleMessageObjectIDToPositionMapping[indexPath.row]!]!
         let singleMessageContent = SingleMessageContent(messageContent: messageContent)
         //print("senderName - \(singleMessageContent.senderName!) previousSenderName - \(singleMessageContent.previousSenderName!) messageText -  \(singleMessageContent.messageText!) ")
