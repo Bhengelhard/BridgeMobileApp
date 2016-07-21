@@ -81,20 +81,20 @@ class SingleMessageContent {
     
     var backgroundColor: UIColor {
         if senderId == PFUser.currentUser()?.objectId {
-            print("bridgeType == PFUser.currentUser()?.objectId")
-            return UIColor.lightGrayColor()
+           //print("bridgeType == PFUser.currentUser()?.objectId")
+            return UIColor.clearColor()
         }
         else if bridgeType == "Business" {
             return UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)
         }
         else if bridgeType == "Love" {
-            print("bridgeType == Love")
+            //print("bridgeType == Love")
             return UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0)
         }
         else if bridgeType == "Friendship" {
             return UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0)
         }
-        print("bridgeType == UIColor.grayColor")
+        //print("bridgeType == UIColor.grayColor")
         return UIColor.lightGrayColor()
     }
     
