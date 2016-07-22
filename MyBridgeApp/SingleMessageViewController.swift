@@ -313,7 +313,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         timestamp = dateFormatter.stringFromDate(date)+">"
                         
                     }
-                    self.messageContentArrayMapping[(result.objectId!)]=["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":isNotification, "senderId":senderId, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp ]
+                    self.messageContentArrayMapping[(result.objectId!)]=["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":isNotification, "senderId":senderId, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":date ]
                     self.singleMessageObjectIDToPositionMapping[singleMessagePosition] = (result.objectId!)
                     singleMessagePosition += 1
                     previousSenderName = senderName
@@ -321,8 +321,18 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                     previousDate = date
                     //update the older entry's previousSenderName, Id and timestamp
                     if (i == 0 && self.messageContentArrayMapping.count > results.count){
+                        var show = false
                         let temp = self.messageContentArrayMapping[self.singleMessageObjectIDToPositionMapping[results.count]!]!
-                        self.messageContentArrayMapping[self.singleMessageObjectIDToPositionMapping[results.count]!] = ["messageText":temp["messageText"]!,"bridgeType":temp["bridgeType"]!,"senderName":temp["senderName"]!, "timestamp":temp["timestamp"]!, "isNotification":temp["isNotification"]!, "senderId":temp["senderId"]!, "previousSenderName":senderName, "previousSenderId":senderId, "showTimestamp":true ]
+                        let components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
+                                fromDate: date, toDate: temp["date"]! as! NSDate, options: NSCalendarOptions.WrapComponents)
+                        if components.minute > 10 {
+                            show = true
+                        }
+                        else{
+                            show = false
+                        }
+                        
+                        self.messageContentArrayMapping[self.singleMessageObjectIDToPositionMapping[results.count]!] = ["messageText":temp["messageText"]!,"bridgeType":temp["bridgeType"]!,"senderName":temp["senderName"]!, "timestamp":temp["timestamp"]!, "isNotification":temp["isNotification"]!, "senderId":temp["senderId"]!, "previousSenderName":senderName, "previousSenderId":senderId, "showTimestamp":show, "date":temp["date"]! ]
                     }
 
                 }
