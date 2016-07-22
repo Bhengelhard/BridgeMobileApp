@@ -643,6 +643,18 @@ class LocalStorageUtility{
         }
     }
     func getBridgePairings(){
+        if let friendList = PFUser.currentUser()?["friend_list"] as? [String] {
+                        //print("ratings")
+                        PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
+                            (response: AnyObject?, error: NSError?) -> Void in
+                            if let ratings = response as? String {
+                                print(ratings)
+                            }
+                            else {
+                                print(error)
+                            }
+                        }
+        }
  //       getBridgePairingsFromCloud()
 //             var ignoredPairings = [[String]]()
 //        

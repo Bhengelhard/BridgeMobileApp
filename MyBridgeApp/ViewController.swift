@@ -198,7 +198,7 @@ class ViewController: UIViewController {
                         
                         //use while access token is nil instead of delay
                          print("not new")
-                        LocalStorageUtility().getBridgePairings()
+                        //LocalStorageUtility().getBridgePairings()
                          //self.getUserPhotos()
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
                             //stop the spinner animation and reactivate the interaction with user

@@ -154,7 +154,7 @@ class LoadPageViewController: UIViewController {
                 //print("Load page, username is \(username)")
                 LocalStorageUtility().getUserFriends()
                 LocalStorageUtility().getMainProfilePicture()
-                LocalStorageUtility().getBridgePairings()
+                //LocalStorageUtility().getBridgePairings()
                 self.performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
             }
             else{
