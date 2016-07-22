@@ -106,24 +106,24 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                      })*/
                     
                     let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
-                    let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
+                    //let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
                     
                     var updatedIdsInMessage = [String]()
-                    var updatedNamesInMessage = [String]()
+                   // var updatedNamesInMessage = [String]()
                     
                     for i in 0...(CurrentIdsInMessage.count - 1) {
                         
                         if CurrentIdsInMessage[i] as? String != PFUser.currentUser()?.objectId {
                             
                             updatedIdsInMessage.append(CurrentIdsInMessage[i] as! String)
-                            updatedNamesInMessage.append(CurrentNamesInMessage[i] as! String)
+                         //   updatedNamesInMessage.append(CurrentNamesInMessage[i] as! String)
                             
                         }
                         
                     }
                     
                     object!["ids_in_message"] = updatedIdsInMessage
-                    object!["names_in_message"] = updatedNamesInMessage
+                   // object!["names_in_message"] = updatedNamesInMessage
                     
                     object!.saveInBackgroundWithBlock({ (success, error) in
                         
@@ -290,26 +290,28 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                             showTimestamp = false
                         }
                     }
-                    let components = calendar.components([.Month, .Day, .Year, .WeekOfYear],
-                            fromDate: date, toDate: NSDate(), options: NSCalendarOptions.WrapComponents)
+                    print("date - \(date), toDate - \(NSDate())")
+                    let components = calendar.components([.Day],
+                            fromDate: date, toDate: NSDate(), options: [])
+                    print(components)
                     if components.day > 7 {
                         let dateFormatter = NSDateFormatter()
                         dateFormatter.dateFormat = "MM/dd/yyy"
                         timestamp = dateFormatter.stringFromDate(date)+">"
                     }
-                    else if components.day > 2 {
+                    else if components.day >= 2 {
                         let calendar = NSCalendar.currentCalendar()
                         let date = result.createdAt!
-                        let components = calendar.components([.Weekday],
+                        let components2 = calendar.components([.Weekday],
                             fromDate: date)
-                        timestamp = String(getWeekDay(components.weekday))+">"
+                        timestamp = String(getWeekDay(components2.weekday))+">"
                     }
-                    else if components.day > 1 {
+                    else if components.day >= 1 {
                         timestamp = "Yesterday"+">"
                     }
                     else {
                         let dateFormatter = NSDateFormatter()
-                        dateFormatter.dateFormat = "hh:mm:ss"
+                        dateFormatter.dateFormat = "hh:mm:ss a"
                         timestamp = dateFormatter.stringFromDate(date)+">"
                         
                     }
@@ -331,6 +333,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         else{
                             show = false
                         }
+                        
+                        
                         
                         self.messageContentArrayMapping[self.singleMessageObjectIDToPositionMapping[results.count]!] = ["messageText":temp["messageText"]!,"bridgeType":temp["bridgeType"]!,"senderName":temp["senderName"]!, "timestamp":temp["timestamp"]!, "isNotification":temp["isNotification"]!, "senderId":temp["senderId"]!, "previousSenderName":senderName, "previousSenderId":senderId, "showTimestamp":show, "date":temp["date"]! ]
                     }
@@ -404,9 +408,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var addSenderName = false
         let messageContent = messageContentArrayMapping[singleMessageObjectIDToPositionMapping[indexPath.row]!]!
+        
         let senderNameLabel = UITextView(frame: CGRectZero)
-        if ( (messageContent["senderName"] as? String)! != (messageContent["previousSenderName"] as? String)!) {
+        let messageTextLabel = UITextView(frame: CGRectZero)
+        let timestampLabel = UILabel(frame: CGRectZero)
+        
+        if ((messageContent["senderId"] as? String)! != (PFUser.currentUser()?.objectId)!)  {
+            if ( (messageContent["senderName"] as? String)! != (messageContent["previousSenderName"] as? String)!) {
             addSenderName = true
+            }
         }
         var addTimestamp = false
         if (messageContent["showTimestamp"] as? Bool)! {
@@ -415,17 +425,27 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         else {
             addTimestamp = false
         }
+        
+        
+        if addTimestamp {
+            timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, 0, UIScreen.mainScreen().bounds.width*0.30, 27)
+            timestampLabel.layer.borderWidth = 1
+            timestampLabel.layer.cornerRadius = 5
+            timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
+        }
         if addSenderName {
             senderNameLabel.text = (messageContent["senderName"] as? String)!
-            senderNameLabel.frame = CGRectMake(1, 0, UIScreen.mainScreen().bounds.width/3, 15)
+            var width = (UIScreen.mainScreen().bounds.width/3 )
+            width += CGFloat(5)
+            senderNameLabel.frame = CGRectMake(5, 0, width, 15)
             let fixedWidth = senderNameLabel.frame.size.width
             let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
             var newFrame = senderNameLabel.frame
-            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height + CGFloat(1))
+            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height + 1)
             senderNameLabel.frame = newFrame
         }
 
-        let messageTextLabel = UITextView(frame: CGRectZero)
+        
         
         messageTextLabel.text = (messageContent["messageText"] as? String)!
         messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2, 0, UIScreen.mainScreen().bounds.width/2, 25)
@@ -433,17 +453,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
         var newFrame = messageTextLabel.frame
         newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+        messageTextLabel.frame = newFrame
         
-        let timestampLabel = UILabel(frame: CGRectZero)
-        if addTimestamp {
-            timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, 0, UIScreen.mainScreen().bounds.width*0.30, 25)
-            timestampLabel.layer.borderWidth = 1
-            timestampLabel.layer.cornerRadius = 5
-            timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
-        }
 
         //print("tableView \(indexPath.row) : \(newFrame.height)")
-        return newFrame.height + senderNameLabel.frame.height + timestampLabel.frame.height + CGFloat(8)
+        return messageTextLabel.frame.height + senderNameLabel.frame.height + timestampLabel.frame.height + CGFloat(2)
 
         
     }

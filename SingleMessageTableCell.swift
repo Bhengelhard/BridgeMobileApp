@@ -26,8 +26,8 @@ class SingleMessageTableCell: UITableViewCell {
                 messageTextLabel.text = s.messageText
                 senderId = s.senderId!
                 if (senderId != PFUser.currentUser()?.objectId) && (singleMessageContent?.senderId != singleMessageContent?.previousSenderId )  {
-                    print("")
-                    print ("senderId - \(senderId), PFUser.currentUser()?.objectId - \(PFUser.currentUser()?.objectId), singleMessageContent?.senderId- \(singleMessageContent?.senderId), singleMessageContent?.previousSenderId - \(singleMessageContent?.previousSenderId)   ")
+//                    print("")
+//                    print ("senderId - \(senderId), PFUser.currentUser()?.objectId - \(PFUser.currentUser()?.objectId), singleMessageContent?.senderId- \(singleMessageContent?.senderId), singleMessageContent?.previousSenderId - \(singleMessageContent?.previousSenderId)   ")
                     
                     addSenderName = true
                     contentView.addSubview(senderNameLabel)
@@ -87,10 +87,23 @@ class SingleMessageTableCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         var y = CGFloat(0)
+        
+        if addTimestamp == true {
+            print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
+            timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
+            timestampLabel.layer.borderWidth = 1
+            timestampLabel.layer.cornerRadius = 10
+            timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
+//            addTimestamp = false
+            y += timestampLabel.frame.height + 2
+//            print("timestampLabel - \(timestampLabel.frame)")
+
+        }
+
         if addSenderName {
             var width = (UIScreen.mainScreen().bounds.width/3 )
             width += CGFloat(5)
-            senderNameLabel.frame = CGRectMake(5, 0, width, 15)
+            senderNameLabel.frame = CGRectMake(5, y, width, 15)
             let fixedWidth = senderNameLabel.frame.size.width
             let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
             var newFrame = senderNameLabel.frame
@@ -99,8 +112,8 @@ class SingleMessageTableCell: UITableViewCell {
             senderNameLabel.layer.borderWidth = 1
             senderNameLabel.layer.cornerRadius = 5
             senderNameLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
-            y = newFrame.height + 1
-            addSenderName = false
+            y += newFrame.height + 1
+//            addSenderName = false
         }
         if senderId == PFUser.currentUser()?.objectId {
         messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2, y, UIScreen.mainScreen().bounds.width/2, 25)
@@ -115,19 +128,11 @@ class SingleMessageTableCell: UITableViewCell {
         var newFrame = messageTextLabel.frame
         newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
         messageTextLabel.frame = newFrame
+//        print("messageTextLabel - \(messageTextLabel.frame)")
         messageTextLabel.layer.borderWidth = 1
         messageTextLabel.layer.cornerRadius = 5
         messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.CGColor
-        y += newFrame.height + 2
-        if addTimestamp == true {
-            print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
-            timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
-            timestampLabel.layer.borderWidth = 1
-            timestampLabel.layer.cornerRadius = 10
-            timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
-            addTimestamp = false
-        }
-
+        
        // print("Cell : \(newFrame.height)")
     }
     override func awakeFromNib() {

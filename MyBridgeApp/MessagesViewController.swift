@@ -481,7 +481,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //print(dateFormatter.stringFromDate(date))
             cell.messageTimestamp.text = dateFormatter.stringFromDate(date)+">"
         }
-        else if components.day > 2 {
+        else if components.day >= 2 {
             let calendar = NSCalendar.currentCalendar()
             let date = messageTimestamps[indexPath.row]!
             let components = calendar.components([.Weekday],
@@ -489,7 +489,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //print(components.weekday)
             cell.messageTimestamp.text = String(getWeekDay(components.weekday))+">"
         }
-        else if components.day > 1 {
+        else if components.day >= 1 {
             //print ("Yesterday")
             cell.messageTimestamp.text = "Yesterday"+">"
         }
