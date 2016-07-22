@@ -36,16 +36,18 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
    // @IBOutlet var tableView: UITableView!
     var emails = [String]()
     var images = [UIImage]()
-    var names = [[String]]()
-    var IDsOfMessages = [String]()
-    var messages = [String]()
-    var messageType = [String]()
-    var messageViewed = [Bool]()
-    var messageTimestamps = [NSDate?]()
+    var names = [String : [String]]()
+    //var IDsOfMessages = [String]()
+    var messages = [String : String]()
+    var messageType = [String : String]()
+    var messageViewed = [String : Bool]()
+    var messageTimestamps = [String : NSDate?]()
+    var messagePositionToMessageIdMapping = [Int:String]()
     let searchController = UISearchController(searchResultsController: nil)
     var filteredPositions = [Int]()
     var toolbarTapped = false
     var encounteredBefore: [Int:Bool] = [:]
+    var noOfElementsProcessed = 0
     var noOfRefreshes = 0
     var noOfElementsPerRefresher = 2
     var noOfElementsFetched = 0
@@ -61,7 +63,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
        toolbarTapped = true
         filteredPositions = [Int]()
         for i in 0 ..< messageType.count{
-            if messageType[i] == "Friendship" {
+            if messageType[messagePositionToMessageIdMapping[i]!]! == "Friendship" {
                 filteredPositions.append(i)
             }
         }
@@ -71,7 +73,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         toolbarTapped = true
         filteredPositions = [Int]()
         for i in 0 ..< messageType.count{
-            if messageType[i] == "Love" {
+            if messageType[messagePositionToMessageIdMapping[i]!]! == "Love" {
                 filteredPositions.append(i)
             }
         }
@@ -81,7 +83,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         toolbarTapped = true
         filteredPositions = [Int]()
         for i in 0 ..< messageType.count{
-            if messageType[i] == "Business" {
+            if messageType[messagePositionToMessageIdMapping[i]!]! == "Business" {
                 filteredPositions.append(i)
             }
         }
@@ -157,28 +159,30 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             else if let results = results {
                 self.noOfElementsFetched += results.count
                 print("self.noOfElementsFetched \(self.noOfElementsFetched)")
-                for result in results{
-                    
-                    self.IDsOfMessages.append(result.objectId!)
+                for i in 0..<results.count{
+                    let result = results[i]
+                    self.messagePositionToMessageIdMapping[self.noOfElementsProcessed] = result.objectId!
+                    self.noOfElementsProcessed += 1
+                    //self.IDsOfMessages.append(result.objectId!)
                     if let _ = result["message_type"] {
-                        self.messageType.append(result["message_type"] as! (String))
+                        self.messageType[result.objectId!] = (result["message_type"] as! (String))
                     }
                     else {
-                        self.messageType.append("Default")
+                        self.messageType[result.objectId!] = ("Default")
                     }
                     if let _ = result["message_viewed"] {
                         let whoViewed = result["message_viewed"] as! ([String])
                         if whoViewed.contains((PFUser.currentUser()?.objectId)!) {
-                            self.messageViewed.append(true)
+                            self.messageViewed[result.objectId!] = (true)
                             print("1")
                         }
                         else {
-                            self.messageViewed.append(false)
+                            self.messageViewed[result.objectId!] = (false)
                             print("2")
                         }
                     }
                     else {
-                        self.messageViewed.append(false)
+                        self.messageViewed[result.objectId!]=(false)
                         print("3")
                     }
 
@@ -195,7 +199,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                             names_per_message.append(userObject["name"] as! String)
                         }
                     }
-                    self.names.append(names_per_message)
+                    self.names[result.objectId!] = (names_per_message)
                    
                     })
                     // get the message
@@ -203,21 +207,22 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     messageQuery.whereKey("message_id", equalTo:result.objectId!)
                     messageQuery.orderByDescending("updatedAt")
                     messageQuery.cachePolicy = .NetworkElseCache
-                    messageQuery.findObjectsInBackgroundWithBlock({(results, error) -> Void in
+                    messageQuery.limit = 1
+                    messageQuery.findObjectsInBackgroundWithBlock({(objects, error) -> Void in
                     if (error == nil) {
-                    if results!.count == 0{
-                        self.messages.append("Your new bridge awaits")
-                        self.messageTimestamps.append(result.createdAt!)
+                    if objects!.count == 0{
+                        self.messages[result.objectId!] = ("Your new bridge awaits")
+                        self.messageTimestamps[result.objectId!] = (result.createdAt!)
                     }
                     else {
-                        for messageObject in results! {
+                        for messageObject in objects! {
                             if let _ = messageObject["message_text"] {
-                                self.messages.append(messageObject["message_text"] as! (String))
+                                self.messages[result.objectId!] = (messageObject["message_text"] as! (String))
                             }
                             else{
-                                self.messages.append("")
+                                self.messages[result.objectId!] = ("")
                             }
-                            self.messageTimestamps.append((messageObject.createdAt))
+                            self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
                             break
                                 //friendsArray.append(object.objectId!)
                         }
@@ -231,85 +236,85 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         })
     }
     func updateMessagesTable() {
-        let query: PFQuery = PFQuery(className: "Messages")
-        query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
-        query.orderByDescending("updatedAt")
-        
-        query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
-            
-            if let error = error {
-                
-                print(error)
-                
-            } else if let results = results {
-                
-                for result in results{
-                    self.IDsOfMessages.append(result.objectId!)
-                    if let _ = result["message_type"] {
-                        self.messageType.append(result["message_type"] as! (String))
-                    }
-                    else{
-                        self.messageType.append("Default")
-                    }
-                    let message_userids = result["ids_in_message"] as! [String]
-                    var names_per_message = [String]()
-                    //get all those involved in this chat
-                    do{
-                        let userQuery = PFQuery(className:"_User")
-                        userQuery.whereKey("objectId", containedIn:message_userids)
-                        let userObjects = try userQuery.findObjects()
-                        for userObject in userObjects {
-                            names_per_message.append(userObject["name"] as! String)
-                        }
-                    }
-                    catch{
-                        
-                    }
-                    self.names.append(names_per_message)
-                    // get the message
-                    do{
-                        let messageQuery = PFQuery(className:"SingleMessages")
-                        messageQuery.whereKey("message_id", equalTo:result.objectId!)
-                        messageQuery.orderByDescending("createdAt")
-                        let messageObjects = try messageQuery.findObjects()
-                        if messageObjects.count == 0{
-                            self.messages.append("Your new bridge awaits")
-                            self.messageTimestamps.append(result.createdAt!)
-                        }
-                        else {
-                         for messageObject in messageObjects {
-                             if let _ = messageObject["message_text"] {
-                                 self.messages.append(messageObject["message_text"] as! (String))
-                             }
-                             else{
-                                 self.messages.append("")
-                             }
-                            self.messageTimestamps.append((messageObject.createdAt))
-                            break
-                            //friendsArray.append(object.objectId!)
-                         }
-                        }
-                    }
-                    catch{
-                        print(error)
-                    }
-                    
-                    
-                }
-
-                print("current user - \(PFUser.currentUser()?["name"])")
-                print("names - \(self.names)")
-               dispatch_async(dispatch_get_main_queue(), {
-                    
-                    self.tableView.reloadData()
-                    
-                })
-                
-            }
-            
-            
-        })
-
+//        let query: PFQuery = PFQuery(className: "Messages")
+//        query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
+//        query.orderByDescending("updatedAt")
+//        
+//        query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+//            
+//            if let error = error {
+//                
+//                print(error)
+//                
+//            } else if let results = results {
+//                
+//                for result in results{
+//                    self.IDsOfMessages.append(result.objectId!)
+//                    if let _ = result["message_type"] {
+//                        self.messageType.append(result["message_type"] as! (String))
+//                    }
+//                    else{
+//                        self.messageType.append("Default")
+//                    }
+//                    let message_userids = result["ids_in_message"] as! [String]
+//                    var names_per_message = [String]()
+//                    //get all those involved in this chat
+//                    do{
+//                        let userQuery = PFQuery(className:"_User")
+//                        userQuery.whereKey("objectId", containedIn:message_userids)
+//                        let userObjects = try userQuery.findObjects()
+//                        for userObject in userObjects {
+//                            names_per_message.append(userObject["name"] as! String)
+//                        }
+//                    }
+//                    catch{
+//                        
+//                    }
+//                    self.names.append(names_per_message)
+//                    // get the message
+//                    do{
+//                        let messageQuery = PFQuery(className:"SingleMessages")
+//                        messageQuery.whereKey("message_id", equalTo:result.objectId!)
+//                        messageQuery.orderByDescending("createdAt")
+//                        let messageObjects = try messageQuery.findObjects()
+//                        if messageObjects.count == 0{
+//                            self.messages.append("Your new bridge awaits")
+//                            self.messageTimestamps.append(result.createdAt!)
+//                        }
+//                        else {
+//                         for messageObject in messageObjects {
+//                             if let _ = messageObject["message_text"] {
+//                                 self.messages.append(messageObject["message_text"] as! (String))
+//                             }
+//                             else{
+//                                 self.messages.append("")
+//                             }
+//                            self.messageTimestamps.append((messageObject.createdAt))
+//                            break
+//                            //friendsArray.append(object.objectId!)
+//                         }
+//                        }
+//                    }
+//                    catch{
+//                        print(error)
+//                    }
+//                    
+//                    
+//                }
+//
+//                print("current user - \(PFUser.currentUser()?["name"])")
+//                print("names - \(self.names)")
+//               dispatch_async(dispatch_get_main_queue(), {
+//                    
+//                    self.tableView.reloadData()
+//                    
+//                })
+//                
+//            }
+//            
+//            
+//        })
+//
         
     }
     // helper function for updateSearchResultsForSearchController
@@ -317,7 +322,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         filteredPositions = [Int]()
         for i in 0 ..< names.count  {
             var flag = true
-            for individualNames in names[i]{
+            for individualNames in names[messagePositionToMessageIdMapping[i]!]!{
                 if individualNames.lowercaseString.containsString(searchText.lowercaseString){
                     filteredPositions.append(i)
                     flag = false
@@ -325,7 +330,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             
-            if flag && messages[i].lowercaseString.containsString(searchText.lowercaseString){
+            if flag && messages[messagePositionToMessageIdMapping[i]!]!.lowercaseString.containsString(searchText.lowercaseString){
                 filteredPositions.append(i)
             }
         }
@@ -408,28 +413,32 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 
     // Data to be shown on an individual row
      func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        print("Row is \(indexPath.row) \(messageViewed)")
-        var names = self.names
-        var messages = self.messages
-        var messageType = self.messageType
-        var messageTimestamps = self.messageTimestamps
+        //print("Row is \(indexPath.row) \(messageViewed)")
+//        var names = self.names
+//        var messages = self.messages
+//        var messageType = self.messageType
+//        var messageTimestamps = self.messageTimestamps
+        var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
         
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
-             names = [[String]]()
-             messages = [String]()
-             messageType = [String]()
-             messageTimestamps = [NSDate?]()
-
+//             names = [[String]]()
+//             messages = [String]()
+//             messageType = [String]()
+//             messageTimestamps = [NSDate?]()
+            var i = 0
+            messagePositionToMessageIdMapping = [Int:String]()
             for index in filteredPositions {
-                names.append(self.names[index])
-                messages.append(self.messages[index])
-                messageType.append(self.messageType[index])
-                messageTimestamps.append(self.messageTimestamps[index])
+                 messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
+                 i += 1
+//                names.append(self.names[index])
+//                messages.append(self.messages[index])
+//                messageType.append(self.messageType[index])
+//                messageTimestamps.append(self.messageTimestamps[index])
             }
         }
         var stringOfNames = ""
-        var users = names[indexPath.row]
+        var users = names[messagePositionToMessageIdMapping[indexPath.row]!]!
         users = users.filter { $0 != PFUser.currentUser()?["name"] as! String }
         
         for i in 0 ..< users.count  {
@@ -454,11 +463,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         cell.participants.text = stringOfNames
-        cell.messageSnapshot.text = messages[indexPath.row]
-        if messageViewed[indexPath.row] {
+        cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[indexPath.row]!]!
         cell.blueDot.hidden = true
-        }
-        switch messageType[indexPath.row]{
+//        if messageViewed[indexPath.row] {
+//        cell.blueDot.hidden = true
+//        }
+        switch messageType[messagePositionToMessageIdMapping[indexPath.row]!]!{
             
         case "Business": cell.backgroundColor = UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0)
             break
@@ -472,7 +482,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
         let calendar = NSCalendar.currentCalendar()
-        let date = messageTimestamps[indexPath.row]!
+        let date = (messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!]!)!
         let components = calendar.components([.Month, .Day, .Year, .WeekOfYear],
                                              fromDate: date, toDate: NSDate(), options: NSCalendarOptions.WrapComponents)
         if components.day > 7 {
@@ -483,7 +493,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         else if components.day >= 2 {
             let calendar = NSCalendar.currentCalendar()
-            let date = messageTimestamps[indexPath.row]!
+            let date = (messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!]!)!
             let components = calendar.components([.Weekday],
                                                  fromDate: date)
             //print(components.weekday)
@@ -509,18 +519,23 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     // A row is selected
      func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var IDsOfMessages = self.IDsOfMessages
+        //var IDsOfMessages = self.IDsOfMessages
         let currentCell = tableView.cellForRowAtIndexPath(indexPath)! as! MessagesTableCell
+        var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
-            IDsOfMessages = [String]()
+            //IDsOfMessages = [String]()
+            messagePositionToMessageIdMapping = [Int:String]()
+            var i = 0
             for index in filteredPositions {
-                IDsOfMessages.append(self.IDsOfMessages[index])
+                messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
+                i += 1
+                //IDsOfMessages.append(self.IDsOfMessages[index])
             }
         }
 
         singleMessageTitle = (currentCell.participants?.text)!
-        singleMessageId = IDsOfMessages[indexPath.row ]
-        messageId = IDsOfMessages[indexPath.row ]
+        singleMessageId = messagePositionToMessageIdMapping[indexPath.row]!
+        messageId = messagePositionToMessageIdMapping[indexPath.row ]!
         
         //previousViewController = "MessagesViewController"
         toolbarTapped = false
