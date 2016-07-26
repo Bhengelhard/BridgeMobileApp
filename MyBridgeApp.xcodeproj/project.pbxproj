@@ -38,6 +38,9 @@
 		1BF998DD1D0B158E00F79E00 /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DC1D0B158E00F79E00 /* PairInfo.swift */; };
 		1BF998DF1D0B315F00F79E00 /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */; };
 		1BFDE4E31D174E1300D91C6F /* bridgeVector.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1BFDE4E21D174E1300D91C6F /* bridgeVector.jpg */; };
+		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
+		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
+		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
 		814C3ACB1B69877600E307BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814C3AC81B69877600E307BB /* Images.xcassets */; };
 		81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81761A49E0D500E65899 /* libsqlite3.dylib */; };
 		81BA81791A49E0DB00E65899 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81781A49E0DB00E65899 /* AudioToolbox.framework */; };
@@ -54,7 +57,6 @@
 		CBEFCD671CE35DB900695B15 /* suzy's_profile_picture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */; };
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
 		CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD761CEDED9600695B15 /* Main.storyboard */; };
-		CBEFCD7D1CEF93BA00695B15 /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD7C1CEF93BA00695B15 /* ProfileTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +91,9 @@
 		1BF998DC1D0B158E00F79E00 /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PairInfo.swift; sourceTree = "<group>"; };
 		1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoPair.swift; sourceTree = "<group>"; };
 		1BFDE4E21D174E1300D91C6F /* bridgeVector.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridgeVector.jpg; sourceTree = "<group>"; };
+		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
 		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		814C3AC91B69877600E307BB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81BA81451A49DA1800E65899 /* MyBridgeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyBridgeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,7 +112,6 @@
 		CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "suzy's_profile_picture.jpg"; path = "Images.xcassets/suzy's_profile_picture.jpg"; sourceTree = "<group>"; };
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD761CEDED9600695B15 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
-		CBEFCD7C1CEF93BA00695B15 /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = MyBridgeApp/ProfileTableViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,9 +193,11 @@
 				1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */,
 				1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */,
 				1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */,
+				307A7F591D46619300858F96 /* ProfileViewController.swift */,
+				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
+				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
 				CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */,
 				1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */,
-				CBEFCD7C1CEF93BA00695B15 /* ProfileTableViewController.swift */,
 				1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */,
 				1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */,
 				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
@@ -260,6 +266,7 @@
 				TargetAttributes = {
 					81BA81441A49DA1800E65899 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 7Y7JRS85QB;
 					};
 				};
 			};
@@ -311,10 +318,12 @@
 				1B4A11FD1D1C5F56002FB859 /* NewMessageTableCell.swift in Sources */,
 				1BF57CED1D3E9404005F2DE7 /* SingleMessageContent.swift in Sources */,
 				1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */,
+				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
+				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF57CEB1D3E9308005F2DE7 /* SingleMessageTableCell.swift in Sources */,
-				CBEFCD7D1CEF93BA00695B15 /* ProfileTableViewController.swift in Sources */,
 				1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
+				307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */,
 				1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */,
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
@@ -426,6 +435,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -435,7 +445,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Blake.myBridgeApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Introduction;
 				PRODUCT_NAME = MyBridgeApp;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -447,6 +457,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -456,7 +467,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Blake.myBridgeApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Introduction;
 				PRODUCT_NAME = MyBridgeApp;
 			};
 			name = Release;

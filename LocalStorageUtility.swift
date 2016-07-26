@@ -499,6 +499,7 @@ class LocalStorageUtility{
                         localData.setMainProfilePicture(data)
                         localData.setProfilePictureFromFb(true)
                         localData.synchronize()
+                            
                         }
                     }
                 }
@@ -506,6 +507,7 @@ class LocalStorageUtility{
             }
         }
     }
+    
     func getUserDetails(id:String)->PairInfo?{
         var user:PairInfo? = nil
         let query = PFQuery(className:"_User")

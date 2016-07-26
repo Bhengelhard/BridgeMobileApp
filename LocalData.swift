@@ -69,6 +69,7 @@ class LocalData {
     func setProfilePictureFromFb(profilePictureFromFb:Bool){
         self.profilePictureFromFb = profilePictureFromFb
     }
+    
     func getProfilePictureFromFb()-> Bool?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let _ = userDefaults.objectForKey("userInfo"){
@@ -134,6 +135,7 @@ class LocalData {
     func setMainProfilePicture(mainProfilePicture:NSData){
         self.mainProfilePicture = mainProfilePicture
     }
+    
     func getMainProfilePicture()->NSData?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let _ = userDefaults.objectForKey("userInfo"){

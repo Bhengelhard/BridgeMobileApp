@@ -128,7 +128,7 @@ class LoadPageViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         
-        
+        LocalData().setUsername("Blake Harris Engelhard")
         
     }
     
@@ -147,14 +147,16 @@ class LoadPageViewController: UIViewController {
             }
         })*/
         
-        
         PFUser.currentUser()?.fetchInBackgroundWithBlock({ (object, error) in
             let localData = LocalData()
+            
             if let username = localData.getMainProfilePicture(){ //remember to change this back to username
                 //print("Load page, username is \(username)")
                 LocalStorageUtility().getUserFriends()
                 LocalStorageUtility().getMainProfilePicture()
                 //LocalStorageUtility().getBridgePairings()
+                
+                
                 self.performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
             }
             else{
