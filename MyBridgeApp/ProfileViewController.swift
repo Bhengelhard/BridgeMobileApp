@@ -194,12 +194,18 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         if indexPath.row == 0 {
             
             //opens user's email application with email ready to be sent to bridge email
-            let email = "blake@mybridgeapp.com"
-            let url = NSURL(string: "mailto:\(email)")
-            UIApplication.sharedApplication().openURL(url!)
             
-            print(email)
-            print(url)
+            let subject = "Providing%20Feedback%20for%20the%20Bridge%20Team"
+            let encodedParams = "subject=\(subject)"
+            let email = "blake@mybridgeapp.com"
+            let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
+            
+            if UIApplication.sharedApplication().canOpenURL(url!) {
+                
+                UIApplication.sharedApplication().openURL(url!)
+                
+            }
+            
             
         } else if indexPath.row == 1 {
             
