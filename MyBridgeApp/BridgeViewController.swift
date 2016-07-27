@@ -106,11 +106,11 @@ class BridgeViewController: UIViewController {
     }
     
     func getUpperDeckCardFrame() -> CGRect {
-        let upperDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*(0.16), screenWidth*0.8,screenHeight*0.37)
+        let upperDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*0.87*(0.16), screenWidth*0.8,screenHeight*0.87*0.37)
         return upperDeckFrame
     }
     func getLowerDeckCardFrame() -> CGRect {
-        let lowerDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*(0.54), screenWidth*0.8,screenHeight*0.37)
+        let lowerDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*0.87*(0.54), screenWidth*0.8,screenHeight*0.87*0.37)
         return lowerDeckFrame
     }
     func getUpperDeckCard(name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor) -> UIView{
@@ -157,7 +157,7 @@ class BridgeViewController: UIViewController {
         
         let upperDeckCard = getUpperDeckCard(name, location: location, status: status, photo: photo, cardColor: cardColor)
         let lowerDeckCard = getLowerDeckCard(name2, location: location2, status: status2, photo: photo2, cardColor: cardColor)
-        let superDeckFrame : CGRect = CGRectMake(0,0, screenWidth,screenHeight)
+        let superDeckFrame : CGRect = CGRectMake(0,screenHeight*0.087, screenWidth,screenHeight*0.85)
         let superDeckView = UIView(frame:superDeckFrame)
         superDeckView.addSubview(upperDeckCard)
         superDeckView.addSubview(lowerDeckCard)
@@ -377,7 +377,7 @@ class BridgeViewController: UIViewController {
             }
             stackOfCards.removeAll()
             displayCards()
-            displayToolBar()
+            //displayToolBar()
             
         }
         
@@ -464,8 +464,7 @@ class BridgeViewController: UIViewController {
     func isDragged(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translationInView(self.view)
         let superDeckView = gesture.view!
-        
-        superDeckView.center = CGPoint(x: self.view.bounds.width / 2 + translation.x, y: self.view.bounds.height / 2 + translation.y)
+        superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5) + translation.y)
         let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
         let scale = min(100 / abs(xFromCenter), 1)
         var rotation = CGAffineTransformMakeRotation(xFromCenter / 200)
@@ -490,7 +489,7 @@ class BridgeViewController: UIViewController {
             rotation = CGAffineTransformMakeRotation(0)
             stretch = CGAffineTransformScale(rotation, 1, 1)
             superDeckView.transform = stretch
-            superDeckView.center = CGPoint(x: self.view.bounds.width / 2, y: self.view.bounds.height / 2)
+            superDeckView.center = CGPoint(x: self.screenWidth / 2, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5))
             }
         }
         
