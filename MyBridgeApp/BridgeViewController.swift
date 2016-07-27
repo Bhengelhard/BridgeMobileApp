@@ -20,7 +20,8 @@ class BridgeViewController: UIViewController {
     let localStorageUtility = LocalStorageUtility()
     var currentTypeOfCardsOnDisplay = typesOfCard.All
     var lastCardInStack:UIView = UIView()
-    
+    var displayNoMoreCardsView:UIView? = nil
+    var arrayOfCardsInDeck = [UIView]()
     var segueToSingleMessage = false
     var messageId = ""
     let transitionManager = TransitionManager()
@@ -104,7 +105,18 @@ class BridgeViewController: UIViewController {
         toolbar.backgroundColor = UIColor.redColor()
         self.view.addSubview(toolbar)
     }
-    
+    func displayNoMoreCards() {
+        let frame1: CGRect = CGRectMake(0,screenHeight*0.2, screenWidth,screenHeight*0.8)
+        let frame2: CGRect = CGRectMake(screenWidth * 0.08,screenHeight*0.1, screenWidth*0.9,screenHeight * 0.5)
+        let view1 = UIView(frame:frame1)
+        let label = UILabel(frame: frame2)
+        label.numberOfLines = 0
+        label.text = "You see to have run out of potential Bridges for the day. Please check back tomorrow!"
+        view1.addSubview(label)
+        self.view.insertSubview(view1, aboveSubview: self.view)
+        displayNoMoreCardsView = view1
+        
+    }
     func getUpperDeckCardFrame() -> CGRect {
         let upperDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*0.87*(0.16), screenWidth*0.8,screenHeight*0.87*0.37)
         return upperDeckFrame
@@ -167,15 +179,23 @@ class BridgeViewController: UIViewController {
         superDeckView.addGestureRecognizer(gesture)
         superDeckView.userInteractionEnabled = true
         if let aboveView = aboveView {
+            superDeckView.userInteractionEnabled = false
             self.view.insertSubview(superDeckView, belowSubview: aboveView)
         }
         else {
             self.view.insertSubview(superDeckView, aboveSubview: self.view)
         }
+        arrayOfCardsInDeck.append(superDeckView)
         stackOfCards.append(superDeckView)
         return superDeckView
     }
     func displayCards(){
+        if let displayNoMoreCardsView = displayNoMoreCardsView {
+            displayNoMoreCardsView.removeFromSuperview()
+            self.displayNoMoreCardsView = nil
+        }
+        arrayOfCardsInDeck = [UIView]()
+        var j = 0
         let bridgePairings = LocalData().getPairings()
         if let bridgePairings = bridgePairings {
             var aboveView:UIView? = nil
@@ -185,6 +205,7 @@ class BridgeViewController: UIViewController {
                 print ("continue")
                 continue
             }
+            j += 1
             var name1 = String()
             var name2 = String()
             var location1 = String()
@@ -251,10 +272,15 @@ class BridgeViewController: UIViewController {
             aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photo1, name2: name2, location2: location2, status2: status2, photo2: photo2, cardColor: color)
             lastCardInStack = aboveView!
         }
+        
     }
+        if  j == 0 {
+            displayNoMoreCards()
+        }
+        
     
     }
-    func downloadMoreCards(noOfCards:Int) {
+    func downloadMoreCards(noOfCards:Int) -> Int{
         var count = 0
         let c = self.bridgePairings?.count
         if let c = c {
@@ -341,7 +367,12 @@ class BridgeViewController: UIViewController {
             lastCardInStack = aboveView
         }   
         }
-
+        if let _ = bridgePairings{
+            return bridgePairings!.count - count
+        }
+        else {
+            return 0
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -377,7 +408,7 @@ class BridgeViewController: UIViewController {
             }
             stackOfCards.removeAll()
             displayCards()
-            //displayToolBar()
+            displayToolBar()
             
         }
         
@@ -451,11 +482,22 @@ class BridgeViewController: UIViewController {
                 }
             })
             self.bridgePairings!.removeAtIndex(x)
+            if arrayOfCardsInDeck.count > 0 {
+                arrayOfCardsInDeck.removeAtIndex(0)
+                if arrayOfCardsInDeck.count > 0 {
+                    arrayOfCardsInDeck[0].userInteractionEnabled = true
+                }
+            }
+            
             print("bridgePairings.count - \(bridgePairings.count)")
             let localData = LocalData()
             localData.setPairings(self.bridgePairings!)
             localData.synchronize()
-            downloadMoreCards(1)
+            let c = downloadMoreCards(1)
+            if c == 0 {
+                displayNoMoreCards()
+            }
+            
         }
         
 
