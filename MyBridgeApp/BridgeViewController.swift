@@ -425,33 +425,6 @@ class BridgeViewController: UIViewController {
                 x = i
                 
             }
-            let objectId = bridgePairings[x].user1?.objectId
-            let query = PFQuery(className:"BridgePairings")
-            query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
-                if let result = result {
-                    result["checked_out"] = true
-                    result["bridged"] = true
-                    //result.saveInBackground()
-                    let notificationMessage1 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":bridgePairings[x].user1!.userId!,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge"]) {
-                        (response: AnyObject?, error: NSError?) -> Void in
-                        if error == nil {
-                            if let response = response as? String {
-                                print(response)
-                            }
-                        }
-                    }
-                    let notificationMessage2 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":bridgePairings[x].user2!.userId!,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge"]) {
-                        (response: AnyObject?, error: NSError?) -> Void in
-                        if error == nil {
-                            if let response = response as? String {
-                                print(response)
-                            }
-                        }
-                    }
-                }
-            })
             let message = PFObject(className: "Messages")
             let currentUserId = PFUser.currentUser()?.objectId
             message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
@@ -462,10 +435,38 @@ class BridgeViewController: UIViewController {
             var noOfSingleMessagesViewed = [String:Int]()
             noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = 1
             message["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
-            message.saveInBackground()
+            //message.saveInBackground()
             // update the no of message in a Thread - End
             do {
                 try message.save()
+                let objectId = bridgePairings[x].user1?.objectId
+                let query = PFQuery(className:"BridgePairings")
+                query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
+                    if let result = result {
+                        result["checked_out"] = true
+                        result["bridged"] = true
+                        //result.saveInBackground()
+                        let notificationMessage1 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":bridgePairings[x].user1!.userId!,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge"]) {
+                            (response: AnyObject?, error: NSError?) -> Void in
+                            if error == nil {
+                                if let response = response as? String {
+                                    print(response)
+                                }
+                            }
+                        }
+                        let notificationMessage2 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":bridgePairings[x].user2!.userId!,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge"]) {
+                            (response: AnyObject?, error: NSError?) -> Void in
+                            if error == nil {
+                                if let response = response as? String {
+                                    print(response)
+                                }
+                            }
+                        }
+                    }
+                })
+
                 self.messageId = message.objectId!
             }
             catch {
