@@ -368,21 +368,21 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fbLoginButton.setTitleColor(UIColor(red: 247/255, green: 191/255, blue: 51/255, alpha: 1.0), forState: UIControlState.Highlighted)
+        fbLoginButton.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
         
         fbLoginButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         
         fbLoginButton.layer.cornerRadius = 7.0
         fbLoginButton.layer.borderWidth = 3.0
-        fbLoginButton.layer.borderColor = UIColor(red: 247/255, green: 191/255, blue: 51/255, alpha: 1.0).CGColor
+        fbLoginButton.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
         fbLoginButton.clipsToBounds = true
         
     }
     
     override func viewDidLayoutSubviews() {
         
-        appName.frame = CGRect(x: 0.1*screenWidth, y:0.4*screenHeight, width:0.80*screenWidth, height:0.15*screenHeight)
-        appDescription.frame = CGRect(x: 0.05*screenWidth, y:0.55*screenHeight, width:0.90*screenWidth, height:0.15*screenHeight)
+        appName.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.80*screenWidth, height:0.15*screenHeight)
+        appDescription.frame = CGRect(x: 0.05*screenWidth, y:0.53*screenHeight, width:0.90*screenWidth, height:0.15*screenHeight)
         fbLoginButton.frame = CGRect(x:0.16*screenWidth, y:0.75*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
         
     }

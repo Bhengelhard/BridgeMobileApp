@@ -93,11 +93,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         
         bridgeStatus.layer.cornerRadius = 7.0
-        bridgeStatus.layer.borderWidth = 3.0
-        bridgeStatus.layer.borderColor = UIColor(red: 247/255, green: 191/255, blue: 51/255, alpha: 1.0).CGColor
+        bridgeStatus.layer.borderWidth = 4.0
+        bridgeStatus.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
+        //bridgeStatus.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
         bridgeStatus.clipsToBounds = true
         
-        bridgeStatus.setTitleColor(UIColor(red: 247/255, green: 191/255, blue: 51/255, alpha: 1.0), forState: UIControlState.Highlighted)
+        bridgeStatus.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
         
         bridgeStatus.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         
@@ -146,7 +147,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
             cell2.label.text = "Bridge for Business"
-            cell2.preferencesSwitch.onTintColor = UIColor(red: 139/255, green: 217/255, blue: 176/255, alpha: 1.0)
+            //cell2.preferencesSwitch.onTintColor = UIColor(red: 139/255, green: 217/255, blue: 176/255, alpha: 1.0)
+            cell2.preferencesSwitch.onTintColor = UIColor(red: 42/255, green: 66/255, blue: 165/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
             return cell2
@@ -155,7 +157,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
             cell2.label.text = "Bridge for Love"
-            cell2.preferencesSwitch.onTintColor = UIColor.init(red: 255/255, green: 129/255, blue: 125/255, alpha: 1.0)
+            //cell2.preferencesSwitch.onTintColor = UIColor.init(red: 255/255, green: 129/255, blue: 125/255, alpha: 1.0)
+            cell2.preferencesSwitch.onTintColor = UIColor.init(red: 216/255, green: 63/255, blue: 52/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
             return cell2
@@ -164,7 +167,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
             cell2.label.text = "Bridge for Friendship"
-            cell2.preferencesSwitch.onTintColor = UIColor(red: 144/255, green: 207/255, blue: 214/255, alpha: 1.0)
+            //cell2.preferencesSwitch.onTintColor = UIColor(red: 144/255, green: 207/255, blue: 214/255, alpha: 1.0)
+            cell2.preferencesSwitch.onTintColor = UIColor(red: 87/255, green: 154/255, blue: 57/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
             return cell2

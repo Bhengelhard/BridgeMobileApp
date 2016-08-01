@@ -12,6 +12,7 @@
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
+            <string>BentonSans-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -30,10 +31,13 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Load Page Option A Scaled to Iphone 6.png" translatesAutoresizingMaskIntoConstraints="NO" id="t8n-RK-RgQ">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Screen over Image.png" translatesAutoresizingMaskIntoConstraints="NO" id="c9w-xs-Vdl">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="necter" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Smv-xO-RG3">
                                 <rect key="frame" x="60" y="261" width="254" height="97"/>
                                 <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="75"/>
-                                <color key="textColor" red="0.93725490196078431" green="0.6470588235294118" blue="0.15294117647058825" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.99607843139999996" green="0.89019607840000003" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Discover the fruit of your relationships" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CWD-hN-Kj8">
@@ -42,9 +46,6 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Screen over Image.png" translatesAutoresizingMaskIntoConstraints="NO" id="c9w-xs-Vdl">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -394,16 +395,16 @@
                                     <action selector="fbLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="h5H-0t-AvW"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="necter" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G8m-25-j3c">
-                                <rect key="frame" x="52" y="255" width="271" height="97"/>
-                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="75"/>
-                                <color key="textColor" red="0.95686274510000002" green="0.70196078429999997" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Discover the fruit of your relationships" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wlP-aK-aWi">
                                 <rect key="frame" x="20" y="360" width="335" height="68"/>
                                 <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="24"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="necter" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G8m-25-j3c">
+                                <rect key="frame" x="52" y="255" width="271" height="97"/>
+                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="75"/>
+                                <color key="textColor" red="0.99607843137254903" green="0.8901960784313725" blue="0.17647058823529413" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -764,7 +765,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
                                                     <rect key="frame" x="54" y="11" width="266" height="21"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -787,7 +788,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YFd-UJ-CdR">
                                                     <rect key="frame" x="33" y="11" width="121" height="21"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -818,11 +819,11 @@
                                     <constraint firstAttribute="height" constant="34" id="2pS-HR-DfI"/>
                                     <constraint firstAttribute="width" constant="156" id="V6F-Xg-8PG"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="20"/>
+                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="20"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <size key="titleShadowOffset" width="2.2250738585072014e-308" height="0.0"/>
                                 <state key="normal" title="Post Status">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <segue destination="P6Q-JZ-W57" kind="show" id="Dbz-zZ-5B6"/>
@@ -1268,9 +1269,9 @@
         <image name="suzy's_profile_picture.jpg" width="960" height="960"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Dbz-zZ-5B6"/>
         <segue reference="nDE-dt-Hjx"/>
         <segue reference="lgB-8D-KNZ"/>
-        <segue reference="Dbz-zZ-5B6"/>
         <segue reference="cy1-Ds-r2Z"/>
         <segue reference="JzV-LS-8wx"/>
         <segue reference="0Jc-ZY-MLe"/>
