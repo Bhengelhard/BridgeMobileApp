@@ -91,7 +91,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
         editImageButton.clipsToBounds = true
         
-        bridgeStatus.layer.cornerRadius = 10
+        
+        bridgeStatus.layer.cornerRadius = 7.0
+        bridgeStatus.layer.borderWidth = 3.0
+        bridgeStatus.layer.borderColor = UIColor(red: 247/255, green: 191/255, blue: 51/255, alpha: 1.0).CGColor
+        bridgeStatus.clipsToBounds = true
+        
+        bridgeStatus.setTitleColor(UIColor(red: 247/255, green: 191/255, blue: 51/255, alpha: 1.0), forState: UIControlState.Highlighted)
+        
+        bridgeStatus.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         
     }
 
