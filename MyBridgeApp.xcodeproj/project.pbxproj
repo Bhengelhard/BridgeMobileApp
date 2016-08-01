@@ -37,11 +37,9 @@
 		1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DA1D0B13E400F79E00 /* UserInfo.swift */; };
 		1BF998DD1D0B158E00F79E00 /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DC1D0B158E00F79E00 /* PairInfo.swift */; };
 		1BF998DF1D0B315F00F79E00 /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */; };
-		1BFDE4E31D174E1300D91C6F /* bridgeVector.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1BFDE4E21D174E1300D91C6F /* bridgeVector.jpg */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
-		30EA351F1D4FA89300B7F095 /* correct colors bridge with little people holding up the dot of the i.png in Resources */ = {isa = PBXBuildFile; fileRef = 30EA351E1D4FA89300B7F095 /* correct colors bridge with little people holding up the dot of the i.png */; };
 		30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */; };
 		30EA352D1D4FD12C00B7F095 /* Screen over Image.png in Resources */ = {isa = PBXBuildFile; fileRef = 30EA352C1D4FD12C00B7F095 /* Screen over Image.png */; };
 		814C3ACB1B69877600E307BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814C3AC81B69877600E307BB /* Images.xcassets */; };
@@ -92,11 +90,9 @@
 		1BF998DA1D0B13E400F79E00 /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		1BF998DC1D0B158E00F79E00 /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PairInfo.swift; sourceTree = "<group>"; };
 		1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoPair.swift; sourceTree = "<group>"; };
-		1BFDE4E21D174E1300D91C6F /* bridgeVector.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridgeVector.jpg; sourceTree = "<group>"; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
-		30EA351E1D4FA89300B7F095 /* correct colors bridge with little people holding up the dot of the i.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "correct colors bridge with little people holding up the dot of the i.png"; path = "../../../../Dropbox/Matchmaker App/Bridge from Work/Bridge/Designs/Potential Logos/correct colors bridge with little people holding up the dot of the i.png"; sourceTree = "<group>"; };
 		30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Page Option A Scaled to Iphone 6.png"; sourceTree = "<group>"; };
 		30EA352C1D4FD12C00B7F095 /* Screen over Image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screen over Image.png"; sourceTree = "<group>"; };
 		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -145,12 +141,10 @@
 				30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */,
 				30EA352C1D4FD12C00B7F095 /* Screen over Image.png */,
 				1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */,
-				30EA351E1D4FA89300B7F095 /* correct colors bridge with little people holding up the dot of the i.png */,
 				1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */,
 				1B4A12001D1C8C94002FB859 /* camera_icon_small.jpg */,
 				1B4A11FE1D1C8A67002FB859 /* camera.png */,
 				1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */,
-				1BFDE4E21D174E1300D91C6F /* bridgeVector.jpg */,
 				1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */,
 				CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */,
 				CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */,
@@ -307,9 +301,7 @@
 				CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */,
 				30EA352D1D4FD12C00B7F095 /* Screen over Image.png in Resources */,
 				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
-				1BFDE4E31D174E1300D91C6F /* bridgeVector.jpg in Resources */,
 				1BE888D71D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png in Resources */,
-				30EA351F1D4FA89300B7F095 /* correct colors bridge with little people holding up the dot of the i.png in Resources */,
 				1B915A971D25E5DB004E0E8E /* blue_dot_small.gif in Resources */,
 				1B4A11FF1D1C8A67002FB859 /* camera.png in Resources */,
 				CB6A329B1CC996F400FADB13 /* BentonSans-Light copy.otf in Resources */,

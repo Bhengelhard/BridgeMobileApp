@@ -15,6 +15,12 @@ import CoreData
 
 class LoadPageViewController: UIViewController {
     
+    @IBOutlet weak var appName: UILabel!
+    @IBOutlet weak var appDescription: UILabel!
+    
+    let screenWidth = UIScreen.mainScreen().bounds.width
+    let screenHeight = UIScreen.mainScreen().bounds.height
+    
     //right now just updates users Friends
     func updateUser() {
         
@@ -156,7 +162,6 @@ class LoadPageViewController: UIViewController {
                 LocalStorageUtility().getMainProfilePicture()
                 //LocalStorageUtility().getBridgePairings()
                 
-                
                 self.performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
             }
             else{
@@ -257,6 +262,12 @@ class LoadPageViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewDidLayoutSubviews() {
+        
+        appName.frame = CGRect(x: 0.1*screenWidth, y:0.4*screenHeight, width:0.80*screenWidth, height:0.15*screenHeight)
+        appDescription.frame = CGRect(x: 0.05*screenWidth, y:0.55*screenHeight, width:0.90*screenWidth, height:0.15*screenHeight)
+        
+    }
 
     /*
     // MARK: - Navigation

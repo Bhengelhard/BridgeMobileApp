@@ -23,10 +23,10 @@ class ViewController: UIViewController {
         
         print("pressed")
         // Spinner sparts animating before the segue can be accesses
-        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0,0,50,50))
-        activityIndicator.center = self.view.center
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0.475*screenWidth,0.16*screenHeight,0.05*screenWidth,0.05*screenWidth))
+        //activityIndicator.center = self.view.center
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
         view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         UIApplication.sharedApplication().beginIgnoringInteractionEvents()
@@ -373,7 +373,7 @@ class ViewController: UIViewController {
         fbLoginButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         
         fbLoginButton.layer.cornerRadius = 7.0
-        fbLoginButton.layer.borderWidth = 2.5
+        fbLoginButton.layer.borderWidth = 3.0
         fbLoginButton.layer.borderColor = UIColor(red: 247/255, green: 191/255, blue: 51/255, alpha: 1.0).CGColor
         fbLoginButton.clipsToBounds = true
         
@@ -381,12 +381,9 @@ class ViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         
-        appName.frame = CGRect(x: 0.15*screenWidth, y:0.4*screenHeight, width:0.70*screenWidth, height:0.1*screenHeight)
+        appName.frame = CGRect(x: 0.1*screenWidth, y:0.4*screenHeight, width:0.80*screenWidth, height:0.15*screenHeight)
         appDescription.frame = CGRect(x: 0.05*screenWidth, y:0.55*screenHeight, width:0.90*screenWidth, height:0.15*screenHeight)
         fbLoginButton.frame = CGRect(x:0.16*screenWidth, y:0.75*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
-        
-        appDescription.sizeThatFits(CGSizeMake(0.8*screenWidth, 0.2*screenHeight))
-        appDescription.adjustsFontSizeToFitWidth = true
         
     }
     
