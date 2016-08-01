@@ -39,7 +39,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             
             messageText.enabled = false
             sendButton.enabled = false
-            self.updateMessages()
+            
             let singleMessage = PFObject(className: "SingleMessages")
             singleMessage["message_text"] = messageText.text!
             singleMessage["sender"] = PFUser.currentUser()?.objectId
@@ -49,6 +49,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
                 
                 if (success) {
+                    self.updateMessages()
                     self.messageContentArrayMapping = [String:[String:AnyObject]]()
                     self.singleMessageObjectIDToPositionMapping = [Int:String]()
                     
@@ -280,9 +281,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                             
                             noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = noOfSingleMessages
                             object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                            do{
+                            try object.save()
+                            }
+                            catch {
+                                
+                            }
                         }
                     }
-                    object.saveInBackground()
+                    
                     installation.saveInBackground()
                     // update the no of messages viewed in a Thread by the current user - End
                 }
