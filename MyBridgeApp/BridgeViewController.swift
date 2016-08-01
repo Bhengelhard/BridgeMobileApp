@@ -430,10 +430,18 @@ class BridgeViewController: UIViewController {
                 if let result = result {
                     result["checked_out"] = true
                     result["bridged"] = true
-                    result.saveInBackground()
-                    
+                    //result.saveInBackground()
                     let notificationMessage1 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":"hoZhGYwSmI","alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge"]) {
+                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":bridgePairings[x].user1!.userId!,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge"]) {
+                        (response: AnyObject?, error: NSError?) -> Void in
+                        if error == nil {
+                            if let response = response as? String {
+                                print(response)
+                            }
+                        }
+                    }
+                    let notificationMessage2 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":bridgePairings[x].user2!.userId!,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge"]) {
                         (response: AnyObject?, error: NSError?) -> Void in
                         if error == nil {
                             if let response = response as? String {
@@ -448,6 +456,13 @@ class BridgeViewController: UIViewController {
             message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
             print("userId1, userId2 - \((bridgePairings[x].user1?.userId)!),\((bridgePairings[x].user2?.userId)!)")
             message["bridge_builder"] = currentUserId
+            // update the no of message in a Thread - Start
+            message["no_of_single_messages"] = 1
+            var noOfSingleMessagesViewed = [String:Int]()
+            noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = 1
+            message["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+            message.saveInBackground()
+            // update the no of message in a Thread - End
             do {
                 try message.save()
                 self.messageId = message.objectId!

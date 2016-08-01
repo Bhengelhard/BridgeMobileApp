@@ -53,7 +53,42 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                     self.singleMessageObjectIDToPositionMapping = [Int:String]()
                     self.updateMessages()
                     print("Object has been saved.")
-                    
+                    // push notification starts
+                    let messageQuery = PFQuery(className: "Messages")
+                    messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
+                        if error == nil {
+                            if let object = object {
+                                // update the no of message in a Thread - Start
+                                if let noOfSingleMessages = object["no_of_single_messages"] as? Int {
+                                    object["no_of_single_messages"] = noOfSingleMessages + 1
+                                }
+                                else {
+                                    object["no_of_single_messages"] = 1
+                                }
+                                if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                                    noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = (object["no_of_single_messages"] as! Int)
+                                    object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                                }
+                                object.saveInBackground()
+                                // update the no of message in a Thread - End
+                                for userId in object["ids_in_message"] as! [String] {
+                                    if userId == PFUser.currentUser()!.objectId {
+                                        continue
+                                    }
+                                    let notificationMessage = "Message from " + (PFUser.currentUser()!["name"] as! String)
+                                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage"]) {
+                                        (response: AnyObject?, error: NSError?) -> Void in
+                                        if error == nil {
+                                            if let response = response as? String {
+                                            print(response)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    // push notification ends
                 } else {
                     
                     print(error)
@@ -208,6 +243,30 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     }
     
     func updateMessages() {
+        
+        
+        let messageQuery = PFQuery(className: "Messages")
+        messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
+            if error == nil {
+                if let object = object {
+                    // update the no of messages viewed in a Thread by the current user - Start
+                    if let noOfSingleMessages = object["no_of_single_messages"] as? Int {
+                        if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                            if noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] == nil {
+                                noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = 0
+                            }
+                            let installation = PFInstallation.currentInstallation()
+                            installation.badge = installation.badge - (noOfSingleMessages - noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!]!)
+                            installation.saveInBackground()
+                            noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = noOfSingleMessages
+                            object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                        }
+                    }
+                    object.saveInBackground()
+                    // update the no of messages viewed in a Thread by the current user - End
+                }
+            }
+        })
         singleMessageTableView.userInteractionEnabled = false
         print("messageId is \(messageId)")
         let query: PFQuery = PFQuery(className: "SingleMessages")
@@ -333,9 +392,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         else{
                             show = false
                         }
-                        
-                        
-                        
                         self.messageContentArrayMapping[self.singleMessageObjectIDToPositionMapping[results.count]!] = ["messageText":temp["messageText"]!,"bridgeType":temp["bridgeType"]!,"senderName":temp["senderName"]!, "timestamp":temp["timestamp"]!, "isNotification":temp["isNotification"]!, "senderId":temp["senderId"]!, "previousSenderName":senderName, "previousSenderId":senderId, "showTimestamp":show, "date":temp["date"]! ]
                     }
 
