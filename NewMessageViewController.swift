@@ -111,6 +111,22 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
             for result in results{
                 let objectIdsRetrieved = result["ids_in_message"] as! [String]
                 if objectIdsInMessage.count == objectIdsRetrieved.count{
+                    // push Notification starts
+                    for userId in objectIdsRetrieved {
+                        if userId == PFUser.currentUser()!.objectId {
+                            continue
+                        }
+                        let notificationMessage = "Message from " + (PFUser.currentUser()!["name"] as! String)
+                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage"]) {
+                            (response: AnyObject?, error: NSError?) -> Void in
+                            if error == nil {
+                                if let response = response as? String {
+                                    print(response)
+                                }
+                            }
+                        }
+                    }
+                    // push notification ends
                     print("object found")
                     self.messageId = result.objectId!
                     messageIdNotFound = false
