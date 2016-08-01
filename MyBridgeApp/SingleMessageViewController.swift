@@ -72,8 +72,22 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                                 object.saveInBackground()
                                 // update the no of message in a Thread - End
                                 for userId in object["ids_in_message"] as! [String] {
+                                    // Skip sending the current user a notification
                                     if userId == PFUser.currentUser()!.objectId {
                                         continue
+                                    }
+                                    // Skip sending a notification to a user who hasn't viewed the bridge notification yet. 
+                                    // But in order to mainatain sync with other users set no of meesages viewed by this user to 1
+                                    if object["no_of_single_messages"] as! Int == 2 {
+                                        if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                                            if noOfSingleMessagesViewed[userId] == nil {
+                                                noOfSingleMessagesViewed[userId] = 1
+                                                object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                                                object.saveInBackground()
+                                                continue
+                                            }
+                                        }
+                                        
                                     }
                                     let notificationMessage = "Message from " + (PFUser.currentUser()!["name"] as! String)
                                     PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage"]) {
