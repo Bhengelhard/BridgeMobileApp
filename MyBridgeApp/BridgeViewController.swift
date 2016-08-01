@@ -374,6 +374,7 @@ class BridgeViewController: UIViewController {
             return 0
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //        while localStorageUtility.waitForCardsToBeDownloaded(){

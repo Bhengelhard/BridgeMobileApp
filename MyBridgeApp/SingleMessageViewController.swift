@@ -255,7 +255,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             }
         }
     }
-    
+    func reloadThread(notification: NSNotification) {
+        self.singleMessageTableView.reloadData()
+    }
     func updateMessages() {
         
         
@@ -424,6 +426,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadThread), name: "reloadTheThread", object: nil)
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), forControlEvents: UIControlEvents.ValueChanged)
         singleMessageTableView.addSubview(refresher)

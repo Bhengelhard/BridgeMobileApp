@@ -341,8 +341,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text!)
     }
+    func reloadMessageTable(notification: NSNotification) {
+        self.tableView.reloadData()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadMessageTable), name: "reloadTheMessageTable", object: nil)
         /*refresher = UIRefreshControl()
         refresher.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refresher.addTarget(self, action: #selector(MessagesViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
