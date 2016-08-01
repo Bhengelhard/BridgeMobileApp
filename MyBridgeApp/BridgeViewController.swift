@@ -426,6 +426,11 @@ class BridgeViewController: UIViewController {
                 
             }
             let message = PFObject(className: "Messages")
+            let acl = PFACL()
+            acl.publicReadAccess = true
+            acl.publicWriteAccess = true
+            message.ACL = acl
+
             let currentUserId = PFUser.currentUser()?.objectId
             message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
             print("userId1, userId2 - \((bridgePairings[x].user1?.userId)!),\((bridgePairings[x].user2?.userId)!)")
