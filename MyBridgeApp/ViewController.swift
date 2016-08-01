@@ -30,7 +30,6 @@ class ViewController: UIViewController {
         //Log user in with permissions public_profile, email and user_friends
         let permissions = ["public_profile", "email", "user_friends"]
         PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) { (user, error) in
-            
             print("got past permissions")
             if let error = error {
                 print(error)
@@ -38,6 +37,13 @@ class ViewController: UIViewController {
             } else {
                 if let user = user {
                     print("got user")
+                    // identify user id with the device
+                    let installation = PFInstallation.currentInstallation()
+                    //installation.setDeviceTokenFromData(deviceToken)
+                    installation["user"] = PFUser.currentUser()
+                    installation["userObjectId"] = PFUser.currentUser()?.objectId
+                    installation.saveInBackground()
+                    
                     //getting user information from Facebook and saving to Parse
                     //Current Fields Saved: name, gender, fb_profile_picture
                     //**Need to add check for if fields exist**

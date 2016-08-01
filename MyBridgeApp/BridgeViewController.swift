@@ -431,6 +431,16 @@ class BridgeViewController: UIViewController {
                     result["checked_out"] = true
                     result["bridged"] = true
                     result.saveInBackground()
+                    
+                    let notificationMessage1 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":"hoZhGYwSmI","alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge"]) {
+                        (response: AnyObject?, error: NSError?) -> Void in
+                        if error == nil {
+                            if let response = response as? String {
+                                print(response)
+                            }
+                        }
+                    }
                 }
             })
             let message = PFObject(className: "Messages")

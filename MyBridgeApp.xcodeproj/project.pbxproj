@@ -267,6 +267,11 @@
 					81BA81441A49DA1800E65899 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 7Y7JRS85QB;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -445,7 +450,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Introduction;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Beta;
 				PRODUCT_NAME = MyBridgeApp;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -467,7 +472,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Introduction;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Beta;
 				PRODUCT_NAME = MyBridgeApp;
 			};
 			name = Release;
