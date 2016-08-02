@@ -37,6 +37,9 @@
 		1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DA1D0B13E400F79E00 /* UserInfo.swift */; };
 		1BF998DD1D0B158E00F79E00 /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DC1D0B158E00F79E00 /* PairInfo.swift */; };
 		1BF998DF1D0B315F00F79E00 /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */; };
+		305691C61D514D61007FD050 /* Love-33x33.png in Resources */ = {isa = PBXBuildFile; fileRef = 305691C51D514D61007FD050 /* Love-33x33.png */; };
+		305691C81D514E19007FD050 /* Business-33x33.png in Resources */ = {isa = PBXBuildFile; fileRef = 305691C71D514E19007FD050 /* Business-33x33.png */; };
+		305691CC1D514FE9007FD050 /* Friendship-44x44.png in Resources */ = {isa = PBXBuildFile; fileRef = 305691CB1D514FE9007FD050 /* Friendship-44x44.png */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -90,6 +93,9 @@
 		1BF998DA1D0B13E400F79E00 /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		1BF998DC1D0B158E00F79E00 /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PairInfo.swift; sourceTree = "<group>"; };
 		1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoPair.swift; sourceTree = "<group>"; };
+		305691C51D514D61007FD050 /* Love-33x33.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Love-33x33.png"; sourceTree = "<group>"; };
+		305691C71D514E19007FD050 /* Business-33x33.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Business-33x33.png"; sourceTree = "<group>"; };
+		305691CB1D514FE9007FD050 /* Friendship-44x44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Friendship-44x44.png"; sourceTree = "<group>"; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
@@ -138,6 +144,9 @@
 		814C3AC51B69877600E307BB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				305691C51D514D61007FD050 /* Love-33x33.png */,
+				305691C71D514E19007FD050 /* Business-33x33.png */,
+				305691CB1D514FE9007FD050 /* Friendship-44x44.png */,
 				30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */,
 				30EA352C1D4FD12C00B7F095 /* Screen over Image.png */,
 				1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */,
@@ -302,11 +311,14 @@
 				30EA352D1D4FD12C00B7F095 /* Screen over Image.png in Resources */,
 				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
 				1BE888D71D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png in Resources */,
+				305691CC1D514FE9007FD050 /* Friendship-44x44.png in Resources */,
 				1B915A971D25E5DB004E0E8E /* blue_dot_small.gif in Resources */,
+				305691C81D514E19007FD050 /* Business-33x33.png in Resources */,
 				1B4A11FF1D1C8A67002FB859 /* camera.png in Resources */,
 				CB6A329B1CC996F400FADB13 /* BentonSans-Light copy.otf in Resources */,
 				30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */,
 				CBEFCD671CE35DB900695B15 /* suzy's_profile_picture.jpg in Resources */,
+				305691C61D514D61007FD050 /* Love-33x33.png in Resources */,
 				1B4A12011D1C8C94002FB859 /* camera_icon_small.jpg in Resources */,
 				1B82A0841D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png in Resources */,
 				1BF5A6C71D231B7C00EE6B95 /* iconCancel.png in Resources */,

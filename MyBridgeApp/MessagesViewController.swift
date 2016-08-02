@@ -30,10 +30,17 @@ func getWeekDay(num:Int)->String{
 
 
 class MessagesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating {
+    @IBOutlet weak var toolBar: UIToolbar!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var loveButton: UIBarButtonItem!
+    @IBOutlet weak var businessButton: UIBarButtonItem!
+    @IBOutlet weak var friendshipButton: UIBarButtonItem!
+    @IBOutlet var tableView: UITableView!
     
-   
-    @IBOutlet weak var tableView: UITableView!
-   // @IBOutlet var tableView: UITableView!
+    let screenWidth = UIScreen.mainScreen().bounds.width
+    let screenHeight = UIScreen.mainScreen().bounds.height
+    
+    
     var names = [String : [String]]()
     var messages = [String : String]()
     var messageType = [String : String]()
@@ -68,6 +75,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBAction func loveTapped(sender: AnyObject) {
         toolbarTapped = true
         filteredPositions = [Int]()
+        print("loveButtonClicked")
         for i in 0 ..< messageType.count{
             if messageType[messagePositionToMessageIdMapping[i]!]! == "Love" {
                 filteredPositions.append(i)
@@ -287,6 +295,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //create NavigationBar
+        
+        
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadMessageTable), name: "reloadTheMessageTable", object: nil)
         /*refresher = UIRefreshControl()
         refresher.attributedTitle = NSAttributedString(string: "Pull to refresh")
@@ -327,6 +340,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         pagingSpinner.hidesWhenStopped = true
         tableView.tableFooterView = pagingSpinner
     }
+    
+    override func viewDidLayoutSubviews() {
+        
+        navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.1*screenHeight)
+        tableView.frame = CGRect(x: 0, y:0.1*screenHeight, width:screenWidth, height:0.825*screenHeight)
+        toolBar.frame = CGRect(x: 0, y:0.925*screenHeight, width:screenWidth, height:0.075*screenHeight)
+        
+    }
+    
     override func viewDidAppear(animated: Bool) {
         
     }
