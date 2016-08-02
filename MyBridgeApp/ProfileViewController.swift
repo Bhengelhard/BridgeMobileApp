@@ -23,14 +23,50 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     let imagePicker = UIImagePickerController()
     
     @IBAction func editImageTapped(sender: AnyObject) {
+        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.Default)
+        {
+            UIAlertAction in
+            self.openCamera()
+        }
+        let galleryAction = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.Default)
+        {
+            UIAlertAction in
+            self.openGallary()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
+        {
+            UIAlertAction in
+        }
         
+        // Add the actions
+        //self.picker.delegate = self
+        alert.addAction(cameraAction)
+        alert.addAction(galleryAction)
+        alert.addAction(cancelAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+
         imagePicker.allowsEditing = false
-        imagePicker.sourceType = .PhotoLibrary
-        
-        presentViewController(imagePicker, animated: true, completion: nil)
         
     }
     
+    func openCamera(){
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }else{
+            let alert = UIAlertView()
+            alert.title = "Warning"
+            alert.message = "You don't have camera"
+            alert.addButtonWithTitle("OK")
+            alert.show()
+        }
+    }
+    func openGallary(){
+        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        self.presentViewController(imagePicker, animated: true, completion: nil)
+    }
+
     
     //update the UIImageView once an image has been picked
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
@@ -38,7 +74,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             profilePicture.image = pickedImage
             profilePicture.layer.cornerRadius = profilePicture.frame.size.width/2
             profilePicture.clipsToBounds = true
-            if let imageData = UIImagePNGRepresentation(pickedImage){
+            if let imageData = UIImageJPEGRepresentation(pickedImage, 1.0){
                 let localData = LocalData()
                 localData.setMainProfilePicture(imageData)
                 localData.synchronize()
@@ -101,6 +137,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         bridgeStatus.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
         
         bridgeStatus.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        tableView.tableFooterView = UIView()
         
     }
 
@@ -118,7 +155,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         profilePicture.clipsToBounds = true
         bridgeStatus.frame = CGRect(x: 0, y:0.4*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
         bridgeStatus.center.x = self.view.center.x
-        tableView.frame = CGRect(x: 0, y:0.46*screenHeight, width:screenWidth, height:0.54*screenHeight)
+        tableView.frame = CGRect(x: 0, y:0.49*screenHeight, width:screenWidth, height:0.5*screenHeight)
         
     }
     
@@ -190,7 +227,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
             cell.label.text = "Terms of Service"
-            cell.label.textColor = UIColor.grayColor()
+            //cell.label.textColor = UIColor.grayColor()
             
             return cell
             
@@ -198,7 +235,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
             cell.label.text = "Privacy Policy"
-            cell.label.textColor = UIColor.grayColor()
+            //cell.label.textColor = UIColor.grayColor()
             
             return cell
             
@@ -206,7 +243,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
             cell.label.text = "Log Out"
-            cell.label.textColor = UIColor.grayColor()
+            //cell.label.textColor = UIColor.grayColor()
             
             return cell
             
@@ -231,6 +268,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
             }
             
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
             
         } else if indexPath.row == 1 {
             

@@ -373,7 +373,7 @@ class ViewController: UIViewController {
         fbLoginButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         
         fbLoginButton.layer.cornerRadius = 7.0
-        fbLoginButton.layer.borderWidth = 3.0
+        fbLoginButton.layer.borderWidth = 4.0
         fbLoginButton.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
         fbLoginButton.clipsToBounds = true
         
