@@ -89,7 +89,7 @@ class SingleMessageTableCell: UITableViewCell {
         var y = CGFloat(0)
         
         if addTimestamp == true {
-            print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
+            //print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
             timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
             timestampLabel.layer.borderWidth = 1
             timestampLabel.layer.cornerRadius = 10

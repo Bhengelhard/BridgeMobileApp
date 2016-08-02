@@ -130,6 +130,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        print("Listener is set at didReceiveRemoteNotification")
+        NSNotificationCenter.defaultCenter().postNotificationName("reloadTheThread", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName("reloadTheMessageTable", object: nil)
         PFPush.handlePush(userInfo)
         if application.applicationState == UIApplicationState.Inactive {
             PFAnalytics.trackAppOpenedWithRemoteNotificationPayload(userInfo)

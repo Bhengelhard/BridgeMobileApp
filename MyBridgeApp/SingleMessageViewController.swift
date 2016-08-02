@@ -20,9 +20,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     var isSeguedFromNewMessage = false
     var isSeguedFromBridgePage = false
     var isSeguedFromMessages = false
-    var messageContentArrayMapping = [String:[String:AnyObject]]()
+    var objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
 //    var messageContentArray = [[String:AnyObject]]()
-    var singleMessageObjectIDToPositionMapping = [Int:String]()
+    var singleMessagePositionToObjectIDMapping = [Int:String]()
     var refresher = UIRefreshControl()
     
     
@@ -41,6 +41,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             sendButton.enabled = false
             
             let singleMessage = PFObject(className: "SingleMessages")
+            let acl = PFACL()
+            acl.publicReadAccess = true
+            acl.publicWriteAccess = true
+            singleMessage.ACL = acl
             singleMessage["message_text"] = messageText.text!
             singleMessage["sender"] = PFUser.currentUser()?.objectId
             //save users_in_message to singleMessage
@@ -49,10 +53,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
                 
                 if (success) {
-                    self.messageContentArrayMapping = [String:[String:AnyObject]]()
-                    self.singleMessageObjectIDToPositionMapping = [Int:String]()
+                    
+                    self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
+                    self.singleMessagePositionToObjectIDMapping = [Int:String]()
                     self.updateMessages()
-                    print("Object has been saved.")
+                    //print("Object has been saved.")
                     // push notification starts
                     let messageQuery = PFQuery(className: "Messages")
                     messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
@@ -69,26 +74,48 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                                     noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = (object["no_of_single_messages"] as! Int)
                                     object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
                                 }
-                                object.saveInBackground()
-                                // update the no of message in a Thread - End
-                                for userId in object["ids_in_message"] as! [String] {
+                                object["lastSingleMessageAt"] = NSDate()
+                                object.saveInBackgroundWithBlock{
+                                    (success, error) -> Void in
+                                    if error == nil {
+                                    for userId in object["ids_in_message"] as! [String] {
+                                    // Skip sending the current user a notification
                                     if userId == PFUser.currentUser()!.objectId {
-                                        continue
+                                    continue
+                                    }
+                                    // Skip sending a notification to a user who hasn't viewed the bridge notification yet.
+                                    // But in order to mainatain sync with other users set no of meesages viewed by this user to 1
+                                    if object["no_of_single_messages"] as! Int == 2 {
+                                    if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                                    if noOfSingleMessagesViewed[userId] == nil {
+                                    noOfSingleMessagesViewed[userId] = 1
+                                    object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                                    object.saveInBackground()
+                                    continue
+                                    }
+                                    }
+                                    
                                     }
                                     let notificationMessage = "Message from " + (PFUser.currentUser()!["name"] as! String)
                                     PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage"]) {
-                                        (response: AnyObject?, error: NSError?) -> Void in
-                                        if error == nil {
-                                            if let response = response as? String {
-                                            print(response)
-                                            }
-                                        }
+                                    (response: AnyObject?, error: NSError?) -> Void in
+                                    if error == nil {
+                                    if let response = response as? String {
+                                    print(response)
+                                    }
+                                    }
+                                    }
+                                    }
+                                    self.updatePushNotifications()
                                     }
                                 }
+                                // update the no of message in a Thread - End
+                                
                             }
                         }
                     })
                     // push notification ends
+                    
                 } else {
                     
                     print(error)
@@ -195,12 +222,12 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         let query: PFQuery = PFQuery(className: "Messages")
         query.getObjectInBackgroundWithId(newMessageId) { (result: PFObject?, error: NSError?) -> Void in
             if error == nil {
-                print("newMessageId - \(self.newMessageId)")
+                //print("newMessageId - \(self.newMessageId)")
                 if let result = result {
                     let currentUserId = (PFUser.currentUser()?.objectId)! as String
                     let participantObjectIds = result["ids_in_message"] as! [String]
                     let participantObjectIdsWithoutCurentUser = participantObjectIds.filter({$0 != currentUserId})
-                    print("participantObjectIdsWithoutCurentUser \(participantObjectIdsWithoutCurentUser)")
+                    //print("participantObjectIdsWithoutCurentUser \(participantObjectIdsWithoutCurentUser)")
                     let query: PFQuery = PFQuery(className: "_User")
                     query.whereKey("objectId", containedIn: participantObjectIdsWithoutCurentUser)
                     query.findObjectsInBackgroundWithBlock({ (objects:[PFObject]?, err: NSError?) in
@@ -231,7 +258,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                             }
                         }
                         dispatch_async(dispatch_get_main_queue(), {
-                            print(stringOfNames)
+                            //print(stringOfNames)
                             self.navigationBar.title = stringOfNames
                         })
 
@@ -241,62 +268,72 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             }
         }
     }
-    
-    func updateMessages() {
-        
-        
+    func updatePushNotifications(){
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
             if error == nil {
                 if let object = object {
                     // update the no of messages viewed in a Thread by the current user - Start
+                    let installation = PFInstallation.currentInstallation()
                     if let noOfSingleMessages = object["no_of_single_messages"] as? Int {
                         if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
                             if noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] == nil {
                                 noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = 0
                             }
-                            let installation = PFInstallation.currentInstallation()
+                            
+                            print("installation.badge, noOfSingleMessages, noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!]! are \(installation.badge), \(noOfSingleMessages), \(noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!]!) ")
                             installation.badge = installation.badge - (noOfSingleMessages - noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!]!)
-                            installation.saveInBackground()
+                            
                             noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = noOfSingleMessages
                             object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                            object.saveInBackground()
                         }
                     }
-                    object.saveInBackground()
+                    
+                    installation.saveInBackground()
                     // update the no of messages viewed in a Thread by the current user - End
                 }
             }
         })
-        singleMessageTableView.userInteractionEnabled = false
-        print("messageId is \(messageId)")
+
+    }
+    func reloadThread(notification: NSNotification) {
+        print("Yes, received notification at reload the thread")
+        self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
+        self.singleMessagePositionToObjectIDMapping = [Int:String]()
+        self.updateMessages()
+    }
+    func updateMessages() {
+       singleMessageTableView.userInteractionEnabled = false
+        //print("messageId is \(messageId)")
         let query: PFQuery = PFQuery(className: "SingleMessages")
         query.whereKey("message_id", equalTo: messageId)
         query.orderByDescending("createdAt")
-        query.limit = 2
-        query.skip = messageContentArrayMapping.count
+        query.limit = 20
+        query.skip = objectIDToMessageContentArrayMapping.count
         query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
             if let error = error {
                 print(error)
                 
             } else if let results = results {
-                 //self.messageContentArrayMapping = [String:[String:AnyObject]]()
+                 //self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
                  //self.messageContentArray = [[String:AnyObject]]()
 
 //                if results.count < 1 {
-//                    self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
+//                    self.objectIDToMessageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
 //                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])
 //                    
-//                    self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false]
+//                    self.objectIDToMessageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false]
 //                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false])
 //                    
-//                    self.messageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
+//                    self.objectIDToMessageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
 //                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])
 //                }
                 if results.count > 0{
                 var singleMessagePosition = 0
-                for i in (0..<self.singleMessageObjectIDToPositionMapping.count).reverse(){
-                    let temp = self.singleMessageObjectIDToPositionMapping[i]
-                    self.singleMessageObjectIDToPositionMapping[i+results.count] = temp
+                for i in (0..<self.singleMessagePositionToObjectIDMapping.count).reverse(){
+                    let temp = self.singleMessagePositionToObjectIDMapping[i]
+                    self.singleMessagePositionToObjectIDMapping[i+results.count] = temp
                 }
                 var previousSenderName = ""
                 var previousSenderId = ""
@@ -341,7 +378,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                     if let previousDate = previousDate {
                         let components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
                             fromDate: previousDate, toDate: date, options: NSCalendarOptions.WrapComponents)
-                        print("components.minute - \(components.minute)")
+                        //print("components.minute - \(components.minute)")
                         if components.minute > 10 {
                             showTimestamp = true
                         }
@@ -349,10 +386,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                             showTimestamp = false
                         }
                     }
-                    print("date - \(date), toDate - \(NSDate())")
+                    //print("date - \(date), toDate - \(NSDate())")
                     let components = calendar.components([.Day],
                             fromDate: date, toDate: NSDate(), options: [])
-                    print(components)
+                    //print(components)
                     if components.day > 7 {
                         let dateFormatter = NSDateFormatter()
                         dateFormatter.dateFormat = "MM/dd/yyy"
@@ -374,16 +411,16 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         timestamp = dateFormatter.stringFromDate(date)+">"
                         
                     }
-                    self.messageContentArrayMapping[(result.objectId!)]=["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":isNotification, "senderId":senderId, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":date ]
-                    self.singleMessageObjectIDToPositionMapping[singleMessagePosition] = (result.objectId!)
+                    self.objectIDToMessageContentArrayMapping[(result.objectId!)]=["messageText":messageText,"bridgeType":bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":isNotification, "senderId":senderId, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":date ]
+                    self.singleMessagePositionToObjectIDMapping[singleMessagePosition] = (result.objectId!)
                     singleMessagePosition += 1
                     previousSenderName = senderName
                     previousSenderId = senderId
                     previousDate = date
                     //update the older entry's previousSenderName, Id and timestamp
-                    if (i == 0 && self.messageContentArrayMapping.count > results.count){
+                    if (i == 0 && self.objectIDToMessageContentArrayMapping.count > results.count){
                         var show = false
-                        let temp = self.messageContentArrayMapping[self.singleMessageObjectIDToPositionMapping[results.count]!]!
+                        let temp = self.objectIDToMessageContentArrayMapping[self.singleMessagePositionToObjectIDMapping[results.count]!]!
                         let components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
                                 fromDate: date, toDate: temp["date"]! as! NSDate, options: NSCalendarOptions.WrapComponents)
                         if components.minute > 10 {
@@ -392,7 +429,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         else{
                             show = false
                         }
-                        self.messageContentArrayMapping[self.singleMessageObjectIDToPositionMapping[results.count]!] = ["messageText":temp["messageText"]!,"bridgeType":temp["bridgeType"]!,"senderName":temp["senderName"]!, "timestamp":temp["timestamp"]!, "isNotification":temp["isNotification"]!, "senderId":temp["senderId"]!, "previousSenderName":senderName, "previousSenderId":senderId, "showTimestamp":show, "date":temp["date"]! ]
+                        self.objectIDToMessageContentArrayMapping[self.singleMessagePositionToObjectIDMapping[results.count]!] = ["messageText":temp["messageText"]!,"bridgeType":temp["bridgeType"]!,"senderName":temp["senderName"]!, "timestamp":temp["timestamp"]!, "isNotification":temp["isNotification"]!, "senderId":temp["senderId"]!, "previousSenderName":senderName, "previousSenderId":senderId, "showTimestamp":show, "date":temp["date"]! ]
                     }
 
                 }
@@ -410,13 +447,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        updatePushNotifications()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadThread), name: "reloadTheThread", object: nil)
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), forControlEvents: UIControlEvents.ValueChanged)
         singleMessageTableView.addSubview(refresher)
         navigationBar.title = singleMessageTitle
         singleMessageTableView.registerClass(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
         if isSeguedFromMessages   {
-            print("calling1")
+            //print("calling1")
             messageId = newMessageId
             updateMessages()
             self.updateTitle()
@@ -424,7 +463,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         }
 
         else if isSeguedFromNewMessage   {
-            print("calling2")
+            //print("calling2")
             messageId = newMessageId
             updateMessages()
             self.updateTitle()
@@ -432,7 +471,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         }
         else if isSeguedFromBridgePage   {
             messageId = newMessageId
-            print("calling3")
+            //print("calling3")
             updateMessages()
             self.updateTitle()
 //            let seconds = 4.0
@@ -456,14 +495,14 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         //return messageTextArray.count
-        print("messageContentArrayMapping.count - \(messageContentArrayMapping.count)")
-        return messageContentArrayMapping.count
+        //print("objectIDToMessageContentArrayMapping.count - \(objectIDToMessageContentArrayMapping.count)")
+        return objectIDToMessageContentArrayMapping.count
         
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var addSenderName = false
-        let messageContent = messageContentArrayMapping[singleMessageObjectIDToPositionMapping[indexPath.row]!]!
+        let messageContent = objectIDToMessageContentArrayMapping[singleMessagePositionToObjectIDMapping[indexPath.row]!]!
         
         let senderNameLabel = UITextView(frame: CGRectZero)
         let messageTextLabel = UITextView(frame: CGRectZero)
@@ -521,7 +560,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 //        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(SingleMessageTableCell), forIndexPath: indexPath) as! SingleMessageTableCell
         let cell = SingleMessageTableCell()
-        let messageContent = messageContentArrayMapping[singleMessageObjectIDToPositionMapping[indexPath.row]!]!
+        let messageContent = objectIDToMessageContentArrayMapping[singleMessagePositionToObjectIDMapping[indexPath.row]!]!
         let singleMessageContent = SingleMessageContent(messageContent: messageContent)
         //print("senderName - \(singleMessageContent.senderName!) previousSenderName - \(singleMessageContent.previousSenderName!) messageText -  \(singleMessageContent.messageText!) ")
         //print("")
