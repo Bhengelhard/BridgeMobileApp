@@ -147,7 +147,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         //self.refresher.endRefreshing()
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
-        query.orderByDescending("updatedAt")
+        query.orderByDescending("lastSingleMessageAt")
         query.skip = noOfElementsFetched
         query.limit = noOfElementsPerRefresher
         query.cachePolicy = .NetworkElseCache
@@ -355,7 +355,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
-        query.orderByDescending("updatedAt")
+        
+        query.orderByDescending("lastSingleMessageAt")
         query.limit = 1000
         query.cachePolicy = .NetworkElseCache
         //print("\n starting return")

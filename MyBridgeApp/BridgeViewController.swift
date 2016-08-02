@@ -435,6 +435,7 @@ class BridgeViewController: UIViewController {
             message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
             print("userId1, userId2 - \((bridgePairings[x].user1?.userId)!),\((bridgePairings[x].user2?.userId)!)")
             message["bridge_builder"] = currentUserId
+            message["lastSingleMessageAt"] = NSDate()
             // update the no of message in a Thread - Start
             message["no_of_single_messages"] = 1
             var noOfSingleMessagesViewed = [String:Int]()

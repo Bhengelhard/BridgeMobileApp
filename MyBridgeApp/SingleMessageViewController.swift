@@ -41,6 +41,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             sendButton.enabled = false
             
             let singleMessage = PFObject(className: "SingleMessages")
+            let acl = PFACL()
+            acl.publicReadAccess = true
+            acl.publicWriteAccess = true
+            singleMessage.ACL = acl
             singleMessage["message_text"] = messageText.text!
             singleMessage["sender"] = PFUser.currentUser()?.objectId
             //save users_in_message to singleMessage
@@ -49,10 +53,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
                 
                 if (success) {
-                    self.updateMessages()
+                    
                     self.messageContentArrayMapping = [String:[String:AnyObject]]()
                     self.singleMessageObjectIDToPositionMapping = [Int:String]()
-                    
+                    self.updateMessages()
                     //print("Object has been saved.")
                     // push notification starts
                     let messageQuery = PFQuery(className: "Messages")
@@ -70,6 +74,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                                     noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = (object["no_of_single_messages"] as! Int)
                                     object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
                                 }
+                                object["lastSingleMessageAt"] = NSDate()
                                 object.saveInBackgroundWithBlock{
                                     (success, error) -> Void in
                                     if error == nil {
@@ -281,12 +286,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                             
                             noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = noOfSingleMessages
                             object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
-                            do{
-                            try object.save()
-                            }
-                            catch {
-                                
-                            }
+                            object.saveInBackground()
                         }
                     }
                     
