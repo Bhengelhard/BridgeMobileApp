@@ -16,6 +16,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var bridgeStatus: UIButton!
     
+    let screenWidth = UIScreen.mainScreen().bounds.width
+    let screenHeight = UIScreen.mainScreen().bounds.height
+    
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
     
@@ -85,9 +88,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             profilePicture.image = image
         }
         
-        profilePicture.layer.cornerRadius = profilePicture.frame.size.width/2
-        profilePicture.clipsToBounds = true
-        
         editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
         editImageButton.clipsToBounds = true
         
@@ -107,6 +107,19 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.1*screenHeight)
+        profilePicture.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
+        profilePicture.center.x = self.view.center.x
+        profilePicture.layer.cornerRadius = profilePicture.frame.size.width/2
+        profilePicture.clipsToBounds = true
+        bridgeStatus.frame = CGRect(x: 0, y:0.4*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
+        bridgeStatus.center.x = self.view.center.x
+        tableView.frame = CGRect(x: 0, y:0.46*screenHeight, width:screenWidth, height:0.54*screenHeight)
+        
     }
     
     /*
