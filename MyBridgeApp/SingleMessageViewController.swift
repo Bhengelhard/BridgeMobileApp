@@ -309,7 +309,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         let query: PFQuery = PFQuery(className: "SingleMessages")
         query.whereKey("message_id", equalTo: messageId)
         query.orderByDescending("createdAt")
-        query.limit = 20
+        query.limit = 10
         query.skip = objectIDToMessageContentArrayMapping.count
         query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
             if let error = error {
