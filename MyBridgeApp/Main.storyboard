@@ -12,7 +12,6 @@
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
-            <string>BentonSans-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -41,7 +40,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Discover the fruit of your relationships" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CWD-hN-Kj8">
-                                <rect key="frame" x="20" y="364" width="335" height="68"/>
+                                <rect key="frame" x="20" y="366" width="335" height="68"/>
                                 <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="24"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -395,12 +394,6 @@
                                     <action selector="fbLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="h5H-0t-AvW"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Discover the fruit of your relationships" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wlP-aK-aWi">
-                                <rect key="frame" x="20" y="360" width="335" height="68"/>
-                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="24"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="necter" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G8m-25-j3c">
                                 <rect key="frame" x="52" y="255" width="271" height="97"/>
                                 <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="75"/>
@@ -422,7 +415,6 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="appDescription" destination="wlP-aK-aWi" id="7Ps-Lm-fZz"/>
                         <outlet property="appName" destination="G8m-25-j3c" id="NKv-o8-SXm"/>
                         <outlet property="fbLoginButton" destination="anP-2u-xN8" id="xF6-Mt-qlx"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" id="7Zw-u1-iEd"/>
@@ -1244,10 +1236,10 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="HGT-Vo-Kl8"/>
-        <segue reference="7Zw-u1-iEd"/>
         <segue reference="nDE-dt-Hjx"/>
-        <segue reference="Dbz-zZ-5B6"/>
+        <segue reference="9H7-t1-aWy"/>
         <segue reference="JzV-LS-8wx"/>
+        <segue reference="54d-57-TXv"/>
         <segue reference="0Jc-ZY-MLe"/>
     </inferredMetricsTieBreakers>
 </document>

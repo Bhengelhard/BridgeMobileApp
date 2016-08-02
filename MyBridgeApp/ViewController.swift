@@ -13,7 +13,6 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var fbLoginButton: UIButton!
     @IBOutlet weak var appName: UILabel!
-    @IBOutlet weak var appDescription: UILabel!
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -376,6 +375,14 @@ class ViewController: UIViewController {
         fbLoginButton.layer.borderWidth = 4.0
         fbLoginButton.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
         fbLoginButton.clipsToBounds = true
+        let appDescriptions = UILabel(frame: CGRectMake(0.05*screenWidth, 0.49*screenHeight, 0.90*screenWidth, 0.15*screenHeight))
+        appDescriptions.textAlignment = NSTextAlignment.Center
+        appDescriptions.text = "Connect your friends with the people they are looking for"
+        appDescriptions.font = UIFont(name: "BentonSans", size: 24)
+        appDescriptions.textColor = UIColor.whiteColor()
+        appDescriptions.numberOfLines = 0
+        self.view.addSubview(appDescriptions)
+        
         
         let label = UILabel(frame: CGRectMake(0.05*screenWidth, 0.775*screenHeight, 0.9*screenWidth, 0.075*screenHeight))
         //label.center = CGPointMake(160, 284)
@@ -386,12 +393,47 @@ class ViewController: UIViewController {
         label.numberOfLines = 0
         self.view.addSubview(label)
         
+        let appDescriptionsArray = ["Connect your friends with the people they are looking for", "Discover the sweetness of your community", "Be the (con)necter you wish to see in the world"]
+        
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+            var i = 1
+            while i < 10 {
+            
+//                let seconds = 4.0
+//                let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+//                let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+                sleep(4)
+                dispatch_async(dispatch_get_main_queue(), {
+                appDescriptions.text = appDescriptionsArray[i % appDescriptionsArray.count]
+                i += 1
+                })
+
+//                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+//                
+//                    appDescriptions.text = appDescriptionsArray[i % appDescriptionsArray.count]
+//                    i += 1
+//                    
+//                })
+
+            }
+            
+        }
+        
+        /*let delay2 = (2 * seconds + 1) * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+        let dispatchTime2 = dispatch_time(DISPATCH_TIME_NOW, Int64(delay2))
+        
+        dispatch_after(dispatchTime2, dispatch_get_main_queue(), {
+            
+            appDescriptions.text = "Be the (con)necter you wish to see in the world"
+            
+        })*/
+        
     }
     
     override func viewDidLayoutSubviews() {
         
         appName.frame = CGRect(x: 0.1*screenWidth, y:0.36*screenHeight, width:0.80*screenWidth, height:0.15*screenHeight)
-        appDescription.frame = CGRect(x: 0.05*screenWidth, y:0.49*screenHeight, width:0.90*screenWidth, height:0.15*screenHeight)
         fbLoginButton.frame = CGRect(x:0.16*screenWidth, y:0.7*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
         
     }

@@ -133,9 +133,6 @@ class LoadPageViewController: UIViewController {
         
         // Do any additional setup after loading the view.
         
-        
-        LocalData().setUsername("Blake Harris Engelhard")
-        
     }
     
     override func viewDidAppear(animated: Bool) {
