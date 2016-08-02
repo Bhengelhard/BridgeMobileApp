@@ -133,7 +133,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Listener is set at didReceiveRemoteNotification")
         NSNotificationCenter.defaultCenter().postNotificationName("reloadTheThread", object: nil)
         NSNotificationCenter.defaultCenter().postNotificationName("reloadTheMessageTable", object: nil)
-        PFPush.handlePush(userInfo)
+//        if userInfo.objectForKey("badge") {
+//            let badgeNumber: Int = userInfo.objectForKey("badge").integerValue
+//            application.applicationIconBadgeNumber = badgeNumber
+//        }
+
+        if let _ = userInfo["badge"] as? Int {
+            let badgeNumber = (userInfo["badge"] as! Int)
+            print("badgeNumber - \(badgeNumber)")
+            application.applicationIconBadgeNumber = badgeNumber
+        }
+        //PFPush.handlePush(userInfo)
         if application.applicationState == UIApplicationState.Inactive {
             PFAnalytics.trackAppOpenedWithRemoteNotificationPayload(userInfo)
         }
