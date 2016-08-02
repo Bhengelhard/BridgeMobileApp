@@ -1243,10 +1243,10 @@
         <image name="suzy's_profile_picture.jpg" width="960" height="960"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Dbz-zZ-5B6"/>
+        <segue reference="HGT-Vo-Kl8"/>
+        <segue reference="7Zw-u1-iEd"/>
         <segue reference="nDE-dt-Hjx"/>
-        <segue reference="lgB-8D-KNZ"/>
-        <segue reference="cy1-Ds-r2Z"/>
+        <segue reference="Dbz-zZ-5B6"/>
         <segue reference="JzV-LS-8wx"/>
         <segue reference="0Jc-ZY-MLe"/>
     </inferredMetricsTieBreakers>

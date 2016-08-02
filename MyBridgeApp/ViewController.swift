@@ -377,13 +377,22 @@ class ViewController: UIViewController {
         fbLoginButton.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
         fbLoginButton.clipsToBounds = true
         
+        let label = UILabel(frame: CGRectMake(0.05*screenWidth, 0.775*screenHeight, 0.9*screenWidth, 0.075*screenHeight))
+        //label.center = CGPointMake(160, 284)
+        label.textAlignment = NSTextAlignment.Center
+        label.text = "No need to get sour! We never post to Facebook."
+        label.font = UIFont(name: "BentonSans", size: 14)
+        label.textColor = UIColor.whiteColor()
+        label.numberOfLines = 0
+        self.view.addSubview(label)
+        
     }
     
     override func viewDidLayoutSubviews() {
         
-        appName.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.80*screenWidth, height:0.15*screenHeight)
-        appDescription.frame = CGRect(x: 0.05*screenWidth, y:0.53*screenHeight, width:0.90*screenWidth, height:0.15*screenHeight)
-        fbLoginButton.frame = CGRect(x:0.16*screenWidth, y:0.75*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
+        appName.frame = CGRect(x: 0.1*screenWidth, y:0.36*screenHeight, width:0.80*screenWidth, height:0.15*screenHeight)
+        appDescription.frame = CGRect(x: 0.05*screenWidth, y:0.49*screenHeight, width:0.90*screenWidth, height:0.15*screenHeight)
+        fbLoginButton.frame = CGRect(x:0.16*screenWidth, y:0.7*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
         
     }
     
