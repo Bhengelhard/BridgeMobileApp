@@ -12,7 +12,6 @@ import Parse
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navigationBar: UINavigationBar!
-    @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var bridgeStatus: UIButton!
     
@@ -71,9 +70,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     //update the UIImageView once an image has been picked
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profilePicture.image = pickedImage
-            profilePicture.layer.cornerRadius = profilePicture.frame.size.width/2
-            profilePicture.clipsToBounds = true
+            editImageButton.setImage(pickedImage, forState: .Normal)
+            editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
+            editImageButton.clipsToBounds = true
             if let imageData = UIImageJPEGRepresentation(pickedImage, 1.0){
                 let localData = LocalData()
                 localData.setMainProfilePicture(imageData)
@@ -108,7 +107,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         
         let username = LocalData().getUsername()
-        print(username)
+        
+        let modelName = UIDevice.currentDevice().modelName
+        
+        if ["iPhone 4", "iPhone 4s", "iPhone 5", "iPhone 5", "iPhone 5c", "iPhone 5s"].contains(modelName) {
+            navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 16)!]
+        } else {
+            navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 18)!]
+        }
+        
         
         if let username = username {
             
@@ -121,17 +128,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let mainProfilePicture = LocalData().getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
             let image = UIImage(data:mainProfilePicture,scale:1.0)
-            profilePicture.image = image
+            editImageButton.setImage(image, forState: .Normal)
         }
-        
-        editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
-        editImageButton.clipsToBounds = true
-        
         
         bridgeStatus.layer.cornerRadius = 7.0
         bridgeStatus.layer.borderWidth = 4.0
         bridgeStatus.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
-        //bridgeStatus.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
         bridgeStatus.clipsToBounds = true
         
         bridgeStatus.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
@@ -147,16 +149,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func viewDidLayoutSubviews() {
-        
         navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.1*screenHeight)
-        profilePicture.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
-        profilePicture.center.x = self.view.center.x
-        profilePicture.layer.cornerRadius = profilePicture.frame.size.width/2
-        profilePicture.clipsToBounds = true
+        editImageButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
+        editImageButton.center.x = self.view.center.x
+        editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
+        editImageButton.clipsToBounds = true
         bridgeStatus.frame = CGRect(x: 0, y:0.4*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
         bridgeStatus.center.x = self.view.center.x
         tableView.frame = CGRect(x: 0, y:0.49*screenHeight, width:screenWidth, height:0.5*screenHeight)
-        
     }
     
     /*

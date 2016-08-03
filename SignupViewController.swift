@@ -15,15 +15,20 @@ import CoreData
 
 class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     @IBOutlet weak var main_title: UILabel!
-    @IBOutlet weak var interestLabel: UILabel!
+    @IBOutlet weak var nameTextField: UITextField!
+    //@IBOutlet weak var profilePicture: UIImageView!
+    @IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var friendshipLabel: UILabel!
-    @IBOutlet weak var loveLable: UILabel!
+    @IBOutlet weak var loveLabel: UILabel!
     @IBOutlet weak var businessLabel: UILabel!
     @IBOutlet weak var businessSwitch: UISwitch!
     @IBOutlet weak var friendshipSwitch: UISwitch!
     @IBOutlet weak var loveSwitch: UISwitch!
-    @IBOutlet weak var profilePicture: UIImageView!
-    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var interestedLabel: UILabel!
+    @IBOutlet weak var beginConnectingButton: UIButton!
+   
+    let screenWidth = UIScreen.mainScreen().bounds.width
+    let screenHeight = UIScreen.mainScreen().bounds.height
     
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
@@ -40,9 +45,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     //update the UIImageView once an image has been picked
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profilePicture.image = pickedImage
-            profilePicture.layer.cornerRadius = profilePicture.frame.size.width/2
-            profilePicture.clipsToBounds = true
+            editImageButton.setImage(pickedImage, forState: .Normal)
+            //editImageButton.layer.cornerRadius = profilePicture.frame.size.width/2
+            //editImageButton.clipsToBounds = true
             if let imageData = UIImagePNGRepresentation(pickedImage){
             let localData = LocalData()
             localData.setMainProfilePicture(imageData)
@@ -60,12 +65,12 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     // Begin Bridging Button Clicked
     @IBAction func beginBridgingTouched(sender: AnyObject) {
         if let _ = PFUser.currentUser() {
-         PFUser.currentUser()?["name"] = editableName
-         PFUser.currentUser()?["interested_in_business"] = businessSwitch.on
-         PFUser.currentUser()?["interested_in_love"] = loveSwitch.on
-         PFUser.currentUser()?["interested_in_friendship"] = friendshipSwitch.on
+            PFUser.currentUser()?["name"] = editableName
+            PFUser.currentUser()?["interested_in_business"] = businessSwitch.on
+            PFUser.currentUser()?["interested_in_love"] = loveSwitch.on
+            PFUser.currentUser()?["interested_in_friendship"] = friendshipSwitch.on
+            PFUser.currentUser()?.saveInBackground()
         }
-        
     }
     // Switches tapped
     @IBAction func friendshipSwitchTapped(sender: AnyObject) {
@@ -78,11 +83,11 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     }
     @IBAction func loveSwitchTapped(sender: AnyObject) {
         if loveSwitch.on{
-            loveLable.textColor = UIColor.blackColor()
+            loveLabel.textColor = UIColor.blackColor()
         }
         else{
           
-            loveLable.textColor = UIColor.grayColor()
+            loveLabel.textColor = UIColor.grayColor()
         }
     }
     
@@ -97,22 +102,29 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
 
     override func viewDidLoad() {
                 super.viewDidLoad()
+        
         imagePicker.delegate = self
         nameTextField.delegate = self
         
         let username = LocalData().getUsername()
         
         if let username = username {
+            if username != "" {
                 editableName = username
                 nameTextField.text = username
+                print("1"+username)
+                main_title.attributedText = twoColoredString(editableName+"'s interests")
+            } else{
+                editableName = "Enter your full name"
+                main_title.text = "Click to enter your full name"
+            }
         }
         else{
-            editableName = "A man has no name!"
-            nameTextField.text = "A man has no name!"
+            editableName = "Enter your full name"
+            main_title.text = "Click to enter your full name"
         }
-        main_title.attributedText = twoColoredString(editableName+"'s interests")
+        print(main_title.text)
         nameTextField.hidden = true
-        interestLabel.hidden = true
         main_title.userInteractionEnabled = true
         
         
@@ -129,12 +141,70 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         let mainProfilePicture = LocalData().getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
             let image = UIImage(data:mainProfilePicture,scale:1.0)
-            profilePicture.image = image
+            editImageButton.setImage(image, forState: .Normal)
         }
-        profilePicture.layer.cornerRadius = profilePicture.frame.size.width/2
-        profilePicture.clipsToBounds = true
+        //editImageButton.layer.cornerRadius = profilePicture.frame.size.width/2
+        //editImageButton.clipsToBounds = true
+        
+        beginConnectingButton.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
+        
+        beginConnectingButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        
+        beginConnectingButton.layer.cornerRadius = 7.0
+        beginConnectingButton.layer.borderWidth = 4.0
+        beginConnectingButton.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
+        beginConnectingButton.clipsToBounds = true
         
     }
+    
+    override func viewDidLayoutSubviews() {
+        
+        let modelName = UIDevice.currentDevice().modelName
+        
+        //placing elements
+        //placing elements on smaller sized iPhones
+        if ["iPhone 4", "iPhone 4s", "iPhone 5", "iPhone 5", "iPhone 5c", "iPhone 5s"].contains(modelName) {
+            main_title.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
+            nameTextField.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
+            editImageButton.frame = CGRect(x: 0, y:0.13*screenHeight, width:0.24*screenHeight, height:0.24*screenHeight)
+            editImageButton.center.x = self.view.center.x
+            editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
+            editImageButton.clipsToBounds = true
+            interestedLabel.frame = CGRect(x:0.05*screenWidth , y:0.4*screenHeight, width:0.9*screenWidth, height:0.05*screenHeight)
+            /*businessLabel.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+             businessSwitch.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+             loveLabel.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+             loveSwitch.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+             friendshipLabel.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+             friendshipSwitch.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+             beginConnectingButton.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)*/
+        //placing elements on larger iPhones
+        } else {
+            main_title.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+            nameTextField.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
+            editImageButton.frame = CGRect(x: 0, y:0.15*screenHeight, width:0.24*screenHeight, height:0.24*screenHeight)
+            editImageButton.center.x = self.view.center.x
+            editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
+            editImageButton.clipsToBounds = true
+            interestedLabel.frame = CGRect(x:0.05*screenWidth , y:0.42*screenHeight, width:0.9*screenWidth, height:0.05*screenHeight)
+            businessLabel.frame = CGRect(x:0.125*screenWidth , y:0.5*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            businessSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
+            businessSwitch.center.y = businessLabel.center.y
+            loveLabel.frame = CGRect(x:0.125*screenWidth , y:0.59*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            loveSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
+            loveSwitch.center.y = loveLabel.center.y
+            friendshipLabel.frame = CGRect(x:0.125*screenWidth , y:0.68*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
+            friendshipSwitch.center.y = friendshipLabel.center.y
+            beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.785*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
+            
+            
+        }
+        
+        
+        
+    }
+    
     // Utility functions
     // generate a 2-colored string. Used for the title
     func twoColoredString(s:String)->NSMutableAttributedString{
@@ -147,35 +217,40 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     func lblTapped(){
         main_title.hidden = true
         nameTextField.hidden = false
-        interestLabel.hidden = false
-        nameTextField.text = editableName
+        if editableName != "Enter your full name" {
+            nameTextField.text = editableName
+        }
+        
+        
     }
     // Tapped anywhere else on the main view. Textfield should be replaced by label
     func tappedOutside(){
         main_title.hidden = false
         nameTextField.hidden = true
-        interestLabel.hidden = true
         if let editableNameTemp = nameTextField.text{
-            main_title.attributedText = twoColoredString(editableNameTemp+"'s interests")
-            editableName = editableNameTemp
+            if editableNameTemp != "" {
+                main_title.attributedText = twoColoredString(editableNameTemp+"'s interests")
+                editableName = editableNameTemp
+            }
         }
         let updatedText = nameTextField.text
         if let updatedText = updatedText {
+            print(updatedText)
             let localData = LocalData()
             localData.setUsername(updatedText)
             localData.synchronize()
         }
+        
 
     }
     // User returns after editing
     func textFieldShouldReturn(userText: UITextField) -> Bool {
         userText.resignFirstResponder()
         nameTextField.hidden = true
-        interestLabel.hidden = true
         main_title.hidden = false
         if let editableNameTemp = nameTextField.text{
-        main_title.attributedText = twoColoredString(editableNameTemp+"'s interests")
-        editableName = editableNameTemp
+            main_title.attributedText = twoColoredString(editableNameTemp+"'s interests")
+            editableName = editableNameTemp
         }
         let updatedText = nameTextField.text
         if let updatedText = updatedText {
@@ -187,7 +262,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     }
 
      override func viewDidAppear(animated: Bool) {
+        
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

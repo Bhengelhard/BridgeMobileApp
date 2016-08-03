@@ -399,23 +399,11 @@ class ViewController: UIViewController {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
             var i = 1
             while i < 10 {
-            
-//                let seconds = 4.0
-//                let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
-//                let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
                 sleep(4)
                 dispatch_async(dispatch_get_main_queue(), {
                 appDescriptions.text = appDescriptionsArray[i % appDescriptionsArray.count]
                 i += 1
                 })
-
-//                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-//                
-//                    appDescriptions.text = appDescriptionsArray[i % appDescriptionsArray.count]
-//                    i += 1
-//                    
-//                })
-
             }
             
         }
