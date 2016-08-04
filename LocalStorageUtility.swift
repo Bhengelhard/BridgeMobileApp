@@ -494,11 +494,11 @@ class LocalStorageUtility{
                             }
                         }
                         else {
-                        PFUser.currentUser()?["fb_profile_picture"] = imageFile
-                        PFUser.currentUser()?["profile_picture"] = imageFile
-                        localData.setMainProfilePicture(data)
-                        localData.setProfilePictureFromFb(true)
-                        localData.synchronize()
+                            PFUser.currentUser()?["fb_profile_picture"] = imageFile
+                            PFUser.currentUser()?["profile_picture"] = imageFile
+                            localData.setMainProfilePicture(data)
+                            localData.setProfilePictureFromFb(true)
+                            localData.synchronize()
                             
                         }
                     }

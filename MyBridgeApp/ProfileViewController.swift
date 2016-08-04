@@ -14,9 +14,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var bridgeStatus: UIButton!
+    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var nameTextField: UITextField!
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
+    var editableName:String = ""
     
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
@@ -71,8 +74,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             editImageButton.setImage(pickedImage, forState: .Normal)
-            editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
-            editImageButton.clipsToBounds = true
             if let imageData = UIImageJPEGRepresentation(pickedImage, 1.0){
                 let localData = LocalData()
                 localData.setMainProfilePicture(imageData)
@@ -106,24 +107,41 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.dataSource = self
         
         
-        let username = LocalData().getUsername()
-        
+        /*
         let modelName = UIDevice.currentDevice().modelName
         
         if ["iPhone 4", "iPhone 4s", "iPhone 5", "iPhone 5", "iPhone 5c", "iPhone 5s"].contains(modelName) {
             navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 16)!]
         } else {
             navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 18)!]
-        }
+        }*/
         
         
+        let username = LocalData().getUsername()
         if let username = username {
-            
-            print("hello world")
-            
-            navigationBar.topItem?.title = "\(username)'s Profile"
-            
+            if username != "" {
+                editableName = username
+                nameTextField.text = username
+            } else{
+                editableName = "Enter your full name"
+                name.text = "Click to enter your full name"
+            }
         }
+        else{
+            editableName = "Enter your full name"
+            name.text = "Click to enter your full name"
+        }
+        nameTextField.hidden = true
+        name.userInteractionEnabled = true
+        if let username = username {
+            name.text = username
+        }
+        
+        let aSelector : Selector = #selector(ProfileViewController.lblTapped)
+        let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
+        tapGesture.numberOfTapsRequired = 1
+        name.addGestureRecognizer(tapGesture)
+        
         
         let mainProfilePicture = LocalData().getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
@@ -154,9 +172,70 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         editImageButton.center.x = self.view.center.x
         editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
         editImageButton.clipsToBounds = true
-        bridgeStatus.frame = CGRect(x: 0, y:0.4*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
+        name.frame = CGRect(x: 0, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
+        name.center.x = self.view.center.x
+        name.textColor = UIColor.lightGrayColor()
+        nameTextField.frame = CGRect(x: 0, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
+        nameTextField.center.x = self.view.center.x
+        bridgeStatus.frame = CGRect(x: 0, y:0.465*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
         bridgeStatus.center.x = self.view.center.x
-        tableView.frame = CGRect(x: 0, y:0.49*screenHeight, width:screenWidth, height:0.5*screenHeight)
+        tableView.frame = CGRect(x: 0, y:0.55*screenHeight, width:screenWidth, height:0.435*screenHeight)
+    }
+    
+    // Username label is tapped. Textfield should appear and replace the label
+    func lblTapped(){
+        nameTextField.becomeFirstResponder()
+        name.hidden = true
+        nameTextField.hidden = false
+        if editableName != "Enter your full name" {
+            nameTextField.text = editableName
+        }
+        let outSelector : Selector = #selector(ProfileViewController.tappedOutside)
+        let outsideTapGesture = UITapGestureRecognizer(target: self, action: outSelector)
+        outsideTapGesture.numberOfTapsRequired = 1
+        view.addGestureRecognizer(outsideTapGesture)
+    }
+    // Tapped anywhere else on the main view. Textfield should be replaced by label
+    func tappedOutside(){
+        name.hidden = false
+        nameTextField.hidden = true
+        if let editableNameTemp = nameTextField.text{
+            if editableNameTemp != "" {
+                name.text = editableNameTemp
+                editableName = editableNameTemp
+            }
+        }
+        let updatedText = nameTextField.text
+        if let updatedText = updatedText {
+            print(updatedText)
+            let localData = LocalData()
+            localData.setUsername(updatedText)
+            localData.synchronize()
+            
+            //saving updated username to parse
+            if let _ = PFUser.currentUser() {
+                PFUser.currentUser()!["name"] = updatedText
+                PFUser.currentUser()?.saveInBackground()
+            }
+        }
+        self.view.endEditing(true)
+    }
+    // User returns after editing
+    func textFieldShouldReturn(userText: UITextField) -> Bool {
+        userText.resignFirstResponder()
+        nameTextField.hidden = true
+        name.hidden = false
+        if let editableNameTemp = nameTextField.text{
+            name.text = editableNameTemp
+            editableName = editableNameTemp
+        }
+        let updatedText = nameTextField.text
+        if let updatedText = updatedText {
+            let localData = LocalData()
+            localData.setUsername(updatedText)
+            localData.synchronize()
+        }
+        return true
     }
     
     /*
