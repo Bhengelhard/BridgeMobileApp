@@ -219,6 +219,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
         self.view.endEditing(true)
+        let outSelector : Selector = #selector(ProfileViewController.tappedOutside)
+        let outsideTapGesture = UITapGestureRecognizer(target: self, action: outSelector)
+        outsideTapGesture.numberOfTapsRequired = 1
+        view.removeGestureRecognizer(outsideTapGesture)
     }
     // User returns after editing
     func textFieldShouldReturn(userText: UITextField) -> Bool {
