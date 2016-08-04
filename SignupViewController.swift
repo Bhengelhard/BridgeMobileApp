@@ -107,7 +107,11 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             PFUser.currentUser()?["interested_in_business"] = businessSwitch.on
             PFUser.currentUser()?["interested_in_love"] = loveSwitch.on
             PFUser.currentUser()?["interested_in_friendship"] = friendshipSwitch.on
-            PFUser.currentUser()?.saveInBackground()
+            PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
+                if success {
+                    LocalStorageUtility().getBridgePairings()
+                }
+            })
         }
     }
     // Switches tapped

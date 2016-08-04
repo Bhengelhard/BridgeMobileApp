@@ -55,6 +55,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var noOfElementsPerRefresher = 2
     var noOfElementsFetched = 0
     var totalElements = 0
+    var isElementCountNotFetched = true
     var refresher:UIRefreshControl!
     var pagingSpinner : UIActivityIndicatorView!
     var runBackgroundThread = true
@@ -131,7 +132,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     func startBackgroundThread() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
-            while self.runBackgroundThread {
+            while self.runBackgroundThread && (self.isElementCountNotFetched || self.names.count < self.totalElements || self.messageTimestamps.count < self.totalElements ||  self.messages.count <  self.totalElements   ) {
+
                 if self.encounteredBefore[self.noOfElementsFetched] == nil && self.noOfElementsFetched > 0 && self.names.count == self.noOfElementsFetched && self.messages.count == self.noOfElementsFetched && self.messageTimestamps.count == self.noOfElementsFetched{
                     self.encounteredBefore[self.noOfElementsFetched] = true
                     dispatch_async(dispatch_get_main_queue(), {
@@ -320,6 +322,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             if error == nil {
                 
                 self.totalElements = Int(count)
+                self.isElementCountNotFetched = false
                 self.refresh()
             }
             else {

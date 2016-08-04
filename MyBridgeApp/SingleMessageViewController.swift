@@ -481,9 +481,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
 //            dispatch_after(dispatchTime, dispatch_get_main_queue(), {
 //                
 //            })
-
-            
-            
+        }
+        else {
+            messageId = newMessageId
+            updateMessages()
+            self.updateTitle()
         }
 
         // Do any additional setup after loading the view.

@@ -169,11 +169,13 @@ class ViewController: UIViewController {
                                 localData.setNewBridgesPushNotifications(true)
                                 PFUser.currentUser()?["built_bridges"] = []
                                 PFUser.currentUser()?["rejected_bridges"] = []
-                               
+                                PFUser.currentUser()?["interested_in_business"] = true
+                                PFUser.currentUser()?["interested_in_love"] = true
+                                PFUser.currentUser()?["interested_in_friendship"] = true
 
                                 PFUser.currentUser()?.saveInBackground()
                                
-                                LocalStorageUtility().getBridgePairings()
+                                //LocalStorageUtility().getBridgePairings()
                                 localData.synchronize()
                                 
                                 
