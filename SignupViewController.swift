@@ -16,7 +16,6 @@ import CoreData
 class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     @IBOutlet weak var main_title: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
-    //@IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var friendshipLabel: UILabel!
     @IBOutlet weak var loveLabel: UILabel!
@@ -99,6 +98,16 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
+    //stopping user from entering name with length greater than 25
+    @IBAction func nameTextFieldChanges(sender: AnyObject) {
+        if let characterCount = nameTextField.text?.characters.count {
+            if characterCount > 25 {
+                let aboveMaxBy = characterCount - 25
+                let index1 = nameTextField.text!.endIndex.advancedBy(-aboveMaxBy)
+                nameTextField.text = nameTextField.text!.substringToIndex(index1)
+            }
+        }
+    }
     // Begin Bridging Button Clicked
     @IBAction func beginBridgingTouched(sender: AnyObject) {
         beginConnectingButton.layer.borderColor = necterYellow.CGColor
@@ -109,10 +118,12 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             PFUser.currentUser()?["interested_in_friendship"] = friendshipSwitch.on
             PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
                 if success {
-                    LocalStorageUtility().getBridgePairings()
+                    //LocalStorageUtility().getBridgePairings() remember to uncomment this!
                 }
             })
         }
+        LocalData().setUsername(editableName)
+        LocalData().synchronize()
     }
     // Switches tapped
     @IBAction func friendshipSwitchTapped(sender: AnyObject) {
@@ -151,9 +162,18 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         let username = LocalData().getUsername()
         
         if let username = username {
-            if username != "" {
-                editableName = username
-                nameTextField.text = username
+            var usernameString = username
+            //name with max characters of 25
+            if usernameString.characters.count > 25 {
+                let aboveMaxBy = usernameString.characters.count - 25
+                let index1 = usernameString.endIndex.advancedBy(-aboveMaxBy)
+                usernameString = usernameString.substringToIndex(index1)
+                LocalData().setUsername(usernameString)
+                LocalData().synchronize()
+            }
+            if usernameString != "" {
+                editableName = usernameString
+                nameTextField.text = usernameString
                 main_title.attributedText = twoColoredString(editableName+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
             } else{
                 editableName = noNameText
@@ -164,6 +184,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         else{
             editableName = noNameText
             main_title.text = noNameText
+            main_title.textColor = necterYellow
         }
         nameTextField.hidden = true
         main_title.userInteractionEnabled = true
@@ -224,27 +245,25 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         let modelName = UIDevice.currentDevice().modelName
         
         //placing elements
-        if ["iPhone 4", "iPhone 4s", "iPhone 5", "iPhone 5", "iPhone 5c", "iPhone 5s"].contains(modelName) {
+        if ["iPhone 4", "iPhone 4s", "iPhone 5", "iPhone 5", "iPhone 5c", "iPhone 5s", "Simulator"].contains(modelName) {
         //placing elements on smaller sized iPhones
-            main_title.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+            main_title.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.15*screenHeight)
             nameTextField.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
-            editImageButton.layer.borderWidth = 4.0
-            editImageButton.layer.borderColor = necterYellow.CGColor
-            editImageButton.frame = CGRect(x: 0, y:0.16*screenHeight, width:0.24*screenHeight, height:0.24*screenHeight)
+            editImageButton.frame = CGRect(x: 0, y:0.19*screenHeight, width:0.23*screenHeight, height:0.23*screenHeight)
             editImageButton.center.x = self.view.center.x
             editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
             editImageButton.clipsToBounds = true
-            interestedLabel.frame = CGRect(x:0.05*screenWidth , y:0.42*screenHeight, width:0.9*screenWidth, height:0.05*screenHeight)
-            businessLabel.frame = CGRect(x:0.125*screenWidth , y:0.5*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            interestedLabel.frame = CGRect(x:0.05*screenWidth , y:0.45*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
+            businessLabel.frame = CGRect(x:0.125*screenWidth , y:0.55*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
             businessSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             businessSwitch.center.y = businessLabel.center.y
-            loveLabel.frame = CGRect(x:0.125*screenWidth , y:0.59*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            loveLabel.frame = CGRect(x:0.125*screenWidth , y:0.65*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
             loveSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             loveSwitch.center.y = loveLabel.center.y
-            friendshipLabel.frame = CGRect(x:0.125*screenWidth , y:0.68*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            friendshipLabel.frame = CGRect(x:0.125*screenWidth , y:0.75*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
             friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             friendshipSwitch.center.y = friendshipLabel.center.y
-            beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.785*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
+            beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
         } else {
         //placing elements on larger iPhones
             main_title.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
@@ -315,7 +334,6 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         }
         let updatedText = nameTextField.text
         if let updatedText = updatedText {
-            print(updatedText)
             let localData = LocalData()
             localData.setUsername(updatedText)
             localData.synchronize()

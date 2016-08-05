@@ -517,7 +517,12 @@ class LocalStorageUtility{
             for object in objects {
                 var name:String? = nil
                 if let ob = object["name"] {
-                    name = ob as? String
+                    //name with max characters of 25
+                    if name?.characters.count > 25 {
+                        name = ob as? String
+                        let index1 = name!.endIndex.advancedBy(name!.characters.count - 25)
+                        name = name!.substringToIndex(index1)
+                    }
                 }
                 var main_profile_picture:NSData? = nil
                 if let ob = object["fb_profile_picture"] {

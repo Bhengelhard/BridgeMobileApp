@@ -13,6 +13,8 @@ class ProfileTableViewCell2: UITableViewCell {
 
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var preferencesSwitch: UISwitch!
+    let screenWidth = UIScreen.mainScreen().bounds.width
+    let screenHeight = UIScreen.mainScreen().bounds.height
     
     //Switches Tapped
     @IBAction func preferencesSwitchTapped(sender: AnyObject) {

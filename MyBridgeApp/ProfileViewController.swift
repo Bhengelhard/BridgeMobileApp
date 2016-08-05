@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var editImageButton: UIButton!
@@ -20,6 +20,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     var editableName:String = ""
+    let noNameText = "Click to enter your full name"
     
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
@@ -96,12 +97,22 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         dismissViewControllerAnimated(true, completion: nil)
     }
 
+    //stopping user from entering name with length greater than 25
+    @IBAction func nameTextFieldChanged(sender: AnyObject) {
+        if let characterCount = nameTextField.text?.characters.count {
+            if characterCount > 25 {
+                let aboveMaxBy = characterCount - 25
+                let index1 = nameTextField.text!.endIndex.advancedBy(-aboveMaxBy)
+                nameTextField.text = nameTextField.text!.substringToIndex(index1)
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+        nameTextField.delegate = self
         imagePicker.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
@@ -118,24 +129,42 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         
         let username = LocalData().getUsername()
+        
         if let username = username {
             if username != "" {
                 editableName = username
                 nameTextField.text = username
             } else{
-                editableName = "Enter your full name"
-                name.text = "Click to enter your full name"
+                /*PFUser.currentUser()?.fetchInBackgroundWithBlock({ (<#PFObject?#>, <#NSError?#>) in
+                    <#code#>
+                })
+                let query = PFQuery(className:"_User")
+                query.getObjectInBackgroundWithId(PFUser.currentUser()?.objectId, block: { (objects, error) in
+                    if error == nil {
+                        
+                    } else {
+                        
+                    }
+                    
+                })*/
+                
+                
+                editableName = noNameText
+                name.text = noNameText
             }
         }
         else{
-            editableName = "Enter your full name"
-            name.text = "Click to enter your full name"
+            editableName = noNameText
+            name.text = noNameText
         }
+        
         nameTextField.hidden = true
         name.userInteractionEnabled = true
+        
         if let username = username {
             name.text = username
         }
+        name.textColor = UIColor.lightGrayColor()
         
         let aSelector : Selector = #selector(ProfileViewController.lblTapped)
         let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
@@ -172,11 +201,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         editImageButton.center.x = self.view.center.x
         editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
         editImageButton.clipsToBounds = true
-        name.frame = CGRect(x: 0, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
-        name.center.x = self.view.center.x
-        name.textColor = UIColor.lightGrayColor()
-        nameTextField.frame = CGRect(x: 0, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
-        nameTextField.center.x = self.view.center.x
+        name.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
+        nameTextField.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
         bridgeStatus.frame = CGRect(x: 0, y:0.465*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
         bridgeStatus.center.x = self.view.center.x
         tableView.frame = CGRect(x: 0, y:0.55*screenHeight, width:screenWidth, height:0.435*screenHeight)
@@ -187,7 +213,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         nameTextField.becomeFirstResponder()
         name.hidden = true
         nameTextField.hidden = false
-        if editableName != "Enter your full name" {
+        if editableName != noNameText {
             nameTextField.text = editableName
         }
         let outSelector : Selector = #selector(ProfileViewController.tappedOutside)
@@ -197,32 +223,35 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     // Tapped anywhere else on the main view. Textfield should be replaced by label
     func tappedOutside(){
-        name.hidden = false
-        nameTextField.hidden = true
-        if let editableNameTemp = nameTextField.text{
-            if editableNameTemp != "" {
-                name.text = editableNameTemp
-                editableName = editableNameTemp
+        if !view.isFirstResponder() {
+            nameTextField.endEditing(true)
+            name.hidden = false
+            nameTextField.hidden = true
+            if let editableNameTemp = nameTextField.text{
+                if editableNameTemp != "" {
+                    name.text = editableNameTemp
+                    editableName = editableNameTemp
+                }
             }
-        }
-        let updatedText = nameTextField.text
-        if let updatedText = updatedText {
-            print(updatedText)
-            let localData = LocalData()
-            localData.setUsername(updatedText)
-            localData.synchronize()
+            let updatedText = nameTextField.text
+            if let updatedText = updatedText {
+                let localData = LocalData()
+                localData.setUsername(updatedText)
+                localData.synchronize()
+                
+                //saving updated username to parse
+                if let _ = PFUser.currentUser() {
+                    PFUser.currentUser()!["name"] = updatedText
+                    PFUser.currentUser()?.saveInBackground()
+                }
+            }
+            if let _ = view.gestureRecognizers {
+                for gesture in view.gestureRecognizers! {
+                    view.removeGestureRecognizer(gesture)
+                }
+            }
             
-            //saving updated username to parse
-            if let _ = PFUser.currentUser() {
-                PFUser.currentUser()!["name"] = updatedText
-                PFUser.currentUser()?.saveInBackground()
-            }
         }
-        self.view.endEditing(true)
-        let outSelector : Selector = #selector(ProfileViewController.tappedOutside)
-        let outsideTapGesture = UITapGestureRecognizer(target: self, action: outSelector)
-        outsideTapGesture.numberOfTapsRequired = 1
-        view.removeGestureRecognizer(outsideTapGesture)
     }
     // User returns after editing
     func textFieldShouldReturn(userText: UITextField) -> Bool {
@@ -279,27 +308,49 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if indexPath.row == 1 {
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
-            cell2.label.text = "Bridge for Business"
+            //cell2.label.text = "'nect for Business"
             cell2.preferencesSwitch.onTintColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
+            
+            //setting multi-font label
+            let string = "connect for business" as NSString
+            let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
+            let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
+            // Part of string to be necter font
+            attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
+            cell2.label.attributedText = attributedString
             
             return cell2
             
         } else if indexPath.row == 2 {
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
-            cell2.label.text = "Bridge for Love"
             cell2.preferencesSwitch.onTintColor = UIColor.init(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
+            
+            //setting multi-font label
+            let string = "connect for love" as NSString
+            let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
+            let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
+            // Part of string to be necter font
+            attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
+            cell2.label.attributedText = attributedString
             
             return cell2
             
         } else if indexPath.row == 3 {
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
-            cell2.label.text = "Bridge for Friendship"
             cell2.preferencesSwitch.onTintColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
+            
+            //setting multi-font label
+            let string = "connect for friendship" as NSString
+            let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
+            let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
+            // Part of string to be necter font
+            attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
+            cell2.label.attributedText = attributedString
             
             return cell2
             
