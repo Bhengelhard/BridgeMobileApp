@@ -25,6 +25,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     @IBOutlet weak var loveSwitch: UISwitch!
     @IBOutlet weak var interestedLabel: UILabel!
     @IBOutlet weak var beginConnectingButton: UIButton!
+    let updateLaterLabel = UILabel()
    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -89,8 +90,16 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
                 let localData = LocalData()
                 localData.setMainProfilePicture(imageData)
                 localData.synchronize()
+                
+                //update the user's profile picture in Database
+                if let _ = PFUser.currentUser() {
+                    PFUser.currentUser()!["profile_picture"] = imageData
+                    PFUser.currentUser()?.saveInBackground()
+                }
+                
             }
 
+            
         }
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -122,8 +131,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
                 }
             })
         }
-        LocalData().setUsername(editableName)
-        LocalData().synchronize()
+        let localData = LocalData()
+        localData.setUsername(editableName)
+        localData.synchronize()
     }
     // Switches tapped
     @IBAction func friendshipSwitchTapped(sender: AnyObject) {
@@ -168,8 +178,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
                 let aboveMaxBy = usernameString.characters.count - 25
                 let index1 = usernameString.endIndex.advancedBy(-aboveMaxBy)
                 usernameString = usernameString.substringToIndex(index1)
-                LocalData().setUsername(usernameString)
-                LocalData().synchronize()
+                /*let localData = LocalData()
+                localData.setUsername(usernameString)
+                localData.synchronize()*/
             }
             if usernameString != "" {
                 editableName = usernameString
@@ -210,33 +221,49 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             beginConnectingButton.setTitleColor(UIColor.grayColor(), forState: .Normal)
             beginConnectingButton.enabled = false
         } else {
-            beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-            beginConnectingButton.setTitleColor(necterYellow, forState: .Highlighted)
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+            /*dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
                 var i = 1
                 while i < 4 {
                     sleep(1)
                     dispatch_async(dispatch_get_main_queue(), {
                         if i == 1 {
-                            self.main_title.textColor = UIColor.blackColor()
+                            self.main_title.textColor = UIColor.lightGrayColor()
                             self.main_title.attributedText = self.twoColoredString(self.editableName+"'s Interests", partLength: self.editableName.characters.count, start: (self.editableName.characters.count + 12), color: self.necterYellow)
                         } else if i == 2 {
-                            self.interestedLabel.textColor = self.necterYellow
-                            self.main_title.textColor = UIColor.lightGrayColor()
-                            self.main_title.attributedText = self.twoColoredString(self.editableName+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
+                            if self.nameTextField.hidden != false {
+                            }
                         } else if i == 3 {
-                            self.beginConnectingButton.layer.borderColor = self.necterYellow.CGColor
+                            if self.nameTextField.hidden != false {
+                                self.beginConnectingButton.layer.borderColor = self.necterYellow.CGColor
+                                self.main_title.textColor = UIColor.lightGrayColor()
+                                self.main_title.attributedText = self.twoColoredString(self.editableName+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
+                            }
                             self.interestedLabel.textColor = UIColor.blackColor()
                         }
                         i += 1
                     })
                 }
                 
-            }
+            }*/
         }
         beginConnectingButton.layer.cornerRadius = 7.0
         beginConnectingButton.layer.borderWidth = 4.0
         beginConnectingButton.clipsToBounds = true
+        if editableName == "" || editableName == noNameText {
+            beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+            beginConnectingButton.enabled = false
+        } else {
+            beginConnectingButton.layer.borderColor = necterYellow.CGColor
+            beginConnectingButton.setTitleColor(necterYellow, forState: .Highlighted)
+        }
+        
+        //label below beginConnecting Button
+        updateLaterLabel.textAlignment = NSTextAlignment.Center
+        updateLaterLabel.text = "You can always update your interests later"
+        updateLaterLabel.font = UIFont(name: "BentonSans", size: 12)
+        updateLaterLabel.textColor = UIColor.blackColor()
+        updateLaterLabel.numberOfLines = 0
+        self.view.addSubview(updateLaterLabel)
         
     }
     
@@ -264,6 +291,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             friendshipSwitch.center.y = friendshipLabel.center.y
             beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
+            updateLaterLabel.frame = CGRectMake(0.05*screenWidth, 0.925*screenHeight, 0.9*screenWidth, 0.05*screenHeight)
+            
         } else {
         //placing elements on larger iPhones
             main_title.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
@@ -283,6 +312,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             friendshipSwitch.center.y = friendshipLabel.center.y
             beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
+            updateLaterLabel.frame = CGRectMake(0.05*screenWidth, 0.925*screenHeight, 0.9*screenWidth, 0.05*screenHeight)
             
         }
         
@@ -303,11 +333,14 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     // Username label is tapped. Textfield should appear and replace the label
     func lblTapped(){
         nameTextField.becomeFirstResponder()
+        nameTextField.textColor = necterYellow
         main_title.hidden = true
         nameTextField.hidden = false
         if editableName != noNameText {
             nameTextField.text = editableName
         }
+        beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        beginConnectingButton.enabled = false
     }
     // Tapped anywhere else on the main view. Textfield should be replaced by label
     func tappedOutside(){
@@ -328,15 +361,13 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         
         if let editableNameTemp = nameTextField.text{
             if editableNameTemp != "" {
-                main_title.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
                 editableName = editableNameTemp
+                main_title.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
             }
         }
-        let updatedText = nameTextField.text
-        if let updatedText = updatedText {
-            let localData = LocalData()
-            localData.setUsername(updatedText)
-            localData.synchronize()
+        if editableName != "" {
+            beginConnectingButton.layer.borderColor = necterYellow.CGColor
+            beginConnectingButton.enabled = true
         }
     }
     // User returns after editing
@@ -348,12 +379,12 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             main_title.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
             editableName = editableNameTemp
         }
-        let updatedText = nameTextField.text
+        /*let updatedText = nameTextField.text
         if let updatedText = updatedText {
             let localData = LocalData()
             localData.setUsername(updatedText)
             localData.synchronize()
-        }
+        }*/
         return true
     }
 

@@ -223,7 +223,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     // Tapped anywhere else on the main view. Textfield should be replaced by label
     func tappedOutside(){
-        if !view.isFirstResponder() {
+        if nameTextField.isFirstResponder() {
             nameTextField.endEditing(true)
             name.hidden = false
             nameTextField.hidden = true

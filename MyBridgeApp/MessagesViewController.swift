@@ -348,7 +348,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.1*screenHeight)
         tableView.frame = CGRect(x: 0, y:0.1*screenHeight, width:screenWidth, height:0.825*screenHeight)
-        toolBar.frame = CGRect(x: 0, y:0.925*screenHeight, width:screenWidth, height:0.075*screenHeight)
+        toolBar.frame = CGRect(x: 0, y:0.9*screenHeight, width:screenWidth, height:0.1*screenHeight)
         
     }
     
@@ -435,19 +435,28 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         cell.participants.text = stringOfNames
         cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[indexPath.row]!]!
-        cell.blueDot.hidden = true
-//        if messageViewed[indexPath.row] {
-//        cell.blueDot.hidden = true
-//        }
+        
+        if !messageViewed[messagePositionToMessageIdMapping[indexPath.row]!]! {
+            cell.notificationDot.hidden = true
+        } else {
+            cell.notificationDot.hidden = false
+        }
         switch messageType[messagePositionToMessageIdMapping[indexPath.row]!]!{
             
-        case "Business": cell.backgroundColor = UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0)
+        case "Business":
+            cell.participants.textColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
+            cell.arrow.textColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
             break
-        case "Love": cell.backgroundColor = UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0)
+        case "Love":
+            cell.participants.textColor = UIColor(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
+            cell.arrow.textColor = UIColor(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
             break
-        case "Friendship": cell.backgroundColor = UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)
+        case "Friendship":
+            cell.participants.textColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
+            cell.arrow.textColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
             break
-        default: cell.backgroundColor = UIColor.init(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0)
+        default: cell.participants.textColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
+            cell.arrow.textColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
             
         }
         let dateFormatter = NSDateFormatter()
@@ -460,7 +469,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyy"
             //print(dateFormatter.stringFromDate(date))
-            cell.messageTimestamp.text = dateFormatter.stringFromDate(date)+">"
+            cell.messageTimestamp.text = dateFormatter.stringFromDate(date)
         }
         else if components.day >= 2 {
             let calendar = NSCalendar.currentCalendar()
@@ -468,16 +477,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             let components = calendar.components([.Weekday],
                                                  fromDate: date)
             //print(components.weekday)
-            cell.messageTimestamp.text = String(getWeekDay(components.weekday))+">"
+            cell.messageTimestamp.text = String(getWeekDay(components.weekday))
         }
         else if components.day >= 1 {
             //print ("Yesterday")
-            cell.messageTimestamp.text = "Yesterday"+">"
+            cell.messageTimestamp.text = "Yesterday"
         }
         else {
             let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "hh:mm:ss"
-            cell.messageTimestamp.text = dateFormatter.stringFromDate(date)+">"
+            dateFormatter.dateFormat = "hh:mm"
+            cell.messageTimestamp.text = dateFormatter.stringFromDate(date) + " QM"
             //print(dateFormatter.stringFromDate(date))
             
         }

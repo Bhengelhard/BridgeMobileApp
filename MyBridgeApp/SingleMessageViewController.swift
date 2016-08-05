@@ -75,6 +75,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                                     object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
                                 }
                                 object["lastSingleMessageAt"] = NSDate()
+                                object["message_viewed"] = [(PFUser.currentUser()?.objectId)!]
                                 object.saveInBackgroundWithBlock{
                                     (success, error) -> Void in
                                     if error == nil {
@@ -493,6 +494,29 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        //Update the fact that you have viewed the message Thread when you segue
+        // Segue is not the best place to put this. If you are about to close the view this should get called
+        let messageQuery = PFQuery(className: "Messages")
+        messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
+            if error == nil {
+                if let object = object {
+                    if var ob = object["message_viewed"] as? [String] {
+                        if !ob.contains((PFUser.currentUser()?.objectId)!) {
+                            ob.append((PFUser.currentUser()?.objectId)!)
+                            object["message_viewed"] = ob
+                        }
+                        
+                    }
+                    else {
+                        object["message_viewed"] = [(PFUser.currentUser()?.objectId)!]
+                    }
+                    object.saveInBackground()
+                }
+            }
+        })
+        
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
