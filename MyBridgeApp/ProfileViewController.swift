@@ -82,7 +82,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
                 
                 //update the user's profile picture in Database
                 if let _ = PFUser.currentUser() {
-                    PFUser.currentUser()!["profile_picture"] = imageData
+                    let file = PFFile(data:imageData)
+                    PFUser.currentUser()!["profile_picture"] = file
                     PFUser.currentUser()?.saveInBackground()
                 }
                 

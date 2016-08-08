@@ -731,128 +731,148 @@ class LocalStorageUtility{
         return result
     }
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
-//        var pairings = [UserInfoPair]()
+        //        var pairings = [UserInfoPair]()
         let bridgePairings = LocalData().getPairings()
         var pairings = [UserInfoPair]()
         if (bridgePairings != nil) {
             pairings = bridgePairings!
         }
         if let _ = PFUser.currentUser()?.objectId {
-        let query = PFQuery(className:"BridgePairings")
-        query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
-        query.whereKey("checked_out", equalTo: false)
-        query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
-        if (typeOfCards != "All") {
-            query.whereKey("bridge_type", equalTo: typeOfCards)
+            var getMorePairings = true
+            var i = 1
+            while getMorePairings {
+                let query = PFQuery(className:"BridgePairings")
+                query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
+                query.whereKey("checked_out", equalTo: false)
+                query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
+                if (typeOfCards != "All" && typeOfCards != "EachOfAllType") {
+                    query.whereKey("bridge_type", equalTo: typeOfCards)
+                }
+                if typeOfCards == "EachOfAllType" {
+                    switch i {
+                    case 1:
+                        query.whereKey("bridge_type", equalTo: "Business")
+                    case 2:
+                        query.whereKey("bridge_type", equalTo: "Love")
+                    case 3:
+                        query.whereKey("bridge_type", equalTo: "Friendship")
+                    default: break
+                    }
+                    
+                }
+                query.limit = maxNoOfCards
+                //        let err = NSErrorPointer()
+                //        totalObjects =  query.countObjects(err)
+                print("totalObjects \(totalObjects)")
+                do {
+                    let results = try query.findObjects()
+                    
+                    
+                    // query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+                    //if let results = results {
+                    print("Hi")
+                    for result in results {
+                        var user1:PairInfo? = nil
+                        var user2:PairInfo? = nil
+                        var name1:String? = nil
+                        var name2:String? = nil
+                        if let ob = result["user1_name"] {
+                            name1 = ob as? String
+                            
+                        }
+                        if let ob = result["user2_name"] {
+                            name2 = ob as? String
+                        }
+                        print("name2 - \(name2)")
+                        var location1:[Double]? = nil
+                        var location2:[Double]? = nil
+                        if let ob = result["user_locations"] as? [PFGeoPoint]{
+                            location1 = [ob[0].latitude, ob[0].longitude]
+                            location2 = [ob[1].latitude, ob[1].longitude]
+                        }
+                        print("location1 - \(location2)")
+                        var profilePicture1:NSData? = nil
+                        var profilePicture2:NSData? = nil
+                        
+                        
+                        if let ob = result["user1_profile_picture"] {
+                            let main_profile_picture_file = ob as! PFFile
+                            profilePicture1 = try main_profile_picture_file.getData()
+                        }
+                        if let ob = result["user2_profile_picture"] {
+                            let main_profile_picture_file = ob as! PFFile
+                            profilePicture2 = try main_profile_picture_file.getData()
+                        }
+                        
+                        var bridgeStatus1:String? = nil
+                        var bridgeStatus2:String? = nil
+                        if let ob = result["user1_bridge_status"] {
+                            bridgeStatus1 =  ob as? String
+                        }
+                        if let ob = result["user2_bridge_status"] {
+                            bridgeStatus2 =  ob as? String
+                        }
+                        
+                        
+                        var bridgeType1:String? = nil
+                        var bridgeType2:String? = nil
+                        if let ob = result["bridge_type"] {
+                            bridgeType1 =  ob as? String
+                            bridgeType2 =  ob as? String
+                        }
+                        
+                        var objectId1:String? = nil
+                        var objectId2:String? = nil
+                        if let ob = result.objectId {
+                            objectId1 =  ob as String
+                            objectId2 =  ob as String
+                        }
+                        var userId1:String? = nil
+                        var userId2:String? = nil
+                        if let ob = result["user_objectIds"] as? [String] {
+                            userId1 =  ob[0]
+                            userId2 =  ob[1]
+                        }
+                        
+                        result["checked_out"]  = true
+                        if let _ = result["shown_to"] {
+                            if var ar = result["shown_to"] as? [String] {
+                                let s = (PFUser.currentUser()?.objectId)! as String
+                                ar.append(s)
+                                result["shown_to"] = ar
+                            }
+                            else {
+                                result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
+                            }
+                        }
+                        else {
+                            result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
+                        }
+                        result.saveInBackground()
+                        
+                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1)
+                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2)
+                        let userInfoPair = UserInfoPair(user1: user1, user2: user2)
+                        pairings.append(userInfoPair)
+                        print("userId1, userId2 - \(userId1),\(userId2)")
+                        
+                    }
+                    let localData = LocalData()
+                    localData.setPairings(pairings)
+                    localData.synchronize()
+                    
+                    
+                }
+                catch {
+                    
+                }
+                i += 1
+                if i > 3 || typeOfCards != "EachOfAllType"{
+                    getMorePairings = false
+                }
+                
+                
+            }
         }
-        query.limit = maxNoOfCards
-//        let err = NSErrorPointer()
-//        totalObjects =  query.countObjects(err)
-        print("totalObjects \(totalObjects)")
-           do {
-                let results = try query.findObjects()
-            
-            
-           // query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
-                                //if let results = results {
-                                    print("Hi")
-                                    for result in results {
-                                        var user1:PairInfo? = nil
-                                        var user2:PairInfo? = nil
-                                        var name1:String? = nil
-                                        var name2:String? = nil
-                                        if let ob = result["user1_name"] {
-                                            name1 = ob as? String
-                
-                                        }
-                                        if let ob = result["user2_name"] {
-                                            name2 = ob as? String
-                                        }
-                                        print("name2 - \(name2)")
-                                        var location1:[Double]? = nil
-                                        var location2:[Double]? = nil
-                                        if let ob = result["user_locations"] as? [PFGeoPoint]{
-                                            location1 = [ob[0].latitude, ob[0].longitude]
-                                            location2 = [ob[1].latitude, ob[1].longitude]
-                                        }
-                                        print("location1 - \(location2)")
-                                        var profilePicture1:NSData? = nil
-                                        var profilePicture2:NSData? = nil
-                                        
-
-                                        if let ob = result["user1_profile_picture"] {
-                                            let main_profile_picture_file = ob as! PFFile
-                                            profilePicture1 = try main_profile_picture_file.getData()
-                                        }
-                                        if let ob = result["user2_profile_picture"] {
-                                            let main_profile_picture_file = ob as! PFFile
-                                            profilePicture2 = try main_profile_picture_file.getData()
-                                        }
-                
-                                        var bridgeStatus1:String? = nil
-                                        var bridgeStatus2:String? = nil
-                                        if let ob = result["user1_bridge_status"] {
-                                            bridgeStatus1 =  ob as? String
-                                        }
-                                        if let ob = result["user2_bridge_status"] {
-                                            bridgeStatus2 =  ob as? String
-                                        }
-                
-                
-                                        var bridgeType1:String? = nil
-                                        var bridgeType2:String? = nil
-                                        if let ob = result["bridge_type"] {
-                                            bridgeType1 =  ob as? String
-                                            bridgeType2 =  ob as? String
-                                        }
-                                        
-                                        var objectId1:String? = nil
-                                        var objectId2:String? = nil
-                                        if let ob = result.objectId {
-                                            objectId1 =  ob as String
-                                            objectId2 =  ob as String
-                                        }
-                                        var userId1:String? = nil
-                                        var userId2:String? = nil
-                                        if let ob = result["user_objectIds"] as? [String] {
-                                            userId1 =  ob[0]
-                                            userId2 =  ob[1]
-                                        }
-
-                                        result["checked_out"]  = true
-                                        if let _ = result["shown_to"] {
-                                            if var ar = result["shown_to"] as? [String] {
-                                                let s = (PFUser.currentUser()?.objectId)! as String
-                                                ar.append(s)
-                                                result["shown_to"] = ar
-                                            }
-                                            else {
-                                                result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
-                                            }
-                                        }
-                                        else {
-                                            result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
-                                        }
-                                        result.saveInBackground()
-                
-                                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1)
-                                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2)
-                                        let userInfoPair = UserInfoPair(user1: user1, user2: user2)
-                                        pairings.append(userInfoPair)
-                                        print("userId1, userId2 - \(userId1),\(userId2)")
-                                        
-                                    }
-                                    let localData = LocalData()
-                                    localData.setPairings(pairings)
-                                    localData.synchronize()
-                
-            
-            }
-            catch {
-                
-            }
-
-        
-    }
     }
 }

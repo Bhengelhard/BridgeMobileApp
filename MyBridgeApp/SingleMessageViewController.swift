@@ -98,7 +98,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                                     
                                     }
                                     let notificationMessage = "Message from " + (PFUser.currentUser()!["name"] as! String)
-                                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage"]) {
+                                    PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage",  "messageId": self.newMessageId]) {
                                     (response: AnyObject?, error: NSError?) -> Void in
                                     if error == nil {
                                     if let response = response as? String {
@@ -516,6 +516,18 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 }
             }
         })
+        if let _ = self.navigationController{
+            print("no - \(navigationController?.viewControllers.count)")
+            if (navigationController?.viewControllers.count)! > 1 {
+                for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
+                    navigationController?.viewControllers.removeAtIndex(0)
+                }
+            }
+            
+            //navigationController?.viewControllers.removeAll()
+        }
+
+        
         
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
