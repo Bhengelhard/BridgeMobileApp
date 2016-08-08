@@ -25,6 +25,8 @@ class BridgeViewController: UIViewController {
     var segueToSingleMessage = false
     var messageId = ""
     let transitionManager = TransitionManager()
+    var iconFrame = CGRectMake(0,0,0,0)
+    var iconLabel = UILabel()
     enum typesOfCard {
         case All
         case Business
@@ -264,8 +266,8 @@ class BridgeViewController: UIViewController {
                 photo2 = mainProfilePicture
             }
             else {
-                let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
-                photo2 =  mainProfilePicture
+                //let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
+               // photo2 =  mainProfilePicture
             }
             let color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
             
@@ -374,7 +376,21 @@ class BridgeViewController: UIViewController {
             return 0
         }
     }
-    
+    func updateNoOfUnreadMessagesIcon(notification: NSNotification) {
+        
+        let aps = notification.userInfo!["aps"] as? NSDictionary
+        let badge = aps!["badge"] as? Int
+        print("Listened at updateNoOfUnreadMessagesIcon - \(badge)")
+        dispatch_async(dispatch_get_main_queue(), {
+            self.iconLabel.text = String(badge!)
+            self.iconLabel.layer.backgroundColor = UIColor.redColor().CGColor
+            self.iconLabel.layer.cornerRadius = 12
+            
+        })
+        
+        
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         //        while localStorageUtility.waitForCardsToBeDownloaded(){
@@ -385,14 +401,20 @@ class BridgeViewController: UIViewController {
         
 //        localStorageUtility.getBridgePairingsFromCloud()
 //        bridgePairings = LocalData().getPairings()
-
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
+        //NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
+        
         bridgePairings = LocalData().getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
-        localStorageUtility.getBridgePairingsFromCloud(2,typeOfCards: "All")
+        localStorageUtility.getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
         bridgePairings = LocalData().getPairings()
         }
         displayCards()
         displayToolBar()
+        self.iconFrame = CGRectMake(0.97*self.screenWidth,0.03*self.screenHeight,0.03*self.screenWidth,0.03*self.screenHeight)
+        self.iconLabel = UILabel(frame: iconFrame)
+        self.view.addSubview(self.iconLabel)
+
         
 
         
@@ -410,6 +432,10 @@ class BridgeViewController: UIViewController {
             stackOfCards.removeAll()
             displayCards()
             displayToolBar()
+            self.iconFrame = CGRectMake(0.97*self.screenWidth,0.03*self.screenHeight,0.03*self.screenWidth,0.03*self.screenHeight)
+            self.iconLabel = UILabel(frame: iconFrame)
+            self.view.addSubview(self.iconLabel)
+
             
         }
         
@@ -578,6 +604,17 @@ class BridgeViewController: UIViewController {
             singleMessageVC.isSeguedFromBridgePage = true
             singleMessageVC.newMessageId = self.messageId
         }
+        if let _ = self.navigationController{
+            print("no - \(navigationController?.viewControllers.count)")
+            if (navigationController?.viewControllers.count)! > 1 {
+            for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
+                navigationController?.viewControllers.removeAtIndex(0)
+            }
+            }
+            
+            //navigationController?.viewControllers.removeAll()
+        }
+
     }
 
     override func didReceiveMemoryWarning() {

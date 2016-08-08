@@ -128,6 +128,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             singleMessageVC.isSeguedFromMessages = true
             singleMessageVC.newMessageId = self.singleMessageId
         }
+        if let _ = self.navigationController{
+            print("no - \(navigationController?.viewControllers.count)")
+            if (navigationController?.viewControllers.count)! > 1 {
+            for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
+                navigationController?.viewControllers.removeAtIndex(0)
+            }
+            }
+            
+            //navigationController?.viewControllers.removeAll()
+        }
 
     }
     func startBackgroundThread() {

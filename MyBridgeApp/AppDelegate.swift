@@ -131,29 +131,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-//        print("Listener is set at didReceiveRemoteNotification")
-//        NSNotificationCenter.defaultCenter().postNotificationName("reloadTheThread", object: nil)
-//        NSNotificationCenter.defaultCenter().postNotificationName("reloadTheMessageTable", object: nil)
-//        if userInfo.objectForKey("badge") {
-//            let badgeNumber: Int = userInfo.objectForKey("badge").integerValue
-//            application.applicationIconBadgeNumber = badgeNumber
-//        }
-
-//        if let _ = userInfo["badge"] as? Int {
-//            let badgeNumber = (userInfo["badge"] as! Int)
-//            print("badgeNumber - \(badgeNumber)")
-//            application.applicationIconBadgeNumber = badgeNumber
-//        }
+        print("Listener is set at didReceiveRemoteNotification")
+        
+        NSNotificationCenter.defaultCenter().postNotificationName("reloadTheThread", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName("reloadTheMessageTable", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName("updateBridgePage", object: nil, userInfo: userInfo)
+        //        if userInfo.objectForKey("badge") {
+        //            let badgeNumber: Int = userInfo.objectForKey("badge").integerValue
+        //            application.applicationIconBadgeNumber = badgeNumber
+        //        }
+        
+        //        if let _ = userInfo["badge"] as? Int {
+        //            let badgeNumber = (userInfo["badge"] as! Int)
+        //            print("badgeNumber - \(badgeNumber)")
+        //            application.applicationIconBadgeNumber = badgeNumber
+        //        }
+        
         print("userInfo - \(userInfo)")
         let messageId = userInfo["messageId"] as? String
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc : SingleMessageViewController = storyboard.instantiateViewControllerWithIdentifier("SingleMessageViewController") as! SingleMessageViewController
         vc.newMessageId = messageId!
-
         let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)
-        navController.viewControllers.removeAll()
-        navController.pushViewController(vc, animated: true)
-
+        
+        print("top navController - \(navController.topViewController)")
+        if application.applicationState == UIApplicationState.Inactive {
+            print("UIApplicationState.Inactive")
+            
+            navController.viewControllers.removeAll()
+            navController.pushViewController(vc, animated: true)
+        }
+        else if application.applicationState == UIApplicationState.Background {
+            print("UIApplicationState.Background")
+        }
+        else if application.applicationState == UIApplicationState.Active {
+            print("UIApplicationState.Active")
+        }
+        else{
+            print("None")
+        }
+        
         //PFPush.handlePush(userInfo)
         if application.applicationState == UIApplicationState.Inactive {
             PFAnalytics.trackAppOpenedWithRemoteNotificationPayload(userInfo)
