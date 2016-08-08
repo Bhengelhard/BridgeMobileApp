@@ -8,6 +8,7 @@ import ParseFacebookUtilsV4
 
 // If you want to use any of the UI components, uncomment this line
 // import ParseUI
+// Add
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
