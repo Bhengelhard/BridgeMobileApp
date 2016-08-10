@@ -10,11 +10,16 @@ import UIKit
 import Parse
 import MapKit
 class BridgeViewController: UIViewController {
+    @IBOutlet weak var navigationBar: UINavigationBar!
     var bridgePairings:[UserInfoPair]? = nil
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
-    let cardWidth = UIScreen.mainScreen().bounds.width*0.8
-    let cardHeight = UIScreen.mainScreen().bounds.height*0.37
+    let cardWidth = UIScreen.mainScreen().bounds.height*0.45
+    let cardHeight = UIScreen.mainScreen().bounds.height*0.45
+    let superDeckX = 0.02*UIScreen.mainScreen().bounds.width
+    let superDeckY = 0.11*UIScreen.mainScreen().bounds.height
+    let superDeckWidth = 0.96*UIScreen.mainScreen().bounds.width
+    let superDeckHeight = 0.78*UIScreen.mainScreen().bounds.height
     var totalNoOfCards = 0
     var stackOfCards = [UIView]()
     let localStorageUtility = LocalStorageUtility()
@@ -22,6 +27,7 @@ class BridgeViewController: UIViewController {
     var lastCardInStack:UIView = UIView()
     var displayNoMoreCardsView:UIView? = nil
     var arrayOfCardsInDeck = [UIView]()
+    var arrayOfCardColors = [CGColor]()
     var segueToSingleMessage = false
     var messageId = ""
     let transitionManager = TransitionManager()
@@ -92,19 +98,28 @@ class BridgeViewController: UIViewController {
     func displayToolBar(){
         var items = [UIBarButtonItem]()
         
-        items.append( UIBarButtonItem(title: "All", style: .Plain, target: nil, action:#selector(filterTapped(_:)) ))
+        items.append( UIBarButtonItem(title: "Filter", style: .Plain, target: nil, action:#selector(filterTapped(_:)) ))
+        items[0].tintColor = UIColor.darkGrayColor()
+        items[0].tag = 0
         items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
-        items.append( UIBarButtonItem(title: "Business", style: .Plain, target: nil, action: #selector(filterTapped(_:))))
+        items.append( UIBarButtonItem(image: UIImage(named: "Business-33x33.png"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
+        items[2].tintColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
+        items[2].tag = 1
         items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
-        items.append( UIBarButtonItem(title: "Love", style: .Plain, target: nil, action: #selector(filterTapped(_:))))
+        items.append( UIBarButtonItem(image: UIImage(named: "Love-33x33.png"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
+        items[4].tintColor = UIColor(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
+        items[4].tag = 2
         items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
-        items.append( UIBarButtonItem(title: "Friendship", style: .Plain, target: nil, action: #selector(filterTapped(_:))))
+        items.append( UIBarButtonItem(image: UIImage(named: "Friendship-44x44.png"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
+        items[6].tintColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
+        items[6].tag = 3
+
         
         let toolbar = UIToolbar()
-        toolbar.frame = CGRectMake(0, self.view.frame.size.height - 46, self.view.frame.size.width, 46)
-        toolbar.sizeToFit()
+        toolbar.frame = CGRectMake(0, 0.9*screenHeight, screenWidth, 0.1*screenHeight)
+        //toolbar.sizeToFit()
         toolbar.setItems(items, animated: true)
-        toolbar.backgroundColor = UIColor.redColor()
+        toolbar.tintColor = UIColor.whiteColor()
         self.view.addSubview(toolbar)
     }
     func displayNoMoreCards() {
@@ -120,11 +135,11 @@ class BridgeViewController: UIViewController {
         
     }
     func getUpperDeckCardFrame() -> CGRect {
-        let upperDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*0.87*(0.16), screenWidth*0.8,screenHeight*0.87*0.37)
+        let upperDeckFrame : CGRect = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
         return upperDeckFrame
     }
     func getLowerDeckCardFrame() -> CGRect {
-        let lowerDeckFrame : CGRect = CGRectMake(screenWidth*(0.08),screenHeight*0.87*(0.54), screenWidth*0.8,screenHeight*0.87*0.37)
+        let lowerDeckFrame : CGRect = CGRectMake(0, 0.5*superDeckHeight, superDeckWidth, 0.5*superDeckHeight)
         return lowerDeckFrame
     }
     func getUpperDeckCard(name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor) -> UIView{
@@ -140,7 +155,7 @@ class BridgeViewController: UIViewController {
         let nameFrame = CGRectMake(0.05*cardWidth,0.10*cardHeight,0.55*cardWidth,0.20*cardHeight)
         let locationFrame = CGRectMake(0.05*cardWidth,0.31*cardHeight,0.55*cardWidth,0.20*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.55*cardHeight,0.95*cardWidth,0.45*cardHeight)
-        let photoFrame = CGRectMake(0,0, cardWidth, cardHeight)
+        let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
         
         let nameLabel = UILabel(frame: nameFrame)
         nameLabel.text = name
@@ -156,6 +171,9 @@ class BridgeViewController: UIViewController {
         
         let photoView = UIImageView(frame: photoFrame)
         photoView.image = UIImage(data: photo)
+        //photoView.autoresizingMask = UIViewAutoresizing.FlexibleBottomMargin | UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleRightMargin | UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleWidth
+        photoView.contentMode = UIViewContentMode.ScaleAspectFill
+        photoView.clipsToBounds = true
         
         let card = UIView(frame:deckFrame)
         card.addSubview(photoView)
@@ -171,11 +189,14 @@ class BridgeViewController: UIViewController {
         
         let upperDeckCard = getUpperDeckCard(name, location: location, status: status, photo: photo, cardColor: cardColor)
         let lowerDeckCard = getLowerDeckCard(name2, location: location2, status: status2, photo: photo2, cardColor: cardColor)
-        let superDeckFrame : CGRect = CGRectMake(0,screenHeight*0.087, screenWidth,screenHeight*0.85)
+        let superDeckFrame : CGRect = CGRectMake(0.02*screenWidth, 0.11*screenHeight, 0.96*screenWidth, 0.78*screenHeight)
         let superDeckView = UIView(frame:superDeckFrame)
+        superDeckView.layer.cornerRadius = 7
+        superDeckView.clipsToBounds = true
         superDeckView.addSubview(upperDeckCard)
         superDeckView.addSubview(lowerDeckCard)
-        superDeckView.layer.borderWidth = 3
+        superDeckView.backgroundColor = UIColor.whiteColor()
+        superDeckView.layer.borderWidth = 4
         superDeckView.layer.borderColor = getCGColor(cardColor)
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
         superDeckView.addGestureRecognizer(gesture)
@@ -188,6 +209,7 @@ class BridgeViewController: UIViewController {
             self.view.insertSubview(superDeckView, aboveSubview: self.view)
         }
         arrayOfCardsInDeck.append(superDeckView)
+        arrayOfCardColors.append(superDeckView.layer.borderColor!)
         stackOfCards.append(superDeckView)
         return superDeckView
     }
@@ -197,6 +219,7 @@ class BridgeViewController: UIViewController {
             self.displayNoMoreCardsView = nil
         }
         arrayOfCardsInDeck = [UIView]()
+        arrayOfCardColors = [CGColor]()
         var j = 0
         let bridgePairings = LocalData().getPairings()
         if let bridgePairings = bridgePairings {
@@ -259,8 +282,8 @@ class BridgeViewController: UIViewController {
                 photo1 = mainProfilePicture
             }
             else {
-                let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
-                photo1 =  mainProfilePicture
+                //let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
+                //photo1 =  mainProfilePicture
             }
             if let mainProfilePicture = pairing.user2?.mainProfilePicture {
                 photo2 = mainProfilePicture
@@ -414,18 +437,43 @@ class BridgeViewController: UIViewController {
         self.iconFrame = CGRectMake(0.97*self.screenWidth,0.03*self.screenHeight,0.03*self.screenWidth,0.03*self.screenHeight)
         self.iconLabel = UILabel(frame: iconFrame)
         self.view.addSubview(self.iconLabel)
-
-        
-
-        
         
         // Do any additional setup after loading the view, typically from a nib.
     }
+    
+    override func viewDidLayoutSubviews() {
+   
+        navigationBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0.1*screenHeight)
+
+    }
+    
     func filterTapped(sender: UIBarButtonItem ){
         print(currentTypeOfCardsOnDisplay)
-        if let title = sender.title {
-            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum(title)
-            print(currentTypeOfCardsOnDisplay)
+        let tag = sender.tag
+        switch(tag){
+            case 0: currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
+                    break
+            case 1: currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
+                    break
+            case 2: currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
+                    break
+            case 3: currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
+                    break
+            default:currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
+        }
+            /*if tag == UIImage(named: "Business-33x33.png") {
+                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
+                print(currentTypeOfCardsOnDisplay)
+            } else if image == UIImage(named: "Love-33x33.png") {
+                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
+                print(currentTypeOfCardsOnDisplay)
+            } else if image == UIImage(named: "Friendship-44x44.png") {
+                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
+                print(currentTypeOfCardsOnDisplay)
+            } else if{
+                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
+                print(currentTypeOfCardsOnDisplay)
+            }*/
             for i in 0..<stackOfCards.count {
                 stackOfCards[i].removeFromSuperview()
             }
@@ -435,10 +483,7 @@ class BridgeViewController: UIViewController {
             self.iconFrame = CGRectMake(0.97*self.screenWidth,0.03*self.screenHeight,0.03*self.screenWidth,0.03*self.screenHeight)
             self.iconLabel = UILabel(frame: iconFrame)
             self.view.addSubview(self.iconLabel)
-
-            
-        }
-        
+    
     }
     func bridged(){
         let bridgePairings = LocalData().getPairings()
@@ -543,6 +588,7 @@ class BridgeViewController: UIViewController {
             self.bridgePairings!.removeAtIndex(x)
             if arrayOfCardsInDeck.count > 0 {
                 arrayOfCardsInDeck.removeAtIndex(0)
+                arrayOfCardColors.removeAtIndex(0)
                 if arrayOfCardsInDeck.count > 0 {
                     arrayOfCardsInDeck[0].userInteractionEnabled = true
                 }
@@ -565,20 +611,29 @@ class BridgeViewController: UIViewController {
     func isDragged(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translationInView(self.view)
         let superDeckView = gesture.view!
-        superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5) + translation.y)
+        //superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5) + translation.y)
+        superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight / 2 + translation.y)
         let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
         let scale = min(100 / abs(xFromCenter), 1)
         var rotation = CGAffineTransformMakeRotation(xFromCenter / 200)
         var stretch = CGAffineTransformScale(rotation, scale, scale)
         superDeckView.transform = stretch
         var removeCard = false
+        if superDeckView.center.x < 0.25*screenWidth{
+            superDeckView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        } else if superDeckView.center.x > 0.75*screenWidth {
+            superDeckView.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
+        } else {
+            superDeckView.layer.borderColor = arrayOfCardColors[0]
+        }
+        
         if gesture.state == UIGestureRecognizerState.Ended {
             
-            if superDeckView.center.x < 100 {
-                removeCard = true
+            if superDeckView.center.x < 0.25*screenWidth {
                 print("nextPair")
                 nextPair()
-            } else if superDeckView.center.x > self.view.bounds.width - 100 {
+                removeCard = true
+            } else if superDeckView.center.x > 0.75*screenWidth {
                 removeCard = true
                 print("bridged")
                 bridged()
@@ -587,10 +642,20 @@ class BridgeViewController: UIViewController {
                 superDeckView.removeFromSuperview()
             }
             else {
-            rotation = CGAffineTransformMakeRotation(0)
-            stretch = CGAffineTransformScale(rotation, 1, 1)
-            superDeckView.transform = stretch
-            superDeckView.center = CGPoint(x: self.screenWidth / 2, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5))
+                
+                
+                //superDeckView.center = CGPoint(x: self.screenWidth / 2, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5))
+                UIView.animateWithDuration(0.7, animations: {
+                    //var superDeckViewFrame = superDeckView.frame
+                    superDeckView.layer.borderColor = self.arrayOfCardColors[0]
+                    rotation = CGAffineTransformMakeRotation(0)
+                    stretch = CGAffineTransformScale(rotation, 1, 1)
+                    superDeckView.transform = stretch
+                    superDeckView.center.x = self.screenWidth/2
+                    superDeckView.center.y = self.screenHeight/2
+                })
+                //superDeckView.center = CGPoint(x: self.screenWidth / 2, y: self.screenHeight / 2)
+                
             }
         }
         

@@ -201,6 +201,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         editImageButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
         editImageButton.center.x = self.view.center.x
         editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
+        editImageButton.contentMode = UIViewContentMode.ScaleAspectFill
         editImageButton.clipsToBounds = true
         name.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
         nameTextField.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
