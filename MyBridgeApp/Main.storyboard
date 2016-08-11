@@ -718,7 +718,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Izu-XS-RmV">
+                            <navigationBar clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Izu-XS-RmV">
                                 <rect key="frame" x="-4" y="20" width="383" height="44"/>
                                 <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <textAttributes key="titleTextAttributes">
@@ -1068,10 +1068,10 @@
         <image name="suzy's_profile_picture.jpg" width="960" height="960"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aOp-uB-KM9"/>
-        <segue reference="ZED-f0-itX"/>
-        <segue reference="cy1-Ds-r2Z"/>
-        <segue reference="s3F-dq-ZaG"/>
+        <segue reference="Vf7-BV-Sao"/>
         <segue reference="lgB-8D-KNZ"/>
+        <segue reference="nDE-dt-Hjx"/>
+        <segue reference="cy1-Ds-r2Z"/>
+        <segue reference="B19-eu-GHC"/>
     </inferredMetricsTieBreakers>
 </document>

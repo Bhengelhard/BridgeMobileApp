@@ -174,31 +174,34 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         view.addSubview(username)
         self.optionsTableView.alpha = 0
         self.selectTypeLabel.alpha = 0
-        self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.14*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
+        self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.135*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
         self.cancelButton.alpha = 0
         self.backButton.alpha = 1
         self.postButton.alpha = 1
         
         
-        let _ = Timer(interval: 0.25) {i -> Bool in
+        let _ = Timer(interval: 0.3) {i -> Bool in
             //self.selectTypeLabel.attributedText = attributedGreeting.attributedSubstringFromRange(NSRange(location: 0, length: i+1))
             //return i + 1 < attributedGreeting.string.characters.count
             //fade out select necter Type screen
             //using optionTableView.alpha as an indicator that the user has not yet clicked the back button
-            if i == 1 && self.optionsTableView.alpha == 0{
-                //intructions pop in
-                self.selectTypeLabel.alpha = 1
-                let greeting = "Great job! Now post a status about the connection you are looking for."
-                let attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 16)!])
-                self.selectTypeLabel.attributedText = attributedGreeting
-            } else if i == 2 && self.optionsTableView.alpha == 0 {
-                //fade in post status screen
-                self.bridgeStatus.becomeFirstResponder()
-                self.profilePicture.alpha = 1
-                self.bridgeStatus.alpha = 1
-            }
+            UIView.animateWithDuration(0.6, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
+                if i == 0 && self.optionsTableView.alpha == 0{
+                    //intructions pop in
+                    self.selectTypeLabel.alpha = 1
+                    self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.14*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
+                    let greeting = "Awesome! Now post a status to give your friends more information"
+                    let attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 16)!])
+                    self.selectTypeLabel.attributedText = attributedGreeting
+                } else if i == 1 && self.optionsTableView.alpha == 0 {
+                    //fade in post status screen
+                    self.bridgeStatus.becomeFirstResponder()
+                    self.profilePicture.alpha = 1
+                    self.bridgeStatus.alpha = 1
+                }
+            }, completion: nil)
             
-                return i < 3
+            return i < 3
         }
         
         /*UIView.animateWithDuration(0.7) {
@@ -219,14 +222,15 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         //show previous views setup (i.e. the initial bot question of which connection type the user is looking for)
         let greeting = "Hello \(firstName), \n\nWhat type of connection are you looking for?"
         //var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22)!])
-        let attributedGreeting2 = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
+        var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
         let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
         let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
+        //attributedGreeting.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(firstName),")! as! NSRange)
         //attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(firstName),"))
-        print(attributedGreeting2)
+        //print(attributedGreeting2)
         //attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
-        print(attributedGreeting2)
-        selectTypeLabel.attributedText = attributedGreeting2
+        //print(attributedGreeting2)
+        selectTypeLabel.attributedText = attributedGreeting
 
         
         optionsTableView.alpha = 1
@@ -241,8 +245,37 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
     }
     func postTapped(sender: UIButton){
+        
+        self.vc?.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+        
+        self.backButton.alpha = 0
+        self.postButton.alpha = 0
+        self.selectTypeLabel.alpha = 0
+        self.profilePicture.alpha = 0
+        self.bridgeStatus.resignFirstResponder()
+        self.bridgeStatus.alpha = 0
+        self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.145*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
+        //displaying confirmation that post was sent out and then segueing back to profile
+        let _ = Timer(interval: 0.25) {i -> Bool in
+            UIView.animateWithDuration(0.6, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
+                if i == 0 {
+                    //intructions fade and drop in
+                    self.selectTypeLabel.alpha = 1
+                    self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.15*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
+                    let greeting = "Great! I'll put it out to your community." //Way to give your friends the opportunity to help you.
+                    let attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 20)!])
+                    self.selectTypeLabel.attributedText = attributedGreeting
+                } else if i == 6 {
+                    self.selectTypeLabel.alpha = 0
+                    self.presentViewController(self.vc!, animated: true, completion: nil)
+                }
+                
+            }, completion: nil)
+            
+            return i < 6
+        }
         print("post selected")
-        presentViewController(vc!, animated: true, completion: nil)
+        
         let bridgeStatusObject = PFObject(className: "BridgeStatus")
         bridgeStatusObject["bridge_status"] = self.bridgeStatus.text!
         bridgeStatusObject["bridge_type"] = self.necterType
@@ -286,9 +319,9 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         }
         
         //setting up instructions and buttons
-        selectTypeLabel.frame = CGRect(x: 0.05*screenWidth, y: 0.05*screenHeight, width: 0.9*screenWidth, height: 0.25*screenHeight)
+        selectTypeLabel.frame = CGRect(x: 0.05*screenWidth, y: 0.045*screenHeight, width: 0.9*screenWidth, height: 0.25*screenHeight)
         //setting multi-font label
-        var greeting = "Hello \(firstName)," as NSString
+        var greeting = "Hello \(firstName), \n\nWhat type of connection are you looking for?" as NSString
         var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22)!])
         // Part of string to be bolded
         //self.selectTypeLabel.attributedText = attributedGreeting
@@ -296,30 +329,80 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         selectTypeLabel.numberOfLines = 0
         selectTypeLabel.textColor = necterGray
         selectTypeLabel.alpha = 0
+        
         view.addSubview(selectTypeLabel)
         
-        let _ = Timer(interval: 0.5) {i -> Bool in
-            //self.selectTypeLabel.attributedText = attributedGreeting.attributedSubstringFromRange(NSRange(location: 0, length: i+1))
-            //return i + 1 < attributedGreeting.string.characters.count
-            if i == 1 {
-                self.selectTypeLabel.attributedText = attributedGreeting
-                self.selectTypeLabel.alpha = 1.0
-            } else if i == 2 {
-                greeting = "Hello \(self.firstName), \n\nWhat type of connection are you looking for?"
-                let attributedGreeting2 = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
-                let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
-                let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
-                attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(self.firstName),"))
-                print(attributedGreeting)
-                attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
-                print(attributedGreeting)
-                self.selectTypeLabel.attributedText = attributedGreeting2
-            } else if i == 3 {
-                self.optionsTableView.alpha = 1.0
-            }
-            print(i)
+        
+        //Bot that fades in and down to speak with you
+        let _ = Timer(interval: 0.25) {i -> Bool in
+
+            UIView.animateWithDuration(0.7, delay: 0.2, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
+                if i == 0 {
+                    self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.05*self.screenHeight, width: 0.9*self.screenWidth, height: 0.25*self.screenHeight)
+                    let attributedGreeting2 = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
+                    let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
+                    let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
+                    attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(self.firstName),"))
+                    print(attributedGreeting)
+                    attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
+                    print(attributedGreeting)
+                    self.selectTypeLabel.attributedText = attributedGreeting2
+                    self.selectTypeLabel.alpha = 1
+                } else if i == 2 {
+                    self.optionsTableView.alpha = 1.0
+                }
+                
+              }, completion: nil)
             return i < 4
-        }
+            }
+        
+        //Bot that pops in to speak with you
+        /*let _ = Timer(interval: 0.5) {i -> Bool in
+         if i == 1 {
+         self.selectTypeLabel.attributedText = attributedGreeting
+         self.selectTypeLabel.alpha = 1.0
+         } else if i == 2 {
+         greeting = "Hello \(self.firstName), \n\nWhat type of connection are you looking for?"
+         let attributedGreeting2 = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
+         let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
+         let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
+         attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(self.firstName),"))
+         print(attributedGreeting)
+         attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
+         print(attributedGreeting)
+         self.selectTypeLabel.attributedText = attributedGreeting2
+         } else if i == 3 {
+         self.optionsTableView.alpha = 1.0
+         }
+         print(i)
+         return i < 4
+         }*/
+        
+
+        
+        //Bot that types in to speak with you
+        /*let _ = Timer(interval: 0.5) {i -> Bool in
+         //self.selectTypeLabel.attributedText = attributedGreeting.attributedSubstringFromRange(NSRange(location: 0, length: i+1))
+         //return i + 1 < attributedGreeting.string.characters.count
+         if i == 1 {
+         self.selectTypeLabel.attributedText = attributedGreeting
+         self.selectTypeLabel.alpha = 1.0
+         } else if i == 2 {
+         greeting = "Hello \(self.firstName), \n\nWhat type of connection are you looking for?"
+         let attributedGreeting2 = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
+         let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
+         let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
+         attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(self.firstName),"))
+         print(attributedGreeting)
+         attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
+         print(attributedGreeting)
+         self.selectTypeLabel.attributedText = attributedGreeting2
+         } else if i == 3 {
+         self.optionsTableView.alpha = 1.0
+         }
+         print(i)
+         return i < 4
+         }*/
         
         /*let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1.5 * Double(NSEC_PER_SEC)))
         dispatch_after(delayTime, dispatch_get_main_queue()) {
