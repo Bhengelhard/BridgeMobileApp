@@ -79,8 +79,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "77"
             endingLineNumber = "77"
-            landmarkName = "textFieldShouldReturn(_:)"
-            landmarkType = "5">
+            landmarkName = "NewBridgeStatusViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -271,7 +271,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "125"
             endingLineNumber = "125"
-            landmarkName = "getUpperDeckCardFrame()"
+            landmarkName = "displayNoMoreCards()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -287,7 +287,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "124"
             endingLineNumber = "124"
-            landmarkName = "getUpperDeckCardFrame()"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -303,7 +303,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "123"
             endingLineNumber = "123"
-            landmarkName = "getUpperDeckCardFrame()"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -319,7 +319,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "122"
             endingLineNumber = "122"
-            landmarkName = "getUpperDeckCardFrame()"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -335,7 +335,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "394"
             endingLineNumber = "394"
-            landmarkName = "viewDidLoad()"
+            landmarkName = "downloadMoreCards(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -600,11 +600,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SingleMessageTableCell.swift"
-            timestampString = "490832919.165173"
+            timestampString = "492626764.548406"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
             landmarkName = "init(style:reuseIdentifier:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -632,11 +632,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SingleMessageTableCell.swift"
-            timestampString = "490844455.527135"
+            timestampString = "492626764.548406"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "layoutSubviews()"
             landmarkType = "5">
          </BreakpointContent>
@@ -648,11 +648,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SingleMessageTableCell.swift"
-            timestampString = "490845780.032707"
+            timestampString = "492626764.548406"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "layoutSubviews()"
             landmarkType = "5">
          </BreakpointContent>
@@ -749,7 +749,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "114"
             endingLineNumber = "114"
-            landmarkName = "displayNoMoreCards()"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -765,7 +765,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "113"
             endingLineNumber = "113"
-            landmarkName = "displayNoMoreCards()"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -781,7 +781,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "197"
             endingLineNumber = "197"
-            landmarkName = "displayCards()"
+            landmarkName = "addCardPairView(_:name:location:status:photo:name2:location2:status2:photo2:cardColor:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1134,6 +1134,22 @@
             startingLineNumber = "449"
             endingLineNumber = "449"
             landmarkName = "viewDidLoad()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyBridgeApp/ProfileTableViewCell2.swift"
+            timestampString = "492530890.195252"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "preferencesSwitchTapped(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

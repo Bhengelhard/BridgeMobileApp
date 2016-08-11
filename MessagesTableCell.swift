@@ -11,11 +11,16 @@ import UIKit
 class MessagesTableCell: UITableViewCell {
     
 
-    @IBOutlet weak var participants: UILabel!
-    @IBOutlet weak var messageTimestamp: UILabel!
-    @IBOutlet weak var messageSnapshot: UILabel!
-    @IBOutlet weak var arrow: UILabel!
-    @IBOutlet weak var notificationDot: UIView!
+//    @IBOutlet weak var participants: UILabel!
+//    @IBOutlet weak var messageTimestamp: UILabel!
+//    @IBOutlet weak var messageSnapshot: UILabel!
+//    @IBOutlet weak var arrow: UILabel!
+//    @IBOutlet weak var notificationDot: UIView!
+    var participants: UILabel!
+    var messageTimestamp: UILabel!
+    var messageSnapshot: UILabel!
+    var arrow: UILabel!
+    var notificationDot: UIView!
     
     let cellWidth = UIScreen.mainScreen().bounds.width
     let cellHeight:CGFloat = 80.0

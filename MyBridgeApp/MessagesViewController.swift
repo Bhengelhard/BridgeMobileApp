@@ -400,7 +400,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        var messageType = self.messageType
 //        var messageTimestamps = self.messageTimestamps
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
+        let cell = MessagesTableCell()//tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
         
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
 //             names = [[String]]()

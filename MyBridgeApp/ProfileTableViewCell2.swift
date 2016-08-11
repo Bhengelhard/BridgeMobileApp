@@ -58,7 +58,20 @@ class ProfileTableViewCell2: UITableViewCell {
                 }
             }
         }
-        PFUser.currentUser()?.saveInBackground()
+        PFUser.currentUser()?.saveInBackgroundWithBlock{
+            (success: Bool, error: NSError?) -> Void in
+            if success && error == nil {
+                PFCloud.callFunctionInBackground("changeBridgePairingsOnInterestedInUpdate", withParameters: [:]) {
+                    (response:AnyObject?, error: NSError?) -> Void in
+                    if error == nil {
+                        if let response = response as? String {
+                            print(response)
+                        }
+                    }
+                }
+            }
+            
+        }
     }
     
     override func awakeFromNib() {

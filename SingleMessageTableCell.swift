@@ -46,7 +46,6 @@ class SingleMessageTableCell: UITableViewCell {
             }
         }
     }
-
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = UIColor.clearColor()
