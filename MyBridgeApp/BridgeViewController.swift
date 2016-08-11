@@ -16,10 +16,10 @@ class BridgeViewController: UIViewController {
     let screenHeight = UIScreen.mainScreen().bounds.height
     let cardWidth = UIScreen.mainScreen().bounds.height*0.45
     let cardHeight = UIScreen.mainScreen().bounds.height*0.45
-    let superDeckX = 0.02*UIScreen.mainScreen().bounds.width
-    let superDeckY = 0.11*UIScreen.mainScreen().bounds.height
-    let superDeckWidth = 0.96*UIScreen.mainScreen().bounds.width
-    let superDeckHeight = 0.78*UIScreen.mainScreen().bounds.height
+    let superDeckX = 0.03*UIScreen.mainScreen().bounds.width
+    let superDeckY = 0.12*UIScreen.mainScreen().bounds.height
+    let superDeckWidth = UIScreen.mainScreen().bounds.width - 2*0.03*UIScreen.mainScreen().bounds.width
+    let superDeckHeight = 0.765*UIScreen.mainScreen().bounds.height
     var totalNoOfCards = 0
     var stackOfCards = [UIView]()
     let localStorageUtility = LocalStorageUtility()
@@ -189,9 +189,11 @@ class BridgeViewController: UIViewController {
         
         let upperDeckCard = getUpperDeckCard(name, location: location, status: status, photo: photo, cardColor: cardColor)
         let lowerDeckCard = getLowerDeckCard(name2, location: location2, status: status2, photo: photo2, cardColor: cardColor)
-        let superDeckFrame : CGRect = CGRectMake(0.02*screenWidth, 0.11*screenHeight, 0.96*screenWidth, 0.78*screenHeight)
+        let superDeckFrame : CGRect = CGRectMake(superDeckX, superDeckY, superDeckWidth, superDeckHeight)
         let superDeckView = UIView(frame:superDeckFrame)
-        superDeckView.layer.cornerRadius = 7
+        superDeckView.layer.cornerRadius = 15
+        upperDeckCard.clipsToBounds = true
+        lowerDeckCard.clipsToBounds = true
         superDeckView.clipsToBounds = true
         superDeckView.addSubview(upperDeckCard)
         superDeckView.addSubview(lowerDeckCard)

@@ -61,6 +61,8 @@
 		CBEFCD671CE35DB900695B15 /* suzy's_profile_picture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */; };
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
 		CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD761CEDED9600695B15 /* Main.storyboard */; };
+		E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */; };
+		E92F2E251D5CC010004CA2FD /* Icon_Business_Square_Text.ai in Resources */ = {isa = PBXBuildFile; fileRef = E92F2E241D5CC010004CA2FD /* Icon_Business_Square_Text.ai */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -120,6 +122,8 @@
 		CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "suzy's_profile_picture.jpg"; path = "Images.xcassets/suzy's_profile_picture.jpg"; sourceTree = "<group>"; };
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD761CEDED9600695B15 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
+		E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = MyBridgeApp/StatusTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		E92F2E241D5CC010004CA2FD /* Icon_Business_Square_Text.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icon_Business_Square_Text.ai; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,7 @@
 				305691C51D514D61007FD050 /* Love-33x33.png */,
 				305691C71D514E19007FD050 /* Business-33x33.png */,
 				305691CB1D514FE9007FD050 /* Friendship-44x44.png */,
+				E92F2E241D5CC010004CA2FD /* Icon_Business_Square_Text.ai */,
 				30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */,
 				30EA352C1D4FD12C00B7F095 /* Screen over Image.png */,
 				1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */,
@@ -202,6 +207,7 @@
 				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
 				1BC1C5391D2C20EF009BF004 /* BridgeNewViewController.swift */,
 				1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */,
+				E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */,
 				1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */,
 				1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */,
 				1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */,
@@ -322,6 +328,7 @@
 				30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */,
 				CBEFCD671CE35DB900695B15 /* suzy's_profile_picture.jpg in Resources */,
 				305691C61D514D61007FD050 /* Love-33x33.png in Resources */,
+				E92F2E251D5CC010004CA2FD /* Icon_Business_Square_Text.ai in Resources */,
 				1B4A12011D1C8C94002FB859 /* camera_icon_small.jpg in Resources */,
 				1B82A0841D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png in Resources */,
 				1BF5A6C71D231B7C00EE6B95 /* iconCancel.png in Resources */,
@@ -356,6 +363,7 @@
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
 				1BF692CA1D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
+				E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */,
 				1B0E053E1D1A597C00FEF514 /* MessagesTableCell.swift in Sources */,
 				CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
