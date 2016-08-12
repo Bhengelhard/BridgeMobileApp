@@ -352,6 +352,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         pagingSpinner.color = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
         pagingSpinner.hidesWhenStopped = true
         tableView.tableFooterView = pagingSpinner
+        tableView.separatorStyle = .None
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -401,7 +403,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        var messageTimestamps = self.messageTimestamps
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = MessagesTableCell()//tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
-        
+        cell.cellHeight = screenHeight/6.0
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
 //             names = [[String]]()
 //             messages = [String]()
@@ -446,7 +448,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.participants.text = stringOfNames
         cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[indexPath.row]!]!
         
-        if !messageViewed[messagePositionToMessageIdMapping[indexPath.row]!]! {
+        if messageViewed[messagePositionToMessageIdMapping[indexPath.row]!]! {
             cell.notificationDot.hidden = true
         } else {
             cell.notificationDot.hidden = false
@@ -495,17 +497,21 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         else {
             let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "hh:mm"
-            cell.messageTimestamp.text = dateFormatter.stringFromDate(date) + " QM"
+            dateFormatter.dateFormat = "hh:mm:ss a"
+            cell.messageTimestamp.text = dateFormatter.stringFromDate(date)
             //print(dateFormatter.stringFromDate(date))
             
         }
         if indexPath == filteredPositions.count - 1 {
             toolbarTapped = false
         }
+        cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
         return cell
 
         
+    }
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return screenHeight/6.0
     }
     // A row is selected
      func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

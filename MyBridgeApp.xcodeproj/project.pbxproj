@@ -15,6 +15,7 @@
 		1B82A0841D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */; };
 		1B915A971D25E5DB004E0E8E /* blue_dot_small.gif in Resources */ = {isa = PBXBuildFile; fileRef = 1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */; };
 		1BA782271D11FE47000B0B3C /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA782261D11FE47000B0B3C /* LocalData.swift */; };
+		1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */; };
 		1BC1C53A1D2C20EF009BF004 /* BridgeNewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1C5391D2C20EF009BF004 /* BridgeNewViewController.swift */; };
 		1BE5C1EB1D06010600D6AA81 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */; };
 		1BE5C1EF1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1ED1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework */; };
@@ -74,6 +75,7 @@
 		1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen-shot-2012-04-26-at-10-40-51-am.png"; sourceTree = "<group>"; };
 		1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = blue_dot_small.gif; sourceTree = "<group>"; };
 		1BA782261D11FE47000B0B3C /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalData.swift; sourceTree = "<group>"; };
+		1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageContent.swift; path = MyBridgeApp/MessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BC1C5391D2C20EF009BF004 /* BridgeNewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeNewViewController.swift; sourceTree = SOURCE_ROOT; };
 		1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		1BE5C1ED1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
 				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
+				1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */,
 				CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */,
 				1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */,
 				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
@@ -345,6 +348,7 @@
 				1B4A11FD1D1C5F56002FB859 /* NewMessageTableCell.swift in Sources */,
 				1BF57CED1D3E9404005F2DE7 /* SingleMessageContent.swift in Sources */,
 				1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */,
+				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF57CEB1D3E9308005F2DE7 /* SingleMessageTableCell.swift in Sources */,
