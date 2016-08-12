@@ -179,6 +179,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     let result = results[i]
                     self.messagePositionToMessageIdMapping[self.noOfElementsProcessed] = result.objectId!
                     self.noOfElementsProcessed += 1
+                    //print( "\(self.noOfElementsProcessed) - \(result["lastSingleMessageAt"] as! (NSDate))")
                     //self.IDsOfMessages.append(result.objectId!)
                     if let _ = result["message_type"] {
                         self.messageType[result.objectId!] = (result["message_type"] as! (String))
@@ -186,6 +187,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     else {
                         self.messageType[result.objectId!] = ("Default")
                     }
+                    if let _ = result["lastSingleMessageAt"] {
+                        self.messageTimestamps[result.objectId!] =  (result["lastSingleMessageAt"] as! (NSDate))
+                    }
+                    else {
+                        self.messageTimestamps[result.objectId!] = NSDate()
+                    }
+
+                    
                     if let _ = result["message_viewed"] {
                         let whoViewed = result["message_viewed"] as! ([String])
                         if whoViewed.contains((PFUser.currentUser()?.objectId)!) {
@@ -228,7 +237,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     if (error == nil) {
                     if objects!.count == 0{
                         self.messages[result.objectId!] = ("Your new bridge awaits")
-                        self.messageTimestamps[result.objectId!] = (result.createdAt!)
+                        //self.messageTimestamps[result.objectId!] = (result.createdAt!)
                     }
                     else {
                         for messageObject in objects! {
@@ -238,7 +247,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                             else{
                                 self.messages[result.objectId!] = ("")
                             }
-                            self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
+                            //self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
                             break
                                 //friendsArray.append(object.objectId!)
                         }
@@ -479,8 +488,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
         let calendar = NSCalendar.currentCalendar()
         let date = (messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!]!)!
-        let components = calendar.components([.Month, .Day, .Year, .WeekOfYear],
+        let components = calendar.components([ .Day],
                                              fromDate: date, toDate: NSDate(), options: NSCalendarOptions.WrapComponents)
+        //print("row, date, day -\(indexPath.row) \(date) \(components.day)")
         if components.day > 7 {
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyy"

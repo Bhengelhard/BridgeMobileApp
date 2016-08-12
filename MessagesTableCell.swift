@@ -66,7 +66,7 @@ class MessagesTableCell: UITableViewCell {
         cellWidth = cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
         if let _ = setSeparator {
-            print("setSeparator")
+           // print("setSeparator")
         line.frame = CGRectMake(0.025*cellWidth! + 0.15*cellHeight!, 0, bounds.size.width, 1)
         contentView.addSubview(line)
         }
