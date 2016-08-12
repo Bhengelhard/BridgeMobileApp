@@ -37,9 +37,20 @@ class MessagesTableCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         participants = UILabel(frame: CGRectZero)
+        participants.font = UIFont(name: "Verdana", size: 18)
+        
         messageTimestamp = UILabel(frame:CGRectZero)
+        messageTimestamp.font = UIFont(name: "BentonSans", size: 16)
+        messageTimestamp.textAlignment = NSTextAlignment.Right
+        
         messageSnapshot = UILabel(frame:CGRectZero)
+        messageSnapshot.font = UIFont(name: "BentonSans", size: 16)
+        messageSnapshot.numberOfLines = 2
+        messageSnapshot.sizeToFit()
+        
         arrow = UILabel(frame:CGRectZero)
+        arrow.font = UIFont(name: "Mishafi Regular", size: 30)
+        
         notificationDot = UIView(frame:CGRectZero)
         line = UIView(frame: CGRectZero)
         line.backgroundColor = UIColor.grayColor()
@@ -55,22 +66,26 @@ class MessagesTableCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     override func layoutSubviews() {
-        cellWidth = cellWidth ?? contentView.frame.width
+        cellWidth = bounds.size.width//cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
+        
         //setting line to begin with text and go to end of frame
-        line.frame = CGRectMake(0.025*cellWidth! + 0.15*cellHeight!, 0, bounds.size.width, 1)
-        participants.frame = CGRect(x: 0.1*cellWidth!, y: 0.1*cellHeight!, width: 0.55*cellWidth!, height: 0.25*cellHeight!)
-        messageTimestamp.frame = CGRect(x: 0.65*cellWidth!, y: 0.15*cellHeight!, width: 0.35*cellWidth!, height: 0.2*cellHeight!)
+        line.frame = CGRectMake(0.05*cellWidth! + 0.15*cellHeight!, 0.99*cellHeight!, bounds.size.width, 1)
+        
+        participants.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.1*cellHeight!, width: 0.55*cellWidth!, height: 0.25*cellHeight!)
+        
+        messageTimestamp.frame = CGRect(x: 0.7*cellWidth!, y: 0.15*cellHeight!, width: 0.25*cellWidth!, height: 0.2*cellHeight!)
+        
         arrow.frame = CGRect(x: 0.9*cellWidth!, y: 0.375*cellHeight!, width: 0.05*cellWidth!, height: 0.25*cellHeight!)
-        messageSnapshot.frame = CGRect(x: 0.1*cellWidth!, y: 0.425*cellHeight!, width: 0.8*cellWidth!, height: 0.4*cellHeight!)
-        //messageSnapshot.sizeToFit()
-        notificationDot.frame = CGRect(x: 0.025*cellWidth!, y: 0.425*cellHeight!, width: 0.15*cellHeight!, height: 0.15*cellHeight!)
+        
+        messageSnapshot.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.4*cellHeight!, width: 0.8*cellWidth!-0.15*cellHeight!, height: 0.4*cellHeight!)
+        
+        notificationDot.frame = CGRect(x: 0.025*cellWidth!, y: 0.4375*cellHeight!, width: 0.15*cellHeight!, height: 0.15*cellHeight!)
         notificationDot.layer.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
-        //notificationDot.layer.cornerRadius = notificationDot.frame.size.width/2
         notificationDot.layer.cornerRadius = notificationDot.frame.size.height/2
         notificationDot.clipsToBounds = true
+        
 
-        //notificationDot.hidden = true
 //        guard let superview = contentView.superview else {
 //            return
 //        }

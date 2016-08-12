@@ -39,6 +39,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
+    let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
+    let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
+    let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
+    let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
+    let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
     
     
     var names = [String : [String]]()
@@ -227,7 +232,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     messageQuery.findObjectsInBackgroundWithBlock({(objects, error) -> Void in
                     if (error == nil) {
                     if objects!.count == 0{
-                        self.messages[result.objectId!] = ("Your new bridge awaits")
+                        self.messages[result.objectId!] = ("Your new connection awaits")
                         self.messageTimestamps[result.objectId!] = (result.createdAt!)
                     }
                     else {
@@ -403,7 +408,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        var messageTimestamps = self.messageTimestamps
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = MessagesTableCell()//tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
-        cell.cellHeight = screenHeight/6.0
+        cell.cellHeight = 0.15 * screenHeight
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
 //             names = [[String]]()
 //             messages = [String]()
@@ -447,6 +452,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         cell.participants.text = stringOfNames
         cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[indexPath.row]!]!
+        cell.arrow.text = ">"
+        
         
         if messageViewed[messagePositionToMessageIdMapping[indexPath.row]!]! {
             cell.notificationDot.hidden = true
@@ -456,19 +463,23 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         switch messageType[messagePositionToMessageIdMapping[indexPath.row]!]!{
             
         case "Business":
-            cell.participants.textColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
-            cell.arrow.textColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
+            cell.participants.textColor = businessBlue
+            cell.arrow.textColor = businessBlue
+            //cell.line.backgroundColor = businessBlue
             break
         case "Love":
-            cell.participants.textColor = UIColor(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
-            cell.arrow.textColor = UIColor(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
+            cell.participants.textColor = loveRed
+            cell.arrow.textColor = loveRed
+            //cell.line.backgroundColor = loveRed
             break
         case "Friendship":
-            cell.participants.textColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
-            cell.arrow.textColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
+            cell.participants.textColor = friendshipGreen
+            cell.arrow.textColor = friendshipGreen
+            //cell.line.backgroundColor = friendshipGreen
             break
-        default: cell.participants.textColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
-            cell.arrow.textColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
+        default: cell.participants.textColor = friendshipGreen
+            cell.arrow.textColor = friendshipGreen
+            //cell.line.backgroundColor = friendshipGreen
             
         }
         let dateFormatter = NSDateFormatter()
@@ -497,7 +508,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         else {
             let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "hh:mm:ss a"
+            dateFormatter.dateFormat = "hh:mm a"
             cell.messageTimestamp.text = dateFormatter.stringFromDate(date)
             //print(dateFormatter.stringFromDate(date))
             
