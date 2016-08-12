@@ -57,6 +57,7 @@ class MessagesTableCell: UITableViewCell {
     override func layoutSubviews() {
         cellWidth = cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
+        //setting line to begin with text and go to end of frame
         line.frame = CGRectMake(0.025*cellWidth! + 0.15*cellHeight!, 0, bounds.size.width, 1)
         participants.frame = CGRect(x: 0.1*cellWidth!, y: 0.1*cellHeight!, width: 0.55*cellWidth!, height: 0.25*cellHeight!)
         messageTimestamp.frame = CGRect(x: 0.65*cellWidth!, y: 0.15*cellHeight!, width: 0.35*cellWidth!, height: 0.2*cellHeight!)
