@@ -20,6 +20,7 @@ class BridgeViewController: UIViewController {
     let superDeckY = 0.12*UIScreen.mainScreen().bounds.height
     let superDeckWidth = UIScreen.mainScreen().bounds.width - 2*0.03*UIScreen.mainScreen().bounds.width
     let superDeckHeight = 0.765*UIScreen.mainScreen().bounds.height
+    let necterColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     var totalNoOfCards = 0
     var stackOfCards = [UIView]()
     let localStorageUtility = LocalStorageUtility()
@@ -408,8 +409,6 @@ class BridgeViewController: UIViewController {
         print("Listened at updateNoOfUnreadMessagesIcon - \(badge)")
         dispatch_async(dispatch_get_main_queue(), {
             self.iconLabel.text = String(badge!)
-            self.iconLabel.layer.backgroundColor = UIColor.redColor().CGColor
-            self.iconLabel.layer.cornerRadius = 12
             
         })
         
@@ -436,9 +435,36 @@ class BridgeViewController: UIViewController {
         }
         displayCards()
         displayToolBar()
-        self.iconFrame = CGRectMake(0.97*self.screenWidth,0.03*self.screenHeight,0.03*self.screenWidth,0.03*self.screenHeight)
+        self.iconFrame = CGRectMake(0.74*self.screenWidth,0.04*self.screenHeight,0.03*self.screenWidth,0.02*self.screenHeight)
         self.iconLabel = UILabel(frame: iconFrame)
+        self.iconLabel.layer.backgroundColor = UIColor.redColor().CGColor
+        self.iconLabel.layer.cornerRadius = 5
+        self.iconLabel.textColor = necterColor
         self.view.addSubview(self.iconLabel)
+        let query: PFQuery = PFQuery(className: "Messages")
+        query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
+        query.cachePolicy = .NetworkElseCache
+        query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+            if error == nil {
+                if let results = results {
+                var badgeCount = 0
+                for i in 0..<results.count{
+                    let result = results[i]
+                    if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(result["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                        let noOfMessagesViewed = noOfSingleMessagesViewed[(PFUser.currentUser()?.objectId)!] ?? 0
+                        badgeCount += (result["no_of_single_messages"] as! Int) - noOfMessagesViewed
+                    }
+                    
+                }
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.iconLabel.text = String(badgeCount)
+                        
+                        
+                    })
+
+                }
+            }
+        })
         
         // Do any additional setup after loading the view, typically from a nib.
     }

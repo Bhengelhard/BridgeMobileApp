@@ -403,6 +403,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        var messageTimestamps = self.messageTimestamps
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = MessagesTableCell()//tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
+        if indexPath.row != 0 {
+            cell.setSeparator = true
+        }
+
         cell.cellHeight = screenHeight/6.0
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
 //             names = [[String]]()
@@ -506,7 +510,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             toolbarTapped = false
         }
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
-        return cell
+                return cell
 
         
     }

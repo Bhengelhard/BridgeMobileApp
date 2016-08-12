@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492377367.23516"
+            timestampString = "492723642.534404"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "displayNoMoreCards()"
             landmarkType = "5">
          </BreakpointContent>
@@ -282,7 +282,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492377367.23516"
+            timestampString = "492723642.534404"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "displayToolBar()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyBridgeApp/BridgeViewController.swift"
+            timestampString = "492723642.534404"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "124"
@@ -298,7 +314,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492377367.23516"
+            timestampString = "492723642.534404"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "123"
@@ -314,27 +330,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492377367.23516"
+            timestampString = "492723642.534404"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
-            landmarkName = "displayToolBar()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492377367.23516"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "394"
-            endingLineNumber = "394"
+            startingLineNumber = "395"
+            endingLineNumber = "395"
             landmarkName = "downloadMoreCards(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -568,11 +568,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/SingleMessageViewController.swift"
-            timestampString = "492377367.23516"
+            timestampString = "492725064.640648"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "560"
-            endingLineNumber = "560"
+            startingLineNumber = "565"
+            endingLineNumber = "565"
             landmarkName = "tableView(_:heightForRowAtIndexPath:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -744,7 +744,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492377367.23516"
+            timestampString = "492723642.534404"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "displayToolBar()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyBridgeApp/BridgeViewController.swift"
+            timestampString = "492723642.534404"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "114"
@@ -760,27 +776,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492377367.23516"
+            timestampString = "492723642.534404"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "displayToolBar()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492377367.23516"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
             landmarkName = "addCardPairView(_:name:location:status:photo:name2:location2:status2:photo2:cardColor:)"
             landmarkType = "5">
          </BreakpointContent>
