@@ -146,27 +146,28 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 
     }
     func startBackgroundThread() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
-            while self.runBackgroundThread && (self.isElementCountNotFetched || self.names.count < self.totalElements || self.messageTimestamps.count < self.totalElements ||  self.messages.count <  self.totalElements   ) {
-
-                if self.encounteredBefore[self.noOfElementsFetched] == nil && self.noOfElementsFetched > 0 && self.names.count == self.noOfElementsFetched && self.messages.count == self.noOfElementsFetched && self.messageTimestamps.count == self.noOfElementsFetched{
-                    self.encounteredBefore[self.noOfElementsFetched] = true
-                    dispatch_async(dispatch_get_main_queue(), {
-                        //self.refresher.endRefreshing()
-                        //print("reloadData")
-                        self.tableView.reloadData()
-                        print("stop animating")
-                        self.pagingSpinner.stopAnimating()
-                    })
-                }
-                
-            }
-            //print("backgroundThread stopped")
-        }
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+//            while self.runBackgroundThread && (self.isElementCountNotFetched || self.names.count < self.totalElements || self.messageTimestamps.count < self.totalElements ||  self.messages.count <  self.totalElements   ) {
+//
+//                if self.encounteredBefore[self.noOfElementsFetched] == nil && self.noOfElementsFetched > 0 && self.names.count == self.noOfElementsFetched && self.messages.count == self.noOfElementsFetched && self.messageTimestamps.count == self.noOfElementsFetched{
+//                    self.encounteredBefore[self.noOfElementsFetched] = true
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        //self.refresher.endRefreshing()
+//                        //print("reloadData")
+//                        self.tableView.reloadData()
+//                        print("stop animating")
+//                        self.pagingSpinner.stopAnimating()
+//                    })
+//                }
+//                
+//            }
+//            //print("backgroundThread stopped")
+//        }
     }
     // refresh() fetches the data from Parse
     func refresh() {
         //self.refresher.endRefreshing()
+        
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
         query.orderByDescending("lastSingleMessageAt")
@@ -231,7 +232,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                     }
                     self.names[result.objectId!] = (names_per_message)
-                   
+                    self.tableView.reloadData()
                     })
                     // get the message
                     let messageQuery = PFQuery(className:"SingleMessages")
@@ -243,7 +244,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     if (error == nil) {
                     if objects!.count == 0{
 
-                        self.messages[result.objectId!] = ("Your new bridge awaits")
+                        //self.messages[result.objectId!] = ("Your new bridge awaits")
                         //self.messageTimestamps[result.objectId!] = (result.createdAt!)
                         self.messages[result.objectId!] = ("Your new connection awaits")
                         //self.messageTimestamps[result.objectId!] = (result.createdAt!)
@@ -262,11 +263,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                     }
                     }
+                    else {
+                        self.messages[result.objectId!] = ("")
+                    }
+                    self.tableView.reloadData()
                     })
                     
                 }
             }
-           
+           self.tableView.reloadData()
         })
     }
        // helper function for updateSearchResultsForSearchController
@@ -391,12 +396,33 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         //print ("indexPath - \(indexPath.row) & noOfElementsFetched - \(noOfElementsFetched)" )
-        if (indexPath.row == noOfElementsFetched - 1) && (noOfElementsFetched < totalElements) {
-        //print ("noOfElementsFetched, totalElements = \(noOfElementsFetched) & \(totalElements)")
-        print("start animating")
-        pagingSpinner.startAnimating()
-        refresh()
+//        if (indexPath.row == messages.count - 1 ) {
+//            //print("refresh should be  called - \(noOfElementsFetched), \(totalElements)")
+//            //print(messages)
+//        }
+        if (indexPath.row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
+            if self.encounteredBefore[self.noOfElementsFetched] == nil {
+            self.encounteredBefore[self.noOfElementsFetched] = true
+            refresh()
+            pagingSpinner.startAnimating()
+            print("\(indexPath.row) - refresh called")
+            
+            }
+
         }
+//        if (indexPath.row == noOfElementsFetched - 1) && (noOfElementsFetched < totalElements) {
+//        //print ("noOfElementsFetched, totalElements = \(noOfElementsFetched) & \(totalElements)")
+//        //print("start animating")
+//        pagingSpinner.startAnimating()
+//        print("\(indexPath.row) - refresh called")
+//        refresh()
+//        }
+        else {
+            self.pagingSpinner.stopAnimating()
+        }
+//        if (indexPath.row == noOfElementsFetched - 1) && (noOfElementsFetched == totalElements) {
+//        self.pagingSpinner.stopAnimating()
+//        }
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -444,6 +470,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //                messageTimestamps.append(self.messageTimestamps[index])
             }
         }
+        if messagePositionToMessageIdMapping[indexPath.row] == nil || names[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messages[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messageType[messagePositionToMessageIdMapping[indexPath.row]!] == nil{
+            cell.participants.text = ""
+            cell.messageSnapshot.text = ""
+            cell.messageTimestamp.text = ""
+            cell.backgroundColor = UIColor.whiteColor()
+            return cell
+        }
+
         var stringOfNames = ""
         var users = names[messagePositionToMessageIdMapping[indexPath.row]!]!
         users = users.filter { $0 != PFUser.currentUser()?["name"] as! String }
