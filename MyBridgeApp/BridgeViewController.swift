@@ -164,11 +164,11 @@ class BridgeViewController: UIViewController {
     func getCard(deckFrame:CGRect, name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor) -> UIView {
         let nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
         let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
-        let statusFrame = CGRectMake(0.05*cardWidth,0.6*cardHeight,0.9*cardWidth,0.35*cardHeight)
+        let statusFrame = CGRectMake(0.05*cardWidth,0.675*cardHeight,0.9*cardWidth,0.3*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
         //Creating the transparency screens
         let screenUnderTopFrame = CGRectMake(0,0,cardWidth,0.3*cardHeight)
-        let screenUnderBottomFrame = CGRectMake(0, 0.6*cardHeight, cardWidth, 0.4*cardHeight)
+        let screenUnderBottomFrame = CGRectMake(0, 0.65*cardHeight, cardWidth, 0.35*cardHeight)
         
         let nameLabel = UILabel(frame: nameFrame)
         nameLabel.text = name
@@ -180,7 +180,7 @@ class BridgeViewController: UIViewController {
         locationLabel.text = location
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
-        locationLabel.font = UIFont(name: "Verdana", size: 18)
+        locationLabel.font = UIFont(name: "Verdana", size: 16)
         
         let statusLabel = UILabel(frame: statusFrame)
         statusLabel.text = status

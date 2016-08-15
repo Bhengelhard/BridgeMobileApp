@@ -52,8 +52,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
         //stopping user from entering bridge status with more than 140 characters
         if let characterCount = bridgeStatus.text?.characters.count {
-            if characterCount > 140 {
-                let aboveMaxBy = characterCount - 140
+            if characterCount > 100 {
+                let aboveMaxBy = characterCount - 100
                 let index1 = bridgeStatus.text!.endIndex.advancedBy(-aboveMaxBy)
                 bridgeStatus.text = bridgeStatus.text!.substringToIndex(index1)
             }
@@ -99,7 +99,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     //resetting view for what it should look like after one of the necter Type Buttons are clicked
     func setPositionsForEnteringStatus() {
         
-        backButton.frame = CGRect(x: 0.05*screenWidth, y:0.06*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
+        backButton.frame = CGRect(x: 0.05*screenWidth, y:0.05*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
         backButton.layer.borderWidth = 4.0
         backButton.layer.borderColor = necterGray.CGColor
         backButton.layer.cornerRadius = 7.0
@@ -111,7 +111,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         backButton.alpha = 0
         view.addSubview(backButton)
         
-        postButton.frame = CGRect(x: 0.65*screenWidth, y:0.06*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
+        postButton.frame = CGRect(x: 0.65*screenWidth, y:0.05*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
         postButton.layer.borderWidth = 4.0
         postButton.layer.borderColor = necterGray.CGColor
         postButton.layer.cornerRadius = 7.0
@@ -135,40 +135,91 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         profilePicture.layer.cornerRadius = 15
         profilePicture.contentMode = UIViewContentMode.ScaleAspectFill
         profilePicture.clipsToBounds = true
-        profilePicture.frame = CGRect(x: 0.02*self.screenWidth, y: 0.225*self.screenHeight, width: 0.96*self.screenWidth, height: 0.3825*self.screenHeight)
+        let profilePictureHeight = 0.3825*self.screenHeight
+        let profilePictureWidth = 0.96*self.screenWidth
+        let profilePictureY = 0.225*self.screenHeight-0.05*profilePictureWidth // this 0.05 is for the necterTypeIcon to be just at the top of the keyboard
+        let profilePictureX = (screenWidth-profilePictureWidth)*0.5
+        profilePicture.frame = CGRect(x: profilePictureX
+            , y: profilePictureY, width: profilePictureWidth, height: profilePictureHeight)
         profilePicture.alpha = 0
-        /*let screenBelowImage = UIImageView()
-        screenOverImage.layer.cornerRadius = 7
-        screenOverImage.clipsToBounds = true
-        screenOverImage.image = UIImage(named: "Screen over image.png")
-        self.screenOverImage.frame = CGRect(x: 0.05*self.screenWidth, y: 0.15*self.screenHeight, width: 0.9*self.screenWidth, height: 0.4*self.screenHeight)
-         view.addSubview(screenOverImage)
-         */
-        /*let nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
-        let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
-        let statusFrame = CGRectMake(0.05*cardWidth,0.6*cardHeight,0.9*cardWidth,0.35*cardHeight)
-        let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
-        //Creating the transparency screens
-        let screenUnderTopFrame = CGRectMake(0,0,cardWidth,0.3*cardHeight)
-        let screenUnderBottomFrame = CGRectMake(0, 0.6*cardHeight, cardWidth, 0.4*cardHeight)*/
+        
+        
+        //let screenUnderTopFrame = CGRectMake(0,0,cardWidth,0.3*cardHeight)
+        //let screenUnderBottomFrame = CGRectMake(0, 0.6*cardHeight, cardWidth, 0.4*cardHeight)
+
+        let screenUnderTop = UIImageView()
+        screenUnderTop.alpha = 0
+        screenUnderTop.layer.cornerRadius = 15
+        screenUnderTop.clipsToBounds = true
+        screenUnderTop.image = UIImage(named: "Screen over Image.png")
+        screenUnderTop.frame = CGRect(x: profilePictureX, y: profilePictureY, width: profilePictureWidth, height: 0.3*profilePictureHeight)
+
+        let screenUnderBottom = UIImageView()
+        screenUnderBottom.alpha = 0
+        screenUnderBottom.layer.cornerRadius = 15
+        screenUnderBottom.clipsToBounds = true
+        screenUnderBottom.image = UIImage(named: "Screen over Image.png")
+        screenUnderBottom.frame = CGRect(x: profilePictureX, y: profilePictureY + 0.65*profilePictureHeight, width: profilePictureWidth, height: 0.35*profilePictureHeight)
+
+        let nameLabel = UILabel()
+        nameLabel.alpha = 0
+        nameLabel.textAlignment = NSTextAlignment.Left
+        nameLabel.textColor = UIColor.whiteColor()
+        nameLabel.font = UIFont(name: "Verdana", size: 20)
+        nameLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.05*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.1*profilePictureHeight)
+        nameLabel.text = username.text
+        
+       //CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
+        let locationLabel = UILabel()
+        locationLabel.alpha = 0
+        locationLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.17*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.1*profilePictureHeight)
+        locationLabel.text = "Save location to device"
+        locationLabel.textAlignment = NSTextAlignment.Left
+        locationLabel.textColor = UIColor.whiteColor()
+        locationLabel.font = UIFont(name: "Verdana", size: 16)
         
         bridgeStatus.alpha = 0
-        //bridgeStatus.textColor = businessBlue//UIColor.whiteColor()
+        bridgeStatus.textColor = UIColor.whiteColor()
         bridgeStatus.backgroundColor = UIColor.clearColor()
         bridgeStatus.text = "I am looking for "
         bridgeStatus.font = UIFont(name: "BentonSans", size: 20)
-        bridgeStatus.frame = CGRect(x: 0.05*0.96*self.screenWidth + 0.02*self.screenWidth, y: 0.6*0.3825*self.screenHeight + 0.225*self.screenHeight, width: 0.9*0.96*self.screenWidth, height: 0.35*0.3825*self.screenHeight)
+        bridgeStatus.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: 0.675*profilePictureHeight + 0.225*self.screenHeight, width: 0.9*profilePictureWidth, height: 0.3*profilePictureHeight)
         //bridgeStatus.scrollRangeToVisible(NSMakeRange(0,0))
         var statusAttributedString = NSMutableAttributedString()
+        
+        //line that represents the necter Type and is located between user cards -> half on the current user card in the Status page
+        let leftNecterTypeLine = UIView()
+        leftNecterTypeLine.alpha = 0
+        leftNecterTypeLine.frame = CGRect(x: profilePictureX + 0.25*profilePictureWidth, y: profilePictureY + profilePictureHeight - 2, width: 0.2*profilePictureWidth, height: 4)
+        
+        let rightNecterTypeLine = UIView()
+        rightNecterTypeLine.alpha = 0
+        rightNecterTypeLine.frame = CGRect(x: profilePictureX + 0.55*profilePictureWidth, y: profilePictureY + profilePictureHeight - 2, width: 0.2*profilePictureWidth, height: 4)
+        
+        //icon that represents the necter Type
+        let necterTypeIcon = UIImageView()
+        necterTypeIcon.alpha = 0
+        necterTypeIcon.frame = CGRect(x: profilePictureX + 0.45*profilePictureWidth, y: profilePictureY + profilePictureHeight - 0.05*profilePictureWidth, width: 0.1*profilePictureWidth, height: 0.1*profilePictureWidth)
+        necterTypeIcon.contentMode = UIViewContentMode.ScaleAspectFill
+        necterTypeIcon.clipsToBounds = true
         
         //setting placeholder text as examples for each type of connection.
         var placeholderText = String()
         if necterType == "Business" {
             placeholderText  = "e.g. I am looking for a graphic design job, I am looking for tech startups to invest in, I am looking for yogis for my new studio, etc."
+            leftNecterTypeLine.backgroundColor = businessBlue
+            rightNecterTypeLine.backgroundColor = businessBlue
+            necterTypeIcon.image = UIImage(named: "Business_Icon_Blue")
         } else if necterType == "Love" {
             placeholderText  = "e.g. I am looking for someone to try a new restaurant with this weekend, I am looking for someone who is smart and pretty, etc."
+            leftNecterTypeLine.backgroundColor = loveRed
+            rightNecterTypeLine.backgroundColor = loveRed
+            necterTypeIcon.image = UIImage(named: "Love_Icon_Red")
         } else if necterType == "Friendship" {
             placeholderText  = "e.g. I am looking for someone to try a new restaurant with this weekend, I am looking for someone who is smart and pretty, etc."
+            leftNecterTypeLine.backgroundColor = friendshipGreen
+            rightNecterTypeLine.backgroundColor = friendshipGreen
+            necterTypeIcon.image = UIImage(named: "Friendship_Icon_Green")
         }
         
         
@@ -177,11 +228,18 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         //bridgeStatus.attributedPlaceholder = statusAttributedString
         
         view.addSubview(profilePicture)
+        view.addSubview(screenUnderTop)
+        view.addSubview(screenUnderBottom)
+        view.addSubview(nameLabel)
+        view.addSubview(locationLabel)
         view.addSubview(bridgeStatus)
-        view.addSubview(username)
+        view.addSubview(leftNecterTypeLine)
+        view.addSubview(rightNecterTypeLine)
+        view.addSubview(necterTypeIcon)
+        
         self.optionsTableView.alpha = 0
         self.selectTypeLabel.alpha = 0
-        self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.0875*self.screenHeight, width: 0.9*self.screenWidth, height: 0.1*self.screenHeight)
+        self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.07*self.screenHeight, width: 0.9*self.screenWidth, height: 0.1*self.screenHeight)
         self.cancelButton.alpha = 0
         self.backButton.alpha = 1
         self.postButton.alpha = 1
@@ -196,7 +254,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                 if i == 0 && self.optionsTableView.alpha == 0{
                     //intructions pop in
                     self.selectTypeLabel.alpha = 1
-                    self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.0925*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
+                    self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.075*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
                     let greeting = "Awesome! Now post a status to give your friends more information"
                     let attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 16)!])
                     self.selectTypeLabel.attributedText = attributedGreeting
@@ -204,7 +262,14 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                     //fade in post status screen
                     self.bridgeStatus.becomeFirstResponder()
                     self.profilePicture.alpha = 1
+                    screenUnderBottom.alpha = 1
+                    screenUnderTop.alpha = 1
+                    nameLabel.alpha = 1
+                    locationLabel.alpha = 1
                     self.bridgeStatus.alpha = 1
+                    leftNecterTypeLine.alpha = 1
+                    rightNecterTypeLine.alpha = 1
+                    necterTypeIcon.alpha = 1
                 }
             }, completion: nil)
             
@@ -511,21 +576,21 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
         if indexPath.row == 0 {
             necterType = "Business"
-            bridgeStatus.textColor = businessBlue
+            //bridgeStatus.textColor = businessBlue
             //profilePicture.layer.borderColor = businessBlue.CGColor
             //profilePicture.layer.borderWidth = 4
             setPositionsForEnteringStatus()
         } else if indexPath.row == 1 {
             print("Love tapped")
-            necterType = "Loved"
-            bridgeStatus.textColor = loveRed
+            necterType = "Love"
+            //bridgeStatus.textColor = loveRed
             //profilePicture.layer.borderWidth = 4
             //profilePicture.layer.borderColor = loveRed.CGColor
             setPositionsForEnteringStatus()
         } else {
             print("Friendship tapped")
             necterType = "Friendship"
-            bridgeStatus.textColor = friendshipGreen
+            //bridgeStatus.textColor = friendshipGreen
             //profilePicture.layer.borderWidth = 4
             //profilePicture.layer.borderColor = friendshipGreen.CGColor
             setPositionsForEnteringStatus()
