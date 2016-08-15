@@ -668,7 +668,7 @@ class BridgeViewController: UIViewController {
                         
                     }))
                     alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
-                        PFCloud.callFunctionInBackground("revitalizeMyPairs", withParameters: [:]) {
+                        PFCloud.callFunctionInBackground("revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)]) {
                             (response: AnyObject?, error: NSError?) -> Void in
                             if error == nil {
                                 if let response = response as? String {

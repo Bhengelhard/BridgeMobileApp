@@ -155,6 +155,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         //self.refresher.endRefreshing()
                         //print("reloadData")
                         self.tableView.reloadData()
+                        print("stop animating")
                         self.pagingSpinner.stopAnimating()
                     })
                 }
@@ -392,6 +393,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         //print ("indexPath - \(indexPath.row) & noOfElementsFetched - \(noOfElementsFetched)" )
         if (indexPath.row == noOfElementsFetched - 1) && (noOfElementsFetched < totalElements) {
         //print ("noOfElementsFetched, totalElements = \(noOfElementsFetched) & \(totalElements)")
+        print("start animating")
         pagingSpinner.startAnimating()
         refresh()
         }
