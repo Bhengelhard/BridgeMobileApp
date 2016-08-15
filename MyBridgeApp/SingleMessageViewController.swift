@@ -498,6 +498,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         //Update the fact that you have viewed the message Thread when you segue
         // Segue is not the best place to put this. If you are about to close the view this should get called
+        let messageVC:MessagesViewController = segue.destinationViewController as! MessagesViewController
+        let transitionManager = TransitionManager()
+        messageVC.transitioningDelegate = transitionManager
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
             if error == nil {
