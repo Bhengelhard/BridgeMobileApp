@@ -15,12 +15,12 @@ class BridgeViewController: UIViewController {
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     //set to the height and width of the images in the superDeck
-    let cardWidth = UIScreen.mainScreen().bounds.width - 2*0.03*UIScreen.mainScreen().bounds.width
+    let cardWidth = UIScreen.mainScreen().bounds.width - 0.06*UIScreen.mainScreen().bounds.width
     let cardHeight = 0.765*UIScreen.mainScreen().bounds.height*0.5
     //superDeck refers to the swipable rectangel containing the two images of the people to connect
     let superDeckX = 0.03*UIScreen.mainScreen().bounds.width
     let superDeckY = 0.12*UIScreen.mainScreen().bounds.height
-    let superDeckWidth = UIScreen.mainScreen().bounds.width - 2*0.03*UIScreen.mainScreen().bounds.width
+    let superDeckWidth = UIScreen.mainScreen().bounds.width - 0.06*UIScreen.mainScreen().bounds.width
     let superDeckHeight = 0.765*UIScreen.mainScreen().bounds.height
     let necterColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     var totalNoOfCards = 0
@@ -231,6 +231,39 @@ class BridgeViewController: UIViewController {
         superDeckView.clipsToBounds = true
         superDeckView.addSubview(upperDeckCard)
         superDeckView.addSubview(lowerDeckCard)
+        let leftNecterTypeLine = UIView()
+        leftNecterTypeLine.alpha = 1.0
+        leftNecterTypeLine.frame = CGRect(x:  0.25*superDeckWidth, y: superDeckHeight/2.0 - 2, width: 0.2*superDeckWidth, height: 4)
+        
+        let rightNecterTypeLine = UIView()
+        rightNecterTypeLine.alpha = 1.0
+        rightNecterTypeLine.frame = CGRect(x:  0.55*superDeckWidth, y: superDeckHeight/2.0  - 2, width: 0.2*superDeckWidth, height: 4)
+        
+        let necterTypeIcon = UIImageView()
+        necterTypeIcon.alpha = 1.0
+        necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.05*superDeckWidth, width: 0.1*superDeckWidth, height: 0.1*superDeckWidth)
+        necterTypeIcon.contentMode = UIViewContentMode.ScaleAspectFill
+        necterTypeIcon.clipsToBounds = true
+        
+        if cardColor == typesOfColor.Business {
+            leftNecterTypeLine.backgroundColor = businessBlue
+            rightNecterTypeLine.backgroundColor = businessBlue
+            necterTypeIcon.image = UIImage(named: "Business_Icon_Blue")
+        } else if cardColor == typesOfColor.Love {
+            leftNecterTypeLine.backgroundColor = loveRed
+            rightNecterTypeLine.backgroundColor = loveRed
+            necterTypeIcon.image = UIImage(named: "Love_Icon_Red")
+        } else if cardColor == typesOfColor.Friendship{
+            leftNecterTypeLine.backgroundColor = friendshipGreen
+            rightNecterTypeLine.backgroundColor = friendshipGreen
+            necterTypeIcon.image = UIImage(named: "Friendship_Icon_Green")
+        }
+        
+        superDeckView.addSubview(leftNecterTypeLine)
+        superDeckView.addSubview(rightNecterTypeLine)
+        superDeckView.addSubview(necterTypeIcon)
+        
+        
         superDeckView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(1.0)
         //superDeckView.layer.borderWidth = 4
         //superDeckView.layer.borderColor = getCGColor(cardColor)

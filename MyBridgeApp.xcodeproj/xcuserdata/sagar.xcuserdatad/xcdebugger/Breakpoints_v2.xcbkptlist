@@ -330,11 +330,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492723642.534404"
+            timestampString = "492977773.998569"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
             landmarkName = "downloadMoreCards(_:)"
             landmarkType = "5">
          </BreakpointContent>
