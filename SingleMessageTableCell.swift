@@ -20,7 +20,8 @@ class SingleMessageTableCell: UITableViewCell {
     var singleMessageContent: SingleMessageContent? {
         didSet {
             if let s = singleMessageContent {
-                messageTextLabel.backgroundColor = s.backgroundColor
+                messageTextLabel.textColor = s.backgroundColor
+                //print("bg - \(s.backgroundColor)")
                 timestampLabel.text = s.timestamp
                 senderNameLabel.text = s.senderName
                 messageTextLabel.text = s.messageText
@@ -58,6 +59,7 @@ class SingleMessageTableCell: UITableViewCell {
         messageTextLabel.textAlignment = .Left
         messageTextLabel.textColor = UIColor.blackColor()
         messageTextLabel.userInteractionEnabled = false
+        messageTextLabel.backgroundColor = UIColor.lightGrayColor()
         contentView.addSubview(messageTextLabel)
         
         senderNameLabel = UITextView(frame: CGRectZero)
@@ -86,7 +88,7 @@ class SingleMessageTableCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         var y = CGFloat(0)
-        
+        let screenWidth = UIScreen.mainScreen().bounds.width
         if addTimestamp == true {
             //print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
             timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
@@ -102,7 +104,7 @@ class SingleMessageTableCell: UITableViewCell {
         if addSenderName {
             var width = (UIScreen.mainScreen().bounds.width/3 )
             width += CGFloat(5)
-            senderNameLabel.frame = CGRectMake(5, y, width, 15)
+            senderNameLabel.frame = CGRectMake(0.05*screenWidth, y, width, 15)
             let fixedWidth = senderNameLabel.frame.size.width
             let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
             var newFrame = senderNameLabel.frame
@@ -115,7 +117,7 @@ class SingleMessageTableCell: UITableViewCell {
 //            addSenderName = false
         }
         if senderId == PFUser.currentUser()?.objectId {
-        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2, y, UIScreen.mainScreen().bounds.width/2, 25)
+        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2.0, y, UIScreen.mainScreen().bounds.width/2.0, 25)
         }
         else {
             var width = (UIScreen.mainScreen().bounds.width/2 )
@@ -124,8 +126,14 @@ class SingleMessageTableCell: UITableViewCell {
         }
         let fixedWidth = messageTextLabel.frame.size.width
         let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        var newFrame = messageTextLabel.frame
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+//        var newFrame = messageTextLabel.frame
+//        //max(newSize.width, fixedWidth)
+//        newFrame.size = CGSize(width: newSize.width, height: newSize.height)
+        var x = 0.05*screenWidth
+        if senderId == PFUser.currentUser()?.objectId {
+            x = 0.95*screenWidth - newSize.width
+        }
+        let newFrame = CGRectMake(x, y, newSize.width, newSize.height)
         messageTextLabel.frame = newFrame
 //        print("messageTextLabel - \(messageTextLabel.frame)")
         messageTextLabel.layer.borderWidth = 1
