@@ -14,8 +14,10 @@ class BridgeViewController: UIViewController {
     var bridgePairings:[UserInfoPair]? = nil
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
-    let cardWidth = UIScreen.mainScreen().bounds.height*0.45
-    let cardHeight = UIScreen.mainScreen().bounds.height*0.45
+    //set to the height and width of the images in the superDeck
+    let cardWidth = UIScreen.mainScreen().bounds.width - 2*0.03*UIScreen.mainScreen().bounds.width
+    let cardHeight = 0.765*UIScreen.mainScreen().bounds.height*0.5
+    //superDeck refers to the swipable rectangel containing the two images of the people to connect
     let superDeckX = 0.03*UIScreen.mainScreen().bounds.width
     let superDeckY = 0.12*UIScreen.mainScreen().bounds.height
     let superDeckWidth = UIScreen.mainScreen().bounds.width - 2*0.03*UIScreen.mainScreen().bounds.width
@@ -34,6 +36,13 @@ class BridgeViewController: UIViewController {
     let transitionManager = TransitionManager()
     var iconFrame = CGRectMake(0,0,0,0)
     var iconLabel = UILabel()
+    
+    let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
+    let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
+    let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
+    let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
+    let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
+    
     enum typesOfCard {
         case All
         case Business
@@ -88,11 +97,11 @@ class BridgeViewController: UIViewController {
     func getCGColor (color:typesOfColor) -> CGColor {
         switch(color) {
         case typesOfColor.Business:
-            return UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0).CGColor
+            return businessBlue.CGColor
         case typesOfColor.Love:
-            return  UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0).CGColor
+            return  loveRed.CGColor
         case typesOfColor.Friendship:
-            return  UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0).CGColor
+            return  friendshipGreen.CGColor
         }
         
     }
@@ -104,15 +113,15 @@ class BridgeViewController: UIViewController {
         items[0].tag = 0
         items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
         items.append( UIBarButtonItem(image: UIImage(named: "Business-33x33.png"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
-        items[2].tintColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
+        items[2].tintColor = businessBlue
         items[2].tag = 1
         items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
         items.append( UIBarButtonItem(image: UIImage(named: "Love-33x33.png"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
-        items[4].tintColor = UIColor(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
+        items[4].tintColor = loveRed
         items[4].tag = 2
         items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
         items.append( UIBarButtonItem(image: UIImage(named: "Friendship-44x44.png"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
-        items[6].tintColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
+        items[6].tintColor = friendshipGreen
         items[6].tag = 3
 
         
@@ -129,7 +138,8 @@ class BridgeViewController: UIViewController {
         let view1 = UIView(frame:frame1)
         let label = UILabel(frame: frame2)
         label.numberOfLines = 0
-        label.text = "You see to have run out of potential Bridges for the day. Please check back tomorrow!"
+        label.text = "You seem to have run out of people to connect for the day. Please check back tomorrow!"
+        label.font = UIFont(name: "BentonSans", size: 20)
         view1.addSubview(label)
         self.view.insertSubview(view1, aboveSubview: self.view)
         displayNoMoreCardsView = view1
@@ -153,22 +163,31 @@ class BridgeViewController: UIViewController {
         return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor)
     }
     func getCard(deckFrame:CGRect, name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor) -> UIView {
-        let nameFrame = CGRectMake(0.05*cardWidth,0.10*cardHeight,0.55*cardWidth,0.20*cardHeight)
-        let locationFrame = CGRectMake(0.05*cardWidth,0.31*cardHeight,0.55*cardWidth,0.20*cardHeight)
-        let statusFrame = CGRectMake(0.05*cardWidth,0.55*cardHeight,0.95*cardWidth,0.45*cardHeight)
+        let nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
+        let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
+        let statusFrame = CGRectMake(0.05*cardWidth,0.6*cardHeight,0.9*cardWidth,0.35*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
+        //Creating the transparency screens
+        let screenUnderTopFrame = CGRectMake(0,0,cardWidth,0.3*cardHeight)
+        let screenUnderBottomFrame = CGRectMake(0, 0.6*cardHeight, cardWidth, 0.4*cardHeight)
         
         let nameLabel = UILabel(frame: nameFrame)
         nameLabel.text = name
+        nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.textColor = UIColor.whiteColor()
+        nameLabel.font = UIFont(name: "Verdana", size: 20)
         
         let locationLabel = UILabel(frame: locationFrame)
         locationLabel.text = location
+        locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
+        locationLabel.font = UIFont(name: "Verdana", size: 18)
         
         let statusLabel = UILabel(frame: statusFrame)
         statusLabel.text = status
-        statusLabel.textColor = UIColor.whiteColor()
+        statusLabel.textColor = businessBlue//UIColor.whiteColor()
+        statusLabel.font = UIFont(name: "BentonSans", size: 18)
+        statusLabel.numberOfLines = 0
         
         let photoView = UIImageView(frame: photoFrame)
         photoView.image = UIImage(data: photo)
@@ -176,8 +195,22 @@ class BridgeViewController: UIViewController {
         photoView.contentMode = UIViewContentMode.ScaleAspectFill
         photoView.clipsToBounds = true
         
+        let screenUnderTop = UIImageView(frame: screenUnderTopFrame)
+        screenUnderTop.image = UIImage(named: "Screen over Image.png")
+        //screenUnderTop.layer.cornerRadius = 15
+        screenUnderTop.contentMode = UIViewContentMode.ScaleAspectFill
+        screenUnderTop.clipsToBounds = true
+        
+        let screenUnderBottom = UIImageView(frame: screenUnderBottomFrame)
+        screenUnderBottom.image = UIImage(named: "Screen over Image.png")
+        //screenUnderBottom.layer.cornerRadius = 15
+        screenUnderBottom.contentMode = UIViewContentMode.ScaleAspectFill
+        screenUnderBottom.clipsToBounds = true
+        
         let card = UIView(frame:deckFrame)
         card.addSubview(photoView)
+        card.addSubview(screenUnderTop)
+        card.addSubview(screenUnderBottom)
         card.addSubview(nameLabel)
         card.addSubview(locationLabel)
         card.addSubview(statusLabel)
@@ -199,8 +232,8 @@ class BridgeViewController: UIViewController {
         superDeckView.addSubview(upperDeckCard)
         superDeckView.addSubview(lowerDeckCard)
         superDeckView.backgroundColor = UIColor.whiteColor()
-        superDeckView.layer.borderWidth = 4
-        superDeckView.layer.borderColor = getCGColor(cardColor)
+        //superDeckView.layer.borderWidth = 4
+        //superDeckView.layer.borderColor = getCGColor(cardColor)
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
         superDeckView.addGestureRecognizer(gesture)
         superDeckView.userInteractionEnabled = true
@@ -489,7 +522,7 @@ class BridgeViewController: UIViewController {
                     break
             default:currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
         }
-            /*if tag == UIImage(named: "Business-33x33.png") {
+            /*if tag == UIImage(named: "business-33x33.png") {
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
                 print(currentTypeOfCardsOnDisplay)
             } else if image == UIImage(named: "Love-33x33.png") {

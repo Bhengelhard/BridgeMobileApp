@@ -271,7 +271,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "126"
             endingLineNumber = "126"
-            landmarkName = "displayNoMoreCards()"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -733,7 +733,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "411"
             endingLineNumber = "411"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
+            landmarkName = "tableView(_:numberOfRowsInSection:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -781,7 +781,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "198"
             endingLineNumber = "198"
-            landmarkName = "addCardPairView(_:name:location:status:photo:name2:location2:status2:photo2:cardColor:)"
+            landmarkName = "getCard(_:name:location:status:photo:cardColor:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -813,7 +813,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "164"
             endingLineNumber = "164"
-            landmarkName = "refresh()"
+            landmarkName = "startBackgroundThread()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
