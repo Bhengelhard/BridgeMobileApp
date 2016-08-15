@@ -191,10 +191,10 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
         //line that represents the necter Type and is located between user cards -> half on the current user card in the Status page
         leftNecterTypeLine.alpha = 0
-        leftNecterTypeLine.frame = CGRect(x: profilePictureX + 0.25*profilePictureWidth, y: profilePictureY + profilePictureHeight - 2, width: 0.2*profilePictureWidth, height: 4)
+        leftNecterTypeLine.frame = CGRect(x: profilePictureX, y: profilePictureY + profilePictureHeight - 2, width: profilePictureWidth, height: 4)
         
-        rightNecterTypeLine.alpha = 0
-        rightNecterTypeLine.frame = CGRect(x: profilePictureX + 0.55*profilePictureWidth, y: profilePictureY + profilePictureHeight - 2, width: 0.2*profilePictureWidth, height: 4)
+        /*rightNecterTypeLine.alpha = 0
+        rightNecterTypeLine.frame = CGRect(x: profilePictureX + 0.5*profilePictureWidth, y: profilePictureY + profilePictureHeight - 2, width: 0.3*profilePictureWidth, height: 4)*/
         
         //icon that represents the necter Type
         necterTypeIcon.alpha = 0

@@ -185,7 +185,7 @@ class BridgeViewController: UIViewController {
         
         let statusLabel = UILabel(frame: statusFrame)
         statusLabel.text = status
-        statusLabel.textColor = businessBlue//UIColor.whiteColor()
+        statusLabel.textColor = UIColor.whiteColor()
         statusLabel.font = UIFont(name: "BentonSans", size: 18)
         statusLabel.numberOfLines = 0
         
@@ -231,36 +231,37 @@ class BridgeViewController: UIViewController {
         superDeckView.clipsToBounds = true
         superDeckView.addSubview(upperDeckCard)
         superDeckView.addSubview(lowerDeckCard)
-        let leftNecterTypeLine = UIView()
-        leftNecterTypeLine.alpha = 1.0
-        leftNecterTypeLine.frame = CGRect(x:  0.25*superDeckWidth, y: superDeckHeight/2.0 - 2, width: 0.2*superDeckWidth, height: 4)
         
-        let rightNecterTypeLine = UIView()
+        let leftNecterTypeLine = UIView()
+        //leftNecterTypeLine.alpha = 1.0
+        leftNecterTypeLine.frame = CGRect(x: 0, y: superDeckHeight/2.0 - 2, width: superDeckWidth, height: 4)
+        
+        /*let rightNecterTypeLine = UIView()
         rightNecterTypeLine.alpha = 1.0
-        rightNecterTypeLine.frame = CGRect(x:  0.55*superDeckWidth, y: superDeckHeight/2.0  - 2, width: 0.2*superDeckWidth, height: 4)
+        rightNecterTypeLine.frame = CGRect(x:  0.55*superDeckWidth, y: superDeckHeight/2.0  - 2, width: 0.2*superDeckWidth, height: 4)*/
         
         let necterTypeIcon = UIImageView()
-        necterTypeIcon.alpha = 1.0
+        //necterTypeIcon.alpha = 1.0
         necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.05*superDeckWidth, width: 0.1*superDeckWidth, height: 0.1*superDeckWidth)
         necterTypeIcon.contentMode = UIViewContentMode.ScaleAspectFill
         necterTypeIcon.clipsToBounds = true
         
         if cardColor == typesOfColor.Business {
             leftNecterTypeLine.backgroundColor = businessBlue
-            rightNecterTypeLine.backgroundColor = businessBlue
+            //rightNecterTypeLine.backgroundColor = businessBlue
             necterTypeIcon.image = UIImage(named: "Business_Icon_Blue")
         } else if cardColor == typesOfColor.Love {
             leftNecterTypeLine.backgroundColor = loveRed
-            rightNecterTypeLine.backgroundColor = loveRed
+            //rightNecterTypeLine.backgroundColor = loveRed
             necterTypeIcon.image = UIImage(named: "Love_Icon_Red")
         } else if cardColor == typesOfColor.Friendship{
             leftNecterTypeLine.backgroundColor = friendshipGreen
-            rightNecterTypeLine.backgroundColor = friendshipGreen
+            //rightNecterTypeLine.backgroundColor = friendshipGreen
             necterTypeIcon.image = UIImage(named: "Friendship_Icon_Green")
         }
         
         superDeckView.addSubview(leftNecterTypeLine)
-        superDeckView.addSubview(rightNecterTypeLine)
+        //superDeckView.addSubview(rightNecterTypeLine)
         superDeckView.addSubview(necterTypeIcon)
         
         
@@ -740,8 +741,8 @@ class BridgeViewController: UIViewController {
         //superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5) + translation.y)
         superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight / 2 + translation.y)
         let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
-        let scale = min(100 / abs(xFromCenter), 1)
-        var rotation = CGAffineTransformMakeRotation(xFromCenter / 200)
+        let scale = min(/*150 / abs(xFromCenter)*/ CGFloat(1.0), 1)
+        var rotation = CGAffineTransformMakeRotation(xFromCenter / 350)
         var stretch = CGAffineTransformScale(rotation, scale, scale)
         superDeckView.transform = stretch
         var removeCard = false
