@@ -19,8 +19,14 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     let postButton = UIButton()
     let username = UILabel()
     let profilePicture = UIImageView()
-    //let bridgeStatus = UITextField()
     let bridgeStatus = UITextView()
+    let screenUnderTop = UIImageView()
+    let screenUnderBottom = UIImageView()
+    let nameLabel = UILabel()
+    let locationLabel = UILabel()
+    let leftNecterTypeLine = UIView()
+    let rightNecterTypeLine = UIView()
+    let necterTypeIcon = UIImageView()
     
     let localData = LocalData()
 
@@ -147,21 +153,18 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         //let screenUnderTopFrame = CGRectMake(0,0,cardWidth,0.3*cardHeight)
         //let screenUnderBottomFrame = CGRectMake(0, 0.6*cardHeight, cardWidth, 0.4*cardHeight)
 
-        let screenUnderTop = UIImageView()
         screenUnderTop.alpha = 0
         screenUnderTop.layer.cornerRadius = 15
         screenUnderTop.clipsToBounds = true
         screenUnderTop.image = UIImage(named: "Screen over Image.png")
         screenUnderTop.frame = CGRect(x: profilePictureX, y: profilePictureY, width: profilePictureWidth, height: 0.3*profilePictureHeight)
-
-        let screenUnderBottom = UIImageView()
+        
         screenUnderBottom.alpha = 0
         screenUnderBottom.layer.cornerRadius = 15
         screenUnderBottom.clipsToBounds = true
         screenUnderBottom.image = UIImage(named: "Screen over Image.png")
         screenUnderBottom.frame = CGRect(x: profilePictureX, y: profilePictureY + 0.65*profilePictureHeight, width: profilePictureWidth, height: 0.35*profilePictureHeight)
-
-        let nameLabel = UILabel()
+        
         nameLabel.alpha = 0
         nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.textColor = UIColor.whiteColor()
@@ -170,7 +173,6 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         nameLabel.text = username.text
         
        //CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
-        let locationLabel = UILabel()
         locationLabel.alpha = 0
         locationLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.17*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.1*profilePictureHeight)
         locationLabel.text = "Save location to device"
@@ -183,21 +185,18 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         bridgeStatus.backgroundColor = UIColor.clearColor()
         bridgeStatus.text = "I am looking for "
         bridgeStatus.font = UIFont(name: "BentonSans", size: 20)
-        bridgeStatus.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: 0.675*profilePictureHeight + 0.225*self.screenHeight, width: 0.9*profilePictureWidth, height: 0.3*profilePictureHeight)
+        bridgeStatus.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: 0.65*profilePictureHeight + profilePictureY, width: 0.9*profilePictureWidth, height: 0.3*profilePictureHeight)
         //bridgeStatus.scrollRangeToVisible(NSMakeRange(0,0))
         var statusAttributedString = NSMutableAttributedString()
         
         //line that represents the necter Type and is located between user cards -> half on the current user card in the Status page
-        let leftNecterTypeLine = UIView()
         leftNecterTypeLine.alpha = 0
         leftNecterTypeLine.frame = CGRect(x: profilePictureX + 0.25*profilePictureWidth, y: profilePictureY + profilePictureHeight - 2, width: 0.2*profilePictureWidth, height: 4)
         
-        let rightNecterTypeLine = UIView()
         rightNecterTypeLine.alpha = 0
         rightNecterTypeLine.frame = CGRect(x: profilePictureX + 0.55*profilePictureWidth, y: profilePictureY + profilePictureHeight - 2, width: 0.2*profilePictureWidth, height: 4)
         
         //icon that represents the necter Type
-        let necterTypeIcon = UIImageView()
         necterTypeIcon.alpha = 0
         necterTypeIcon.frame = CGRect(x: profilePictureX + 0.45*profilePictureWidth, y: profilePictureY + profilePictureHeight - 0.05*profilePictureWidth, width: 0.1*profilePictureWidth, height: 0.1*profilePictureWidth)
         necterTypeIcon.contentMode = UIViewContentMode.ScaleAspectFill
@@ -262,14 +261,14 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                     //fade in post status screen
                     self.bridgeStatus.becomeFirstResponder()
                     self.profilePicture.alpha = 1
-                    screenUnderBottom.alpha = 1
-                    screenUnderTop.alpha = 1
-                    nameLabel.alpha = 1
-                    locationLabel.alpha = 1
+                    self.screenUnderBottom.alpha = 1
+                    self.screenUnderTop.alpha = 1
+                    self.nameLabel.alpha = 1
+                    self.locationLabel.alpha = 1
                     self.bridgeStatus.alpha = 1
-                    leftNecterTypeLine.alpha = 1
-                    rightNecterTypeLine.alpha = 1
-                    necterTypeIcon.alpha = 1
+                    self.leftNecterTypeLine.alpha = 1
+                    self.rightNecterTypeLine.alpha = 1
+                    self.necterTypeIcon.alpha = 1
                 }
             }, completion: nil)
             
@@ -290,17 +289,24 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
         bridgeStatus.resignFirstResponder()
         
+        /*
+ let attributedGreeting2 = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
+ let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
+ let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
+ attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(self.firstName),"))
+ attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))*/
+ 
         print("back selected")
         //show previous views setup (i.e. the initial bot question of which connection type the user is looking for)
-        let greeting = "Hello \(firstName), \n\nWhat type of connection are you looking for?"
+        let greeting = "Hello \(firstName), \n\nWhat type of connection are you looking for?" as NSString
         //var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22)!])
         var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
         let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
         let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
-        //attributedGreeting.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(firstName),")! as! NSRange)
+        attributedGreeting.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(firstName),"))
         //attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(firstName),"))
         //print(attributedGreeting2)
-        //attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
+        attributedGreeting.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
         //print(attributedGreeting2)
         selectTypeLabel.attributedText = attributedGreeting
 
@@ -314,6 +320,13 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
         profilePicture.alpha = 0
         bridgeStatus.alpha = 0
+        screenUnderBottom.alpha = 0
+        screenUnderTop.alpha = 0
+        nameLabel.alpha = 0
+        locationLabel.alpha = 0
+        leftNecterTypeLine.alpha = 0
+        rightNecterTypeLine.alpha = 0
+        necterTypeIcon.alpha = 0
         
     }
     func postTapped(sender: UIButton){
@@ -326,6 +339,13 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         self.profilePicture.alpha = 0
         self.bridgeStatus.resignFirstResponder()
         self.bridgeStatus.alpha = 0
+        screenUnderBottom.alpha = 0
+        screenUnderTop.alpha = 0
+        nameLabel.alpha = 0
+        locationLabel.alpha = 0
+        leftNecterTypeLine.alpha = 0
+        rightNecterTypeLine.alpha = 0
+        necterTypeIcon.alpha = 0
         self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.145*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
         //displaying confirmation that post was sent out and then segueing back to profile
         let _ = Timer(interval: 0.25) {i -> Bool in
@@ -415,9 +435,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                     let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
                     let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
                     attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(self.firstName),"))
-                    print(attributedGreeting)
                     attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
-                    print(attributedGreeting)
                     self.selectTypeLabel.attributedText = attributedGreeting2
                     self.selectTypeLabel.alpha = 1
                 } else if i == 2 {

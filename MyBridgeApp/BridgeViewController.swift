@@ -165,7 +165,7 @@ class BridgeViewController: UIViewController {
     func getCard(deckFrame:CGRect, name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor) -> UIView {
         let nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
         let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
-        let statusFrame = CGRectMake(0.05*cardWidth,0.675*cardHeight,0.9*cardWidth,0.3*cardHeight)
+        let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
         //Creating the transparency screens
         let screenUnderTopFrame = CGRectMake(0,0,cardWidth,0.3*cardHeight)
@@ -498,6 +498,8 @@ class BridgeViewController: UIViewController {
                 }
             }
         })
+        
+        
         
         // Do any additional setup after loading the view, typically from a nib.
     }
