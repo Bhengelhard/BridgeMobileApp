@@ -155,6 +155,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         //self.refresher.endRefreshing()
                         //print("reloadData")
                         self.tableView.reloadData()
+                        print("stop animating")
                         self.pagingSpinner.stopAnimating()
                     })
                 }
@@ -184,6 +185,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     let result = results[i]
                     self.messagePositionToMessageIdMapping[self.noOfElementsProcessed] = result.objectId!
                     self.noOfElementsProcessed += 1
+                    //print( "\(self.noOfElementsProcessed) - \(result["lastSingleMessageAt"] as! (NSDate))")
                     //self.IDsOfMessages.append(result.objectId!)
                     if let _ = result["message_type"] {
                         self.messageType[result.objectId!] = (result["message_type"] as! (String))
@@ -191,6 +193,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     else {
                         self.messageType[result.objectId!] = ("Default")
                     }
+                    if let _ = result["lastSingleMessageAt"] {
+                        self.messageTimestamps[result.objectId!] =  (result["lastSingleMessageAt"] as! (NSDate))
+                    }
+                    else {
+                        self.messageTimestamps[result.objectId!] = NSDate()
+                    }
+
+                    
                     if let _ = result["message_viewed"] {
                         let whoViewed = result["message_viewed"] as! ([String])
                         if whoViewed.contains((PFUser.currentUser()?.objectId)!) {
@@ -232,8 +242,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     messageQuery.findObjectsInBackgroundWithBlock({(objects, error) -> Void in
                     if (error == nil) {
                     if objects!.count == 0{
+
+                        self.messages[result.objectId!] = ("Your new bridge awaits")
+                        //self.messageTimestamps[result.objectId!] = (result.createdAt!)
                         self.messages[result.objectId!] = ("Your new connection awaits")
-                        self.messageTimestamps[result.objectId!] = (result.createdAt!)
+                        //self.messageTimestamps[result.objectId!] = (result.createdAt!)
                     }
                     else {
                         for messageObject in objects! {
@@ -243,7 +256,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                             else{
                                 self.messages[result.objectId!] = ("")
                             }
-                            self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
+                            //self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
                             break
                                 //friendsArray.append(object.objectId!)
                         }
@@ -380,6 +393,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         //print ("indexPath - \(indexPath.row) & noOfElementsFetched - \(noOfElementsFetched)" )
         if (indexPath.row == noOfElementsFetched - 1) && (noOfElementsFetched < totalElements) {
         //print ("noOfElementsFetched, totalElements = \(noOfElementsFetched) & \(totalElements)")
+        print("start animating")
         pagingSpinner.startAnimating()
         refresh()
         }
@@ -408,6 +422,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        var messageTimestamps = self.messageTimestamps
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = MessagesTableCell()//tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
+        //if indexPath.row != 0 {
+            cell.setSeparator = true
+        //}
+
+        cell.cellHeight = screenHeight/6.0
         cell.cellHeight = 0.15 * screenHeight
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
 //             names = [[String]]()
@@ -486,8 +505,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
         let calendar = NSCalendar.currentCalendar()
         let date = (messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!]!)!
-        let components = calendar.components([.Month, .Day, .Year, .WeekOfYear],
+        let components = calendar.components([ .Day],
                                              fromDate: date, toDate: NSDate(), options: NSCalendarOptions.WrapComponents)
+        //print("row, date, day -\(indexPath.row) \(date) \(components.day)")
         if components.day > 7 {
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyy"
@@ -517,7 +537,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             toolbarTapped = false
         }
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
-        return cell
+                return cell
 
         
     }

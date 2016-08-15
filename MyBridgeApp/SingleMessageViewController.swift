@@ -512,6 +512,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                     else {
                         object["message_viewed"] = [(PFUser.currentUser()?.objectId)!]
                     }
+                    if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                        noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = (object["no_of_single_messages"] as! Int)
+                        object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                    }
+
                     object.saveInBackground()
                 }
             }
