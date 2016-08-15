@@ -420,9 +420,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        var messageTimestamps = self.messageTimestamps
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = MessagesTableCell()//tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
-        if indexPath.row != 0 {
+        //if indexPath.row != 0 {
             cell.setSeparator = true
-        }
+        //}
 
         cell.cellHeight = screenHeight/6.0
         cell.cellHeight = 0.15 * screenHeight

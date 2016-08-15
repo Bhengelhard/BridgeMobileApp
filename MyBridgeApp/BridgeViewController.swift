@@ -133,7 +133,7 @@ class BridgeViewController: UIViewController {
         self.view.addSubview(toolbar)
     }
     func displayNoMoreCards() {
-        let frame1: CGRect = CGRectMake(0,screenHeight*0.2, screenWidth,screenHeight*0.8)
+        let frame1: CGRect = CGRectMake(superDeckX, superDeckY, superDeckWidth, superDeckHeight)
         let frame2: CGRect = CGRectMake(screenWidth * 0.08,screenHeight*0.1, screenWidth*0.9,screenHeight * 0.5)
         let view1 = UIView(frame:frame1)
         let label = UILabel(frame: frame2)
@@ -231,7 +231,7 @@ class BridgeViewController: UIViewController {
         superDeckView.clipsToBounds = true
         superDeckView.addSubview(upperDeckCard)
         superDeckView.addSubview(lowerDeckCard)
-        superDeckView.backgroundColor = UIColor.whiteColor()
+        superDeckView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(1.0)
         //superDeckView.layer.borderWidth = 4
         //superDeckView.layer.borderColor = getCGColor(cardColor)
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
@@ -419,8 +419,8 @@ class BridgeViewController: UIViewController {
                 photo2 = mainProfilePicture
             }
             else {
-                let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
-                photo2 =  mainProfilePicture
+               // let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
+                //photo2 =  mainProfilePicture
             }
             let color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
             
@@ -460,7 +460,13 @@ class BridgeViewController: UIViewController {
 //        bridgePairings = LocalData().getPairings()
         NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
         //NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
-        
+        self.iconFrame = CGRectMake(0.74*self.screenWidth,0.04*self.screenHeight,0.03*self.screenWidth,0.02*self.screenHeight)
+        self.iconLabel = UILabel(frame: iconFrame)
+        self.iconLabel.layer.backgroundColor = UIColor.redColor().CGColor
+        self.iconLabel.layer.cornerRadius = 5
+        self.iconLabel.textColor = necterColor
+        self.view.addSubview(self.iconLabel)
+
         bridgePairings = LocalData().getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
         localStorageUtility.getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
@@ -468,12 +474,6 @@ class BridgeViewController: UIViewController {
         }
         displayCards()
         displayToolBar()
-        self.iconFrame = CGRectMake(0.74*self.screenWidth,0.04*self.screenHeight,0.03*self.screenWidth,0.02*self.screenHeight)
-        self.iconLabel = UILabel(frame: iconFrame)
-        self.iconLabel.layer.backgroundColor = UIColor.redColor().CGColor
-        self.iconLabel.layer.cornerRadius = 5
-        self.iconLabel.textColor = necterColor
-        self.view.addSubview(self.iconLabel)
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
         query.cachePolicy = .NetworkElseCache
@@ -647,22 +647,52 @@ class BridgeViewController: UIViewController {
                 }
             })
             self.bridgePairings!.removeAtIndex(x)
-            if arrayOfCardsInDeck.count > 0 {
-                arrayOfCardsInDeck.removeAtIndex(0)
-                arrayOfCardColors.removeAtIndex(0)
-                if arrayOfCardsInDeck.count > 0 {
-                    arrayOfCardsInDeck[0].userInteractionEnabled = true
-                }
-            }
             
             print("bridgePairings.count - \(bridgePairings.count)")
             let localData = LocalData()
             localData.setPairings(self.bridgePairings!)
             localData.synchronize()
             let c = downloadMoreCards(1)
-            if c == 0 {
-                displayNoMoreCards()
+            if arrayOfCardsInDeck.count > 0 {
+                arrayOfCardsInDeck.removeAtIndex(0)
+                arrayOfCardColors.removeAtIndex(0)
+                if arrayOfCardsInDeck.count > 0 {
+                    arrayOfCardsInDeck[0].userInteractionEnabled = true
+                }
+                else {
+                    
+                    //create the alert controller
+                    let alert = UIAlertController(title: "Recycle the pairs", message: "You have ran out of people to connect for today. Would you like to have a re-look at the pairs you didn't bridge?", preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
+                        self.displayNoMoreCards()
+                        
+                    }))
+                    alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
+                        PFCloud.callFunctionInBackground("revitalizeMyPairs", withParameters: [:]) {
+                            (response: AnyObject?, error: NSError?) -> Void in
+                            if error == nil {
+                                if let response = response as? String {
+                                    print(response)
+                                }
+                                self.localStorageUtility.getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
+                                self.bridgePairings = LocalData().getPairings()
+                                for i in 0..<self.stackOfCards.count {
+                                    self.stackOfCards[i].removeFromSuperview()
+                                }
+                                self.stackOfCards.removeAll()
+                                self.displayCards()
+                            }
+                        }
+                    }))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    
+                }
             }
+            
+
+//            if c == 0 {
+//                
+//            }
             
         }
         
