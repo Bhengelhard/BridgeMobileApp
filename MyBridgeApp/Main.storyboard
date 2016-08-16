@@ -558,7 +558,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4S1-vj-COi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-336.5" y="-187.5"/>
+            <point key="canvasLocation" x="-355.5" y="-187.5"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
@@ -749,6 +749,7 @@
                     <connections>
                         <outlet property="navigationBar" destination="Izu-XS-RmV" id="qmu-Jw-y6D"/>
                         <segue destination="ABc-Ef-uKn" kind="show" identifier="showSingleMessage" id="B19-eu-GHC"/>
+                        <segue destination="P6Q-JZ-W57" kind="show" identifier="showNewStatusViewController" id="5m7-4W-1ig"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HbE-ka-aov" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1015,10 +1016,11 @@
         <image name="suzy's_profile_picture.jpg" width="960" height="960"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Vf7-BV-Sao"/>
-        <segue reference="9H7-t1-aWy"/>
         <segue reference="nDE-dt-Hjx"/>
+        <segue reference="ZMu-OO-A5m"/>
         <segue reference="cy1-Ds-r2Z"/>
-        <segue reference="0Jc-ZY-MLe"/>
+        <segue reference="B19-eu-GHC"/>
+        <segue reference="5m7-4W-1ig"/>
+        <segue reference="aOp-uB-KM9"/>
     </inferredMetricsTieBreakers>
 </document>

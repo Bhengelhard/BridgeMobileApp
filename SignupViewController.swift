@@ -26,10 +26,19 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     @IBOutlet weak var interestedLabel: UILabel!
     @IBOutlet weak var beginConnectingButton: UIButton!
     let updateLaterLabel = UILabel()
+    let businessIcon = UIImageView()
+    let loveIcon = UIImageView()
+    let friendshipIcon = UIImageView()
+    
    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
+    let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
+    let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
+    let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
+    let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
+
     
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
@@ -137,32 +146,39 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         localData.synchronize()
     }
     // Switches tapped
-    @IBAction func friendshipSwitchTapped(sender: AnyObject) {
-        if friendshipSwitch.on{
-            friendshipLabel.textColor = UIColor.blackColor()
+    @IBAction func businessSwitchTapped(sender: AnyObject) {
+        if businessSwitch.on{
+            businessLabel.textColor = businessBlue
+            businessIcon.image = UIImage(named: "Business_Icon_Blue")
         }
         else{
-            friendshipLabel.textColor = UIColor.grayColor()
+            businessLabel.textColor = UIColor.grayColor()
+            businessIcon.image = UIImage(named: "Business_Icon_Text_Gray")
         }
     }
     @IBAction func loveSwitchTapped(sender: AnyObject) {
         if loveSwitch.on{
-            loveLabel.textColor = UIColor.blackColor()
+            loveLabel.textColor = loveRed
+            loveIcon.image = UIImage(named: "Love_Icon_Red")
         }
         else{
           
             loveLabel.textColor = UIColor.grayColor()
+            loveIcon.image = UIImage(named: "Love_Icon_Text_Gray")
         }
     }
-    
-    @IBAction func businessSwitchTapped(sender: AnyObject) {
-        if businessSwitch.on{
-            businessLabel.textColor = UIColor.blackColor()
+    @IBAction func friendshipSwitchTapped(sender: AnyObject) {
+        if friendshipSwitch.on{
+            friendshipLabel.textColor = friendshipGreen
+            friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
         }
         else{
-            businessLabel.textColor = UIColor.grayColor()
+            friendshipLabel.textColor = UIColor.grayColor()
+            friendshipIcon.image = UIImage(named: "Friendship_Icon_Text_Gray")
         }
     }
+
+    
 
     override func viewDidLoad() {
                 super.viewDidLoad()
@@ -272,6 +288,18 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         
         let modelName = UIDevice.currentDevice().modelName
         
+        
+        //setting up elements
+        businessLabel.textColor = businessBlue
+        loveLabel.textColor = loveRed
+        friendshipLabel.textColor = friendshipGreen
+        businessIcon.image = UIImage(named: "Business_Icon_Blue")
+        loveIcon.image = UIImage(named: "Love_Icon_Red")
+        friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
+        
+        
+        
+        
         //placing elements
         if ["iPhone 4", "iPhone 4s", "iPhone 5", "iPhone 5", "iPhone 5c", "iPhone 5s", "Simulator"].contains(modelName) {
         //placing elements on smaller sized iPhones
@@ -282,13 +310,19 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
             editImageButton.clipsToBounds = true
             interestedLabel.frame = CGRect(x:0.05*screenWidth , y:0.45*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
-            businessLabel.frame = CGRect(x:0.125*screenWidth , y:0.55*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            businessIcon.frame = CGRect(x:0.125*screenWidth , y:0.55*screenHeight, width:0.1*screenWidth, height:0.1*screenWidth)
+            businessLabel.frame = CGRect(x:0.25*screenWidth , y:0, width:0.4*screenWidth, height:0.04*screenHeight)
+            businessLabel.center.y = businessIcon.center.y
             businessSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             businessSwitch.center.y = businessLabel.center.y
-            loveLabel.frame = CGRect(x:0.125*screenWidth , y:0.65*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            loveIcon.frame = CGRect(x:0.125*screenWidth , y:0.65*screenHeight, width:0.1*screenWidth, height:0.1*screenWidth)
+            loveLabel.frame = CGRect(x:0.25*screenWidth , y:0, width:0.4*screenWidth, height:0.04*screenHeight)
+            loveLabel.center.y = loveIcon.center.y
             loveSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             loveSwitch.center.y = loveLabel.center.y
-            friendshipLabel.frame = CGRect(x:0.125*screenWidth , y:0.75*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)
+            friendshipIcon.frame = CGRect(x:0.125*screenWidth , y:0.75*screenHeight, width:0.1*screenWidth, height:0.1*screenWidth)
+            friendshipLabel.frame = CGRect(x:0.25*screenWidth , y:0, width:0.4*screenWidth, height:0.04*screenHeight)
+            friendshipLabel.center.y = friendshipIcon.center.y
             friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             friendshipSwitch.center.y = friendshipLabel.center.y
             beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
@@ -316,6 +350,10 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             updateLaterLabel.frame = CGRectMake(0.05*screenWidth, 0.925*screenHeight, 0.9*screenWidth, 0.05*screenHeight)
             
         }
+        
+        view.addSubview(businessIcon)
+        view.addSubview(loveIcon)
+        view.addSubview(friendshipIcon)
         
         
         

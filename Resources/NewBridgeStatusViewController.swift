@@ -283,7 +283,9 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     
     func cancelTapped(sender: UIButton ){
         print("cancel selected")
-        presentViewController(vc!, animated: true, completion: nil)
+        //presentViewController(vc!, animated: true, completion: nil)
+        navigationController!.popViewControllerAnimated(true)
+
     }
     func backTapped(sender: UIButton ){
         
@@ -359,7 +361,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                     self.selectTypeLabel.attributedText = attributedGreeting
                 } else if i == 6 {
                     self.selectTypeLabel.alpha = 0
-                    self.presentViewController(self.vc!, animated: true, completion: nil)
+                    //self.presentViewController(self.vc!, animated: true, completion: nil)
+                    self.navigationController!.popViewControllerAnimated(true)
                 }
                 
             }, completion: nil)

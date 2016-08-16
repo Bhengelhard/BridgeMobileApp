@@ -390,9 +390,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             
             //opens user's email application with email ready to be sent to bridge email
             
-            let subject = "Providing%20Feedback%20for%20the%20Bridge%20Team"
+            let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
             let encodedParams = "subject=\(subject)"
-            let email = "blake@mybridgeapp.com"
+            let email = "blake@necter.social"
             let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
             
             if UIApplication.sharedApplication().canOpenURL(url!) {
