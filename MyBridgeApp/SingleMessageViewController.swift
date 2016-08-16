@@ -456,7 +456,12 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             if error == nil {
                 if let object = object {
                     if let x = object["message_type"] as? String? {
-                        self.bridgeType = x!
+                        if let x = x {
+                        self.bridgeType = x
+                        }
+                        else {
+                        self.bridgeType = "Friendship"
+                        }
                     }
                     else {
                         self.bridgeType = "Friendship"

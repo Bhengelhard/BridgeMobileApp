@@ -15,7 +15,6 @@
 		1B82A0841D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */; };
 		1B915A971D25E5DB004E0E8E /* blue_dot_small.gif in Resources */ = {isa = PBXBuildFile; fileRef = 1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */; };
 		1BA782271D11FE47000B0B3C /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA782261D11FE47000B0B3C /* LocalData.swift */; };
-		1BB3FFC81D6261D900F5EAB6 /* SegueTransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB3FFC71D6261D900F5EAB6 /* SegueTransitionManager.swift */; };
 		1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */; };
 		1BC1C53A1D2C20EF009BF004 /* BridgeNewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC1C5391D2C20EF009BF004 /* BridgeNewViewController.swift */; };
 		1BE5C1EB1D06010600D6AA81 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */; };
@@ -76,7 +75,6 @@
 		1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen-shot-2012-04-26-at-10-40-51-am.png"; sourceTree = "<group>"; };
 		1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = blue_dot_small.gif; sourceTree = "<group>"; };
 		1BA782261D11FE47000B0B3C /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalData.swift; sourceTree = "<group>"; };
-		1BB3FFC71D6261D900F5EAB6 /* SegueTransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueTransitionManager.swift; sourceTree = SOURCE_ROOT; };
 		1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageContent.swift; path = MyBridgeApp/MessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BC1C5391D2C20EF009BF004 /* BridgeNewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeNewViewController.swift; sourceTree = SOURCE_ROOT; };
 		1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
@@ -227,7 +225,6 @@
 				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
 				1BF692D71D09E32B0030B6D0 /* DataController.swift */,
 				CBEFCD761CEDED9600695B15 /* Main.storyboard */,
-				1BB3FFC71D6261D900F5EAB6 /* SegueTransitionManager.swift */,
 			);
 			name = MyBridgeApp;
 			path = ParseStarterProject;
@@ -370,7 +367,6 @@
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
 				1BF692CA1D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
-				1BB3FFC81D6261D900F5EAB6 /* SegueTransitionManager.swift in Sources */,
 				E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */,
 				1B0E053E1D1A597C00FEF514 /* MessagesTableCell.swift in Sources */,
 				CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */,
