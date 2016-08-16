@@ -166,6 +166,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         else if application.applicationState == UIApplicationState.Active {
             print("UIApplicationState.Active")
+            let aps = userInfo["aps"] as? NSDictionary
+            let badge = aps!["badge"] as? Int
+            let installation = PFInstallation.currentInstallation()
+            installation.badge = badge ?? 1
+            installation.saveInBackground()
         }
         else{
             print("None")

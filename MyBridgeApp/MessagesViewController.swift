@@ -124,6 +124,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         performSegueWithIdentifier("showBridgeFromMessages", sender: self)
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+            NSNotificationCenter.defaultCenter().removeObserver(self)
            self.runBackgroundThread = false
         if segueToSingleMessage {
             //print(" prepareForSegue was Called")
