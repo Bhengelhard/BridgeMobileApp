@@ -21,6 +21,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     let screenHeight = UIScreen.mainScreen().bounds.height
     var editableName:String = ""
     let noNameText = "Click to enter your full name"
+    let transitionManager = TransitionManager()
     
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
@@ -273,15 +274,17 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         return true
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+            let vc = segue.destinationViewController
+            let mirror = Mirror(reflecting: vc)
+//            if mirror.subjectType == BridgeViewController.self {
+//                self.transitionManager.animateRightToLeft = false
+//            }
+            vc.transitioningDelegate = self.transitionManager
     }
-    */
+ 
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections

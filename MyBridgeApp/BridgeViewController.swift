@@ -739,6 +739,15 @@ class BridgeViewController: UIViewController {
             message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
             //print("userId1, userId2 - \((bridgePairings[x].user1?.userId)!),\((bridgePairings[x].user2?.userId)!)")
             message["bridge_builder"] = currentUserId
+            var y = [String]()
+            y.append(currentUserId as String!)
+            message["message_viewed"] = y
+            if let bridgeType = bridgePairings[x].user1?.bridgeType {
+            message["message_type"] = bridgePairings[x].user1?.bridgeType
+            }
+            else {
+            message["message_type"] = "Friendship"
+            }
             message["lastSingleMessageAt"] = NSDate()
             // update the no of message in a Thread - Start
             message["no_of_single_messages"] = 1
@@ -959,16 +968,34 @@ class BridgeViewController: UIViewController {
             singleMessageVC.isSeguedFromBridgePage = true
             singleMessageVC.newMessageId = self.messageId
         }
+<<<<<<< HEAD
         if let _ = self.navigationController{
             //print("no - \(navigationController?.viewControllers.count)")
             if (navigationController?.viewControllers.count)! > 1 {
             for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
                 navigationController?.viewControllers.removeAtIndex(0)
             }
+=======
+        else {
+            let vc = segue.destinationViewController
+            let mirror = Mirror(reflecting: vc)
+            if mirror.subjectType == ProfileViewController.self {
+                self.transitionManager.animateRightToLeft = false
+>>>>>>> origin/august12
             }
+            vc.transitioningDelegate = self.transitionManager
             
-            //navigationController?.viewControllers.removeAll()
         }
+//        if let _ = self.navigationController{
+//            print("no - \(navigationController?.viewControllers.count)")
+//            if (navigationController?.viewControllers.count)! > 1 {
+//            for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
+//                navigationController?.viewControllers.removeAtIndex(0)
+//            }
+//            }
+//            
+//            navigationController?.viewControllers.removeAll()
+//        }
 
     }
 

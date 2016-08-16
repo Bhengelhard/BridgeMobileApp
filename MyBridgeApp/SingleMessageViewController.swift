@@ -17,6 +17,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     
     var messageTextArray = [String]()
     var newMessageId = String()
+    var bridgeType =  String()
     var isSeguedFromNewMessage = false
     var isSeguedFromBridgePage = false
     var isSeguedFromMessages = false
@@ -24,7 +25,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
 //    var messageContentArray = [[String:AnyObject]]()
     var singleMessagePositionToObjectIDMapping = [Int:String]()
     var refresher = UIRefreshControl()
-    
+    let transitionManager = TransitionManager()
     
     @IBOutlet weak var singleMessageTableView: UITableView!
     @IBOutlet weak var sendButton: UIBarButtonItem!
@@ -49,7 +50,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
             singleMessage["sender"] = PFUser.currentUser()?.objectId
             //save users_in_message to singleMessage
             singleMessage["message_id"] = messageId
-            
+            singleMessage["bridge_type"] = bridgeType
             singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
                 
                 if (success) {
@@ -359,6 +360,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                     var senderId = ""
                     if let ob = result["sender"] as? String {
                         senderId = ob
+                        
                         let queryForName = PFQuery(className: "_User")
                         do{
                             let userObject = try queryForName.getObjectWithId(ob)
@@ -449,6 +451,24 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         updatePushNotifications()
+        let messageQuery = PFQuery(className: "Messages")
+        messageQuery.getObjectInBackgroundWithId(newMessageId, block: { (object, error) in
+            if error == nil {
+                if let object = object {
+                    if let x = object["message_type"] as? String? {
+                        if let x = x {
+                        self.bridgeType = x
+                        }
+                        else {
+                        self.bridgeType = "Friendship"
+                        }
+                    }
+                    else {
+                        self.bridgeType = "Friendship"
+                    }
+                }
+            }
+        })
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadThread), name: "reloadTheThread", object: nil)
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), forControlEvents: UIControlEvents.ValueChanged)
@@ -498,6 +518,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         //Update the fact that you have viewed the message Thread when you segue
         // Segue is not the best place to put this. If you are about to close the view this should get called
+        print("segue Called")
+        let vc = segue.destinationViewController
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == BridgeViewController.self || mirror.subjectType == MessagesViewController.self {
+            self.transitionManager.animateRightToLeft = false
+        }
+        vc.transitioningDelegate = self.transitionManager
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
             if error == nil {
@@ -521,16 +548,16 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 }
             }
         })
-        if let _ = self.navigationController{
-            print("no - \(navigationController?.viewControllers.count)")
-            if (navigationController?.viewControllers.count)! > 1 {
-                for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
-                    navigationController?.viewControllers.removeAtIndex(0)
-                }
-            }
-            
-            //navigationController?.viewControllers.removeAll()
-        }
+//        if let _ = self.navigationController{
+//            print("no - \(navigationController?.viewControllers.count)")
+//            if (navigationController?.viewControllers.count)! > 1 {
+//                for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
+//                    navigationController?.viewControllers.removeAtIndex(0)
+//                }
+//            }
+//            
+//            navigationController?.viewControllers.removeAll()
+//        }
 
         
         

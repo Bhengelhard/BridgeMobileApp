@@ -152,14 +152,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc : SingleMessageViewController = storyboard.instantiateViewControllerWithIdentifier("SingleMessageViewController") as! SingleMessageViewController
         vc.newMessageId = messageId!
-        let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)
-        
-        print("top navController - \(navController.topViewController)")
+//        let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)
+//        
+//        print("top navController - \(navController.topViewController)")
         if application.applicationState == UIApplicationState.Inactive {
-            print("UIApplicationState.Inactive")
-            
-            navController.viewControllers.removeAll()
-            navController.pushViewController(vc, animated: true)
+            print("UIApplicationState.Inactive but ")
+              self.window?.rootViewController = vc
+//            navController.viewControllers.removeAll()
+//            navController.pushViewController(vc, animated: true)
         }
         else if application.applicationState == UIApplicationState.Background {
             print("UIApplicationState.Background")

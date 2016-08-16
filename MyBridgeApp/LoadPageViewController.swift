@@ -129,7 +129,7 @@ class LoadPageViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        self.navigationController!.navigationBar.hidden = true  
+       // self.navigationController!.navigationBar.hidden = true
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.

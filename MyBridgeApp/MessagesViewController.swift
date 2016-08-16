@@ -133,16 +133,26 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             singleMessageVC.isSeguedFromMessages = true
             singleMessageVC.newMessageId = self.singleMessageId
         }
-        if let _ = self.navigationController{
-            print("no - \(navigationController?.viewControllers.count)")
-            if (navigationController?.viewControllers.count)! > 1 {
-            for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
-                navigationController?.viewControllers.removeAtIndex(0)
+        else {
+            let vc = segue.destinationViewController
+            let mirror = Mirror(reflecting: vc)
+            if mirror.subjectType == BridgeViewController.self {
+                self.transitionManager.animateRightToLeft = false
             }
-            }
+            vc.transitioningDelegate = self.transitionManager
             
-            //navigationController?.viewControllers.removeAll()
         }
+
+//        if let _ = self.navigationController{
+//            print("no - \(navigationController?.viewControllers.count)")
+//            if (navigationController?.viewControllers.count)! > 1 {
+//            for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
+//                navigationController?.viewControllers.removeAtIndex(0)
+//            }
+//            }
+//            
+//            navigationController?.viewControllers.removeAll()
+//        }
 
     }
     func startBackgroundThread() {
