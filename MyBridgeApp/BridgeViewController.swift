@@ -802,16 +802,25 @@ class BridgeViewController: UIViewController {
             singleMessageVC.isSeguedFromBridgePage = true
             singleMessageVC.newMessageId = self.messageId
         }
-        if let _ = self.navigationController{
-            print("no - \(navigationController?.viewControllers.count)")
+        else {
+            let vc = segue.destinationViewController
+            let mirror = Mirror(reflecting: vc)
+            if mirror.subjectType == ProfileViewController.self {
+                self.transitionManager.animateRightToLeft = false
+            }
+            vc.transitioningDelegate = self.transitionManager
+            
+        }
+//        if let _ = self.navigationController{
+//            print("no - \(navigationController?.viewControllers.count)")
 //            if (navigationController?.viewControllers.count)! > 1 {
 //            for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
 //                navigationController?.viewControllers.removeAtIndex(0)
 //            }
 //            }
-            
-            //navigationController?.viewControllers.removeAll()
-        }
+//            
+//            navigationController?.viewControllers.removeAll()
+//        }
 
     }
 

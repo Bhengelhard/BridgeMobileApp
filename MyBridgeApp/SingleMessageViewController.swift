@@ -25,7 +25,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
 //    var messageContentArray = [[String:AnyObject]]()
     var singleMessagePositionToObjectIDMapping = [Int:String]()
     var refresher = UIRefreshControl()
-    
+    let transitionManager = TransitionManager()
     
     @IBOutlet weak var singleMessageTableView: UITableView!
     @IBOutlet weak var sendButton: UIBarButtonItem!
@@ -360,6 +360,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                     var senderId = ""
                     if let ob = result["sender"] as? String {
                         senderId = ob
+                        
                         let queryForName = PFQuery(className: "_User")
                         do{
                             let userObject = try queryForName.getObjectWithId(ob)
@@ -512,9 +513,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         //Update the fact that you have viewed the message Thread when you segue
         // Segue is not the best place to put this. If you are about to close the view this should get called
-        let messageVC:MessagesViewController = segue.destinationViewController as! MessagesViewController
-        let transitionManager = TransitionManager()
-        messageVC.transitioningDelegate = transitionManager
+        print("segue Called")
+        let vc = segue.destinationViewController
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == BridgeViewController.self || mirror.subjectType == MessagesViewController.self {
+            self.transitionManager.animateRightToLeft = false
+        }
+        vc.transitioningDelegate = self.transitionManager
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
             if error == nil {
@@ -538,16 +543,16 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 }
             }
         })
-        if let _ = self.navigationController{
-            print("no - \(navigationController?.viewControllers.count)")
+//        if let _ = self.navigationController{
+//            print("no - \(navigationController?.viewControllers.count)")
 //            if (navigationController?.viewControllers.count)! > 1 {
 //                for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
 //                    navigationController?.viewControllers.removeAtIndex(0)
 //                }
 //            }
-            
-            //navigationController?.viewControllers.removeAll()
-        }
+//            
+//            navigationController?.viewControllers.removeAll()
+//        }
 
         
         

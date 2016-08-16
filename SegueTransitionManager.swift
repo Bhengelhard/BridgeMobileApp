@@ -20,8 +20,8 @@ class SegueTransitionManager: NSObject, UIViewControllerAnimatedTransitioning, U
         let toView = transitionContext.viewForKey(UITransitionContextToViewKey)!
         
         // set up from 2D transforms that we'll use in the animation
-        let offScreenRight = CGAffineTransformMakeTranslation(-container!.frame.width, 0)
-        let offScreenLeft = CGAffineTransformMakeTranslation(container!.frame.width, 0)
+        let offScreenRight = CGAffineTransformMakeTranslation(container!.frame.width, 0)
+        let offScreenLeft = CGAffineTransformMakeTranslation(-container!.frame.width, 0)
         
         // start the toView to the right of the screen
         toView.transform = offScreenRight
