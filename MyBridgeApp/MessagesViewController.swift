@@ -137,7 +137,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             let vc = segue.destinationViewController
             let mirror = Mirror(reflecting: vc)
             if mirror.subjectType == BridgeViewController.self {
-                self.transitionManager.animateRightToLeft = false
+                self.transitionManager.animationDirection = "Left"
             }
             vc.transitioningDelegate = self.transitionManager
             

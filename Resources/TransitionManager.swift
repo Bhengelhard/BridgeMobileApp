@@ -10,7 +10,7 @@ import UIKit
 
 class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate  {
     
-    var animateRightToLeft = true
+    var animationDirection = "Right"
     // MARK: UIViewControllerAnimatedTransitioning protocol methods
     
     // animate a change from one viewcontroller to another
@@ -23,15 +23,26 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UIView
         // set up from 2D transforms that we'll use in the animation
         let offScreenRight = CGAffineTransformMakeTranslation(container!.frame.width, 0)
         let offScreenLeft = CGAffineTransformMakeTranslation(-container!.frame.width, 0)
+        let offScreenBottom = CGAffineTransformMakeTranslation(0, -container!.frame.height)
+        let offScreenTop = CGAffineTransformMakeTranslation(0, container!.frame.height)
         
         // start the toView to the right of the screen
-        if animateRightToLeft {
-        print("if called")
-        toView.transform = offScreenRight
-        }
-        else {
-        print("else callled")
-        toView.transform = offScreenLeft
+        switch(animationDirection){
+            case "Right":
+                toView.transform = offScreenRight
+                break
+            case "Left":
+                toView.transform = offScreenLeft
+                break
+            case "Bottom":
+                toView.transform = offScreenBottom
+                break
+            case "Top":
+                toView.transform = offScreenTop
+                break
+            default:
+                toView.transform = offScreenRight
+            
         }
         
         // add the both views to our view controller
@@ -46,13 +57,23 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UIView
         // meaning fromView is pushed off the screen and toView slides into view
         // we also use the block animation usingSpringWithDamping for a little bounce
         UIView.animateWithDuration(duration, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-            if self.animateRightToLeft {
+            switch(self.animationDirection){
+            case "Right":
                 fromView.transform = offScreenLeft
-            }
-            else {
+                break
+            case "Left":
                 fromView.transform = offScreenRight
+                break
+            case "Bottom":
+                fromView.transform = offScreenTop
+                break
+            case "Top":
+                fromView.transform = offScreenBottom
+                break
+            default:
+                fromView.transform = offScreenLeft
+                
             }
-
             
             toView.transform = CGAffineTransformIdentity
             
@@ -68,7 +89,7 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UIView
     
     // return how many seconds the transiton animation will take
     func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
-        return 0.7
+        return 0.5
     }
     
     // MARK: UIViewControllerTransitioningDelegate protocol methods

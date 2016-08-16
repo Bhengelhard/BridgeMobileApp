@@ -522,7 +522,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         let vc = segue.destinationViewController
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self || mirror.subjectType == MessagesViewController.self {
-            self.transitionManager.animateRightToLeft = false
+            self.transitionManager.animationDirection = "Left"
         }
         vc.transitioningDelegate = self.transitionManager
         let messageQuery = PFQuery(className: "Messages")

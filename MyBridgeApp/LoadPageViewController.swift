@@ -21,6 +21,8 @@ class LoadPageViewController: UIViewController {
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     
+    let transitionManager = TransitionManager()
+    
     //right now just updates users Friends
     func updateUser() {
         
@@ -271,10 +273,6 @@ class LoadPageViewController: UIViewController {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
     */
     
     

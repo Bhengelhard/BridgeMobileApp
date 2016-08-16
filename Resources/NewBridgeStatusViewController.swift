@@ -29,6 +29,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     let necterTypeIcon = UIImageView()
     
     let localData = LocalData()
+    let transitionManager = TransitionManager()
 
     var enablePost = Bool()
     var vc : ProfileViewController? = nil
@@ -284,7 +285,9 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     func cancelTapped(sender: UIButton ){
         print("cancel selected")
         //presentViewController(vc!, animated: true, completion: nil)
-        navigationController!.popViewControllerAnimated(true)
+        //navigationController!.popViewControllerAnimated(true)
+        //dismissViewControllerAnimated(true, completion: nil)
+        performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
 
     }
     func backTapped(sender: UIButton ){
@@ -333,7 +336,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     }
     func postTapped(sender: UIButton){
         
-        self.vc?.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+        //self.vc?.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
         
         self.backButton.alpha = 0
         self.postButton.alpha = 0
@@ -361,14 +364,16 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                     self.selectTypeLabel.attributedText = attributedGreeting
                 } else if i == 6 {
                     self.selectTypeLabel.alpha = 0
+                    self.performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
                     //self.presentViewController(self.vc!, animated: true, completion: nil)
-                    self.navigationController!.popViewControllerAnimated(true)
+                    //self.navigationController!.popViewControllerAnimated(true)
                 }
                 
             }, completion: nil)
             
             return i < 6
         }
+        
         print("post selected")
         
         let bridgeStatusObject = PFObject(className: "BridgeStatus")
@@ -622,6 +627,15 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let vc = segue.destinationViewController
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == BridgeViewController.self {
+            self.transitionManager.animationDirection = "Bottom"
+        }
+        vc.transitioningDelegate = self.transitionManager
+        
+    }
 
     /*
     // MARK: - Navigation
