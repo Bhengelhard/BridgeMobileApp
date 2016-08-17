@@ -108,7 +108,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                                     }
                                     }
                                     }
-                                    self.updatePushNotifications()
+                                    //self.updatePushNotifications()
                                     }
                                 }
                                 // update the no of message in a Thread - End
@@ -288,11 +288,17 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                             
                             noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = noOfSingleMessages
                             object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
-                            object.saveInBackground()
+                            object.saveInBackgroundWithBlock({ (success, error) in
+                                if error == nil && success {
+                                    print("installation saved")
+                                    installation.saveInBackground()
+                                    
+                                }
+                            })
                         }
                     }
                     
-                    installation.saveInBackground()
+                    
                     // update the no of messages viewed in a Thread by the current user - End
                 }
             }
@@ -311,26 +317,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         let query: PFQuery = PFQuery(className: "SingleMessages")
         query.whereKey("message_id", equalTo: messageId)
         query.orderByDescending("createdAt")
-        query.limit = 10
+        query.limit = 5
         query.skip = objectIDToMessageContentArrayMapping.count
         query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
             if let error = error {
                 print(error)
                 
             } else if let results = results {
-                 //self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
-                 //self.messageContentArray = [[String:AnyObject]]()
-
-//                if results.count < 1 {
-//                    self.objectIDToMessageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
-//                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])
-//                    
-//                    self.objectIDToMessageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false]
-//                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Love","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":(PFUser.currentUser()?.objectId)!,"previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":false])
-//                    
-//                    self.objectIDToMessageContentArrayMapping["(result.objectId!)"]=["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp", "isNotification":"isNotification","senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true]
-//                    self.messageContentArray.append(["messageText":"messageText messageText messageText messageText messageText messageText messageText messageText messageText messageText","bridgeType":"Business","senderName":"senderName", "timestamp":"timestamp","isNotification":false,"senderId":"senderId","previousSenderName":"previousSenderName", "previousSenderId":"previousSenderId","showTimestamp":true])
-//                }
                 if results.count > 0{
                 var singleMessagePosition = 0
                 for i in (0..<self.singleMessagePositionToObjectIDMapping.count).reverse(){
@@ -360,17 +353,17 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                     var senderId = ""
                     if let ob = result["sender"] as? String {
                         senderId = ob
-                        
-                        let queryForName = PFQuery(className: "_User")
-                        do{
-                            let userObject = try queryForName.getObjectWithId(ob)
-                            if let name = userObject["name"] as? String {
-                                senderName = name
-                            }
-                        }
-                        catch{
-                            
-                        }
+                        senderName = ob
+//                        let queryForName = PFQuery(className: "_User")
+//                        do{
+//                            let userObject = try queryForName.getObjectWithId(ob)
+//                            if let name = userObject["name"] as? String {
+//                                senderName = name
+//                            }
+//                        }
+//                        catch{
+//                            
+//                        }
                         
                     }
                     var timestamp = ""
@@ -439,6 +432,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 }
                 
             }
+            print("calling updatePushNotifications()")
+            self.updatePushNotifications()
+            self.updateMessagesViewed()
             dispatch_async(dispatch_get_main_queue(), {
                 self.refresher.endRefreshing()
                 self.singleMessageTableView.reloadData()
@@ -450,7 +446,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        updatePushNotifications()
+        //updatePushNotifications()
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(newMessageId, block: { (object, error) in
             if error == nil {
@@ -469,6 +465,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                 }
             }
         })
+        NSNotificationCenter.defaultCenter().removeObserver("reloadTheThread")
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadThread), name: "reloadTheThread", object: nil)
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), forControlEvents: UIControlEvents.ValueChanged)
@@ -515,16 +512,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        //Update the fact that you have viewed the message Thread when you segue
-        // Segue is not the best place to put this. If you are about to close the view this should get called
-        print("segue Called")
-        let vc = segue.destinationViewController
-        let mirror = Mirror(reflecting: vc)
-        if mirror.subjectType == BridgeViewController.self || mirror.subjectType == MessagesViewController.self {
-            self.transitionManager.animationDirection = "Left"
-        }
-        vc.transitioningDelegate = self.transitionManager
+    func updateMessagesViewed() {
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
             if error == nil {
@@ -543,11 +531,23 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = (object["no_of_single_messages"] as! Int)
                         object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
                     }
-
                     object.saveInBackground()
                 }
             }
         })
+    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        //Update the fact that you have viewed the message Thread when you segue
+        // Segue is not the best place to put this. If you are about to close the view this should get called
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        print("segue Called")
+        let vc = segue.destinationViewController
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == BridgeViewController.self || mirror.subjectType == MessagesViewController.self {
+            self.transitionManager.animationDirection = "Left"
+        }
+        vc.transitioningDelegate = self.transitionManager
+        updateMessagesViewed()
 //        if let _ = self.navigationController{
 //            print("no - \(navigationController?.viewControllers.count)")
 //            if (navigationController?.viewControllers.count)! > 1 {

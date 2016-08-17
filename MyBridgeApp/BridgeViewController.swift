@@ -608,8 +608,8 @@ class BridgeViewController: UIViewController {
         
         //vc = storyboard!.instantiateViewControllerWithIdentifier("NewBridgeStatusViewController") as? NewBridgeStatusViewController
         
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
-        //NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
+        //NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
         self.iconFrame = CGRectMake(0.74*self.screenWidth,0.04*self.screenHeight,0.03*self.screenWidth,0.02*self.screenHeight)
         self.iconLabel = UILabel(frame: iconFrame)
         self.iconLabel.layer.backgroundColor = UIColor.redColor().CGColor
@@ -1032,6 +1032,7 @@ class BridgeViewController: UIViewController {
         
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         if segueToSingleMessage {
             //print("was Called")
             segueToSingleMessage = false
