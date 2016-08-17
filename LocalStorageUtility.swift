@@ -786,9 +786,16 @@ class LocalStorageUtility{
                         print("name2 - \(name2)")
                         var location1:[Double]? = nil
                         var location2:[Double]? = nil
-                        if let ob = result["user_locations"] as? [PFGeoPoint]{
-                            location1 = [ob[0].latitude, ob[0].longitude]
-                            location2 = [ob[1].latitude, ob[1].longitude]
+                        print(result["user_locations"])
+                        
+                        if let ob = result["user_locations"] as? [AnyObject]{
+                            if let x = ob[0] as? PFGeoPoint{
+                                location1 = [x.latitude,x.longitude]
+                            }
+                            if let x = ob[1] as? PFGeoPoint{
+                                location2 = [x.latitude,x.longitude]
+                            }
+                            print("location1-\(location1),location2- \(location2)")
                         }
                         print("location1 - \(location2)")
                         var profilePicture1:NSData? = nil
