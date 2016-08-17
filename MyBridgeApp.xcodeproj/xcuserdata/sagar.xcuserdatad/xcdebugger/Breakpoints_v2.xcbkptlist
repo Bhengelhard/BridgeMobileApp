@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492723642.534404"
+            timestampString = "493151964.723341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
@@ -282,11 +282,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492723642.534404"
+            timestampString = "493151964.723341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
             landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
@@ -298,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492723642.534404"
+            timestampString = "493151964.723341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
@@ -314,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492723642.534404"
+            timestampString = "493151964.723341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
@@ -330,11 +330,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492977773.998569"
+            timestampString = "493151964.723341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "428"
-            endingLineNumber = "428"
+            startingLineNumber = "472"
+            endingLineNumber = "472"
             landmarkName = "displayCards()"
             landmarkType = "5">
          </BreakpointContent>
@@ -712,11 +712,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
-            timestampString = "492723642.534404"
+            timestampString = "493151964.723341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
             landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
@@ -1087,38 +1087,54 @@
             endingLineNumber = "61"
             landmarkName = "preferencesSwitchTapped(_:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MyBridgeApp.ProfileTableViewCell2.preferencesSwitchTapped (Swift.AnyObject) -&gt; ()"
-                  moduleName = "MyBridgeApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/MyBridgeApp/ProfileTableViewCell2.swift"
-                  timestampString = "493082726.159553"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "61"
-                  endingLineNumber = "61"
-                  offsetFromSymbolStart = "5004">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MyBridgeApp.ProfileTableViewCell2.(preferencesSwitchTapped (Swift.AnyObject) -&gt; ()).(closure #1)"
-                  moduleName = "MyBridgeApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/MyBridgeApp/ProfileTableViewCell2.swift"
-                  timestampString = "493082726.159692"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63"
-                  offsetFromSymbolStart = "44">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyBridgeApp/BridgeViewController.swift"
+            timestampString = "493151761.804859"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "setCityName(_:locationCoordinates:pairing:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LocalStorageUtility.swift"
+            timestampString = "493144451.292041"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "788"
+            endingLineNumber = "788"
+            landmarkName = "getBridgePairingsFromCloud(_:typeOfCards:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LocalStorageUtility.swift"
+            timestampString = "493144928.122736"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "790"
+            endingLineNumber = "790"
+            landmarkName = "getBridgePairingsFromCloud(_:typeOfCards:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

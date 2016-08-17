@@ -214,6 +214,11 @@ class ViewController: UIViewController {
                         
                         //use while access token is nil instead of delay
                          print("not new")
+                        if let _ = (PFUser.currentUser()?["name"]) as? String {
+                        let localData = LocalData()
+                        localData.setUsername((PFUser.currentUser()?["name"])! as! String)
+                        localData.synchronize()
+                        }
                         //LocalStorageUtility().getBridgePairings()
                          //self.getUserPhotos()
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in

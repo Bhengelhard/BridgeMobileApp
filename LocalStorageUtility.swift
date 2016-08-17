@@ -539,7 +539,7 @@ class LocalStorageUtility{
                     bridge_status = ob as? String
                 }
                 
-                user = PairInfo(name:name, mainProfilePicture: main_profile_picture, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil, userId: nil )
+                user = PairInfo(name:name, mainProfilePicture: main_profile_picture, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil, userId: nil, city: nil )
             }
         }
         catch {
@@ -786,9 +786,16 @@ class LocalStorageUtility{
                         print("name2 - \(name2)")
                         var location1:[Double]? = nil
                         var location2:[Double]? = nil
-                        if let ob = result["user_locations"] as? [PFGeoPoint]{
-                            location1 = [ob[0].latitude, ob[0].longitude]
-                            location2 = [ob[1].latitude, ob[1].longitude]
+                        print(result["user_locations"])
+                        
+                        if let ob = result["user_locations"] as? [AnyObject]{
+                            if let x = ob[0] as? PFGeoPoint{
+                                location1 = [x.latitude,x.longitude]
+                            }
+                            if let x = ob[1] as? PFGeoPoint{
+                                location2 = [x.latitude,x.longitude]
+                            }
+                            print("location1-\(location1),location2- \(location2)")
                         }
                         print("location1 - \(location2)")
                         var profilePicture1:NSData? = nil
@@ -850,8 +857,8 @@ class LocalStorageUtility{
                         }
                         result.saveInBackground()
                         
-                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1)
-                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2)
+                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: nil)
+                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: nil)
                         let userInfoPair = UserInfoPair(user1: user1, user2: user2)
                         pairings.append(userInfoPair)
                         print("userId1, userId2 - \(userId1),\(userId2)")
