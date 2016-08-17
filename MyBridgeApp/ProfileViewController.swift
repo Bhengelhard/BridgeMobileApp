@@ -13,11 +13,12 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     //@IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var editImageButton: UIButton!
-    @IBOutlet weak var bridgeStatus: UIButton!
+    //@IBOutlet weak var bridgeStatus: UIButton!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     let navigationBar = UINavigationBar()
     let necterButton = UIButton()
+    let bridgeStatus = UIButton()
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -230,16 +231,22 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             editImageButton.setImage(image, forState: .Normal)
         }
         
+        bridgeStatus.setTitle("Post Status", forState: .Normal)
+        bridgeStatus.titleLabel!.font = UIFont(name: "Verdana", size: 20)
+        bridgeStatus.setTitleColor(necterYellow, forState: UIControlState.Highlighted)
+        bridgeStatus.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         bridgeStatus.layer.cornerRadius = 7.0
         bridgeStatus.layer.borderWidth = 4.0
         bridgeStatus.layer.borderColor = necterYellow.CGColor
         bridgeStatus.clipsToBounds = true
+        bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), forControlEvents: .TouchUpInside)
         
-        bridgeStatus.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
-        
-        bridgeStatus.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        view.addSubview(bridgeStatus)
         tableView.tableFooterView = UIView()
         
+    }
+    func statusTapped(sender: UIButton) {
+        performSegueWithIdentifier("showNewStatusViewFromProfilePage", sender: self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -326,13 +333,16 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+        //let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
+
         let vc = segue.destinationViewController
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Right"
         } else if mirror.subjectType == NewBridgeStatusViewController.self {
             self.transitionManager.animationDirection = "Top"
+            let vc2 = vc as! NewBridgeStatusViewController
+            vc2.seguedFrom = "ProfileViewController"
         }
         vc.transitioningDelegate = self.transitionManager
     }

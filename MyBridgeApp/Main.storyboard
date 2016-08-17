@@ -67,7 +67,7 @@
                     <connections>
                         <outlet property="appDescription" destination="CWD-hN-Kj8" id="b7w-U9-gYb"/>
                         <outlet property="appName" destination="Smv-xO-RG3" id="wPU-x5-w7P"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginFromLoadPage" id="HGT-Vo-Kl8"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginFromLoadPage" animates="NO" id="HGT-Vo-Kl8"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromLoadPage" id="Lus-h1-21q"/>
                     </connections>
                 </viewController>
@@ -557,11 +557,13 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromStatus" id="Z7c-Ws-k9O"/>
+                        <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromNewStatusView" id="Zct-T5-yb8"/>
+                        <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesViewfromStatus" id="RFd-6z-IK0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4S1-vj-COi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-193.5" y="-181.5"/>
+            <point key="canvasLocation" x="-408.5" y="-181.5"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
@@ -636,18 +638,6 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n0p-Ww-JF9">
-                                <rect key="frame" x="131" y="259" width="114" height="37"/>
-                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="20"/>
-                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <size key="titleShadowOffset" width="2.2250738585072014e-308" height="0.0"/>
-                                <state key="normal" title="Post Status">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="P6Q-JZ-W57" kind="show" id="Dbz-zZ-5B6"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X4g-Qk-Qti">
                                 <rect key="frame" x="117" y="84" width="140" height="140"/>
                                 <state key="normal" image="suzy's_profile_picture.jpg"/>
@@ -675,7 +665,6 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="bridgeStatus" destination="n0p-Ww-JF9" id="ddb-Hq-Jpx"/>
                         <outlet property="editImageButton" destination="X4g-Qk-Qti" id="Rys-4C-akM"/>
                         <outlet property="name" destination="5HU-Ir-Pg6" id="eu0-cS-voQ"/>
                         <outlet property="nameTextField" destination="xQx-CP-9XW" id="SUa-el-NfI"/>
@@ -684,6 +673,7 @@
                         <segue destination="g3I-ul-dfk" kind="show" identifier="showTermsofService" id="pbm-rN-Dzp"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginView" id="cy1-Ds-r2Z"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewFromProfilePage" id="ORi-q2-txU"/>
+                        <segue destination="P6Q-JZ-W57" kind="show" identifier="showNewStatusViewFromProfilePage" id="FKg-ff-qrd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSk-yp-EIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -765,7 +755,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZO4-tV-uGJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1389.5" y="-187.5"/>
+            <point key="canvasLocation" x="1414.5" y="-181.5"/>
         </scene>
         <!--Old Messages View Controller-->
         <scene sceneID="yR7-m9-XyN">
@@ -894,11 +884,11 @@
         <image name="suzy's_profile_picture.jpg" width="960" height="960"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="HGT-Vo-Kl8"/>
+        <segue reference="Zct-T5-yb8"/>
         <segue reference="97c-Mj-xqQ"/>
-        <segue reference="OnA-y9-bUb"/>
-        <segue reference="wYg-RW-AbN"/>
-        <segue reference="1Bx-ML-R6e"/>
-        <segue reference="cy1-Ds-r2Z"/>
+        <segue reference="RFd-6z-IK0"/>
         <segue reference="0Jc-ZY-MLe"/>
+        <segue reference="wYg-RW-AbN"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -33,6 +33,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
 
     var enablePost = Bool()
     var vc : ProfileViewController? = nil
+    var seguedFrom = ""
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -281,14 +282,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         }*/
         
     }
-    
     func cancelTapped(sender: UIButton ){
-        print("cancel selected")
-        //presentViewController(vc!, animated: true, completion: nil)
-        //navigationController!.popViewControllerAnimated(true)
-        //dismissViewControllerAnimated(true, completion: nil)
-        performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
-
+        performSegueToPriorView()
     }
     func backTapped(sender: UIButton ){
         
@@ -365,8 +360,6 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                 } else if i == 6 {
                     self.selectTypeLabel.alpha = 0
                     self.performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
-                    //self.presentViewController(self.vc!, animated: true, completion: nil)
-                    //self.navigationController!.popViewControllerAnimated(true)
                 }
                 
             }, completion: nil)
@@ -381,15 +374,29 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         bridgeStatusObject["bridge_type"] = self.necterType
         bridgeStatusObject["userId"] = PFUser.currentUser()?.objectId
         bridgeStatusObject.saveInBackground()
-        /*PFCloud.callFunctionInBackground("changeBridgePairingsOnStatusUpdate", withParameters: ["status":self.bridgeStatus.text!, "bridgeType":self.necterType]) {
+        PFCloud.callFunctionInBackground("changeBridgePairingsOnStatusUpdate", withParameters: ["status":self.bridgeStatus.text!, "bridgeType":self.necterType]) {
             (response:AnyObject?, error: NSError?) -> Void in
             if error == nil {
                 if let response = response as? String {
                     print(response)
                 }
             }
-        }*/
-        //self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        performSegueToPriorView()
+    }
+    
+    func performSegueToPriorView() {
+        if seguedFrom == "ProfileViewController" {
+            performSegueWithIdentifier("showProfilePageFromNewStatusView", sender: self)
+        } else if seguedFrom == "BridgeViewController" {
+            performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
+        } else if seguedFrom == "MessagesViewController" {
+            performSegueWithIdentifier("showMessagesViewfromStatus", sender: self)
+        } else {
+            //default case
+            performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
+        }
     }
 
     override func viewDidLoad() {
@@ -631,6 +638,10 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         let vc = segue.destinationViewController
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
+            self.transitionManager.animationDirection = "Bottom"
+        } else if mirror.subjectType == ProfileViewController.self {
+            self.transitionManager.animationDirection = "Bottom"
+        } else if mirror.subjectType == MessagesViewController.self {
             self.transitionManager.animationDirection = "Bottom"
         }
         vc.transitioningDelegate = self.transitionManager

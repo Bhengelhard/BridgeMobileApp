@@ -30,13 +30,13 @@ class BridgeViewController: UIViewController {
     var currentTypeOfCardsOnDisplay = typesOfCard.All
     var lastCardInStack:UIView = UIView()
     var displayNoMoreCardsView:UIView? = nil
+    let displayNoMoreCardsLabel = UILabel()
     var arrayOfCardsInDeck = [UIView]()
     var arrayOfCardColors = [CGColor]()
     var segueToSingleMessage = false
     var messageId = ""
     let transitionManager = TransitionManager()
-    var iconFrame = CGRectMake(0,0,0,0)
-    var iconLabel = UILabel()
+    //var iconLabel = UILabel()
     
     //toolbar buttons
     let toolbar = UIView()
@@ -269,22 +269,32 @@ class BridgeViewController: UIViewController {
     
     func displayNoMoreCards() {
         //let frame1: CGRect = CGRectMake(superDeckX, superDeckY, superDeckWidth, superDeckHeight)
-        let frame2: CGRect = CGRectMake(0,0, 0.8*screenWidth,screenHeight * 0.2)
+        let labelFrame: CGRect = CGRectMake(0,0, 0.8*screenWidth,screenHeight * 0.2)
         //let view1 = UIView(frame:frame1)
-        let label = UILabel(frame: frame2)
-        label.numberOfLines = 0
-        label.text = "You ran out of people to connect. Please check back tomorrow."
-        label.font = UIFont(name: "BentonSans", size: 20)
-        label.textAlignment = NSTextAlignment.Center
-        label.center.y = view.center.y
-        label.center.x = view.center.x
-        label.layer.borderWidth = 2
-        label.layer.borderColor = necterGray.CGColor
-        label.layer.cornerRadius = 15
+        displayNoMoreCardsLabel.frame = labelFrame
+        displayNoMoreCardsLabel.numberOfLines = 0
+        
+        if businessButton.enabled == false {
+            displayNoMoreCardsLabel.text = "You ran out of people to connect for business. Please check back tomorrow."
+        } else if loveButton.enabled == false {
+            displayNoMoreCardsLabel.text = "You ran out of people to connect for love. Please check back tomorrow."
+        } else if friendshipButton.enabled == false {
+            displayNoMoreCardsLabel.text = "You ran out of people to connect for friendship. Please check back tomorrow."
+        } else {
+            displayNoMoreCardsLabel.text = "You ran out of people to connect. Please check back tomorrow."
+        }
+        
+        displayNoMoreCardsLabel.font = UIFont(name: "BentonSans", size: 20)
+        displayNoMoreCardsLabel.textAlignment = NSTextAlignment.Center
+        displayNoMoreCardsLabel.center.y = view.center.y
+        displayNoMoreCardsLabel.center.x = view.center.x
+        displayNoMoreCardsLabel.layer.borderWidth = 2
+        displayNoMoreCardsLabel.layer.borderColor = necterGray.CGColor
+        displayNoMoreCardsLabel.layer.cornerRadius = 15
         //view1.addSubview(label)
         //self.view.insertSubview(view1, aboveSubview: self.view)
         //displayNoMoreCardsView = view1
-        view.addSubview(label)
+        view.addSubview(displayNoMoreCardsLabel)
         
     }
     func getUpperDeckCardFrame() -> CGRect {
@@ -437,6 +447,7 @@ class BridgeViewController: UIViewController {
     func displayCards(){
         if let displayNoMoreCardsView = displayNoMoreCardsView {
             displayNoMoreCardsView.removeFromSuperview()
+            
             self.displayNoMoreCardsView = nil
         }
         arrayOfCardsInDeck = [UIView]()
@@ -647,7 +658,7 @@ class BridgeViewController: UIViewController {
         dispatch_async(dispatch_get_main_queue(), {
             
             if self.badgeCount != 0 {
-                self.iconLabel.text = String(self.badgeCount)
+                //self.iconLabel.text = String(self.badgeCount)
                 //self.displayNavigationBar()
                 self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
                 self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Highlighted)
@@ -703,14 +714,14 @@ class BridgeViewController: UIViewController {
         
         self.view.addSubview(navigationBar)
         
-        //setting the number of notifications to the iconLabel
-        iconLabel = UILabel(frame: messagesButton.frame)
+        //setting the number of notifications to the iconLabel -> this has been removed
+        /*iconLabel = UILabel(frame: messagesButton.frame)
         iconLabel.center.x = messagesButton.center.x
         iconLabel.center.y = messagesButton.center.y
         //iconLabel.font = UIFont(name: "BentonSans", size: 14)
         iconLabel.textColor = necterColor
         //iconLabel.text = String(badgeCount)
-        view.addSubview(iconLabel)
+        //view.addSubview(iconLabel)*/
     }
     func profileTapped(sender: UIBarButtonItem) {
         profileButton.selected = true
@@ -765,8 +776,8 @@ class BridgeViewController: UIViewController {
                     dispatch_async(dispatch_get_main_queue(), {
                         //self.badgeCount = 0
                         if self.badgeCount != 0 {
-                            //setting the iconLabel to the number of notifications
-                            self.iconLabel.text = String(self.badgeCount)
+                            //setting the iconLabel to the number of notifications -> this has been removed
+                            //self.iconLabel.text = String(self.badgeCount)
                             //setting the messagesIcon to the notification rightBarButtonItem
                             //self.displayNavigationBar()
                             self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
@@ -775,7 +786,7 @@ class BridgeViewController: UIViewController {
                             self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
                             self.navigationBar.setItems([self.navItem], animated: false)
                         } else {
-                            self.iconLabel.text = ""
+                            //self.iconLabel.text = ""
                             //self.displayNavigationBar()
                             self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), forState: .Normal)
                             self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Highlighted)
@@ -1152,6 +1163,8 @@ class BridgeViewController: UIViewController {
                 self.transitionManager.animationDirection = "Left"
             } else if mirror.subjectType == NewBridgeStatusViewController.self {
                 self.transitionManager.animationDirection = "Top"
+                let vc2 = vc as! NewBridgeStatusViewController
+                vc2.seguedFrom = "BridgeViewController"
             } else if mirror.subjectType == MessagesViewController.self {
                 self.transitionManager.animationDirection = "Right"
             }
