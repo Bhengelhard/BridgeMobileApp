@@ -175,7 +175,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
        //CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
         locationLabel.alpha = 0
-        locationLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.17*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.1*profilePictureHeight)
+        locationLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.16*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.1*profilePictureHeight)
         locationLabel.text = "Save location to device"
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()

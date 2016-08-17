@@ -38,10 +38,15 @@ class BridgeViewController: UIViewController {
     var iconLabel = UILabel()
     
     //toolbar buttons
-    let allTypesButton = UIButton(type: .Custom)
+    let toolbar = UIView()
+    let allTypesButton = UIButton()
+    let allTypesLabel = UILabel()
     let businessButton = UIButton()
+    let businessLabel = UILabel()
     let loveButton = UIButton()
+    let loveLabel = UILabel()
     let friendshipButton = UIButton()
+    let friendshipLabel = UILabel()
     let postStatusButton = UIButton()
     
     //Connect and disconnect Icons
@@ -118,38 +123,72 @@ class BridgeViewController: UIViewController {
     }
     func displayToolBar(){
         
-        let toolbar = UIView()
         toolbar.frame = CGRectMake(0, 0.9*screenHeight, screenWidth, 0.1*screenHeight)
         toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
 
         //creating buttons to be added to the toolbar and evenly spaced across
-        allTypesButton.setBackgroundImage(UIImage(named: "All_Types_Icon_Colors"), forState: .Normal)
-        //allTypesButton.setBackgroundImage(UIImage(named: "All_Types_Icon_Text"), forState: .Disabled)
-        allTypesButton.frame = CGRect(x: 0.07083*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1150*screenWidth)
-        allTypesButton.center.y = toolbar.center.y
+        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), forState: .Normal)
+        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), forState: .Disabled)
+        allTypesButton.frame = CGRect(x: 0.07083*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
+        allTypesButton.center.y = toolbar.center.y - 0.005*screenHeight
         allTypesButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
         allTypesButton.tag = 0
+        
+        //coloring allTypesText three different colors
+        let allTypesText = "All Types" as NSString
+        var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
+        //setting allTypesText
+        allTypesLabel.attributedText = allTypesAttributedText
+        allTypesLabel.textAlignment =  NSTextAlignment.Center
+        allTypesLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        allTypesLabel.center.x = allTypesButton.center.x
 
-        businessButton.setBackgroundImage(UIImage(named: "Business_Icon_Text_Gray"), forState: .Normal)
-        businessButton.setBackgroundImage(UIImage(named: "Business_Icon_Text"), forState: .Selected)
-        businessButton.frame = CGRect(x: 0.24166*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1150*screenWidth)
-        businessButton.center.y = toolbar.center.y
+        
+        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), forState: .Normal)
+        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), forState: .Disabled)
+        businessButton.frame = CGRect(x: 0.24166*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
+        businessButton.center.y = toolbar.center.y - 0.005*screenHeight
         businessButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
         businessButton.tag = 1
         
-        loveButton.setBackgroundImage(UIImage(named: "Love_Icon_Text_Gray"), forState: .Normal)
-        loveButton.setBackgroundImage(UIImage(named: "Love_Icon_Text"), forState: .Selected)
-        loveButton.frame = CGRect(x: 0.65832*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1150*screenWidth)
-        loveButton.center.y = toolbar.center.y
+        businessLabel.text = "Business"
+        businessLabel.textColor = necterGray
+        businessLabel.font = UIFont(name: "BentonSans", size: 11)
+        businessLabel.textAlignment =  NSTextAlignment.Center
+        businessLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        businessLabel.center.x = businessButton.center.x
+        
+        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), forState: .Normal)
+        loveButton.setImage(UIImage(named: "Love_Icon_Red"), forState: .Disabled)
+        loveButton.frame = CGRect(x: 0.65832*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
+        loveButton.center.y = toolbar.center.y - 0.005*screenHeight
         loveButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
         loveButton.tag = 2
         
-        friendshipButton.setBackgroundImage(UIImage(named: "Friendship_Icon_Text_Gray"), forState: .Normal)
-        friendshipButton.setBackgroundImage(UIImage(named: "Friendship_Icon_Text"), forState: .Selected)
+        loveLabel.text = "Love"
+        loveLabel.font = UIFont(name: "BentonSans", size: 11)
+        loveLabel.textColor = necterGray
+        loveLabel.textAlignment =  NSTextAlignment.Center
+        loveLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        loveLabel.center.x = loveButton.center.x
+        
+        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), forState: .Normal)
+        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), forState: .Disabled)
         friendshipButton.frame = CGRect(x: 0.82915*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1150*screenWidth)
-        friendshipButton.center.y = toolbar.center.y
+        friendshipButton.center.y = toolbar.center.y - 0.005*screenHeight
         friendshipButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
         friendshipButton.tag = 3
+        
+        friendshipLabel.text = "Friendship"
+        friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
+        friendshipLabel.textColor = necterGray
+        friendshipLabel.textAlignment =  NSTextAlignment.Center
+        friendshipLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        friendshipLabel.center.x = friendshipButton.center.x
+
         
         postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*screenWidth, height: 0.175*screenWidth)
         postStatusButton.backgroundColor = necterYellow
@@ -171,59 +210,34 @@ class BridgeViewController: UIViewController {
        
         view.addSubview(toolbar)
         view.addSubview(allTypesButton)
+        view.addSubview(allTypesLabel)
         view.addSubview(businessButton)
+        view.addSubview(businessLabel)
         view.addSubview(loveButton)
+        view.addSubview(loveLabel)
         view.addSubview(friendshipButton)
+        view.addSubview(friendshipLabel)
         view.addSubview(postStatusButton)
-        
-        //items.append(allTypesIcon)
-        
-        
-        /*var items = [UIBarButtonItem]()
-        
-        let allTypesButton = UIBarButtonItem()
-        allTypesButton.action = #selector(filterTapped(_:))
-        allTypesButton.image = UIImage(named: "All_Types_Icon_Text_Gray")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
-        allTypesButton.style = .Plain
-        allTypesButton.width = 0.15*screenWidth
-        allTypesButton.tag = 0
-        //allTypesButton.decreaseSize(self)
-        //allTypesButton.tintColor =
-        //image: UIImage(named: "All_Types_Icon_Text_Gray"), style: .Plain, target: nil, action:
-        
-        items.append(allTypesButton)
-        //UIBarButtonItem(image: UIImage(named: "All_Types_Icon_Text_Gray"), style: .Plain, target: nil, action:#selector(filterTapped(_:)) )
-        //items[0].tintColor = UIColor.darkGrayColor()
-        //items[0].width = 0.15*screenWidth
-        //items[0].tag = 0
-        items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
-        items.append( UIBarButtonItem(image: UIImage(named: "business_Icon_Text_Gray"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
-        //items[2].tintColor = businessBlue
-        items[2].width = 0.15*screenWidth
-        items[2].tag = 1
-        items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
-        items.append( UIBarButtonItem(image: UIImage(named: "love_Icon_Text_Gray"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
-        //items[4].tintColor = loveRed
-        items[4].width = 0.15*screenWidth
-        items[4].tag = 2
-        items.append(UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil))
-        items.append( UIBarButtonItem(image: UIImage(named: "friendship_Icon_Text_Gray"), style: .Plain, target: nil, action: #selector(filterTapped(_:))))
-        //items[6].tintColor = friendshipGreen
-        items[6].width = 0.15*screenWidth
-        items[6].tag = 3*/
-
     }
+    
     func displayNoMoreCards() {
-        let frame1: CGRect = CGRectMake(superDeckX, superDeckY, superDeckWidth, superDeckHeight)
-        let frame2: CGRect = CGRectMake(screenWidth * 0.08,screenHeight*0.1, screenWidth*0.9,screenHeight * 0.5)
-        let view1 = UIView(frame:frame1)
+        //let frame1: CGRect = CGRectMake(superDeckX, superDeckY, superDeckWidth, superDeckHeight)
+        let frame2: CGRect = CGRectMake(0,0, 0.8*screenWidth,screenHeight * 0.2)
+        //let view1 = UIView(frame:frame1)
         let label = UILabel(frame: frame2)
         label.numberOfLines = 0
-        label.text = "You seem to have run out of people to connect for the day. Please check back tomorrow!"
+        label.text = "You ran out of people to connect. Please check back tomorrow."
         label.font = UIFont(name: "BentonSans", size: 20)
-        view1.addSubview(label)
-        self.view.insertSubview(view1, aboveSubview: self.view)
-        displayNoMoreCardsView = view1
+        label.textAlignment = NSTextAlignment.Center
+        label.center.y = view.center.y
+        label.center.x = view.center.x
+        label.layer.borderWidth = 2
+        label.layer.borderColor = necterGray.CGColor
+        label.layer.cornerRadius = 15
+        //view1.addSubview(label)
+        //self.view.insertSubview(view1, aboveSubview: self.view)
+        //displayNoMoreCardsView = view1
+        view.addSubview(label)
         
     }
     func getUpperDeckCardFrame() -> CGRect {
@@ -245,7 +259,7 @@ class BridgeViewController: UIViewController {
     }
     func getCard(deckFrame:CGRect, name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor) -> UIView {
         let nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
-        let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
+        let locationFrame = CGRectMake(0.05*cardWidth,0.155*cardHeight,0.8*cardWidth,0.10*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
         //Creating the transparency screens
@@ -257,18 +271,25 @@ class BridgeViewController: UIViewController {
         nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.textColor = UIColor.whiteColor()
         nameLabel.font = UIFont(name: "Verdana", size: 20)
+        nameLabel.shadowColor = UIColor.blackColor()
+        nameLabel.shadowOffset = CGSize(width: 0.1, height: 0.1)
         
         let locationLabel = UILabel(frame: locationFrame)
         locationLabel.text = location
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
         locationLabel.font = UIFont(name: "Verdana", size: 16)
+        locationLabel.shadowColor = UIColor.blackColor()
+        locationLabel.shadowOffset = CGSize(width: 0.1, height: 0.1)
         
         let statusLabel = UILabel(frame: statusFrame)
         statusLabel.text = status
         statusLabel.textColor = UIColor.whiteColor()
         statusLabel.font = UIFont(name: "BentonSans", size: 18)
         statusLabel.numberOfLines = 0
+        statusLabel.shadowColor = UIColor.blackColor()
+        statusLabel.shadowOffset = CGSize(width: 0.1, height: 0.1)
+        
         
         let photoView = UIImageView(frame: photoFrame)
         photoView.image = UIImage(data: photo)
@@ -290,8 +311,8 @@ class BridgeViewController: UIViewController {
         
         let card = UIView(frame:deckFrame)
         card.addSubview(photoView)
-        card.addSubview(screenUnderTop)
-        card.addSubview(screenUnderBottom)
+        //card.addSubview(screenUnderTop)
+        //card.addSubview(screenUnderBottom)
         card.addSubview(nameLabel)
         card.addSubview(locationLabel)
         card.addSubview(statusLabel)
@@ -449,12 +470,23 @@ class BridgeViewController: UIViewController {
             lastCardInStack = aboveView!
         }
         
-    }
+        }
         if  j == 0 {
             displayNoMoreCards()
         }
         
-    
+        view.addSubview(toolbar)
+        view.addSubview(allTypesButton)
+        view.addSubview(allTypesLabel)
+        view.addSubview(businessButton)
+        view.addSubview(businessLabel)
+        view.addSubview(loveButton)
+        view.addSubview(loveLabel)
+        view.addSubview(friendshipButton)
+        view.addSubview(friendshipLabel)
+        view.addSubview(postStatusButton)
+        view.addSubview(disconnectIcon)
+        view.addSubview(connectIcon)
     }
     func downloadMoreCards(noOfCards:Int) -> Int{
         var count = 0
@@ -592,6 +624,7 @@ class BridgeViewController: UIViewController {
         }
         displayCards()
         displayToolBar()
+        allTypesButton.enabled = false
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
         query.cachePolicy = .NetworkElseCache
@@ -651,68 +684,107 @@ class BridgeViewController: UIViewController {
             case 0:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
                 
-                allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), forState: UIControlState.Normal)
-                businessButton.setImage(UIImage(named:  "Business_Icon_Text_Gray"), forState: UIControlState.Normal)
-                loveButton.setImage(UIImage(named:  "Love_Icon_Text_Gray"), forState: UIControlState.Normal)
-                friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Text_Gray"), forState: UIControlState.Normal)
-                //allTypesButton.setBackgroundImage(UIImage(named: "All_Types_Icon_Text"), forState: .Normal)
-                /*allTypesButton.selected = false
-                businessButton.selected = false
-                loveButton.selected = false
-                friendshipButton.selected = false*/
-                print("It's happening")
+                //updating which toolbar Button is selected
+                allTypesButton.enabled = false
+                businessButton.enabled = true
+                loveButton.enabled = true
+                friendshipButton.enabled = true
+                
+                //updating textColor necter-Type labels
+                let allTypesText = "All Types" as NSString
+                var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
+                allTypesLabel.attributedText = allTypesAttributedText
+                businessLabel.textColor = necterGray
+                loveLabel.textColor = necterGray
+                friendshipLabel.textColor = necterGray
                     break
             case 1:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
-                allTypesButton.setImage(UIImage(named: "All_Types_Icon_Text_Gray"), forState: UIControlState.Normal)
-                businessButton.setImage(UIImage(named:  "Business_Icon_Text"), forState: UIControlState.Normal)
-                loveButton.setImage(UIImage(named:  "Love_Icon_Text_Gray"), forState: UIControlState.Normal)
-                friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Text_Gray"), forState: UIControlState.Normal)
+                
+                //updating which toolbar Button is selected
+                allTypesButton.enabled = true
+                businessButton.enabled = false
+                loveButton.enabled = true
+                friendshipButton.enabled = true
+                
+                //updating textColor necter-Type labels
+                let allTypesText = "All Types" as NSString
+                var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
+                allTypesLabel.attributedText = allTypesAttributedText
+                businessLabel.textColor = businessBlue
+                loveLabel.textColor = necterGray
+                friendshipLabel.textColor = necterGray
+                
+                print("business clicked")
                     break
             case 2:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
-                allTypesButton.setImage(UIImage(named: "All_Types_Icon_Text_Gray"), forState: UIControlState.Normal)
-                businessButton.setImage(UIImage(named:  "Business_Icon_Text_Gray"), forState: UIControlState.Normal)
-                loveButton.setImage(UIImage(named:  "Love_Icon_Text"), forState: UIControlState.Normal)
-                friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Text_Gray"), forState: UIControlState.Normal)
+                
+                //updating which toolbar Button is selected
+                allTypesButton.enabled = true
+                businessButton.enabled = true
+                loveButton.enabled = false
+                friendshipButton.enabled = true
+                
+                //updating textColor necter-Type labels
+                let allTypesText = "All Types" as NSString
+                var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
+                allTypesLabel.attributedText = allTypesAttributedText
+                businessLabel.textColor = necterGray
+                loveLabel.textColor = loveRed
+                friendshipLabel.textColor = necterGray
                     break
             case 3:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
-                allTypesButton.setImage(UIImage(named: "All_Types_Icon_Text_Gray"), forState: UIControlState.Normal)
-                businessButton.setImage(UIImage(named:  "Business_Icon_Text_Gray"), forState: UIControlState.Normal)
-                loveButton.setImage(UIImage(named:  "Love_Icon_Text_Gray"), forState: UIControlState.Normal)
-                friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Text"), forState: UIControlState.Normal)
+                
+                //updating which toolbar Button is selected
+                allTypesButton.enabled = true
+                businessButton.enabled = true
+                loveButton.enabled = true
+                friendshipButton.enabled = false
+                
+                
+                //updating textColor necter-Type labels
+                let allTypesText = "All Types" as NSString
+                var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
+                allTypesLabel.attributedText = allTypesAttributedText
+                businessLabel.textColor = necterGray
+                loveLabel.textColor = necterGray
+                friendshipLabel.textColor = friendshipGreen
                     break
             default:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
-                allTypesButton.setImage(UIImage(named: "All_Types_Icon_Text_Gray"), forState: UIControlState.Normal)
-                businessButton.setImage(UIImage(named:  "Business_Icon_Text"), forState: UIControlState.Normal)
-                loveButton.setImage(UIImage(named:  "Love_Icon_Text_Gray"), forState: UIControlState.Normal)
-                friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Text_Gray"), forState: UIControlState.Normal)
+                
+                //updating which toolbar Button is selected
+                allTypesButton.enabled = false
+                businessButton.enabled = true
+                loveButton.enabled = true
+                friendshipButton.enabled = true
+                
+                //updating textColor necter-Type labels
+                let allTypesText = "All Types" as NSString
+                var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
+                allTypesLabel.attributedText = allTypesAttributedText
+                businessLabel.textColor = necterGray
+                loveLabel.textColor = necterGray
+                friendshipLabel.textColor = necterGray
         }
-            /*if tag == 0 {
-                //currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
-                allTypesButton.setImage(UIImage(named: "All_Types_Icon_Text"), forState: .Normal)
-                //allTypesButton.setBackgroundImage(UIImage(named: "All_Types_Icon_Text"), forState: .Normal)
-                print("Image should have changed")
-                //print(currentTypeOfCardsOnDisplay)
-            } else if image == UIImage(named: "Love-33x33.png") {
-                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
-                print(currentTypeOfCardsOnDisplay)
-            } else if image == UIImage(named: "Friendship-44x44.png") {
-                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
-                print(currentTypeOfCardsOnDisplay)
-            } else if{
-                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
-                print(currentTypeOfCardsOnDisplay)
-            }*/
         
             for i in 0..<stackOfCards.count {
                 stackOfCards[i].removeFromSuperview()
             }
             stackOfCards.removeAll()
             displayCards()
-            displayToolBar()
+            //displayToolBar()
             self.iconFrame = CGRectMake(0.97*self.screenWidth,0.03*self.screenHeight,0.03*self.screenWidth,0.03*self.screenHeight)
             self.iconLabel = UILabel(frame: iconFrame)
             self.view.addSubview(self.iconLabel)

@@ -277,13 +277,17 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-            let vc = segue.destinationViewController
-            let mirror = Mirror(reflecting: vc)
-//            if mirror.subjectType == BridgeViewController.self {
-//                self.transitionManager.animateRightToLeft = false
-//            }
-            vc.transitioningDelegate = self.transitionManager
+        let vc = segue.destinationViewController
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == BridgeViewController.self {
+            self.transitionManager.animationDirection = "Right"
+        } else if mirror.subjectType == NewBridgeStatusViewController.self {
+            self.transitionManager.animationDirection = "Top"
+        }
+        vc.transitioningDelegate = self.transitionManager
     }
+    
+    
  
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
