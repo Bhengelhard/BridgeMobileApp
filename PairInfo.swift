@@ -14,10 +14,11 @@ class PairInfo:NSObject, NSCoding {
     var profilePictures: [NSData]? = nil
     var location:[Double]? = nil
     var bridgeStatus:String? = nil
+    var city:String? = nil
 //    var profilePicturePFFile:PFFile? = nil
     var bridgeType:String? = nil
     var userId:String? = nil
-    init( name:String?, mainProfilePicture: NSData?, profilePictures: [NSData]?, location:[Double]?, bridgeStatus:String?, objectId:String?,bridgeType:String?,userId:String? ) { //, profilePicturePFFile:PFFile?
+    init( name:String?, mainProfilePicture: NSData?, profilePictures: [NSData]?, location:[Double]?, bridgeStatus:String?, objectId:String?,bridgeType:String?,userId:String?,city:String? ) { //, profilePicturePFFile:PFFile?
         self.name = name
         self.mainProfilePicture = mainProfilePicture
         self.profilePictures = profilePictures
@@ -27,6 +28,7 @@ class PairInfo:NSObject, NSCoding {
 //        self.profilePicturePFFile = profilePicturePFFile
         self.bridgeType = bridgeType
         self.userId = userId
+        self.city = city
         
     }
     
@@ -40,8 +42,9 @@ class PairInfo:NSObject, NSCoding {
         //let profilePicturePFFile = aDecoder.decodeObjectForKey("profilePicturePFFile") as! PFFile?
         let bridgeType = aDecoder.decodeObjectForKey("bridgeType") as! String?
         let userId = aDecoder.decodeObjectForKey("userId") as! String?
+        let city = aDecoder.decodeObjectForKey("city") as! String?
         self.init(name: name, mainProfilePicture: mainProfilePicture, profilePictures: profilePictures,
-                  location: location, bridgeStatus: bridgeStatus, objectId:objectId, bridgeType: bridgeType, userId:userId )
+                  location: location, bridgeStatus: bridgeStatus, objectId:objectId, bridgeType: bridgeType, userId:userId, city: city )
         //, profilePicturePFFile: profilePicturePFFile
     }
     
@@ -55,6 +58,7 @@ class PairInfo:NSObject, NSCoding {
        // aCoder.encodeObject(profilePicturePFFile, forKey: "profilePicturePFFile")
         aCoder.encodeObject(bridgeType, forKey: "bridgeType")
         aCoder.encodeObject(userId, forKey: "userId")
+        aCoder.encodeObject(city, forKey: "city")
         
     }
     

@@ -116,37 +116,43 @@ class BridgeViewController: UIViewController {
         }
         
     }
-    func setCityName(locationLabel: UILabel, locationCoordinates:[Double]) {
-        
-        var longitude :CLLocationDegrees = -122.0312186//locationCoordinates[0]//-122.0312186
-        var latitude :CLLocationDegrees = 37.33233141//locationCoordinates[1]//37.33233141
-        if locationCoordinates.count == 2{
-            longitude = locationCoordinates[1]
-            latitude = locationCoordinates[0]
+    func setCityName(locationLabel: UILabel, locationCoordinates:[Double], pairing:UserInfoPair) {
+        if locationLabel.tag == 0 && pairing.user1?.city != nil {
+            dispatch_async(dispatch_get_main_queue(), {
+                locationLabel.text = (pairing.user1?.city)!
+            })
         }
+        else if  locationLabel.tag == 1 && pairing.user2?.city != nil {
+            dispatch_async(dispatch_get_main_queue(), {
+                locationLabel.text = (pairing.user1?.city)!
+            })
+        }
+        else {
+            var longitude :CLLocationDegrees = -122.0312186//locationCoordinates[0]//-122.0312186
+            var latitude :CLLocationDegrees = 37.33233141//locationCoordinates[1]//37.33233141
+            if locationCoordinates.count == 2{
+                longitude = locationCoordinates[1]
+                latitude = locationCoordinates[0]
+            }
         
-        let location = CLLocation(latitude: latitude, longitude: longitude) //changed!!!
-        print(location)
-        
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
-            print(location)
+            let location = CLLocation(latitude: latitude, longitude: longitude) //changed!!!
+            CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+                if error != nil {
+                    print("Reverse geocoder failed with error" + error!.localizedDescription)
+                    return
+                }
             
-            if error != nil {
-                print("Reverse geocoder failed with error" + error!.localizedDescription)
-                return
-            }
-            
-            if placemarks!.count > 0 {
-                let pm = placemarks![0]
-                dispatch_async(dispatch_get_main_queue(), {
-                    locationLabel.text = pm.locality
-                })
-                print(pm.locality)
-            }
-            else {
-                print("Problem with the data received from geocoder")
-            }
-        })
+                if placemarks!.count > 0 {
+                    let pm = placemarks![0]
+                    dispatch_async(dispatch_get_main_queue(), {
+                        locationLabel.text = pm.locality
+                    })
+                }
+                else {
+                    print("Problem with the data received from geocoder")
+                }
+            })
+        }
     }
     func displayToolBar(){
         
@@ -266,16 +272,16 @@ class BridgeViewController: UIViewController {
         let lowerDeckFrame : CGRect = CGRectMake(0, 0.5*superDeckHeight, superDeckWidth, 0.5*superDeckHeight)
         return lowerDeckFrame
     }
-    func getUpperDeckCard(name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double]) -> UIView{
+    func getUpperDeckCard(name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double], pairing: UserInfoPair) -> UIView{
         let frame = getUpperDeckCardFrame()
-        return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates)
+        return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag: 0)
         
     }
-    func getLowerDeckCard(name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double]) -> UIView{
+    func getLowerDeckCard(name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double], pairing: UserInfoPair) -> UIView{
         let frame = getLowerDeckCardFrame()
-        return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates)
+        return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag:1)
     }
-    func getCard(deckFrame:CGRect, name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double]) -> UIView {
+    func getCard(deckFrame:CGRect, name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double], pairing:UserInfoPair, tag:Int) -> UIView {
         let nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
         let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
@@ -291,7 +297,8 @@ class BridgeViewController: UIViewController {
         nameLabel.font = UIFont(name: "Verdana", size: 20)
         
         let locationLabel = UILabel(frame: locationFrame)
-        setCityName(locationLabel, locationCoordinates: locationCoordinates)
+        locationLabel.tag = tag
+        setCityName(locationLabel, locationCoordinates: locationCoordinates, pairing:pairing)
         locationLabel.text = location
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
@@ -333,10 +340,10 @@ class BridgeViewController: UIViewController {
         return card
         
     }
-    func addCardPairView(aboveView:UIView?, name:String, location:String, status:String, photo:NSData, locationCoordinates1:[Double], name2:String, location2:String, status2:String, photo2:NSData, locationCoordinates2:[Double], cardColor:typesOfColor) -> UIView{
+    func addCardPairView(aboveView:UIView?, name:String, location:String, status:String, photo:NSData, locationCoordinates1:[Double], name2:String, location2:String, status2:String, photo2:NSData, locationCoordinates2:[Double], cardColor:typesOfColor, pairing:UserInfoPair) -> UIView{
         
-        let upperDeckCard = getUpperDeckCard(name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates1)
-        let lowerDeckCard = getLowerDeckCard(name2, location: location2, status: status2, photo: photo2, cardColor: cardColor,locationCoordinates:locationCoordinates2)
+        let upperDeckCard = getUpperDeckCard(name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates1, pairing:pairing)
+        let lowerDeckCard = getLowerDeckCard(name2, location: location2, status: status2, photo: photo2, cardColor: cardColor,locationCoordinates:locationCoordinates2, pairing:pairing)
         let superDeckFrame : CGRect = CGRectMake(superDeckX, superDeckY, superDeckWidth, superDeckHeight)
         let superDeckView = UIView(frame:superDeckFrame)
         superDeckView.layer.cornerRadius = 15
@@ -482,7 +489,7 @@ class BridgeViewController: UIViewController {
             }
             let color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
             
-            aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photo1,locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photo2,locationCoordinates2: locationCoordinates2, cardColor: color)
+            aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photo1,locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photo2,locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
             lastCardInStack = aboveView!
         }
         
@@ -580,7 +587,7 @@ class BridgeViewController: UIViewController {
             }
             let color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
             
-            aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photo1, locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photo2, locationCoordinates2: locationCoordinates2, cardColor: color)
+            aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photo1, locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photo2, locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
             lastCardInStack = aboveView
         }   
         }
