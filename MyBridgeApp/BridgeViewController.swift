@@ -10,7 +10,8 @@ import UIKit
 import Parse
 import MapKit
 class BridgeViewController: UIViewController {
-    @IBOutlet weak var navigationBar: UINavigationBar!
+    //@IBOutlet weak var navigationBar: UINavigationBar!
+    let navigationBar = UINavigationBar()
     var bridgePairings:[UserInfoPair]? = nil
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -49,10 +50,18 @@ class BridgeViewController: UIViewController {
     let friendshipLabel = UILabel()
     let postStatusButton = UIButton()
     
+    //navbar creation
+    let navItem = UINavigationItem()
+    var badgeCount = Int()
+    let profileButton = UIButton()
+    let messagesButton = UIButton()
+    
+    
     //Connect and disconnect Icons
     let connectIcon = UIImageView()
     let disconnectIcon = UIImageView()
     
+    //necter Colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
     let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
@@ -585,16 +594,86 @@ class BridgeViewController: UIViewController {
     func updateNoOfUnreadMessagesIcon(notification: NSNotification) {
         
         let aps = notification.userInfo!["aps"] as? NSDictionary
-        let badge = aps!["badge"] as? Int
+        badgeCount = (aps!["badge"] as? Int)!
         //print("Listened at updateNoOfUnreadMessagesIcon - \(badge)")
         dispatch_async(dispatch_get_main_queue(), {
-            self.iconLabel.text = String(badge!)
+            
+            if self.badgeCount != 0 {
+                self.iconLabel.text = String(self.badgeCount)
+                //self.displayNavigationBar()
+                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
+                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Highlighted)
+                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Selected)
+                self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
+                self.navigationBar.setItems([self.navItem], animated: false)
+                print("got message")
+            }
+            
             
         })
         
         
     }
-
+    func displayNavigationBar(){
+        
+        //setting the profileIcon to the leftBarButtonItem
+        let profileIcon = UIImage(named: "Profile_Icon_Gray")
+        profileButton.setImage(profileIcon, forState: .Normal)
+        profileButton.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Selected)
+        profileButton.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Highlighted)
+        profileButton.addTarget(self, action: #selector(profileTapped(_:)), forControlEvents: .TouchUpInside)
+        profileButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
+        var leftBarButton = UIBarButtonItem(customView: profileButton)
+        navItem.leftBarButtonItem = leftBarButton
+        
+        //setting the messagesIcon to the rightBarButtonItem
+        var messagesIcon = UIImage()
+        //setting messagesIcon to the icon specifying if there are or are not notifications
+        if badgeCount == 0 {
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), forState: .Normal)
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Selected)
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Highlighted)
+        } else {
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Highlighted)
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Selected)
+        }
+        
+        messagesButton.addTarget(self, action: #selector(messagesTapped(_:)), forControlEvents: .TouchUpInside)
+        messagesButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
+        messagesButton.contentMode = UIViewContentMode.ScaleAspectFill
+        messagesButton.clipsToBounds = true
+        var rightBarButton = UIBarButtonItem(customView: messagesButton)
+        navItem.rightBarButtonItem = rightBarButton
+        
+        //setting the navBar color and title
+        navigationBar.setItems([navItem], animated: false)
+        navigationBar.topItem?.title = "necter"
+        navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 34)!, NSForegroundColorAttributeName: necterYellow]
+        navigationBar.barStyle = .Black
+        navigationBar.barTintColor = UIColor.whiteColor()
+        
+        self.view.addSubview(navigationBar)
+        
+        //setting the number of notifications to the iconLabel
+        iconLabel = UILabel(frame: messagesButton.frame)
+        iconLabel.center.x = messagesButton.center.x
+        iconLabel.center.y = messagesButton.center.y
+        //iconLabel.font = UIFont(name: "BentonSans", size: 14)
+        iconLabel.textColor = necterColor
+        //iconLabel.text = String(badgeCount)
+        view.addSubview(iconLabel)
+    }
+    func profileTapped(sender: UIBarButtonItem) {
+        profileButton.selected = true
+        performSegueWithIdentifier("showProfilePageFromBridgeView", sender: self)
+    }
+    
+    func messagesTapped(sender: UIBarButtonItem) {
+        messagesButton.selected = true
+        performSegueWithIdentifier("showMessagesPageFromBridgeView", sender: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //        while localStorageUtility.waitForCardsToBeDownloaded(){
@@ -606,22 +685,18 @@ class BridgeViewController: UIViewController {
 //        localStorageUtility.getBridgePairingsFromCloud()
 //        bridgePairings = LocalData().getPairings()
         
-        //vc = storyboard!.instantiateViewControllerWithIdentifier("NewBridgeStatusViewController") as? NewBridgeStatusViewController
-        
         //NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
+        
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
-        self.iconFrame = CGRectMake(0.74*self.screenWidth,0.04*self.screenHeight,0.03*self.screenWidth,0.02*self.screenHeight)
-        self.iconLabel = UILabel(frame: iconFrame)
-        self.iconLabel.layer.backgroundColor = UIColor.redColor().CGColor
-        self.iconLabel.layer.cornerRadius = 5
-        self.iconLabel.textColor = necterColor
-        self.view.addSubview(self.iconLabel)
 
         bridgePairings = LocalData().getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
-        localStorageUtility.getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
-        bridgePairings = LocalData().getPairings()
+            localStorageUtility.getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
+            bridgePairings = LocalData().getPairings()
         }
+        
+        displayNavigationBar()
         displayCards()
         displayToolBar()
         allTypesButton.enabled = false
@@ -631,26 +706,43 @@ class BridgeViewController: UIViewController {
         query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
             if error == nil {
                 if let results = results {
-                var badgeCount = 0
+                self.badgeCount = 0
                 for i in 0..<results.count{
                     let result = results[i]
                     if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(result["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
                         let noOfMessagesViewed = noOfSingleMessagesViewed[(PFUser.currentUser()?.objectId)!] ?? 0
-                        badgeCount += (result["no_of_single_messages"] as! Int) - noOfMessagesViewed
+                        self.badgeCount += (result["no_of_single_messages"] as! Int) - noOfMessagesViewed
                     }
-                    
                 }
                     dispatch_async(dispatch_get_main_queue(), {
-                        self.iconLabel.text = String(badgeCount)
-                        
-                        
+                        //self.badgeCount = 0
+                        if self.badgeCount != 0 {
+                            //setting the iconLabel to the number of notifications
+                            self.iconLabel.text = String(self.badgeCount)
+                            //setting the messagesIcon to the notification rightBarButtonItem
+                            //self.displayNavigationBar()
+                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
+                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Highlighted)
+                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Selected)
+                            self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
+                            self.navigationBar.setItems([self.navItem], animated: false)
+                        } else {
+                            self.iconLabel.text = ""
+                            //self.displayNavigationBar()
+                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), forState: .Normal)
+                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Highlighted)
+                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Selected)
+
+                            self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
+                            self.navigationBar.setItems([self.navItem], animated: false)
+                        }
                     })
 
                 }
             }
         })
         
-        connectIcon.image = UIImage(named: "Connect_Icon")
+        connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.frame = CGRect(x: 0.8*screenWidth+10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
         connectIcon.alpha = 0.0
         view.addSubview(connectIcon)
@@ -667,7 +759,7 @@ class BridgeViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
    
-        navigationBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0.1*screenHeight)
+        navigationBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0.11*screenHeight)
 
     }
     
@@ -784,11 +876,6 @@ class BridgeViewController: UIViewController {
             }
             stackOfCards.removeAll()
             displayCards()
-            //displayToolBar()
-            self.iconFrame = CGRectMake(0.97*self.screenWidth,0.03*self.screenHeight,0.03*self.screenWidth,0.03*self.screenHeight)
-            self.iconLabel = UILabel(frame: iconFrame)
-            self.view.addSubview(self.iconLabel)
-    
     }
     func bridged(){
         let bridgePairings = LocalData().getPairings()
@@ -799,7 +886,6 @@ class BridgeViewController: UIViewController {
                     break
                 }
                 x = i
-                
             }
             let message = PFObject(className: "Messages")
             let acl = PFACL()
@@ -863,22 +949,14 @@ class BridgeViewController: UIViewController {
             catch {
                 
             }
-//            message.saveInBackgroundWithBlock({ (success, error) in
-//                print("new Message Created")
-            
-//            })
             self.bridgePairings!.removeAtIndex(x)
-            //print("bridgePairings.count - \(bridgePairings.count)")
             let localData = LocalData()
             localData.setPairings(self.bridgePairings!)
             localData.synchronize()
             downloadMoreCards(1)
             segueToSingleMessage = true
             performSegueWithIdentifier("showSingleMessage", sender: nil)
-
-
         }
-
     }
     func nextPair(){
         if var bridgePairings = bridgePairings {
@@ -900,8 +978,6 @@ class BridgeViewController: UIViewController {
                 }
             })
             self.bridgePairings!.removeAtIndex(x)
-            
-            //print("bridgePairings.count - \(bridgePairings.count)")
             let localData = LocalData()
             localData.setPairings(self.bridgePairings!)
             localData.synchronize()
@@ -941,12 +1017,6 @@ class BridgeViewController: UIViewController {
                     
                 }
             }
-            
-
-//            if c == 0 {
-//                
-//            }
-            
         }
         
 
@@ -955,10 +1025,9 @@ class BridgeViewController: UIViewController {
     func isDragged(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translationInView(self.view)
         let superDeckView = gesture.view!
-        //superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5) + translation.y)
         superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight / 2 + translation.y)
         let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
-        let scale = min(/*150 / abs(xFromCenter)*/ CGFloat(1.0), 1)
+        let scale = min(CGFloat(1.0), 1)
         var rotation = CGAffineTransformMakeRotation(xFromCenter / 350)
         var stretch = CGAffineTransformScale(rotation, scale, scale)
         superDeckView.transform = stretch
@@ -975,21 +1044,17 @@ class BridgeViewController: UIViewController {
                 self.connectIcon.frame = CGRect(x: 0.35*self.screenWidth, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             })
         } else {
-            
             UIView.animateWithDuration(0.7, animations: {
                 self.connectIcon.frame = CGRect(x: 0.8*self.screenWidth+10, y: 0.5*self.screenHeight-0.1*self.screenWidth, width: 0.2*self.screenWidth, height: 0.2*self.screenWidth)
                 self.connectIcon.alpha = 0.0
                 self.disconnectIcon.frame = CGRect(x: -10, y: 0.5*self.screenHeight-0.1*self.screenWidth, width: 0.2*self.screenWidth, height: 0.2*self.screenWidth)
                 self.disconnectIcon.alpha = 0.0
             })
-            
-            //superDeckView.layer.borderColor = arrayOfCardColors[0]
         }
         
         if gesture.state == UIGestureRecognizerState.Ended {
             
             if superDeckView.center.x < 0.25*screenWidth {
-                //print("nextPair")
                 connectIcon.frame = CGRect(x: 0.8*screenWidth+10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
                 connectIcon.alpha = 0.0
                 disconnectIcon.frame = CGRect(x: -10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
@@ -1003,16 +1068,12 @@ class BridgeViewController: UIViewController {
                 removeCard = true
                 
                 superDeckView.center.x = 2.0*screenWidth
-                //print("bridged")
                 bridged()
             }
             if removeCard {
                 superDeckView.removeFromSuperview()
             }
             else {
-                
-                
-                //superDeckView.center = CGPoint(x: self.screenWidth / 2, y: self.screenHeight*0.087 + (screenHeight*0.85*0.5))
                 UIView.animateWithDuration(0.7, animations: {
                     //var superDeckViewFrame = superDeckView.frame
                     superDeckView.layer.borderColor = self.arrayOfCardColors[0]
@@ -1020,12 +1081,7 @@ class BridgeViewController: UIViewController {
                     stretch = CGAffineTransformScale(rotation, 1, 1)
                     superDeckView.transform = stretch
                     superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
-                    /*superDeckView.center.x = self.screenWidth/2
-                    superDeckView.center.y = self.screenHeight/2*/
-                    /*self.connectIcon.frame = CGRect(x: self.screenWidth+10, y: 0.5*self.screenHeight-0.1*self.screenWidth, width: 0.2*self.screenWidth, height: 0.2*self.screenWidth)
-                    self.connectIcon.alpha = 0.0*/
                 })
-                //superDeckView.center = CGPoint(x: self.screenWidth / 2, y: self.screenHeight / 2)
                 
             }
         }
@@ -1048,6 +1104,8 @@ class BridgeViewController: UIViewController {
                 self.transitionManager.animationDirection = "Left"
             } else if mirror.subjectType == NewBridgeStatusViewController.self {
                 self.transitionManager.animationDirection = "Top"
+            } else if mirror.subjectType == MessagesViewController.self {
+                self.transitionManager.animationDirection = "Right"
             }
             vc.transitioningDelegate = self.transitionManager
             

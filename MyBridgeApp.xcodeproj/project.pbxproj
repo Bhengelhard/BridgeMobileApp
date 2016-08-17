@@ -10,10 +10,6 @@
 		1B0E053E1D1A597C00FEF514 /* MessagesTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */; };
 		1B4A11F71D1C4547002FB859 /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */; };
 		1B4A11FD1D1C5F56002FB859 /* NewMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */; };
-		1B4A11FF1D1C8A67002FB859 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B4A11FE1D1C8A67002FB859 /* camera.png */; };
-		1B4A12011D1C8C94002FB859 /* camera_icon_small.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1B4A12001D1C8C94002FB859 /* camera_icon_small.jpg */; };
-		1B82A0841D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */; };
-		1B915A971D25E5DB004E0E8E /* blue_dot_small.gif in Resources */ = {isa = PBXBuildFile; fileRef = 1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */; };
 		1BA782271D11FE47000B0B3C /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA782261D11FE47000B0B3C /* LocalData.swift */; };
 		1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */; };
 		1BE5C1EB1D06010600D6AA81 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */; };
@@ -24,12 +20,10 @@
 		1BE5C1F71D060CAF00D6AA81 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F51D060CAF00D6AA81 /* Parse.framework */; };
 		1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */; };
 		1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */; };
-		1BE888D71D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */; };
 		1BF57CEB1D3E9308005F2DE7 /* SingleMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */; };
 		1BF57CED1D3E9404005F2DE7 /* SingleMessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */; };
 		1BF5A6C31D1FAB1800EE6B95 /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */; };
 		1BF5A6C51D2174DF00EE6B95 /* NewBridgeStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */; };
-		1BF5A6C71D231B7C00EE6B95 /* iconCancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */; };
 		1BF692CA1D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692C81D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld */; };
 		1BF692D31D09E1950030B6D0 /* Users+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D11D09E1950030B6D0 /* Users+CoreDataProperties.swift */; };
 		1BF692D41D09E1950030B6D0 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D21D09E1950030B6D0 /* Users.swift */; };
@@ -37,9 +31,6 @@
 		1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DA1D0B13E400F79E00 /* UserInfo.swift */; };
 		1BF998DD1D0B158E00F79E00 /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DC1D0B158E00F79E00 /* PairInfo.swift */; };
 		1BF998DF1D0B315F00F79E00 /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */; };
-		305691C61D514D61007FD050 /* Love-33x33.png in Resources */ = {isa = PBXBuildFile; fileRef = 305691C51D514D61007FD050 /* Love-33x33.png */; };
-		305691C81D514E19007FD050 /* Business-33x33.png in Resources */ = {isa = PBXBuildFile; fileRef = 305691C71D514E19007FD050 /* Business-33x33.png */; };
-		305691CC1D514FE9007FD050 /* Friendship-44x44.png in Resources */ = {isa = PBXBuildFile; fileRef = 305691CB1D514FE9007FD050 /* Friendship-44x44.png */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -62,17 +53,12 @@
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
 		CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD761CEDED9600695B15 /* Main.storyboard */; };
 		E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */; };
-		E92F2E251D5CC010004CA2FD /* Icon_Business_Square_Text.ai in Resources */ = {isa = PBXBuildFile; fileRef = E92F2E241D5CC010004CA2FD /* Icon_Business_Square_Text.ai */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableCell.swift; sourceTree = SOURCE_ROOT; };
 		1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageViewController.swift; sourceTree = SOURCE_ROOT; };
 		1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
-		1B4A11FE1D1C8A67002FB859 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = Resources/camera.png; sourceTree = SOURCE_ROOT; };
-		1B4A12001D1C8C94002FB859 /* camera_icon_small.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = camera_icon_small.jpg; sourceTree = "<group>"; };
-		1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen-shot-2012-04-26-at-10-40-51-am.png"; sourceTree = "<group>"; };
-		1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = blue_dot_small.gif; sourceTree = "<group>"; };
 		1BA782261D11FE47000B0B3C /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalData.swift; sourceTree = "<group>"; };
 		1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageContent.swift; path = MyBridgeApp/MessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
@@ -83,12 +69,10 @@
 		1BE5C1F51D060CAF00D6AA81 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageUtility.swift; sourceTree = "<group>"; };
 		1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = SOURCE_ROOT; };
-		1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Editing-Rectangle-Stroked-icon.png"; sourceTree = "<group>"; };
 		1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
 		1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = Resources/TransitionManager.swift; sourceTree = SOURCE_ROOT; };
 		1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewBridgeStatusViewController.swift; path = Resources/NewBridgeStatusViewController.swift; sourceTree = SOURCE_ROOT; };
-		1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconCancel.png; sourceTree = "<group>"; };
 		1BF692C91D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyBridgeAppDataModel.xcdatamodel; sourceTree = "<group>"; };
 		1BF692D11D09E1950030B6D0 /* Users+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Users+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1BF692D21D09E1950030B6D0 /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
@@ -96,9 +80,6 @@
 		1BF998DA1D0B13E400F79E00 /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		1BF998DC1D0B158E00F79E00 /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PairInfo.swift; sourceTree = "<group>"; };
 		1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoPair.swift; sourceTree = "<group>"; };
-		305691C51D514D61007FD050 /* Love-33x33.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Love-33x33.png"; sourceTree = "<group>"; };
-		305691C71D514E19007FD050 /* Business-33x33.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Business-33x33.png"; sourceTree = "<group>"; };
-		305691CB1D514FE9007FD050 /* Friendship-44x44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Friendship-44x44.png"; sourceTree = "<group>"; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
@@ -123,7 +104,6 @@
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD761CEDED9600695B15 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = MyBridgeApp/StatusTableViewCell.swift; sourceTree = SOURCE_ROOT; };
-		E92F2E241D5CC010004CA2FD /* Icon_Business_Square_Text.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icon_Business_Square_Text.ai; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,18 +130,8 @@
 		814C3AC51B69877600E307BB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				305691C51D514D61007FD050 /* Love-33x33.png */,
-				305691C71D514E19007FD050 /* Business-33x33.png */,
-				305691CB1D514FE9007FD050 /* Friendship-44x44.png */,
-				E92F2E241D5CC010004CA2FD /* Icon_Business_Square_Text.ai */,
 				30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */,
 				30EA352C1D4FD12C00B7F095 /* Screen over Image.png */,
-				1B915A961D25E5DB004E0E8E /* blue_dot_small.gif */,
-				1BF5A6C61D231B7C00EE6B95 /* iconCancel.png */,
-				1B4A12001D1C8C94002FB859 /* camera_icon_small.jpg */,
-				1B4A11FE1D1C8A67002FB859 /* camera.png */,
-				1B82A0831D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png */,
-				1BE888D61D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png */,
 				CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */,
 				CBEFCD661CE35DB900695B15 /* suzy's_profile_picture.jpg */,
 				814C3AC81B69877600E307BB /* Images.xcassets */,
@@ -319,19 +289,9 @@
 				CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */,
 				30EA352D1D4FD12C00B7F095 /* Screen over Image.png in Resources */,
 				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
-				1BE888D71D146BC100EA6DA4 /* Editing-Rectangle-Stroked-icon.png in Resources */,
-				305691CC1D514FE9007FD050 /* Friendship-44x44.png in Resources */,
-				1B915A971D25E5DB004E0E8E /* blue_dot_small.gif in Resources */,
-				305691C81D514E19007FD050 /* Business-33x33.png in Resources */,
-				1B4A11FF1D1C8A67002FB859 /* camera.png in Resources */,
 				CB6A329B1CC996F400FADB13 /* BentonSans-Light copy.otf in Resources */,
 				30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */,
 				CBEFCD671CE35DB900695B15 /* suzy's_profile_picture.jpg in Resources */,
-				305691C61D514D61007FD050 /* Love-33x33.png in Resources */,
-				E92F2E251D5CC010004CA2FD /* Icon_Business_Square_Text.ai in Resources */,
-				1B4A12011D1C8C94002FB859 /* camera_icon_small.jpg in Resources */,
-				1B82A0841D18752A000B6AFE /* screen-shot-2012-04-26-at-10-40-51-am.png in Resources */,
-				1BF5A6C71D231B7C00EE6B95 /* iconCancel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

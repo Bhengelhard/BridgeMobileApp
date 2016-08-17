@@ -30,11 +30,6 @@ func getWeekDay(num:Int)->String{
 
 
 class MessagesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating {
-    //@IBOutlet weak var toolBar: UIToolbar!
-    @IBOutlet weak var navigationBar: UINavigationBar!
-    //@IBOutlet weak var loveButton: UIBarButtonItem!
-    //@IBOutlet weak var businessButton: UIBarButtonItem!
-    //@IBOutlet weak var friendshipButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
     
     let screenWidth = UIScreen.mainScreen().bounds.width
@@ -44,6 +39,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
     let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
     let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
+    
+    //creating navigation Bar
+    let navigationBar = UINavigationBar()
+    let necterButton = UIButton()
     
     //toolbar buttons
     let toolbar = UIView()
@@ -79,7 +78,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var singleMessageId = ""
     let transitionManager = TransitionManager()
     
-    @IBAction func segueToBridgeViewController(sender: AnyObject) {
+    /*@IBAction func segueToBridgeViewController(sender: AnyObject) {
         self.runBackgroundThread = false
         navigationController?.popViewControllerAnimated(true)
         
@@ -91,7 +90,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     // startBackgroundThread() reloads the table when the 3 async Parse tasks are complete
     @IBAction func bridgeTapped(sender: AnyObject) {
         performSegueWithIdentifier("showBridgeFromMessages", sender: self)
-    }
+    }*/
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             NSNotificationCenter.defaultCenter().removeObserver(self)
            self.runBackgroundThread = false
@@ -411,11 +410,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func postStatusTapped(sender: UIButton ){
         print("Post Tapped")
         performSegueWithIdentifier("showNewStatusViewControllerFromMessages", sender: self)
-        //presentViewController(vc!, animated: true, completion: nil)
     }
     
     func filterTapped(sender: UIButton){
-        //print(currentTypeOfCardsOnDisplay)
         let tag = sender.tag
         switch(tag){
         case 0:
@@ -435,6 +432,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             businessLabel.textColor = necterGray
             loveLabel.textColor = necterGray
             friendshipLabel.textColor = necterGray
+            
+            //filtering the messages table
+            allBridgesTapped()
             break
         case 1:
             //updating which toolbar Button is selected
@@ -452,7 +452,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             loveLabel.textColor = necterGray
             friendshipLabel.textColor = necterGray
             
-            print("business clicked")
+            //filtering the messages table
+            businessTapped()
             break
         case 2:
             //updating which toolbar Button is selected
@@ -469,6 +470,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             businessLabel.textColor = necterGray
             loveLabel.textColor = loveRed
             friendshipLabel.textColor = necterGray
+            
+            //filtering the messages table
+            loveTapped()
             break
         case 3:
             //updating which toolbar Button is selected
@@ -486,6 +490,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             businessLabel.textColor = necterGray
             loveLabel.textColor = necterGray
             friendshipLabel.textColor = friendshipGreen
+            
+            //filtering the messages table
+            friendshipTapped()
             break
         default:
             //updating which toolbar Button is selected
@@ -504,6 +511,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             businessLabel.textColor = necterGray
             loveLabel.textColor = necterGray
             friendshipLabel.textColor = necterGray
+            
+            //filtering the messages table
+            allBridgesTapped()
         }
     }
     func friendshipTapped() {
@@ -548,11 +558,48 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         self.tableView.reloadData()
     }
+    func displayNavigationBar(){
+        
+        let navItem = UINavigationItem()
+        
+        //setting the necterIcon to the rightBarButtonItem
+        //setting messagesIcon to the icon specifying if there are or are not notifications
+        necterButton.setImage(UIImage(named: "All_Types_Icon_Gray"), forState: .Normal)
+        necterButton.setImage(UIImage(named: "Necter_Icon"), forState: .Selected)
+        necterButton.setImage(UIImage(named: "Necter_Icon"), forState: .Highlighted)
+        necterButton.addTarget(self, action: #selector(necterIconTapped(_:)), forControlEvents: .TouchUpInside)
+        necterButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
+        necterButton.contentMode = UIViewContentMode.ScaleAspectFill
+        necterButton.clipsToBounds = true
+        let rightBarButton = UIBarButtonItem(customView: necterButton)
+        navItem.leftBarButtonItem = rightBarButton
+        
+        //setting the navBar color and title
+        navigationBar.setItems([navItem], animated: false)
+        
+        let navBarTitleView = UIView()
+        navBarTitleView.frame = CGRect(x: 0, y: 0, width: 0.06*screenHeight, height: 0.06*screenHeight)
+        let titleImageView = UIImageView(image: UIImage(named: "Messages_Icon_Yellow"))
+        titleImageView.frame = CGRect(x: 0, y: 0, width: navBarTitleView.frame.size.width , height: navBarTitleView.frame.size.height)
+        titleImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        titleImageView.clipsToBounds = true
+        navBarTitleView.addSubview(titleImageView)
+        navigationBar.topItem?.titleView = navBarTitleView
+        
+        navigationBar.barStyle = .Black
+        navigationBar.barTintColor = UIColor.whiteColor()
+        
+        self.view.addSubview(navigationBar)
+    }
+    func necterIconTapped (sender: UIBarButtonItem) {
+        necterButton.selected = true
+        performSegueWithIdentifier("showBridgeFromMessages", sender: self)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //create NavigationBar
-        
+        displayNavigationBar()
         
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadMessageTable), name: "reloadTheMessageTable", object: nil)
@@ -604,8 +651,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLayoutSubviews() {
         
-        navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.1*screenHeight)
-        tableView.frame = CGRect(x: 0, y:0.1*screenHeight, width:screenWidth, height:0.8*screenHeight)
+        navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.11*screenHeight)
+        tableView.frame = CGRect(x: 0, y:0.11*screenHeight, width:screenWidth, height:0.79*screenHeight)
         
     }
     
