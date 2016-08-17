@@ -131,6 +131,7 @@ class BridgeViewController: UIViewController {
         
     }
     func setCityName(locationLabel: UILabel, locationCoordinates:[Double], pairing:UserInfoPair) {
+        // We will store the city names to LocalData.  Not required now. But will ne be needed in fututre when when optimize. 
         if locationLabel.tag == 0 && pairing.user1?.city != nil {
             dispatch_async(dispatch_get_main_queue(), {
                 locationLabel.text = (pairing.user1?.city)!
@@ -333,7 +334,9 @@ class BridgeViewController: UIViewController {
         
         let locationLabel = UILabel(frame: locationFrame)
         locationLabel.tag = tag
+        if location == "" {
         setCityName(locationLabel, locationCoordinates: locationCoordinates, pairing:pairing)
+        }
         locationLabel.text = location
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
@@ -489,18 +492,28 @@ class BridgeViewController: UIViewController {
             }
             if let location_values1 = pairing.user1?.location {
                 locationCoordinates1 = location_values1
-                location1 = "Location has no name"
             }
             else {
-                location1 = "Location has no name"
             }
             if let location_values2 = pairing.user2?.location {
                 locationCoordinates2 = location_values2
-                location2 = "Location has no name"
             }
             else {
-                location2 = "Location has no name"
             }
+            
+            if let city = pairing.user1?.city {
+                location1 = city
+            }
+            else {
+                location1 = ""
+            }
+            if let city = pairing.user2?.city {
+                location2 = city
+            }
+            else {
+                location2 = ""
+            }
+            
             
             if let bridgeStatus = pairing.user1?.bridgeStatus {
                 status1 = bridgeStatus
@@ -601,15 +614,26 @@ class BridgeViewController: UIViewController {
                 location1 = "Location has no name"
             }
             else {
-                location1 = "Location has no name"
             }
             if let location_values2 = pairing.user2?.location {
                 locationCoordinates2 = location_values2
-                location2 = "Location has no name"
             }
             else {
-                location2 = "Location has no name"
             }
+            
+            if let city = pairing.user1?.city {
+                location1 = city
+            }
+            else {
+                location1 = ""
+            }
+            if let city = pairing.user2?.city {
+                location2 = city
+            }
+            else {
+                location2 = ""
+            }
+
             
             if let bridgeStatus = pairing.user1?.bridgeStatus {
                 status1 = bridgeStatus

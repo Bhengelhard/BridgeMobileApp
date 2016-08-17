@@ -651,16 +651,38 @@ class LocalStorageUtility{
     }
     func getBridgePairings(){
         if let friendList = PFUser.currentUser()?["friend_list"] as? [String] {
-                        //print("ratings")
-                        PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
-                            (response: AnyObject?, error: NSError?) -> Void in
-                            if let ratings = response as? String {
-                                print(ratings)
-                            }
-                            else {
-                                print(error)
-                            }
-                        }
+            var latitude:CLLocationDegrees = -122.0312186
+            var longitude:CLLocationDegrees = 37.33233141
+            if let location = PFUser.currentUser()?["location"] as? PFGeoPoint {
+                latitude = location.latitude
+                longitude = location.longitude
+            }
+            let location = CLLocation(latitude: latitude, longitude: longitude)
+            CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+                if error != nil {
+                    print("Reverse geocoder failed with error" + error!.localizedDescription)
+                    PFUser.currentUser()?["city"] = ""
+                    return
+                }
+                
+                if placemarks!.count > 0 {
+                    let pm = placemarks![0]
+                    PFUser.currentUser()?["city"] = pm.locality
+                }
+                else {
+                    PFUser.currentUser()?["city"] = ""
+                    print("Problem with the data received from geocoder")
+                }
+            })
+            PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
+                (response: AnyObject?, error: NSError?) -> Void in
+                    if let ratings = response as? String {
+                        print(ratings)
+                    }
+                    else {
+                        print(error)
+                    }
+            }
         }
  //       getBridgePairingsFromCloud()
 //             var ignoredPairings = [[String]]()
@@ -819,6 +841,14 @@ class LocalStorageUtility{
                         if let ob = result["user2_bridge_status"] {
                             bridgeStatus2 =  ob as? String
                         }
+                        var city1:String? = nil
+                        var city2:String? = nil
+                        if let ob = result["user1_city"] {
+                            city1 =  ob as? String
+                        }
+                        if let ob = result["user2_city"] {
+                            city2 =  ob as? String
+                        }
                         
                         
                         var bridgeType1:String? = nil
@@ -857,8 +887,8 @@ class LocalStorageUtility{
                         }
                         result.saveInBackground()
                         
-                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: nil)
-                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: nil)
+                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
+                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
                         let userInfoPair = UserInfoPair(user1: user1, user2: user2)
                         pairings.append(userInfoPair)
                         print("userId1, userId2 - \(userId1),\(userId2)")

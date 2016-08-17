@@ -378,48 +378,70 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
             //cell2.label.text = "'nect for Business"
+            if let interestedInBusiness = PFUser.currentUser()?["interested_in_business"] as? Bool {
+                cell2.preferencesSwitch.on = interestedInBusiness
+            }
+            else {
+                cell2.preferencesSwitch.on = true
+            }
             cell2.preferencesSwitch.onTintColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
             //setting multi-font label
-            let string = "connect for business" as NSString
-            let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
-            let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
+            //let string = "connect for business" as NSString
+            //let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
+            //let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
             // Part of string to be necter font
-            attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
-            cell2.label.attributedText = attributedString
+            //attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
+            cell2.label.text = "connect for business"
+            cell2.label.font = UIFont(name: "BentonSans", size: 18)
             
             return cell2
             
         } else if indexPath.row == 2 {
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
+            if let interestedInLove = PFUser.currentUser()?["interested_in_love"] as? Bool {
+                cell2.preferencesSwitch.on = interestedInLove
+            }
+            else {
+                cell2.preferencesSwitch.on = true
+            }
             cell2.preferencesSwitch.onTintColor = UIColor.init(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
             //setting multi-font label
-            let string = "connect for love" as NSString
-            let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
-            let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
+            //let string = "connect for love" as NSString
+            //let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
+            //let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
             // Part of string to be necter font
-            attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
-            cell2.label.attributedText = attributedString
+            //attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
+            cell2.label.text = "connect for love"
+            cell2.label.font = UIFont(name: "BentonSans", size: 18)
             
             return cell2
             
         } else if indexPath.row == 3 {
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
+            if let interestedInFriendship = PFUser.currentUser()?["interested_in_friendship"] as? Bool {
+                cell2.preferencesSwitch.on = interestedInFriendship
+            }
+            else {
+                cell2.preferencesSwitch.on = true
+            }
+
             cell2.preferencesSwitch.onTintColor = UIColor(red: 96/255, green: 182/255, blue: 163/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
             //setting multi-font label
-            let string = "connect for friendship" as NSString
-            let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
-            let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
+            //let string = "connect for friendship" as NSString
+            //let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
+            //let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
             // Part of string to be necter font
-            attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
-            cell2.label.attributedText = attributedString
+            //attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
+            cell2.label.text = "connect for friendship"
+            cell2.label.font = UIFont(name: "BentonSans", size: 18)
             
             return cell2
             
