@@ -18,7 +18,7 @@ class ProfileTableViewCell2: UITableViewCell {
     
     //Switches Tapped
     @IBAction func preferencesSwitchTapped(sender: AnyObject) {
-        if label.text == "Bridge for Business" {
+        if label.text == "connect for business" {
             if preferencesSwitch.on{
                 label.textColor = UIColor.blackColor()
                 if let _ = PFUser.currentUser() {
@@ -31,7 +31,7 @@ class ProfileTableViewCell2: UITableViewCell {
                     PFUser.currentUser()?["interested_in_business"] = false
                 }
             }
-        } else if label.text == "Bridge for Love" {
+        } else if label.text == "connect for love" {
             if preferencesSwitch.on{
                 label.textColor = UIColor.blackColor()
                 if let _ = PFUser.currentUser() {
