@@ -137,7 +137,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             PFUser.currentUser()?["interested_in_friendship"] = friendshipSwitch.on
             PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
                 if success {
-                    //LocalStorageUtility().getBridgePairings() remember to uncomment this!
+                    LocalStorageUtility().updateBridgePairingsTable()// remember to uncomment this!
                 }
             })
         }

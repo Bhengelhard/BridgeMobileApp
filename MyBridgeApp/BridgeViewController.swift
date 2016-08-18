@@ -26,7 +26,7 @@ class BridgeViewController: UIViewController {
     var stackOfCards = [UIView]()
     let localStorageUtility = LocalStorageUtility()
     var currentTypeOfCardsOnDisplay = typesOfCard.All
-    var lastCardInStack:UIView = UIView()
+    var lastCardInStack:UIView = UIView() // used by downloadMoreCards() to add a card below this
     var displayNoMoreCardsView:UIView? = nil
     let displayNoMoreCardsLabel = UILabel()
     var arrayOfCardsInDeck = [UIView]()
@@ -560,7 +560,49 @@ class BridgeViewController: UIViewController {
         view.addSubview(disconnectIcon)
         view.addSubview(connectIcon)
     }
-    func downloadMoreCards(noOfCards:Int) -> Int{
+    func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
+        let bridgePairings = LocalData().getPairings()
+        var pairings = [UserInfoPair]()
+        if (bridgePairings != nil) {
+            pairings = bridgePairings!
+        }
+        if let _ = PFUser.currentUser()?.objectId {
+            var getMorePairings = true
+            var i = 1
+            while getMorePairings {
+                let query = PFQuery(className:"BridgePairings")
+                var flist = [String]()
+                if let friendlist = (PFUser.currentUser()?["friend_list"] as? [String]) {
+                    flist = friendlist
+                }
+                query.whereKey("user_objectIds", containedIn :flist)
+                query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
+                query.whereKey("checked_out", equalTo: false)
+                query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
+                if (typeOfCards != "All" && typeOfCards != "EachOfAllType") {
+                    query.whereKey("bridge_type", equalTo: typeOfCards)
+                }
+                if typeOfCards == "EachOfAllType" {
+                    switch i {
+                    case 1:
+                        query.whereKey("bridge_type", equalTo: "Business")
+                    case 2:
+                        query.whereKey("bridge_type", equalTo: "Love")
+                    case 3:
+                        query.whereKey("bridge_type", equalTo: "Friendship")
+                    default: break
+                    }
+                    
+                }
+                query.limit = maxNoOfCards
+//                query.findObjectsInBackgroundWithBlock({ (results:AnyObject?, error:NSError?) -> Void in
+//                    
+//                })
+     
+            }
+        }
+    }
+    func downloadMoreCards(noOfCards:Int, typeOfCards:String) -> Int{
         var count = 0
         let c = self.bridgePairings?.count
         if let c = c {
@@ -568,7 +610,7 @@ class BridgeViewController: UIViewController {
                 count = c
             }
         }
-        localStorageUtility.getBridgePairingsFromCloud(noOfCards,typeOfCards: convertBridgeTypeEnumToBridgeTypeString(currentTypeOfCardsOnDisplay))
+        localStorageUtility.getBridgePairingsFromCloud(noOfCards,typeOfCards: typeOfCards)
         bridgePairings = LocalData().getPairings()
         
         if let bridgePairings = bridgePairings {
@@ -1036,11 +1078,17 @@ class BridgeViewController: UIViewController {
             catch {
                 
             }
+            
+            var bridgeType = "All"
+            if let bt = bridgePairings[x].user1?.bridgeType {
+                bridgeType = bt
+            }
+
             self.bridgePairings!.removeAtIndex(x)
             let localData = LocalData()
             localData.setPairings(self.bridgePairings!)
             localData.synchronize()
-            downloadMoreCards(1)
+            downloadMoreCards(1, typeOfCards: bridgeType)
             segueToSingleMessage = true
             performSegueWithIdentifier("showSingleMessage", sender: nil)
         }
@@ -1064,11 +1112,17 @@ class BridgeViewController: UIViewController {
                     result.saveInBackground()
                 }
             })
+            var bridgeType = "All"
+            if let bt = bridgePairings[x].user1?.bridgeType {
+                bridgeType = bt
+            }
             self.bridgePairings!.removeAtIndex(x)
             let localData = LocalData()
             localData.setPairings(self.bridgePairings!)
             localData.synchronize()
-            let c = downloadMoreCards(1)
+            
+
+            downloadMoreCards(1, typeOfCards: bridgeType)
             if arrayOfCardsInDeck.count > 0 {
                 arrayOfCardsInDeck.removeAtIndex(0)
                 arrayOfCardColors.removeAtIndex(0)
@@ -1088,15 +1142,22 @@ class BridgeViewController: UIViewController {
                             (response: AnyObject?, error: NSError?) -> Void in
                             if error == nil {
                                 if let response = response as? String {
-                                    //print(response)
+                                    print(response)
                                 }
-                                self.localStorageUtility.getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
-                                self.bridgePairings = LocalData().getPairings()
-                                for i in 0..<self.stackOfCards.count {
-                                    self.stackOfCards[i].removeFromSuperview()
+                                self.lastCardInStack = UIView()
+                                self.downloadMoreCards(1, typeOfCards: bridgeType)
+                                if self.arrayOfCardsInDeck.count > 0 {
+                                        self.arrayOfCardsInDeck[0].userInteractionEnabled = true
                                 }
-                                self.stackOfCards.removeAll()
-                                self.displayCards()
+                                
+
+//                                self.localStorageUtility.getBridgePairingsFromCloud(1,typeOfCards: "EachOfAllType")
+//                                self.bridgePairings = LocalData().getPairings()
+//                                for i in 0..<self.stackOfCards.count {
+//                                    self.stackOfCards[i].removeFromSuperview()
+//                                }
+//                                self.stackOfCards.removeAll()
+//                                self.displayCards()
                             }
                         }
                     }))

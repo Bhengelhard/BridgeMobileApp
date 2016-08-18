@@ -4,7 +4,7 @@ import FBSDKCoreKit
 import ParseFacebookUtilsV4
 import FBSDKLoginKit
 import CoreData
-
+import CoreLocation
 //var user1 = PFUser()
 //var currentUser = PFUser.currentUser()
 
@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
-    
+    var geoPoint:PFGeoPoint?
     @IBAction func fbLogin(sender: AnyObject) {
         
         print("pressed")
@@ -45,6 +45,11 @@ class ViewController: UIViewController {
             } else {
                 if let user = user {
                     print("got user")
+                    /* Check if the global variable geoPoint has been set to the user's location. If so, store it in Parse. Extremely important since the location would be used to get the user's current city in LocalUtility().getBridgePairings() which is indeed called in SignupViewController - cIgAr 08/18/16 */
+                    if let geoPoint = self.geoPoint {
+                    PFUser.currentUser()?["location"] = geoPoint
+                    PFUser.currentUser()?.saveInBackground()
+                    }
                     // identify user id with the device
                     let installation = PFInstallation.currentInstallation()
                     //installation.setDeviceTokenFromData(deviceToken)
@@ -52,18 +57,8 @@ class ViewController: UIViewController {
                     installation["userObjectId"] = PFUser.currentUser()?.objectId
                     installation.saveInBackground()
                     
-                    //getting user information from Facebook and saving to Parse
-                    //Current Fields Saved: name, gender, fb_profile_picture
-                    //**Need to add check for if fields exist**
-                    // Common to new and old user
-                    
                     LocalStorageUtility().getUserFriends()
                     LocalStorageUtility().getMainProfilePicture()
-                    
-                    // Testing the localData
-                   /* let localData = LocalData()
-                    let pairings = localData.getPairings()
-                    print("\(pairings![0].user1?.name) and \(pairings![0].user2?.name)")*/
                     if user.isNew {
                         
                         print("got to new user")
@@ -151,14 +146,12 @@ class ViewController: UIViewController {
                                     //newUser.setValue(age, forKey: "age")
                                     
                                 }
-                                
-                                if let location = result["location"]! {
-                                    print("location")
-                                    PFUser.currentUser()?["fb_location"] = location
-                                    //newUser.setValue(location[0], forKey: "longitude")
-                                    //newUser.setValue(location[1], forKey: "latitude")
+                                // Commenting this out since we are using Apple's Location Manager Services to get the user's location. In the graph request above we are still requesting for the user's location which is kind of useless now. cIgaR - 08/18/16
+                                //if let location = result["location"]! {
+                                //    print("location")
+                                //    PFUser.currentUser()?["fb_location"] = location
                                     
-                                }
+                                //}
                                 
 
                                 
@@ -201,13 +194,6 @@ class ViewController: UIViewController {
                             
                         }
                         
-                        
-                        
-                        //self.updateUser()
-                        
-                        //print("new")
-                        //self.getUserPhotos()
-                        
                     } else {
                         //spinner
                         //update user and friends
@@ -219,8 +205,6 @@ class ViewController: UIViewController {
                         localData.setUsername((PFUser.currentUser()?["name"])! as! String)
                         localData.synchronize()
                         }
-                        //LocalStorageUtility().getBridgePairings()
-                         //self.getUserPhotos()
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
                             //stop the spinner animation and reactivate the interaction with user
                             self.activityIndicator.stopAnimating()
@@ -237,7 +221,10 @@ class ViewController: UIViewController {
         }
         
     }
-    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        //NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    /* This was me experimenting with coreData. Leaving it here if someone wants to have a look - cIgAr - 08/18/16*/
     func seedUsers(){
         print("seedUsers method called")
         let moc = DataController().managedObjectContext
@@ -252,6 +239,7 @@ class ViewController: UIViewController {
             
         }
     }
+    /* This was me experimenting with coreData. Leaving it here if someone wants to have a look - cIgAr - 08/18/16*/
     func fetchUsers(){
         print("fetchUsers method called")
         let moc = DataController().managedObjectContext
@@ -265,8 +253,9 @@ class ViewController: UIViewController {
             fatalError("failure to fetch user: \(error)")
         }
     }
-
+    
     //right now just updates users Friends
+    /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
     func updateUser() {
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
@@ -314,7 +303,7 @@ class ViewController: UIViewController {
         }
         
     }
-    
+    /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
     func updateFriendList() {
         //add graph request to update users fb_friends
         //query to find and save fb_friends
@@ -370,10 +359,19 @@ class ViewController: UIViewController {
         })
         
     }
+    func storeUserLocationOnParse(notification: NSNotification) {
+        print("storeUserLocationOnParse - \(notification.userInfo)")
+        let geoPoint = notification.userInfo!["geoPoint"] as? PFGeoPoint
+        if let geoPoint = geoPoint {
+            self.geoPoint = geoPoint
+        }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        // Listen for a notification from LoadPageViewController when it has got the user's location. cIgaR 08/18/16
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.storeUserLocationOnParse), name: "storeUserLocationOnParse", object: nil)
         fbLoginButton.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
         
         fbLoginButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
@@ -435,37 +433,6 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         
-        
-        //PFUser.logOut()
-        
-        /*PFUser.currentUser()?.fetchInBackgroundWithBlock({ (object, error) in
-            
-            if object != nil {
-                
-                //updateFriendList()
-                //self.updateUser()
-                performSegueWithIdentifier("showBridgeViewController", sender: self)
-                
-            } else {
-                
-                //not yet logged in
-                
-            }
-            
-        })*/
-        
-        /*if let username = PFUser.currentUser()?.username{
-            
-            //updateFriendList()
-            updateUser()
-            //performSegueWithIdentifier("showBridgeViewController", sender: self)
-            
-        } else {
-            
-            //not yet logged in
-            
-        }*/
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -476,62 +443,4 @@ class ViewController: UIViewController {
     
 
 }
-
-
-
-//Notes
-
-//Parse
-//Saving to the Database
-/*let testObject = PFObject(className: "TestObject")
- testObject["foo"] = "bar"
- testObject.saveInBackgroundWithBlock { (success, error) -> Void in
- print("Object has been saved.")
- }
- */
-
-
-//Facebook
-//Facebook Login Button
-/*var FBLoginButton = FBSDKLoginButton()
-FBLoginButton.readPermissions = ["public_profile"]
-FBLoginButton.center = self.view.center
-//FBLoginButton.delegate = self
-self.view.addSubview(FBLoginButton)
-*/
-
-/*func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
- 
- if let accessToken = FBSDKAccessToken.currentAccessToken().tokenString {
- //print(accessToken)
- } else {
- print("Logged in! ")
- let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, gender"])
- graphRequest.startWithCompletionHandler( { (connection, result, error) -> Void in
- if error != nil {
- print(error)
- } else if let result = result {
- if let userLocation = result["location"] as? String {
- //save location
- }
- } else {
- print("Canceled")
- }
- })
- }
- }*/
-
-
-/*func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
- print("User logged out...")
- }*/
-
-//checking if user is initially logged in
-/*if (FBSDKAccessToken.currentAccessToken() == nil) {
- print("Not logged in")
- } else {
- print("logged in")
- //print(PFUser.currentUser())
- //performSegueWithIdentifier("showApp", sender: self)
- }*/
 
