@@ -11,7 +11,6 @@ import Parse
 
 var singleMessageTitle = "Message"
 var messageId = String()
-//var messageID =
 
 //Change to MessagesTableViewController so other can be MessageViewController
 
@@ -32,8 +31,11 @@ func getWeekDay(num:Int)->String{
 class MessagesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating {
     @IBOutlet var tableView: UITableView!
     
+    //screen proportions
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
+    
+    //necter colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
     let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
@@ -56,12 +58,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let friendshipLabel = UILabel()
     let postStatusButton = UIButton()
     
+    //message information
+    let noMessagesLabel = UILabel()
     var names = [String : [String]]()
     var messages = [String : String]()
     var messageType = [String : String]()
     var messageViewed = [String : Bool]()
     var messageTimestamps = [String : NSDate?]()
     var messagePositionToMessageIdMapping = [Int:String]()
+    
     let searchController = UISearchController(searchResultsController: nil)
     var filteredPositions = [Int]()
     var toolbarTapped = false
@@ -74,6 +79,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var refresher:UIRefreshControl!
     var pagingSpinner : UIActivityIndicatorView!
     var runBackgroundThread = true
+    
     var segueToSingleMessage = false
     var singleMessageId = ""
     let transitionManager = TransitionManager()
@@ -170,6 +176,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 self.noOfElementsFetched += results.count
                 //print("self.noOfElementsFetched \(self.noOfElementsFetched)")
                 for i in 0..<results.count{
+                    
                     let result = results[i]
                     self.messagePositionToMessageIdMapping[self.noOfElementsProcessed] = result.objectId!
                     self.noOfElementsProcessed += 1
@@ -187,8 +194,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     else {
                         self.messageTimestamps[result.objectId!] = NSDate()
                     }
-
-                    
                     if let _ = result["message_viewed"] {
                         let whoViewed = result["message_viewed"] as! ([String])
                         if whoViewed.contains((PFUser.currentUser()?.objectId)!) {
@@ -228,34 +233,35 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     messageQuery.cachePolicy = .NetworkElseCache
                     messageQuery.limit = 1
                     messageQuery.findObjectsInBackgroundWithBlock({(objects, error) -> Void in
-                    if (error == nil) {
-                    if objects!.count == 0{
+                        if (error == nil) {
+                            if objects!.count == 0{
 
-                        //self.messages[result.objectId!] = ("Your new bridge awaits")
-                        //self.messageTimestamps[result.objectId!] = (result.createdAt!)
-                        self.messages[result.objectId!] = ("Your new connection awaits")
-                        //self.messageTimestamps[result.objectId!] = (result.createdAt!)
-                    }
-                    else {
-                        for messageObject in objects! {
-                            if let _ = messageObject["message_text"] {
-                                self.messages[result.objectId!] = (messageObject["message_text"] as! (String))
+                            //self.messages[result.objectId!] = ("Your new bridge awaits")
+                            //self.messageTimestamps[result.objectId!] = (result.createdAt!)
+                            self.messages[result.objectId!] = ("Your new connection awaits")
+                            //self.messageTimestamps[result.objectId!] = (result.createdAt!)
                             }
-                            else{
-                                self.messages[result.objectId!] = ("")
+                            else {
+                                for messageObject in objects! {
+                                    if let _ = messageObject["message_text"] {
+                                        self.messages[result.objectId!] = (messageObject["message_text"] as! (String))
+                                        //hide no messages Label because there are messages in the View
+                                        print("got to messages")
+                                    }
+                                    else{
+                                        self.messages[result.objectId!] = ("")
+                                    }
+                                    //self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
+                                    break
+                                    //friendsArray.append(object.objectId!)
+                                }
                             }
-                            //self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
-                            break
-                                //friendsArray.append(object.objectId!)
                         }
-                    }
-                    }
-                    else {
-                        self.messages[result.objectId!] = ("")
-                    }
-                    self.tableView.reloadData()
+                        else {
+                            self.messages[result.objectId!] = ("")
+                        }
+                        self.tableView.reloadData()
                     })
-                    
                 }
             }
            self.tableView.reloadData()
@@ -421,6 +427,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func filterTapped(sender: UIButton){
         let tag = sender.tag
         switch(tag){
+            
+        //all types filter tapped
         case 0:
             //updating which toolbar Button is selected
             allTypesButton.enabled = false
@@ -428,9 +436,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             loveButton.enabled = true
             friendshipButton.enabled = true
             
+            //updating No Message Label Text
+            noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
+            
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
-            var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
@@ -442,6 +453,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //filtering the messages table
             allBridgesTapped()
             break
+            
+        //business filter tapped
         case 1:
             //updating which toolbar Button is selected
             allTypesButton.enabled = true
@@ -449,9 +462,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             loveButton.enabled = true
             friendshipButton.enabled = true
             
+            //updating No Message Label Text
+            noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
+            
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
-            var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
             allTypesLabel.attributedText = allTypesAttributedText
             businessLabel.textColor = businessBlue
@@ -461,6 +477,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //filtering the messages table
             businessTapped()
             break
+            
+        //love filter tapped
         case 2:
             //updating which toolbar Button is selected
             allTypesButton.enabled = true
@@ -468,9 +486,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             loveButton.enabled = false
             friendshipButton.enabled = true
             
+            //updating No Message Label Text
+            noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
+            
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
-            var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
             allTypesLabel.attributedText = allTypesAttributedText
             businessLabel.textColor = necterGray
@@ -480,6 +501,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //filtering the messages table
             loveTapped()
             break
+        
+        //friendship filter tapped
         case 3:
             //updating which toolbar Button is selected
             allTypesButton.enabled = true
@@ -487,10 +510,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             loveButton.enabled = true
             friendshipButton.enabled = false
             
+            //updating No Message Label Text
+            noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
             
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
-            var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
             allTypesLabel.attributedText = allTypesAttributedText
             businessLabel.textColor = necterGray
@@ -507,9 +532,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             loveButton.enabled = true
             friendshipButton.enabled = true
             
+            //updating No Message Label Text
+            
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
-            var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
             allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
@@ -525,9 +552,13 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func friendshipTapped() {
         toolbarTapped = true
         filteredPositions = [Int]()
+        
+        //displaying noMessagesLabel when there are no messages in the filtered message type
+        noMessagesLabel.alpha = 1
         for i in 0 ..< messageType.count{
             if messageType[messagePositionToMessageIdMapping[i]!]! == "Friendship" {
                 filteredPositions.append(i)
+                noMessagesLabel.alpha = 0
             }
         }
         self.tableView.reloadData()
@@ -536,9 +567,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         toolbarTapped = true
         filteredPositions = [Int]()
         print("loveButtonClicked")
+        noMessagesLabel.alpha = 1
         for i in 0 ..< messageType.count{
             if messageType[messagePositionToMessageIdMapping[i]!]! == "Love" {
                 filteredPositions.append(i)
+                noMessagesLabel.alpha = 0
             }
         }
         self.tableView.reloadData()
@@ -546,9 +579,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func businessTapped() {
         toolbarTapped = true
         filteredPositions = [Int]()
+        noMessagesLabel.alpha = 1
         for i in 0 ..< messageType.count{
             if messageType[messagePositionToMessageIdMapping[i]!]! == "Business" {
                 filteredPositions.append(i)
+                noMessagesLabel.alpha = 0
             }
         }
         //print("Filtered positions count is \(messageType.count)")
@@ -558,8 +593,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func allBridgesTapped() {
         toolbarTapped = true
         filteredPositions = [Int]()
+        noMessagesLabel.alpha = 1
         for i in 0 ..< messageType.count{
             filteredPositions.append(i)
+            noMessagesLabel.alpha = 0
         }
         
         self.tableView.reloadData()
@@ -601,12 +638,41 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         necterButton.selected = true
         performSegueWithIdentifier("showBridgeFromMessages", sender: self)
     }
+    func displayNoMessages() {
+        let labelFrame: CGRect = CGRectMake(0,0, 0.85*screenWidth,screenHeight * 0.2)
+        
+        noMessagesLabel.frame = labelFrame
+        noMessagesLabel.numberOfLines = 0
+        noMessagesLabel.alpha = 1
+        
+        if businessButton.enabled == false {
+            noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
+            print("business enabled = false")
+        } else if loveButton.enabled == false {
+            noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
+            print("love enabled = false")
+        } else if friendshipButton.enabled == false {
+            noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
+        } else {
+            noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
+        }
+        
+        noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
+        noMessagesLabel.textAlignment = NSTextAlignment.Center
+        noMessagesLabel.center.y = view.center.y
+        noMessagesLabel.center.x = view.center.x
+        noMessagesLabel.layer.borderWidth = 2
+        noMessagesLabel.layer.borderColor = necterGray.CGColor
+        noMessagesLabel.layer.cornerRadius = 15
+        
+        view.addSubview(noMessagesLabel)
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //create NavigationBar
         displayNavigationBar()
-        
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadMessageTable), name: "reloadTheMessageTable", object: nil)
         /*refresher = UIRefreshControl()
@@ -630,6 +696,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 self.totalElements = Int(count)
                 self.isElementCountNotFetched = false
                 self.refresh()
+                
+                if self.totalElements == 0 {
+                    self.displayNoMessages()
+                } else {
+                    self.noMessagesLabel.alpha = 0
+                }
             }
             else {
                 print(" not alive")
@@ -678,11 +750,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        }
         if (indexPath.row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
             if self.encounteredBefore[self.noOfElementsFetched] == nil {
-            self.encounteredBefore[self.noOfElementsFetched] = true
-            refresh()
-            pagingSpinner.startAnimating()
-            print("\(indexPath.row) - refresh called")
-            
+                self.encounteredBefore[self.noOfElementsFetched] = true
+                refresh()
+                pagingSpinner.startAnimating()
+                // setting whether no messages text should be displayed
+                
             }
 
         }
@@ -711,6 +783,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //print ("Search term is \(searchController.searchBar.text) and number of results is \(filteredPositions.count)")
             return filteredPositions.count
         }
+        
         return messages.count
         
     }

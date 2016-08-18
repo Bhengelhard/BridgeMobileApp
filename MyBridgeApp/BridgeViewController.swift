@@ -268,9 +268,7 @@ class BridgeViewController: UIViewController {
     }
     
     func displayNoMoreCards() {
-        //let frame1: CGRect = CGRectMake(superDeckX, superDeckY, superDeckWidth, superDeckHeight)
         let labelFrame: CGRect = CGRectMake(0,0, 0.8*screenWidth,screenHeight * 0.2)
-        //let view1 = UIView(frame:frame1)
         displayNoMoreCardsLabel.frame = labelFrame
         displayNoMoreCardsLabel.numberOfLines = 0
         
@@ -291,9 +289,7 @@ class BridgeViewController: UIViewController {
         displayNoMoreCardsLabel.layer.borderWidth = 2
         displayNoMoreCardsLabel.layer.borderColor = necterGray.CGColor
         displayNoMoreCardsLabel.layer.cornerRadius = 15
-        //view1.addSubview(label)
-        //self.view.insertSubview(view1, aboveSubview: self.view)
-        //displayNoMoreCardsView = view1
+
         view.addSubview(displayNoMoreCardsLabel)
         
     }
@@ -610,7 +606,7 @@ class BridgeViewController: UIViewController {
             }
             if let location_values1 = pairing.user1?.location {
                 locationCoordinates1 = location_values1
-                location1 = "Location has no name"
+                location1 = "Location not set"
             }
             else {
             }

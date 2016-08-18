@@ -21,6 +21,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     
     //Creating the tableView
     let singleMessageTableView = UITableView()
+    let noMessagesLabel = UILabel()
     
     //Creating the toolBar
     let toolbar = UIToolbar()
@@ -163,6 +164,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 
             } else if let results = results {
                 if results.count > 0{
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.noMessagesLabel.alpha = 0
+                    })
                 var singleMessagePosition = 0
                 for i in (0..<self.singleMessagePositionToObjectIDMapping.count).reverse(){
                     let temp = self.singleMessagePositionToObjectIDMapping[i]
@@ -318,8 +322,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let sendBarButton = UIBarButtonItem(customView: sendButton)
         
         if messageText.isFirstResponder() { //keyboard is active
-            //toolbar.frame = CGRectMake(0, 0.925*screenHeight, screenWidth, 0.075*screenHeight)
-            //toolbar.frame.origin.y =
             toolbar.frame = CGRectMake(0, 0.5*screenHeight, screenWidth, 0.075*screenHeight)
             print("keyboard is active")
         } else {
@@ -369,7 +371,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
                 
                 if (success) {
-                    
                     self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
                     self.singleMessagePositionToObjectIDMapping = [Int:String]()
                     self.updateMessages()
@@ -472,7 +473,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         leaveConversation.setTitleColor(necterGray, forState: .Normal)
         leaveConversation.setTitleColor(necterYellow, forState: .Selected)
         leaveConversation.setTitleColor(necterYellow, forState: .Highlighted)
-        leaveConversation.titleLabel!.font = UIFont(name: "BentonSans", size: 20)!
+        leaveConversation.titleLabel!.font = UIFont(name: "Verdana-Bold", size: 24)!
         //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Selected)
         //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Highlighted)
         leaveConversation.addTarget(self, action: #selector(leaveConversationTapped(_:)), forControlEvents: .TouchUpInside)
@@ -494,7 +495,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func leaveConversationTapped(sender: UIBarButtonItem) {
         //create the alert controller
-        let alert = UIAlertController(title: "Exiting the Message", message: "Are you sure you want to leave this conversation?", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Leaving the Conversation", message: "Are you sure you want to leave this conversation?", preferredStyle: UIAlertControllerStyle.Alert)
         
         //Create the actions
         alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
@@ -585,19 +586,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             keyboardHeight = keyboardSize.height
             self.toolbar.frame.origin.y -= keyboardSize.height
             singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.815*screenHeight - keyboardSize.height)
+            noMessagesLabel.alpha = 0
         }
         
     }
     func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            //if view.frame.origin.y != 0 {
-            //self.singleMessageTableView.frame  = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: toolbar.frame.height + keyboardSize.height)
             self.toolbar.frame.origin.y += keyboardSize.height
             singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.815*screenHeight + keyboardSize.height)
-            //}
-            //else {
-                
-            //}
+ 
         }
     }
     // Tapped anywhere on the main view oustside of the messageText Textfield
@@ -631,6 +628,29 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             }
         })
     }
+    func displayNoMessages() {
+        let labelFrame: CGRect = CGRectMake(0,0, 0.85*screenWidth,screenHeight * 0.2)
+        
+        noMessagesLabel.frame = labelFrame
+        noMessagesLabel.numberOfLines = 0
+        noMessagesLabel.alpha = 1
+        
+        noMessagesLabel.text = "\"All of life is rooted in relationships.\"\n- Lee A. Harris"
+        
+        print("business enabled = false")
+        
+        noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
+        noMessagesLabel.textAlignment = NSTextAlignment.Center
+        noMessagesLabel.center.y = view.center.y
+        noMessagesLabel.center.x = view.center.x
+        noMessagesLabel.layer.borderWidth = 2
+        noMessagesLabel.layer.borderColor = necterGray.CGColor
+        noMessagesLabel.layer.cornerRadius = 15
+        
+        view.addSubview(noMessagesLabel)
+        
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         singleMessageTableView.delegate = self
@@ -638,6 +658,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         //updatePushNotifications()
         
+        //setting no messages label to be hidden at the start
+        //noMessagesLabel.alpha = 0
         
         //display singleMessageTableView
         singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.815*screenHeight)
@@ -752,6 +774,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         //return messageTextArray.count
         //print("objectIDToMessageContentArrayMapping.count - \(objectIDToMessageContentArrayMapping.count)")
+        
+        if objectIDToMessageContentArrayMapping.count == 0 {
+            displayNoMessages()
+            print("displayNoMessages")
+        } else {
+            noMessagesLabel.alpha = 0
+            print("don't display no messages")
+        }
+        
         return objectIDToMessageContentArrayMapping.count
         
     }
