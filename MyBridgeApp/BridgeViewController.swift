@@ -395,9 +395,9 @@ class BridgeViewController: UIViewController {
         superDeckView.addSubview(upperDeckCard)
         superDeckView.addSubview(lowerDeckCard)
         
-        let leftNecterTypeLine = UIView()
+        let necterTypeLine = UIView()
         //leftNecterTypeLine.alpha = 1.0
-        leftNecterTypeLine.frame = CGRect(x: 0, y: superDeckHeight/2.0 - 2, width: superDeckWidth, height: 4)
+        necterTypeLine.frame = CGRect(x: 0, y: superDeckHeight/2.0 - 2, width: superDeckWidth, height: 4)
         
         /*let rightNecterTypeLine = UIView()
         rightNecterTypeLine.alpha = 1.0
@@ -405,25 +405,25 @@ class BridgeViewController: UIViewController {
         
         let necterTypeIcon = UIImageView()
         //necterTypeIcon.alpha = 1.0
-        necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.05*superDeckWidth, width: 0.1*superDeckWidth, height: 0.1*superDeckWidth)
+        necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.075*superDeckWidth, width: 0.15*superDeckWidth, height: 0.15*superDeckWidth)
         necterTypeIcon.contentMode = UIViewContentMode.ScaleAspectFill
         necterTypeIcon.clipsToBounds = true
         
         if cardColor == typesOfColor.Business {
-            leftNecterTypeLine.backgroundColor = businessBlue
+            necterTypeLine.backgroundColor = businessBlue
             //rightNecterTypeLine.backgroundColor = businessBlue
             necterTypeIcon.image = UIImage(named: "Business_Icon_Blue")
         } else if cardColor == typesOfColor.Love {
-            leftNecterTypeLine.backgroundColor = loveRed
+            necterTypeLine.backgroundColor = loveRed
             //rightNecterTypeLine.backgroundColor = loveRed
             necterTypeIcon.image = UIImage(named: "Love_Icon_Red")
         } else if cardColor == typesOfColor.Friendship{
-            leftNecterTypeLine.backgroundColor = friendshipGreen
+            necterTypeLine.backgroundColor = friendshipGreen
             //rightNecterTypeLine.backgroundColor = friendshipGreen
             necterTypeIcon.image = UIImage(named: "Friendship_Icon_Green")
         }
         
-        superDeckView.addSubview(leftNecterTypeLine)
+        superDeckView.addSubview(necterTypeLine)
         //superDeckView.addSubview(rightNecterTypeLine)
         superDeckView.addSubview(necterTypeIcon)
         
@@ -730,8 +730,17 @@ class BridgeViewController: UIViewController {
         
         //setting the navBar color and title
         navigationBar.setItems([navItem], animated: false)
-        navigationBar.topItem?.title = "necter"
-        navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 34)!, NSForegroundColorAttributeName: necterYellow]
+        //navigationBar.topItem?.title = "necter"
+        let navBarTitle = UILabel()
+        navBarTitle.frame = CGRect(x: 0, y: 0, width: 0.4*screenWidth, height: 0.1*screenHeight)
+        navBarTitle.center.x = navigationBar.center.x
+        navBarTitle.center.y = navigationBar.center.y
+        navBarTitle.text = "necter"
+        navBarTitle.font = UIFont(name: "Verdana", size: 34)
+        navBarTitle.textColor = necterYellow
+        navBarTitle.textAlignment = NSTextAlignment.Center
+        
+        navigationBar.topItem?.titleView = navBarTitle
         navigationBar.barStyle = .Black
         navigationBar.barTintColor = UIColor.whiteColor()
         

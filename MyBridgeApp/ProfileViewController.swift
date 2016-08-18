@@ -256,7 +256,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     override func viewDidLayoutSubviews() {
         navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.11*screenHeight)
-        editImageButton.frame = CGRect(x: 0, y:0.115*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
+        editImageButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
         editImageButton.center.x = self.view.center.x
         editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
         editImageButton.contentMode = UIViewContentMode.ScaleAspectFill
