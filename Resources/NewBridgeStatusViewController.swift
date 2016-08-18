@@ -32,7 +32,6 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     let transitionManager = TransitionManager()
 
     var enablePost = Bool()
-    var vc : ProfileViewController? = nil
     var seguedFrom = ""
     
     let screenWidth = UIScreen.mainScreen().bounds.width
@@ -300,7 +299,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         //show previous views setup (i.e. the initial bot question of which connection type the user is looking for)
         let greeting = "Hello \(firstName), \n\nWhat type of connection are you looking for?" as NSString
         //var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22)!])
-        var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
+        let attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
         let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
         let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
         attributedGreeting.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(firstName),"))
@@ -406,7 +405,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         optionsTableView.delegate = self
         optionsTableView.dataSource = self
         
-        vc = storyboard!.instantiateViewControllerWithIdentifier("ProfileViewController") as? ProfileViewController
+        //vc = storyboard!.instantiateViewControllerWithIdentifier("ProfileViewController") as? ProfileViewController
         
         if let name = localData.getUsername() {
             username.text = name

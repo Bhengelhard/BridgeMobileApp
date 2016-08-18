@@ -111,6 +111,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 self.transitionManager.animationDirection = "Top"
                 let vc2 = vc as! NewBridgeStatusViewController
                 vc2.seguedFrom = "MessagesViewController"
+            } else if mirror.subjectType == SingleMessageViewController.self {
+                self.transitionManager.animationDirection = "Right"
+                let vc2 = vc as! SingleMessageViewController
+                vc2.seguedFrom = "MessagesViewController"
             }
             vc.transitioningDelegate = self.transitionManager
             

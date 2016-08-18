@@ -13,7 +13,31 @@ import Parse
 
 class SingleMessageViewController: UIViewController, UITableViewDelegate {
     @IBOutlet weak var messageText: UITextField!
-    @IBOutlet weak var navigationBar: UINavigationItem!
+    //@IBOutlet weak var navigationBar: UINavigationItem!
+    @IBOutlet weak var toolbar: UIToolbar!
+    
+    //Creating the navigationBar
+    let navigationBar = UINavigationBar()
+    let navItem = UINavigationItem()
+    let messagesButton = UIButton()
+    let leaveConversation = UIButton()
+    
+    //Creating the toolBar
+    //let toolbar = UIToolbar()
+    
+    //screen dimensions
+    let screenWidth = UIScreen.mainScreen().bounds.width
+    let screenHeight = UIScreen.mainScreen().bounds.height
+    
+    //getting information on which viewController the user was on prior to this one
+    var seguedFrom = ""
+    
+    //necter Colors
+    let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
+    let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
+    let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
+    let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
+    let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
     
     var messageTextArray = [String]()
     var newMessageId = String()
@@ -138,87 +162,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         }
         
     }
-    @IBAction func exitMessage(sender: AnyObject) {
-        
-        //create the alert controller
-        let alert = UIAlertController(title: "Exiting the Message", message: "Are you sure you want to leave this conversation?", preferredStyle: UIAlertControllerStyle.Alert)
-        
-        //Create the actions
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
-            
-            
-            
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
-            
-            //take currentUser out of the current ids_in_message
-            
-            let messageQuery = PFQuery(className: "Messages")
-            messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
-                
-                if error != nil {
-                    
-                    print(error)
-                    
-                } else {
-                    
-                    /*dispatch_async(dispatch_get_main_queue(), {
-                     
-                     segueFromExitedMessage = true
-                     
-                     })*/
-                    
-                    let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
-                    //let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
-                    
-                    var updatedIdsInMessage = [String]()
-                   // var updatedNamesInMessage = [String]()
-                    
-                    for i in 0...(CurrentIdsInMessage.count - 1) {
-                        
-                        if CurrentIdsInMessage[i] as? String != PFUser.currentUser()?.objectId {
-                            
-                            updatedIdsInMessage.append(CurrentIdsInMessage[i] as! String)
-                         //   updatedNamesInMessage.append(CurrentNamesInMessage[i] as! String)
-                            
-                        }
-                        
-                    }
-                    
-                    object!["ids_in_message"] = updatedIdsInMessage
-                   // object!["names_in_message"] = updatedNamesInMessage
-                    
-                    object!.saveInBackgroundWithBlock({ (success, error) in
-                        
-                        print("message updated for exited user")
-                        
-                    })
-                    
-                }
-                
-                
-                
-            })
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                
-                //pop-up/drop-down segue for BridgeViewController Message creations
-                self.performSegueWithIdentifier("showBridgeFromSingleMessage", sender: self)
-                
-                //slide in and slide back segue from Messages message access.
-                
-                //self.performSegueWithIdentifier("showMessagesFromSingleMessage", sender: self)
-                
-            })
-            
-            
-            
-        }))
-        
-        self.presentViewController(alert, animated: true, completion: nil)
-        
-    }
+    
     func updateTitle(){
         var stringOfNames = ""
         let query: PFQuery = PFQuery(className: "Messages")
@@ -261,7 +205,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
                         }
                         dispatch_async(dispatch_get_main_queue(), {
                             //print(stringOfNames)
-                            self.navigationBar.title = stringOfNames
+                            self.navigationBar.topItem?.title = stringOfNames
                         })
 
                     })
@@ -444,9 +388,152 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         })
         
     }
+    /*func displayToolbar() {
+        //setting the text field
+        
+        //adding the flexible space
+        
+        //setting the send button
+    }*/
+    
+    func displayNavigationBar(){
+        
+        //setting the messagesIcon to the leftBarButtonItem
+        messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), forState: .Normal)
+        messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Selected)
+        messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Highlighted)
+        messagesButton.addTarget(self, action: #selector(messagesTapped(_:)), forControlEvents: .TouchUpInside)
+        messagesButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
+        messagesButton.contentMode = UIViewContentMode.ScaleAspectFill
+        messagesButton.clipsToBounds = true
+        let leftBarButton = UIBarButtonItem(customView: messagesButton)
+        navItem.leftBarButtonItem = leftBarButton
+        
+        //setting the leave conversation button to the rightBarButtonItem
+        //let leaveConversationIcon = UIImage(named: "Profile_Icon_Gray")
+        leaveConversation.setTitle("X", forState: .Normal)
+        leaveConversation.setTitleColor(necterGray, forState: .Normal)
+        leaveConversation.setTitleColor(necterYellow, forState: .Selected)
+        leaveConversation.setTitleColor(necterYellow, forState: .Highlighted)
+        leaveConversation.titleLabel!.font = UIFont(name: "BentonSans", size: 20)!
+        //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Selected)
+        //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Highlighted)
+        leaveConversation.addTarget(self, action: #selector(leaveConversationTapped(_:)), forControlEvents: .TouchUpInside)
+        leaveConversation.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
+        let rightBarButton = UIBarButtonItem(customView: leaveConversation)
+        navItem.rightBarButtonItem = rightBarButton
+
+        
+        //setting the navBar color and title
+        navigationBar.setItems([navItem], animated: false)
+        navigationBar.topItem?.title = "Conversation"
+        navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: necterYellow]
+        navigationBar.barStyle = .Black
+        navigationBar.barTintColor = UIColor.whiteColor()
+        
+        self.view.addSubview(navigationBar)
+        
+    }
+    func leaveConversationTapped(sender: UIBarButtonItem) {
+        //create the alert controller
+        let alert = UIAlertController(title: "Exiting the Message", message: "Are you sure you want to leave this conversation?", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        //Create the actions
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
+            
+            
+            
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
+            
+            //take currentUser out of the current ids_in_message
+            
+            let messageQuery = PFQuery(className: "Messages")
+            messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
+                
+                if error != nil {
+                    
+                    print(error)
+                    
+                } else {
+                    
+                    /*dispatch_async(dispatch_get_main_queue(), {
+                     
+                     segueFromExitedMessage = true
+                     
+                     })*/
+                    
+                    let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
+                    //let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
+                    
+                    var updatedIdsInMessage = [String]()
+                    // var updatedNamesInMessage = [String]()
+                    
+                    for i in 0...(CurrentIdsInMessage.count - 1) {
+                        
+                        if CurrentIdsInMessage[i] as? String != PFUser.currentUser()?.objectId {
+                            
+                            updatedIdsInMessage.append(CurrentIdsInMessage[i] as! String)
+                            //   updatedNamesInMessage.append(CurrentNamesInMessage[i] as! String)
+                            
+                        }
+                        
+                    }
+                    
+                    object!["ids_in_message"] = updatedIdsInMessage
+                    // object!["names_in_message"] = updatedNamesInMessage
+                    
+                    object!.saveInBackgroundWithBlock({ (success, error) in
+                        
+                        print("message updated for exited user")
+                        
+                    })
+                    
+                }
+                
+                
+                
+            })
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                
+                //pop-up/drop-down segue for BridgeViewController Message creations
+                print(self.seguedFrom)
+                print("-------------------------")
+                if self.seguedFrom == "BridgeViewController" {
+                    self.performSegueWithIdentifier("showBridgeFromSingleMessage", sender: self)
+                } else {
+                    self.performSegueWithIdentifier("showMessagesTableFromSingleMessage", sender: self)
+                }
+                
+                //slide in and slide back segue from Messages message access.
+                
+                //self.performSegueWithIdentifier("showMessagesFromSingleMessage", sender: self)
+                
+            })
+            
+            
+            
+        }))
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func messagesTapped(sender: UIBarButtonItem) {
+        messagesButton.selected = true
+        performSegueWithIdentifier("showMessagesTableFromSingleMessage", sender: self)
+    }
+    func displayToolbar() {
+        
+        view.addSubview(toolbar)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         //updatePushNotifications()
+        displayNavigationBar()
+        
+        displayToolbar()
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(newMessageId, block: { (object, error) in
             if error == nil {
@@ -470,35 +557,23 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), forControlEvents: UIControlEvents.ValueChanged)
         singleMessageTableView.addSubview(refresher)
-        navigationBar.title = singleMessageTitle
+        navigationBar.topItem?.title = singleMessageTitle
         singleMessageTableView.registerClass(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
         if isSeguedFromMessages   {
-            //print("calling1")
             messageId = newMessageId
             updateMessages()
             self.updateTitle()
-            
         }
 
         else if isSeguedFromNewMessage   {
-            //print("calling2")
             messageId = newMessageId
             updateMessages()
             self.updateTitle()
-            
         }
         else if isSeguedFromBridgePage   {
             messageId = newMessageId
-            //print("calling3")
             updateMessages()
             self.updateTitle()
-//            let seconds = 4.0
-//            let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
-//            let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-//            
-//            dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-//                
-//            })
         }
         else {
             messageId = newMessageId
@@ -507,6 +582,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate {
         }
 
         // Do any additional setup after loading the view.
+    }
+    override func viewDidLayoutSubviews() {
+        
+        navigationBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0.11*screenHeight)
+        singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.79*screenHeight)
+        toolbar.frame = CGRectMake(0, 0.9*screenHeight, screenWidth, 0.1*screenHeight)
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

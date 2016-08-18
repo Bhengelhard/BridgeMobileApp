@@ -10,8 +10,6 @@ import UIKit
 import Parse
 import MapKit
 class BridgeViewController: UIViewController {
-    //@IBOutlet weak var navigationBar: UINavigationBar!
-    let navigationBar = UINavigationBar()
     var bridgePairings:[UserInfoPair]? = nil
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -51,6 +49,7 @@ class BridgeViewController: UIViewController {
     let postStatusButton = UIButton()
     
     //navbar creation
+    let navigationBar = UINavigationBar()
     let navItem = UINavigationItem()
     var badgeCount = Int()
     let profileButton = UIButton()
@@ -1179,6 +1178,11 @@ class BridgeViewController: UIViewController {
             singleMessageVC.transitioningDelegate = self.transitionManager
             singleMessageVC.isSeguedFromBridgePage = true
             singleMessageVC.newMessageId = self.messageId
+            self.transitionManager.animationDirection = "Right"
+            let vc = segue.destinationViewController
+            let vc2 = vc as! SingleMessageViewController
+            vc2.seguedFrom = "BridgeViewController"
+            print("------ trying to figure this out \(vc2.seguedFrom)")
         }
         else {
             let vc = segue.destinationViewController
