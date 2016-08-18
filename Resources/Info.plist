@@ -48,8 +48,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To find people near you!</string>
+	<key>NSLocationUsageDescription</key>
+	<string>To find people near you</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>To help you (con)NeCt with people near you!</string>
+	<key>NSLocationWhenInUsageDescription</key>
+	<string>To find people near you</string>
 	<key>UILaunchStoryboardName</key>
 	<string>Main</string>
 	<key>UIMainStoryboardFile</key>

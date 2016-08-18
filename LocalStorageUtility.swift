@@ -477,9 +477,6 @@ class LocalStorageUtility{
                 if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
                     if let data = NSData(contentsOfURL: fbpicUrl) {
                         let imageFile: PFFile = PFFile(data: data)!
-                        //PFUser.currentUser()?["profile_picture"] = imageFile
-                        //PFUser.currentUser()?["profile_picture_from_fb"] = true
-                        //print("storing profile picture to local storage")
                         var updateProfilePic = false
                         if let profilePictureFromFbBool = localData.getProfilePictureFromFb(){
                             updateProfilePic = profilePictureFromFbBool
@@ -649,7 +646,7 @@ class LocalStorageUtility{
             
         }
     }
-    func getBridgePairings(){
+    func updateBridgePairingsTable(){
         if let friendList = PFUser.currentUser()?["friend_list"] as? [String] {
             var latitude:CLLocationDegrees = -122.0312186
             var longitude:CLLocationDegrees = 37.33233141
@@ -684,76 +681,10 @@ class LocalStorageUtility{
                     }
             }
         }
- //       getBridgePairingsFromCloud()
-//             var ignoredPairings = [[String]]()
-//        
-//        if let builtBridges = PFUser.currentUser()?["built_bridges"] {
-//            let builtBridges2 = builtBridges as! [[String]]
-//            ignoredPairings = ignoredPairings + builtBridges2
-//        }
-//        
-//        if let rejectedBridges = PFUser.currentUser()?["rejected_bridges"] {
-//            let rejectedBridges2 = rejectedBridges as! [[String]]
-//            ignoredPairings = ignoredPairings + rejectedBridges2
-//        }
-//        var friendPairings =  [[String]]()
-//        
-//        if let friendList = PFUser.currentUser()?["friend_list"] as? [String] {
-//            print("ratings")
-//            PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
-//                (response: AnyObject?, error: NSError?) -> Void in
-//                if let ratings = response as? String {
-//                    print(ratings)
-//                }
-//                else {
-//                    print(error)
-//                }
-//            }
-//
-//            var pairings = [UserInfoPair]()
-//            for friend1 in friendList {
-//                if friendPairings.count >= 10 {
-//                    break
-//                }
-//                for friend2 in friendList {
-//                    if friendPairings.count >= 10 {
-//                        break
-//                    }
-//                    let containedInIgnoredPairings = ignoredPairings.contains {$0 == [friend1, friend2]} || ignoredPairings.contains {$0 == [friend2, friend1]}
-//                    
-//                    let PreviouslyDisplayedUser = friendPairings.contains {$0 == [friend1, friend2]} || friendPairings.contains {$0 == [friend2, friend1]}
-//                    
-//
-//                    if PreviouslyDisplayedUser == false && friend1 != friend2 && containedInIgnoredPairings == false  {
-//                        friendPairings.append([friend1,friend2])
-//                        var user1:PairInfo? = nil
-//                        var user2:PairInfo? = nil
-//                        user1 = getUserDetails(friend1)
-//                        user2 = getUserDetails(friend2)
-//                        
-//                        let userInfoPair = UserInfoPair(user1: user1, user2: user2)
-//                        pairings.append(userInfoPair)
-//                    }
-//                    
-//                }
-//                
-//            }
-//            let localData = LocalData()
-//            localData.setPairings(pairings)
-//            localData.synchronize()
-//        }
+
         
-    }
-    func waitForCardsToBeDownloaded() -> Bool {
-        
-//        print("totalObjects == objectsDownloaded \(totalObjects) == \(objectsDownloaded)")
-//        if objectsDownloaded > 0 && totalObjects == objectsDownloaded {
-//            result = false
-//        }
-        return result
     }
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
-        //        var pairings = [UserInfoPair]()
         let bridgePairings = LocalData().getPairings()
         var pairings = [UserInfoPair]()
         if (bridgePairings != nil) {
@@ -764,6 +695,11 @@ class LocalStorageUtility{
             var i = 1
             while getMorePairings {
                 let query = PFQuery(className:"BridgePairings")
+                var flist = [String]()
+                if let friendlist = (PFUser.currentUser()?["friend_list"] as? [String]) {
+                    flist = friendlist
+                }
+                query.whereKey("user_objectIds", containedIn :flist)
                 query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
                 query.whereKey("checked_out", equalTo: false)
                 query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
@@ -798,6 +734,16 @@ class LocalStorageUtility{
                         var user2:PairInfo? = nil
                         var name1:String? = nil
                         var name2:String? = nil
+                        var userId1:String? = nil
+                        var userId2:String? = nil
+                        if let ob = result["user_objectIds"] as? [String] {
+                            userId1 =  ob[0]
+                            userId2 =  ob[1]
+                            if flist.indexOf(userId1!) == nil || flist.indexOf(userId2!) == nil {
+                                continue
+                            }
+                        }
+                        
                         if let ob = result["user1_name"] {
                             name1 = ob as? String
                             
@@ -864,12 +810,7 @@ class LocalStorageUtility{
                             objectId1 =  ob as String
                             objectId2 =  ob as String
                         }
-                        var userId1:String? = nil
-                        var userId2:String? = nil
-                        if let ob = result["user_objectIds"] as? [String] {
-                            userId1 =  ob[0]
-                            userId2 =  ob[1]
-                        }
+                      
                         
                         result["checked_out"]  = true
                         if let _ = result["shown_to"] {

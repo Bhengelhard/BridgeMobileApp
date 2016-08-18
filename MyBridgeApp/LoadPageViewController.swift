@@ -12,8 +12,9 @@ import FBSDKCoreKit
 import ParseFacebookUtilsV4
 import FBSDKLoginKit
 import CoreData
+import CoreLocation
 
-class LoadPageViewController: UIViewController {
+class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var appName: UILabel!
     @IBOutlet weak var appDescription: UILabel!
@@ -22,7 +23,10 @@ class LoadPageViewController: UIViewController {
     let screenHeight = UIScreen.mainScreen().bounds.height
     
     let transitionManager = TransitionManager()
+    var locationManager = CLLocationManager()
+    var geoPoint: PFGeoPoint? = nil
     
+     // Do we need this function anymore? Not being called from anywhere. cIgAr 08/18/16
     //right now just updates users Friends
     func updateUser() {
         
@@ -71,7 +75,7 @@ class LoadPageViewController: UIViewController {
         }
         
     }
-    
+    // Do we need this function anymore? Not being called from anywhere. cIgAr 08/18/16
     func updateFriendList() {
         
         //add graph request to update users fb_friends
@@ -129,130 +133,40 @@ class LoadPageViewController: UIViewController {
         })
         
     }
+    func locationManager(manager:CLLocationManager, didUpdateLocations locations:[CLLocation]) {
+        locationManager.stopUpdatingLocation()
+        geoPoint = PFGeoPoint(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
+        print("\(geoPoint?.latitude),\(geoPoint?.longitude)")
+        NSNotificationCenter.defaultCenter().postNotificationName("storeUserLocationOnParse", object: nil, userInfo:  ["geoPoint":geoPoint!])
+        
+        }
 
     override func viewDidLoad() {
-       // self.navigationController!.navigationBar.hidden = true
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-        
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
     }
     
     override func viewDidAppear(animated: Bool) {
-        
-        /*PFUser.currentUser()?.fetchInBackgroundWithBlock({ (user, error) in
-            
-            if user != nil {
-                
-                print("user exists")
-                
-            } else {
-                
-                print("user does not exist")
-                
-            }
-        })*/
-        
+        /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
         PFUser.currentUser()?.fetchInBackgroundWithBlock({ (object, error) in
             let localData = LocalData()
             
             if let username = localData.getUsername(){ //remember to change this back to username
-                //print("Load page, username is \(username)")
                 LocalStorageUtility().getUserFriends()
                 LocalStorageUtility().getMainProfilePicture()
-                //LocalStorageUtility().getBridgePairings()
-                
                 self.performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
             }
             else{
                 self.performSegueWithIdentifier("showLoginFromLoadPage", sender: self)
 
             }
-            /*if object?.objectId != "new" {
-                print(object)
-                print("user exists LoadePageViewController")
-                //updateFriendList()
-                self.updateUser()
-                self.performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
-                
-            } else {
-                
-                print("user does not exist")
-                PFUser.logOut()
-                //clear all cached
-                //not yet logged in
-                self.performSegueWithIdentifier("showLoginFromLoadPage", sender: self)
-                
-            }*/
-            //print(error)
             
             
         })
         
-        /*PFUser.currentUser()?.fetchInBackgroundWithBlock({ (success, error) in
-            currentUser = PFUser.currentUser()?.username
-            print(currentUser)
-            
-            if let username = PFUser.currentUser()?.username {
-                
-                print("user exists")
-                
-            } else {
-                
-                print("user does not exist")
-                
-            }
-            
-        })*/
-        
-        
-        //Check if User exists and if not then segue to login page
-        
-        /*let accessToken = PFUser.currentUser()!["authData/Facebook/accessToken"]
-        
-        PFFacebookUtils.logInInBackgroundWithAccessToken(accessToken, block: {
-            (user: PFUser?, error: NSError?) -> Void in
-            if user != nil {
-                print("User logged in through Facebook!")
-            } else {
-                print("Uh oh. There was an error logging in.")
-            }
-        })*/
-        
-        
-       /* //PFUser.logOut()
-        PFUser.logInWithUsernameInBackground((PFUser.currentUser()?.username)!, password: (PFUser.currentUser()?.password)!) {
-            (user: PFUser?, error: NSError?) -> Void in
-            if user != nil {
-                // Do stuff after successful login.
-                //updateFriendList()
-                updateUser()
-                performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
-
-            } else {
-                
-                performSegueWithIdentifier("showLoginFromLoadPage", sender: self)
-                
-            }
-        }*/
-
-        
-        
-       /* if PFUser.currentUser()?.username != nil {
-            print(PFUser.currentUser()?.username)
-            //updateFriendList()
-            updateUser()
-            performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
-            print("Went to bridge from Load Page")
-            
-        } else {
-            
-            //not yet logged in
-            performSegueWithIdentifier("showLoginFromLoadPage", sender: self)
-            
-            
-            
-        }*/
         
     }
 
@@ -268,81 +182,5 @@ class LoadPageViewController: UIViewController {
         appDescription.frame = CGRect(x: 0.05*screenWidth, y:0.49*screenHeight, width:0.90*screenWidth, height:0.15*screenHeight)
         
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    */
-    
-    
-    //Saving and retrieving Core Data
-    /*
- let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
- let context: NSManagedObjectContext = appDel.managedObjectContext
- 
- var newUser = NSEntityDescription.insertNewObjectForEntityForName("User", inManagedObjectContext: context)
- 
- newUser.setValue("Rob", forKey: "username")
- newUser.setValue("pass123", forKey: "password")
- 
- do {
- 
- try context.save()
- 
- } catch {
- 
- print("There was a problem saving the Core Data")
- 
- }
- 
- let request = NSFetchRequest(entityName: "User")
- 
- //returns core data where username = Rob
- request.predicate = NSPredicate(format: "username = %@", "Rob")
- 
- request.returnsObjectsAsFaults = false
- 
- do {
- 
- let results = try context.executeFetchRequest(request)
- 
- if results.count > 0 {
- 
- for result in results as! [NSManagedObject] {
- 
- //changing a value in Core Data
- result.setValue("Ralphie", forKey: "username")
- 
- //deleting an object
- //context.deleteObject(result)
- 
- do {
- 
- try context.save()
- 
- } catch {
- 
- print("There was a problem saving the updated values")
- 
- }
- 
- if let username = result.valueForKey("username") as? String {
- 
- print(username)
- 
- }
- 
- }
- 
- }
- print(results)
- 
- } catch {
- 
- print("There was a problem retrieving the Core Data")
- 
- }
-*/
 
 }
