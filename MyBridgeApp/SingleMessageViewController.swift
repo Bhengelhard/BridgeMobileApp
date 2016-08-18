@@ -195,17 +195,17 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     var senderId = ""
                     if let ob = result["sender"] as? String {
                         senderId = ob
-                        senderName = ob
-//                        let queryForName = PFQuery(className: "_User")
-//                        do{
-//                            let userObject = try queryForName.getObjectWithId(ob)
-//                            if let name = userObject["name"] as? String {
-//                                senderName = name
-//                            }
-//                        }
-//                        catch{
-//                            
-//                        }
+                        //senderName = ob
+                        let queryForName = PFQuery(className: "_User")
+                        do{
+                            let userObject = try queryForName.getObjectWithId(ob)
+                            if let name = userObject["name"] as? String {
+                                senderName = name
+                            }
+                        }
+                        catch{
+                            
+                        }
                         
                     }
                     var timestamp = ""

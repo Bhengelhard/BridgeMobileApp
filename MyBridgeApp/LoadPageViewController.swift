@@ -136,6 +136,7 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
     func locationManager(manager:CLLocationManager, didUpdateLocations locations:[CLLocation]) {
         locationManager.stopUpdatingLocation()
         geoPoint = PFGeoPoint(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
+        print("LoadViewController posting a notification")
         print("\(geoPoint?.latitude),\(geoPoint?.longitude)")
         NSNotificationCenter.defaultCenter().postNotificationName("storeUserLocationOnParse", object: nil, userInfo:  ["geoPoint":geoPoint!])
         
@@ -154,7 +155,7 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         PFUser.currentUser()?.fetchInBackgroundWithBlock({ (object, error) in
             let localData = LocalData()
             
-            if let username = localData.getUsername(){ //remember to change this back to username
+            if (localData.getUsername() != nil) && ((PFUser.currentUser()!.objectId) != nil){ //remember to change this back to username
                 LocalStorageUtility().getUserFriends()
                 LocalStorageUtility().getMainProfilePicture()
                 self.performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
