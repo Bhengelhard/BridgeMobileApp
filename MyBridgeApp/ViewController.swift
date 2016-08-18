@@ -222,7 +222,7 @@ class ViewController: UIViewController {
         
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        //NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     /* This was me experimenting with coreData. Leaving it here if someone wants to have a look - cIgAr - 08/18/16*/
     func seedUsers(){
@@ -360,7 +360,7 @@ class ViewController: UIViewController {
         
     }
     func storeUserLocationOnParse(notification: NSNotification) {
-        print(notification.userInfo)
+        print("storeUserLocationOnParse - \(notification.userInfo)")
         let geoPoint = notification.userInfo!["geoPoint"] as? PFGeoPoint
         if let geoPoint = geoPoint {
             self.geoPoint = geoPoint

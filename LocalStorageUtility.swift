@@ -22,7 +22,6 @@ class LocalStorageUtility{
     var userBridgeStatusePostedAt = [String : [NSDate]]()
     var userBridgeTypes = [String : [String]]()
     var objectsDownloaded = 0
-    var totalObjects = 0
     var result = true
     //defunct now since we moved to using the Cloud
     func ifNotFriends(friend1:String, friend2:String) -> Bool{
@@ -685,6 +684,13 @@ class LocalStorageUtility{
         
     }
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
+        let q = PFQuery(className: "_User")
+        var flist = [String]()
+        q.getObjectInBackgroundWithId((PFUser.currentUser()?.objectId)!){
+            (object, error) -> Void in
+        if error == nil && object != nil {
+        if let fl = object!["friend_list"] as? [String]{
+        flist = fl
         let bridgePairings = LocalData().getPairings()
         var pairings = [UserInfoPair]()
         if (bridgePairings != nil) {
@@ -695,10 +701,10 @@ class LocalStorageUtility{
             var i = 1
             while getMorePairings {
                 let query = PFQuery(className:"BridgePairings")
-                var flist = [String]()
-                if let friendlist = (PFUser.currentUser()?["friend_list"] as? [String]) {
-                    flist = friendlist
-                }
+                
+//                if let friendlist = (PFUser.currentUser()?["friend_list"] as? [String]) {
+//                    flist = friendlist
+//                }
                 query.whereKey("user_objectIds", containedIn :flist)
                 query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
                 query.whereKey("checked_out", equalTo: false)
@@ -719,9 +725,6 @@ class LocalStorageUtility{
                     
                 }
                 query.limit = maxNoOfCards
-                //        let err = NSErrorPointer()
-                //        totalObjects =  query.countObjects(err)
-                print("totalObjects \(totalObjects)")
                 do {
                     let results = try query.findObjects()
                     
@@ -739,6 +742,7 @@ class LocalStorageUtility{
                         if let ob = result["user_objectIds"] as? [String] {
                             userId1 =  ob[0]
                             userId2 =  ob[1]
+                            /* Performing this important check here to make sure that each individual in the pair is friend's with the current user. Parse query -"query.whereKey("user_objectIds", containedIn :flist)" returns true even if anyone of those user's is friend with the current user - cIgAr - 08/18/16*/
                             if flist.indexOf(userId1!) == nil || flist.indexOf(userId2!) == nil {
                                 continue
                             }
@@ -851,6 +855,9 @@ class LocalStorageUtility{
                 
                 
             }
+        }
+        }
+        }
         }
     }
 }
