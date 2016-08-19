@@ -39,6 +39,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     
     //getting information on which viewController the user was on prior to this one
     var seguedFrom = ""
+    var messageId = String()
+    var singleMessageTitle = "Conversation"
     
     //necter Colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
@@ -272,6 +274,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
 
                 }
                 }
+                //results.count <= 0, so no messages label should be displayed since there are no messages
+                else {
+                    self.displayNoMessages()
+                    print("displayNoMessages")
+                }
                 
             }
             print("calling updatePushNotifications()")
@@ -377,7 +384,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     //print("Object has been saved.")
                     // push notification starts
                     let messageQuery = PFQuery(className: "Messages")
-                    messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
+                    messageQuery.getObjectInBackgroundWithId(self.messageId, block: { (object, error) in
                         if error == nil {
                             if let object = object {
                                 // update the no of message in a Thread - Start
@@ -496,77 +503,39 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func leaveConversationTapped(sender: UIBarButtonItem) {
         //create the alert controller
         let alert = UIAlertController(title: "Leaving the Conversation", message: "Are you sure you want to leave this conversation?", preferredStyle: UIAlertControllerStyle.Alert)
-        
         //Create the actions
         alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
-            
-            
             
         }))
         
         alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
             
             //take currentUser out of the current ids_in_message
-            
             let messageQuery = PFQuery(className: "Messages")
-            messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
-                
+            messageQuery.getObjectInBackgroundWithId(self.messageId, block: { (object, error) in
                 if error != nil {
-                    
                     print(error)
-                    
                 } else {
-                    
-                    /*dispatch_async(dispatch_get_main_queue(), {
-                     
-                     segueFromExitedMessage = true
-                     
-                     })*/
-                    
                     let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
-                    //let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
-                    
                     var updatedIdsInMessage = [String]()
-                    // var updatedNamesInMessage = [String]()
-                    
                     for i in 0...(CurrentIdsInMessage.count - 1) {
-                        
                         if CurrentIdsInMessage[i] as? String != PFUser.currentUser()?.objectId {
-                            
                             updatedIdsInMessage.append(CurrentIdsInMessage[i] as! String)
-                            //   updatedNamesInMessage.append(CurrentNamesInMessage[i] as! String)
-                            
                         }
-                        
                     }
-                    
                     object!["ids_in_message"] = updatedIdsInMessage
-                    // object!["names_in_message"] = updatedNamesInMessage
-                    
                     object!.saveInBackgroundWithBlock({ (success, error) in
-                        
-                        
+                        if error != nil {
+                            print(error)
+                        } else if success {
+                            if self.seguedFrom == "BridgeViewController" {
+                                self.performSegueWithIdentifier("showBridgeFromSingleMessage", sender: self)
+                            } else {
+                                self.performSegueWithIdentifier("showMessagesTableFromSingleMessage", sender: self)
+                            }
+                        }
                     })
-                    
                 }
-                
-                
-                
-            })
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                
-                //pop-up/drop-down segue for BridgeViewController Message creations
-                if self.seguedFrom == "BridgeViewController" {
-                    self.performSegueWithIdentifier("showBridgeFromSingleMessage", sender: self)
-                } else {
-                    self.performSegueWithIdentifier("showMessagesTableFromSingleMessage", sender: self)
-                }
-                
-                //slide in and slide back segue from Messages message access.
-                
-                //self.performSegueWithIdentifier("showMessagesFromSingleMessage", sender: self)
-                
             })
             
             
@@ -774,14 +743,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         //return messageTextArray.count
         //print("objectIDToMessageContentArrayMapping.count - \(objectIDToMessageContentArrayMapping.count)")
-        
-        if objectIDToMessageContentArrayMapping.count == 0 {
-            displayNoMessages()
-            print("displayNoMessages")
-        } else {
-            noMessagesLabel.alpha = 0
-            print("don't display no messages")
-        }
         
         return objectIDToMessageContentArrayMapping.count
         

@@ -9,9 +9,6 @@
 import UIKit
 import Parse
 
-var singleMessageTitle = "Message"
-var messageId = String()
-
 //Change to MessagesTableViewController so other can be MessageViewController
 
 func getWeekDay(num:Int)->String{
@@ -84,6 +81,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var singleMessageId = ""
     let transitionManager = TransitionManager()
     
+    var messageId = String()
+    var singleMessageTitle = "Conversation"
+    
     /*@IBAction func segueToBridgeViewController(sender: AnyObject) {
         self.runBackgroundThread = false
         navigationController?.popViewControllerAnimated(true)
@@ -107,6 +107,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             singleMessageVC.transitioningDelegate = self.transitionManager
             singleMessageVC.isSeguedFromMessages = true
             singleMessageVC.newMessageId = self.singleMessageId
+           
         }
         else {
             let vc = segue.destinationViewController
