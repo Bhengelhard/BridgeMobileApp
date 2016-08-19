@@ -11,17 +11,22 @@ import Parse
 
 class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var navigationBar: UINavigationBar!
+    //@IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var editImageButton: UIButton!
-    @IBOutlet weak var bridgeStatus: UIButton!
+    //@IBOutlet weak var bridgeStatus: UIButton!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
+    let navigationBar = UINavigationBar()
+    let necterButton = UIButton()
+    let bridgeStatus = UIButton()
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     var editableName:String = ""
     let noNameText = "Click to enter your full name"
     let transitionManager = TransitionManager()
+    
+    let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
@@ -109,16 +114,62 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             }
         }
     }
+    func displayNavigationBar(){
+        
+        let navItem = UINavigationItem()
+
+        //setting the necterIcon to the rightBarButtonItem
+        //setting messagesIcon to the icon specifying if there are or are not notifications
+        necterButton.setImage(UIImage(named: "All_Types_Icon_Gray"), forState: .Normal)
+        necterButton.setImage(UIImage(named: "Necter_Icon"), forState: .Selected)
+        necterButton.setImage(UIImage(named: "Necter_Icon"), forState: .Highlighted)
+        necterButton.addTarget(self, action: #selector(necterIconTapped(_:)), forControlEvents: .TouchUpInside)
+        necterButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
+        necterButton.contentMode = UIViewContentMode.ScaleAspectFill
+        necterButton.clipsToBounds = true
+        let rightBarButton = UIBarButtonItem(customView: necterButton)
+        navItem.rightBarButtonItem = rightBarButton
+        
+        //setting the navBar color and title
+        navigationBar.setItems([navItem], animated: false)
+        
+        let navBarTitleView = UIView()
+        navBarTitleView.frame = CGRect(x: 0, y: 0, width: 0.06*screenHeight, height: 0.06*screenHeight)
+        //navBarTitleView.backgroundColor = UIColor.greenColor()
+        let titleImageView = UIImageView(image: UIImage(named: "Profile_Icon_Yellow"))
+        titleImageView.frame = CGRect(x: 0, y: 0, width: 0.06*screenHeight, height: 0.06*screenHeight)
+        titleImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        titleImageView.clipsToBounds = true
+        navBarTitleView.addSubview(titleImageView)
+        navigationBar.topItem?.titleView = navBarTitleView
+        //navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 30)!, NSForegroundColorAttributeName: necterYellow]
+        /*UIView *backView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];// Here you can set View width and height as per your requirement for displaying titleImageView position in navigationbar
+        [backView setBackgroundColor:[UIColor greenColor]];
+        UIImageView *titleImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SelectAnAlbumTitleLettering"]];
+        titleImageView.frame = CGRectMake(45, 5,titleImageView.frame.size.width , titleImageView.frame.size.height); // Here I am passing origin as (45,5) but can pass them as your requirement.
+        [backView addSubview:titleImageView];*/
+        
+        navigationBar.barStyle = .Black
+        navigationBar.barTintColor = UIColor.whiteColor()
+        
+        self.view.addSubview(navigationBar)
+        
+    }
+    func necterIconTapped (sender: UIBarButtonItem) {
+        necterButton.selected = true
+        performSegueWithIdentifier("showBridgeViewFromProfilePage", sender: self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         nameTextField.delegate = self
         imagePicker.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         
+        displayNavigationBar()
         
         /*
         let modelName = UIDevice.currentDevice().modelName
@@ -180,16 +231,22 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             editImageButton.setImage(image, forState: .Normal)
         }
         
+        bridgeStatus.setTitle("Post Status", forState: .Normal)
+        bridgeStatus.titleLabel!.font = UIFont(name: "Verdana", size: 20)
+        bridgeStatus.setTitleColor(necterYellow, forState: UIControlState.Highlighted)
+        bridgeStatus.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         bridgeStatus.layer.cornerRadius = 7.0
         bridgeStatus.layer.borderWidth = 4.0
-        bridgeStatus.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
+        bridgeStatus.layer.borderColor = necterYellow.CGColor
         bridgeStatus.clipsToBounds = true
+        bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), forControlEvents: .TouchUpInside)
         
-        bridgeStatus.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
-        
-        bridgeStatus.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        view.addSubview(bridgeStatus)
         tableView.tableFooterView = UIView()
         
+    }
+    func statusTapped(sender: UIButton) {
+        performSegueWithIdentifier("showNewStatusViewFromProfilePage", sender: self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -198,7 +255,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     override func viewDidLayoutSubviews() {
-        navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.1*screenHeight)
+        navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.11*screenHeight)
         editImageButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
         editImageButton.center.x = self.view.center.x
         editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
@@ -276,14 +333,21 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-            let vc = segue.destinationViewController
-            let mirror = Mirror(reflecting: vc)
-//            if mirror.subjectType == BridgeViewController.self {
-//                self.transitionManager.animateRightToLeft = false
-//            }
-            vc.transitioningDelegate = self.transitionManager
+        //let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
+
+        let vc = segue.destinationViewController
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == BridgeViewController.self {
+            self.transitionManager.animationDirection = "Right"
+        } else if mirror.subjectType == NewBridgeStatusViewController.self {
+            self.transitionManager.animationDirection = "Top"
+            let vc2 = vc as! NewBridgeStatusViewController
+            vc2.seguedFrom = "ProfileViewController"
+        }
+        vc.transitioningDelegate = self.transitionManager
     }
+    
+    
  
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

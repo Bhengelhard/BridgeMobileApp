@@ -17,10 +17,11 @@ class SingleMessageTableCell: UITableViewCell {
     var senderId:String = ""
     var addSenderName = false
     var addTimestamp = false
+    let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
     var singleMessageContent: SingleMessageContent? {
         didSet {
             if let s = singleMessageContent {
-                messageTextLabel.textColor = s.backgroundColor
+                messageTextLabel.backgroundColor = s.backgroundColor
                 //print("bg - \(s.backgroundColor)")
                 timestampLabel.text = s.timestamp
                 senderNameLabel.text = s.senderName
@@ -57,21 +58,24 @@ class SingleMessageTableCell: UITableViewCell {
         
         messageTextLabel = UITextView(frame: CGRectZero)
         messageTextLabel.textAlignment = .Left
-        messageTextLabel.textColor = UIColor.blackColor()
+        messageTextLabel.textColor = necterGray
+        messageTextLabel.font = UIFont(name: "Verdana", size: 16)
         messageTextLabel.userInteractionEnabled = false
         messageTextLabel.backgroundColor = UIColor.lightGrayColor()
         contentView.addSubview(messageTextLabel)
         
         senderNameLabel = UITextView(frame: CGRectZero)
         senderNameLabel.textAlignment = .Left
-        senderNameLabel.textColor = UIColor.whiteColor()
+        senderNameLabel.textColor = necterGray
+        senderNameLabel.font = UIFont(name: "Verdana", size: 12)
         senderNameLabel.userInteractionEnabled = false
-        senderNameLabel.backgroundColor = UIColor.lightGrayColor()
+        //senderNameLabel.backgroundColor = UIColor.lightGrayColor()
         
         timestampLabel = UILabel(frame: CGRectZero)
         timestampLabel.textAlignment = .Center
         timestampLabel.textColor = UIColor.lightGrayColor()
-        timestampLabel.font = timestampLabel.font.fontWithSize(10)
+        //timestampLabel.font = timestampLabel.font.fontWithSize(10)
+        timestampLabel.font = UIFont(name: "BentonSans", size: 10)
 
         //contentView.addSubview(timestampLabel)
     }
@@ -92,9 +96,9 @@ class SingleMessageTableCell: UITableViewCell {
         if addTimestamp == true {
             //print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
             timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
-            timestampLabel.layer.borderWidth = 1
-            timestampLabel.layer.cornerRadius = 10
-            timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
+            //timestampLabel.layer.borderWidth = 1
+            //timestampLabel.layer.cornerRadius = 10
+            //timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
 //            addTimestamp = false
             y += timestampLabel.frame.height + 2
 //            print("timestampLabel - \(timestampLabel.frame)")

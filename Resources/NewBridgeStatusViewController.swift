@@ -32,7 +32,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     let transitionManager = TransitionManager()
 
     var enablePost = Bool()
-    var vc : ProfileViewController? = nil
+    var seguedFrom = ""
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -175,7 +175,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
        //CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.10*cardHeight)
         locationLabel.alpha = 0
-        locationLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.17*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.1*profilePictureHeight)
+        locationLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.16*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.1*profilePictureHeight)
         locationLabel.text = "Save location to device"
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
@@ -281,14 +281,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         }*/
         
     }
-    
     func cancelTapped(sender: UIButton ){
-        print("cancel selected")
-        //presentViewController(vc!, animated: true, completion: nil)
-        //navigationController!.popViewControllerAnimated(true)
-        //dismissViewControllerAnimated(true, completion: nil)
-        performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
-
+        performSegueToPriorView()
     }
     func backTapped(sender: UIButton ){
         
@@ -305,7 +299,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         //show previous views setup (i.e. the initial bot question of which connection type the user is looking for)
         let greeting = "Hello \(firstName), \n\nWhat type of connection are you looking for?" as NSString
         //var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22)!])
-        var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
+        let attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
         let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
         let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
         attributedGreeting.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(firstName),"))
@@ -365,8 +359,6 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                 } else if i == 6 {
                     self.selectTypeLabel.alpha = 0
                     self.performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
-                    //self.presentViewController(self.vc!, animated: true, completion: nil)
-                    //self.navigationController!.popViewControllerAnimated(true)
                 }
                 
             }, completion: nil)
@@ -381,15 +373,29 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         bridgeStatusObject["bridge_type"] = self.necterType
         bridgeStatusObject["userId"] = PFUser.currentUser()?.objectId
         bridgeStatusObject.saveInBackground()
-        /*PFCloud.callFunctionInBackground("changeBridgePairingsOnStatusUpdate", withParameters: ["status":self.bridgeStatus.text!, "bridgeType":self.necterType]) {
+        PFCloud.callFunctionInBackground("changeBridgePairingsOnStatusUpdate", withParameters: ["status":self.bridgeStatus.text!, "bridgeType":self.necterType]) {
             (response:AnyObject?, error: NSError?) -> Void in
             if error == nil {
                 if let response = response as? String {
                     print(response)
                 }
             }
-        }*/
-        //self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        performSegueToPriorView()
+    }
+    
+    func performSegueToPriorView() {
+        if seguedFrom == "ProfileViewController" {
+            performSegueWithIdentifier("showProfilePageFromNewStatusView", sender: self)
+        } else if seguedFrom == "BridgeViewController" {
+            performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
+        } else if seguedFrom == "MessagesViewController" {
+            performSegueWithIdentifier("showMessagesViewfromStatus", sender: self)
+        } else {
+            //default case
+            performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
+        }
     }
 
     override func viewDidLoad() {
@@ -399,7 +405,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         optionsTableView.delegate = self
         optionsTableView.dataSource = self
         
-        vc = storyboard!.instantiateViewControllerWithIdentifier("ProfileViewController") as? ProfileViewController
+        //vc = storyboard!.instantiateViewControllerWithIdentifier("ProfileViewController") as? ProfileViewController
         
         if let name = localData.getUsername() {
             username.text = name
@@ -632,6 +638,10 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Bottom"
+        } else if mirror.subjectType == ProfileViewController.self {
+            self.transitionManager.animationDirection = "Bottom"
+        } else if mirror.subjectType == MessagesViewController.self {
+            self.transitionManager.animationDirection = "Bottom"
         }
         vc.transitioningDelegate = self.transitionManager
         
@@ -646,123 +656,6 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         // Pass the selected object to the new view controller.
     }
     */
-     /*
-     let businessButton = UIButton()
-     let businessLabel = UILabel()
-     //setting business button and label
-     businessButton.frame = CGRect(x: 0.1*screenWidth, y: 0.3*screenHeight, width: 0.2*screenWidth, height: 0.2*screenWidth)
-     businessButton.setBackgroundImage(UIImage(named: "Business-33x33.png"), forState: .Normal)
-     businessButton.addTarget(self, action: #selector(businessButtonClicked), forControlEvents: .TouchUpInside)
-     businessButton.contentMode = UIViewContentMode.ScaleToFill
-     businessButton.clipsToBounds = true
-     businessLabel.text = "Business"
-     businessLabel.font = UIFont(name: "BentonSans", size: 20)
-     businessLabel.textAlignment = NSTextAlignment.Left
-     businessLabel.frame = CGRect(x: 0, y: 0, width: 0.3*screenWidth, height: 0.1*screenHeight)
-     businessLabel.center.x = businessButton.center.x + 0.3*screenWidth
-     businessLabel.center.y = businessButton.center.y
-     view.addSubview(businessButton)
-     view.addSubview(businessLabel)
-     
-     //setting love button and label
-     let loveButton = UIButton()
-     let loveLabel = UILabel()
-     loveButton.frame = CGRect(x: 0.1*screenWidth, y: 0.35*screenHeight + 0.2*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
-     loveButton.setBackgroundImage(UIImage(named: "Love-33x33.png"), forState: .Normal)
-     loveButton.addTarget(self, action: #selector(loveButtonClicked), forControlEvents: .TouchUpInside)
-     loveButton.contentMode = UIViewContentMode.ScaleToFill
-     loveButton.clipsToBounds = true
-     loveLabel.text = "Love"
-     loveLabel.font = UIFont(name: "BentonSans", size: 16)
-     loveLabel.textAlignment = NSTextAlignment.Left
-     loveLabel.frame = CGRect(x: 0, y: 0, width: 0.3*screenWidth, height: 0.1*screenHeight)
-     loveLabel.center.x = loveButton.center.x + 0.3*screenWidth
-     loveLabel.center.y = loveButton.center.y
-     view.addSubview(loveButton)
-     view.addSubview(loveLabel)
-     
-     //setting friendship button and label
-     let friendshipButton = UIButton()
-     let friendshipLabel = UILabel()
-     friendshipButton.frame = CGRect(x: 0.1*screenWidth, y: 0.4*screenHeight + 0.4*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
-     friendshipButton.setBackgroundImage(UIImage(named: "Friendship-44x44.png"), forState: .Normal)
-     friendshipButton.addTarget(self, action: #selector(friendshipButtonClicked), forControlEvents: .TouchUpInside)
-     friendshipButton.contentMode = UIViewContentMode.ScaleToFill
-     friendshipButton.clipsToBounds = true
-     friendshipLabel.text = "Friendship"
-     friendshipLabel.font = UIFont(name: "BentonSans", size: 20)
-     friendshipLabel.textAlignment = NSTextAlignment.Left
-     friendshipLabel.frame = CGRect(x: 0, y: 0, width: 0.3*screenWidth, height: 0.1*screenHeight)
-     friendshipLabel.center.x = friendshipButton.center.x + 0.3*screenWidth
-     friendshipLabel.center.y = friendshipButton.center.y
-     view.addSubview(friendshipButton)
-     view.addSubview(friendshipLabel)
-     */
-
-     
-     
-     
-      /*
-     func displayNavigationBar(){
-     
-     var items = [UINavigationItem]()
-     
-     navItem.leftBarButtonItem = UIBarButtonItem(title: "cancel", style: .Plain, target: self, action: #selector(cancelTapped(_:)))
-     navItem.leftBarButtonItem?.setTitleTextAttributes([ NSFontAttributeName: UIFont(name: "Verdana", size: 16)!, NSForegroundColorAttributeName: UIColor.grayColor()], forState: .Normal)
-     navItem.rightBarButtonItem = UIBarButtonItem(title: "Post", style: .Plain, target: self, action: #selector(postTapped(_:)))
-     navItem.rightBarButtonItem?.setTitleTextAttributes([ NSFontAttributeName: UIFont(name: "Verdana", size: 16)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()], forState: .Normal)
-     //navItem.title = "necter Status"
-     items.append(navItem)
-     
-     navigationBar.setItems(items, animated: false)
-     navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Verdana", size: 20)!, NSForegroundColorAttributeName: UIColor.blackColor()]
-     
-     view.addSubview(navigationBar)
-     
-     
-     }*/
-    /*func textFieldDidEndEditing(textField: UITextField) {
-     if bridgeStatus.text! != "" && pickerSelected{
-     postButton.enabled = true
-     }
-     }*/
-    /*func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-     let pickerLabel = UILabel()
-     let titleData = pickerData[row]
-     var myTitle = NSAttributedString()
-     if row == 0{
-     
-     myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
-     pickerLabel.backgroundColor = UIColor.init(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0)
-     }
-     else if row == 1{
-     
-     myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
-
-     pickerLabel.backgroundColor = UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0)
-     }
-     else if row == 2{
-     
-     myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
-     pickerLabel.backgroundColor = UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)
-     }
-     else {
-     myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
-     }
-     
-     
-     
-     pickerLabel.attributedText = myTitle
-     return pickerLabel
-     }*/
-    
-    /*func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-     
-     return pickerData[row]
-     }*/
-    
-    
-    
 
 }
 

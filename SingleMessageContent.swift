@@ -19,6 +19,13 @@ class SingleMessageContent {
     var timestamp: String?
     var showTimestamp: Bool?
     var isNotification: Bool?
+    
+    //necter Colors
+    let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
+    let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
+    let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
+    let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
+    
     init(messageContent: [String: AnyObject]) {
         if let m = messageContent["messageText"] as? String {
             messageText = m
@@ -82,20 +89,21 @@ class SingleMessageContent {
     var backgroundColor: UIColor {
         if senderId == PFUser.currentUser()?.objectId {
             //print("bridgeType == PFUser.currentUser()?.objectId")
-            return UIColor.blackColor()
+            return UIColor.lightGrayColor()
         }
         else if bridgeType == "Business" {
-            return UIColor.init(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)
+            return businessBlue
         }
         else if bridgeType == "Love" {
             //print("bridgeType == Love")
-            return UIColor.init(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0)
+            return loveRed
         }
         else if bridgeType == "Friendship" {
-            return UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0)
+            return friendshipGreen
+        } else {
+            return UIColor.lightGrayColor()
         }
-        //print("bridgeType == UIColor.grayColor")
-        return UIColor.blackColor()
+        
     }
     
    
