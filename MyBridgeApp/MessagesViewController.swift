@@ -63,13 +63,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var messageViewed = [String : Bool]()
     var messageTimestamps = [String : NSDate?]()
     var messagePositionToMessageIdMapping = [Int:String]()
+    var necterTypeColor = UIColor()
     
     let searchController = UISearchController(searchResultsController: nil)
     var filteredPositions = [Int]()
     var toolbarTapped = false
     var encounteredBefore: [Int:Bool] = [:]
     var noOfElementsProcessed = 0
-    var noOfElementsPerRefresher = 2
+    var noOfElementsPerRefresher = 5
     var noOfElementsFetched = 0
     var totalElements = 0
     var isElementCountNotFetched = true
@@ -81,7 +82,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let transitionManager = TransitionManager()
     
     var messageId = String()
-    var singleMessageTitle = "Conversation"
+    var singleMessageTitle = ""
     
    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -93,6 +94,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             singleMessageVC.transitioningDelegate = self.transitionManager
             singleMessageVC.isSeguedFromMessages = true
             singleMessageVC.newMessageId = self.singleMessageId
+            singleMessageVC.necterTypeColor = necterTypeColor
+            singleMessageVC.singleMessageTitle = singleMessageTitle
            
         }
         else {
@@ -902,8 +905,19 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         singleMessageTitle = (currentCell.participants?.text)!
         singleMessageId = messagePositionToMessageIdMapping[indexPath.row]!
         messageId = messagePositionToMessageIdMapping[indexPath.row ]!
+        let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[indexPath.row ]!]!
+        switch(necterTypeForMessage) {
+        case "Business":
+            necterTypeColor = businessBlue
+        case "Love":
+            necterTypeColor = loveRed
+        case "Friendship":
+            necterTypeColor = friendshipGreen
+        default:
+            necterTypeColor = necterGray
+        }
         
-        //previousViewController = "MessagesViewController"
+         //previousViewController = "MessagesViewController"
         toolbarTapped = false
         let query: PFQuery = PFQuery(className: "Messages")
         query.getObjectInBackgroundWithId(messageId) {
