@@ -1089,8 +1089,8 @@ class BridgeViewController: UIViewController {
 
             let currentUserId = PFUser.currentUser()?.objectId
             let currentUserName = (PFUser.currentUser()?["name"] as? String) ?? ""
-            message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserName]
-            message["names_in_message"] = [(bridgePairings[x].user1?.name)!, (bridgePairings[x].user2?.name)!, currentUserId!]
+            message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
+            message["names_in_message"] = [(bridgePairings[x].user1?.name)!, (bridgePairings[x].user2?.name)!, currentUserName]
             //print("userId1, userId2 - \((bridgePairings[x].user1?.userId)!),\((bridgePairings[x].user2?.userId)!)")
             message["bridge_builder"] = currentUserId
             var y = [String]()

@@ -27,8 +27,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     let toolbar = UIToolbar()
     let messageText = UITextField()
     let sendButton = UIButton()
-    //@IBOutlet weak var messageText: UITextField!
-    //@IBOutlet weak var toolbar: UIToolbar!
+    var necterTypeColor = UIColor()
     
     //setting the height of the keyboard
     var keyboardHeight = CGFloat()
@@ -40,7 +39,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     //getting information on which viewController the user was on prior to this one
     var seguedFrom = ""
     var messageId = String()
-    var singleMessageTitle = "Conversation"
+    var singleMessageTitle = ""
     
     //necter Colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
@@ -61,7 +60,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     var refresher = UIRefreshControl()
     let transitionManager = TransitionManager()
     
-    func updateTitle(){
+    /*func updateTitle(){
         var stringOfNames = ""
         let query: PFQuery = PFQuery(className: "Messages")
         query.getObjectInBackgroundWithId(newMessageId) { (result: PFObject?, error: NSError?) -> Void in
@@ -111,7 +110,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 }
             }
         }
-    }
+    }*/
     func updatePushNotifications(){
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
@@ -506,7 +505,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         navigationBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0.11*screenHeight)
         navigationBar.setItems([navItem], animated: false)
         navigationBar.topItem?.title = "Conversation"
-        navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: necterYellow]
+        navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: necterTypeColor]
         navigationBar.barStyle = .Black
         navigationBar.barTintColor = UIColor.whiteColor()
         
@@ -713,23 +712,23 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         if isSeguedFromMessages   {
             messageId = newMessageId
             updateMessages()
-            self.updateTitle()
+            //self.updateTitle()
         }
 
         else if isSeguedFromNewMessage   {
             messageId = newMessageId
             updateMessages()
-            self.updateTitle()
+            //self.updateTitle()
         }
         else if isSeguedFromBridgePage   {
             messageId = newMessageId
             updateMessages()
-            self.updateTitle()
+            //self.updateTitle()
         }
         else {
             messageId = newMessageId
             updateMessages()
-            self.updateTitle()
+            //self.updateTitle()
         }
 
         // Do any additional setup after loading the view.
@@ -749,8 +748,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     override func viewWillAppear(animated: Bool) {
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
