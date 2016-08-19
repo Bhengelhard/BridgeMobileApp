@@ -187,6 +187,7 @@ class BridgeViewController: UIViewController {
         allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
         allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
         allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
+        
         //setting allTypesText
         allTypesLabel.attributedText = allTypesAttributedText
         allTypesLabel.textAlignment =  NSTextAlignment.Center
@@ -380,18 +381,6 @@ class BridgeViewController: UIViewController {
         photoView.contentMode = UIViewContentMode.ScaleAspectFill
         photoView.clipsToBounds = true
         
-        let screenUnderTop = UIImageView(frame: screenUnderTopFrame)
-        screenUnderTop.image = UIImage(named: "Screen over Image.png")
-        //screenUnderTop.layer.cornerRadius = 15
-        screenUnderTop.contentMode = UIViewContentMode.ScaleAspectFill
-        screenUnderTop.clipsToBounds = true
-        
-        let screenUnderBottom = UIImageView(frame: screenUnderBottomFrame)
-        screenUnderBottom.image = UIImage(named: "Screen over Image.png")
-        //screenUnderBottom.layer.cornerRadius = 15
-        screenUnderBottom.contentMode = UIViewContentMode.ScaleAspectFill
-        screenUnderBottom.clipsToBounds = true
-        
         let card = UIView(frame:deckFrame)
         
         
@@ -438,11 +427,7 @@ class BridgeViewController: UIViewController {
         nameLabel.backgroundColor = UIColor.clearColor()
         locationLabel.backgroundColor = UIColor.clearColor()
         statusLabel.backgroundColor = UIColor.clearColor()
-        
-        //photoView.layer.insertSublayer(gradient, atIndex: 0)
         card.addSubview(photoView)
-        //card.addSubview(screenUnderTop)
-        //card.addSubview(screenUnderBottom)
         card.addSubview(nameLabel)
         card.addSubview(locationLabel)
         card.addSubview(statusLabel)
@@ -476,9 +461,14 @@ class BridgeViewController: UIViewController {
         
         let necterTypeIcon = UIImageView()
         //necterTypeIcon.alpha = 1.0
-        necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.075*superDeckWidth, width: 0.15*superDeckWidth, height: 0.15*superDeckWidth)
+        necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.08*superDeckWidth, width: 0.12*superDeckWidth, height: 0.12*superDeckWidth)
         necterTypeIcon.contentMode = UIViewContentMode.ScaleAspectFill
         necterTypeIcon.clipsToBounds = true
+        
+        necterTypeIcon.layer.shadowOpacity = 0.5
+        necterTypeIcon.layer.shadowRadius = 0.5
+        necterTypeIcon.layer.shadowColor = UIColor.blackColor().CGColor
+        necterTypeIcon.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
         if cardColor == typesOfColor.Business {
             necterTypeLine.backgroundColor = businessBlue
