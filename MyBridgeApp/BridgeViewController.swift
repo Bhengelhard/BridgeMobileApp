@@ -1088,7 +1088,9 @@ class BridgeViewController: UIViewController {
             message.ACL = acl
 
             let currentUserId = PFUser.currentUser()?.objectId
-            message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
+            let currentUserName = (PFUser.currentUser()?["name"] as? String) ?? ""
+            message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserName]
+            message["names_in_message"] = [(bridgePairings[x].user1?.name)!, (bridgePairings[x].user2?.name)!, currentUserId!]
             //print("userId1, userId2 - \((bridgePairings[x].user1?.userId)!),\((bridgePairings[x].user2?.userId)!)")
             message["bridge_builder"] = currentUserId
             var y = [String]()
