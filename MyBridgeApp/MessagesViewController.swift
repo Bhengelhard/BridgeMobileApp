@@ -75,7 +75,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var isElementCountNotFetched = true
     var refresher:UIRefreshControl!
     var pagingSpinner : UIActivityIndicatorView!
-    var runBackgroundThread = true
     
     var segueToSingleMessage = false
     var singleMessageId = ""
@@ -84,22 +83,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var messageId = String()
     var singleMessageTitle = "Conversation"
     
-    /*@IBAction func segueToBridgeViewController(sender: AnyObject) {
-        self.runBackgroundThread = false
-        navigationController?.popViewControllerAnimated(true)
-        
-    }
-    @IBAction func composeMessage(sender: AnyObject) {
-        performSegueWithIdentifier("showNewMessageFromMessages", sender: self)
-    }
-    
-    // startBackgroundThread() reloads the table when the 3 async Parse tasks are complete
-    @IBAction func bridgeTapped(sender: AnyObject) {
-        performSegueWithIdentifier("showBridgeFromMessages", sender: self)
-    }*/
+   
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             NSNotificationCenter.defaultCenter().removeObserver(self)
-           self.runBackgroundThread = false
         if segueToSingleMessage {
             //print(" prepareForSegue was Called")
             segueToSingleMessage = false
@@ -127,36 +113,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             
         }
 
-//        if let _ = self.navigationController{
-//            print("no - \(navigationController?.viewControllers.count)")
-//            if (navigationController?.viewControllers.count)! > 1 {
-//            for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
-//                navigationController?.viewControllers.removeAtIndex(0)
-//            }
-//            }
-//            
-//            navigationController?.viewControllers.removeAll()
-//        }
 
-    }
-    func startBackgroundThread() {
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
-//            while self.runBackgroundThread && (self.isElementCountNotFetched || self.names.count < self.totalElements || self.messageTimestamps.count < self.totalElements ||  self.messages.count <  self.totalElements   ) {
-//
-//                if self.encounteredBefore[self.noOfElementsFetched] == nil && self.noOfElementsFetched > 0 && self.names.count == self.noOfElementsFetched && self.messages.count == self.noOfElementsFetched && self.messageTimestamps.count == self.noOfElementsFetched{
-//                    self.encounteredBefore[self.noOfElementsFetched] = true
-//                    dispatch_async(dispatch_get_main_queue(), {
-//                        //self.refresher.endRefreshing()
-//                        //print("reloadData")
-//                        self.tableView.reloadData()
-//                        print("stop animating")
-//                        self.pagingSpinner.stopAnimating()
-//                    })
-//                }
-//                
-//            }
-//            //print("backgroundThread stopped")
-//        }
+
     }
     // refresh() fetches the data from Parse
     func refresh() {
@@ -181,8 +139,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     let result = results[i]
                     self.messagePositionToMessageIdMapping[self.noOfElementsProcessed] = result.objectId!
                     self.noOfElementsProcessed += 1
-                    //print( "\(self.noOfElementsProcessed) - \(result["lastSingleMessageAt"] as! (NSDate))")
-                    //self.IDsOfMessages.append(result.objectId!)
                     if let _ = result["message_type"] {
                         self.messageType[result.objectId!] = (result["message_type"] as! (String))
                     }
@@ -210,59 +166,72 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         self.messageViewed[result.objectId!]=(false)
                         //print("3")
                     }
-
-                    let message_userids = result["ids_in_message"] as! [String]
-                    
-                    //get all those involved in this chat
-                    let userQuery = PFQuery(className:"_User")
-                    userQuery.whereKey("objectId", containedIn:message_userids)
-                    userQuery.cachePolicy = .NetworkElseCache
-                    userQuery.findObjectsInBackgroundWithBlock({(results, error) -> Void in
+                    if let _ = result["last_single_message"] {
+                        self.messages[result.objectId!] = (result["last_single_message"] as! (String))
+                    }
+                    else {
+                        self.messages[result.objectId!] = "Your new connection awaits"
+                    }
                     var names_per_message = [String]()
-                    if (error == nil) {
-                        for userObject in results! {
-                            names_per_message.append(userObject["name"] as! String)
+                    if let names = result["names_in_message"] as? [String] {
+                        for name in names {
+                            names_per_message.append(name)
                         }
+                        
                     }
                     self.names[result.objectId!] = (names_per_message)
-                    self.tableView.reloadData()
-                    })
+//                    let message_userids = result["ids_in_message"] as! [String]
+//                    
+//                    //get all those involved in this chat
+//                    let userQuery = PFQuery(className:"_User")
+//                    userQuery.whereKey("objectId", containedIn:message_userids)
+//                    userQuery.cachePolicy = .NetworkElseCache
+//                    userQuery.findObjectsInBackgroundWithBlock({(results, error) -> Void in
+//                    var names_per_message = [String]()
+//                    if (error == nil) {
+//                        for userObject in results! {
+//                            names_per_message.append(userObject["name"] as! String)
+//                        }
+//                    }
+//                    self.names[result.objectId!] = (names_per_message)
+//                    self.tableView.reloadData()
+//                    })
                     // get the message
-                    let messageQuery = PFQuery(className:"SingleMessages")
-                    messageQuery.whereKey("message_id", equalTo:result.objectId!)
-                    messageQuery.orderByDescending("updatedAt")
-                    messageQuery.cachePolicy = .NetworkElseCache
-                    messageQuery.limit = 1
-                    messageQuery.findObjectsInBackgroundWithBlock({(objects, error) -> Void in
-                        if (error == nil) {
-                            if objects!.count == 0{
-
-                            //self.messages[result.objectId!] = ("Your new bridge awaits")
-                            //self.messageTimestamps[result.objectId!] = (result.createdAt!)
-                            self.messages[result.objectId!] = ("Your new connection awaits")
-                            //self.messageTimestamps[result.objectId!] = (result.createdAt!)
-                            }
-                            else {
-                                for messageObject in objects! {
-                                    if let _ = messageObject["message_text"] {
-                                        self.messages[result.objectId!] = (messageObject["message_text"] as! (String))
-                                        //hide no messages Label because there are messages in the View
-                                        print("got to messages")
-                                    }
-                                    else{
-                                        self.messages[result.objectId!] = ("")
-                                    }
-                                    //self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
-                                    break
-                                    //friendsArray.append(object.objectId!)
-                                }
-                            }
-                        }
-                        else {
-                            self.messages[result.objectId!] = ("")
-                        }
-                        self.tableView.reloadData()
-                    })
+//                    let messageQuery = PFQuery(className:"SingleMessages")
+//                    messageQuery.whereKey("message_id", equalTo:result.objectId!)
+//                    messageQuery.orderByDescending("updatedAt")
+//                    messageQuery.cachePolicy = .NetworkElseCache
+//                    messageQuery.limit = 1
+//                    messageQuery.findObjectsInBackgroundWithBlock({(objects, error) -> Void in
+//                        if (error == nil) {
+//                            if objects!.count == 0{
+//
+//                            //self.messages[result.objectId!] = ("Your new bridge awaits")
+//                            //self.messageTimestamps[result.objectId!] = (result.createdAt!)
+//                            self.messages[result.objectId!] = ("Your new connection awaits")
+//                            //self.messageTimestamps[result.objectId!] = (result.createdAt!)
+//                            }
+//                            else {
+//                                for messageObject in objects! {
+//                                    if let _ = messageObject["message_text"] {
+//                                        self.messages[result.objectId!] = (messageObject["message_text"] as! (String))
+//                                        //hide no messages Label because there are messages in the View
+//                                        print("got to messages")
+//                                    }
+//                                    else{
+//                                        self.messages[result.objectId!] = ("")
+//                                    }
+//                                    //self.messageTimestamps[result.objectId!] = ((messageObject.createdAt))
+//                                    break
+//                                    //friendsArray.append(object.objectId!)
+//                                }
+//                            }
+//                        }
+//                        else {
+//                            self.messages[result.objectId!] = ("")
+//                        }
+//                        self.tableView.reloadData()
+//                    })
                 }
             }
            self.tableView.reloadData()
@@ -708,7 +677,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 print(" not alive")
             }
         }
-        startBackgroundThread()
        
         tableView.delegate = self
         tableView.dataSource = self
@@ -791,11 +759,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 
     // Data to be shown on an individual row
      func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        //print("Row is \(indexPath.row) \(messageViewed)")
-//        var names = self.names
-//        var messages = self.messages
-//        var messageType = self.messageType
-//        var messageTimestamps = self.messageTimestamps
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = MessagesTableCell()//tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
         //if indexPath.row != 0 {
@@ -805,19 +768,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.cellHeight = screenHeight/6.0
         cell.cellHeight = 0.15 * screenHeight
         if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
-//             names = [[String]]()
-//             messages = [String]()
-//             messageType = [String]()
-//             messageTimestamps = [NSDate?]()
             var i = 0
             messagePositionToMessageIdMapping = [Int:String]()
             for index in filteredPositions {
                  messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
                  i += 1
-//                names.append(self.names[index])
-//                messages.append(self.messages[index])
-//                messageType.append(self.messageType[index])
-//                messageTimestamps.append(self.messageTimestamps[index])
             }
         }
         if messagePositionToMessageIdMapping[indexPath.row] == nil || names[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messages[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messageType[messagePositionToMessageIdMapping[indexPath.row]!] == nil{
@@ -950,7 +905,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //previousViewController = "MessagesViewController"
         toolbarTapped = false
-        self.runBackgroundThread = false
         let query: PFQuery = PFQuery(className: "Messages")
         query.getObjectInBackgroundWithId(messageId) {
             (messageObject: PFObject?, error: NSError?) -> Void in

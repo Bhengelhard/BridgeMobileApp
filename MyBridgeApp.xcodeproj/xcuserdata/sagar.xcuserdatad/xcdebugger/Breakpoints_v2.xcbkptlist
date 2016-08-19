@@ -90,12 +90,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "327"
-            endingLineNumber = "327"
-            landmarkName = "reloadMessageTable(_:)"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -271,7 +271,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "165"
             endingLineNumber = "165"
-            landmarkName = "displayToolBar()"
+            landmarkName = "setCityName(_:locationCoordinates:pairing:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -287,7 +287,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "164"
             endingLineNumber = "164"
-            landmarkName = "displayToolBar()"
+            landmarkName = "setCityName(_:locationCoordinates:pairing:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -303,7 +303,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "163"
             endingLineNumber = "163"
-            landmarkName = "displayToolBar()"
+            landmarkName = "setCityName(_:locationCoordinates:pairing:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -319,7 +319,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "162"
             endingLineNumber = "162"
-            landmarkName = "displayToolBar()"
+            landmarkName = "setCityName(_:locationCoordinates:pairing:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -335,7 +335,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "485"
             endingLineNumber = "485"
-            landmarkName = "displayCards()"
+            landmarkName = "addCardPairView(_:name:location:status:photo:locationCoordinates1:name2:location2:status2:photo2:locationCoordinates2:cardColor:pairing:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -367,7 +367,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "239"
             endingLineNumber = "239"
-            landmarkName = "updateTitle()"
+            landmarkName = "updateMessages()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -383,7 +383,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "222"
             endingLineNumber = "222"
-            landmarkName = "updateTitle()"
+            landmarkName = "updateMessages()"
             landmarkType = "5">
             <Locations>
                <Location
@@ -461,7 +461,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "227"
             endingLineNumber = "227"
-            landmarkName = "updateTitle()"
+            landmarkName = "updateMessages()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -477,7 +477,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "235"
             endingLineNumber = "235"
-            landmarkName = "updateTitle()"
+            landmarkName = "updateMessages()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -493,7 +493,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "233"
             endingLineNumber = "233"
-            landmarkName = "updateTitle()"
+            landmarkName = "updateMessages()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -504,12 +504,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/SingleMessageViewController.swift"
-            timestampString = "493079491.054317"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "409"
-            endingLineNumber = "409"
-            landmarkName = "updateMessages()"
+            startingLineNumber = "411"
+            endingLineNumber = "411"
+            landmarkName = "sendTapped(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -525,7 +525,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "315"
             endingLineNumber = "315"
-            landmarkName = "updateMessages()"
+            landmarkName = "displayToolbar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -541,7 +541,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "238"
             endingLineNumber = "238"
-            landmarkName = "updateTitle()"
+            landmarkName = "updateMessages()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -557,7 +557,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "322"
             endingLineNumber = "322"
-            landmarkName = "updateMessages()"
+            landmarkName = "displayToolbar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -568,12 +568,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/SingleMessageViewController.swift"
-            timestampString = "493081743.647386"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "592"
-            endingLineNumber = "592"
-            landmarkName = "tableView(_:heightForRowAtIndexPath:)"
+            startingLineNumber = "598"
+            endingLineNumber = "598"
+            landmarkName = "updateMessagesViewed()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -648,12 +648,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/SingleMessageViewController.swift"
-            timestampString = "493079491.054317"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "388"
-            endingLineNumber = "388"
-            landmarkName = "updateMessages()"
+            startingLineNumber = "389"
+            endingLineNumber = "389"
+            landmarkName = "sendTapped(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -664,12 +664,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "448"
-            endingLineNumber = "448"
-            landmarkName = "tableView(_:numberOfRowsInSection:)"
+            startingLineNumber = "417"
+            endingLineNumber = "417"
+            landmarkName = "filterTapped(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -685,7 +685,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "115"
             endingLineNumber = "115"
-            landmarkName = "getCGColor(_:)"
+            landmarkName = "convertBridgeTypeStringToColorTypeEnum(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -701,7 +701,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "114"
             endingLineNumber = "114"
-            landmarkName = "getCGColor(_:)"
+            landmarkName = "convertBridgeTypeStringToColorTypeEnum(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -728,12 +728,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "343"
-            endingLineNumber = "343"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "312"
+            endingLineNumber = "312"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -744,27 +744,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "176"
-            endingLineNumber = "176"
-            landmarkName = "startBackgroundThread()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "refresh()"
             landmarkType = "5">
          </BreakpointContent>
@@ -776,12 +760,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "347"
-            endingLineNumber = "347"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "316"
+            endingLineNumber = "316"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -792,12 +776,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "320"
+            endingLineNumber = "320"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
             <Locations>
                <Location
@@ -840,12 +824,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
+            landmarkName = "displayToolBar()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -856,11 +840,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
             landmarkName = "refresh()"
             landmarkType = "5">
             <Locations>
@@ -904,75 +888,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
-            landmarkName = "refresh()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
-            landmarkName = "refresh()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "243"
-            endingLineNumber = "243"
-            landmarkName = "refresh()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "248"
-            endingLineNumber = "248"
-            landmarkName = "refresh()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "317"
-            endingLineNumber = "317"
+            startingLineNumber = "286"
+            endingLineNumber = "286"
             landmarkName = "reloadMessageTable(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -984,27 +904,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
-            landmarkName = "filterContentForSearchText(_:scope:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "315"
-            endingLineNumber = "315"
+            startingLineNumber = "264"
+            endingLineNumber = "264"
             landmarkName = "reloadMessageTable(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1016,11 +920,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/MessagesViewController.swift"
-            timestampString = "493082195.040428"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "322"
-            endingLineNumber = "322"
+            startingLineNumber = "284"
+            endingLineNumber = "284"
+            landmarkName = "reloadMessageTable(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyBridgeApp/MessagesViewController.swift"
+            timestampString = "493316666.336936"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
             landmarkName = "reloadMessageTable(_:)"
             landmarkType = "5">
             <Locations>
@@ -1064,12 +984,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/SingleMessageViewController.swift"
-            timestampString = "493081234.499707"
+            timestampString = "493316666.336936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "447"
-            endingLineNumber = "447"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "449"
+            endingLineNumber = "449"
+            landmarkName = "sendTapped(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1096,7 +1016,7 @@
                   moduleName = "MyBridgeApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/MyBridgeApp/ProfileTableViewCell2.swift"
-                  timestampString = "493243934.962174"
+                  timestampString = "493308470.571081"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "61"
@@ -1111,7 +1031,7 @@
                   moduleName = "MyBridgeApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/MyBridgeApp/ProfileTableViewCell2.swift"
-                  timestampString = "493243934.962303"
+                  timestampString = "493308470.5719"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "63"
@@ -1245,7 +1165,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "983"
             endingLineNumber = "983"
-            landmarkName = "nextPair()"
+            landmarkName = "filterTapped(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1288,7 +1208,7 @@
                   moduleName = "MyBridgeApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/LocalStorageUtility.swift"
-                  timestampString = "493243934.955972"
+                  timestampString = "493308470.612776"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "692"
@@ -1303,7 +1223,7 @@
                   moduleName = "MyBridgeApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/LocalStorageUtility.swift"
-                  timestampString = "493243934.956107"
+                  timestampString = "493308470.61297"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "692"

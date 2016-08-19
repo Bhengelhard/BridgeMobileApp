@@ -198,17 +198,20 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     if let ob = result["sender"] as? String {
                         senderId = ob
                         //senderName = ob
-                        let queryForName = PFQuery(className: "_User")
-                        do{
-                            let userObject = try queryForName.getObjectWithId(ob)
-                            if let name = userObject["name"] as? String {
-                                senderName = name
-                            }
-                        }
-                        catch{
-                            
-                        }
+//                        let queryForName = PFQuery(className: "_User")
+//                        do{
+//                            let userObject = try queryForName.getObjectWithId(ob)
+//                            if let name = userObject["name"] as? String {
+//                                senderName = name
+//                            }
+//                        }
+//                        catch{
+//                            
+//                        }
                         
+                    }
+                    if let ob = result["sender_name"] as? String {
+                        senderName = ob
                     }
                     var timestamp = ""
                     let dateFormatter = NSDateFormatter()
@@ -364,7 +367,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             let sendingMessageText = messageText.text
             sendButton.enabled = false
             messageText.text = ""
-            
+            let senderName = (PFUser.currentUser()?["name"] as? String) ?? ""
             let singleMessage = PFObject(className: "SingleMessages")
             let acl = PFACL()
             acl.publicReadAccess = true
@@ -372,6 +375,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             singleMessage.ACL = acl
             singleMessage["message_text"] = sendingMessageText
             singleMessage["sender"] = PFUser.currentUser()?.objectId
+            singleMessage["sender_name"] = senderName
             //save users_in_message to singleMessage
             singleMessage["message_id"] = messageId
             singleMessage["bridge_type"] = bridgeType
@@ -398,6 +402,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                                     noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = (object["no_of_single_messages"] as! Int)
                                     object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
                                 }
+                                object["last_single_message"] = sendingMessageText
                                 object["lastSingleMessageAt"] = NSDate()
                                 object["message_viewed"] = [(PFUser.currentUser()?.objectId)!]
                                 object.saveInBackgroundWithBlock{
@@ -517,13 +522,17 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     print(error)
                 } else {
                     let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
+                    let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
                     var updatedIdsInMessage = [String]()
+                    var updatedNamesInMessage = [String]()
                     for i in 0...(CurrentIdsInMessage.count - 1) {
                         if CurrentIdsInMessage[i] as? String != PFUser.currentUser()?.objectId {
                             updatedIdsInMessage.append(CurrentIdsInMessage[i] as! String)
+                            updatedNamesInMessage.append(CurrentNamesInMessage[i] as! String)
                         }
                     }
                     object!["ids_in_message"] = updatedIdsInMessage
+                    object!["names_in_message"] = updatedNamesInMessage
                     object!.saveInBackgroundWithBlock({ (success, error) in
                         if error != nil {
                             print(error)
@@ -709,8 +718,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     override func viewWillAppear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

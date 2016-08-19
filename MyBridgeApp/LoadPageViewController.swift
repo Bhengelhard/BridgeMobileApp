@@ -135,10 +135,12 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
     }
     func locationManager(manager:CLLocationManager, didUpdateLocations locations:[CLLocation]) {
         locationManager.stopUpdatingLocation()
+        if manager.location != nil {
         geoPoint = PFGeoPoint(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
         print("LoadViewController posting a notification")
         print("\(geoPoint?.latitude),\(geoPoint?.longitude)")
         NSNotificationCenter.defaultCenter().postNotificationName("storeUserLocationOnParse", object: nil, userInfo:  ["geoPoint":geoPoint!])
+        }
         
         }
 
