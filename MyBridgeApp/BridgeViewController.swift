@@ -141,7 +141,7 @@ class BridgeViewController: UIViewController {
         }
         else if  locationLabel.tag == 1 && pairing.user2?.city != nil {
             dispatch_async(dispatch_get_main_queue(), {
-                locationLabel.text = (pairing.user1?.city)!
+                locationLabel.text = (pairing.user2?.city)!
             })
         }
         else {
@@ -440,7 +440,7 @@ class BridgeViewController: UIViewController {
             self.view.insertSubview(superDeckView, belowSubview: aboveView)
         }
         else {
-            self.view.insertSubview(superDeckView, aboveSubview: self.view)
+            self.view.insertSubview(superDeckView, belowSubview: self.toolbar)
         }
         arrayOfCardsInDeck.append(superDeckView)
         arrayOfCardColors.append(superDeckView.layer.borderColor!)
@@ -553,18 +553,6 @@ class BridgeViewController: UIViewController {
             displayNoMoreCards()
         }
         
-        view.addSubview(toolbar)
-        view.addSubview(allTypesButton)
-        view.addSubview(allTypesLabel)
-        view.addSubview(businessButton)
-        view.addSubview(businessLabel)
-        view.addSubview(loveButton)
-        view.addSubview(loveLabel)
-        view.addSubview(friendshipButton)
-        view.addSubview(friendshipLabel)
-        view.addSubview(postStatusButton)
-        view.addSubview(disconnectIcon)
-        view.addSubview(connectIcon)
     }
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
         let q = PFQuery(className: "_User")
@@ -857,6 +845,19 @@ class BridgeViewController: UIViewController {
         else {
             return 0
         }
+        
+        
+        view.addSubview(toolbar)
+        view.addSubview(allTypesButton)
+        view.addSubview(allTypesLabel)
+        view.addSubview(businessButton)
+        view.addSubview(businessLabel)
+        view.addSubview(loveButton)
+        view.addSubview(loveLabel)
+        view.addSubview(friendshipButton)
+        view.addSubview(friendshipLabel)
+        view.addSubview(postStatusButton)
+
     }
     func updateNoOfUnreadMessagesIcon(notification: NSNotification) {
         
@@ -973,8 +974,8 @@ class BridgeViewController: UIViewController {
         }
         
         displayNavigationBar()
-        displayCards()
         displayToolBar()
+        displayCards()
         allTypesButton.enabled = false
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
@@ -1021,14 +1022,13 @@ class BridgeViewController: UIViewController {
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.frame = CGRect(x: 0.6*screenWidth+10, y: 0.33*self.screenHeight, width: 0.4*screenWidth, height: 0.4*screenWidth)
         connectIcon.alpha = 0.0
-        view.addSubview(connectIcon)
+        view.insertSubview(connectIcon, aboveSubview: self.toolbar)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
         disconnectIcon.frame = CGRect(x: 0, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
         //CGRect(x: -10, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
         disconnectIcon.alpha = 0.0
-        view.addSubview(disconnectIcon)
-        
+        view.insertSubview(disconnectIcon, aboveSubview: self.toolbar)
         
         
         // Do any additional setup after loading the view, typically from a nib.
@@ -1309,7 +1309,7 @@ class BridgeViewController: UIViewController {
                                     print(response)
                                 }
                                 self.lastCardInStack = UIView()
-                                self.downloadMoreCards(1, typeOfCards: bridgeType)
+                                self.downloadMoreCards(2, typeOfCards: bridgeType)
                                 if self.arrayOfCardsInDeck.count > 0 {
                                         self.arrayOfCardsInDeck[0].userInteractionEnabled = true
                                 }
@@ -1330,9 +1330,6 @@ class BridgeViewController: UIViewController {
                 }
             }
         }
-        
-
-        
     }
     func isDragged(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translationInView(self.view)
@@ -1352,45 +1349,41 @@ class BridgeViewController: UIViewController {
         
         //animating connect and disconnect icons from 0.4% of screenwidth to 0.25% of screenWidth
         if superDeckView.center.x < 0.4*screenWidth{
-            UIView.animateWithDuration(0.7, animations: {
+            //UIView.animateWithDuration(0.7, animations: {
                 //fading in with swipe left from 0.4% of screenWidth to 0.25% of screen width
                 self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
                 self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            })
+            //})
         } else if superDeckView.center.x > 0.6*screenWidth {
-            UIView.animateWithDuration(0.7, animations: {
+            //UIView.animateWithDuration(0.7, animations: {
                 //fading in with swipe right from 0.6% of screenWidth to 0.75% of screen width
                 self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
                 self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            })
+            //})
         } else {
-            UIView.animateWithDuration(0.7, animations: {
+            //UIView.animateWithDuration(0.7, animations: {
                     self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
                     self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
                     self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
                     self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
-            })
+            //})
         }
         
         if gesture.state == UIGestureRecognizerState.Ended {
             
             if superDeckView.center.x < 0.25*screenWidth {
                 
-                
-                
-                UIView.animateWithDuration(0.4, animations: {
+                UIView.animateWithDuration(0.2, animations: {
                     superDeckView.center.x = -1.0*self.screenWidth
                     self.disconnectIcon.center.x = -1.0*self.screenWidth
                     self.disconnectIcon.alpha = 0.0
-                    
+                    }, completion: { (success) in
+                        self.nextPair()
                 })
-                
-
-                nextPair()
                 removeCard = true
             } else if superDeckView.center.x > 0.75*screenWidth {
                 removeCard = true
-                UIView.animateWithDuration(0.4, animations: {
+                UIView.animateWithDuration(0.2, animations: {
                     superDeckView.center.x = 2.0*self.screenWidth
                     self.connectIcon.center.x = 2.0*self.screenWidth
                     self.connectIcon.alpha = 0.0
