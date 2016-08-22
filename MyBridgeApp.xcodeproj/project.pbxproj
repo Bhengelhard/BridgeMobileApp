@@ -53,6 +53,7 @@
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
 		CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD761CEDED9600695B15 /* Main.storyboard */; };
 		E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */; };
+		E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD761CEDED9600695B15 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = MyBridgeApp/StatusTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OptionsFromBotViewController.swift; path = MyBridgeApp/OptionsFromBotViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 				CB5829461CAA26D900DC86C9 /* ViewController.swift */,
 				1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */,
 				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
+				E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */,
 				1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */,
 				E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */,
 				1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */,
@@ -307,6 +310,7 @@
 				1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */,
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
+				E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF57CEB1D3E9308005F2DE7 /* SingleMessageTableCell.swift in Sources */,
 				1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */,

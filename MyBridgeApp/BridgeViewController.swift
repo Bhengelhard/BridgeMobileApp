@@ -319,17 +319,12 @@ class BridgeViewController: UIViewController {
         let locationFrame = CGRectMake(0.05*cardWidth,0.155*cardHeight,0.8*cardWidth,0.10*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
-        //Creating the transparency screens
-        let screenUnderTopFrame = CGRectMake(0,0,cardWidth,0.3*cardHeight)
-        let screenUnderBottomFrame = CGRectMake(0, 0.65*cardHeight, cardWidth, 0.35*cardHeight)
-        
         
         let nameLabel = UILabel()
         nameLabel.text = name
         nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.textColor = UIColor.whiteColor()
         nameLabel.font = UIFont(name: "Verdana", size: 20)
-        //nameLabel.backgroundColor = necterGray.colorWithAlphaComponent(0.6)
         let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.1*cardHeight))
         var nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
         nameFrame.size = adjustedNameSize
@@ -353,10 +348,6 @@ class BridgeViewController: UIViewController {
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
         locationLabel.font = UIFont(name: "Verdana", size: 16)
-        //locationLabel.shadowColor = UIColor.blackColor()
-        //locationLabel.shadowOffset = CGSize(width: 0.1, height: 0.1)
-        //locationLabel.backgroundColor = UIColor.clearColor()
-        //locationLabel.opaque = true
         locationLabel.layer.shadowOpacity = 0.5
         locationLabel.layer.shadowRadius = 0.5
         locationLabel.layer.shadowColor = UIColor.blackColor().CGColor
@@ -367,77 +358,23 @@ class BridgeViewController: UIViewController {
         statusLabel.textColor = UIColor.whiteColor()
         statusLabel.font = UIFont(name: "Verdana", size: 14)
         statusLabel.numberOfLines = 0
-        //statusLabel.shadowColor = UIColor.blackColor()
-        //statusLabel.shadowOffset = CGSize(width: 0.1, height: 0.1)
-        //statusLabel.backgroundColor = UIColor.clearColor()
-        //statusLabel.opaque = true
-        
         statusLabel.layer.shadowOpacity = 0.5
         statusLabel.layer.shadowRadius = 0.5
         statusLabel.layer.shadowColor = UIColor.blackColor().CGColor
         statusLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
-        
         let photoView = UIImageView(frame: photoFrame)
         photoView.image = UIImage(data: photo)
-        //photoView.autoresizingMask = UIViewAutoresizing.FlexibleBottomMargin | UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleRightMargin | UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleWidth
         photoView.contentMode = UIViewContentMode.ScaleAspectFill
         photoView.clipsToBounds = true
         
         let card = UIView(frame:deckFrame)
         
-        
-        /*let gradient = CAGradientLayer()
-        let gradientFrame = CGRectMake(0, 0, cardWidth, 0.305*cardHeight)
-        gradient.frame = gradientFrame
-        let color = UIColor.grayColor()
-        var colors = [CGColor]()
-        
-        for i in 1..<550 {
-            colors.append(color.colorWithAlphaComponent(0.55-CGFloat(i)*0.001).CGColor)
-        }*/
-        
-        /*var colors = [
-            colour.colorWithAlphaComponent(0.55).CGColor,
-            colour.colorWithAlphaComponent(0.525).CGColor,
-            colour.colorWithAlphaComponent(0.5).CGColor,
-            colour.colorWithAlphaComponent(0.475).CGColor,
-            colour.colorWithAlphaComponent(0.45).CGColor,
-            colour.colorWithAlphaComponent(0.4).CGColor,
-            colour.colorWithAlphaComponent(0.35).CGColor,
-            colour.colorWithAlphaComponent(0.3).CGColor,
-            colour.colorWithAlphaComponent(0.25).CGColor,
-            colour.colorWithAlphaComponent(0.2).CGColor,
-            colour.colorWithAlphaComponent(0.15).CGColor,
-            colour.colorWithAlphaComponent(0.10).CGColor,
-            colour.colorWithAlphaComponent(0.05).CGColor,
-            UIColor.clearColor().CGColor
-        ]*/
-        
-        /*if transparntToOpaque == true
-         {
-         colours = colours.reverse()
-         }*/
-        
-        //if vertical == true
-        //{
-        //gradient.startPoint = CGPointMake(0, 0.5)
-        //gradient.endPoint = CGPointMake(1, 0.5)
-        //}
-        //gradient.colors = colors
-        
-        photoView.backgroundColor = UIColor.clearColor()
-        nameLabel.backgroundColor = UIColor.clearColor()
-        locationLabel.backgroundColor = UIColor.clearColor()
-        statusLabel.backgroundColor = UIColor.clearColor()
         card.addSubview(photoView)
         card.addSubview(nameLabel)
         card.addSubview(locationLabel)
         card.addSubview(statusLabel)
         
-        //view.layer.insertSublayer(gradient, atIndex: 0)
-//        card.layer.borderWidth = 3
-//        card.layer.borderColor = getCGColor(cardColor)
         return card
         
     }
@@ -510,6 +447,7 @@ class BridgeViewController: UIViewController {
         stackOfCards.append(superDeckView)
         return superDeckView
     }
+    
     func displayCards(){
         if let displayNoMoreCardsView = displayNoMoreCardsView {
             displayNoMoreCardsView.removeFromSuperview()
@@ -1338,9 +1276,9 @@ class BridgeViewController: UIViewController {
             let mirror = Mirror(reflecting: vc)
             if mirror.subjectType == ProfileViewController.self {
                 self.transitionManager.animationDirection = "Left"
-            } else if mirror.subjectType == NewBridgeStatusViewController.self {
+            } else if mirror.subjectType == OptionsFromBotViewController.self {
                 self.transitionManager.animationDirection = "Top"
-                let vc2 = vc as! NewBridgeStatusViewController
+                let vc2 = vc as! OptionsFromBotViewController
                 vc2.seguedFrom = "BridgeViewController"
             } else if mirror.subjectType == MessagesViewController.self {
                 self.transitionManager.animationDirection = "Right"

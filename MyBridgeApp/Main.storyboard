@@ -536,6 +536,31 @@
             </objects>
             <point key="canvasLocation" x="1740.5" y="-1104.5"/>
         </scene>
+        <!--Options From Bot View Controller-->
+        <scene sceneID="doL-75-kLW">
+            <objects>
+                <viewController id="nwH-9I-MyI" customClass="OptionsFromBotViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QST-a2-fwf"/>
+                        <viewControllerLayoutGuide type="bottom" id="rvM-My-gJG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xwJ-oV-AJ5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <segue destination="P6Q-JZ-W57" kind="show" identifier="showNewStatusFromOptionsView" id="zMO-kw-Ku9"/>
+                        <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromOptionsView" id="TvH-ve-6hX"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromOptionsView" id="WdR-zr-3Hq"/>
+                        <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesViewfromOptionsView" id="tAM-Qe-S00"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fcM-Rn-gGP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-667.5" y="-187.5"/>
+        </scene>
         <!--New Bridge Status-->
         <scene sceneID="6dS-e7-LSj">
             <objects>
@@ -554,11 +579,12 @@
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromStatus" id="Z7c-Ws-k9O"/>
                         <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromNewStatusView" id="Zct-T5-yb8"/>
                         <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesViewfromStatus" id="RFd-6z-IK0"/>
+                        <segue destination="nwH-9I-MyI" kind="show" identifier="showOptionsViewFromNewStatus" id="lb2-8V-Hs1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4S1-vj-COi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-408.5" y="-181.5"/>
+            <point key="canvasLocation" x="-667.5" y="723.5"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
@@ -660,7 +686,7 @@
                         <segue destination="g3I-ul-dfk" kind="show" identifier="showTermsofService" id="pbm-rN-Dzp"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginView" id="cy1-Ds-r2Z"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewFromProfilePage" id="ORi-q2-txU"/>
-                        <segue destination="P6Q-JZ-W57" kind="show" identifier="showNewStatusViewFromProfilePage" id="FKg-ff-qrd"/>
+                        <segue destination="nwH-9I-MyI" kind="show" identifier="showNewStatusViewFromProfilePage" id="4OI-Nx-18t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSk-yp-EIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -684,9 +710,9 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <segue destination="ABc-Ef-uKn" kind="show" identifier="showSingleMessage" id="B19-eu-GHC"/>
-                        <segue destination="P6Q-JZ-W57" kind="show" identifier="showNewStatusViewController" id="5m7-4W-1ig"/>
                         <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromBridgeView" id="1Bx-ML-R6e"/>
                         <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesPageFromBridgeView" id="OnA-y9-bUb"/>
+                        <segue destination="nwH-9I-MyI" kind="show" identifier="showNewStatusViewController" id="szG-GP-VfO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HbE-ka-aov" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -735,8 +761,8 @@
                     <connections>
                         <outlet property="tableView" destination="WJ6-Xw-l9y" id="S9M-4M-vhe"/>
                         <segue destination="ABc-Ef-uKn" kind="show" identifier="showSingleMessageFromMessages" id="0Jc-ZY-MLe"/>
-                        <segue destination="P6Q-JZ-W57" kind="show" identifier="showNewStatusViewControllerFromMessages" id="97c-Mj-xqQ"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromMessages" id="wYg-RW-AbN"/>
+                        <segue destination="nwH-9I-MyI" kind="show" identifier="showNewStatusViewControllerFromMessages" id="CNh-Pt-C4t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZO4-tV-uGJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -775,11 +801,11 @@
         <image name="suzy's_profile_picture.jpg" width="960" height="960"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="WdR-zr-3Hq"/>
+        <segue reference="lb2-8V-Hs1"/>
+        <segue reference="tAM-Qe-S00"/>
+        <segue reference="TvH-ve-6hX"/>
         <segue reference="cy1-Ds-r2Z"/>
-        <segue reference="Zct-T5-yb8"/>
-        <segue reference="FKg-ff-qrd"/>
-        <segue reference="ORi-q2-txU"/>
-        <segue reference="fLD-mo-7R5"/>
-        <segue reference="0Jc-ZY-MLe"/>
+        <segue reference="B19-eu-GHC"/>
     </inferredMetricsTieBreakers>
 </document>
