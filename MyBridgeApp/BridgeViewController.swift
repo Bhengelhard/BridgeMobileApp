@@ -878,12 +878,13 @@ class BridgeViewController: UIViewController {
         })
         
         connectIcon.image = UIImage(named: "Necter_Icon")
-        connectIcon.frame = CGRect(x: 0.8*screenWidth+10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
+        connectIcon.frame = CGRect(x: 0.6*screenWidth+10, y: 0.33*self.screenHeight, width: 0.4*screenWidth, height: 0.4*screenWidth)
         connectIcon.alpha = 0.0
         view.addSubview(connectIcon)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
-        disconnectIcon.frame = CGRect(x: -10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
+        disconnectIcon.frame = CGRect(x: 0, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+        //CGRect(x: -10, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
         disconnectIcon.alpha = 0.0
         view.addSubview(disconnectIcon)
         
@@ -1202,42 +1203,58 @@ class BridgeViewController: UIViewController {
         var stretch = CGAffineTransformScale(rotation, scale, scale)
         superDeckView.transform = stretch
         var removeCard = false
-
-        if superDeckView.center.x < 0.25*screenWidth{
+        
+        //let disconnectIconX = min(CGFloat(0.25*self.screenWidth-superDeckView.center), CGFloat(0.25*screenWidth))
+        
+        let disconnectIconX = min((-1.66*(superDeckView.center.x/self.screenWidth)+0.66)*screenWidth, 0.25*screenWidth)
+        let connectIconX = max((-1.66*(superDeckView.center.x/self.screenWidth)+1.6)*screenWidth, 0.35*screenWidth)
+        
+        //animating connect and disconnect icons from 0.4% of screenwidth to 0.25% of screenWidth
+        if superDeckView.center.x < 0.4*screenWidth{
             UIView.animateWithDuration(0.7, animations: {
-                self.disconnectIcon.alpha = 1.0
-                self.disconnectIcon.frame = CGRect(x: 0.25*self.screenWidth, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+                //fading in with swipe left from 0.4% of screenWidth to 0.25% of screen width
+                self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
+                self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             })
-        } else if superDeckView.center.x > 0.75*screenWidth {
+        } else if superDeckView.center.x > 0.6*screenWidth {
             UIView.animateWithDuration(0.7, animations: {
-                self.connectIcon.alpha = 1.0
-                self.connectIcon.frame = CGRect(x: 0.35*self.screenWidth, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+                //fading in with swipe right from 0.6% of screenWidth to 0.75% of screen width
+                self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
+                self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             })
         } else {
             UIView.animateWithDuration(0.7, animations: {
-                self.connectIcon.frame = CGRect(x: 0.8*self.screenWidth+10, y: 0.5*self.screenHeight-0.1*self.screenWidth, width: 0.2*self.screenWidth, height: 0.2*self.screenWidth)
-                self.connectIcon.alpha = 0.0
-                self.disconnectIcon.frame = CGRect(x: -10, y: 0.5*self.screenHeight-0.1*self.screenWidth, width: 0.2*self.screenWidth, height: 0.2*self.screenWidth)
-                self.disconnectIcon.alpha = 0.0
+                    self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
+                    self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+                    self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+                    self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
             })
         }
         
         if gesture.state == UIGestureRecognizerState.Ended {
             
             if superDeckView.center.x < 0.25*screenWidth {
-                connectIcon.frame = CGRect(x: 0.8*screenWidth+10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
-                connectIcon.alpha = 0.0
-                disconnectIcon.frame = CGRect(x: -10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
-                disconnectIcon.alpha = 0.0
                 
-                superDeckView.center.x = -1.0*screenWidth
+                
+                
+                UIView.animateWithDuration(0.4, animations: {
+                    superDeckView.center.x = -1.0*self.screenWidth
+                    self.disconnectIcon.center.x = -1.0*self.screenWidth
+                    self.disconnectIcon.alpha = 0.0
+                    
+                })
+                
 
                 nextPair()
                 removeCard = true
             } else if superDeckView.center.x > 0.75*screenWidth {
                 removeCard = true
+                UIView.animateWithDuration(0.4, animations: {
+                    superDeckView.center.x = 2.0*self.screenWidth
+                    self.connectIcon.center.x = 2.0*self.screenWidth
+                    self.connectIcon.alpha = 0.0
+                })
                 
-                superDeckView.center.x = 2.0*screenWidth
                 bridged()
             }
             if removeCard {
@@ -1251,6 +1268,8 @@ class BridgeViewController: UIViewController {
                     stretch = CGAffineTransformScale(rotation, 1, 1)
                     superDeckView.transform = stretch
                     superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
+                    self.disconnectIcon.center.x = -10
+                    self.disconnectIcon.alpha = 0.0
                 })
                 
             }
