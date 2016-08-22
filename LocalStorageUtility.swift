@@ -691,10 +691,12 @@ class LocalStorageUtility{
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
         let q = PFQuery(className: "_User")
         var flist = [String]()
-        q.getObjectInBackgroundWithId((PFUser.currentUser()?.objectId)!){
-            (object, error) -> Void in
-        if error == nil && object != nil {
-        if let fl = object!["friend_list"] as? [String]{
+        do {
+        let object = try q.getObjectWithId((PFUser.currentUser()?.objectId)!)
+//        q.getObjectInBackgroundWithId((PFUser.currentUser()?.objectId)!){
+//            (object, error) -> Void in
+        //if error == nil && object != nil {
+        if let fl = object["friend_list"] as? [String]{
         flist = fl
         let bridgePairings = LocalData().getPairings()
         var pairings = [UserInfoPair]()
@@ -863,6 +865,10 @@ class LocalStorageUtility{
         }
         }
         }
+        catch {
+            
         }
+        //}
+        //}
     }
 }
