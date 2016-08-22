@@ -141,7 +141,7 @@ class BridgeViewController: UIViewController {
         }
         else if  locationLabel.tag == 1 && pairing.user2?.city != nil {
             dispatch_async(dispatch_get_main_queue(), {
-                locationLabel.text = (pairing.user1?.city)!
+                locationLabel.text = (pairing.user2?.city)!
             })
         }
         else {
@@ -319,17 +319,12 @@ class BridgeViewController: UIViewController {
         let locationFrame = CGRectMake(0.05*cardWidth,0.155*cardHeight,0.8*cardWidth,0.10*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
-        //Creating the transparency screens
-        let screenUnderTopFrame = CGRectMake(0,0,cardWidth,0.3*cardHeight)
-        let screenUnderBottomFrame = CGRectMake(0, 0.65*cardHeight, cardWidth, 0.35*cardHeight)
-        
         
         let nameLabel = UILabel()
         nameLabel.text = name
         nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.textColor = UIColor.whiteColor()
         nameLabel.font = UIFont(name: "Verdana", size: 20)
-        //nameLabel.backgroundColor = necterGray.colorWithAlphaComponent(0.6)
         let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.1*cardHeight))
         var nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
         nameFrame.size = adjustedNameSize
@@ -353,10 +348,6 @@ class BridgeViewController: UIViewController {
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
         locationLabel.font = UIFont(name: "Verdana", size: 16)
-        //locationLabel.shadowColor = UIColor.blackColor()
-        //locationLabel.shadowOffset = CGSize(width: 0.1, height: 0.1)
-        //locationLabel.backgroundColor = UIColor.clearColor()
-        //locationLabel.opaque = true
         locationLabel.layer.shadowOpacity = 0.5
         locationLabel.layer.shadowRadius = 0.5
         locationLabel.layer.shadowColor = UIColor.blackColor().CGColor
@@ -367,77 +358,23 @@ class BridgeViewController: UIViewController {
         statusLabel.textColor = UIColor.whiteColor()
         statusLabel.font = UIFont(name: "Verdana", size: 14)
         statusLabel.numberOfLines = 0
-        //statusLabel.shadowColor = UIColor.blackColor()
-        //statusLabel.shadowOffset = CGSize(width: 0.1, height: 0.1)
-        //statusLabel.backgroundColor = UIColor.clearColor()
-        //statusLabel.opaque = true
-        
         statusLabel.layer.shadowOpacity = 0.5
         statusLabel.layer.shadowRadius = 0.5
         statusLabel.layer.shadowColor = UIColor.blackColor().CGColor
         statusLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
-        
         let photoView = UIImageView(frame: photoFrame)
         photoView.image = UIImage(data: photo)
-        //photoView.autoresizingMask = UIViewAutoresizing.FlexibleBottomMargin | UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleRightMargin | UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleWidth
         photoView.contentMode = UIViewContentMode.ScaleAspectFill
         photoView.clipsToBounds = true
         
         let card = UIView(frame:deckFrame)
         
-        
-        /*let gradient = CAGradientLayer()
-        let gradientFrame = CGRectMake(0, 0, cardWidth, 0.305*cardHeight)
-        gradient.frame = gradientFrame
-        let color = UIColor.grayColor()
-        var colors = [CGColor]()
-        
-        for i in 1..<550 {
-            colors.append(color.colorWithAlphaComponent(0.55-CGFloat(i)*0.001).CGColor)
-        }*/
-        
-        /*var colors = [
-            colour.colorWithAlphaComponent(0.55).CGColor,
-            colour.colorWithAlphaComponent(0.525).CGColor,
-            colour.colorWithAlphaComponent(0.5).CGColor,
-            colour.colorWithAlphaComponent(0.475).CGColor,
-            colour.colorWithAlphaComponent(0.45).CGColor,
-            colour.colorWithAlphaComponent(0.4).CGColor,
-            colour.colorWithAlphaComponent(0.35).CGColor,
-            colour.colorWithAlphaComponent(0.3).CGColor,
-            colour.colorWithAlphaComponent(0.25).CGColor,
-            colour.colorWithAlphaComponent(0.2).CGColor,
-            colour.colorWithAlphaComponent(0.15).CGColor,
-            colour.colorWithAlphaComponent(0.10).CGColor,
-            colour.colorWithAlphaComponent(0.05).CGColor,
-            UIColor.clearColor().CGColor
-        ]*/
-        
-        /*if transparntToOpaque == true
-         {
-         colours = colours.reverse()
-         }*/
-        
-        //if vertical == true
-        //{
-        //gradient.startPoint = CGPointMake(0, 0.5)
-        //gradient.endPoint = CGPointMake(1, 0.5)
-        //}
-        //gradient.colors = colors
-        
-        photoView.backgroundColor = UIColor.clearColor()
-        nameLabel.backgroundColor = UIColor.clearColor()
-        locationLabel.backgroundColor = UIColor.clearColor()
-        statusLabel.backgroundColor = UIColor.clearColor()
         card.addSubview(photoView)
         card.addSubview(nameLabel)
         card.addSubview(locationLabel)
         card.addSubview(statusLabel)
         
-        //view.layer.insertSublayer(gradient, atIndex: 0)
-//        card.layer.borderWidth = 3
-//        card.layer.borderColor = getCGColor(cardColor)
         return card
         
     }
@@ -503,13 +440,14 @@ class BridgeViewController: UIViewController {
             self.view.insertSubview(superDeckView, belowSubview: aboveView)
         }
         else {
-            self.view.insertSubview(superDeckView, aboveSubview: self.view)
+            self.view.insertSubview(superDeckView, belowSubview: self.toolbar)
         }
         arrayOfCardsInDeck.append(superDeckView)
         arrayOfCardColors.append(superDeckView.layer.borderColor!)
         stackOfCards.append(superDeckView)
         return superDeckView
     }
+    
     func displayCards(){
         if let displayNoMoreCardsView = displayNoMoreCardsView {
             displayNoMoreCardsView.removeFromSuperview()
@@ -615,18 +553,6 @@ class BridgeViewController: UIViewController {
             displayNoMoreCards()
         }
         
-        view.addSubview(toolbar)
-        view.addSubview(allTypesButton)
-        view.addSubview(allTypesLabel)
-        view.addSubview(businessButton)
-        view.addSubview(businessLabel)
-        view.addSubview(loveButton)
-        view.addSubview(loveLabel)
-        view.addSubview(friendshipButton)
-        view.addSubview(friendshipLabel)
-        view.addSubview(postStatusButton)
-        view.addSubview(disconnectIcon)
-        view.addSubview(connectIcon)
     }
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
         let q = PFQuery(className: "_User")
@@ -919,6 +845,19 @@ class BridgeViewController: UIViewController {
         else {
             return 0
         }
+        
+        
+        view.addSubview(toolbar)
+        view.addSubview(allTypesButton)
+        view.addSubview(allTypesLabel)
+        view.addSubview(businessButton)
+        view.addSubview(businessLabel)
+        view.addSubview(loveButton)
+        view.addSubview(loveLabel)
+        view.addSubview(friendshipButton)
+        view.addSubview(friendshipLabel)
+        view.addSubview(postStatusButton)
+
     }
     func updateNoOfUnreadMessagesIcon(notification: NSNotification) {
         
@@ -1035,8 +974,8 @@ class BridgeViewController: UIViewController {
         }
         
         displayNavigationBar()
-        displayCards()
         displayToolBar()
+        displayCards()
         allTypesButton.enabled = false
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
@@ -1081,15 +1020,15 @@ class BridgeViewController: UIViewController {
         })
         
         connectIcon.image = UIImage(named: "Necter_Icon")
-        connectIcon.frame = CGRect(x: 0.8*screenWidth+10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
+        connectIcon.frame = CGRect(x: 0.6*screenWidth+10, y: 0.33*self.screenHeight, width: 0.4*screenWidth, height: 0.4*screenWidth)
         connectIcon.alpha = 0.0
-        view.addSubview(connectIcon)
+        view.insertSubview(connectIcon, aboveSubview: self.toolbar)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
-        disconnectIcon.frame = CGRect(x: -10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
+        disconnectIcon.frame = CGRect(x: 0, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+        //CGRect(x: -10, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
         disconnectIcon.alpha = 0.0
-        view.addSubview(disconnectIcon)
-        
+        view.insertSubview(disconnectIcon, aboveSubview: self.toolbar)
         
         
         // Do any additional setup after loading the view, typically from a nib.
@@ -1370,7 +1309,7 @@ class BridgeViewController: UIViewController {
                                     print(response)
                                 }
                                 self.lastCardInStack = UIView()
-                                self.downloadMoreCards(1, typeOfCards: bridgeType)
+                                self.downloadMoreCards(2, typeOfCards: bridgeType)
                                 if self.arrayOfCardsInDeck.count > 0 {
                                         self.arrayOfCardsInDeck[0].userInteractionEnabled = true
                                 }
@@ -1391,9 +1330,6 @@ class BridgeViewController: UIViewController {
                 }
             }
         }
-        
-
-        
     }
     func isDragged(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translationInView(self.view)
@@ -1405,42 +1341,54 @@ class BridgeViewController: UIViewController {
         var stretch = CGAffineTransformScale(rotation, scale, scale)
         superDeckView.transform = stretch
         var removeCard = false
-
-        if superDeckView.center.x < 0.25*screenWidth{
-            UIView.animateWithDuration(0.7, animations: {
-                self.disconnectIcon.alpha = 1.0
-                self.disconnectIcon.frame = CGRect(x: 0.25*self.screenWidth, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            })
-        } else if superDeckView.center.x > 0.75*screenWidth {
-            UIView.animateWithDuration(0.7, animations: {
-                self.connectIcon.alpha = 1.0
-                self.connectIcon.frame = CGRect(x: 0.35*self.screenWidth, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            })
+        
+        //let disconnectIconX = min(CGFloat(0.25*self.screenWidth-superDeckView.center), CGFloat(0.25*screenWidth))
+        
+        let disconnectIconX = min((-1.66*(superDeckView.center.x/self.screenWidth)+0.66)*screenWidth, 0.25*screenWidth)
+        let connectIconX = max((-1.66*(superDeckView.center.x/self.screenWidth)+1.6)*screenWidth, 0.35*screenWidth)
+        
+        //animating connect and disconnect icons from 0.4% of screenwidth to 0.25% of screenWidth
+        if superDeckView.center.x < 0.4*screenWidth{
+            //UIView.animateWithDuration(0.7, animations: {
+                //fading in with swipe left from 0.4% of screenWidth to 0.25% of screen width
+                self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
+                self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            //})
+        } else if superDeckView.center.x > 0.6*screenWidth {
+            //UIView.animateWithDuration(0.7, animations: {
+                //fading in with swipe right from 0.6% of screenWidth to 0.75% of screen width
+                self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
+                self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            //})
         } else {
-            UIView.animateWithDuration(0.7, animations: {
-                self.connectIcon.frame = CGRect(x: 0.8*self.screenWidth+10, y: 0.5*self.screenHeight-0.1*self.screenWidth, width: 0.2*self.screenWidth, height: 0.2*self.screenWidth)
-                self.connectIcon.alpha = 0.0
-                self.disconnectIcon.frame = CGRect(x: -10, y: 0.5*self.screenHeight-0.1*self.screenWidth, width: 0.2*self.screenWidth, height: 0.2*self.screenWidth)
-                self.disconnectIcon.alpha = 0.0
-            })
+            //UIView.animateWithDuration(0.7, animations: {
+                    self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
+                    self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+                    self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+                    self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
+            //})
         }
         
         if gesture.state == UIGestureRecognizerState.Ended {
             
             if superDeckView.center.x < 0.25*screenWidth {
-                connectIcon.frame = CGRect(x: 0.8*screenWidth+10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
-                connectIcon.alpha = 0.0
-                disconnectIcon.frame = CGRect(x: -10, y: 0.5*screenHeight-0.1*screenWidth, width: 0.2*screenWidth, height: 0.2*screenWidth)
-                disconnectIcon.alpha = 0.0
                 
-                superDeckView.center.x = -1.0*screenWidth
-
-                nextPair()
+                UIView.animateWithDuration(0.2, animations: {
+                    superDeckView.center.x = -1.0*self.screenWidth
+                    self.disconnectIcon.center.x = -1.0*self.screenWidth
+                    self.disconnectIcon.alpha = 0.0
+                    }, completion: { (success) in
+                        self.nextPair()
+                })
                 removeCard = true
             } else if superDeckView.center.x > 0.75*screenWidth {
                 removeCard = true
+                UIView.animateWithDuration(0.2, animations: {
+                    superDeckView.center.x = 2.0*self.screenWidth
+                    self.connectIcon.center.x = 2.0*self.screenWidth
+                    self.connectIcon.alpha = 0.0
+                })
                 
-                superDeckView.center.x = 2.0*screenWidth
                 bridged()
             }
             if removeCard {
@@ -1454,6 +1402,8 @@ class BridgeViewController: UIViewController {
                     stretch = CGAffineTransformScale(rotation, 1, 1)
                     superDeckView.transform = stretch
                     superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
+                    self.disconnectIcon.center.x = -10
+                    self.disconnectIcon.alpha = 0.0
                 })
                 
             }
@@ -1479,9 +1429,9 @@ class BridgeViewController: UIViewController {
             let mirror = Mirror(reflecting: vc)
             if mirror.subjectType == ProfileViewController.self {
                 self.transitionManager.animationDirection = "Left"
-            } else if mirror.subjectType == NewBridgeStatusViewController.self {
+            } else if mirror.subjectType == OptionsFromBotViewController.self {
                 self.transitionManager.animationDirection = "Top"
-                let vc2 = vc as! NewBridgeStatusViewController
+                let vc2 = vc as! OptionsFromBotViewController
                 vc2.seguedFrom = "BridgeViewController"
             } else if mirror.subjectType == MessagesViewController.self {
                 self.transitionManager.animationDirection = "Right"

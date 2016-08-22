@@ -545,7 +545,6 @@ class LocalStorageUtility{
         
     }
     //saves to LocalDataStorage and Parse
-
     func getUserFriends(){
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name"])

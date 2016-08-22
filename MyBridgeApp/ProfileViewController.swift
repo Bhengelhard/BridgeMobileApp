@@ -342,9 +342,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Right"
-        } else if mirror.subjectType == NewBridgeStatusViewController.self {
+        } else if mirror.subjectType == OptionsFromBotViewController.self {
             self.transitionManager.animationDirection = "Top"
-            let vc2 = vc as! NewBridgeStatusViewController
+            let vc2 = vc as! OptionsFromBotViewController
             vc2.seguedFrom = "ProfileViewController"
         }
         vc.transitioningDelegate = self.transitionManager
