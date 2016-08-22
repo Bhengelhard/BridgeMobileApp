@@ -646,6 +646,7 @@ class LocalStorageUtility{
         }
     }
     func updateBridgePairingsTable(){
+        // The user will have a default city at co-ordinates (-122,37). Mind you, the city is set during Logging In from Facebook. cIgAr - 08/22
         if let friendList = PFUser.currentUser()?["friend_list"] as? [String] {
             var latitude:CLLocationDegrees = -122.0312186
             var longitude:CLLocationDegrees = 37.33233141
@@ -658,9 +659,8 @@ class LocalStorageUtility{
                 if error != nil {
                     print("Reverse geocoder failed with error" + error!.localizedDescription)
                     PFUser.currentUser()?["city"] = ""
-                    return
                 }
-                
+                else {
                 if placemarks!.count > 0 {
                     let pm = placemarks![0]
                     PFUser.currentUser()?["city"] = pm.locality
@@ -669,19 +669,24 @@ class LocalStorageUtility{
                     PFUser.currentUser()?["city"] = ""
                     print("Problem with the data received from geocoder")
                 }
-            })
-            PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
-                (response: AnyObject?, error: NSError?) -> Void in
+                }
+                PFUser.currentUser()?.saveInBackgroundWithBlock{
+                (success, error) -> Void in
+                // Perform the bridgePairings table update irresepctive of the save being a success or failure - cIgAr 08/22
+                PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
+                    (response: AnyObject?, error: NSError?) -> Void in
                     if let ratings = response as? String {
                         print(ratings)
                     }
                     else {
                         print(error)
                     }
-            }
-        }
+                }
 
-        
+                }
+            })
+
+        }
     }
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
         let q = PFQuery(className: "_User")

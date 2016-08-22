@@ -135,6 +135,7 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
     }
     func locationManager(manager:CLLocationManager, didUpdateLocations locations:[CLLocation]) {
         locationManager.stopUpdatingLocation()
+        print("didUpdateLocations")
         if manager.location != nil {
         geoPoint = PFGeoPoint(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
         print("LoadViewController posting a notification")
@@ -148,7 +149,8 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
+        //locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
     }
     
@@ -172,6 +174,16 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         
         
     }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let vc = segue.destinationViewController
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == ViewController.self {
+            let vc2 = vc as! ViewController
+            vc2.geoPoint = self.geoPoint
+        }
+        //NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
 
 
     override func didReceiveMemoryWarning() {
