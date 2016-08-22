@@ -567,46 +567,187 @@ class BridgeViewController: UIViewController {
         view.addSubview(connectIcon)
     }
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
-        let bridgePairings = LocalData().getPairings()
-        var pairings = [UserInfoPair]()
-        if (bridgePairings != nil) {
-            pairings = bridgePairings!
-        }
-        if let _ = PFUser.currentUser()?.objectId {
-            var getMorePairings = true
-            var i = 1
-            while getMorePairings {
-                let query = PFQuery(className:"BridgePairings")
-                var flist = [String]()
-                if let friendlist = (PFUser.currentUser()?["friend_list"] as? [String]) {
-                    flist = friendlist
+        let q = PFQuery(className: "_User")
+        var flist = [String]()
+        do {
+            let object = try q.getObjectWithId((PFUser.currentUser()?.objectId)!)
+            //        q.getObjectInBackgroundWithId((PFUser.currentUser()?.objectId)!){
+            //            (object, error) -> Void in
+            //if error == nil && object != nil {
+            if let fl = object["friend_list"] as? [String]{
+                flist = fl
+                let bridgePairings = LocalData().getPairings()
+                var pairings = [UserInfoPair]()
+                if (bridgePairings != nil) {
+                    pairings = bridgePairings!
                 }
-                query.whereKey("user_objectIds", containedIn :flist)
-                query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
-                query.whereKey("checked_out", equalTo: false)
-                query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
-                if (typeOfCards != "All" && typeOfCards != "EachOfAllType") {
-                    query.whereKey("bridge_type", equalTo: typeOfCards)
-                }
-                if typeOfCards == "EachOfAllType" {
-                    switch i {
-                    case 1:
-                        query.whereKey("bridge_type", equalTo: "Business")
-                    case 2:
-                        query.whereKey("bridge_type", equalTo: "Love")
-                    case 3:
-                        query.whereKey("bridge_type", equalTo: "Friendship")
-                    default: break
+                if let _ = PFUser.currentUser()?.objectId {
+                    var getMorePairings = true
+                    var i = 1
+                    while getMorePairings {
+                        let query = PFQuery(className:"BridgePairings")
+                        
+                        //                if let friendlist = (PFUser.currentUser()?["friend_list"] as? [String]) {
+                        //                    flist = friendlist
+                        //                }
+                        query.whereKey("user_objectIds", containedIn :flist)
+                        query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
+                        query.whereKey("checked_out", equalTo: false)
+                        query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
+                        if (typeOfCards != "All" && typeOfCards != "EachOfAllType") {
+                            query.whereKey("bridge_type", equalTo: typeOfCards)
+                        }
+                        if typeOfCards == "EachOfAllType" {
+                            switch i {
+                            case 1:
+                                query.whereKey("bridge_type", equalTo: "Business")
+                            case 2:
+                                query.whereKey("bridge_type", equalTo: "Love")
+                            case 3:
+                                query.whereKey("bridge_type", equalTo: "Friendship")
+                            default: break
+                            }
+                            
+                        }
+                        query.limit = maxNoOfCards
+                        do {
+                            let results = try query.findObjects()
+                            
+                            
+                            // query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+                            //if let results = results {
+                            print("Hi")
+                            for result in results {
+                                var user1:PairInfo? = nil
+                                var user2:PairInfo? = nil
+                                var name1:String? = nil
+                                var name2:String? = nil
+                                var userId1:String? = nil
+                                var userId2:String? = nil
+                                if let ob = result["user_objectIds"] as? [String] {
+                                    userId1 =  ob[0]
+                                    userId2 =  ob[1]
+                                    /* Performing this important check here to make sure that each individual in the pair is friend's with the current user. Parse query -"query.whereKey("user_objectIds", containedIn :flist)" returns true even if anyone of those user's is friend with the current user - cIgAr - 08/18/16*/
+//                                    if flist.indexOf(userId1!) == nil || flist.indexOf(userId2!) == nil {
+//                                        continue
+//                                    }
+                                }
+                                
+                                if let ob = result["user1_name"] {
+                                    name1 = ob as? String
+                                    
+                                }
+                                if let ob = result["user2_name"] {
+                                    name2 = ob as? String
+                                }
+                                print("name2 - \(name2)")
+                                var location1:[Double]? = nil
+                                var location2:[Double]? = nil
+                                print(result["user_locations"])
+                                
+                                if let ob = result["user_locations"] as? [AnyObject]{
+                                    if let x = ob[0] as? PFGeoPoint{
+                                        location1 = [x.latitude,x.longitude]
+                                    }
+                                    if let x = ob[1] as? PFGeoPoint{
+                                        location2 = [x.latitude,x.longitude]
+                                    }
+                                    print("location1-\(location1),location2- \(location2)")
+                                }
+                                print("location1 - \(location2)")
+                                var profilePicture1:NSData? = nil
+                                var profilePicture2:NSData? = nil
+                                
+                                
+                                if let ob = result["user1_profile_picture"] {
+                                    let main_profile_picture_file = ob as! PFFile
+                                    profilePicture1 = try main_profile_picture_file.getData()
+                                }
+                                if let ob = result["user2_profile_picture"] {
+                                    let main_profile_picture_file = ob as! PFFile
+                                    profilePicture2 = try main_profile_picture_file.getData()
+                                }
+                                
+                                var bridgeStatus1:String? = nil
+                                var bridgeStatus2:String? = nil
+                                if let ob = result["user1_bridge_status"] {
+                                    bridgeStatus1 =  ob as? String
+                                }
+                                if let ob = result["user2_bridge_status"] {
+                                    bridgeStatus2 =  ob as? String
+                                }
+                                var city1:String? = nil
+                                var city2:String? = nil
+                                if let ob = result["user1_city"] {
+                                    city1 =  ob as? String
+                                }
+                                if let ob = result["user2_city"] {
+                                    city2 =  ob as? String
+                                }
+                                
+                                
+                                var bridgeType1:String? = nil
+                                var bridgeType2:String? = nil
+                                if let ob = result["bridge_type"] {
+                                    bridgeType1 =  ob as? String
+                                    bridgeType2 =  ob as? String
+                                }
+                                
+                                var objectId1:String? = nil
+                                var objectId2:String? = nil
+                                if let ob = result.objectId {
+                                    objectId1 =  ob as String
+                                    objectId2 =  ob as String
+                                }
+                                
+                                
+                                result["checked_out"]  = true
+                                if let _ = result["shown_to"] {
+                                    if var ar = result["shown_to"] as? [String] {
+                                        let s = (PFUser.currentUser()?.objectId)! as String
+                                        ar.append(s)
+                                        result["shown_to"] = ar
+                                    }
+                                    else {
+                                        result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
+                                    }
+                                }
+                                else {
+                                    result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
+                                }
+                                result.saveInBackground()
+                                
+                                user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
+                                user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
+                                let userInfoPair = UserInfoPair(user1: user1, user2: user2)
+                                pairings.append(userInfoPair)
+                                print("userId1, userId2 - \(userId1),\(userId2)")
+                                
+                            }
+                            let localData = LocalData()
+                            localData.setPairings(pairings)
+                            localData.synchronize()
+                            
+                            
+                        }
+                        catch {
+                            
+                        }
+                        i += 1
+                        if i > 3 || typeOfCards != "EachOfAllType"{
+                            getMorePairings = false
+                        }
+                        
+                        
                     }
-                    
                 }
-                query.limit = maxNoOfCards
-//                query.findObjectsInBackgroundWithBlock({ (results:AnyObject?, error:NSError?) -> Void in
-//                    
-//                })
-     
             }
         }
+        catch {
+            
+        }
+        //}
+        //}
     }
     func downloadMoreCards(noOfCards:Int, typeOfCards:String) -> Int{
         var count = 0
@@ -616,7 +757,7 @@ class BridgeViewController: UIViewController {
                 count = c
             }
         }
-        localStorageUtility.getBridgePairingsFromCloud(noOfCards,typeOfCards: typeOfCards)
+        getBridgePairingsFromCloud(noOfCards,typeOfCards: typeOfCards)
         bridgePairings = LocalData().getPairings()
         
         if let bridgePairings = bridgePairings {
@@ -827,7 +968,7 @@ class BridgeViewController: UIViewController {
 
         bridgePairings = LocalData().getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
-            localStorageUtility.getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
+            getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
             bridgePairings = LocalData().getPairings()
         }
         
