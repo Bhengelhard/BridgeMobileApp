@@ -669,6 +669,7 @@ class LocalStorageUtility{
                     PFUser.currentUser()?["city"] = ""
                     print("Problem with the data received from geocoder")
                 }
+                PFUser.currentUser()?.saveInBackground()
             })
             PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
                 (response: AnyObject?, error: NSError?) -> Void in

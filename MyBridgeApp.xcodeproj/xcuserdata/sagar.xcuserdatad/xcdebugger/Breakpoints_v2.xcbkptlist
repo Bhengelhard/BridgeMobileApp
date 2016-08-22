@@ -249,22 +249,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocalStorageUtility.swift"
-            timestampString = "493243912.840148"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "762"
-            endingLineNumber = "762"
-            landmarkName = "getBridgePairingsFromCloud(_:typeOfCards:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "MyBridgeApp/BridgeViewController.swift"
             timestampString = "493158678.350513"
             startingColumnNumber = "9223372036854775807"
@@ -573,7 +557,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "601"
             endingLineNumber = "601"
-            landmarkName = "updateMessagesViewed()"
+            landmarkName = "keyboardWillHide(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1007,38 +991,6 @@
             endingLineNumber = "61"
             landmarkName = "preferencesSwitchTapped(_:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MyBridgeApp.ProfileTableViewCell2.preferencesSwitchTapped (Swift.AnyObject) -&gt; ()"
-                  moduleName = "MyBridgeApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/MyBridgeApp/ProfileTableViewCell2.swift"
-                  timestampString = "493308470.571081"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "61"
-                  endingLineNumber = "61"
-                  offsetFromSymbolStart = "5603">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MyBridgeApp.ProfileTableViewCell2.(preferencesSwitchTapped (Swift.AnyObject) -&gt; ()).(closure #1)"
-                  moduleName = "MyBridgeApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/MyBridgeApp/ProfileTableViewCell2.swift"
-                  timestampString = "493308470.5719"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63"
-                  offsetFromSymbolStart = "41">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1054,54 +1006,6 @@
             startingLineNumber = "132"
             endingLineNumber = "132"
             landmarkName = "setCityName(_:locationCoordinates:pairing:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocalStorageUtility.swift"
-            timestampString = "493243912.840148"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "832"
-            endingLineNumber = "832"
-            landmarkName = "getBridgePairingsFromCloud(_:typeOfCards:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocalStorageUtility.swift"
-            timestampString = "493243912.840148"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "834"
-            endingLineNumber = "834"
-            landmarkName = "getBridgePairingsFromCloud(_:typeOfCards:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocalStorageUtility.swift"
-            timestampString = "493243912.840148"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "808"
-            endingLineNumber = "808"
-            landmarkName = "getBridgePairingsFromCloud(_:typeOfCards:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1175,60 +1079,44 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocalStorageUtility.swift"
-            timestampString = "493243912.840148"
+            filePath = "MyBridgeApp/BridgeViewController.swift"
+            timestampString = "493329592.390693"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "708"
-            endingLineNumber = "708"
-            landmarkName = "getBridgePairingsFromCloud(_:typeOfCards:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocalStorageUtility.swift"
-            timestampString = "493243934.878182"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "692"
-            endingLineNumber = "692"
-            landmarkName = "getBridgePairingsFromCloud(_:typeOfCards:)"
+            startingLineNumber = "681"
+            endingLineNumber = "681"
+            landmarkName = "downloadMoreCards(_:typeOfCards:)"
             landmarkType = "5">
             <Locations>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MyBridgeApp.LocalStorageUtility.(getBridgePairingsFromCloud (Swift.Int, typeOfCards : Swift.String) -&gt; ()).(closure #1)"
+                  symbolName = "MyBridgeApp.BridgeViewController.downloadMoreCards (Swift.Int, typeOfCards : Swift.String) -&gt; Swift.Int"
                   moduleName = "MyBridgeApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/LocalStorageUtility.swift"
-                  timestampString = "493308470.612776"
+                  urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/MyBridgeApp/BridgeViewController.swift"
+                  timestampString = "493329592.392943"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "692"
-                  endingLineNumber = "692"
-                  offsetFromSymbolStart = "519">
+                  startingLineNumber = "681"
+                  endingLineNumber = "681"
+                  offsetFromSymbolStart = "583">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MyBridgeApp.LocalStorageUtility.(getBridgePairingsFromCloud (Swift.Int, typeOfCards : Swift.String) -&gt; ()).(closure #1)"
+                  symbolName = "MyBridgeApp.BridgeViewController.downloadMoreCards (Swift.Int, typeOfCards : Swift.String) -&gt; Swift.Int"
                   moduleName = "MyBridgeApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/LocalStorageUtility.swift"
-                  timestampString = "493308470.61297"
+                  urlString = "file:///Users/sagar/Documents/Development/BridgeMobileApp/MyBridgeApp/BridgeViewController.swift"
+                  timestampString = "493329592.393081"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "692"
-                  endingLineNumber = "692"
-                  offsetFromSymbolStart = "1005">
+                  startingLineNumber = "681"
+                  endingLineNumber = "681"
+                  offsetFromSymbolStart = "631">
                </Location>
             </Locations>
          </BreakpointContent>
