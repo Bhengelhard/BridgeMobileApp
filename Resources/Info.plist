@@ -53,7 +53,7 @@
 	<key>NSLocationUsageDescription</key>
 	<string>To find people near you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To find people near you</string>
+	<string>To help you (con)NeCt with people near you!</string>
 	<key>UILaunchStoryboardName</key>
 	<string>Main</string>
 	<key>UIMainStoryboardFile</key>

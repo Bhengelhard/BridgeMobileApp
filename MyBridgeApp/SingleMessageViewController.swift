@@ -60,63 +60,23 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     var refresher = UIRefreshControl()
     let transitionManager = TransitionManager()
     
-    /*func updateTitle(){
-        var stringOfNames = ""
-        let query: PFQuery = PFQuery(className: "Messages")
-        query.getObjectInBackgroundWithId(newMessageId) { (result: PFObject?, error: NSError?) -> Void in
-            if error == nil {
-                //print("newMessageId - \(self.newMessageId)")
-                if let result = result {
-                    let currentUserId = (PFUser.currentUser()?.objectId)! as String
-                    let participantObjectIds = result["ids_in_message"] as! [String]
-                    let participantObjectIdsWithoutCurentUser = participantObjectIds.filter({$0 != currentUserId})
-                    //print("participantObjectIdsWithoutCurentUser \(participantObjectIdsWithoutCurentUser)")
-                    let query: PFQuery = PFQuery(className: "_User")
-                    query.whereKey("objectId", containedIn: participantObjectIdsWithoutCurentUser)
-                    query.findObjectsInBackgroundWithBlock({ (objects:[PFObject]?, err: NSError?) in
-                        if err == nil {
-                            if let objects = objects {
-                                var i = 0
-                                for object in objects {
-                                    if var name = object["name"] as? String{
-                                        if objects.count > 2 && i < objects.count - 2 {
-                                            var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                                            stringOfNames = stringOfNames + fullNameArr[0] + " , "
-                                            
-                                        } else if objects.count >= 2 && i == objects.count - 2 {
-                                            var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                                            stringOfNames = stringOfNames + fullNameArr[0] + " & "
-                                            
-                                        }
-                                        else {
-                                            if objects.count > 1{
-                                                name = name.characters.split{$0 == " "}.map(String.init)[0]
-                                            }
-                                            stringOfNames = stringOfNames + name
-                                        }
-                                        i += 1
-
-                                    }
-                                }
-                            }
-                        }
-                        dispatch_async(dispatch_get_main_queue(), {
-                            //print(stringOfNames)
-                            self.navigationBar.topItem?.title = stringOfNames
-                        })
-
-                    })
-                    
-                }
-            }
-        }
-    }*/
-    func updatePushNotifications(){
+   
+    func updateNoOfPushNotificationsOnBadge(){
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackgroundWithId(messageId, block: { (object, error) in
             if error == nil {
                 if let object = object {
                     // update the no of messages viewed in a Thread by the current user - Start
+                    if var ob = object["message_viewed"] as? [String] {
+                        if !ob.contains((PFUser.currentUser()?.objectId)!) {
+                            ob.append((PFUser.currentUser()?.objectId)!)
+                            object["message_viewed"] = ob
+                        }
+                        
+                    }
+                    else {
+                        object["message_viewed"] = [(PFUser.currentUser()?.objectId)!]
+                    }
                     let installation = PFInstallation.currentInstallation()
                     if let noOfSingleMessages = object["no_of_single_messages"] as? Int {
                         if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
@@ -195,18 +155,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     var senderId = ""
                     if let ob = result["sender"] as? String {
                         senderId = ob
-                        //senderName = ob
-//                        let queryForName = PFQuery(className: "_User")
-//                        do{
-//                            let userObject = try queryForName.getObjectWithId(ob)
-//                            if let name = userObject["name"] as? String {
-//                                senderName = name
-//                            }
-//                        }
-//                        catch{
-//                            
-//                        }
-                        
                     }
                     if let ob = result["sender_name"] as? String {
                         senderName = ob
@@ -298,9 +246,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 }
                 
             }
-            print("calling updatePushNotifications()")
-            self.updatePushNotifications()
-            self.updateMessagesViewed()
+            print("calling updateNoOfPushNotificationsOnBadge()")
+            self.updateNoOfPushNotificationsOnBadge()
+            //self.updateMessagesViewed()
             dispatch_async(dispatch_get_main_queue(), {
                 self.refresher.endRefreshing()
                 self.singleMessageTableView.reloadData()
@@ -364,13 +312,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func sendTapped(sender: UIBarButtonItem) {
         print("Tapped send")
         if messageText.text != "" {
-            
-            //call the end editing method for the text field
-            //messageText.endEditing(true)
-            
-            //disable the  textfield and sendButton
-            
-            //messageText.enabled = false
             let sendingMessageText = messageText.text
             sendButton.enabled = false
             messageText.text = ""
@@ -389,11 +330,71 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
                 
                 if (success) {
-                    self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
-                    self.singleMessagePositionToObjectIDMapping = [Int:String]()
-                    self.updateMessages()
+                    //self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
+                    //self.singleMessagePositionToObjectIDMapping = [Int:String]()
+                    //self.updateMessages()
                     //print("Object has been saved.")
                     // push notification starts
+                let singleMessagePosition = self.objectIDToMessageContentArrayMapping.count
+                var previousSenderName = ""
+                var previousSenderId = ""
+                var previousDate:NSDate? = nil
+                if singleMessagePosition > 0 {
+                    let temp = self.objectIDToMessageContentArrayMapping[self.singleMessagePositionToObjectIDMapping[singleMessagePosition - 1]!]!
+                    previousDate = (temp["date"] as? NSDate)!
+                    previousSenderName = temp["senderName"]! as! String
+                    previousSenderId = temp["senderId"]! as! String
+                    
+                }
+                
+                let currentdate = singleMessage.createdAt!
+                let calendar = NSCalendar.currentCalendar()
+                var showTimestamp = true
+                var timestamp = ""
+                let df = NSDateFormatter()
+                df.dateFormat = "hh:mm a"
+                timestamp = df.stringFromDate(currentdate)
+                if let previousDate = previousDate {
+                var components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
+                    fromDate: previousDate, toDate: currentdate, options: NSCalendarOptions.WrapComponents)
+                if components.minute > 10 {
+                    showTimestamp = true
+                }
+                else{
+                    showTimestamp = false
+                }
+    
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
+                
+                components = calendar.components([.Day],
+                        fromDate: previousDate, toDate: currentdate, options: [])
+                    //print(components)
+                if components.day > 7 {
+                    let dateFormatter = NSDateFormatter()
+                    dateFormatter.dateFormat = "MM/dd/yyy"
+                    timestamp = dateFormatter.stringFromDate(currentdate)
+                }
+                else if components.day >= 2 {
+                    let calendar = NSCalendar.currentCalendar()
+                    let components2 = calendar.components([.Weekday],
+                            fromDate: currentdate)
+                    timestamp = String(getWeekDay(components2.weekday))
+                }
+                else if components.day >= 1 {
+                    timestamp = "Yesterday"
+                }
+                else {
+                    let dateFormatter = NSDateFormatter()
+                    dateFormatter.dateFormat = "hh:mm a"
+                    timestamp = dateFormatter.stringFromDate(currentdate)
+                        
+                }
+                }
+
+                self.objectIDToMessageContentArrayMapping[(singleMessage.objectId!)]=["messageText":sendingMessageText!,"bridgeType":self.bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":false, "senderId":(PFUser.currentUser()?.objectId)!, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":singleMessage.createdAt! ]
+                    self.singleMessagePositionToObjectIDMapping[singleMessagePosition] = (singleMessage.objectId!)
+                    self.singleMessageTableView.reloadData()
                     let messageQuery = PFQuery(className: "Messages")
                     messageQuery.getObjectInBackgroundWithId(self.messageId, block: { (object, error) in
                         if error == nil {
@@ -443,7 +444,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                                                 }
                                             }
                                         }
-                                        //self.updatePushNotifications()
+                                        //self.updateNoOfPushNotificationsOnBadge()
                                     }
                                 }
                                 // update the no of message in a Thread - End
@@ -458,15 +459,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     print(error)
                     
                 }
-                
-                /*dispatch_async(dispatch_get_main_queue(), {
-                    
-                    //enable the textfield and sendButton
-                    self.messageText.enabled = true
-                    self.messageText.text = ""
-                    
-                })*/
-                
             }
             
         }
@@ -714,28 +706,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         singleMessageTableView.addSubview(refresher)
         navigationBar.topItem?.title = singleMessageTitle
         singleMessageTableView.registerClass(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
-        if isSeguedFromMessages   {
-            messageId = newMessageId
-            updateMessages()
-            //self.updateTitle()
-        }
-
-        else if isSeguedFromNewMessage   {
-            messageId = newMessageId
-            updateMessages()
-            //self.updateTitle()
-        }
-        else if isSeguedFromBridgePage   {
-            messageId = newMessageId
-            updateMessages()
-            //self.updateTitle()
-        }
-        else {
-            messageId = newMessageId
-            updateMessages()
-            //self.updateTitle()
-        }
-
+        messageId = newMessageId
+        updateMessages()
+       
         // Do any additional setup after loading the view.
     }
     override func viewDidLayoutSubviews() {
@@ -767,7 +740,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             self.transitionManager.animationDirection = "Left"
         }
         vc.transitioningDelegate = self.transitionManager
-        updateMessagesViewed()
+//        updateMessagesViewed()
 //        if let _ = self.navigationController{
 //            print("no - \(navigationController?.viewControllers.count)")
 //            if (navigationController?.viewControllers.count)! > 1 {
