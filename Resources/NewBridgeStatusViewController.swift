@@ -353,7 +353,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                     //intructions fade and drop in
                     self.selectTypeLabel.alpha = 1
                     self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.15*self.screenHeight, width: 0.9*self.screenWidth, height: 0.15*self.screenHeight)
-                    let greeting = "Great! I'll put it out to your community." //Way to give your friends the opportunity to help you.
+                    let greeting = "I have put your post in front of your friends! I'll put it out to your community." //Way to give your friends the opportunity to help you.
                     let attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 20)!])
                     self.selectTypeLabel.attributedText = attributedGreeting
                 } else if i == 6 {

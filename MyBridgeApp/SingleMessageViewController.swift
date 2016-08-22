@@ -514,7 +514,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func leaveConversationTapped(sender: UIBarButtonItem) {
         //create the alert controller
-        let alert = UIAlertController(title: "Leaving the Conversation", message: "Are you sure you want to leave this conversation?", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Leaving the Conversation", message: "Are you sure you want to leave this conversation? You will not be able to return.", preferredStyle: UIAlertControllerStyle.Alert)
         //Create the actions
         alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
             
@@ -569,18 +569,20 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            if singleMessageTableView.frame.size.height == 0.81*screenHeight {
-                singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.81*screenHeight - keyboardSize.height)
+            /*if singleMessageTableView.frame.size.height == 0.81*screenHeight {
+                
                 print("decreasing tableView height")
             } else {
                 print("keeping tableView height from keyboard will show")
-            }
+            }*/
             
-            
+            //
             if toolbar.frame.origin.y == 0.925*screenHeight{
                 print("move toolbar up with keyboard")
                 keyboardHeight = keyboardSize.height
                 toolbar.frame.origin.y -= keyboardSize.height
+                singleMessageTableView.setContentOffset(CGPointMake(0, keyboardSize.height), animated: true)
+                //singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.81*screenHeight - keyboardSize.height)
                 
                 noMessagesLabel.alpha = 0
 
@@ -593,18 +595,21 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            if singleMessageTableView.frame.size.height != 0.81*screenHeight {
-                singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.81*screenHeight + keyboardSize.height)
+            /*if singleMessageTableView.frame.size.height != 0.81*screenHeight {
+                
                 print("increasing tableView height")
             }
             else {
                 print("keeping tableView height from keyboard will hide")
-            }
+            }*/
             
             
             if toolbar.frame.origin.y != 0.925*screenHeight {
                 print("move toolbar down with keyboard")
                 toolbar.frame.origin.y += keyboardSize.height
+                singleMessageTableView.setContentOffset(CGPointMake(0, -keyboardSize.height), animated: true)
+
+                //singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.81*screenHeight + keyboardSize.height)
             }
             else {
                 print("don't move toolbar down with keyboard, it's already there")

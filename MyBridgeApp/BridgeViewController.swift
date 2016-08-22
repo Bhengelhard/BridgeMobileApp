@@ -34,7 +34,6 @@ class BridgeViewController: UIViewController {
     var segueToSingleMessage = false
     var messageId = ""
     let transitionManager = TransitionManager()
-    //var iconLabel = UILabel()
     
     //toolbar buttons
     let toolbar = UIView()
@@ -59,6 +58,10 @@ class BridgeViewController: UIViewController {
     //Connect and disconnect Icons
     let connectIcon = UIImageView()
     let disconnectIcon = UIImageView()
+    
+    //Send title and title Color singleMessageViewController
+    var singleMessageTitle = ""
+    var necterTypeColor = UIColor()
     
     //necter Colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
@@ -1091,13 +1094,27 @@ class BridgeViewController: UIViewController {
             let currentUserName = (PFUser.currentUser()?["name"] as? String) ?? ""
             message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
             message["names_in_message"] = [(bridgePairings[x].user1?.name)!, (bridgePairings[x].user2?.name)!, currentUserName]
-            //print("userId1, userId2 - \((bridgePairings[x].user1?.userId)!),\((bridgePairings[x].user2?.userId)!)")
+            let user1FirstName = (bridgePairings[x].user1?.name)!.componentsSeparatedByString(" ").first!
+            let user2FirstName = (bridgePairings[x].user2?.name)!.componentsSeparatedByString(" ").first!
+            singleMessageTitle = "\(user1FirstName) & \(user2FirstName)"
             message["bridge_builder"] = currentUserId
             var y = [String]()
             y.append(currentUserId as String!)
             message["message_viewed"] = y
-            if let bridgeType = bridgePairings[x].user1?.bridgeType {
-            message["message_type"] = bridgePairings[x].user1?.bridgeType
+            if let necterType = bridgePairings[x].user1?.bridgeType {
+                message["message_type"] = necterType
+                switch(necterType) {
+                case "Business":
+                    necterTypeColor = businessBlue
+                case "Love":
+                    necterTypeColor = loveRed
+                case "Friendship":
+                    necterTypeColor = friendshipGreen
+                default:
+                    necterTypeColor = necterGray
+                }
+                
+
             }
             else {
             message["message_type"] = "Friendship"
@@ -1311,11 +1328,10 @@ class BridgeViewController: UIViewController {
             singleMessageVC.transitioningDelegate = self.transitionManager
             singleMessageVC.isSeguedFromBridgePage = true
             singleMessageVC.newMessageId = self.messageId
+            singleMessageVC.singleMessageTitle = singleMessageTitle
+            singleMessageVC.seguedFrom = "BridgeViewController"
+            singleMessageVC.necterTypeColor = necterTypeColor
             self.transitionManager.animationDirection = "Right"
-            let vc = segue.destinationViewController
-            let vc2 = vc as! SingleMessageViewController
-            vc2.seguedFrom = "BridgeViewController"
-            print("------ trying to figure this out \(vc2.seguedFrom)")
         }
         else {
             let vc = segue.destinationViewController

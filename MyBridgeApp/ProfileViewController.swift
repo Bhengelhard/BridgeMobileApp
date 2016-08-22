@@ -11,9 +11,7 @@ import Parse
 
 class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var tableView: UITableView!
-    //@IBOutlet weak var navigationBar: UINavigationBar!
-    @IBOutlet weak var editImageButton: UIButton!
-    //@IBOutlet weak var bridgeStatus: UIButton!
+    let profilePictureButton = UIButton()
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     let navigationBar = UINavigationBar()
@@ -25,6 +23,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     var editableName:String = ""
     let noNameText = "Click to enter your full name"
     let transitionManager = TransitionManager()
+    
+    let localData = LocalData()
     
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     
@@ -80,9 +80,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     //update the UIImageView once an image has been picked
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            editImageButton.setImage(pickedImage, forState: .Normal)
+            profilePictureButton.setImage(pickedImage, forState: .Normal)
             if let imageData = UIImageJPEGRepresentation(pickedImage, 1.0){
-                let localData = LocalData()
                 localData.setMainProfilePicture(imageData)
                 localData.synchronize()
                 
@@ -172,6 +171,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         displayNavigationBar()
         
         /*
+        //setting UI based on iPhone model
         let modelName = UIDevice.currentDevice().modelName
         
         if ["iPhone 4", "iPhone 4s", "iPhone 5", "iPhone 5", "iPhone 5c", "iPhone 5s"].contains(modelName) {
@@ -181,7 +181,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }*/
         
         
-        let username = LocalData().getUsername()
+        let username = localData.getUsername()
         
         if let username = username {
             if username != "" {
@@ -224,11 +224,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         tapGesture.numberOfTapsRequired = 1
         name.addGestureRecognizer(tapGesture)
         
-        
-        let mainProfilePicture = LocalData().getMainProfilePicture()
+        //get profile picture and set to a button
+        let mainProfilePicture = localData.getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
-            let image = UIImage(data:mainProfilePicture,scale:1.0)
-            editImageButton.setImage(image, forState: .Normal)
+            print("got main profile picture")
+            let image = UIImage(data: mainProfilePicture, scale: 1.0)
+            print(image)
+            profilePictureButton.setBackgroundImage(image, forState: .Normal)
         }
         
         bridgeStatus.setTitle("Post Status", forState: .Normal)
@@ -242,6 +244,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), forControlEvents: .TouchUpInside)
         
         view.addSubview(bridgeStatus)
+        view.addSubview(profilePictureButton)
         tableView.tableFooterView = UIView()
         
     }
@@ -256,11 +259,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     override func viewDidLayoutSubviews() {
         navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.11*screenHeight)
-        editImageButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
-        editImageButton.center.x = self.view.center.x
-        editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
-        editImageButton.contentMode = UIViewContentMode.ScaleAspectFill
-        editImageButton.clipsToBounds = true
+        profilePictureButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
+        profilePictureButton.center.x = self.view.center.x
+        profilePictureButton.layer.cornerRadius = profilePictureButton.frame.size.width/2
+        profilePictureButton.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureButton.clipsToBounds = true
         name.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
         nameTextField.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
         bridgeStatus.frame = CGRect(x: 0, y:0.465*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
@@ -346,10 +349,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
         vc.transitioningDelegate = self.transitionManager
     }
-    
-    
- 
-    
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1

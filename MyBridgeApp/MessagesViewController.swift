@@ -113,12 +113,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 vc2.seguedFrom = "MessagesViewController"
             }
             vc.transitioningDelegate = self.transitionManager
-            
         }
-
-
-
     }
+    
     // refresh() fetches the data from Parse
     func refresh() {
         //self.refresher.endRefreshing()
