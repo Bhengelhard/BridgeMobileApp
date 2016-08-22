@@ -633,13 +633,6 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X4g-Qk-Qti">
-                                <rect key="frame" x="117" y="84" width="140" height="140"/>
-                                <state key="normal" image="suzy's_profile_picture.jpg"/>
-                                <connections>
-                                    <action selector="editImageTapped:" destination="pCC-By-oJn" eventType="touchUpInside" id="rj5-aq-1CU"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Click to Enter Your Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5HU-Ir-Pg6">
                                 <rect key="frame" x="61" y="232" width="252" height="25"/>
                                 <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="18"/>
@@ -660,7 +653,6 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="editImageButton" destination="X4g-Qk-Qti" id="Rys-4C-akM"/>
                         <outlet property="name" destination="5HU-Ir-Pg6" id="eu0-cS-voQ"/>
                         <outlet property="nameTextField" destination="xQx-CP-9XW" id="SUa-el-NfI"/>
                         <outlet property="tableView" destination="3js-dl-1M1" id="8nQ-Fb-kdF"/>
@@ -783,10 +775,10 @@
         <image name="suzy's_profile_picture.jpg" width="960" height="960"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HGT-Vo-Kl8"/>
-        <segue reference="Lus-h1-21q"/>
+        <segue reference="cy1-Ds-r2Z"/>
         <segue reference="Zct-T5-yb8"/>
-        <segue reference="97c-Mj-xqQ"/>
+        <segue reference="FKg-ff-qrd"/>
+        <segue reference="ORi-q2-txU"/>
         <segue reference="fLD-mo-7R5"/>
         <segue reference="0Jc-ZY-MLe"/>
     </inferredMetricsTieBreakers>
