@@ -238,7 +238,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         locationLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.155*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.1*profilePictureHeight)
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
-        locationLabel.font = UIFont(name: "Verdana", size: 16)
+        locationLabel.font = UIFont(name: "Verdana", size: 14)
         locationLabel.layer.shadowOpacity = 0.5
         locationLabel.layer.shadowRadius = 0.5
         locationLabel.layer.shadowColor = UIColor.blackColor().CGColor
@@ -250,6 +250,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         bridgeStatus.text = "I am looking for "
         bridgeStatus.font = UIFont(name: "Verdana", size: 14)
         bridgeStatus.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: 0.65*profilePictureHeight + profilePictureY, width: 0.9*profilePictureWidth, height: 0.3*profilePictureHeight)
+        bridgeStatus.textAlignment = NSTextAlignment.Center
         bridgeStatus.layer.shadowOpacity = 0.5
         bridgeStatus.layer.shadowRadius = 0.5
         bridgeStatus.layer.shadowColor = UIColor.blackColor().CGColor

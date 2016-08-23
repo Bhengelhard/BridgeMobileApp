@@ -387,12 +387,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             cell2.preferencesSwitch.onTintColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
-            //setting multi-font label
-            //let string = "connect for business" as NSString
-            //let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
-            //let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
-            // Part of string to be necter font
-            //attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
             cell2.label.text = "connect for business"
             cell2.label.font = UIFont(name: "BentonSans", size: 18)
             
@@ -410,12 +404,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             cell2.preferencesSwitch.onTintColor = UIColor.init(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
-            //setting multi-font label
-            //let string = "connect for love" as NSString
-            //let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
-            //let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
-            // Part of string to be necter font
-            //attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
             cell2.label.text = "connect for love"
             cell2.label.font = UIFont(name: "BentonSans", size: 18)
             

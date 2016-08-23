@@ -347,7 +347,7 @@ class BridgeViewController: UIViewController {
         locationLabel.text = location
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
-        locationLabel.font = UIFont(name: "Verdana", size: 16)
+        locationLabel.font = UIFont(name: "Verdana", size: 14)
         locationLabel.layer.shadowOpacity = 0.5
         locationLabel.layer.shadowRadius = 0.5
         locationLabel.layer.shadowColor = UIColor.blackColor().CGColor
@@ -357,6 +357,7 @@ class BridgeViewController: UIViewController {
         statusLabel.text = "\"\(status)\""
         statusLabel.textColor = UIColor.whiteColor()
         statusLabel.font = UIFont(name: "Verdana", size: 14)
+        statusLabel.textAlignment = NSTextAlignment.Center
         statusLabel.numberOfLines = 0
         statusLabel.layer.shadowOpacity = 0.5
         statusLabel.layer.shadowRadius = 0.5
@@ -1402,7 +1403,9 @@ class BridgeViewController: UIViewController {
                     stretch = CGAffineTransformScale(rotation, 1, 1)
                     superDeckView.transform = stretch
                     superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
-                    self.disconnectIcon.center.x = -10
+                    self.connectIcon.center.x = self.screenWidth
+                    self.connectIcon.alpha = 0.0
+                    self.disconnectIcon.center.x = 0.0
                     self.disconnectIcon.alpha = 0.0
                 })
                 
