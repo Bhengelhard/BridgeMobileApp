@@ -90,7 +90,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
                             object.saveInBackgroundWithBlock({ (success, error) in
                                 if error == nil && success {
-                                    print("installation saved")
                                     installation.saveInBackground()
                                     
                                 }
@@ -232,7 +231,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                         if error == nil {
                             
                             let totalElements = Int(count)
-                            print("The total elements = \(totalElements)")
                             if totalElements == 0 {
                                 self.displayNoMessages()
                             } else {
@@ -246,7 +244,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 }
                 
             }
-            print("calling updateNoOfPushNotificationsOnBadge()")
             self.updateNoOfPushNotificationsOnBadge()
             //self.updateMessagesViewed()
             dispatch_async(dispatch_get_main_queue(), {
@@ -294,7 +291,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let sendBarButton = UIBarButtonItem(customView: sendButton)
         
         toolbar.frame = CGRectMake(0, 0.925*screenHeight, screenWidth, 0.075*screenHeight)
-        print("keyboard is not active")
         
         toolbar.sizeToFit()
         //toolbar.translucent = false
@@ -304,13 +300,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     func messageTextDidChange (sender: UIBarButtonItem) {
-        print("messageTextDidChange")
         if messageText.text != "" {
             sendButton.enabled = true
         }
     }
     func sendTapped(sender: UIBarButtonItem) {
-        print("Tapped send")
         if messageText.text != "" {
             let sendingMessageText = messageText.text
             sendButton.enabled = false
@@ -333,7 +327,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     //self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
                     //self.singleMessagePositionToObjectIDMapping = [Int:String]()
                     //self.updateMessages()
-                    //print("Object has been saved.")
                     // push notification starts
                 let singleMessagePosition = self.objectIDToMessageContentArrayMapping.count
                 var previousSenderName = ""
@@ -369,7 +362,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 
                 components = calendar.components([.Day],
                         fromDate: previousDate, toDate: currentdate, options: [])
-                    //print(components)
                 if components.day > 7 {
                     let dateFormatter = NSDateFormatter()
                     dateFormatter.dateFormat = "MM/dd/yyy"
@@ -395,6 +387,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 self.objectIDToMessageContentArrayMapping[(singleMessage.objectId!)]=["messageText":sendingMessageText!,"bridgeType":self.bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":false, "senderId":(PFUser.currentUser()?.objectId)!, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":singleMessage.createdAt! ]
                     self.singleMessagePositionToObjectIDMapping[singleMessagePosition] = (singleMessage.objectId!)
                     self.singleMessageTableView.reloadData()
+                    self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                    
+                    //self.singleMessageTableView.setContentOffset(CGPointZero, animated:true)
                     let messageQuery = PFQuery(className: "Messages")
                     messageQuery.getObjectInBackgroundWithId(self.messageId, block: { (object, error) in
                         if error == nil {
@@ -439,7 +434,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                                                 (response: AnyObject?, error: NSError?) -> Void in
                                                 if error == nil {
                                                     if let response = response as? String {
-                                                        //print(response)
+                                                        print(response)
                                                     }
                                                 }
                                             }
@@ -561,50 +556,27 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            /*if singleMessageTableView.frame.size.height == 0.81*screenHeight {
-                
-                print("decreasing tableView height")
-            } else {
-                print("keeping tableView height from keyboard will show")
-            }*/
-            
-            //
+            self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
             if toolbar.frame.origin.y == 0.925*screenHeight{
-                print("move toolbar up with keyboard")
-                keyboardHeight = keyboardSize.height
                 toolbar.frame.origin.y -= keyboardSize.height
-                singleMessageTableView.setContentOffset(CGPointMake(0, keyboardSize.height), animated: true)
+                singleMessageTableView.frame.origin.y -= keyboardSize.height
                 //singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.81*screenHeight - keyboardSize.height)
                 
                 noMessagesLabel.alpha = 0
 
             }
             else {
-                print("toolbar already up with keyboard")
             }
         }
         
     }
     func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            /*if singleMessageTableView.frame.size.height != 0.81*screenHeight {
-                
-                print("increasing tableView height")
-            }
-            else {
-                print("keeping tableView height from keyboard will hide")
-            }*/
-            
-            
             if toolbar.frame.origin.y != 0.925*screenHeight {
-                print("move toolbar down with keyboard")
-                toolbar.frame.origin.y += keyboardSize.height
-                singleMessageTableView.setContentOffset(CGPointMake(0, -keyboardSize.height), animated: true)
-
-                //singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.81*screenHeight + keyboardSize.height)
+                toolbar.frame.origin.y = 0.925*screenHeight
+                singleMessageTableView.frame.origin.y = 0.11*screenHeight
             }
             else {
-                print("don't move toolbar down with keyboard, it's already there")
                 
             }
             
@@ -614,7 +586,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func tappedOutside(){
         if messageText.isFirstResponder() {
             messageText.endEditing(true)
-            print("message text is first responder")
         }
     }
     func updateMessagesViewed() {
@@ -661,6 +632,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         view.addSubview(noMessagesLabel)
         
     }
+    
+    func tableViewIsDragged (gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translationInView(self.view)
+        let draggedTableView = gesture.view!
+        let tableViewY = draggedTableView.frame.origin.y
+        let tableViewHeight = draggedTableView.frame.height
+        print("tableViewY-\(tableViewY), tableViewHeight - \(tableViewHeight)")
+        toolbar.frame.origin.y = tableViewY + tableViewHeight
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -675,6 +655,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         displayToolbar()
         sendButton.enabled = false
+//        let tableViewIsDraggedGesture = UIPanGestureRecognizer(target: self, action: #selector(tableViewIsDragged(_:)))
+//
+//        singleMessageTableView.addGestureRecognizer(tableViewIsDraggedGesture)
         
         let outSelector : Selector = #selector(SingleMessageViewController.tappedOutside)
         let outsideTapGesture = UITapGestureRecognizer(target: self, action: outSelector)
