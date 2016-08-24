@@ -521,9 +521,10 @@ class LocalStorageUtility{
                     }
                 }
                 var main_profile_picture:NSData? = nil
+                var  main_profile_picture_file:PFFile? = nil
                 if let ob = object["fb_profile_picture"] {
-                    let main_profile_picture_file = ob as! PFFile
-                    let data = try main_profile_picture_file.getData()
+                    main_profile_picture_file = ob as! PFFile
+                    let data = try main_profile_picture_file!.getData()
                     main_profile_picture = data
                 }
                 var location:[Double]? = nil
@@ -535,7 +536,7 @@ class LocalStorageUtility{
                     bridge_status = ob as? String
                 }
                 
-                user = PairInfo(name:name, mainProfilePicture: main_profile_picture, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil, userId: nil, city: nil )
+                user = PairInfo(name:name, mainProfilePicture: main_profile_picture_file?.url, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil, userId: nil, city: nil )
             }
         }
         catch {
@@ -778,14 +779,17 @@ class LocalStorageUtility{
                         print("location1 - \(location2)")
                         var profilePicture1:NSData? = nil
                         var profilePicture2:NSData? = nil
-                        
+                        var profilePictureFile1:String? = nil
+                        var profilePictureFile2:String? = nil
                         
                         if let ob = result["user1_profile_picture"] {
                             let main_profile_picture_file = ob as! PFFile
+                            profilePictureFile1 = main_profile_picture_file.url
                             profilePicture1 = try main_profile_picture_file.getData()
                         }
                         if let ob = result["user2_profile_picture"] {
                             let main_profile_picture_file = ob as! PFFile
+                            profilePictureFile2 = main_profile_picture_file.url
                             profilePicture2 = try main_profile_picture_file.getData()
                         }
                         
@@ -838,8 +842,8 @@ class LocalStorageUtility{
                         }
                         result.saveInBackground()
                         
-                        user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
-                        user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
+                        user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
+                        user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
                         let userInfoPair = UserInfoPair(user1: user1, user2: user2)
                         pairings.append(userInfoPair)
                         print("userId1, userId2 - \(userId1),\(userId2)")

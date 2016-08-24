@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import MapKit
 class BridgeViewController: UIViewController {
-    var bridgePairings:[UserInfoPair]? = nil
+    //var bridgePairings:[UserInfoPair]? = nil
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     //set to the height and width of the images in the superDeck
@@ -26,9 +26,8 @@ class BridgeViewController: UIViewController {
     var stackOfCards = [UIView]()
     let localStorageUtility = LocalStorageUtility()
     var currentTypeOfCardsOnDisplay = typesOfCard.All
-    var lastCardInStack:UIView = UIView() // used by downloadMoreCards() to add a card below this
-    var displayNoMoreCardsView:UIView? = nil
-    let displayNoMoreCardsLabel = UILabel()
+    var lastCardInStack:UIView? = nil // used by getB() to add a card below this
+    var displayNoMoreCardsLabel:UILabel? = nil
     var arrayOfCardsInDeck = [UIView]()
     var arrayOfCardColors = [CGColor]()
     var segueToSingleMessage = false
@@ -171,130 +170,33 @@ class BridgeViewController: UIViewController {
             })
         }
     }
-    func displayToolBar(){
-        
-        toolbar.frame = CGRectMake(0, 0.9*screenHeight, screenWidth, 0.1*screenHeight)
-        toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
-
-        //creating buttons to be added to the toolbar and evenly spaced across
-        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), forState: .Normal)
-        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), forState: .Disabled)
-        allTypesButton.frame = CGRect(x: 0.07083*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
-        allTypesButton.center.y = toolbar.center.y - 0.005*screenHeight
-        allTypesButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
-        allTypesButton.tag = 0
-        
-        //coloring allTypesText three different colors
-        let allTypesText = "All Types" as NSString
-        var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
-        
-        //setting allTypesText
-        allTypesLabel.attributedText = allTypesAttributedText
-        allTypesLabel.textAlignment =  NSTextAlignment.Center
-        allTypesLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
-        allTypesLabel.center.x = allTypesButton.center.x
-
-        
-        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), forState: .Normal)
-        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), forState: .Disabled)
-        businessButton.frame = CGRect(x: 0.24166*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
-        businessButton.center.y = toolbar.center.y - 0.005*screenHeight
-        businessButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
-        businessButton.tag = 1
-        
-        businessLabel.text = "Business"
-        businessLabel.textColor = necterGray
-        businessLabel.font = UIFont(name: "BentonSans", size: 11)
-        businessLabel.textAlignment =  NSTextAlignment.Center
-        businessLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
-        businessLabel.center.x = businessButton.center.x
-        
-        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), forState: .Normal)
-        loveButton.setImage(UIImage(named: "Love_Icon_Red"), forState: .Disabled)
-        loveButton.frame = CGRect(x: 0.65832*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
-        loveButton.center.y = toolbar.center.y - 0.005*screenHeight
-        loveButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
-        loveButton.tag = 2
-        
-        loveLabel.text = "Love"
-        loveLabel.font = UIFont(name: "BentonSans", size: 11)
-        loveLabel.textColor = necterGray
-        loveLabel.textAlignment =  NSTextAlignment.Center
-        loveLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
-        loveLabel.center.x = loveButton.center.x
-        
-        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), forState: .Normal)
-        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), forState: .Disabled)
-        friendshipButton.frame = CGRect(x: 0.82915*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1150*screenWidth)
-        friendshipButton.center.y = toolbar.center.y - 0.005*screenHeight
-        friendshipButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
-        friendshipButton.tag = 3
-        
-        friendshipLabel.text = "Friendship"
-        friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
-        friendshipLabel.textColor = necterGray
-        friendshipLabel.textAlignment =  NSTextAlignment.Center
-        friendshipLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
-        friendshipLabel.center.x = friendshipButton.center.x
-
-        
-        postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*screenWidth, height: 0.175*screenWidth)
-        postStatusButton.backgroundColor = necterYellow
-        postStatusButton.showsTouchWhenHighlighted = true
-        postStatusButton.layer.borderWidth = 2.0
-        postStatusButton.layer.borderColor = UIColor.whiteColor().CGColor
-        postStatusButton.layer.cornerRadius = postStatusButton.frame.size.width/2.0
-        postStatusButton.clipsToBounds = true
-        //loveButton.layer.borderColor =
-        postStatusButton.center.y = toolbar.center.y - 0.25*0.175*screenWidth
-        postStatusButton.center.x = view.center.x
-        postStatusButton.setTitle("+", forState: .Normal)
-        postStatusButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
-        postStatusButton.addTarget(self, action: #selector(postStatusTapped), forControlEvents: .TouchUpInside)
-        //loveButton.addTarget(self, action: #selector(filterTapped(_:)), forControlEvents: .TouchUpInside)
-        //loveButton.tag = 2
-        
-       
-        view.addSubview(toolbar)
-        view.addSubview(allTypesButton)
-        view.addSubview(allTypesLabel)
-        view.addSubview(businessButton)
-        view.addSubview(businessLabel)
-        view.addSubview(loveButton)
-        view.addSubview(loveLabel)
-        view.addSubview(friendshipButton)
-        view.addSubview(friendshipLabel)
-        view.addSubview(postStatusButton)
-    }
+    
     
     func displayNoMoreCards() {
         let labelFrame: CGRect = CGRectMake(0,0, 0.8*screenWidth,screenHeight * 0.2)
-        displayNoMoreCardsLabel.frame = labelFrame
-        displayNoMoreCardsLabel.numberOfLines = 0
+        displayNoMoreCardsLabel = UILabel()
+        displayNoMoreCardsLabel!.frame = labelFrame
+        displayNoMoreCardsLabel!.numberOfLines = 0
         
         if businessButton.enabled == false {
-            displayNoMoreCardsLabel.text = "You ran out of people to connect for business. Please check back tomorrow."
+            displayNoMoreCardsLabel!.text = "You ran out of people to connect for business. Please check back tomorrow."
         } else if loveButton.enabled == false {
-            displayNoMoreCardsLabel.text = "You ran out of people to connect for love. Please check back tomorrow."
+            displayNoMoreCardsLabel!.text = "You ran out of people to connect for love. Please check back tomorrow."
         } else if friendshipButton.enabled == false {
-            displayNoMoreCardsLabel.text = "You ran out of people to connect for friendship. Please check back tomorrow."
+            displayNoMoreCardsLabel!.text = "You ran out of people to connect for friendship. Please check back tomorrow."
         } else {
-            displayNoMoreCardsLabel.text = "You ran out of people to connect. Please check back tomorrow."
+            displayNoMoreCardsLabel!.text = "You ran out of people to connect. Please check back tomorrow."
         }
         
-        displayNoMoreCardsLabel.font = UIFont(name: "BentonSans", size: 20)
-        displayNoMoreCardsLabel.textAlignment = NSTextAlignment.Center
-        displayNoMoreCardsLabel.center.y = view.center.y
-        displayNoMoreCardsLabel.center.x = view.center.x
-        displayNoMoreCardsLabel.layer.borderWidth = 2
-        displayNoMoreCardsLabel.layer.borderColor = necterGray.CGColor
-        displayNoMoreCardsLabel.layer.cornerRadius = 15
+        displayNoMoreCardsLabel!.font = UIFont(name: "BentonSans", size: 20)
+        displayNoMoreCardsLabel!.textAlignment = NSTextAlignment.Center
+        displayNoMoreCardsLabel!.center.y = view.center.y
+        displayNoMoreCardsLabel!.center.x = view.center.x
+        displayNoMoreCardsLabel!.layer.borderWidth = 2
+        displayNoMoreCardsLabel!.layer.borderColor = necterGray.CGColor
+        displayNoMoreCardsLabel!.layer.cornerRadius = 15
 
-        view.addSubview(displayNoMoreCardsLabel)
+        view.addSubview(displayNoMoreCardsLabel!)
         
     }
     func getUpperDeckCardFrame() -> CGRect {
@@ -305,16 +207,16 @@ class BridgeViewController: UIViewController {
         let lowerDeckFrame : CGRect = CGRectMake(0, 0.5*superDeckHeight, superDeckWidth, 0.5*superDeckHeight)
         return lowerDeckFrame
     }
-    func getUpperDeckCard(name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double], pairing: UserInfoPair) -> UIView{
+    func getUpperDeckCard(name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing: UserInfoPair) -> UIView{
         let frame = getUpperDeckCardFrame()
         return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag: 0)
         
     }
-    func getLowerDeckCard(name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double], pairing: UserInfoPair) -> UIView{
+    func getLowerDeckCard(name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing: UserInfoPair) -> UIView{
         let frame = getLowerDeckCardFrame()
         return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag:1)
     }
-    func getCard(deckFrame:CGRect, name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double], pairing:UserInfoPair, tag:Int) -> UIView {
+    func getCard(deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int) -> UIView {
         
         let locationFrame = CGRectMake(0.05*cardWidth,0.155*cardHeight,0.8*cardWidth,0.10*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
@@ -337,7 +239,7 @@ class BridgeViewController: UIViewController {
         nameLabel.layer.shadowRadius = 0.5
         nameLabel.layer.shadowColor = UIColor.blackColor().CGColor
         nameLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
-        
+        let locationCoordinates = locationCoordinates ?? [-122.0,37.0]
         
         let locationLabel = UILabel(frame: locationFrame)
         locationLabel.tag = tag
@@ -364,7 +266,26 @@ class BridgeViewController: UIViewController {
         statusLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
         let photoView = UIImageView(frame: photoFrame)
-        photoView.image = UIImage(data: photo)
+        print("Downloader.load \(photo)")
+        if let photo = photo{
+            print("Downloader.load")
+        if let URL = NSURL(string: photo) {
+            Downloader.load(URL, imageView: photoView)
+        }
+        }
+
+//        if photo != nil {
+//            photo!.getDataInBackgroundWithBlock({ (data, error) in
+//                if error == nil && data != nil {
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        photoView.image = UIImage(data: data!)
+//                    })
+//                    
+//                }
+//                }
+//            )
+//        }
+        //photoView.image = UIImage(data: photo)
         photoView.contentMode = UIViewContentMode.ScaleAspectFill
         photoView.clipsToBounds = true
         
@@ -378,7 +299,7 @@ class BridgeViewController: UIViewController {
         return card
         
     }
-    func addCardPairView(aboveView:UIView?, name:String, location:String, status:String, photo:NSData, locationCoordinates1:[Double], name2:String, location2:String, status2:String, photo2:NSData, locationCoordinates2:[Double], cardColor:typesOfColor, pairing:UserInfoPair) -> UIView{
+    func addCardPairView(aboveView:UIView?, name:String?, location:String?, status:String?, photo:String?, locationCoordinates1:[Double]?, name2:String?, location2:String?, status2:String?, photo2:String?, locationCoordinates2:[Double]?, cardColor:typesOfColor?, pairing:UserInfoPair) -> UIView{
         
         let upperDeckCard = getUpperDeckCard(name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates1, pairing:pairing)
         let lowerDeckCard = getLowerDeckCard(name2, location: location2, status: status2, photo: photo2, cardColor: cardColor,locationCoordinates:locationCoordinates2, pairing:pairing)
@@ -447,12 +368,11 @@ class BridgeViewController: UIViewController {
         stackOfCards.append(superDeckView)
         return superDeckView
     }
-    
     func displayCards(){
-        if let displayNoMoreCardsView = displayNoMoreCardsView {
-            displayNoMoreCardsView.removeFromSuperview()
+        if let displayNoMoreCardsLabel = displayNoMoreCardsLabel {
+            displayNoMoreCardsLabel.removeFromSuperview()
             
-            self.displayNoMoreCardsView = nil
+            self.displayNoMoreCardsLabel = nil
         }
         arrayOfCardsInDeck = [UIView]()
         arrayOfCardColors = [CGColor]()
@@ -473,8 +393,8 @@ class BridgeViewController: UIViewController {
             var location2 = String()
             var status1 = String()
             var status2 = String()
-            var photo1 = NSData()
-            var photo2 = NSData()
+            var photoFile1: String? = nil
+            var photoFile2: String? = nil
             var locationCoordinates1 = [Double]()
             var locationCoordinates2 = [Double]()
             if let name = pairing.user1?.name {
@@ -529,22 +449,14 @@ class BridgeViewController: UIViewController {
                 status2 = "Nah"
             }
             if let mainProfilePicture = pairing.user1?.mainProfilePicture {
-                photo1 = mainProfilePicture
-            }
-            else {
-                //let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
-                //photo1 =  mainProfilePicture
+                photoFile1 = mainProfilePicture
             }
             if let mainProfilePicture = pairing.user2?.mainProfilePicture {
-                photo2 = mainProfilePicture
-            }
-            else {
-                //let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
-               // photo2 =  mainProfilePicture
+                photoFile2 = mainProfilePicture
             }
             let color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
             
-            aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photo1,locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photo2,locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
+            aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photoFile1,locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photoFile2,locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
             lastCardInStack = aboveView!
         }
         
@@ -552,334 +464,6 @@ class BridgeViewController: UIViewController {
         if  j == 0 {
             displayNoMoreCards()
         }
-        
-    }
-    func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
-        let q = PFQuery(className: "_User")
-        var flist = [String]()
-        do {
-            let object = try q.getObjectWithId((PFUser.currentUser()?.objectId)!)
-            //        q.getObjectInBackgroundWithId((PFUser.currentUser()?.objectId)!){
-            //            (object, error) -> Void in
-            //if error == nil && object != nil {
-            if let fl = object["friend_list"] as? [String]{
-                flist = fl
-                let bridgePairings = LocalData().getPairings()
-                var pairings = [UserInfoPair]()
-                if (bridgePairings != nil) {
-                    pairings = bridgePairings!
-                }
-                if let _ = PFUser.currentUser()?.objectId {
-                    var getMorePairings = true
-                    var i = 1
-                    while getMorePairings {
-                        let query = PFQuery(className:"BridgePairings")
-                        
-                        //                if let friendlist = (PFUser.currentUser()?["friend_list"] as? [String]) {
-                        //                    flist = friendlist
-                        //                }
-                        query.whereKey("user_objectIds", containedIn :flist)
-                        query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
-                        query.whereKey("checked_out", equalTo: false)
-                        query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
-                        if (typeOfCards != "All" && typeOfCards != "EachOfAllType") {
-                            query.whereKey("bridge_type", equalTo: typeOfCards)
-                        }
-                        if typeOfCards == "EachOfAllType" {
-                            switch i {
-                            case 1:
-                                query.whereKey("bridge_type", equalTo: "Business")
-                            case 2:
-                                query.whereKey("bridge_type", equalTo: "Love")
-                            case 3:
-                                query.whereKey("bridge_type", equalTo: "Friendship")
-                            default: break
-                            }
-                            
-                        }
-                        query.limit = maxNoOfCards
-                        do {
-                            let results = try query.findObjects()
-                            
-                            
-                            // query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
-                            //if let results = results {
-                            print("Hi")
-                            for result in results {
-                                var user1:PairInfo? = nil
-                                var user2:PairInfo? = nil
-                                var name1:String? = nil
-                                var name2:String? = nil
-                                var userId1:String? = nil
-                                var userId2:String? = nil
-                                if let ob = result["user_objectIds"] as? [String] {
-                                    userId1 =  ob[0]
-                                    userId2 =  ob[1]
-                                    /* Performing this important check here to make sure that each individual in the pair is friend's with the current user. Parse query -"query.whereKey("user_objectIds", containedIn :flist)" returns true even if anyone of those user's is friend with the current user - cIgAr - 08/18/16*/
-//                                    if flist.indexOf(userId1!) == nil || flist.indexOf(userId2!) == nil {
-//                                        continue
-//                                    }
-                                }
-                                
-                                if let ob = result["user1_name"] {
-                                    name1 = ob as? String
-                                    
-                                }
-                                if let ob = result["user2_name"] {
-                                    name2 = ob as? String
-                                }
-                                print("name2 - \(name2)")
-                                var location1:[Double]? = nil
-                                var location2:[Double]? = nil
-                                print(result["user_locations"])
-                                
-                                if let ob = result["user_locations"] as? [AnyObject]{
-                                    if let x = ob[0] as? PFGeoPoint{
-                                        location1 = [x.latitude,x.longitude]
-                                    }
-                                    if let x = ob[1] as? PFGeoPoint{
-                                        location2 = [x.latitude,x.longitude]
-                                    }
-                                    print("location1-\(location1),location2- \(location2)")
-                                }
-                                print("location1 - \(location2)")
-                                var profilePicture1:NSData? = nil
-                                var profilePicture2:NSData? = nil
-                                
-                                
-                                if let ob = result["user1_profile_picture"] {
-                                    let main_profile_picture_file = ob as! PFFile
-                                    profilePicture1 = try main_profile_picture_file.getData()
-                                }
-                                if let ob = result["user2_profile_picture"] {
-                                    let main_profile_picture_file = ob as! PFFile
-                                    profilePicture2 = try main_profile_picture_file.getData()
-                                }
-                                
-                                var bridgeStatus1:String? = nil
-                                var bridgeStatus2:String? = nil
-                                if let ob = result["user1_bridge_status"] {
-                                    bridgeStatus1 =  ob as? String
-                                }
-                                if let ob = result["user2_bridge_status"] {
-                                    bridgeStatus2 =  ob as? String
-                                }
-                                var city1:String? = nil
-                                var city2:String? = nil
-                                if let ob = result["user1_city"] {
-                                    city1 =  ob as? String
-                                }
-                                if let ob = result["user2_city"] {
-                                    city2 =  ob as? String
-                                }
-                                
-                                
-                                var bridgeType1:String? = nil
-                                var bridgeType2:String? = nil
-                                if let ob = result["bridge_type"] {
-                                    bridgeType1 =  ob as? String
-                                    bridgeType2 =  ob as? String
-                                }
-                                
-                                var objectId1:String? = nil
-                                var objectId2:String? = nil
-                                if let ob = result.objectId {
-                                    objectId1 =  ob as String
-                                    objectId2 =  ob as String
-                                }
-                                
-                                
-                                result["checked_out"]  = true
-                                if let _ = result["shown_to"] {
-                                    if var ar = result["shown_to"] as? [String] {
-                                        let s = (PFUser.currentUser()?.objectId)! as String
-                                        ar.append(s)
-                                        result["shown_to"] = ar
-                                    }
-                                    else {
-                                        result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
-                                    }
-                                }
-                                else {
-                                    result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
-                                }
-                                result.saveInBackground()
-                                
-                                user1 = PairInfo(name:name1, mainProfilePicture: profilePicture1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
-                                user2 = PairInfo(name:name2, mainProfilePicture: profilePicture2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
-                                let userInfoPair = UserInfoPair(user1: user1, user2: user2)
-                                pairings.append(userInfoPair)
-                                print("userId1, userId2 - \(userId1),\(userId2)")
-                                
-                            }
-                            let localData = LocalData()
-                            localData.setPairings(pairings)
-                            localData.synchronize()
-                            
-                            
-                        }
-                        catch {
-                            
-                        }
-                        i += 1
-                        if i > 3 || typeOfCards != "EachOfAllType"{
-                            getMorePairings = false
-                        }
-                        
-                        
-                    }
-                }
-            }
-        }
-        catch {
-            
-        }
-        //}
-        //}
-    }
-    func downloadMoreCards(noOfCards:Int, typeOfCards:String) -> Int{
-        var count = 0
-        let c = self.bridgePairings?.count
-        if let c = c {
-            if c > 0 {
-                count = c
-            }
-        }
-        getBridgePairingsFromCloud(noOfCards,typeOfCards: typeOfCards)
-        bridgePairings = LocalData().getPairings()
-        
-        if let bridgePairings = bridgePairings {
-        //print("bridgePairings.count - \(bridgePairings.count)")
-        totalNoOfCards += bridgePairings.count - c!
-        var aboveView = lastCardInStack
-        for i in count ..< (bridgePairings.count) {
-            let pairing = bridgePairings[i]
-            if self.currentTypeOfCardsOnDisplay != typesOfCard.All && pairing.user1?.bridgeType != convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
-                continue
-            }
-            var name1 = String()
-            var name2 = String()
-            var location1 = String()
-            var location2 = String()
-            var status1 = String()
-            var status2 = String()
-            var photo1 = NSData()
-            var photo2 = NSData()
-            var locationCoordinates1 = [Double]()
-            var locationCoordinates2 = [Double]()
-            if let name = pairing.user1?.name {
-                //print(name)
-                name1 = name
-            }
-            else {
-                name1 = "Man has no name"
-            }
-            if let name = pairing.user2?.name {
-                //print(name)
-                name2 = name
-            }
-            else {
-                name2 = "Man has no name"
-            }
-            if let location_values1 = pairing.user1?.location {
-                locationCoordinates1 = location_values1
-                location1 = "Location not set"
-            }
-            else {
-            }
-            if let location_values2 = pairing.user2?.location {
-                locationCoordinates2 = location_values2
-            }
-            else {
-            }
-            
-            if let city = pairing.user1?.city {
-                location1 = city
-            }
-            else {
-                location1 = ""
-            }
-            if let city = pairing.user2?.city {
-                location2 = city
-            }
-            else {
-                location2 = ""
-            }
-
-            
-            if let bridgeStatus = pairing.user1?.bridgeStatus {
-                status1 = bridgeStatus
-            }
-            else {
-                status1 = "Nah"
-            }
-            if let bridgeStatus = pairing.user2?.bridgeStatus {
-                status2 = bridgeStatus
-            }
-            else {
-                status2 = "Nah"
-            }
-            if let mainProfilePicture = pairing.user1?.mainProfilePicture {
-                photo1 = mainProfilePicture
-            }
-            else {
-                let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
-                photo1 =  mainProfilePicture
-            }
-            if let mainProfilePicture = pairing.user2?.mainProfilePicture {
-                photo2 = mainProfilePicture
-            }
-            else {
-               // let mainProfilePicture = UIImagePNGRepresentation(UIImage(named: "bridgeVector.jpg")!)!
-                //photo2 =  mainProfilePicture
-            }
-            let color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
-            
-            aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photo1, locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photo2, locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
-            lastCardInStack = aboveView
-        }   
-        }
-        if let _ = bridgePairings{
-            return bridgePairings!.count - count
-        }
-        else {
-            return 0
-        }
-        
-        
-        view.addSubview(toolbar)
-        view.addSubview(allTypesButton)
-        view.addSubview(allTypesLabel)
-        view.addSubview(businessButton)
-        view.addSubview(businessLabel)
-        view.addSubview(loveButton)
-        view.addSubview(loveLabel)
-        view.addSubview(friendshipButton)
-        view.addSubview(friendshipLabel)
-        view.addSubview(postStatusButton)
-
-    }
-    func updateNoOfUnreadMessagesIcon(notification: NSNotification) {
-        
-        let aps = notification.userInfo!["aps"] as? NSDictionary
-        badgeCount = (aps!["badge"] as? Int)!
-        //print("Listened at updateNoOfUnreadMessagesIcon - \(badge)")
-        dispatch_async(dispatch_get_main_queue(), {
-            
-            if self.badgeCount != 0 {
-                //self.iconLabel.text = String(self.badgeCount)
-                //self.displayNavigationBar()
-                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
-                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Highlighted)
-                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Selected)
-                self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
-                self.navigationBar.setItems([self.navItem], animated: false)
-                print("got message")
-            }
-            
-            
-        })
-        
         
     }
     func displayNavigationBar(){
@@ -934,48 +518,346 @@ class BridgeViewController: UIViewController {
         
         //setting the number of notifications to the iconLabel -> this has been removed
         /*iconLabel = UILabel(frame: messagesButton.frame)
-        iconLabel.center.x = messagesButton.center.x
-        iconLabel.center.y = messagesButton.center.y
-        //iconLabel.font = UIFont(name: "BentonSans", size: 14)
-        iconLabel.textColor = necterColor
-        //iconLabel.text = String(badgeCount)
-        //view.addSubview(iconLabel)*/
+         iconLabel.center.x = messagesButton.center.x
+         iconLabel.center.y = messagesButton.center.y
+         //iconLabel.font = UIFont(name: "BentonSans", size: 14)
+         iconLabel.textColor = necterColor
+         //iconLabel.text = String(badgeCount)
+         //view.addSubview(iconLabel)*/
     }
-    func profileTapped(sender: UIBarButtonItem) {
-        profileButton.selected = true
-        performSegueWithIdentifier("showProfilePageFromBridgeView", sender: self)
+    func displayToolBar(){
+        
+        toolbar.frame = CGRectMake(0, 0.9*screenHeight, screenWidth, 0.1*screenHeight)
+        toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
+        
+        //creating buttons to be added to the toolbar and evenly spaced across
+        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), forState: .Normal)
+        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), forState: .Disabled)
+        allTypesButton.frame = CGRect(x: 0.07083*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
+        allTypesButton.center.y = toolbar.center.y - 0.005*screenHeight
+        allTypesButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
+        allTypesButton.tag = 0
+        
+        //coloring allTypesText three different colors
+        let allTypesText = "All Types" as NSString
+        var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
+        
+        //setting allTypesText
+        allTypesLabel.attributedText = allTypesAttributedText
+        allTypesLabel.textAlignment =  NSTextAlignment.Center
+        allTypesLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        allTypesLabel.center.x = allTypesButton.center.x
+        
+        
+        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), forState: .Normal)
+        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), forState: .Disabled)
+        businessButton.frame = CGRect(x: 0.24166*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
+        businessButton.center.y = toolbar.center.y - 0.005*screenHeight
+        businessButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
+        businessButton.tag = 1
+        
+        businessLabel.text = "Business"
+        businessLabel.textColor = necterGray
+        businessLabel.font = UIFont(name: "BentonSans", size: 11)
+        businessLabel.textAlignment =  NSTextAlignment.Center
+        businessLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        businessLabel.center.x = businessButton.center.x
+        
+        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), forState: .Normal)
+        loveButton.setImage(UIImage(named: "Love_Icon_Red"), forState: .Disabled)
+        loveButton.frame = CGRect(x: 0.65832*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
+        loveButton.center.y = toolbar.center.y - 0.005*screenHeight
+        loveButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
+        loveButton.tag = 2
+        
+        loveLabel.text = "Love"
+        loveLabel.font = UIFont(name: "BentonSans", size: 11)
+        loveLabel.textColor = necterGray
+        loveLabel.textAlignment =  NSTextAlignment.Center
+        loveLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        loveLabel.center.x = loveButton.center.x
+        
+        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), forState: .Normal)
+        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), forState: .Disabled)
+        friendshipButton.frame = CGRect(x: 0.82915*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1150*screenWidth)
+        friendshipButton.center.y = toolbar.center.y - 0.005*screenHeight
+        friendshipButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
+        friendshipButton.tag = 3
+        
+        friendshipLabel.text = "Friendship"
+        friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
+        friendshipLabel.textColor = necterGray
+        friendshipLabel.textAlignment =  NSTextAlignment.Center
+        friendshipLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        friendshipLabel.center.x = friendshipButton.center.x
+        
+        
+        postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*screenWidth, height: 0.175*screenWidth)
+        postStatusButton.backgroundColor = necterYellow
+        postStatusButton.showsTouchWhenHighlighted = true
+        postStatusButton.layer.borderWidth = 2.0
+        postStatusButton.layer.borderColor = UIColor.whiteColor().CGColor
+        postStatusButton.layer.cornerRadius = postStatusButton.frame.size.width/2.0
+        postStatusButton.clipsToBounds = true
+        //loveButton.layer.borderColor =
+        postStatusButton.center.y = toolbar.center.y - 0.25*0.175*screenWidth
+        postStatusButton.center.x = view.center.x
+        postStatusButton.setTitle("+", forState: .Normal)
+        postStatusButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
+        postStatusButton.addTarget(self, action: #selector(postStatusTapped), forControlEvents: .TouchUpInside)
+        //loveButton.addTarget(self, action: #selector(filterTapped(_:)), forControlEvents: .TouchUpInside)
+        //loveButton.tag = 2
+        
+        
+        view.addSubview(toolbar)
+        view.addSubview(allTypesButton)
+        view.addSubview(allTypesLabel)
+        view.addSubview(businessButton)
+        view.addSubview(businessLabel)
+        view.addSubview(loveButton)
+        view.addSubview(loveLabel)
+        view.addSubview(friendshipButton)
+        view.addSubview(friendshipLabel)
+        view.addSubview(postStatusButton)
     }
     
-    func messagesTapped(sender: UIBarButtonItem) {
-        messagesButton.selected = true
-        performSegueWithIdentifier("showMessagesPageFromBridgeView", sender: self)
+    func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String, callBack: ((bridgeType: String)->Void)?, bridgeType: String?){
+        if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
+            displayNoMoreCardsLabel.removeFromSuperview()
+            self.displayNoMoreCardsLabel = nil
+        }
+
+        let q = PFQuery(className: "_User")
+        var flist = [String]()
+            q.getObjectInBackgroundWithId((PFUser.currentUser()?.objectId)!){
+            (object, error) -> Void in
+            if error == nil && object != nil {
+            if let fl = object!["friend_list"] as? [String]{
+                flist = fl
+                if let _ = PFUser.currentUser()?.objectId {
+                    var getMorePairings = true
+                    var i = 1
+                    while getMorePairings {
+                        let query = PFQuery(className:"BridgePairings")
+                        query.whereKey("user_objectId1", containedIn :flist)
+                        query.whereKey("user_objectId2", containedIn :flist)
+                        query.whereKey("user_objectId1", notEqualTo:(PFUser.currentUser()?.objectId)!)
+                        query.whereKey("user_objectId2", notEqualTo:(PFUser.currentUser()?.objectId)!)
+                        
+                        query.whereKey("checked_out", equalTo: false)
+                        query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
+                        if (typeOfCards != "All" && typeOfCards != "EachOfAllType") {
+                            query.whereKey("bridge_type", equalTo: typeOfCards)
+                        }
+                        if typeOfCards == "EachOfAllType" {
+                            switch i {
+                            case 1:
+                                query.whereKey("bridge_type", equalTo: "Business")
+                            case 2:
+                                query.whereKey("bridge_type", equalTo: "Love")
+                            case 3:
+                                query.whereKey("bridge_type", equalTo: "Friendship")
+                            default: break
+                            }
+                            
+                        }
+                        query.limit = maxNoOfCards
+                        query.findObjectsInBackgroundWithBlock ({ (results, error) -> Void in
+                            var noOfResults = 0
+                                if let results = results {
+                                var aboveView:UIView? = self.lastCardInStack
+                                for result in results {
+                                    noOfResults += 1
+                                    var user1:PairInfo? = nil
+                                    var user2:PairInfo? = nil
+                                    var name1:String? = nil
+                                    var name2:String? = nil
+                                    var userId1:String? = nil
+                                    var userId2:String? = nil
+                                    if let ob = result["user_objectIds"] as? [String] {
+                                        userId1 =  ob[0]
+                                        userId2 =  ob[1]
+                                    }
+                                    if let ob = result["user1_name"] {
+                                        name1 = ob as? String
+                                        
+                                    }
+                                    if let ob = result["user2_name"] {
+                                        name2 = ob as? String
+                                    }
+                                    var location1:[Double]? = nil
+                                    var location2:[Double]? = nil
+                                    print(result["user_locations"])
+                                    if let ob = result["user_locations"] as? [AnyObject]{
+                                        if let x = ob[0] as? PFGeoPoint{
+                                            location1 = [x.latitude,x.longitude]
+                                        }
+                                        if let x = ob[1] as? PFGeoPoint{
+                                            location2 = [x.latitude,x.longitude]
+                                        }
+                                        print("location1-\(location1),location2- \(location2)")
+                                    }
+                                    print("location1 - \(location2)")
+                                    var bridgeStatus1:String? = nil
+                                    var bridgeStatus2:String? = nil
+                                    if let ob = result["user1_bridge_status"] {
+                                        bridgeStatus1 =  ob as? String
+                                    }
+                                    if let ob = result["user2_bridge_status"] {
+                                        bridgeStatus2 =  ob as? String
+                                    }
+                                    var city1:String? = nil
+                                    var city2:String? = nil
+                                    if let ob = result["user1_city"] {
+                                        city1 =  ob as? String
+                                    }
+                                    if let ob = result["user2_city"] {
+                                        city2 =  ob as? String
+                                    }
+                                    
+                                    var bridgeType1:String? = nil
+                                    var bridgeType2:String? = nil
+                                    if let ob = result["bridge_type"] {
+                                        bridgeType1 =  ob as? String
+                                        bridgeType2 =  ob as? String
+                                    }
+                                    
+                                    var objectId1:String? = nil
+                                    var objectId2:String? = nil
+                                    if let ob = result.objectId {
+                                        objectId1 =  ob as String
+                                        objectId2 =  ob as String
+                                    }
+                                    
+                                    
+                                    result["checked_out"]  = true
+                                    if let _ = result["shown_to"] {
+                                        if var ar = result["shown_to"] as? [String] {
+                                            let s = (PFUser.currentUser()?.objectId)! as String
+                                            ar.append(s)
+                                            result["shown_to"] = ar
+                                        }
+                                        else {
+                                            result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
+                                        }
+                                    }
+                                    else {
+                                        result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
+                                    }
+//                                    var profilePicture1:NSData? = nil
+//                                    var profilePicture2:NSData? = nil
+                                    var profilePictureFile1:String? = nil
+                                    var profilePictureFile2:String? = nil
+                                    if let ob = result["user1_profile_picture"] as? PFFile {
+                                        print("ob.url-\(ob.url)")
+                                        profilePictureFile1 = ob.url
+                                       // profilePicture1 = try main_profile_picture_file.getData()
+                                    }
+                                    if let ob = result["user2_profile_picture"] as? PFFile {
+                                        profilePictureFile2 = ob.url
+                                       // profilePicture2 = try main_profile_picture_file.getData()
+                                    }
+                                    
+
+                                    result.saveInBackground()
+                                    user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
+                                    user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
+                                    let userInfoPair = UserInfoPair(user1: user1, user2: user2)
+                                    let bridgePairings = LocalData().getPairings()
+                                    var pairings = [UserInfoPair]()
+                                    if (bridgePairings != nil) {
+                                        pairings = bridgePairings!
+                                    }
+
+                                    pairings.append(userInfoPair)
+                                    let localData = LocalData()
+                                    print(localData.getPairings()?.count)
+                                    localData.setPairings(pairings)
+                                    localData.synchronize()
+                                    let localData2 = LocalData()
+                                    print(localData2.getPairings()?.count)
+                                    
+                                    print("userId1, userId2 - \(userId1),\(userId2)")
+                                    dispatch_async(dispatch_get_main_queue(), {
+                                        if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
+                                            displayNoMoreCardsLabel.removeFromSuperview()
+                                            self.displayNoMoreCardsLabel = nil
+                                        }
+                                        let bridgeType = bridgeType1 ?? "Business"
+                                        let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
+                                        
+                                        aboveView = self.addCardPairView(aboveView, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, name2: name2, location2: city2, status2: bridgeStatus1, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
+                                        self.lastCardInStack = aboveView!
+
+                                    })
+                                }
+                            }
+                            
+                            if noOfResults == 0 && self.lastCardInStack == nil && self.displayNoMoreCardsLabel == nil{
+                                dispatch_async(dispatch_get_main_queue(), {
+                                self.displayNoMoreCards()
+                                })
+                            }
+                            if callBack != nil && bridgeType != nil {
+                                callBack!(bridgeType: bridgeType!)
+                            }
+
+                        })
+                        i += 1
+                        if i > 3 || typeOfCards != "EachOfAllType"{
+                            getMorePairings = false
+                        }
+                    }
+                }
+            }
+
+        }
+        }
     }
+    func updateNoOfUnreadMessagesIcon(notification: NSNotification) {
+        
+        let aps = notification.userInfo!["aps"] as? NSDictionary
+        badgeCount = (aps!["badge"] as? Int)!
+        //print("Listened at updateNoOfUnreadMessagesIcon - \(badge)")
+        dispatch_async(dispatch_get_main_queue(), {
+            
+            if self.badgeCount != 0 {
+                //self.iconLabel.text = String(self.badgeCount)
+                //self.displayNavigationBar()
+                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
+                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Highlighted)
+                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Selected)
+                self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
+                self.navigationBar.setItems([self.navItem], animated: false)
+                print("got message")
+            }
+            
+            
+        })
+        
+        
+    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        while localStorageUtility.waitForCardsToBeDownloaded(){
-        //
-        //        }
-        //
-        
-        
-//        localStorageUtility.getBridgePairingsFromCloud()
-//        bridgePairings = LocalData().getPairings()
-        
-        //NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
-        
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
 
-        bridgePairings = LocalData().getPairings()
+        let bridgePairings = LocalData().getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
-            getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType")
-            bridgePairings = LocalData().getPairings()
+            getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+        }
+        else {
+            displayCards()
         }
         
         displayNavigationBar()
         displayToolBar()
-        displayCards()
         allTypesButton.enabled = false
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
@@ -1045,7 +927,6 @@ class BridgeViewController: UIViewController {
         performSegueWithIdentifier("showNewStatusViewController", sender: self)
         //presentViewController(vc!, animated: true, completion: nil)
     }
-    
     func filterTapped(sender: UIButton){
         //print(currentTypeOfCardsOnDisplay)
         let tag = sender.tag
@@ -1154,6 +1035,93 @@ class BridgeViewController: UIViewController {
             stackOfCards.removeAll()
             displayCards()
     }
+    func profileTapped(sender: UIBarButtonItem) {
+        profileButton.selected = true
+        performSegueWithIdentifier("showProfilePageFromBridgeView", sender: self)
+    }
+    func messagesTapped(sender: UIBarButtonItem) {
+        messagesButton.selected = true
+        performSegueWithIdentifier("showMessagesPageFromBridgeView", sender: self)
+    }
+    func isDragged(gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translationInView(self.view)
+        let superDeckView = gesture.view!
+        superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight / 2 + translation.y)
+        let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
+        let scale = min(CGFloat(1.0), 1)
+        var rotation = CGAffineTransformMakeRotation(xFromCenter / 350)
+        var stretch = CGAffineTransformScale(rotation, scale, scale)
+        superDeckView.transform = stretch
+        var removeCard = false
+        
+        //let disconnectIconX = min(CGFloat(0.25*self.screenWidth-superDeckView.center), CGFloat(0.25*screenWidth))
+        
+        let disconnectIconX = min((-1.66*(superDeckView.center.x/self.screenWidth)+0.66)*screenWidth, 0.25*screenWidth)
+        let connectIconX = max((-1.66*(superDeckView.center.x/self.screenWidth)+1.6)*screenWidth, 0.35*screenWidth)
+        
+        //animating connect and disconnect icons from 0.4% of screenwidth to 0.25% of screenWidth
+        if superDeckView.center.x < 0.4*screenWidth{
+            //UIView.animateWithDuration(0.7, animations: {
+            //fading in with swipe left from 0.4% of screenWidth to 0.25% of screen width
+            self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
+            self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            //})
+        } else if superDeckView.center.x > 0.6*screenWidth {
+            //UIView.animateWithDuration(0.7, animations: {
+            //fading in with swipe right from 0.6% of screenWidth to 0.75% of screen width
+            self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
+            self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            //})
+        } else {
+            //UIView.animateWithDuration(0.7, animations: {
+            self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
+            self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
+            //})
+        }
+        
+        if gesture.state == UIGestureRecognizerState.Ended {
+            
+            if superDeckView.center.x < 0.25*screenWidth {
+                
+                UIView.animateWithDuration(0.2, animations: {
+                    superDeckView.center.x = -1.0*self.screenWidth
+                    self.disconnectIcon.center.x = -1.0*self.screenWidth
+                    self.disconnectIcon.alpha = 0.0
+                    }, completion: { (success) in
+                        self.nextPair()
+                })
+                removeCard = true
+            } else if superDeckView.center.x > 0.75*screenWidth {
+                removeCard = true
+                UIView.animateWithDuration(0.2, animations: {
+                    superDeckView.center.x = 2.0*self.screenWidth
+                    self.connectIcon.center.x = 2.0*self.screenWidth
+                    self.connectIcon.alpha = 0.0
+                })
+                
+                bridged()
+            }
+            if removeCard {
+                superDeckView.removeFromSuperview()
+            }
+            else {
+                UIView.animateWithDuration(0.7, animations: {
+                    //var superDeckViewFrame = superDeckView.frame
+                    superDeckView.layer.borderColor = self.arrayOfCardColors[0]
+                    rotation = CGAffineTransformMakeRotation(0)
+                    stretch = CGAffineTransformScale(rotation, 1, 1)
+                    superDeckView.transform = stretch
+                    superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
+                    self.disconnectIcon.center.x = -10
+                    self.disconnectIcon.alpha = 0.0
+                })
+                
+            }
+        }
+        
+    }
     func bridged(){
         let bridgePairings = LocalData().getPairings()
         if var bridgePairings = bridgePairings {
@@ -1211,13 +1179,17 @@ class BridgeViewController: UIViewController {
                 try message.save()
                 let objectId = bridgePairings[x].user1?.objectId
                 let query = PFQuery(className:"BridgePairings")
+                let notificationMessage1 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+                let notificationMessage2 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+                let userObjectId1 = bridgePairings[x].user1!.userId!
+                let userObjectId2 = bridgePairings[x].user2!.userId!
                 query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in
                     if let result = result {
                         result["checked_out"] = true
                         result["bridged"] = true
                         //result.saveInBackground()
-                        let notificationMessage1 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":bridgePairings[x].user1!.userId!,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!]) {
+                        
+                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!]) {
                             (response: AnyObject?, error: NSError?) -> Void in
                             if error == nil {
                                 if let response = response as? String {
@@ -1225,8 +1197,8 @@ class BridgeViewController: UIViewController {
                                 }
                             }
                         }
-                        let notificationMessage2 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":bridgePairings[x].user2!.userId!,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!]) {
+                        
+                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userObjectId1,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!]) {
                             (response: AnyObject?, error: NSError?) -> Void in
                             if error == nil {
                                 if let response = response as? String {
@@ -1248,16 +1220,50 @@ class BridgeViewController: UIViewController {
                 bridgeType = bt
             }
 
-            self.bridgePairings!.removeAtIndex(x)
+            bridgePairings.removeAtIndex(x)
             let localData = LocalData()
-            localData.setPairings(self.bridgePairings!)
+            localData.setPairings(bridgePairings)
             localData.synchronize()
-            downloadMoreCards(1, typeOfCards: bridgeType)
+            getBridgePairingsFromCloud(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
             segueToSingleMessage = true
             performSegueWithIdentifier("showSingleMessage", sender: nil)
         }
     }
+    func nextPairHelper(bridgeType:String) -> Void {
+        if arrayOfCardsInDeck.count > 0 {
+            arrayOfCardsInDeck.removeAtIndex(0)
+            arrayOfCardColors.removeAtIndex(0)
+            if arrayOfCardsInDeck.count > 0 {
+                arrayOfCardsInDeck[0].userInteractionEnabled = true
+            }
+            else {
+                
+                //create the alert controller
+                let alert = UIAlertController(title: "Recycle the pairs", message: "You have ran out of people to connect for today. Would you like to have a re-look at the pairs you didn't bridge?", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
+                    //self.displayNoMoreCards()
+                    
+                }))
+                alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
+                    PFCloud.callFunctionInBackground("revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)]) {
+                        (response: AnyObject?, error: NSError?) -> Void in
+                        if error == nil {
+                            if let response = response as? String {
+                                print(response)
+                            }
+                            self.lastCardInStack = nil
+                            self.getBridgePairingsFromCloud(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
+                        }
+                    }
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+                
+            }
+        }
+
+    }
     func nextPair(){
+        let bridgePairings = LocalData().getPairings()
         if var bridgePairings = bridgePairings {
             var x = 0
             for i in 0 ..< (bridgePairings.count) {
@@ -1280,136 +1286,15 @@ class BridgeViewController: UIViewController {
             if let bt = bridgePairings[x].user1?.bridgeType {
                 bridgeType = bt
             }
-            self.bridgePairings!.removeAtIndex(x)
+            bridgePairings.removeAtIndex(x)
             let localData = LocalData()
-            localData.setPairings(self.bridgePairings!)
+            localData.setPairings(bridgePairings)
             localData.synchronize()
             
-
-            downloadMoreCards(1, typeOfCards: bridgeType)
-            if arrayOfCardsInDeck.count > 0 {
-                arrayOfCardsInDeck.removeAtIndex(0)
-                arrayOfCardColors.removeAtIndex(0)
-                if arrayOfCardsInDeck.count > 0 {
-                    arrayOfCardsInDeck[0].userInteractionEnabled = true
-                }
-                else {
-                    
-                    //create the alert controller
-                    let alert = UIAlertController(title: "Recycle the pairs", message: "You have ran out of people to connect for today. Would you like to have a re-look at the pairs you didn't bridge?", preferredStyle: UIAlertControllerStyle.Alert)
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
-                        self.displayNoMoreCards()
-                        
-                    }))
-                    alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
-                        PFCloud.callFunctionInBackground("revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)]) {
-                            (response: AnyObject?, error: NSError?) -> Void in
-                            if error == nil {
-                                if let response = response as? String {
-                                    print(response)
-                                }
-                                self.lastCardInStack = UIView()
-                                self.downloadMoreCards(2, typeOfCards: bridgeType)
-                                if self.arrayOfCardsInDeck.count > 0 {
-                                        self.arrayOfCardsInDeck[0].userInteractionEnabled = true
-                                }
-                                
-
-//                                self.localStorageUtility.getBridgePairingsFromCloud(1,typeOfCards: "EachOfAllType")
-//                                self.bridgePairings = LocalData().getPairings()
-//                                for i in 0..<self.stackOfCards.count {
-//                                    self.stackOfCards[i].removeFromSuperview()
-//                                }
-//                                self.stackOfCards.removeAll()
-//                                self.displayCards()
-                            }
-                        }
-                    }))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                    
-                }
+            getBridgePairingsFromCloud(1, typeOfCards: bridgeType, callBack: nextPairHelper, bridgeType:bridgeType)
             }
-        }
     }
-    func isDragged(gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translationInView(self.view)
-        let superDeckView = gesture.view!
-        superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight / 2 + translation.y)
-        let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
-        let scale = min(CGFloat(1.0), 1)
-        var rotation = CGAffineTransformMakeRotation(xFromCenter / 350)
-        var stretch = CGAffineTransformScale(rotation, scale, scale)
-        superDeckView.transform = stretch
-        var removeCard = false
-        
-        //let disconnectIconX = min(CGFloat(0.25*self.screenWidth-superDeckView.center), CGFloat(0.25*screenWidth))
-        
-        let disconnectIconX = min((-1.66*(superDeckView.center.x/self.screenWidth)+0.66)*screenWidth, 0.25*screenWidth)
-        let connectIconX = max((-1.66*(superDeckView.center.x/self.screenWidth)+1.6)*screenWidth, 0.35*screenWidth)
-        
-        //animating connect and disconnect icons from 0.4% of screenwidth to 0.25% of screenWidth
-        if superDeckView.center.x < 0.4*screenWidth{
-            //UIView.animateWithDuration(0.7, animations: {
-                //fading in with swipe left from 0.4% of screenWidth to 0.25% of screen width
-                self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
-                self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            //})
-        } else if superDeckView.center.x > 0.6*screenWidth {
-            //UIView.animateWithDuration(0.7, animations: {
-                //fading in with swipe right from 0.6% of screenWidth to 0.75% of screen width
-                self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
-                self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            //})
-        } else {
-            //UIView.animateWithDuration(0.7, animations: {
-                    self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
-                    self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-                    self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-                    self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
-            //})
-        }
-        
-        if gesture.state == UIGestureRecognizerState.Ended {
-            
-            if superDeckView.center.x < 0.25*screenWidth {
-                
-                UIView.animateWithDuration(0.2, animations: {
-                    superDeckView.center.x = -1.0*self.screenWidth
-                    self.disconnectIcon.center.x = -1.0*self.screenWidth
-                    self.disconnectIcon.alpha = 0.0
-                    }, completion: { (success) in
-                        self.nextPair()
-                })
-                removeCard = true
-            } else if superDeckView.center.x > 0.75*screenWidth {
-                removeCard = true
-                UIView.animateWithDuration(0.2, animations: {
-                    superDeckView.center.x = 2.0*self.screenWidth
-                    self.connectIcon.center.x = 2.0*self.screenWidth
-                    self.connectIcon.alpha = 0.0
-                })
-                
-                bridged()
-            }
-            if removeCard {
-                superDeckView.removeFromSuperview()
-            }
-            else {
-                UIView.animateWithDuration(0.7, animations: {
-                    //var superDeckViewFrame = superDeckView.frame
-                    superDeckView.layer.borderColor = self.arrayOfCardColors[0]
-                    rotation = CGAffineTransformMakeRotation(0)
-                    stretch = CGAffineTransformScale(rotation, 1, 1)
-                    superDeckView.transform = stretch
-                    superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
-                    self.disconnectIcon.center.x = -10
-                    self.disconnectIcon.alpha = 0.0
-                })
-                
-            }
-        }
-        
-    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         if segueToSingleMessage {
