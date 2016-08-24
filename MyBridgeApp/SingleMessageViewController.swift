@@ -115,7 +115,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let query: PFQuery = PFQuery(className: "SingleMessages")
         query.whereKey("message_id", equalTo: messageId)
         query.orderByDescending("createdAt")
-        query.limit = 5
+        query.limit = 10
         query.skip = objectIDToMessageContentArrayMapping.count
         query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
             if let error = error {
@@ -249,6 +249,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             dispatch_async(dispatch_get_main_queue(), {
                 self.refresher.endRefreshing()
                 self.singleMessageTableView.reloadData()
+                if self.objectIDToMessageContentArrayMapping.count >= 1 {
+                    self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: false)
+                }
                 self.singleMessageTableView.userInteractionEnabled = true
             })
 
@@ -387,7 +390,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 self.objectIDToMessageContentArrayMapping[(singleMessage.objectId!)]=["messageText":sendingMessageText!,"bridgeType":self.bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":false, "senderId":(PFUser.currentUser()?.objectId)!, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":singleMessage.createdAt! ]
                     self.singleMessagePositionToObjectIDMapping[singleMessagePosition] = (singleMessage.objectId!)
                     self.singleMessageTableView.reloadData()
-                    self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                    if self.objectIDToMessageContentArrayMapping.count >= 1 {
+                        self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                    }
                     
                     //self.singleMessageTableView.setContentOffset(CGPointZero, animated:true)
                     let messageQuery = PFQuery(className: "Messages")
@@ -556,7 +561,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            if self.objectIDToMessageContentArrayMapping.count >= 1 {
+                self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            }
             if toolbar.frame.origin.y == 0.925*screenHeight{
                 toolbar.frame.origin.y -= keyboardSize.height
                 singleMessageTableView.frame.origin.y -= keyboardSize.height
