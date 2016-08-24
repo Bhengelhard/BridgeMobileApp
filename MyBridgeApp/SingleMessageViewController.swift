@@ -39,7 +39,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     //getting information on which viewController the user was on prior to this one
     var seguedFrom = ""
     var messageId = String()
-    var singleMessageTitle = ""
+    var singleMessageTitle = "Conversation"
     
     //necter Colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)

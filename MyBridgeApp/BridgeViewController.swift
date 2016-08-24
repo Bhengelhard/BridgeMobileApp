@@ -316,7 +316,7 @@ class BridgeViewController: UIViewController {
     }
     func getCard(deckFrame:CGRect, name:String, location:String, status:String, photo:NSData, cardColor:typesOfColor, locationCoordinates:[Double], pairing:UserInfoPair, tag:Int) -> UIView {
         
-        let locationFrame = CGRectMake(0.05*cardWidth,0.155*cardHeight,0.8*cardWidth,0.10*cardHeight)
+        let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.075*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
         
@@ -325,7 +325,7 @@ class BridgeViewController: UIViewController {
         nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.textColor = UIColor.whiteColor()
         nameLabel.font = UIFont(name: "Verdana", size: 20)
-        let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.1*cardHeight))
+        let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.12*cardHeight))
         var nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
         nameFrame.size = adjustedNameSize
         nameFrame.size.height = 0.1*cardHeight
@@ -951,7 +951,44 @@ class BridgeViewController: UIViewController {
         messagesButton.selected = true
         performSegueWithIdentifier("showMessagesPageFromBridgeView", sender: self)
     }
-    
+    func displayMessageFromBot(notification: NSNotification) {
+        let botNotificationView = UIView()
+        botNotificationView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //always fill the view
+        blurEffectView.frame = botNotificationView.bounds
+        //blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let messageLabel = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.01*screenHeight, width: 0.9*screenWidth, height: 0.11*screenHeight))
+        messageLabel.text = notification.userInfo!["message"] as? String ?? "No Message Came Up"
+        messageLabel.textColor = UIColor.darkGrayColor()
+        messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = NSTextAlignment.Center
+        //botNotificationView.backgroundColor = necterYellow
+        
+        //botNotificationView.addSubview(blurEffectView)
+        botNotificationView.addSubview(messageLabel)
+        botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
+        view.insertSubview(botNotificationView, aboveSubview: navigationBar)
+        
+        
+        UIView.animateWithDuration(0.7) {
+            botNotificationView.frame.origin.y = 0
+        }
+        
+        let _ = Timer(interval: 4) {i -> Bool in
+            UIView.animateWithDuration(0.7, animations: {
+                botNotificationView.frame.origin.y = -0.12*self.screenHeight
+            })
+            return i < 1
+        }
+        
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        //botNotificationView.removeFromSuperview()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         //        while localStorageUtility.waitForCardsToBeDownloaded(){
@@ -965,7 +1002,7 @@ class BridgeViewController: UIViewController {
         
         //NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
         
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
 
         bridgePairings = LocalData().getPairings()

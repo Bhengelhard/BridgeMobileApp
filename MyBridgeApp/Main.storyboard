@@ -502,18 +502,18 @@
                                     <segue destination="cMo-Jt-lEF" kind="show" id="ZMu-OO-A5m"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FVI-zC-w4v">
-                                <rect key="frame" x="117" y="107" width="140" height="140"/>
-                                <state key="normal" image="suzy's_profile_picture.jpg"/>
-                                <connections>
-                                    <action selector="editImageTapped:" destination="nIP-ev-yX8" eventType="touchUpInside" id="bQW-Ve-MbY"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="I am interested in being connected for:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R8X-Cq-PbN">
                                 <rect key="frame" x="20" y="275" width="335" height="44"/>
                                 <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FVI-zC-w4v">
+                                <rect key="frame" x="117" y="107" width="140" height="140"/>
+                                <state key="normal" image="Profile_Icon_Gray"/>
+                                <connections>
+                                    <action selector="editImageTapped:" destination="nIP-ev-yX8" eventType="touchUpInside" id="bQW-Ve-MbY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -796,16 +796,16 @@
     </scenes>
     <resources>
         <image name="Load Page Option A Scaled to Iphone 6.png" width="200" height="360"/>
+        <image name="Profile_Icon_Gray" width="360" height="360"/>
         <image name="Screen over Image.png" width="200" height="358"/>
         <image name="camera_icon_small.jpg" width="25" height="25"/>
-        <image name="suzy's_profile_picture.jpg" width="960" height="960"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="WdR-zr-3Hq"/>
+        <segue reference="Lus-h1-21q"/>
+        <segue reference="HGT-Vo-Kl8"/>
+        <segue reference="B19-eu-GHC"/>
+        <segue reference="TvH-ve-6hX"/>
         <segue reference="lb2-8V-Hs1"/>
         <segue reference="tAM-Qe-S00"/>
-        <segue reference="TvH-ve-6hX"/>
-        <segue reference="cy1-Ds-r2Z"/>
-        <segue reference="B19-eu-GHC"/>
     </inferredMetricsTieBreakers>
 </document>

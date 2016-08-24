@@ -476,27 +476,34 @@ class LocalStorageUtility{
                 if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
                     if let data = NSData(contentsOfURL: fbpicUrl) {
                         let imageFile: PFFile = PFFile(data: data)!
-                        var updateProfilePic = false
-                        if let profilePictureFromFbBool = localData.getProfilePictureFromFb(){
-                            updateProfilePic = profilePictureFromFbBool
-                        }
-                        if let _ = localData.getMainProfilePicture(){
-                            PFUser.currentUser()?["fb_profile_picture"] = imageFile
-                            if updateProfilePic {
-                                PFUser.currentUser()?["profile_picture"] = imageFile
-                                localData.setMainProfilePicture(data)
-                                localData.synchronize()
+                        var updateProfilePic = true
+                        // commenting this out since we will be asking the user if he wants to upload the FB profile picture - cIgAr - 
+//                        if let profilePictureFromFbBool = localData.getProfilePictureFromFb(){
+//                            updateProfilePic = profilePictureFromFbBool
+//                        }
+//                        if let _ = localData.getMainProfilePicture(){
+//                            PFUser.currentUser()?["fb_profile_picture"] = imageFile
+//                            if updateProfilePic {
+//                                PFUser.currentUser()?["profile_picture"] = imageFile
+//                                localData.setMainProfilePicture(data)
+//                                localData.synchronize()
+//
+//                            }
+//                        }
+//                        else {
+//                            PFUser.currentUser()?["fb_profile_picture"] = imageFile
+//                            PFUser.currentUser()?["profile_picture"] = imageFile
+//                            localData.setMainProfilePicture(data)
+//                            localData.setProfilePictureFromFb(true)
+//                            localData.synchronize()
+//                            
+//                        }
+                        PFUser.currentUser()?["fb_profile_picture"] = imageFile
+                        PFUser.currentUser()?["profile_picture"] = imageFile
+                        PFUser.currentUser()?.saveInBackground()
+                        localData.setMainProfilePicture(data)
+                        localData.synchronize()
 
-                            }
-                        }
-                        else {
-                            PFUser.currentUser()?["fb_profile_picture"] = imageFile
-                            PFUser.currentUser()?["profile_picture"] = imageFile
-                            localData.setMainProfilePicture(data)
-                            localData.setProfilePictureFromFb(true)
-                            localData.synchronize()
-                            
-                        }
                     }
                 }
         
