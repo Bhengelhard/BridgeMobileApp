@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 class SingleMessageTableCell: UITableViewCell {
-    let padding: CGFloat = 5
+    //let padding: CGFloat = 5
     var background: UIView!
     var senderNameLabel: UITextView!
     var messageTextLabel: UITextView!
@@ -121,10 +121,10 @@ class SingleMessageTableCell: UITableViewCell {
 //            addSenderName = false
         }
         if senderId == PFUser.currentUser()?.objectId {
-        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2.0, y, UIScreen.mainScreen().bounds.width/2.0, 25)
+        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/3.0, y, UIScreen.mainScreen().bounds.width/1.5, 25)
         }
         else {
-            var width = (UIScreen.mainScreen().bounds.width/2 )
+            var width = (UIScreen.mainScreen().bounds.width/1.5 )
             width += CGFloat(5)
             messageTextLabel.frame = CGRectMake(5, y, width, 25)
         }
@@ -141,7 +141,7 @@ class SingleMessageTableCell: UITableViewCell {
         messageTextLabel.frame = newFrame
 //        print("messageTextLabel - \(messageTextLabel.frame)")
         messageTextLabel.layer.borderWidth = 1
-        messageTextLabel.layer.cornerRadius = 5
+        messageTextLabel.layer.cornerRadius = 18
         messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.CGColor
         
        // print("Cell : \(newFrame.height)")

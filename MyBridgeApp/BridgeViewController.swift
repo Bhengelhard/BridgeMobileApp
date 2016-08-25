@@ -218,7 +218,7 @@ class BridgeViewController: UIViewController {
     }
     func getCard(deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int) -> UIView {
         
-        let locationFrame = CGRectMake(0.05*cardWidth,0.155*cardHeight,0.8*cardWidth,0.10*cardHeight)
+        let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.075*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
         
@@ -227,7 +227,7 @@ class BridgeViewController: UIViewController {
         nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.textColor = UIColor.whiteColor()
         nameLabel.font = UIFont(name: "Verdana", size: 20)
-        let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.1*cardHeight))
+        let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.12*cardHeight))
         var nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
         nameFrame.size = adjustedNameSize
         nameFrame.size.height = 0.1*cardHeight
@@ -249,7 +249,7 @@ class BridgeViewController: UIViewController {
         locationLabel.text = location
         locationLabel.textAlignment = NSTextAlignment.Left
         locationLabel.textColor = UIColor.whiteColor()
-        locationLabel.font = UIFont(name: "Verdana", size: 16)
+        locationLabel.font = UIFont(name: "Verdana", size: 14)
         locationLabel.layer.shadowOpacity = 0.5
         locationLabel.layer.shadowRadius = 0.5
         locationLabel.layer.shadowColor = UIColor.blackColor().CGColor
@@ -259,6 +259,7 @@ class BridgeViewController: UIViewController {
         statusLabel.text = "\"\(status)\""
         statusLabel.textColor = UIColor.whiteColor()
         statusLabel.font = UIFont(name: "Verdana", size: 14)
+        statusLabel.textAlignment = NSTextAlignment.Center
         statusLabel.numberOfLines = 0
         statusLabel.layer.shadowOpacity = 0.5
         statusLabel.layer.shadowRadius = 0.5
@@ -798,6 +799,7 @@ class BridgeViewController: UIViewController {
                                 }
                             }
                             
+                            print(noOfResults)
                             if noOfResults == 0 && self.lastCardInStack == nil && self.displayNoMoreCardsLabel == nil{
                                 dispatch_async(dispatch_get_main_queue(), {
                                 print("\(i) is calling displayNoMoreCards()")
@@ -843,11 +845,58 @@ class BridgeViewController: UIViewController {
         
         
     }
-    
-    
-    
+    func displayMessageFromBot(notification: NSNotification) {
+        let botNotificationView = UIView()
+        botNotificationView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //always fill the view
+        blurEffectView.frame = botNotificationView.bounds
+        //blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let messageLabel = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.01*screenHeight, width: 0.9*screenWidth, height: 0.11*screenHeight))
+        messageLabel.text = notification.userInfo!["message"] as? String ?? "No Message Came Up"
+        messageLabel.textColor = UIColor.darkGrayColor()
+        messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = NSTextAlignment.Center
+        //botNotificationView.backgroundColor = necterYellow
+        
+        //botNotificationView.addSubview(blurEffectView)
+        botNotificationView.addSubview(messageLabel)
+        botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
+        view.insertSubview(botNotificationView, aboveSubview: navigationBar)
+        
+        
+        UIView.animateWithDuration(0.7) {
+            botNotificationView.frame.origin.y = 0
+        }
+        
+        let _ = Timer(interval: 4) {i -> Bool in
+            UIView.animateWithDuration(0.7, animations: {
+                botNotificationView.frame.origin.y = -0.12*self.screenHeight
+            })
+            return i < 1
+        }
+        
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        //botNotificationView.removeFromSuperview()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        //        while localStorageUtility.waitForCardsToBeDownloaded(){
+        //
+        //        }
+        //
+        
+        
+//        localStorageUtility.getBridgePairingsFromCloud()
+//        bridgePairings = LocalData().getPairings()
+        
+        //NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
 
         let bridgePairings = LocalData().getPairings()
@@ -1046,6 +1095,23 @@ class BridgeViewController: UIViewController {
         performSegueWithIdentifier("showMessagesPageFromBridgeView", sender: self)
     }
     func isDragged(gesture: UIPanGestureRecognizer) {
+        
+        /*else {
+            UIView.animateWithDuration(0.7, animations: {
+                //var superDeckViewFrame = superDeckView.frame
+                superDeckView.layer.borderColor = self.arrayOfCardColors[0]
+                rotation = CGAffineTransformMakeRotation(0)
+                stretch = CGAffineTransformScale(rotation, 1, 1)
+                superDeckView.transform = stretch
+                superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
+                self.connectIcon.center.x = self.screenWidth
+                self.connectIcon.alpha = 0.0
+                self.disconnectIcon.center.x = 0.0
+                self.disconnectIcon.alpha = 0.0
+            })
+            
+        }*/
+
         let translation = gesture.translationInView(self.view)
         let superDeckView = gesture.view!
         superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight / 2 + translation.y)
@@ -1098,12 +1164,13 @@ class BridgeViewController: UIViewController {
             } else if superDeckView.center.x > 0.75*screenWidth {
                 removeCard = true
                 UIView.animateWithDuration(0.2, animations: {
-                    superDeckView.center.x = 2.0*self.screenWidth
-                    self.connectIcon.center.x = 2.0*self.screenWidth
+                    superDeckView.center.x = 1.6*self.screenWidth
+                    self.connectIcon.center.x = 1.6*self.screenWidth
                     self.connectIcon.alpha = 0.0
+                    }, completion: { (success) in
+                        self.bridged()
                 })
                 
-                bridged()
             }
             if removeCard {
                 superDeckView.removeFromSuperview()
@@ -1116,8 +1183,10 @@ class BridgeViewController: UIViewController {
                     stretch = CGAffineTransformScale(rotation, 1, 1)
                     superDeckView.transform = stretch
                     superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
-                    self.disconnectIcon.center.x = -10
+                    self.disconnectIcon.center.x = -1.0*self.screenWidth
                     self.disconnectIcon.alpha = 0.0
+                    self.connectIcon.center.x = 1.6*self.screenWidth
+                    self.connectIcon.alpha = 0.0
                 })
                 
             }
@@ -1243,7 +1312,7 @@ class BridgeViewController: UIViewController {
                 //create the alert controller
                 let alert = UIAlertController(title: "Recycle the pairs", message: "You have ran out of people to connect for today. Would you like to have a re-look at the pairs you didn't bridge?", preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
-                    //self.displayNoMoreCards()
+                    self.displayNoMoreCards()
                     
                 }))
                 alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in

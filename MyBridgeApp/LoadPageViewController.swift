@@ -161,7 +161,7 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
             
             if (localData.getUsername() != nil) && ((PFUser.currentUser()!.objectId) != nil){ //remember to change this back to username
                 LocalStorageUtility().getUserFriends()
-                LocalStorageUtility().getMainProfilePicture()
+                //LocalStorageUtility().getMainProfilePicture()
                 self.performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
             }
             else{

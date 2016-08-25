@@ -8,6 +8,7 @@
 
 import UIKit
 import Parse
+import FBSDKCoreKit
 
 class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var tableView: UITableView!
@@ -31,8 +32,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
     
-    @IBAction func editImageTapped(sender: AnyObject) {
+    func profilePictureTapped(sender: UIButton) {
+    
         let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let facebookProfilePictureAction = UIAlertAction(title: "Facebook Profile Picture", style: UIAlertActionStyle.Default)
+        {
+            UIAlertAction in
+            self.getMainProfilePicture()
+        }
         let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.Default)
         {
             UIAlertAction in
@@ -50,15 +57,56 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         
         // Add the actions
         //self.picker.delegate = self
+        alert.addAction(facebookProfilePictureAction)
         alert.addAction(cameraAction)
         alert.addAction(galleryAction)
         alert.addAction(cancelAction)
         self.presentViewController(alert, animated: true, completion: nil)
-
-        imagePicker.allowsEditing = false
         
+        imagePicker.allowsEditing = false
+    
     }
     
+    //saves  to LocalDataStorage & Parse
+    func getMainProfilePicture(){
+        var pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        pagingSpinner.color = UIColor.darkGrayColor()
+        pagingSpinner.hidesWhenStopped = true
+        pagingSpinner.center.x = profilePictureButton.center.x
+        pagingSpinner.center.y = profilePictureButton.center.y
+        view.addSubview(pagingSpinner)
+        pagingSpinner.startAnimating()
+        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
+        graphRequest.startWithCompletionHandler{ (connection, result, error) -> Void in
+            if error != nil {
+                print(error)
+            }
+            else if let result = result {
+                let localData = LocalData()
+                let userId = result["id"]! as! String
+                let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
+                if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
+                    if let data = NSData(contentsOfURL: fbpicUrl) {
+                        let imageFile: PFFile = PFFile(data: data)!
+                        PFUser.currentUser()?["fb_profile_picture"] = imageFile
+                        PFUser.currentUser()?["profile_picture"] = imageFile
+                        PFUser.currentUser()?.saveInBackground()
+                        localData.setMainProfilePicture(data)
+                        localData.synchronize()
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.profilePictureButton.setImage(UIImage(data: data), forState: .Normal)
+                            pagingSpinner.stopAnimating()
+                            pagingSpinner.removeFromSuperview()
+                        })
+                        
+                        
+                    }
+                }
+                
+            }
+        }
+    }
     func openCamera(){
         if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
             imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
@@ -158,9 +206,50 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         necterButton.selected = true
         performSegueWithIdentifier("showBridgeViewFromProfilePage", sender: self)
     }
+    func displayMessageFromBot(notification: NSNotification) {
+        let botNotificationView = UIView()
+        botNotificationView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //always fill the view
+        blurEffectView.frame = botNotificationView.bounds
+        //blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let messageLabel = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.01*screenHeight, width: 0.9*screenWidth, height: 0.11*screenHeight))
+        messageLabel.text = notification.userInfo!["message"] as? String ?? "No Message Came Up"
+        messageLabel.textColor = UIColor.darkGrayColor()
+        messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = NSTextAlignment.Center
+        //botNotificationView.backgroundColor = necterYellow
+        
+        //botNotificationView.addSubview(blurEffectView)
+        botNotificationView.addSubview(messageLabel)
+        botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
+        view.insertSubview(botNotificationView, aboveSubview: profilePictureButton)
+        
+        
+        UIView.animateWithDuration(0.7) {
+            botNotificationView.frame.origin.y = 0
+        }
+        
+        let _ = Timer(interval: 4) {i -> Bool in
+            UIView.animateWithDuration(0.7, animations: {
+                botNotificationView.frame.origin.y = -0.12*self.screenHeight
+            })
+            return i < 1
+        }
+
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        //botNotificationView.removeFromSuperview()
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
         
         // Do any additional setup after loading the view.
         nameTextField.delegate = self
@@ -230,8 +319,24 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             print("got main profile picture")
             let image = UIImage(data: mainProfilePicture, scale: 1.0)
             print(image)
-            profilePictureButton.setBackgroundImage(image, forState: .Normal)
+            profilePictureButton.setImage(image, forState: .Normal)
+        }  else {
+            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+            if let pfData = pfData {
+                pfData.getDataInBackgroundWithBlock({ (data, error) in
+                    if error != nil || data == nil {
+                        print(error)
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.profilePictureButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
+                        })
+                    }
+                })
+            }
+            
         }
+        
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
         
         bridgeStatus.setTitle("Post Status", forState: .Normal)
         bridgeStatus.titleLabel!.font = UIFont(name: "Verdana", size: 20)
@@ -337,7 +442,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         //let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
-
         let vc = segue.destinationViewController
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
@@ -387,12 +491,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             cell2.preferencesSwitch.onTintColor = UIColor(red: 39/255, green: 103/255, blue: 143/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
-            //setting multi-font label
-            //let string = "connect for business" as NSString
-            //let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
-            //let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
-            // Part of string to be necter font
-            //attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
             cell2.label.text = "connect for business"
             cell2.label.font = UIFont(name: "BentonSans", size: 18)
             
@@ -410,12 +508,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             cell2.preferencesSwitch.onTintColor = UIColor.init(red: 227/255, green: 70/255, blue: 73/255, alpha: 1.0)
             cell2.selectionStyle = UITableViewCellSelectionStyle.None
             
-            //setting multi-font label
-            //let string = "connect for love" as NSString
-            //let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 18)!])
-            //let necterFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana", size: 18) as! AnyObject]
-            // Part of string to be necter font
-            //attributedString.addAttributes(necterFontAttribute, range: string.rangeOfString("nect"))
             cell2.label.text = "connect for love"
             cell2.label.font = UIFont(name: "BentonSans", size: 18)
             

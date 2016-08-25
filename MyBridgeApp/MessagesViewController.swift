@@ -82,7 +82,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let transitionManager = TransitionManager()
     
     var messageId = String()
-    var singleMessageTitle = ""
+    var singleMessageTitle = "Conversation"
     
    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -638,8 +638,49 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         view.addSubview(noMessagesLabel)
         
     }
+    func displayMessageFromBot(notification: NSNotification) {
+        let botNotificationView = UIView()
+        botNotificationView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //always fill the view
+        blurEffectView.frame = botNotificationView.bounds
+        //blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let messageLabel = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.01*screenHeight, width: 0.9*screenWidth, height: 0.11*screenHeight))
+        messageLabel.text = notification.userInfo!["message"] as? String ?? "No Message Came Up"
+        messageLabel.textColor = UIColor.darkGrayColor()
+        messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = NSTextAlignment.Center
+        //botNotificationView.backgroundColor = necterYellow
+        
+        //botNotificationView.addSubview(blurEffectView)
+        botNotificationView.addSubview(messageLabel)
+        botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
+        view.insertSubview(botNotificationView, aboveSubview: navigationBar)
+        
+        
+        UIView.animateWithDuration(0.7) {
+            botNotificationView.frame.origin.y = 0
+        }
+        
+        let _ = Timer(interval: 4) {i -> Bool in
+            UIView.animateWithDuration(0.7, animations: {
+                botNotificationView.frame.origin.y = -0.12*self.screenHeight
+            })
+            return i < 1
+        }
+        
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        //botNotificationView.removeFromSuperview()
+        
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
         
         //create NavigationBar
         displayNavigationBar()
@@ -686,7 +727,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         searchController.searchBar.sizeToFit()
         self.tableView.tableHeaderView = searchController.searchBar
         pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        pagingSpinner.color = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
+        pagingSpinner.color = UIColor.darkGrayColor()
         pagingSpinner.hidesWhenStopped = true
         tableView.tableFooterView = pagingSpinner
         tableView.separatorStyle = .None
@@ -899,7 +940,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
 
-        singleMessageTitle = (currentCell.participants?.text)!
+        if (currentCell.participants?.text)! != "" {
+            singleMessageTitle = (currentCell.participants?.text)!
+        } else {
+            //singleMessageTitle stays as "Conversation"
+        }
+        
         singleMessageId = messagePositionToMessageIdMapping[indexPath.row]!
         messageId = messagePositionToMessageIdMapping[indexPath.row ]!
         let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[indexPath.row ]!]!

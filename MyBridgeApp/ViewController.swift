@@ -58,8 +58,10 @@ class ViewController: UIViewController {
                     installation.saveInBackground()
                     
                     LocalStorageUtility().getUserFriends()
-                    LocalStorageUtility().getMainProfilePicture()
+                    
                     if user.isNew {
+                        //sync profile picture with facebook profile picture
+                        LocalStorageUtility().getMainProfilePicture()
                         
                         print("got to new user")
                         let localData = LocalData()
