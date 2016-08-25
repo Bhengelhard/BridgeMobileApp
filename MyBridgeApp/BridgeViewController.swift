@@ -217,7 +217,7 @@ class BridgeViewController: UIViewController {
     }
     func getCard(deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int) -> UIView {
         
-        let locationFrame = CGRectMake(0.05*cardWidth,0.17*cardHeight,0.8*cardWidth,0.075*cardHeight)
+        let locationFrame = CGRectMake(0.05*cardWidth,0.18*cardHeight,0.8*cardWidth,0.075*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
         let photoFrame = CGRectMake(0, 0, superDeckWidth, 0.5*superDeckHeight)
         
@@ -226,10 +226,10 @@ class BridgeViewController: UIViewController {
         nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.textColor = UIColor.whiteColor()
         nameLabel.font = UIFont(name: "Verdana", size: 20)
-        let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.12*cardHeight))
-        var nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.1*cardHeight)
-        nameFrame.size = adjustedNameSize
-        nameFrame.size.height = 0.1*cardHeight
+        //let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.12*cardHeight))
+        let nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.12*cardHeight)
+        //nameFrame.size = adjustedNameSize
+        //nameFrame.size.height = 0.12*cardHeight
         nameLabel.frame = nameFrame
         nameLabel.layer.cornerRadius = 2
         nameLabel.clipsToBounds = true
@@ -254,8 +254,16 @@ class BridgeViewController: UIViewController {
         locationLabel.layer.shadowColor = UIColor.blackColor().CGColor
         locationLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
+        var statusText = ""
+        
+        if let status = status {
+            if status != "" {
+                statusText = "\"\(status)\""
+            }
+            
+        }
         let statusLabel = UILabel(frame: statusFrame)
-        statusLabel.text = "\"\(status)\""
+        statusLabel.text = statusText
         statusLabel.textColor = UIColor.whiteColor()
         statusLabel.font = UIFont(name: "Verdana", size: 14)
         statusLabel.textAlignment = NSTextAlignment.Center
@@ -266,11 +274,11 @@ class BridgeViewController: UIViewController {
         statusLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
         let photoView = UIImageView(frame: photoFrame)
-        if let photo = photo{
-        if let URL = NSURL(string: photo) {
-            Downloader.load(URL, imageView: photoView)
-        }
-        }
+//        if let photo = photo{
+//        if let URL = NSURL(string: photo) {
+//            Downloader.load(URL, imageView: photoView)
+//        }
+//        }
 
 //        if photo != nil {
 //            photo!.getDataInBackgroundWithBlock({ (data, error) in
@@ -363,6 +371,12 @@ class BridgeViewController: UIViewController {
         }
         arrayOfCardsInDeck.append(superDeckView)
         arrayOfCardColors.append(superDeckView.layer.borderColor!)
+        superDeckView.hidden = true
+        if let photo = photo{
+            if let URL = NSURL(string: photo) {
+                Downloader.load(URL, superDeckView: superDeckView)
+            }
+        }
         return superDeckView
     }
     // Does not download bridge pairings. Only presents the existing ones in the localData to the user
@@ -747,21 +761,15 @@ class BridgeViewController: UIViewController {
                                     else {
                                         result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
                                     }
-//                                    var profilePicture1:NSData? = nil
-//                                    var profilePicture2:NSData? = nil
                                     var profilePictureFile1:String? = nil
                                     var profilePictureFile2:String? = nil
                                     if let ob = result["user1_profile_picture"] as? PFFile {
                                         print("ob.url-\(ob.url)")
                                         profilePictureFile1 = ob.url
-                                       // profilePicture1 = try main_profile_picture_file.getData()
                                     }
                                     if let ob = result["user2_profile_picture"] as? PFFile {
                                         profilePictureFile2 = ob.url
-                                       // profilePicture2 = try main_profile_picture_file.getData()
                                     }
-                                    
-
                                     result.saveInBackground()
                                     user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
                                     user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
@@ -1095,22 +1103,6 @@ class BridgeViewController: UIViewController {
         performSegueWithIdentifier("showMessagesPageFromBridgeView", sender: self)
     }
     func isDragged(gesture: UIPanGestureRecognizer) {
-        
-        /*else {
-            UIView.animateWithDuration(0.7, animations: {
-                //var superDeckViewFrame = superDeckView.frame
-                superDeckView.layer.borderColor = self.arrayOfCardColors[0]
-                rotation = CGAffineTransformMakeRotation(0)
-                stretch = CGAffineTransformScale(rotation, 1, 1)
-                superDeckView.transform = stretch
-                superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
-                self.connectIcon.center.x = self.screenWidth
-                self.connectIcon.alpha = 0.0
-                self.disconnectIcon.center.x = 0.0
-                self.disconnectIcon.alpha = 0.0
-            })
-            
-        }*/
 
         let translation = gesture.translationInView(self.view)
         let superDeckView = gesture.view!
@@ -1122,31 +1114,24 @@ class BridgeViewController: UIViewController {
         superDeckView.transform = stretch
         var removeCard = false
         
-        //let disconnectIconX = min(CGFloat(0.25*self.screenWidth-superDeckView.center), CGFloat(0.25*screenWidth))
-        
         let disconnectIconX = min((-1.66*(superDeckView.center.x/self.screenWidth)+0.66)*screenWidth, 0.25*screenWidth)
         let connectIconX = max((-1.66*(superDeckView.center.x/self.screenWidth)+1.6)*screenWidth, 0.35*screenWidth)
         
         //animating connect and disconnect icons from 0.4% of screenwidth to 0.25% of screenWidth
         if superDeckView.center.x < 0.4*screenWidth{
-            //UIView.animateWithDuration(0.7, animations: {
             //fading in with swipe left from 0.4% of screenWidth to 0.25% of screen width
             self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
             self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             //})
         } else if superDeckView.center.x > 0.6*screenWidth {
-            //UIView.animateWithDuration(0.7, animations: {
             //fading in with swipe right from 0.6% of screenWidth to 0.75% of screen width
             self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
             self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            //})
         } else {
-            //UIView.animateWithDuration(0.7, animations: {
             self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
             self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
-            //})
         }
         
         if gesture.state == UIGestureRecognizerState.Ended {
