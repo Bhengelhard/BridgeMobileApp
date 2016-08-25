@@ -59,7 +59,8 @@ class MessagesTableCell: UITableViewCell {
         messageSnapshot.textContainer.maximumNumberOfLines = 2
         messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.ByTruncatingTail//NSLineBreakByTruncatingTail
         messageSnapshot.sizeToFit()
-        messageSnapshot.scrollEnabled = false
+        messageSnapshot.userInteractionEnabled = false
+        messageSnapshot.contentInset = UIEdgeInsetsMake(-7.0,0.0,0,0.0)
         
         arrow = UILabel(frame:CGRectZero)
         arrow.font = UIFont(name: "Mishafi Regular", size: 30)

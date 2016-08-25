@@ -127,8 +127,9 @@ class SingleMessageTableCell: UITableViewCell {
 //        var newFrame = messageTextLabel.frame
 //        //max(newSize.width, fixedWidth)
 //        newFrame.size = CGSize(width: newSize.width, height: newSize.height)
-        if newSize.width < 50 {
+        if newSize.width < 33 {
             newSize.width = 33
+            messageTextLabel.textContainer.maximumNumberOfLines = 1
         }
         var x = 0.05*screenWidth
         if senderId == PFUser.currentUser()?.objectId {
@@ -139,10 +140,10 @@ class SingleMessageTableCell: UITableViewCell {
         messageTextLabel.layer.borderWidth = 1
         if messageTextLabel.text.characters.count < 3 {
             messageTextLabel.layer.cornerRadius = messageTextLabel.frame.width/2.0
+             messageTextLabel.textAlignment = NSTextAlignment.Center
         } else {
             messageTextLabel.layer.cornerRadius = 15
         }
-        
         messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.CGColor
         
     }
