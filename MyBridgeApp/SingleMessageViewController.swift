@@ -167,7 +167,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                         let components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
                             fromDate: previousDate, toDate: date, options: NSCalendarOptions.WrapComponents)
                         //print("components.minute - \(components.minute)")
-                        if components.minute > 10 {
+                        if components.minute > 2 {
                             showTimestamp = true
                         }
                         else{
@@ -211,7 +211,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                         let temp = self.objectIDToMessageContentArrayMapping[self.singleMessagePositionToObjectIDMapping[results.count]!]!
                         let components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
                                 fromDate: date, toDate: temp["date"]! as! NSDate, options: NSCalendarOptions.WrapComponents)
-                        if components.minute > 10 {
+                        if components.minute > 2 {
                             show = true
                         }
                         else{
@@ -261,13 +261,17 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func displayToolbar() {
         //setting the text field
         messageText.delegate = self
-        
-        messageText.frame = CGRect(x: 0.025*screenWidth, y: 0, width: 0.675*screenWidth, height: 0.05*screenHeight)
+        messageText.frame.size = CGSize(width: 0.675*screenWidth, height: 35.5)
+        messageText.frame.origin.x = 0.025*screenWidth
         messageText.center.y = toolbar.center.y
         //messageText.placeholder = " Write Message"
         messageText.layer.borderWidth = 1
         messageText.layer.borderColor = UIColor.lightGrayColor().CGColor
         messageText.layer.cornerRadius = 7
+        messageText.font = UIFont(name: "Verdana", size: 16)
+        messageText.scrollEnabled = false
+        messageText.text = "Type a message..."
+        messageText.textColor = UIColor.lightGrayColor()
         //messageText.addTarget(self, action: #selector(messageTextDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         //messageText.addTarget(self, action: #selector(messageTextTapped(_:)), forControlEvents: .TouchUpInside)
         //messageTextRecorder
@@ -281,7 +285,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: self, action: nil)
         
         //setting the send button
-        sendButton.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0.2*screenWidth, height: 0.05*screenHeight)
+        sendButton.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0.2*screenWidth, height: 0.0605*screenHeight)
         sendButton.center.y = toolbar.center.y
         sendButton.setTitle("Send", forState: .Normal)
         sendButton.setTitleColor(necterYellow, forState: .Normal)
@@ -306,17 +310,71 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func textViewDidChange(textView: UITextView) {
         if messageText.text != "" {
             sendButton.enabled = true
+            
+            //changing the height of the messageText based on the content
+            let messageTextFixedWidth = messageText.frame.size.width
+            let messageTextNewSize = messageText.sizeThatFits(CGSize(width: messageTextFixedWidth, height: CGFloat.max))
+            var messageTextNewFrame = messageText.frame
+            messageTextNewFrame.size = CGSize(width: max(messageTextNewSize.width, messageTextFixedWidth), height: messageTextNewSize.height)
+            
+            let toolbarFixedHeight = 0.89*screenHeight-keyboardHeight
+            
+            
+            if toolbarFixedHeight < messageTextNewFrame.size.height + 8.5 {
+                
+                print("reached the navBar")
+                messageText.scrollEnabled = true
+                //messageText.frame.size.height = previousMessageHeight
+                //toolbar.frame.size.height = previousToolbarHeight
+            } else {
+                
+                messageText.frame = messageTextNewFrame
+                
+                //changing the height of the toolbar based on the content
+                let previousToolbarHeight = toolbar.frame.height
+                let newToolbarHeight = messageTextNewFrame.size.height + 8.5
+                let changeInToolbarHeight = newToolbarHeight - previousToolbarHeight
+                let toolbarFixedWidth = toolbar.frame.size.width
+               
+                //toolbar.sizeThatFits(CGSize(width: toolbarFixedWidth, height: toolbarFixedHeight))
+                let toolbarNewSize = toolbar.sizeThatFits(CGSize(width: toolbarFixedWidth, height: toolbarFixedHeight))
+                var toolbarNewFrame = toolbar.frame
+                toolbarNewFrame.size = CGSize(width: max(toolbarNewSize.width, toolbarFixedWidth), height: min(messageTextNewFrame.size.height + 8.5, toolbarFixedHeight))
+                toolbarNewFrame.origin.y = toolbar.frame.origin.y - changeInToolbarHeight
+                //if the toolbar has grown to the size where it is just below the navigation bar then enable the textView to scroll
+                toolbar.frame = toolbarNewFrame
+            }
+
+            
+        } else {
+            sendButton.enabled = false
+        }
+
+        
+    }
+    //taking away the placeholder to begin editing the textView
+    func textViewDidBeginEditing(textView: UITextView) {
+        if messageText.textColor == UIColor.lightGrayColor() {
+            messageText.text = nil
+            messageText.textColor = UIColor.blackColor()
+        }
+    }
+    //adding a placeholder when the user is not editing the textView
+    func textViewDidEndEditing(textView: UITextView) {
+        if messageText.text.isEmpty {
+            messageText.text = "Type a message..."
+            messageText.textColor = UIColor.lightGrayColor()
         }
     }
     
-    /*func messageTextDidChange (sender: UIBarButtonItem) {
-        if messageText.text != "" {
-            sendButton.enabled = true
-        }
-    }*/
+    
+    
     func sendTapped(sender: UIBarButtonItem) {
         if messageText.text != "" {
             messageText.resignFirstResponder()
+            toolbar.frame = CGRectMake(0, 0.925*screenHeight, screenWidth, 0.075*screenHeight)
+            messageText.frame = CGRect(x: 0.025*screenWidth, y: 0, width: 0.675*screenWidth, height: 35.5)
+            messageText.scrollEnabled = false
             let sendingMessageText = messageText.text
             sendButton.enabled = false
             messageText.text = ""
@@ -361,7 +419,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 if let previousDate = previousDate {
                 var components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
                     fromDate: previousDate, toDate: currentdate, options: NSCalendarOptions.WrapComponents)
-                if components.minute > 10 {
+                if components.minute > 2 {
                     showTimestamp = true
                 }
                 else{
@@ -564,36 +622,33 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func messagesTapped(sender: UIBarButtonItem) {
         messagesButton.selected = true
         toolbar.frame = CGRectMake(0, 0.925*screenHeight, screenWidth, 0.075*screenHeight)
-        
         performSegueWithIdentifier("showMessagesTableFromSingleMessage", sender: self)
     }
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+            keyboardHeight = keyboardSize.height
             if self.objectIDToMessageContentArrayMapping.count >= 1 {
                 self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
             }
-            if toolbar.frame.origin.y == 0.925*screenHeight{
-                toolbar.frame.origin.y -= keyboardSize.height
-                singleMessageTableView.frame.origin.y -= keyboardSize.height
-                //singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.81*screenHeight - keyboardSize.height)
-                
-                noMessagesLabel.alpha = 0
-
-            }
-            else {
-            }
+            toolbar.frame.origin.y -= keyboardSize.height
+            singleMessageTableView.frame.origin.y -= keyboardSize.height
+            noMessagesLabel.alpha = 0
         }
         
     }
     func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-            if toolbar.frame.origin.y != 0.925*screenHeight {
-                toolbar.frame.origin.y = 0.925*screenHeight
-                singleMessageTableView.frame.origin.y = 0.11*screenHeight
+            singleMessageTableView.frame.origin.y = 0.11*screenHeight
+            if messageText.text.isEmpty {
+                toolbar.frame = CGRectMake(0, 0.925*screenHeight, screenWidth, 0.075*screenHeight)
+                messageText.frame.size.height = 35.5
+            } else {
+                toolbar.frame.origin.y += keyboardHeight//keyboardSize.height
             }
-            else {
-                
-            }
+            print("toolbar")
+            print(toolbar.frame)
+            print("messageText")
+            print(messageText.frame)
             
         }
     }
@@ -653,15 +708,17 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let draggedTableView = gesture.view!
         let tableViewY = draggedTableView.frame.origin.y
         let tableViewHeight = draggedTableView.frame.height
-        print("tableViewY-\(tableViewY), tableViewHeight - \(tableViewHeight)")
         toolbar.frame.origin.y = tableViewY + tableViewHeight
     }
-
+    // Dismiss keyboard when scrolling
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        messageText.resignFirstResponder()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         singleMessageTableView.delegate = self
         singleMessageTableView.dataSource = self
-        singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.81*screenHeight)
+        singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.8*screenHeight)
         singleMessageTableView.separatorStyle = UITableViewCellSeparatorStyle.None
         singleMessageTableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
         view.addSubview(singleMessageTableView)
@@ -808,7 +865,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         
         messageTextLabel.text = (messageContent["messageText"] as? String)!
-        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2, 0, UIScreen.mainScreen().bounds.width/2, 25)
+        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/3.0, 0, UIScreen.mainScreen().bounds.width/1.5, 25)
         let fixedWidth = messageTextLabel.frame.size.width
         let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
         var newFrame = messageTextLabel.frame
@@ -833,7 +890,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         cell.singleMessageContent = singleMessageContent
         //print("cell \(indexPath.row) \(cell.frame.height)")
         return cell
-        
         
     }
 

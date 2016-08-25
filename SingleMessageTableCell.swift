@@ -22,21 +22,17 @@ class SingleMessageTableCell: UITableViewCell {
         didSet {
             if let s = singleMessageContent {
                 messageTextLabel.backgroundColor = s.backgroundColor
-                //print("bg - \(s.backgroundColor)")
                 timestampLabel.text = s.timestamp
                 senderNameLabel.text = s.senderName
                 messageTextLabel.text = s.messageText
                 senderId = s.senderId!
                 if (senderId != PFUser.currentUser()?.objectId) && (singleMessageContent?.senderId != singleMessageContent?.previousSenderId )  {
-//                    print("")
-//                    print ("senderId - \(senderId), PFUser.currentUser()?.objectId - \(PFUser.currentUser()?.objectId), singleMessageContent?.senderId- \(singleMessageContent?.senderId), singleMessageContent?.previousSenderId - \(singleMessageContent?.previousSenderId)   ")
                     
                     addSenderName = true
                     contentView.addSubview(senderNameLabel)
                 }
                 if let t = s.showTimestamp{
                     if t == true{
-                        //print("timeStamp after \(s.messageText)")
                         addTimestamp = true
                         contentView.addSubview(timestampLabel)
                         
@@ -94,14 +90,12 @@ class SingleMessageTableCell: UITableViewCell {
         var y = CGFloat(0)
         let screenWidth = UIScreen.mainScreen().bounds.width
         if addTimestamp == true {
-            //print("timeStampLabel for  \(messageTextLabel.text) is \(timestampLabel.text)")
             timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
             //timestampLabel.layer.borderWidth = 1
             //timestampLabel.layer.cornerRadius = 10
             //timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
 //            addTimestamp = false
             y += timestampLabel.frame.height + 2
-//            print("timestampLabel - \(timestampLabel.frame)")
 
         }
 
@@ -117,34 +111,40 @@ class SingleMessageTableCell: UITableViewCell {
             senderNameLabel.layer.borderWidth = 1
             senderNameLabel.layer.cornerRadius = 5
             senderNameLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
-            y += newFrame.height + 1
+            y += newFrame.height + 2
 //            addSenderName = false
         }
         if senderId == PFUser.currentUser()?.objectId {
         messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/3.0, y, UIScreen.mainScreen().bounds.width/1.5, 25)
         }
         else {
-            var width = (UIScreen.mainScreen().bounds.width/1.5 )
+            var width = (UIScreen.mainScreen().bounds.width/1.5)
             width += CGFloat(5)
             messageTextLabel.frame = CGRectMake(5, y, width, 25)
         }
         let fixedWidth = messageTextLabel.frame.size.width
-        let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+        var newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
 //        var newFrame = messageTextLabel.frame
 //        //max(newSize.width, fixedWidth)
 //        newFrame.size = CGSize(width: newSize.width, height: newSize.height)
+        if newSize.width < 50 {
+            newSize.width = 33
+        }
         var x = 0.05*screenWidth
         if senderId == PFUser.currentUser()?.objectId {
             x = 0.95*screenWidth - newSize.width
         }
         let newFrame = CGRectMake(x, y, newSize.width, newSize.height)
         messageTextLabel.frame = newFrame
-//        print("messageTextLabel - \(messageTextLabel.frame)")
         messageTextLabel.layer.borderWidth = 1
-        messageTextLabel.layer.cornerRadius = 18
+        if messageTextLabel.text.characters.count < 3 {
+            messageTextLabel.layer.cornerRadius = messageTextLabel.frame.width/2.0
+        } else {
+            messageTextLabel.layer.cornerRadius = 15
+        }
+        
         messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.CGColor
         
-       // print("Cell : \(newFrame.height)")
     }
     override func awakeFromNib() {
         super.awakeFromNib()

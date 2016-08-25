@@ -172,6 +172,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
         optionsTableView.tableFooterView = UIView()
         optionsTableView.rowHeight = optionsTableView.frame.size.height/CGFloat(optionsTableView.numberOfRowsInSection(0))
         optionsTableView.alpha = 0
+        optionsTableView.scrollEnabled = false
         view.addSubview(optionsTableView)
         
         
