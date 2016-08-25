@@ -320,6 +320,20 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             let image = UIImage(data: mainProfilePicture, scale: 1.0)
             print(image)
             profilePictureButton.setImage(image, forState: .Normal)
+        }  else {
+            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+            if let pfData = pfData {
+                pfData.getDataInBackgroundWithBlock({ (data, error) in
+                    if error != nil || data == nil {
+                        print(error)
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.profilePictureButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
+                        })
+                    }
+                })
+            }
+            
         }
         
         profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)

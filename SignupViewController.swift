@@ -153,7 +153,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         }
         else{
             businessLabel.textColor = UIColor.grayColor()
-            businessIcon.image = UIImage(named: "Business_Icon_Text_Gray")
+            businessIcon.image = UIImage(named: "Business_Icon_Gray")
         }
     }
     @IBAction func loveSwitchTapped(sender: AnyObject) {
@@ -164,7 +164,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         else{
           
             loveLabel.textColor = UIColor.grayColor()
-            loveIcon.image = UIImage(named: "Love_Icon_Text_Gray")
+            loveIcon.image = UIImage(named: "Love_Icon_Gray")
         }
     }
     @IBAction func friendshipSwitchTapped(sender: AnyObject) {
@@ -174,7 +174,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         }
         else{
             friendshipLabel.textColor = UIColor.grayColor()
-            friendshipIcon.image = UIImage(named: "Friendship_Icon_Text_Gray")
+            friendshipIcon.image = UIImage(named: "Friendship_Icon_Gray")
         }
     }
 
@@ -232,6 +232,20 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         if let mainProfilePicture = mainProfilePicture {
             let image = UIImage(data:mainProfilePicture,scale:1.0)
             editImageButton.setImage(image, forState: .Normal)
+        } else {
+            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+            if let pfData = pfData {
+                pfData.getDataInBackgroundWithBlock({ (data, error) in
+                    if error != nil || data == nil {
+                        print(error)
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.editImageButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
+                        })
+                    }
+                })
+            }
+            
         }
         if main_title.text == noNameText {
             beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor

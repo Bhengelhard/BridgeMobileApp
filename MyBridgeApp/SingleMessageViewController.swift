@@ -11,7 +11,7 @@ import Parse
 
 //var segueFromExitedMessage = false
 
-class SingleMessageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+class SingleMessageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     
     //Creating the navigationBar
     let navigationBar = UINavigationBar()
@@ -25,7 +25,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     
     //Creating the toolBar
     let toolbar = UIToolbar()
-    let messageText = UITextField()
+    let messageText = UITextView()
     let sendButton = UIButton()
     var necterTypeColor = UIColor()
     
@@ -264,11 +264,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         messageText.frame = CGRect(x: 0.025*screenWidth, y: 0, width: 0.675*screenWidth, height: 0.05*screenHeight)
         messageText.center.y = toolbar.center.y
-        messageText.placeholder = " Write Message"
+        //messageText.placeholder = " Write Message"
         messageText.layer.borderWidth = 1
         messageText.layer.borderColor = UIColor.lightGrayColor().CGColor
         messageText.layer.cornerRadius = 7
-        messageText.addTarget(self, action: #selector(messageTextDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        //messageText.addTarget(self, action: #selector(messageTextDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         //messageText.addTarget(self, action: #selector(messageTextTapped(_:)), forControlEvents: .TouchUpInside)
         //messageTextRecorder
         let messageTextButton = UIBarButtonItem(customView: messageText)
@@ -302,13 +302,21 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         view.addSubview(toolbar)
         
     }
-    func messageTextDidChange (sender: UIBarButtonItem) {
+    
+    func textViewDidChange(textView: UITextView) {
         if messageText.text != "" {
             sendButton.enabled = true
         }
     }
+    
+    /*func messageTextDidChange (sender: UIBarButtonItem) {
+        if messageText.text != "" {
+            sendButton.enabled = true
+        }
+    }*/
     func sendTapped(sender: UIBarButtonItem) {
         if messageText.text != "" {
+            messageText.resignFirstResponder()
             let sendingMessageText = messageText.text
             sendButton.enabled = false
             messageText.text = ""
