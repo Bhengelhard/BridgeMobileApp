@@ -266,9 +266,7 @@ class BridgeViewController: UIViewController {
         statusLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
         let photoView = UIImageView(frame: photoFrame)
-        print("Downloader.load \(photo)")
         if let photo = photo{
-            print("Downloader.load")
         if let URL = NSURL(string: photo) {
             Downloader.load(URL, imageView: photoView)
         }
@@ -627,6 +625,7 @@ class BridgeViewController: UIViewController {
     
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String, callBack: ((bridgeType: String)->Void)?, bridgeType: String?){
         if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
+            print("getBridgePairingsFromCloud is removing displayNoMoreCardsLabel ()")
             displayNoMoreCardsLabel.removeFromSuperview()
             self.displayNoMoreCardsLabel = nil
         }
@@ -783,15 +782,17 @@ class BridgeViewController: UIViewController {
                                     
                                     print("userId1, userId2 - \(userId1),\(userId2)")
                                     dispatch_async(dispatch_get_main_queue(), {
-                                        if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
-                                            displayNoMoreCardsLabel.removeFromSuperview()
-                                            self.displayNoMoreCardsLabel = nil
-                                        }
-                                        let bridgeType = bridgeType1 ?? "Business"
+                                                                                let bridgeType = bridgeType1 ?? "Business"
                                         let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
                                         
                                         aboveView = self.addCardPairView(aboveView, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, name2: name2, location2: city2, status2: bridgeStatus1, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
                                         self.lastCardInStack = aboveView!
+                                        if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
+                                            print("\(i) is removing displayNoMoreCardsLabel ()")
+                                            displayNoMoreCardsLabel.removeFromSuperview()
+                                            self.displayNoMoreCardsLabel = nil
+                                        }
+
 
                                     })
                                 }
@@ -799,6 +800,7 @@ class BridgeViewController: UIViewController {
                             
                             if noOfResults == 0 && self.lastCardInStack == nil && self.displayNoMoreCardsLabel == nil{
                                 dispatch_async(dispatch_get_main_queue(), {
+                                print("\(i) is calling displayNoMoreCards()")
                                 self.displayNoMoreCards()
                                 })
                             }

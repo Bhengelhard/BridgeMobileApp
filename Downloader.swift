@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 class Downloader {
     class func load(URL: NSURL, imageView:UIImageView) {
-        print("Downloader.load")
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         let request = NSMutableURLRequest(URL: URL)
