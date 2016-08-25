@@ -23,7 +23,6 @@ class BridgeViewController: UIViewController {
     let superDeckHeight = 0.765*UIScreen.mainScreen().bounds.height
     let necterColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     var totalNoOfCards = 0
-    //var stackOfCards = [UIView]()
     let localStorageUtility = LocalStorageUtility()
     var currentTypeOfCardsOnDisplay = typesOfCard.All
     var lastCardInStack:UIView? = nil // used by getB() to add a card below this
@@ -364,9 +363,9 @@ class BridgeViewController: UIViewController {
         }
         arrayOfCardsInDeck.append(superDeckView)
         arrayOfCardColors.append(superDeckView.layer.borderColor!)
-        //stackOfCards.append(superDeckView)
         return superDeckView
     }
+    // Does not download bridge pairings. Only presents the existing ones in the localData to the user
     func displayCards(){
         if let displayNoMoreCardsLabel = displayNoMoreCardsLabel {
             displayNoMoreCardsLabel.removeFromSuperview()
@@ -623,7 +622,7 @@ class BridgeViewController: UIViewController {
         view.addSubview(friendshipLabel)
         view.addSubview(postStatusButton)
     }
-    
+    // downloads  bridge pairings of different types depending upon the typeOfCards
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String, callBack: ((bridgeType: String)->Void)?, bridgeType: String?){
         if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
             print("getBridgePairingsFromCloud is removing displayNoMoreCardsLabel ()")
@@ -1085,13 +1084,7 @@ class BridgeViewController: UIViewController {
         }
         arrayOfCardsInDeck.removeAll()
         arrayOfCardColors.removeAll()
-
-        
-//            for i in 0..<stackOfCards.count {
-//                stackOfCards[i].removeFromSuperview()
-//            }
-//            stackOfCards.removeAll()
-            displayCards()
+        displayCards()
     }
     func profileTapped(sender: UIBarButtonItem) {
         profileButton.selected = true
@@ -1341,6 +1334,7 @@ class BridgeViewController: UIViewController {
 
     }
     func nextPair(){
+        // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in NextPairHelper. cIgAr - 08/25/16
         let bridgePairings = LocalData().getPairings()
         if var bridgePairings = bridgePairings {
             var x = 0
