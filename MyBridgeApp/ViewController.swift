@@ -199,7 +199,6 @@ class ViewController: UIViewController {
                     } else {
                         //spinner
                         //update user and friends
-                        
                         //use while access token is nil instead of delay
                          print("not new")
                         if let _ = (PFUser.currentUser()?["name"]) as? String {
@@ -209,6 +208,7 @@ class ViewController: UIViewController {
                         }
                         let localData = LocalData()
                         if localData.getMainProfilePicture() == nil {
+                            print("user is not new but we are getting his picture")
                             LocalStorageUtility().getMainProfilePictureFromParse()
                         }
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
