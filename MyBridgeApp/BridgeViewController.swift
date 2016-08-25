@@ -23,7 +23,7 @@ class BridgeViewController: UIViewController {
     let superDeckHeight = 0.765*UIScreen.mainScreen().bounds.height
     let necterColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     var totalNoOfCards = 0
-    var stackOfCards = [UIView]()
+    //var stackOfCards = [UIView]()
     let localStorageUtility = LocalStorageUtility()
     var currentTypeOfCardsOnDisplay = typesOfCard.All
     var lastCardInStack:UIView? = nil // used by getB() to add a card below this
@@ -364,7 +364,7 @@ class BridgeViewController: UIViewController {
         }
         arrayOfCardsInDeck.append(superDeckView)
         arrayOfCardColors.append(superDeckView.layer.borderColor!)
-        stackOfCards.append(superDeckView)
+        //stackOfCards.append(superDeckView)
         return superDeckView
     }
     func displayCards(){
@@ -783,36 +783,37 @@ class BridgeViewController: UIViewController {
                                     
                                     print("userId1, userId2 - \(userId1),\(userId2)")
                                     dispatch_async(dispatch_get_main_queue(), {
-                                                                                let bridgeType = bridgeType1 ?? "Business"
-                                        let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
-                                        
-                                        aboveView = self.addCardPairView(aboveView, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, name2: name2, location2: city2, status2: bridgeStatus1, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
-                                        self.lastCardInStack = aboveView!
                                         if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
                                             print("\(i) is removing displayNoMoreCardsLabel ()")
                                             displayNoMoreCardsLabel.removeFromSuperview()
                                             self.displayNoMoreCardsLabel = nil
                                         }
-
+                                        let bridgeType = bridgeType1 ?? "Business"
+                                        let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
+                                        
+                                        aboveView = self.addCardPairView(aboveView, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, name2: name2, location2: city2, status2: bridgeStatus1, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
+                                        self.lastCardInStack = aboveView!
+                                        
 
                                     })
                                 }
                             }
-                            
-                            print(noOfResults)
+                            dispatch_async(dispatch_get_main_queue(), {
                             if noOfResults == 0 && self.lastCardInStack == nil && self.displayNoMoreCardsLabel == nil{
-                                dispatch_async(dispatch_get_main_queue(), {
-                                print("\(i) is calling displayNoMoreCards()")
+                                print(" calling displayNoMoreCards()")
                                 self.displayNoMoreCards()
-                                })
                             }
+                            })
+                            
                             if callBack != nil && bridgeType != nil {
                                 callBack!(bridgeType: bridgeType!)
                             }
 
                         })
                         i += 1
+                        print("i is \(i)")
                         if i > 3 || typeOfCards != "EachOfAllType"{
+                            print("turning getMorePairings false")
                             getMorePairings = false
                         }
                     }
@@ -1079,11 +1080,17 @@ class BridgeViewController: UIViewController {
                 loveLabel.textColor = necterGray
                 friendshipLabel.textColor = necterGray
         }
+        for i in 0..<arrayOfCardsInDeck.count {
+            arrayOfCardsInDeck[i].removeFromSuperview()
+        }
+        arrayOfCardsInDeck.removeAll()
+        arrayOfCardColors.removeAll()
+
         
-            for i in 0..<stackOfCards.count {
-                stackOfCards[i].removeFromSuperview()
-            }
-            stackOfCards.removeAll()
+//            for i in 0..<stackOfCards.count {
+//                stackOfCards[i].removeFromSuperview()
+//            }
+//            stackOfCards.removeAll()
             displayCards()
     }
     func profileTapped(sender: UIBarButtonItem) {
@@ -1354,9 +1361,10 @@ class BridgeViewController: UIViewController {
                 }
             })
             var bridgeType = "All"
-            if let bt = bridgePairings[x].user1?.bridgeType {
-                bridgeType = bt
-            }
+            bridgeType = convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)
+//            if let bt = bridgePairings[x].user1?.bridgeType {
+//                bridgeType = bt
+//            }
             bridgePairings.removeAtIndex(x)
             let localData = LocalData()
             localData.setPairings(bridgePairings)

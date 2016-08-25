@@ -164,7 +164,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     let calendar = NSCalendar.currentCalendar()
                     let date = result.createdAt!
                     if let previousDate = previousDate {
-                        let components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
+                        let components = calendar.components([.Minute],
                             fromDate: previousDate, toDate: date, options: NSCalendarOptions.WrapComponents)
                         //print("components.minute - \(components.minute)")
                         if components.minute > 10 {
@@ -209,7 +209,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     if (i == 0 && self.objectIDToMessageContentArrayMapping.count > results.count){
                         var show = false
                         let temp = self.objectIDToMessageContentArrayMapping[self.singleMessagePositionToObjectIDMapping[results.count]!]!
-                        let components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
+                        let components = calendar.components([.Minute],
                                 fromDate: date, toDate: temp["date"]! as! NSDate, options: NSCalendarOptions.WrapComponents)
                         if components.minute > 10 {
                             show = true
@@ -359,7 +359,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 df.dateFormat = "hh:mm a"
                 timestamp = df.stringFromDate(currentdate)
                 if let previousDate = previousDate {
-                var components = calendar.components([.Month, .Day, .Year, .WeekOfYear, .Minute],
+                var components = calendar.components([.Minute],
                     fromDate: previousDate, toDate: currentdate, options: NSCalendarOptions.WrapComponents)
                 if components.minute > 10 {
                     showTimestamp = true
