@@ -460,6 +460,18 @@ class LocalStorageUtility{
             
         }
     }
+    func getMainProfilePictureFromParse(){
+        let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+        if let pfData = pfData {
+            pfData.getDataInBackgroundWithBlock({ (data, error) in
+                if error == nil && data != nil {
+                    let localData = LocalData()
+                    localData.setMainProfilePicture(data!)
+                    localData.synchronize()
+                }
+            })
+        }
+    }
     //saves  to LocalDataStorage & Parse
     func getMainProfilePicture(){
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])

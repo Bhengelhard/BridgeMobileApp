@@ -207,6 +207,10 @@ class ViewController: UIViewController {
                         localData.setUsername((PFUser.currentUser()?["name"])! as! String)
                         localData.synchronize()
                         }
+                        let localData = LocalData()
+                        if localData.getMainProfilePicture() == nil {
+                            LocalStorageUtility().getMainProfilePictureFromParse()
+                        }
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
                             //stop the spinner animation and reactivate the interaction with user
                             self.activityIndicator.stopAnimating()
