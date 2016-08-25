@@ -18,7 +18,8 @@ class MessagesTableCell: UITableViewCell {
 //    @IBOutlet weak var notificationDot: UIView!
     var participants: UILabel!
     var messageTimestamp: UILabel!
-    var messageSnapshot: UILabel!
+    //var messageSnapshot: UILabel!
+    var messageSnapshot: UITextView!
     var arrow: UILabel!
     var notificationDot: UIView!
     var line: UIView!
@@ -51,10 +52,14 @@ class MessagesTableCell: UITableViewCell {
         messageTimestamp.font = UIFont(name: "BentonSans", size: 16)
         messageTimestamp.textAlignment = NSTextAlignment.Right
         
-        messageSnapshot = UILabel(frame:CGRectZero)
+        //messageSnapshot = UILabel(frame:CGRectZero)
+        messageSnapshot = UITextView(frame:CGRectZero)
         messageSnapshot.font = UIFont(name: "BentonSans", size: 16)
-        messageSnapshot.numberOfLines = 2
+        //messageSnapshot.numberOfLines = 2
+        messageSnapshot.textContainer.maximumNumberOfLines = 2
+        messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.ByTruncatingTail//NSLineBreakByTruncatingTail
         messageSnapshot.sizeToFit()
+        messageSnapshot.scrollEnabled = false
         
         arrow = UILabel(frame:CGRectZero)
         arrow.font = UIFont(name: "Mishafi Regular", size: 30)
