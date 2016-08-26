@@ -100,7 +100,7 @@ class Downloader {
                 dispatch_async(dispatch_get_main_queue(), {
                     //imageView.image = UIImage(data: data!)
                     imageView1.alpha = 0
-                    imageView1.image = image1
+                    imageView1.image = image2
                     
                 })
                 

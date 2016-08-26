@@ -10,12 +10,15 @@ import UIKit
 import Parse
 import MapKit
 class BridgeViewController: UIViewController {
-    //var bridgePairings:[UserInfoPair]? = nil
+    
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
+    let localData = LocalData()
+    
     //set to the height and width of the images in the superDeck
     let cardWidth = UIScreen.mainScreen().bounds.width - 0.06*UIScreen.mainScreen().bounds.width
     let cardHeight = 0.765*UIScreen.mainScreen().bounds.height*0.5
+    
     //superDeck refers to the swipable rectangel containing the two images of the people to connect
     let superDeckX = 0.03*UIScreen.mainScreen().bounds.width
     let superDeckY = 0.12*UIScreen.mainScreen().bounds.height
@@ -227,7 +230,7 @@ class BridgeViewController: UIViewController {
         nameLabel.textColor = UIColor.whiteColor()
         nameLabel.font = UIFont(name: "Verdana", size: 20)
         //let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.12*cardHeight))
-        let nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.12*cardHeight)
+        var nameFrame = CGRectMake(0.05*cardWidth,0.05*cardHeight,0.8*cardWidth,0.12*cardHeight)
         //nameFrame.size = adjustedNameSize
         //nameFrame.size.height = 0.12*cardHeight
         nameLabel.frame = nameFrame
@@ -274,11 +277,11 @@ class BridgeViewController: UIViewController {
         statusLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
         let photoView = UIImageView(frame: photoFrame)
-//        if let photo = photo{
-//        if let URL = NSURL(string: photo) {
-//            Downloader.load(URL, imageView: photoView)
-//        }
-//        }
+        if let photo = photo{
+        if let URL = NSURL(string: photo) {
+            Downloader.load(URL, imageView: photoView)
+        }
+        }
 
 //        if photo != nil {
 //            photo!.getDataInBackgroundWithBlock({ (data, error) in
@@ -371,12 +374,6 @@ class BridgeViewController: UIViewController {
         }
         arrayOfCardsInDeck.append(superDeckView)
         arrayOfCardColors.append(superDeckView.layer.borderColor!)
-        superDeckView.hidden = true
-        if let photo = photo{
-            if let URL = NSURL(string: photo) {
-                Downloader.load(URL, superDeckView: superDeckView)
-            }
-        }
         return superDeckView
     }
     // Does not download bridge pairings. Only presents the existing ones in the localData to the user
@@ -389,7 +386,7 @@ class BridgeViewController: UIViewController {
         arrayOfCardsInDeck = [UIView]()
         arrayOfCardColors = [CGColor]()
         var j = 0
-        let bridgePairings = LocalData().getPairings()
+        let bridgePairings = localData.getPairings()
         if let bridgePairings = bridgePairings {
             var aboveView:UIView? = nil
         for i in 0..<bridgePairings.count {
@@ -639,7 +636,6 @@ class BridgeViewController: UIViewController {
     // downloads  bridge pairings of different types depending upon the typeOfCards
     func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String, callBack: ((bridgeType: String)->Void)?, bridgeType: String?){
         if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
-            print("getBridgePairingsFromCloud is removing displayNoMoreCardsLabel ()")
             displayNoMoreCardsLabel.removeFromSuperview()
             self.displayNoMoreCardsLabel = nil
         }
@@ -704,7 +700,6 @@ class BridgeViewController: UIViewController {
                                     }
                                     var location1:[Double]? = nil
                                     var location2:[Double]? = nil
-                                    print(result["user_locations"])
                                     if let ob = result["user_locations"] as? [AnyObject]{
                                         if let x = ob[0] as? PFGeoPoint{
                                             location1 = [x.latitude,x.longitude]
@@ -712,9 +707,7 @@ class BridgeViewController: UIViewController {
                                         if let x = ob[1] as? PFGeoPoint{
                                             location2 = [x.latitude,x.longitude]
                                         }
-                                        print("location1-\(location1),location2- \(location2)")
                                     }
-                                    print("location1 - \(location2)")
                                     var bridgeStatus1:String? = nil
                                     var bridgeStatus2:String? = nil
                                     if let ob = result["user1_bridge_status"] {
@@ -764,7 +757,6 @@ class BridgeViewController: UIViewController {
                                     var profilePictureFile1:String? = nil
                                     var profilePictureFile2:String? = nil
                                     if let ob = result["user1_profile_picture"] as? PFFile {
-                                        print("ob.url-\(ob.url)")
                                         profilePictureFile1 = ob.url
                                     }
                                     if let ob = result["user2_profile_picture"] as? PFFile {
@@ -774,24 +766,20 @@ class BridgeViewController: UIViewController {
                                     user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
                                     user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
                                     let userInfoPair = UserInfoPair(user1: user1, user2: user2)
-                                    let bridgePairings = LocalData().getPairings()
+                                    let bridgePairings = self.localData.getPairings()
                                     var pairings = [UserInfoPair]()
                                     if (bridgePairings != nil) {
                                         pairings = bridgePairings!
                                     }
 
                                     pairings.append(userInfoPair)
-                                    let localData = LocalData()
-                                    print(localData.getPairings()?.count)
-                                    localData.setPairings(pairings)
-                                    localData.synchronize()
-                                    let localData2 = LocalData()
-                                    print(localData2.getPairings()?.count)
                                     
-                                    print("userId1, userId2 - \(userId1),\(userId2)")
+                                    self.localData.setPairings(pairings)
+                                    self.localData.synchronize()
+                                    let localData2 = LocalData()
+                                    
                                     dispatch_async(dispatch_get_main_queue(), {
                                         if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
-                                            print("\(i) is removing displayNoMoreCardsLabel ()")
                                             displayNoMoreCardsLabel.removeFromSuperview()
                                             self.displayNoMoreCardsLabel = nil
                                         }
@@ -807,7 +795,6 @@ class BridgeViewController: UIViewController {
                             }
                             dispatch_async(dispatch_get_main_queue(), {
                             if noOfResults == 0 && self.lastCardInStack == nil && self.displayNoMoreCardsLabel == nil{
-                                print(" calling displayNoMoreCards()")
                                 self.displayNoMoreCards()
                             }
                             })
@@ -820,7 +807,6 @@ class BridgeViewController: UIViewController {
                         i += 1
                         print("i is \(i)")
                         if i > 3 || typeOfCards != "EachOfAllType"{
-                            print("turning getMorePairings false")
                             getMorePairings = false
                         }
                     }
@@ -834,7 +820,6 @@ class BridgeViewController: UIViewController {
         
         let aps = notification.userInfo!["aps"] as? NSDictionary
         badgeCount = (aps!["badge"] as? Int)!
-        //print("Listened at updateNoOfUnreadMessagesIcon - \(badge)")
         dispatch_async(dispatch_get_main_queue(), {
             
             if self.badgeCount != 0 {
@@ -845,7 +830,6 @@ class BridgeViewController: UIViewController {
                 self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Selected)
                 self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
                 self.navigationBar.setItems([self.navItem], animated: false)
-                print("got message")
             }
             
             
@@ -893,21 +877,11 @@ class BridgeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        while localStorageUtility.waitForCardsToBeDownloaded(){
-        //
-        //        }
-        //
-        
-        
-//        localStorageUtility.getBridgePairingsFromCloud()
-//        bridgePairings = LocalData().getPairings()
-        
-        //NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateBridgePage", object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
 
-        let bridgePairings = LocalData().getPairings()
+        let bridgePairings = localData.getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
             getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
         }
@@ -982,12 +956,10 @@ class BridgeViewController: UIViewController {
     }
     
     func postStatusTapped(sender: UIButton ){
-        print("Post Tapped")
         performSegueWithIdentifier("showNewStatusViewController", sender: self)
         //presentViewController(vc!, animated: true, completion: nil)
     }
     func filterTapped(sender: UIButton){
-        //print(currentTypeOfCardsOnDisplay)
         let tag = sender.tag
         switch(tag){
             case 0:
@@ -1028,7 +1000,6 @@ class BridgeViewController: UIViewController {
                 loveLabel.textColor = necterGray
                 friendshipLabel.textColor = necterGray
                 
-                print("business clicked")
                     break
             case 2:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
@@ -1138,24 +1109,75 @@ class BridgeViewController: UIViewController {
             
             if superDeckView.center.x < 0.25*screenWidth {
                 
-                UIView.animateWithDuration(0.2, animations: {
-                    superDeckView.center.x = -1.0*self.screenWidth
-                    self.disconnectIcon.center.x = -1.0*self.screenWidth
-                    self.disconnectIcon.alpha = 0.0
-                    }, completion: { (success) in
-                        self.nextPair()
-                })
-                removeCard = true
-            } else if superDeckView.center.x > 0.75*screenWidth {
-                removeCard = true
-                UIView.animateWithDuration(0.2, animations: {
-                    superDeckView.center.x = 1.6*self.screenWidth
-                    self.connectIcon.center.x = 1.6*self.screenWidth
-                    self.connectIcon.alpha = 0.0
-                    }, completion: { (success) in
-                        self.bridged()
-                })
                 
+                let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
+                if isFirstTimeSwipedLeft {
+                    //show alert for swiping right here and then bridging or not
+                    let alert = UIAlertController(title: "Don't Connect?", message: "Dragging a pair of pictures to the left indicates you do not want to introduce the friends shown.", preferredStyle: UIAlertControllerStyle.Alert)
+                    //Create the actions
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
+                        
+                    }))
+                    alert.addAction(UIAlertAction(title: "Don't Connect", style: .Default, handler: { (action) in
+                        UIView.animateWithDuration(0.2, animations: {
+                            superDeckView.center.x = -1.0*self.screenWidth
+                            self.disconnectIcon.center.x = -1.0*self.screenWidth
+                            self.disconnectIcon.alpha = 0.0
+                            }, completion: { (success) in
+                                self.nextPair()
+                        })
+                        removeCard = true
+                    }))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    
+                    self.localData.setFirstTimeSwipingLeft(false)
+                    self.localData.synchronize()
+                } else {
+                    UIView.animateWithDuration(0.2, animations: {
+                        superDeckView.center.x = -1.0*self.screenWidth
+                        self.disconnectIcon.center.x = -1.0*self.screenWidth
+                        self.disconnectIcon.alpha = 0.0
+                        }, completion: { (success) in
+                            self.nextPair()
+                    })
+                    removeCard = true
+                }
+            } else if superDeckView.center.x > 0.75*screenWidth {
+                
+                let isFirstTimeSwipedRight : Bool = localData.getFirstTimeSwipingRight()!
+                if isFirstTimeSwipedRight{
+                    //show alert for swiping right here and then bridging or not
+                    let alert = UIAlertController(title: "Connect?", message: "Dragging a pair of pictures to the right indicates you want to introduce the friends shown.", preferredStyle: UIAlertControllerStyle.Alert)
+                    //Create the actions
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
+                        
+                    }))
+                    alert.addAction(UIAlertAction(title: "Connect", style: .Default, handler: { (action) in
+                        UIView.animateWithDuration(0.2, animations: {
+                            superDeckView.center.x = 1.6*self.screenWidth
+                            superDeckView.alpha = 0.0
+                            self.connectIcon.center.x = 1.6*self.screenWidth
+                            self.connectIcon.alpha = 0.0
+                            }, completion: { (success) in
+                                self.connectIcon.removeFromSuperview()
+                        })
+                        self.bridged()
+                        removeCard = true
+                    }))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    
+                    self.localData.setFirstTimeSwipingRight(false)
+                    self.localData.synchronize()
+                } else {
+                    UIView.animateWithDuration(0.2, animations: {
+                        superDeckView.center.x = 1.6*self.screenWidth
+                        self.connectIcon.center.x = 1.6*self.screenWidth
+                        self.connectIcon.alpha = 0.0
+                        self.connectIcon.removeFromSuperview()
+                    })
+                    self.bridged()
+                    removeCard = true
+                }
             }
             if removeCard {
                 superDeckView.removeFromSuperview()
@@ -1163,7 +1185,6 @@ class BridgeViewController: UIViewController {
             else {
                 UIView.animateWithDuration(0.7, animations: {
                     //var superDeckViewFrame = superDeckView.frame
-                    superDeckView.layer.borderColor = self.arrayOfCardColors[0]
                     rotation = CGAffineTransformMakeRotation(0)
                     stretch = CGAffineTransformScale(rotation, 1, 1)
                     superDeckView.transform = stretch
@@ -1179,7 +1200,7 @@ class BridgeViewController: UIViewController {
         
     }
     func bridged(){
-        let bridgePairings = LocalData().getPairings()
+        let bridgePairings = localData.getPairings()
         if var bridgePairings = bridgePairings {
             var x = 0
             for i in 0 ..< (bridgePairings.count) {
@@ -1277,7 +1298,6 @@ class BridgeViewController: UIViewController {
             }
 
             bridgePairings.removeAtIndex(x)
-            let localData = LocalData()
             localData.setPairings(bridgePairings)
             localData.synchronize()
             getBridgePairingsFromCloud(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
@@ -1320,7 +1340,7 @@ class BridgeViewController: UIViewController {
     }
     func nextPair(){
         // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in NextPairHelper. cIgAr - 08/25/16
-        let bridgePairings = LocalData().getPairings()
+        let bridgePairings = localData.getPairings()
         if var bridgePairings = bridgePairings {
             var x = 0
             for i in 0 ..< (bridgePairings.count) {
@@ -1345,7 +1365,7 @@ class BridgeViewController: UIViewController {
 //                bridgeType = bt
 //            }
             bridgePairings.removeAtIndex(x)
-            let localData = LocalData()
+            
             localData.setPairings(bridgePairings)
             localData.synchronize()
             
@@ -1356,7 +1376,6 @@ class BridgeViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         if segueToSingleMessage {
-            //print("was Called")
             segueToSingleMessage = false
             let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
             singleMessageVC.transitioningDelegate = self.transitionManager

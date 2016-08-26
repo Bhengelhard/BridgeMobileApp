@@ -396,12 +396,21 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     //self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
                     //self.singleMessagePositionToObjectIDMapping = [Int:String]()
                     //self.updateMessages()
+                    
+                    //taking the noMessagesLabel off of the screen upon the first message sent
+                    UIView.animateWithDuration(0.05, animations: {
+                        self.noMessagesLabel.alpha = 0
+                        }, completion: { (success) in
+                            self.noMessagesLabel.removeFromSuperview()
+                    })
+                    
+                    
                     // push notification starts
-                let singleMessagePosition = self.objectIDToMessageContentArrayMapping.count
-                var previousSenderName = ""
-                var previousSenderId = ""
-                var previousDate:NSDate? = nil
-                if singleMessagePosition > 0 {
+                    let singleMessagePosition = self.objectIDToMessageContentArrayMapping.count
+                    var previousSenderName = ""
+                    var previousSenderId = ""
+                    var previousDate:NSDate? = nil
+                    if singleMessagePosition > 0 {
                     let temp = self.objectIDToMessageContentArrayMapping[self.singleMessagePositionToObjectIDMapping[singleMessagePosition - 1]!]!
                     previousDate = (temp["date"] as? NSDate)!
                     previousSenderName = temp["senderName"]! as! String
@@ -632,7 +641,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             }
             toolbar.frame.origin.y -= keyboardSize.height
             singleMessageTableView.frame.origin.y -= keyboardSize.height
-            noMessagesLabel.alpha = 0
         }
         
     }

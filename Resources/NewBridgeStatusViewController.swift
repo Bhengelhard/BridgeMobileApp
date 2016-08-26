@@ -245,8 +245,19 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         //get and set profile picture
         let mainProfilePicture = localData.getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
-            let image = UIImage(data:mainProfilePicture,scale:1.0)
-            profilePicture.image = image
+            
+            //applying filter to make the white text more legible
+            let beginImage = CIImage(data: mainProfilePicture)
+            let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+            edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+            edgeDetectFilter.setValue(0.1, forKey: "inputIntensity")
+            edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+            let newImage = UIImage(CIImage: edgeDetectFilter.outputImage!)
+            
+            //img2.image = newImage
+            
+            //let image = UIImage(data:mainProfilePicture,scale:1.0)
+            profilePicture.image = newImage
         }
         
         profilePicture.layer.cornerRadius = 15

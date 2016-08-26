@@ -13,11 +13,14 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var fbLoginButton: UIButton!
     @IBOutlet weak var appName: UILabel!
-    
+
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
+    
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var geoPoint:PFGeoPoint?
+    
+    //Login with Facebook button tapped
     @IBAction func fbLogin(sender: AnyObject) {
         
         print("pressed")
@@ -32,8 +35,17 @@ class ViewController: UIViewController {
         
         fbLoginButton.backgroundColor = UIColor.clearColor()
         
-        
         var global_name:String = ""
+        
+        let localData = LocalData()
+        
+        //setting first Time Swiping Right to false so the user will be notified of what swiping does for their first swipe
+        localData.setFirstTimeSwipingRight(true)
+        localData.synchronize()
+        
+        //setting first Time SwipingRight to false so the user will be notified of what swiping does for their first swipe
+        localData.setFirstTimeSwipingLeft(true)
+        localData.synchronize()
         
         //Log user in with permissions public_profile, email and user_friends
         let permissions = ["public_profile", "email", "user_friends"]

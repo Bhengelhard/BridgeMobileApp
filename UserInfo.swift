@@ -16,8 +16,10 @@ class UserInfo:NSObject, NSCoding  {
     var profilePictureFromFb:Bool? = nil
     var newMessagesPushNotifications:Bool? = nil
     var newBridgesPushNotifications:Bool? = nil
+    var firstTimeSwipingRight:Bool? = nil
+    var firstTimeSwipingLeft:Bool? = nil
     init( username:String?, friendlist: [String]?, mainProfilePicture: NSData? ,pairings:[UserInfoPair]?,
-          interestedIn: String?, profilePictureFromFb:Bool?, newMessagesPushNotifications:Bool?, newBridgesPushNotifications:Bool? ) {
+          interestedIn: String?, profilePictureFromFb:Bool?, newMessagesPushNotifications:Bool?, newBridgesPushNotifications:Bool?, firstTimeSwipingRight:Bool?, firstTimeSwipingLeft:Bool?) {
         self.username = username
         self.friendlist = friendlist
         self.mainProfilePicture = mainProfilePicture
@@ -26,6 +28,8 @@ class UserInfo:NSObject, NSCoding  {
         self.profilePictureFromFb = profilePictureFromFb
         self.newMessagesPushNotifications = newMessagesPushNotifications
         self.newBridgesPushNotifications = newBridgesPushNotifications
+        self.firstTimeSwipingRight = firstTimeSwipingRight
+        self.firstTimeSwipingLeft = firstTimeSwipingLeft
         
     }
     
@@ -38,9 +42,11 @@ class UserInfo:NSObject, NSCoding  {
         let profilePictureFromFb = aDecoder.decodeObjectForKey("profilePictureFromFb") as! Bool?
         let newMessagesPushNotifications = aDecoder.decodeObjectForKey("newMessagesPushNotifications") as! Bool?
         let newBridgesPushNotifications = aDecoder.decodeObjectForKey("newBridgesPushNotifications") as! Bool?
+        let firstTimeSwipingRight = aDecoder.decodeObjectForKey("firstTimeSwipingRight") as! Bool?
+        let firstTimeSwipingLeft = aDecoder.decodeObjectForKey("firstTimeSwipingLeft") as! Bool?
         
         self.init(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings: pairings, interestedIn: interestedIn, profilePictureFromFb: profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications,
-                  newBridgesPushNotifications:newBridgesPushNotifications)
+                  newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft)
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
@@ -52,6 +58,8 @@ class UserInfo:NSObject, NSCoding  {
         aCoder.encodeObject(profilePictureFromFb, forKey: "profilePictureFromFb")
         aCoder.encodeObject(newMessagesPushNotifications, forKey: "newMessagesPushNotifications")
         aCoder.encodeObject(newBridgesPushNotifications, forKey: "newBridgesPushNotifications")
+        aCoder.encodeObject(firstTimeSwipingRight, forKey:  "firstTimeSwipingRight")
+        aCoder.encodeObject(firstTimeSwipingLeft, forKey:  "firstTimeSwipingLeft")
     }
     
 }

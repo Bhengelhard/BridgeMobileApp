@@ -17,6 +17,8 @@ class LocalData {
     var profilePictureFromFb:Bool? = nil
     var newMessagesPushNotifications:Bool? = nil
     var newBridgesPushNotifications:Bool? = nil
+    var firstTimeSwipingRight:Bool? = nil
+    var firstTimeSwipingLeft:Bool? = nil
     init(){
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let decoded = userDefaults.objectForKey("userInfo") {
@@ -29,9 +31,41 @@ class LocalData {
                 profilePictureFromFb = (userInfo as! UserInfo).profilePictureFromFb
                 newMessagesPushNotifications = (userInfo as! UserInfo).newMessagesPushNotifications
                 newBridgesPushNotifications = (userInfo as! UserInfo).newBridgesPushNotifications
+                firstTimeSwipingRight = (userInfo as! UserInfo).firstTimeSwipingRight
+                firstTimeSwipingLeft = (userInfo as! UserInfo).firstTimeSwipingLeft
             }
         }
     }
+    
+    func setFirstTimeSwipingRight(firstTimeSwipingRight:Bool){
+        self.firstTimeSwipingRight = firstTimeSwipingRight
+    }
+    func getFirstTimeSwipingRight()->Bool? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let _ = userDefaults.objectForKey("userInfo"){
+            let decoded  = userDefaults.objectForKey("userInfo") as! NSData
+            let userInfo = NSKeyedUnarchiver.unarchiveObjectWithData(decoded) as! UserInfo
+            return userInfo.firstTimeSwipingRight
+        }
+        else{
+            return nil
+        }
+    }
+    func setFirstTimeSwipingLeft(firstTimeSwipingLeft:Bool){
+        self.firstTimeSwipingLeft = firstTimeSwipingLeft
+    }
+    func getFirstTimeSwipingLeft()->Bool? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let _ = userDefaults.objectForKey("userInfo"){
+            let decoded  = userDefaults.objectForKey("userInfo") as! NSData
+            let userInfo = NSKeyedUnarchiver.unarchiveObjectWithData(decoded) as! UserInfo
+            return userInfo.firstTimeSwipingLeft
+        }
+        else{
+            return nil
+        }
+    }
+    
     
     
     func setUsername(username:String){
@@ -179,7 +213,7 @@ class LocalData {
     
     func synchronize(){
         //print("Setting mainProfilePicture to \(mainProfilePicture)")
-        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications  )
+        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft)
         let userDefaults = NSUserDefaults.standardUserDefaults()
         let encodedData = NSKeyedArchiver.archivedDataWithRootObject(userInfo)
         userDefaults.setObject(encodedData, forKey: "userInfo")
