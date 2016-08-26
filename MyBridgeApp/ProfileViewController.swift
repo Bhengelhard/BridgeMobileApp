@@ -10,11 +10,10 @@ import UIKit
 import Parse
 import FBSDKCoreKit
 
-class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource/*, UIImagePickerControllerDelegate, UINavigationControllerDelegate*/ {
     @IBOutlet weak var tableView: UITableView!
-    let profilePictureButton = UIButton()
+    let profilePictureView = UIImageView()
     @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var nameTextField: UITextField!
     let navigationBar = UINavigationBar()
     let necterButton = UIButton()
     let bridgeStatus = UIButton()
@@ -29,7 +28,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     
-    // globally required as we do not want to re-create them everytime and for persistence
+    /*// globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
     
     func profilePictureTapped(sender: UIButton) {
@@ -38,7 +37,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         let facebookProfilePictureAction = UIAlertAction(title: "Facebook Profile Picture", style: UIAlertActionStyle.Default)
         {
             UIAlertAction in
-            self.getMainProfilePicture()
+            self.getMainProfilePictureFromFacebook()
         }
         let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.Default)
         {
@@ -68,7 +67,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     //saves  to LocalDataStorage & Parse
-    func getMainProfilePicture(){
+    func getMainProfilePictureFromFacebook(){
         var pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         pagingSpinner.color = UIColor.darkGrayColor()
         pagingSpinner.hidesWhenStopped = true
@@ -149,18 +148,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
-    }
-
-    //stopping user from entering name with length greater than 25
-    @IBAction func nameTextFieldChanged(sender: AnyObject) {
-        if let characterCount = nameTextField.text?.characters.count {
-            if characterCount > 25 {
-                let aboveMaxBy = characterCount - 25
-                let index1 = nameTextField.text!.endIndex.advancedBy(-aboveMaxBy)
-                nameTextField.text = nameTextField.text!.substringToIndex(index1)
-            }
-        }
-    }
+    }*/
+    
     func displayNavigationBar(){
         
         let navItem = UINavigationItem()
@@ -226,7 +215,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         //botNotificationView.addSubview(blurEffectView)
         botNotificationView.addSubview(messageLabel)
         botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
-        view.insertSubview(botNotificationView, aboveSubview: profilePictureButton)
+        view.insertSubview(botNotificationView, aboveSubview: profilePictureView)
         
         
         UIView.animateWithDuration(0.7) {
@@ -252,8 +241,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
         
         // Do any additional setup after loading the view.
-        nameTextField.delegate = self
-        imagePicker.delegate = self
+        //imagePicker.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -275,22 +263,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         if let username = username {
             if username != "" {
                 editableName = username
-                nameTextField.text = username
             } else{
-                /*PFUser.currentUser()?.fetchInBackgroundWithBlock({ (<#PFObject?#>, <#NSError?#>) in
-                    <#code#>
-                })
-                let query = PFQuery(className:"_User")
-                query.getObjectInBackgroundWithId(PFUser.currentUser()?.objectId, block: { (objects, error) in
-                    if error == nil {
-                        
-                    } else {
-                        
-                    }
-                    
-                })*/
-                
-                
                 editableName = noNameText
                 name.text = noNameText
             }
@@ -300,26 +273,17 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             name.text = noNameText
         }
         
-        nameTextField.hidden = true
-        name.userInteractionEnabled = true
-        
         if let username = username {
             name.text = username
         }
-        name.textColor = UIColor.lightGrayColor()
-        
-        let aSelector : Selector = #selector(ProfileViewController.lblTapped)
-        let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
-        tapGesture.numberOfTapsRequired = 1
-        name.addGestureRecognizer(tapGesture)
+        name.textColor = UIColor.blackColor()
         
         //get profile picture and set to a button
         let mainProfilePicture = localData.getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
-            print("got main profile picture")
             let image = UIImage(data: mainProfilePicture, scale: 1.0)
-            print(image)
-            profilePictureButton.setImage(image, forState: .Normal)
+            //profilePictureButton.setImage(image, forState: .Normal)
+            profilePictureView.image = image
         }  else {
             let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
             if let pfData = pfData {
@@ -328,7 +292,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
                         print(error)
                     } else {
                         dispatch_async(dispatch_get_main_queue(), {
-                            self.profilePictureButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
+                            //self.profilePictureButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
+                            self.profilePictureView.image = UIImage(data: data!, scale: 1.0)
                         })
                     }
                 })
@@ -336,7 +301,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             
         }
         
-        profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
+        //profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
         
         bridgeStatus.setTitle("Post Status", forState: .Normal)
         bridgeStatus.titleLabel!.font = UIFont(name: "Verdana", size: 20)
@@ -349,7 +314,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), forControlEvents: .TouchUpInside)
         
         view.addSubview(bridgeStatus)
-        view.addSubview(profilePictureButton)
+        view.addSubview(profilePictureView)
         tableView.tableFooterView = UIView()
         tableView.scrollEnabled = false
         tableView.separatorInset = UIEdgeInsetsZero
@@ -365,81 +330,16 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     override func viewDidLayoutSubviews() {
         navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.11*screenHeight)
-        profilePictureButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
-        profilePictureButton.center.x = self.view.center.x
-        profilePictureButton.layer.cornerRadius = profilePictureButton.frame.size.width/2
-        profilePictureButton.contentMode = UIViewContentMode.ScaleAspectFill
-        profilePictureButton.clipsToBounds = true
+        profilePictureView.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
+        profilePictureView.center.x = self.view.center.x
+        profilePictureView.layer.cornerRadius = profilePictureView.frame.size.width/2
+        profilePictureView.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureView.clipsToBounds = true
         name.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
-        nameTextField.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
         bridgeStatus.frame = CGRect(x: 0, y:0.465*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
         bridgeStatus.center.x = self.view.center.x
         tableView.frame = CGRect(x: 0, y:0.55*screenHeight, width:screenWidth, height:0.435*screenHeight)
     }
-    
-    // Username label is tapped. Textfield should appear and replace the label
-    func lblTapped(){
-        nameTextField.becomeFirstResponder()
-        name.hidden = true
-        nameTextField.hidden = false
-        if editableName != noNameText {
-            nameTextField.text = editableName
-        }
-        let outSelector : Selector = #selector(ProfileViewController.tappedOutside)
-        let outsideTapGesture = UITapGestureRecognizer(target: self, action: outSelector)
-        outsideTapGesture.numberOfTapsRequired = 1
-        view.addGestureRecognizer(outsideTapGesture)
-    }
-    // Tapped anywhere else on the main view. Textfield should be replaced by label
-    func tappedOutside(){
-        if nameTextField.isFirstResponder() {
-            nameTextField.endEditing(true)
-            name.hidden = false
-            nameTextField.hidden = true
-            if let editableNameTemp = nameTextField.text{
-                if editableNameTemp != "" {
-                    name.text = editableNameTemp
-                    editableName = editableNameTemp
-                }
-            }
-            let updatedText = nameTextField.text
-            if let updatedText = updatedText {
-                let localData = LocalData()
-                localData.setUsername(updatedText)
-                localData.synchronize()
-                
-                //saving updated username to parse
-                if let _ = PFUser.currentUser() {
-                    PFUser.currentUser()!["name"] = updatedText
-                    PFUser.currentUser()?.saveInBackground()
-                }
-            }
-            if let _ = view.gestureRecognizers {
-                for gesture in view.gestureRecognizers! {
-                    view.removeGestureRecognizer(gesture)
-                }
-            }
-            
-        }
-    }
-    // User returns after editing
-    func textFieldShouldReturn(userText: UITextField) -> Bool {
-        userText.resignFirstResponder()
-        nameTextField.hidden = true
-        name.hidden = false
-        if let editableNameTemp = nameTextField.text{
-            name.text = editableNameTemp
-            editableName = editableNameTemp
-        }
-        let updatedText = nameTextField.text
-        if let updatedText = updatedText {
-            let localData = LocalData()
-            localData.setUsername(updatedText)
-            localData.synchronize()
-        }
-        return true
-    }
-    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         //let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
@@ -451,6 +351,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             self.transitionManager.animationDirection = "Top"
             let vc2 = vc as! OptionsFromBotViewController
             vc2.seguedFrom = "ProfileViewController"
+        } else if mirror.subjectType == EditProfileViewController.self {
+            self.transitionManager.animationDirection = "Left"
         }
         vc.transitioningDelegate = self.transitionManager
     }

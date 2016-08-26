@@ -296,6 +296,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         updateLaterLabel.textColor = UIColor.blackColor()
         updateLaterLabel.numberOfLines = 0
         
+        //setting the title to the view
         mainTitle.textAlignment = NSTextAlignment.Center
         mainTitle.font = UIFont(name: "Verdana", size: 22)
         mainTitle.numberOfLines = 2
