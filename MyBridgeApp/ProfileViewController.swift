@@ -351,7 +351,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         view.addSubview(bridgeStatus)
         view.addSubview(profilePictureButton)
         tableView.tableFooterView = UIView()
-        
+        tableView.scrollEnabled = false
+        tableView.separatorInset = UIEdgeInsetsZero
     }
     func statusTapped(sender: UIButton) {
         performSegueWithIdentifier("showNewStatusViewFromProfilePage", sender: self)
@@ -463,8 +464,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
-        return 7
+        return 5
         
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let heightOfEachRow = tableView.frame.height/5.0
+        return heightOfEachRow //Choose your custom row height
     }
     
     // Data to be shown on an individual row
@@ -474,13 +480,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
         if indexPath.row == 0 {
             
             let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
-            cell.label.text = "Give Feedback"
+            cell.label.text = "Edit Profile"
             
             return cell
             
         } else if indexPath.row == 1 {
             
-            let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
+            /*let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
             //cell2.label.text = "'nect for Business"
             if let interestedInBusiness = PFUser.currentUser()?["interested_in_business"] as? Bool {
                 cell2.preferencesSwitch.on = interestedInBusiness
@@ -495,8 +501,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             cell2.label.font = UIFont(name: "BentonSans", size: 18)
             
             return cell2
+             */
             
-        } else if indexPath.row == 2 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
+            cell.label.text = "Give Feedback"
+            
+            return cell
+            
+        } /*else if indexPath.row == 2 {
             
             let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
             if let interestedInLove = PFUser.currentUser()?["interested_in_love"] as? Bool {
@@ -537,7 +549,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             
             return cell2
             
-        } else if indexPath.row == 4 {
+        }*/ else if indexPath.row == 2 {
             
             let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
             cell.label.text = "Terms of Service"
@@ -545,7 +557,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             
             return cell
             
-        } else if indexPath.row == 5 {
+        } else if indexPath.row == 3 {
             
             let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
             cell.label.text = "Privacy Policy"
@@ -568,6 +580,15 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if indexPath.row == 0 {
+            performSegueWithIdentifier("showEditProfileViewFromProfilePage", sender: self)
+        } /*else if indexPath.row == 1 {
+            
+            
+        } else if indexPath.row == 2 {
+            
+            
+            
+        }*/else if indexPath.row == 1 {
             
             //opens user's email application with email ready to be sent to bridge email
             
@@ -583,23 +604,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate, UITableViewD
             }
             
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            
-        } else if indexPath.row == 1 {
-            
+
             
         } else if indexPath.row == 2 {
             
-            
-            
-        } else if indexPath.row == 3 {
-            
-            
-            
-        } else if indexPath.row == 4 {
-            
             performSegueWithIdentifier("showTermsofService", sender: self)
             
-        } else if indexPath.row == 5 {
+        } else if indexPath.row == 3 {
             
             performSegueWithIdentifier("showPrivacyPolicy", sender: self)
             

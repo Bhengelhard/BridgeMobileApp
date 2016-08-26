@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="VvB-sH-Hxl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nIP-ev-yX8">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -16,9 +16,33 @@
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
+            <string>BentonSans-Light</string>
+            <string>BentonSans-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
+        <!--Edit Profile View Controller-->
+        <scene sceneID="PW4-Da-Las">
+            <objects>
+                <viewController id="8CW-0M-81O" customClass="EditProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7Oy-dc-Rvt"/>
+                        <viewControllerLayoutGuide type="bottom" id="nDi-Ob-f8N"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="l8p-Mg-KMg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromEditProfileView" id="0Mi-wm-mTu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WkR-Vg-7sb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-270.5" y="900.5"/>
+        </scene>
         <!--Load Page View Controller-->
         <scene sceneID="biW-fj-MnX">
             <objects>
@@ -224,25 +248,6 @@
             </objects>
             <point key="canvasLocation" x="2613.5" y="-1803.5"/>
         </scene>
-        <!--Profile Pictures-->
-        <scene sceneID="PtS-qx-XEX">
-            <objects>
-                <viewController title="Profile Pictures" id="hdb-EI-2OW" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Zqe-UF-Nng"/>
-                        <viewControllerLayoutGuide type="bottom" id="4Rw-wR-6Jw"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="a4b-fq-tD3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YAA-sa-TdE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1246.5" y="-1080.5"/>
-        </scene>
         <!--Terms of Service-->
         <scene sceneID="D1a-a4-6wI">
             <objects>
@@ -257,9 +262,11 @@
                         <subviews>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gde-pK-dFr">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <items>
                                     <navigationItem title="Terms of Service" id="JpM-cr-ouT">
                                         <barButtonItem key="leftBarButtonItem" title="&lt; back" id="5o1-vY-Kfs">
+                                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
                                                 <segue destination="pCC-By-oJn" kind="show" id="s3F-dq-ZaG"/>
                                             </connections>
@@ -267,20 +274,29 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Here lies the terms of service..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qOg-Ir-KMK">
-                                <rect key="frame" x="20" y="148" width="335" height="387"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qOg-Ir-KMK">
+                                <rect key="frame" x="20" y="140" width="335" height="387"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="335" id="aNl-M0-J1F"/>
+                                    <constraint firstAttribute="height" constant="387" id="uCp-ou-Jk0"/>
+                                </constraints>
+                                <string key="text">This application is meant for testing purposes only. All terms of service will be provided upon download of the official app in the apple app store</string>
+                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qOg-Ir-KMK" firstAttribute="centerX" secondItem="Nxv-Vi-jbi" secondAttribute="centerX" id="0oT-3K-GT2"/>
+                            <constraint firstItem="qOg-Ir-KMK" firstAttribute="centerY" secondItem="Nxv-Vi-jbi" secondAttribute="centerY" id="0wx-aL-LuL"/>
+                        </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="grC-iE-gXb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-94.5" y="880.5"/>
+            <point key="canvasLocation" x="223.5" y="900.5"/>
         </scene>
         <!--Privacy Policy-->
         <scene sceneID="Jd0-79-wsk">
@@ -294,11 +310,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AQj-gX-Mhk">
+                            <navigationBar contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AQj-gX-Mhk">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="P8x-cw-Vbj"/>
+                                </constraints>
+                                <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="20"/>
+                                </textAttributes>
                                 <items>
                                     <navigationItem title="Privacy Policy" id="Q7O-06-bb3">
                                         <barButtonItem key="leftBarButtonItem" title="&lt; back" id="IY9-CO-rCv">
+                                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
                                                 <segue destination="pCC-By-oJn" kind="show" id="OR9-ei-n0R"/>
                                             </connections>
@@ -306,67 +330,32 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Here lies the privacy policy..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G1F-ii-ddf">
-                                <rect key="frame" x="78" y="323" width="219" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G1F-ii-ddf">
+                                <rect key="frame" x="20" y="237" width="335" height="193"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="335" id="EKo-qh-4Ip"/>
+                                    <constraint firstAttribute="height" constant="193" id="Pbd-DO-zxv"/>
+                                </constraints>
+                                <string key="text">This application is meant for testing purposes only. All privacy policies will be provided upon download of the official app in the apple app store</string>
+                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="G1F-ii-ddf" firstAttribute="centerX" secondItem="Q5Q-nG-bxV" secondAttribute="centerX" id="5VU-zK-Eqz"/>
+                            <constraint firstItem="AQj-gX-Mhk" firstAttribute="top" secondItem="9rg-0f-hlq" secondAttribute="bottom" id="8DN-yd-FnD"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="AQj-gX-Mhk" secondAttribute="trailing" constant="-20" id="GX5-WD-zmm"/>
+                            <constraint firstItem="G1F-ii-ddf" firstAttribute="centerY" secondItem="Q5Q-nG-bxV" secondAttribute="centerY" id="OSI-IH-luT"/>
+                            <constraint firstItem="AQj-gX-Mhk" firstAttribute="leading" secondItem="Q5Q-nG-bxV" secondAttribute="leadingMargin" constant="-20" id="Rqj-TB-ke5"/>
+                        </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vvX-TW-QcA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="338.5" y="880.5"/>
-        </scene>
-        <!--Bridge New View Controller-->
-        <scene sceneID="eb2-wH-7xO">
-            <objects>
-                <viewController id="Wdf-X1-vl8" customClass="BridgeNewViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="MBo-8Q-Unc"/>
-                        <viewControllerLayoutGuide type="bottom" id="gTo-jg-S01"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3nc-8F-yeF">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="68E-Fo-reP">
-                                <rect key="frame" x="0.0" y="14" width="375" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="V0n-ge-DfV"/>
-                                </constraints>
-                                <items>
-                                    <navigationItem title="Bridge" id="IOT-8D-zxF">
-                                        <barButtonItem key="leftBarButtonItem" title="Profile" id="hGa-cp-NAm"/>
-                                        <barButtonItem key="rightBarButtonItem" title="Messages" id="lLi-CF-qZu"/>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tgN-g6-1X8">
-                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
-                                <items>
-                                    <barButtonItem title="Item" id="BFl-5V-EDW"/>
-                                </items>
-                            </toolbar>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="tgN-g6-1X8" firstAttribute="trailing" secondItem="68E-Fo-reP" secondAttribute="trailing" id="DWY-96-6vk"/>
-                            <constraint firstItem="tgN-g6-1X8" firstAttribute="leading" secondItem="68E-Fo-reP" secondAttribute="leading" id="Lsa-4z-5c5"/>
-                            <constraint firstItem="68E-Fo-reP" firstAttribute="top" secondItem="MBo-8Q-Unc" secondAttribute="bottom" constant="-6" id="O9T-31-F6h"/>
-                            <constraint firstAttribute="trailing" secondItem="68E-Fo-reP" secondAttribute="trailing" id="VHC-1o-Vuq"/>
-                            <constraint firstItem="gTo-jg-S01" firstAttribute="top" secondItem="tgN-g6-1X8" secondAttribute="bottom" id="hf5-6k-GA8"/>
-                            <constraint firstItem="68E-Fo-reP" firstAttribute="leading" secondItem="3nc-8F-yeF" secondAttribute="leading" id="qbU-mq-DdD"/>
-                        </constraints>
-                    </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dfa-lN-cbc" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="331.5" y="-1871.5"/>
+            <point key="canvasLocation" x="646.5" y="900.5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -437,12 +426,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ErP-fN-6ni">
-                                <rect key="frame" x="63" y="47" width="268" height="41"/>
-                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="22"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Business" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4d3-SK-io1">
                                 <rect key="frame" x="46" y="327" width="84" height="24"/>
                                 <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
@@ -514,6 +497,12 @@
                                     <action selector="editImageTapped:" destination="nIP-ev-yX8" eventType="touchUpInside" id="bQW-Ve-MbY"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ErP-fN-6ni">
+                                <rect key="frame" x="63" y="47" width="268" height="41"/>
+                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="22"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -528,7 +517,6 @@
                         <outlet property="interestedLabel" destination="R8X-Cq-PbN" id="bUq-Am-WeR"/>
                         <outlet property="loveLabel" destination="ubP-oB-DcF" id="n22-YI-Fjf"/>
                         <outlet property="loveSwitch" destination="fco-Wt-tFB" id="4Yd-U5-edg"/>
-                        <outlet property="main_title" destination="ErP-fN-6ni" id="MFX-fe-5fS"/>
                         <outlet property="nameTextField" destination="LLM-vU-zqu" id="vqf-jX-js1"/>
                     </connections>
                 </viewController>
@@ -559,7 +547,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fcM-Rn-gGP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-667.5" y="-187.5"/>
+            <point key="canvasLocation" x="-1695.5" y="-187.5"/>
         </scene>
         <!--New Bridge Status-->
         <scene sceneID="6dS-e7-LSj">
@@ -584,7 +572,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4S1-vj-COi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-667.5" y="723.5"/>
+            <point key="canvasLocation" x="-1695.5" y="669.5"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
@@ -687,6 +675,7 @@
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginView" id="cy1-Ds-r2Z"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewFromProfilePage" id="ORi-q2-txU"/>
                         <segue destination="nwH-9I-MyI" kind="show" identifier="showNewStatusViewFromProfilePage" id="4OI-Nx-18t"/>
+                        <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileViewFromProfilePage" id="0EB-Fw-YUx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSk-yp-EIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -801,11 +790,11 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Lus-h1-21q"/>
+        <segue reference="4OI-Nx-18t"/>
+        <segue reference="0Mi-wm-mTu"/>
+        <segue reference="RFd-6z-IK0"/>
         <segue reference="HGT-Vo-Kl8"/>
+        <segue reference="ZMu-OO-A5m"/>
         <segue reference="B19-eu-GHC"/>
-        <segue reference="TvH-ve-6hX"/>
-        <segue reference="lb2-8V-Hs1"/>
-        <segue reference="tAM-Qe-S00"/>
     </inferredMetricsTieBreakers>
 </document>

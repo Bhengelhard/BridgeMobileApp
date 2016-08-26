@@ -14,7 +14,8 @@ import FBSDKLoginKit
 import CoreData
 
 class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    @IBOutlet weak var main_title: UILabel!
+    //@IBOutlet weak var main_title: UILabel!
+    let mainTitle = UILabel()
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var friendshipLabel: UILabel!
@@ -202,26 +203,26 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             if usernameString != "" {
                 editableName = usernameString
                 nameTextField.text = usernameString
-                main_title.attributedText = twoColoredString(editableName+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
+                mainTitle.attributedText = twoColoredString(editableName+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
             } else{
                 editableName = noNameText
-                main_title.text = noNameText
-                main_title.textColor = necterYellow
+                mainTitle.text = noNameText
+                mainTitle.textColor = necterYellow
             }
         }
         else{
             editableName = noNameText
-            main_title.text = noNameText
-            main_title.textColor = necterYellow
+            mainTitle.text = noNameText
+            mainTitle.textColor = necterYellow
         }
         nameTextField.hidden = true
-        main_title.userInteractionEnabled = true
+        mainTitle.userInteractionEnabled = true
         
         
         let aSelector : Selector = #selector(SignupViewController.lblTapped)
         let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
         tapGesture.numberOfTapsRequired = 1
-        main_title.addGestureRecognizer(tapGesture)
+        mainTitle.addGestureRecognizer(tapGesture)
         
         let outSelector : Selector = #selector(SignupViewController.tappedOutside)
         let outsideTapGesture = UITapGestureRecognizer(target: self, action: outSelector)
@@ -247,7 +248,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             }
             
         }
-        if main_title.text == noNameText {
+        if mainTitle.text == noNameText {
             beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
             beginConnectingButton.setTitleColor(UIColor.grayColor(), forState: .Normal)
             beginConnectingButton.enabled = false
@@ -294,6 +295,14 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         updateLaterLabel.font = UIFont(name: "BentonSans", size: 12)
         updateLaterLabel.textColor = UIColor.blackColor()
         updateLaterLabel.numberOfLines = 0
+        
+        mainTitle.textAlignment = NSTextAlignment.Center
+        mainTitle.font = UIFont(name: "Verdana", size: 22)
+        mainTitle.numberOfLines = 2
+        //mainTitle.textColor = UIColor.lightGrayColor()
+        mainTitle.textColor = UIColor.lightGrayColor()
+        mainTitle.attributedText = twoColoredString(mainTitle.text!, partLength: 12, start: 12, color: UIColor.blackColor())
+        self.view.addSubview(mainTitle)
         self.view.addSubview(updateLaterLabel)
         
     }
@@ -317,7 +326,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         //placing elements
         if ["iPhone 4", "iPhone 4s", "iPhone 5", "iPhone 5", "iPhone 5c", "iPhone 5s", "Simulator"].contains(modelName) {
         //placing elements on smaller sized iPhones
-            main_title.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.15*screenHeight)
+            mainTitle.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.15*screenHeight)
             nameTextField.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
             editImageButton.frame = CGRect(x: 0, y:0.19*screenHeight, width:0.23*screenHeight, height:0.23*screenHeight)
             editImageButton.center.x = self.view.center.x
@@ -344,7 +353,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             
         } else {
         //placing elements on larger iPhones
-            main_title.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
+            mainTitle.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
             nameTextField.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
             editImageButton.frame = CGRect(x: 0, y:0.17*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
             editImageButton.center.x = self.view.center.x
@@ -393,7 +402,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     func lblTapped(){
         nameTextField.becomeFirstResponder()
         nameTextField.textColor = necterYellow
-        main_title.hidden = true
+        mainTitle.hidden = true
         nameTextField.hidden = false
         if editableName != noNameText {
             nameTextField.text = editableName
@@ -403,8 +412,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     }
     // Tapped anywhere else on the main view. Textfield should be replaced by label
     func tappedOutside(){
-        if main_title.text == self.noNameText {
-            main_title.hidden = true
+        if mainTitle.text == self.noNameText {
+            mainTitle.hidden = true
             nameTextField.hidden = false
             nameTextField.becomeFirstResponder()
             nameTextField.attributedPlaceholder = NSAttributedString(string:"Enter your full name", attributes: [NSForegroundColorAttributeName: necterYellow])
@@ -413,7 +422,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             beginConnectingButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
             beginConnectingButton.enabled = true
             beginConnectingButton.setTitleColor(necterYellow, forState: .Highlighted)
-            main_title.hidden = false
+            mainTitle.hidden = false
             nameTextField.hidden = true
             self.view.endEditing(true)
         }
@@ -421,7 +430,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         if let editableNameTemp = nameTextField.text{
             if editableNameTemp != "" {
                 editableName = editableNameTemp
-                main_title.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
+                mainTitle.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
             }
         }
         if editableName != "" {
@@ -433,9 +442,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     func textFieldShouldReturn(userText: UITextField) -> Bool {
         userText.resignFirstResponder()
         nameTextField.hidden = true
-        main_title.hidden = false
+        mainTitle.hidden = false
         if let editableNameTemp = nameTextField.text{
-            main_title.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
+            mainTitle.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
             editableName = editableNameTemp
         }
         /*let updatedText = nameTextField.text

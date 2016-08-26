@@ -1173,9 +1173,10 @@ class BridgeViewController: UIViewController {
                         superDeckView.center.x = 1.6*self.screenWidth
                         self.connectIcon.center.x = 1.6*self.screenWidth
                         self.connectIcon.alpha = 0.0
-                        self.connectIcon.removeFromSuperview()
+                        }, completion: { (success) in
+                            self.connectIcon.removeFromSuperview()
+                            self.bridged()
                     })
-                    self.bridged()
                     removeCard = true
                 }
             }
@@ -1197,9 +1198,15 @@ class BridgeViewController: UIViewController {
                 
             }
         }
-        
     }
     func bridged(){
+        /*var pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        pagingSpinner.color = UIColor.lightGrayColor()
+        pagingSpinner.hidesWhenStopped = true
+        pagingSpinner.center.x = view.center.x
+        pagingSpinner.center.y = view.center.y
+        view.insertSubview(pagingSpinner, aboveSubview: toolbar)
+        pagingSpinner.startAnimating()*/
         let bridgePairings = localData.getPairings()
         if var bridgePairings = bridgePairings {
             var x = 0
@@ -1303,6 +1310,8 @@ class BridgeViewController: UIViewController {
             getBridgePairingsFromCloud(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
             segueToSingleMessage = true
             performSegueWithIdentifier("showSingleMessage", sender: nil)
+            //pagingSpinner.stopAnimating()
+            //pagingSpinner.removeFromSuperview()
         }
     }
     func nextPairHelper(bridgeType:String) -> Void {
@@ -1315,12 +1324,12 @@ class BridgeViewController: UIViewController {
             else {
                 
                 //create the alert controller
-                let alert = UIAlertController(title: "Recycle the pairs", message: "You have ran out of people to connect for today. Would you like to have a re-look at the pairs you didn't bridge?", preferredStyle: UIAlertControllerStyle.Alert)
+                let alert = UIAlertController(title: "Revisit Pairs of Friends?", message: "You have ran out of pairs to connect. Would you like to revisit the ones you passed on?", preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
                     self.displayNoMoreCards()
                     
                 }))
-                alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
+                alert.addAction(UIAlertAction(title: "Revisit", style: .Default, handler: { (action) in
                     PFCloud.callFunctionInBackground("revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)]) {
                         (response: AnyObject?, error: NSError?) -> Void in
                         if error == nil {
