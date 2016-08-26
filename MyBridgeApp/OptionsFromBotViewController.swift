@@ -171,7 +171,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
         optionsTableView.separatorStyle = UITableViewCellSeparatorStyle.None
         optionsTableView.tableFooterView = UIView()
         optionsTableView.rowHeight = optionsTableView.frame.size.height/CGFloat(optionsTableView.numberOfRowsInSection(0))
-        optionsTableView.alpha = 0
+        optionsTableView.alpha = 0.001
         optionsTableView.scrollEnabled = false
         view.addSubview(optionsTableView)
         
@@ -225,20 +225,65 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
         //setting the information in the rows of the optionTableView
         if indexPath.row == 0 {
             //cell.optionImage.image = cell.optionImage.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-            cell.optionImage.image = UIImage(named: "Business_Icon_Blue")
-            cell.optionLabel.text = "Business"
-            cell.optionLabel.textColor = businessBlue
+            //Setting whether the user is interested in business
+            if let businessInterest = PFUser.currentUser()?["interested_in_business"] as? Bool {
+                if businessInterest {
+                    cell.optionImage.image = UIImage(named: "Business_Icon_Blue")
+                    cell.optionLabel.text = "Business"
+                    cell.optionLabel.textColor = businessBlue
+                } else {
+                    cell.optionImage.image = UIImage(named: "Business_Icon_Gray")
+                    cell.optionLabel.text = "Business"
+                    cell.optionLabel.textColor = necterGray
+                    cell.userInteractionEnabled = false
+                }
+            }
+            else {
+                cell.optionImage.image = UIImage(named: "Business_Icon_Blue")
+                cell.optionLabel.text = "Business"
+                cell.optionLabel.textColor = businessBlue
+            }
+            
             //cell.backgroundColor = UIColor(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)
         } else if indexPath.row == 1 {
-            cell.optionImage.image = UIImage(named: "Love_Icon_Red.svg")
-            cell.optionLabel.text = "Love"
-            cell.optionLabel.textColor = loveRed
-            //cell.backgroundColor = UIColor(red: 255.0/255, green: 129.0/255, blue: 125.0/255, alpha: 1.0)
+            //Setting whether the user is interested in love
+            if let loveInterest = PFUser.currentUser()?["interested_in_love"] as? Bool {
+                if loveInterest {
+                    cell.optionImage.image = UIImage(named: "Love_Icon_Red")
+                    cell.optionLabel.text = "Love"
+                    cell.optionLabel.textColor = loveRed
+
+                } else {
+                    cell.optionImage.image = UIImage(named: "Love_Icon_Gray")
+                    cell.optionLabel.text = "Love"
+                    cell.optionLabel.textColor = necterGray
+                    cell.userInteractionEnabled = false
+                }
+            }
+            else {
+                cell.optionImage.image = UIImage(named: "Love_Icon_Red")
+                cell.optionLabel.text = "Love"
+                cell.optionLabel.textColor = loveRed
+            }
         } else {
-            cell.optionImage.image = UIImage(named: "Friendship_Icon_Green.svg")
-            cell.optionLabel.text = "Friendship"
-            cell.optionLabel.textColor = friendshipGreen
-            //cell.backgroundColor = UIColor(red: 139.0/255, green: 217.0/255, blue: 176.0/255, alpha: 1.0)
+            //Setting whether the user is interested in friendship
+            if let friendshipInterest = PFUser.currentUser()?["interested_in_friendship"] as? Bool {
+                if friendshipInterest {
+                    cell.optionImage.image = UIImage(named: "Friendship_Icon_Green")
+                    cell.optionLabel.text = "Friendship"
+                    cell.optionLabel.textColor = friendshipGreen
+                } else {
+                    cell.optionImage.image = UIImage(named: "Friendship_Icon_Gray")
+                    cell.optionLabel.text = "Friendship"
+                    cell.optionLabel.textColor = necterGray
+                    cell.userInteractionEnabled = false
+                }
+            }
+            else {
+                cell.optionImage.image = UIImage(named: "Friendship_Icon_Green")
+                cell.optionLabel.text = "Friendship"
+                cell.optionLabel.textColor = friendshipGreen
+            }
             
         }
         
