@@ -410,7 +410,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                             }
                         }
                         
-                        //updating name in bridgePairings and messages table if the name was changed
+                        //updating name in BridgePairings, Messages, and SingleMessages tables if the name was changed
                         if self.nameTextField.text != self.username {
                             PFCloud.callFunctionInBackground("changeMessagesTableOnNameUpdate", withParameters: [:]) {
                                 (response:AnyObject?, error: NSError?) -> Void in
