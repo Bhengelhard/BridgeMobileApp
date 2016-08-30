@@ -411,7 +411,16 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                         }
                         
                         //updating name in bridgePairings and messages table if the name was changed
-                        
+                        if self.nameTextField.text != self.username {
+                            PFCloud.callFunctionInBackground("changeBridgePairingsOnNameUpdate", withParameters: [:]) {
+                                (response:AnyObject?, error: NSError?) -> Void in
+                                if error == nil {
+                                    if let response = response as? String {
+                                        print(response)
+                                    }
+                                }
+                            }
+                        }
                         
                         //updated interests in bridgepairings table if the interests were changed
                         if interestsUpdated {
