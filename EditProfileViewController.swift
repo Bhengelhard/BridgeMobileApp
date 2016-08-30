@@ -412,6 +412,23 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                         
                         //updating name in bridgePairings and messages table if the name was changed
                         if self.nameTextField.text != self.username {
+                            PFCloud.callFunctionInBackground("changeMessagesTableOnNameUpdate", withParameters: [:]) {
+                                (response:AnyObject?, error: NSError?) -> Void in
+                                if error == nil {
+                                    if let response = response as? String {
+                                        print(response)
+                                    }
+                                }
+                            }
+                            PFCloud.callFunctionInBackground("changeSingleMessagesTableOnNameUpdate", withParameters: [:]) {
+                                (response:AnyObject?, error: NSError?) -> Void in
+                                if error == nil {
+                                    if let response = response as? String {
+                                        print(response)
+                                    }
+                                }
+                            }
+                            
                             PFCloud.callFunctionInBackground("changeBridgePairingsOnNameUpdate", withParameters: [:]) {
                                 (response:AnyObject?, error: NSError?) -> Void in
                                 if error == nil {
@@ -420,6 +437,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                                     }
                                 }
                             }
+                            
                         }
                         
                         //updated interests in bridgepairings table if the interests were changed
