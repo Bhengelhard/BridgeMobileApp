@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+
 class Downloader {
     class func load(URL: NSURL, imageView:UIImageView) {
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -21,11 +22,17 @@ class Downloader {
                 let beginImage = CIImage(data: data!)
                 let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
                 edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
-                edgeDetectFilter.setValue(0.1, forKey: "inputIntensity")
+                edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
                 edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
                 
-                //let newImage = UIImage(CIImage: edgeDetectFilter.outputImage!)
-                let newImage = UIImage(data: data!)
+                //edgeDetectFilter.setValue(CIImage(image: edgeDetectFilter.outputImage!), forKey: kCIInputImageKey)
+                let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, fromRect: (edgeDetectFilter.outputImage?.extent)!)
+                
+                
+                let newImage = UIImage(CGImage: newCGImage)
+                //let newImage = UIImage(data: data!)
+                //newImage.resizableImageWithCapInsets(UIEdgeInsetsZero)
+                
                 
                 //img2.image = newImage
                 
@@ -36,7 +43,9 @@ class Downloader {
                     UIView.animateWithDuration(0.2, animations: {
                         imageView.alpha = 1
                     })
-                    
+                    imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    imageView.clipsToBounds = true
+
                 })
 
             }

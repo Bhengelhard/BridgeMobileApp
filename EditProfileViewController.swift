@@ -441,7 +441,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         if originalProfilePicture != pickedImage {
             if let imageData = UIImageJPEGRepresentation(pickedImage!, 1.0){
                 localData.setMainProfilePicture(imageData)
-                
             }
             
         }

@@ -295,9 +295,9 @@ class BridgeViewController: UIViewController {
 //            )
 //        }
         //photoView.image = UIImage(data: photo)
-        photoView.contentMode = UIViewContentMode.ScaleAspectFill
+        //photoView.contentMode = UIViewContentMode.ScaleAspectFill
         //photoView.contentMode = UIViewContentMode.Center
-        photoView.clipsToBounds = true
+        //photoView.clipsToBounds = true
         
         let card = UIView(frame:deckFrame)
         

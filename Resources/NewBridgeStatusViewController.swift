@@ -254,11 +254,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
             edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
             edgeDetectFilter.setValue(0.1, forKey: "inputIntensity")
             edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
-            let newImage = UIImage(CIImage: edgeDetectFilter.outputImage!)
-            
-            //img2.image = newImage
-            
-            //let image = UIImage(data:mainProfilePicture,scale:1.0)
+            let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, fromRect: (edgeDetectFilter.outputImage?.extent)!)
+            let newImage = UIImage(CGImage: newCGImage)
             profilePicture.image = newImage
         }
         
