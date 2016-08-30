@@ -346,7 +346,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         //setting saveButton to selected for title coloring in UI
         saveButton.selected = true
         
-        let pickedImage = profilePictureButton.currentImage
+        let pickedImage = profilePictureButton.currentBackgroundImage
         saveButton.layer.borderColor = necterYellow.CGColor
         
         var somethingWasUpdated = false
@@ -367,6 +367,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             
             //saving the user's profile picture
             if originalProfilePicture != pickedImage {
+                
                 if let imageData = UIImageJPEGRepresentation(pickedImage!, 1.0){
                     //update the user's profile picture in Database
                     if let _ = PFUser.currentUser() {
@@ -374,9 +375,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                         PFUser.currentUser()!["profile_picture"] = file
                         somethingWasUpdated = true
                     }
-                    
                 }
-                
             }
             
             //saving the users interests
@@ -399,6 +398,22 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                 PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
                     if success {
                         print("success")
+                        //updating profile picture in bridgePairings Table if the picture was changed
+                        if self.originalProfilePicture != pickedImage {
+                            PFCloud.callFunctionInBackground("changeBridgePairingsOnProfilePictureUpdate", withParameters: [:]) {
+                                (response:AnyObject?, error: NSError?) -> Void in
+                                if error == nil {
+                                    if let response = response as? String {
+                                        print(response)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        //updating name in bridgePairings and messages table if the name was changed
+                        
+                        
+                        //updated interests in bridgepairings table if the interests were changed
                         if interestsUpdated {
                             PFCloud.callFunctionInBackground("changeBridgePairingsOnInterestedInUpdate", withParameters: [:]) {
                                 (response:AnyObject?, error: NSError?) -> Void in

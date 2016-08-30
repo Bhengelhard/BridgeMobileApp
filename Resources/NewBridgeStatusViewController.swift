@@ -263,8 +263,10 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         }
         
         profilePicture.layer.cornerRadius = 15
+        
         profilePicture.contentMode = UIViewContentMode.ScaleAspectFill
         profilePicture.clipsToBounds = true
+        
         let profilePictureHeight = 0.3825*self.screenHeight
         let profilePictureWidth = 0.96*self.screenWidth
         let profilePictureY = 0.18*self.screenHeight-0.05*profilePictureWidth // this 0.05 is for the necterTypeIcon to be just at the top of the keyboard
@@ -272,6 +274,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         profilePicture.frame = CGRect(x: profilePictureX
             , y: profilePictureY, width: profilePictureWidth, height: profilePictureHeight)
         profilePicture.alpha = 0
+        
+        
         
         nameLabel.alpha = 0
         nameLabel.textAlignment = NSTextAlignment.Left
