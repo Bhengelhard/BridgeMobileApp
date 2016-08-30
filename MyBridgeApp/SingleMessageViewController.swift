@@ -301,6 +301,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         toolbar.sizeToFit()
         //toolbar.translucent = false
+        toolbar.barTintColor = UIColor.whiteColor()
         toolbar.items = [messageTextButton, flexibleSpace, sendBarButton]
         //toolbar.addSubview(messageText)
         view.addSubview(toolbar)
@@ -555,11 +556,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         //setting the leave conversation button to the rightBarButtonItem
         //let leaveConversationIcon = UIImage(named: "Profile_Icon_Gray")
-        leaveConversation.setTitle("X", forState: .Normal)
-        leaveConversation.setTitleColor(necterGray, forState: .Normal)
-        leaveConversation.setTitleColor(necterYellow, forState: .Selected)
-        leaveConversation.setTitleColor(necterYellow, forState: .Highlighted)
-        leaveConversation.titleLabel!.font = UIFont(name: "Verdana-Bold", size: 24)!
+        leaveConversation.setImage(UIImage(named: "Leave_Conversation_Gray"), forState: .Normal)
+        leaveConversation.setImage(UIImage(named: "Leave_Conversation_Yellow"), forState: .Highlighted)
+        leaveConversation.setImage(UIImage(named: "Leave_Conversation_Yellow"), forState: .Selected)
+        //leaveConversation.titleLabel!.font = UIFont(name: "Verdana-Bold", size: 24)!
         //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Selected)
         //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Highlighted)
         leaveConversation.addTarget(self, action: #selector(leaveConversationTapped(_:)), forControlEvents: .TouchUpInside)
@@ -580,11 +580,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     func leaveConversationTapped(sender: UIBarButtonItem) {
+        leaveConversation.selected = true
+        
         //create the alert controller
         let alert = UIAlertController(title: "Leaving the Conversation", message: "Are you sure you want to leave this conversation? You will not be able to return.", preferredStyle: UIAlertControllerStyle.Alert)
         //Create the actions
         alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
-            
+            self.leaveConversation.selected = false
         }))
         
         alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
@@ -707,7 +709,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         noMessagesLabel.layer.borderColor = necterGray.CGColor
         noMessagesLabel.layer.cornerRadius = 15
         
-        view.addSubview(noMessagesLabel)
+        view.insertSubview(noMessagesLabel, belowSubview: toolbar)
         
     }
     

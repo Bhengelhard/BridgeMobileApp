@@ -43,6 +43,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     let screenHeight = UIScreen.mainScreen().bounds.height
     let transitionManager = TransitionManager()
     let localData = LocalData()
+    var seguedFrom = ""
+    var tempSeguedFrom = ""
     
     //necter Colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
@@ -112,13 +114,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                 if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
                     if let data = NSData(contentsOfURL: fbpicUrl) {
                         dispatch_async(dispatch_get_main_queue(), {
-                            self.profilePictureButton.setImage(UIImage(data: data), forState: .Normal)
+                            self.profilePictureButton.setBackgroundImage(UIImage(data: data), forState: .Normal)
                             pagingSpinner.stopAnimating()
                             pagingSpinner.removeFromSuperview()
                         })
                     }
                 }
-                
             }
         }
     }
@@ -143,7 +144,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     //update the UIImageView once an image has been picked
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profilePictureButton.setImage(pickedImage, forState: .Normal)
+            profilePictureButton.setBackgroundImage(pickedImage, forState: .Normal)
         }
         profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
         dismissViewControllerAnimated(true, completion: nil)
@@ -195,7 +196,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     
     func cancelTapped(sender: UIBarButtonItem) {
         cancelButton.selected = true
-        performSegueWithIdentifier("showProfilePageFromEditProfileView", sender: self)
+        if tempSeguedFrom == "OptionsFromBotViewController" {
+            performSegueWithIdentifier("showOptionsViewFromEditProfileView", sender: self)
+        } else {
+            performSegueWithIdentifier("showProfilePageFromEditProfileView", sender: self)
+        }
     }
     
     func displayProfilePictureButton() {
@@ -205,7 +210,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             print("got main profile picture")
             let image = UIImage(data: mainProfilePicture, scale: 1.0)
             originalProfilePicture = image!
-            profilePictureButton.setImage(image, forState: .Normal)
+            profilePictureButton.setBackgroundImage(image, forState: .Normal)
         }  else {
             let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
             if let pfData = pfData {
@@ -216,7 +221,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                         let image = UIImage(data: data!, scale: 1.0)
                         self.originalProfilePicture = image!
                         dispatch_async(dispatch_get_main_queue(), {
-                            self.profilePictureButton.setImage(image, forState:  .Normal)
+                            self.profilePictureButton.setBackgroundImage(image, forState:  .Normal)
                         })
                     }
                 })
@@ -229,10 +234,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         profilePictureButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
         profilePictureButton.center.x = self.view.center.x
         profilePictureButton.layer.cornerRadius = profilePictureButton.frame.size.width/2
-        profilePictureButton.contentMode = UIViewContentMode.ScaleAspectFill
-        profilePictureButton.clipsToBounds = true
         profilePictureButton.layer.borderWidth = 4
         profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        profilePictureButton.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureButton.clipsToBounds = true
         
         view.addSubview(profilePictureButton)
     }
@@ -337,18 +342,26 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     }
     
     func saveTapped() {
-        //saving the user's profile picture
+        
+        //setting saveButton to selected for title coloring in UI
+        saveButton.selected = true
+        
         let pickedImage = profilePictureButton.currentImage
         saveButton.layer.borderColor = necterYellow.CGColor
         
         var somethingWasUpdated = false
         var interestsUpdated = false
         
+        if nameTextField.text == "" {
+            nameTextField.text = username
+        }
+        
         //saving to parse
         if let _ = PFUser.currentUser() {
             //saving the user's name
             if nameTextField.text != username {
-                PFUser.currentUser()?["name"] = editableName
+                print("new name save")
+                PFUser.currentUser()?["name"] = nameTextField.text
                 somethingWasUpdated = true
             }
             
@@ -382,12 +395,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                 interestsUpdated = true
             }
             
-            print("somethingWasUpdated - \(somethingWasUpdated)")
-            print("interestsUpdated - \(interestsUpdated)")
             if somethingWasUpdated || interestsUpdated {
                 PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
                     if success {
-                        
+                        print("success")
                         if interestsUpdated {
                             PFCloud.callFunctionInBackground("changeBridgePairingsOnInterestedInUpdate", withParameters: [:]) {
                                 (response:AnyObject?, error: NSError?) -> Void in
@@ -407,7 +418,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         //saving to local data on the user's device
         //saving the user's name
         if nameTextField.text != username {
-            localData.setUsername(editableName)
+            print("name saved to device")
+            localData.setUsername(nameTextField.text!)
         }
         
         //saving the user's profile picture
@@ -420,7 +432,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         }
         
         localData.synchronize()
-        performSegueWithIdentifier("showProfilePageFromEditProfileView", sender: self)
+        if tempSeguedFrom == "OptionsFromBotViewController" {
+            performSegueWithIdentifier("showOptionsViewFromEditProfileView", sender: self)
+        } else {
+            performSegueWithIdentifier("showProfilePageFromEditProfileView", sender: self)
+        }
     }
     
     // Switches tapped
@@ -574,9 +590,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         saveButton.layer.borderWidth = 4.0
         saveButton.layer.borderColor = necterGray.CGColor
         saveButton.layer.cornerRadius = 7.0
-        saveButton.setTitle("Save", forState: .Normal)
+        saveButton.setTitle("save", forState: .Normal)
         saveButton.setTitleColor(necterGray, forState: .Normal)
-        saveButton.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
+        saveButton.setTitleColor(necterYellow, forState: .Highlighted)
+        saveButton.setTitleColor(necterYellow, forState: .Selected)
         saveButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
         saveButton.addTarget(self, action: #selector(saveTapped), forControlEvents: .TouchUpInside)
         view.addSubview(saveButton)
@@ -613,6 +630,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == ProfileViewController.self {
             self.transitionManager.animationDirection = "Right"
+        } else if mirror.subjectType == OptionsFromBotViewController.self {
+            self.transitionManager.animationDirection = "Right"
+            let vc2 = vc as! OptionsFromBotViewController
+            vc2.seguedFrom = seguedFrom
         }
         vc.transitioningDelegate = self.transitionManager
     }

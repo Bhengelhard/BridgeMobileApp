@@ -24,7 +24,8 @@ class Downloader {
                 edgeDetectFilter.setValue(0.1, forKey: "inputIntensity")
                 edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
                 
-                let newImage = UIImage(CIImage: edgeDetectFilter.outputImage!)
+                //let newImage = UIImage(CIImage: edgeDetectFilter.outputImage!)
+                let newImage = UIImage(data: data!)
                 
                 //img2.image = newImage
                 

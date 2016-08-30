@@ -296,6 +296,7 @@ class BridgeViewController: UIViewController {
 //        }
         //photoView.image = UIImage(data: photo)
         photoView.contentMode = UIViewContentMode.ScaleAspectFill
+        //photoView.contentMode = UIViewContentMode.Center
         photoView.clipsToBounds = true
         
         let card = UIView(frame:deckFrame)
@@ -449,13 +450,13 @@ class BridgeViewController: UIViewController {
                 status1 = bridgeStatus
             }
             else {
-                status1 = "Nah"
+                status1 = ""
             }
             if let bridgeStatus = pairing.user2?.bridgeStatus {
                 status2 = bridgeStatus
             }
             else {
-                status2 = "Nah"
+                status2 = ""
             }
             if let mainProfilePicture = pairing.user1?.mainProfilePicture {
                 photoFile1 = mainProfilePicture
@@ -881,14 +882,6 @@ class BridgeViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
 
-        let bridgePairings = localData.getPairings()
-        if (bridgePairings == nil || bridgePairings?.count < 1) {
-            getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
-        }
-        else {
-            displayCards()
-        }
-        
         displayNavigationBar()
         displayToolBar()
         allTypesButton.enabled = false
@@ -898,14 +891,14 @@ class BridgeViewController: UIViewController {
         query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
             if error == nil {
                 if let results = results {
-                self.badgeCount = 0
-                for i in 0..<results.count{
-                    let result = results[i]
-                    if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(result["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
-                        let noOfMessagesViewed = noOfSingleMessagesViewed[(PFUser.currentUser()?.objectId)!] ?? 0
-                        self.badgeCount += (result["no_of_single_messages"] as! Int) - noOfMessagesViewed
+                    self.badgeCount = 0
+                    for i in 0..<results.count{
+                        let result = results[i]
+                        if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(result["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                            let noOfMessagesViewed = noOfSingleMessagesViewed[(PFUser.currentUser()?.objectId)!] ?? 0
+                            self.badgeCount += (result["no_of_single_messages"] as! Int) - noOfMessagesViewed
+                        }
                     }
-                }
                     dispatch_async(dispatch_get_main_queue(), {
                         //self.badgeCount = 0
                         if self.badgeCount != 0 {
@@ -924,23 +917,33 @@ class BridgeViewController: UIViewController {
                             self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), forState: .Normal)
                             self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Highlighted)
                             self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Selected)
-
+                            
                             self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
                             self.navigationBar.setItems([self.navItem], animated: false)
                         }
                     })
-
+                    
                 }
             }
         })
         
+        
+        let bridgePairings = localData.getPairings()
+        if (bridgePairings == nil || bridgePairings?.count < 1) {
+            getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+        }
+        else {
+            displayCards()
+        }
+        
+        
         connectIcon.image = UIImage(named: "Necter_Icon")
-        connectIcon.frame = CGRect(x: 0.6*screenWidth+10, y: 0.33*self.screenHeight, width: 0.4*screenWidth, height: 0.4*screenWidth)
+        //connectIcon.frame = CGRect(x: 0.6*screenWidth+10, y: 0.33*self.screenHeight, width: 0.1*screenWidth, height: 0.1*screenWidth)
         connectIcon.alpha = 0.0
         view.insertSubview(connectIcon, aboveSubview: self.toolbar)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
-        disconnectIcon.frame = CGRect(x: 0, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+        //disconnectIcon.frame = CGRect(x: 0, y: 0.33*self.screenHeight, width: 0.1*self.screenWidth, height: 0.1*self.screenWidth)
         //CGRect(x: -10, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
         disconnectIcon.alpha = 0.0
         view.insertSubview(disconnectIcon, aboveSubview: self.toolbar)
@@ -1080,28 +1083,42 @@ class BridgeViewController: UIViewController {
         superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight / 2 + translation.y)
         let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
         let scale = min(CGFloat(1.0), 1)
-        var rotation = CGAffineTransformMakeRotation(xFromCenter / 350)
+        var rotation = CGAffineTransformMakeRotation(-xFromCenter / 1000)
         var stretch = CGAffineTransformScale(rotation, scale, scale)
         superDeckView.transform = stretch
         var removeCard = false
         
-        let disconnectIconX = min((-1.66*(superDeckView.center.x/self.screenWidth)+0.66)*screenWidth, 0.25*screenWidth)
-        let connectIconX = max((-1.66*(superDeckView.center.x/self.screenWidth)+1.6)*screenWidth, 0.35*screenWidth)
+        //let disconnectIconSize = max(min((-2.0*(superDeckView.center.x/self.screenWidth)+0.9)*screenWidth, 0.4*screenWidth), 0.1*screenWidth)
+        //let connectIconSize = max(min((2.0*(superDeckView.center.x/self.screenWidth))*screenWidth, 0.4*screenWidth), 0.1*screenWidth)
+        //let disconnectIconX = min((-1.66*(superDeckView.center.x/self.screenWidth)+0.66)*screenWidth, 0.15*screenWidth)
         
-        //animating connect and disconnect icons from 0.4% of screenwidth to 0.25% of screenWidth
+        let disconnectIconX = max(min((-1.5*(superDeckView.center.x/self.screenWidth)+0.6)*screenWidth, 0.1*screenWidth), 0)
+        //let connectIconX = max((-1.66*(superDeckView.center.x/self.screenWidth)+1.6)*screenWidth, 0.35*screenWidth)
+        let connectIconX = max(min(((-2.0/3.0)*(superDeckView.center.x/self.screenWidth)+1.0)*screenWidth, 0.6*screenWidth), 0.5*screenWidth)
+        
+        
+
+        //animating connect and disconnect icons when card is positioned from 0.4% of screenwidth to 0.25% of screenWidth
         if superDeckView.center.x < 0.4*screenWidth{
             //fading in with swipe left from 0.4% of screenWidth to 0.25% of screen width
             self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
+            //self.disconnectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)
+            //self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             //})
         } else if superDeckView.center.x > 0.6*screenWidth {
+            
             //fading in with swipe right from 0.6% of screenWidth to 0.75% of screen width
             self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
+            //self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
             self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
         } else {
             self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
-            self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            //self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*screenWidth, height: 0.4*screenWidth)
+           // self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*screenWidth, height: 0.4*screenWidth)
+
             self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
         }
         

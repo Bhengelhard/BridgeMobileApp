@@ -14,6 +14,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
     let selectTypeLabel = UILabel()
     let optionsTableView = UITableView()
     let cancelButton = UIButton()
+    let editProfileButton = UIButton()
     let username = UILabel()
     var firstName = String()
     
@@ -33,7 +34,12 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
     
     
     func cancelTapped(sender: UIButton ){
+        cancelButton.selected = true
         performSegueToPriorView()
+    }
+    func editProfileTapped(sender: UIButton ){
+        editProfileButton.selected = true
+        performSegueWithIdentifier("showEditProfileViewFromOptionsView", sender: self)
     }
     
     func performSegueToPriorView() {
@@ -177,17 +183,34 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
         
         
         //adding the cancel button
-        cancelButton.frame = CGRect(x: 0, y:0.9*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
-        cancelButton.center.x = view.center.x
+        //cancelButton.frame = CGRect(x: 0, y:0.9*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
+        cancelButton.frame = CGRect(x: 0.62*screenWidth, y:0.9*screenHeight, width:0.33*screenWidth, height:0.06*screenHeight)
+        //cancelButton.center.x = view.center.x
         cancelButton.layer.borderWidth = 4.0
         cancelButton.layer.borderColor = necterGray.CGColor
         cancelButton.layer.cornerRadius = 7.0
         cancelButton.setTitle("cancel", forState: .Normal)
         cancelButton.setTitleColor(necterGray, forState: .Normal)
-        cancelButton.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
+        cancelButton.setTitleColor(necterYellow, forState: .Highlighted)
+        cancelButton.setTitleColor(necterYellow, forState: .Selected)
         cancelButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
         cancelButton.addTarget(self, action: #selector(cancelTapped), forControlEvents: .TouchUpInside)
         view.addSubview(cancelButton)
+        
+        //adding the cancel button
+        editProfileButton.frame = CGRect(x: 0.05*screenWidth, y:0.9*screenHeight, width:0.33*screenWidth, height:0.06*screenHeight)
+        //editProfileButton.center.x = view.center.x
+        editProfileButton.layer.borderWidth = 4.0
+        editProfileButton.layer.borderColor = necterGray.CGColor
+        editProfileButton.layer.cornerRadius = 7.0
+        editProfileButton.setTitle("edit profile", forState: .Normal)
+        editProfileButton.setTitleColor(necterGray, forState: .Normal)
+        editProfileButton.setTitleColor(necterYellow, forState: .Highlighted)
+        editProfileButton.setTitleColor(necterYellow, forState: .Selected)
+        editProfileButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
+        editProfileButton.addTarget(self, action: #selector(editProfileTapped), forControlEvents: .TouchUpInside)
+        view.addSubview(editProfileButton)
+
         
         //adding the view elements to the NewBridgeStatusViewController
         // Do any additional setup after loading the view.
@@ -305,7 +328,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
             
         }
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
         
     }
     
@@ -323,6 +346,11 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
             let vc2 = vc as! NewBridgeStatusViewController
             vc2.seguedFrom = seguedFrom
             vc2.necterType = necterType
+        } else if mirror.subjectType == EditProfileViewController.self {
+            self.transitionManager.animationDirection = "Left"
+            let vc2 = vc as! EditProfileViewController
+            vc2.tempSeguedFrom = "OptionsFromBotViewController"
+            vc2.seguedFrom = seguedFrom
         }
         vc.transitioningDelegate = self.transitionManager
         

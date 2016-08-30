@@ -217,7 +217,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         username.textColor = UIColor.whiteColor()
         username.font = UIFont(name: "BentonSans", size: 20)
 
-        backButton.frame = CGRect(x: 0.05*screenWidth, y:0.07*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
+        //backButton.frame = CGRect(x: 0.05*screenWidth, y:0.07*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
+        backButton.frame = CGRect(x: 0.05*screenWidth, y:0.07*screenHeight, width:0.33*screenWidth, height:0.06*screenHeight)
         backButton.layer.borderWidth = 4.0
         backButton.layer.borderColor = necterGray.CGColor
         backButton.layer.cornerRadius = 7.0
@@ -229,11 +230,12 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         backButton.alpha = 0
         view.addSubview(backButton)
         
-        postButton.frame = CGRect(x: 0.65*screenWidth, y:0.07*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
+        //postButton.frame = CGRect(x: 0.65*screenWidth, y:0.07*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
+        postButton.frame = CGRect(x: 0.62*screenWidth, y:0.07*screenHeight, width:0.33*screenWidth, height:0.06*screenHeight)
         postButton.layer.borderWidth = 4.0
         postButton.layer.borderColor = necterGray.CGColor
         postButton.layer.cornerRadius = 7.0
-        postButton.setTitle("Post", forState: .Normal)
+        postButton.setTitle("post", forState: .Normal)
         postButton.setTitleColor(necterGray, forState: .Normal)
         postButton.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
         postButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)

@@ -53,6 +53,8 @@
 		CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD761CEDED9600695B15 /* Main.storyboard */; };
 		E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */; };
 		E99A66E71D70C967006F553B /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99A66E61D70C967006F553B /* EditProfileViewController.swift */; };
+		E9BB65591D73A90D00799DAB /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB65581D73A90D00799DAB /* TermsOfServiceViewController.swift */; };
+		E9BB655D1D7480E400799DAB /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB655C1D7480E400799DAB /* PrivacyPolicyViewController.swift */; };
 		E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */; };
 		E9C1D1AE1D6CFDEA00E96E98 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1D1AD1D6CFDEA00E96E98 /* Timer.swift */; };
 /* End PBXBuildFile section */
@@ -106,6 +108,8 @@
 		CBEFCD761CEDED9600695B15 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = MyBridgeApp/StatusTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		E99A66E61D70C967006F553B /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		E9BB65581D73A90D00799DAB /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = SOURCE_ROOT; };
+		E9BB655C1D7480E400799DAB /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = SOURCE_ROOT; };
 		E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OptionsFromBotViewController.swift; path = MyBridgeApp/OptionsFromBotViewController.swift; sourceTree = SOURCE_ROOT; };
 		E9C1D1AD1D6CFDEA00E96E98 /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -197,6 +201,8 @@
 				1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */,
 				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
 				1BF692D71D09E32B0030B6D0 /* DataController.swift */,
+				E9BB65581D73A90D00799DAB /* TermsOfServiceViewController.swift */,
+				E9BB655C1D7480E400799DAB /* PrivacyPolicyViewController.swift */,
 				CBEFCD761CEDED9600695B15 /* Main.storyboard */,
 			);
 			name = MyBridgeApp;
@@ -310,6 +316,7 @@
 				1BF57CED1D3E9404005F2DE7 /* SingleMessageContent.swift in Sources */,
 				1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */,
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
+				E9BB65591D73A90D00799DAB /* TermsOfServiceViewController.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
@@ -320,6 +327,7 @@
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
 				307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */,
 				1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */,
+				E9BB655D1D7480E400799DAB /* PrivacyPolicyViewController.swift in Sources */,
 				30F1E6E51D5287AB006770F1 /* modelName.swift in Sources */,
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,

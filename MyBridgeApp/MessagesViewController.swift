@@ -829,11 +829,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         users = users.filter { $0 != PFUser.currentUser()?["name"] as! String }
         
         for i in 0 ..< users.count  {
-            
             var name = users[i]
             if users.count > 2 && i < users.count - 2 {
                 var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                stringOfNames = stringOfNames + fullNameArr[0] + " , "
+                stringOfNames = stringOfNames + fullNameArr[0] + ", "
                 
             } else if users.count >= 2 && i == users.count - 2 {
                 var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
@@ -845,8 +844,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     name = name.characters.split{$0 == " "}.map(String.init)[0]
                 }
                 stringOfNames = stringOfNames + name
-            }
-            
+                }
         }
         
         cell.participants.text = stringOfNames

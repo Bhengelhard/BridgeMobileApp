@@ -353,6 +353,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             vc2.seguedFrom = "ProfileViewController"
         } else if mirror.subjectType == EditProfileViewController.self {
             self.transitionManager.animationDirection = "Left"
+        } else if mirror.subjectType == TermsOfServiceViewController.self {
+            self.transitionManager.animationDirection = "Left"
+        } else if mirror.subjectType == PrivacyPolicyViewController.self {
+            self.transitionManager.animationDirection = "Left"
         }
         vc.transitioningDelegate = self.transitionManager
     }
