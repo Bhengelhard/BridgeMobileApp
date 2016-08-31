@@ -1299,7 +1299,7 @@ class BridgeViewController: UIViewController {
                             }
                         }
                         
-                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userObjectId1,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!]) {
+                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userObjectId2,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!]) {
                             (response: AnyObject?, error: NSError?) -> Void in
                             if error == nil {
                                 if let response = response as? String {
