@@ -25,7 +25,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     @IBOutlet weak var friendshipSwitch: UISwitch!
     @IBOutlet weak var loveSwitch: UISwitch!
     @IBOutlet weak var interestedLabel: UILabel!
-    @IBOutlet weak var beginConnectingButton: UIButton!
+    let beginConnectingButton = UIButton()
     let updateLaterLabel = UILabel()
     let businessIcon = UIImageView()
     let loveIcon = UIImageView()
@@ -42,6 +42,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
 
     
     // globally required as we do not want to re-create them everytime and for persistence
+    let transitionManager = TransitionManager()
     let imagePicker = UIImagePickerController()
     var editableName:String = ""
     let noNameText = "Click to enter your full name"
@@ -128,8 +129,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             }
         }
     }
-    // Begin Bridging Button Clicked
-    @IBAction func beginBridgingTouched(sender: AnyObject) {
+    
+    //Begin Connecting Button Clicked
+    func beginConnectingTapped(send: UIButton) {
         beginConnectingButton.layer.borderColor = necterYellow.CGColor
         if let _ = PFUser.currentUser() {
             PFUser.currentUser()?["name"] = editableName
@@ -145,6 +147,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         let localData = LocalData()
         localData.setUsername(editableName)
         localData.synchronize()
+        
+        performSegueWithIdentifier("showBridgePageFromSignUpView", sender: self)
     }
     // Switches tapped
     @IBAction func businessSwitchTapped(sender: AnyObject) {
@@ -278,9 +282,14 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
                 
             }*/
         }
+        
+        beginConnectingButton.setTitle("Begin Connecting", forState: .Normal)
+        beginConnectingButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
         beginConnectingButton.layer.cornerRadius = 7.0
         beginConnectingButton.layer.borderWidth = 4.0
         beginConnectingButton.clipsToBounds = true
+        beginConnectingButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        beginConnectingButton.addTarget(self, action: #selector(beginConnectingTapped(_:)), forControlEvents: .TouchUpInside)
         if editableName == "" || editableName == noNameText {
             beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
             beginConnectingButton.enabled = false
@@ -304,6 +313,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         mainTitle.textColor = UIColor.lightGrayColor()
         mainTitle.attributedText = twoColoredString(mainTitle.text!, partLength: 12, start: 12, color: UIColor.blackColor())
         self.view.addSubview(mainTitle)
+        self.view.addSubview(beginConnectingButton)
         self.view.addSubview(updateLaterLabel)
         
     }
@@ -465,6 +475,15 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        let vc = segue.destinationViewController
+            let mirror = Mirror(reflecting: vc)
+            if mirror.subjectType == BridgeViewController.self {
+                self.transitionManager.animationDirection = "Bottom"
+            }
+            vc.transitioningDelegate = self.transitionManager
+        }
     
 }
