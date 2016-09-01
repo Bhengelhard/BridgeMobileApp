@@ -16,6 +16,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     let navigationBar = UINavigationBar()
     let cancelButton = UIButton()
     let profilePictureButton = UIButton()
+    let profilePictureView = UIImageView()
     let name = UILabel()
     let nameTextField = UITextField()
     var editableName:String = ""
@@ -114,7 +115,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                 if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
                     if let data = NSData(contentsOfURL: fbpicUrl) {
                         dispatch_async(dispatch_get_main_queue(), {
-                            self.profilePictureButton.setBackgroundImage(UIImage(data: data), forState: .Normal)
+                            self.profilePictureView.image = UIImage(data: data)
+                            //self.profilePictureButton.setBackgroundImage(UIImage(data: data), forState: .Normal)
                             pagingSpinner.stopAnimating()
                             pagingSpinner.removeFromSuperview()
                         })
@@ -144,7 +146,9 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     //update the UIImageView once an image has been picked
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profilePictureButton.setBackgroundImage(pickedImage, forState: .Normal)
+            let fixedPickedImage = fixOrientation(pickedImage)
+            profilePictureView.image = fixedPickedImage
+            //profilePictureButton.setBackgroundImage(fixedPickedImage, forState: .Normal)
         }
         profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
         dismissViewControllerAnimated(true, completion: nil)
@@ -153,6 +157,23 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    //fix the orientation of the image picked by the ImagePickerController
+    func fixOrientation(img:UIImage) -> UIImage {
+        
+        if (img.imageOrientation == UIImageOrientation.Up) {
+            return img;
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale);
+        let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
+        img.drawInRect(rect)
+        
+        let normalizedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        return normalizedImage;
+        
     }
     
     func displayNavigationBar(){
@@ -210,7 +231,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             print("got main profile picture")
             let image = UIImage(data: mainProfilePicture, scale: 1.0)
             originalProfilePicture = image!
-            profilePictureButton.setBackgroundImage(image, forState: .Normal)
+            profilePictureView.image = image
+            //profilePictureButton.setBackgroundImage(image, forState: .Normal)
         }  else {
             let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
             if let pfData = pfData {
@@ -221,7 +243,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                         let image = UIImage(data: data!, scale: 1.0)
                         self.originalProfilePicture = image!
                         dispatch_async(dispatch_get_main_queue(), {
-                            self.profilePictureButton.setBackgroundImage(image, forState:  .Normal)
+                            self.profilePictureView.image = image
+                            //self.profilePictureButton.setBackgroundImage(image, forState:  .Normal)
                         })
                     }
                 })
@@ -238,7 +261,15 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
         profilePictureButton.contentMode = UIViewContentMode.ScaleAspectFill
         profilePictureButton.clipsToBounds = true
+        profilePictureButton.backgroundColor = UIColor.clearColor()
         
+        profilePictureView.frame = profilePictureButton.frame
+        profilePictureView.center.x = self.view.center.x
+        profilePictureView.layer.cornerRadius = profilePictureView.frame.size.width/2
+        profilePictureView.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureView.clipsToBounds = true
+        
+        view.addSubview(profilePictureView)
         view.addSubview(profilePictureButton)
     }
     
@@ -346,7 +377,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         //setting saveButton to selected for title coloring in UI
         saveButton.selected = true
         
-        let pickedImage = profilePictureButton.currentBackgroundImage
+        let pickedImage = profilePictureView.image
         saveButton.layer.borderColor = necterYellow.CGColor
         
         var somethingWasUpdated = false
@@ -655,7 +686,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         border.borderWidth = width
         nameTextField.layer.addSublayer(border)
         nameTextField.layer.masksToBounds = true
-        
         
         let nameBorder = CALayer()
         nameBorder.borderColor = UIColor.blackColor().CGColor
