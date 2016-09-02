@@ -612,31 +612,29 @@ class LocalStorageUtility{
                                     //Update Parse DB to store the FBfriendlist
                                     
                                     PFUser.currentUser()?["fb_friends"] = friendsArrayFbId
-                                   
                                     
-                                    //Update Iphone's local storage and Parse to store the friendlist
+                                    
+                                    
+                                    //get friend_list
+                                    //add unique from friendsArray to friend_list
+                                    //add updated friendlist to the user's device
+                                    
+                                    //Update Iphone's local storage and Parse to store the friendlist with newly added fb friends -> this does not remove friends from facebook that were unfriended on Facebook
+                                    var parseFriendList = PFUser.currentUser()?["friend_list"] as! [String]
                                     let localData = LocalData()
-                                    if let localFriendList = localData.getFriendList() {
-                                        var finalFriendList = localFriendList
-                                        for friend in friendsArray {
-                                            if finalFriendList.contains(friend){
-                                                
-                                            }
-                                            else{
-                                                finalFriendList.append(friend)
-                                            }
+                                    //adding newly added fb friends to the user's friendlist
+                                    var finalFriendList = parseFriendList
+                                    for friend in friendsArray {
+                                        if parseFriendList.contains(friend){
                                         }
-                                        localData.setFriendList(finalFriendList)
-                                        localData.synchronize()
-                                        PFUser.currentUser()?["friend_list"] = finalFriendList
-                                        
+                                        else{
+                                            finalFriendList.append(friend)
+                                        }
                                     }
-                                    else {
-                                    localData.setFriendList(friendsArray)
+                                    localData.setFriendList(finalFriendList)
                                     localData.synchronize()
-                                    PFUser.currentUser()?["friend_list"] = friendsArray
-                                    }
-                                    //print("friends array -\(friendsArray)")
+                                    PFUser.currentUser()?["friend_list"] = finalFriendList
+                                    PFUser.currentUser()?.saveInBackground()
                                 }
                                 
                             }

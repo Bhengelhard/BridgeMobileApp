@@ -214,9 +214,9 @@ class ViewController: UIViewController {
                         //use while access token is nil instead of delay
                          print("not new")
                         if let _ = (PFUser.currentUser()?["name"]) as? String {
-                        let localData = LocalData()
-                        localData.setUsername((PFUser.currentUser()?["name"])! as! String)
-                        localData.synchronize()
+                            let localData = LocalData()
+                            localData.setUsername((PFUser.currentUser()?["name"])! as! String)
+                            localData.synchronize()
                         }
                         let localData = LocalData()
                         if localData.getMainProfilePicture() == nil {
