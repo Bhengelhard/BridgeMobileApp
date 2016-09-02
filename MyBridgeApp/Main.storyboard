@@ -16,7 +16,6 @@
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
-            <string>BentonSans-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -572,38 +571,6 @@
                                             <outlet property="label" destination="xjg-vb-aRK" id="1mZ-OI-EUW"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell2" id="bsf-NA-W6Z" customClass="ProfileTableViewCell2" customModule="MyBridgeApp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bsf-NA-W6Z" id="d96-SM-OjJ">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aio-OV-b6R">
-                                                    <rect key="frame" x="293" y="6" width="51" height="31"/>
-                                                    <connections>
-                                                        <action selector="preferencesSwitchTapped:" destination="bsf-NA-W6Z" eventType="valueChanged" id="9EW-5Y-04p"/>
-                                                    </connections>
-                                                </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YFd-UJ-CdR">
-                                                    <rect key="frame" x="33" y="11" width="247" height="21"/>
-                                                    <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Aio-OV-b6R" firstAttribute="centerY" secondItem="d96-SM-OjJ" secondAttribute="centerY" id="2gF-Z7-ScI"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Aio-OV-b6R" secondAttribute="trailing" constant="25" id="gyh-dz-PID"/>
-                                                <constraint firstItem="YFd-UJ-CdR" firstAttribute="centerY" secondItem="d96-SM-OjJ" secondAttribute="centerY" id="mo3-Fc-Y5P"/>
-                                                <constraint firstItem="YFd-UJ-CdR" firstAttribute="leading" secondItem="d96-SM-OjJ" secondAttribute="leadingMargin" constant="25" id="wPY-Va-E1q"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="label" destination="YFd-UJ-CdR" id="Ceb-Le-Ko7"/>
-                                            <outlet property="preferencesSwitch" destination="Aio-OV-b6R" id="rqB-7x-MVg"/>
-                                        </connections>
-                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Click to Enter Your Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5HU-Ir-Pg6">
@@ -738,12 +705,12 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HGT-Vo-Kl8"/>
-        <segue reference="Lus-h1-21q"/>
-        <segue reference="B19-eu-GHC"/>
+        <segue reference="cy1-Ds-r2Z"/>
         <segue reference="5HO-NE-nlq"/>
+        <segue reference="ORi-q2-txU"/>
         <segue reference="4OI-Nx-18t"/>
         <segue reference="0EB-Fw-YUx"/>
+        <segue reference="B19-eu-GHC"/>
         <segue reference="RFd-6z-IK0"/>
     </inferredMetricsTieBreakers>
 </document>

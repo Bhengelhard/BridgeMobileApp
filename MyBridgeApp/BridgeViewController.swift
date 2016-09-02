@@ -491,14 +491,14 @@ class BridgeViewController: UIViewController {
         //setting the messagesIcon to the rightBarButtonItem
         var messagesIcon = UIImage()
         //setting messagesIcon to the icon specifying if there are or are not notifications
-        if badgeCount == 0 {
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), forState: .Normal)
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Selected)
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Highlighted)
-        } else {
+        if badgeCount > 0 {
             messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
             messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Highlighted)
             messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), forState: .Selected)
+        } else {
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), forState: .Normal)
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Selected)
+            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Highlighted)
         }
         
         messagesButton.addTarget(self, action: #selector(messagesTapped(_:)), forControlEvents: .TouchUpInside)
@@ -818,12 +818,12 @@ class BridgeViewController: UIViewController {
         }
     }
     func updateNoOfUnreadMessagesIcon(notification: NSNotification) {
-        
+        print("updateNoOfUnreadMessagesIcon called")
         let aps = notification.userInfo!["aps"] as? NSDictionary
         badgeCount = (aps!["badge"] as? Int)!
         dispatch_async(dispatch_get_main_queue(), {
             
-            if self.badgeCount != 0 {
+            if self.badgeCount > 0 {
                 //self.iconLabel.text = String(self.badgeCount)
                 //self.displayNavigationBar()
                 self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), forState: .Normal)
@@ -880,8 +880,7 @@ class BridgeViewController: UIViewController {
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateBridgePage", object: nil)
-
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: "updateNoOfUnreadMessagesIcon", object: nil)
         displayNavigationBar()
         displayToolBar()
         allTypesButton.enabled = false
@@ -901,7 +900,7 @@ class BridgeViewController: UIViewController {
                     }
                     dispatch_async(dispatch_get_main_queue(), {
                         //self.badgeCount = 0
-                        if self.badgeCount != 0 {
+                        if self.badgeCount > 0 {
                             //setting the iconLabel to the number of notifications -> this has been removed
                             //self.iconLabel.text = String(self.badgeCount)
                             //setting the messagesIcon to the notification rightBarButtonItem
@@ -1289,6 +1288,14 @@ class BridgeViewController: UIViewController {
                         result["checked_out"] = true
                         result["bridged"] = true
                         //result.saveInBackground()
+                        PFCloud.callFunctionInBackground("addIntroducedUsersToEachothersFriendLists", withParameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2]) {
+                            (response: AnyObject?, error: NSError?) -> Void in
+                            if error == nil {
+                                if let response = response as? String {
+                                    print(response)
+                                }
+                            }
+                        }
                         
                         PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!]) {
                             (response: AnyObject?, error: NSError?) -> Void in
