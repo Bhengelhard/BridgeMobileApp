@@ -11,12 +11,12 @@ import Parse
 
 class ProfileTableViewCell2: UITableViewCell {
 
-    @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var preferencesSwitch: UISwitch!
+    //@IBOutlet weak var label: UILabel!
+    //@IBOutlet weak var preferencesSwitch: UISwitch!
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
     
-    //Switches Tapped
+    /*//Switches Tapped
     @IBAction func preferencesSwitchTapped(sender: AnyObject) {
         if label.text == "connect for business" {
             if preferencesSwitch.on{
@@ -72,7 +72,7 @@ class ProfileTableViewCell2: UITableViewCell {
             }
             
         }
-    }
+    }*/
     
     override func awakeFromNib() {
         super.awakeFromNib()

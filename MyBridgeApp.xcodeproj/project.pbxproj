@@ -7,36 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B0E053E1D1A597C00FEF514 /* MessagesTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */; };
-		1B4A11F71D1C4547002FB859 /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */; };
-		1B4A11FD1D1C5F56002FB859 /* NewMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */; };
-		1B9671081D6D59B30066A7C7 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9671071D6D59B30066A7C7 /* Downloader.swift */; };
-		1BA782271D11FE47000B0B3C /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA782261D11FE47000B0B3C /* LocalData.swift */; };
 		1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */; };
-		1BE5C1EB1D06010600D6AA81 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */; };
-		1BE5C1EF1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1ED1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework */; };
-		1BE5C1F21D06024400D6AA81 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F01D06024400D6AA81 /* FBSDKCoreKit.framework */; };
-		1BE5C1F31D06024400D6AA81 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F11D06024400D6AA81 /* FBSDKLoginKit.framework */; };
-		1BE5C1F61D060CAF00D6AA81 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F41D060CAF00D6AA81 /* Bolts.framework */; };
-		1BE5C1F71D060CAF00D6AA81 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE5C1F51D060CAF00D6AA81 /* Parse.framework */; };
-		1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */; };
-		1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */; };
-		1BF57CEB1D3E9308005F2DE7 /* SingleMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */; };
-		1BF57CED1D3E9404005F2DE7 /* SingleMessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */; };
-		1BF5A6C31D1FAB1800EE6B95 /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */; };
-		1BF5A6C51D2174DF00EE6B95 /* NewBridgeStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */; };
-		1BF692CA1D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692C81D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld */; };
-		1BF692D31D09E1950030B6D0 /* Users+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D11D09E1950030B6D0 /* Users+CoreDataProperties.swift */; };
-		1BF692D41D09E1950030B6D0 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D21D09E1950030B6D0 /* Users.swift */; };
 		1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D71D09E32B0030B6D0 /* DataController.swift */; };
-		1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DA1D0B13E400F79E00 /* UserInfo.swift */; };
-		1BF998DD1D0B158E00F79E00 /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DC1D0B158E00F79E00 /* PairInfo.swift */; };
-		1BF998DF1D0B315F00F79E00 /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
 		30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */; };
-		30F1E6E51D5287AB006770F1 /* modelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F1E6E41D5287AB006770F1 /* modelName.swift */; };
 		814C3ACB1B69877600E307BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814C3AC81B69877600E307BB /* Images.xcassets */; };
 		81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81761A49E0D500E65899 /* libsqlite3.dylib */; };
 		81BA81791A49E0DB00E65899 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81781A49E0DB00E65899 /* AudioToolbox.framework */; };
@@ -52,44 +28,44 @@
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
 		CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD761CEDED9600695B15 /* Main.storyboard */; };
 		E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */; };
-		E99A66E71D70C967006F553B /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99A66E61D70C967006F553B /* EditProfileViewController.swift */; };
-		E9BB65591D73A90D00799DAB /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB65581D73A90D00799DAB /* TermsOfServiceViewController.swift */; };
-		E9BB655D1D7480E400799DAB /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB655C1D7480E400799DAB /* PrivacyPolicyViewController.swift */; };
 		E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */; };
-		E9C1D1AE1D6CFDEA00E96E98 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1D1AD1D6CFDEA00E96E98 /* Timer.swift */; };
+		E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */; };
+		E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */; };
+		E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */; };
+		E9D6DF0F1D7880B700138A1F /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF0E1D7880B700138A1F /* EditProfileViewController.swift */; };
+		E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF101D7880C400138A1F /* MessagesTableCell.swift */; };
+		E9D6DF131D7880CC00138A1F /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF121D7880CC00138A1F /* PrivacyPolicyViewController.swift */; };
+		E9D6DF151D7880EA00138A1F /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D6DF141D7880EA00138A1F /* Bolts.framework */; };
+		E9D6DF171D7880FC00138A1F /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D6DF161D7880FC00138A1F /* FBSDKCoreKit.framework */; };
+		E9D6DF191D78810100138A1F /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D6DF181D78810100138A1F /* FBSDKLoginKit.framework */; };
+		E9D6DF1B1D78810800138A1F /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D6DF1A1D78810800138A1F /* ParseFacebookUtilsV4.framework */; };
+		E9D6DF1D1D78810F00138A1F /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D6DF1C1D78810F00138A1F /* ParseUI.framework */; };
+		E9D6DF1F1D78811900138A1F /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D6DF1E1D78811900138A1F /* Parse.framework */; };
+		E9D6DF3B1D7882F000138A1F /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF371D7882F000138A1F /* Downloader.swift */; };
+		E9D6DF3C1D7882F000138A1F /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF381D7882F000138A1F /* LocalData.swift */; };
+		E9D6DF3D1D7882F000138A1F /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF391D7882F000138A1F /* LocalStorageUtility.swift */; };
+		E9D6DF3E1D7882F000138A1F /* modelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF3A1D7882F000138A1F /* modelName.swift */; };
+		E9D6DF441D7882F600138A1F /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF3F1D7882F600138A1F /* PairInfo.swift */; };
+		E9D6DF451D7882F600138A1F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF401D7882F600138A1F /* Timer.swift */; };
+		E9D6DF461D7882F600138A1F /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF411D7882F600138A1F /* TransitionManager.swift */; };
+		E9D6DF471D7882F600138A1F /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF421D7882F600138A1F /* UserInfo.swift */; };
+		E9D6DF481D7882F600138A1F /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF431D7882F600138A1F /* UserInfoPair.swift */; };
+		E9D6DF4A1D7882FB00138A1F /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF491D7882FB00138A1F /* Users.swift */; };
+		E9D6DF4C1D7882FF00138A1F /* Users+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF4B1D7882FF00138A1F /* Users+CoreDataProperties.swift */; };
+		E9D6DF4E1D78835800138A1F /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF4D1D78835800138A1F /* SignupViewController.swift */; };
+		E9D6DF511D78836200138A1F /* SingleMessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF4F1D78836200138A1F /* SingleMessageContent.swift */; };
+		E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF501D78836200138A1F /* SingleMessageTableCell.swift */; };
+		E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF531D78836900138A1F /* TermsOfServiceViewController.swift */; };
+		E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableCell.swift; sourceTree = SOURCE_ROOT; };
-		1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageViewController.swift; sourceTree = SOURCE_ROOT; };
-		1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
-		1B9671071D6D59B30066A7C7 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = SOURCE_ROOT; };
-		1BA782261D11FE47000B0B3C /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalData.swift; sourceTree = "<group>"; };
 		1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageContent.swift; path = MyBridgeApp/MessageContent.swift; sourceTree = SOURCE_ROOT; };
-		1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
-		1BE5C1ED1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
-		1BE5C1F01D06024400D6AA81 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		1BE5C1F11D06024400D6AA81 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		1BE5C1F41D060CAF00D6AA81 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
-		1BE5C1F51D060CAF00D6AA81 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageUtility.swift; sourceTree = "<group>"; };
-		1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = SOURCE_ROOT; };
-		1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
-		1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMessageContent.swift; sourceTree = SOURCE_ROOT; };
-		1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = Resources/TransitionManager.swift; sourceTree = SOURCE_ROOT; };
-		1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewBridgeStatusViewController.swift; path = Resources/NewBridgeStatusViewController.swift; sourceTree = SOURCE_ROOT; };
-		1BF692C91D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyBridgeAppDataModel.xcdatamodel; sourceTree = "<group>"; };
-		1BF692D11D09E1950030B6D0 /* Users+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Users+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		1BF692D21D09E1950030B6D0 /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		1BF692D71D09E32B0030B6D0 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = MyBridgeApp/DataController.swift; sourceTree = SOURCE_ROOT; };
-		1BF998DA1D0B13E400F79E00 /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
-		1BF998DC1D0B158E00F79E00 /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PairInfo.swift; sourceTree = "<group>"; };
-		1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoPair.swift; sourceTree = "<group>"; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
 		30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Page Option A Scaled to Iphone 6.png"; sourceTree = "<group>"; };
-		30F1E6E41D5287AB006770F1 /* modelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = modelName.swift; sourceTree = SOURCE_ROOT; };
 		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		814C3AC91B69877600E307BB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81BA81451A49DA1800E65899 /* MyBridgeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyBridgeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,11 +83,35 @@
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD761CEDED9600695B15 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = MyBridgeApp/StatusTableViewCell.swift; sourceTree = SOURCE_ROOT; };
-		E99A66E61D70C967006F553B /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = SOURCE_ROOT; };
-		E9BB65581D73A90D00799DAB /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = SOURCE_ROOT; };
-		E9BB655C1D7480E400799DAB /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = SOURCE_ROOT; };
 		E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OptionsFromBotViewController.swift; path = MyBridgeApp/OptionsFromBotViewController.swift; sourceTree = SOURCE_ROOT; };
-		E9C1D1AD1D6CFDEA00E96E98 /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMessageTableCell.swift; path = MyBridgeApp/NewMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMessageViewController.swift; path = MyBridgeApp/NewMessageViewController.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewBridgeStatusViewController.swift; path = MyBridgeApp/NewBridgeStatusViewController.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF0E1D7880B700138A1F /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileViewController.swift; path = MyBridgeApp/EditProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF101D7880C400138A1F /* MessagesTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTableCell.swift; path = MyBridgeApp/MessagesTableCell.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF121D7880CC00138A1F /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrivacyPolicyViewController.swift; path = MyBridgeApp/PrivacyPolicyViewController.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF141D7880EA00138A1F /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Frameworks/Bolts.framework; sourceTree = "<group>"; };
+		E9D6DF161D7880FC00138A1F /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Frameworks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		E9D6DF181D78810100138A1F /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Frameworks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		E9D6DF1A1D78810800138A1F /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtilsV4.framework; path = Frameworks/ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
+		E9D6DF1C1D78810F00138A1F /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = Frameworks/ParseUI.framework; sourceTree = "<group>"; };
+		E9D6DF1E1D78811900138A1F /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Frameworks/Parse.framework; sourceTree = "<group>"; };
+		E9D6DF371D7882F000138A1F /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Downloader.swift; path = "Custom Classes/Downloader.swift"; sourceTree = "<group>"; };
+		E9D6DF381D7882F000138A1F /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalData.swift; path = "Custom Classes/LocalData.swift"; sourceTree = "<group>"; };
+		E9D6DF391D7882F000138A1F /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalStorageUtility.swift; path = "Custom Classes/LocalStorageUtility.swift"; sourceTree = "<group>"; };
+		E9D6DF3A1D7882F000138A1F /* modelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = modelName.swift; path = "Custom Classes/modelName.swift"; sourceTree = "<group>"; };
+		E9D6DF3F1D7882F600138A1F /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PairInfo.swift; path = "Custom Classes/PairInfo.swift"; sourceTree = "<group>"; };
+		E9D6DF401D7882F600138A1F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Timer.swift; path = "Custom Classes/Timer.swift"; sourceTree = "<group>"; };
+		E9D6DF411D7882F600138A1F /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = "Custom Classes/TransitionManager.swift"; sourceTree = "<group>"; };
+		E9D6DF421D7882F600138A1F /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserInfo.swift; path = "Custom Classes/UserInfo.swift"; sourceTree = "<group>"; };
+		E9D6DF431D7882F600138A1F /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserInfoPair.swift; path = "Custom Classes/UserInfoPair.swift"; sourceTree = "<group>"; };
+		E9D6DF491D7882FB00138A1F /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Users.swift; path = "Custom Classes/Users.swift"; sourceTree = "<group>"; };
+		E9D6DF4B1D7882FF00138A1F /* Users+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Users+CoreDataProperties.swift"; path = "Custom Classes/Users+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E9D6DF4D1D78835800138A1F /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignupViewController.swift; path = MyBridgeApp/SignupViewController.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF4F1D78836200138A1F /* SingleMessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleMessageContent.swift; path = MyBridgeApp/SingleMessageContent.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF501D78836200138A1F /* SingleMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleMessageTableCell.swift; path = MyBridgeApp/SingleMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF531D78836900138A1F /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TermsOfServiceViewController.swift; path = MyBridgeApp/TermsOfServiceViewController.swift; sourceTree = SOURCE_ROOT; };
+		E9D6DF561D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyBridgeAppDataModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,16 +119,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BE5C1EB1D06010600D6AA81 /* ParseUI.framework in Frameworks */,
-				1BE5C1F31D06024400D6AA81 /* FBSDKLoginKit.framework in Frameworks */,
-				1BE5C1F71D060CAF00D6AA81 /* Parse.framework in Frameworks */,
+				E9D6DF171D7880FC00138A1F /* FBSDKCoreKit.framework in Frameworks */,
+				E9D6DF1B1D78810800138A1F /* ParseFacebookUtilsV4.framework in Frameworks */,
 				81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */,
+				E9D6DF1F1D78811900138A1F /* Parse.framework in Frameworks */,
 				81BA817B1A49E0E500E65899 /* SystemConfiguration.framework in Frameworks */,
 				81BA81791A49E0DB00E65899 /* AudioToolbox.framework in Frameworks */,
+				E9D6DF191D78810100138A1F /* FBSDKLoginKit.framework in Frameworks */,
 				81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */,
-				1BE5C1F21D06024400D6AA81 /* FBSDKCoreKit.framework in Frameworks */,
-				1BE5C1EF1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework in Frameworks */,
-				1BE5C1F61D060CAF00D6AA81 /* Bolts.framework in Frameworks */,
+				E9D6DF151D7880EA00138A1F /* Bolts.framework in Frameworks */,
+				E9D6DF1D1D78810F00138A1F /* ParseUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +138,7 @@
 		814C3AC51B69877600E307BB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */,
 				30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */,
 				CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */,
 				814C3AC81B69877600E307BB /* Images.xcassets */,
@@ -149,17 +150,7 @@
 		81BA813C1A49DA1800E65899 = {
 			isa = PBXGroup;
 			children = (
-				1BE888D21D1300BF00EA6DA4 /* LocalStorageUtility.swift */,
-				1BA782261D11FE47000B0B3C /* LocalData.swift */,
-				1BF998DA1D0B13E400F79E00 /* UserInfo.swift */,
-				1BF998DC1D0B158E00F79E00 /* PairInfo.swift */,
-				1BF998DE1D0B315F00F79E00 /* UserInfoPair.swift */,
-				1BF692D11D09E1950030B6D0 /* Users+CoreDataProperties.swift */,
-				1BF692D21D09E1950030B6D0 /* Users.swift */,
-				E9C1D1AD1D6CFDEA00E96E98 /* Timer.swift */,
-				30F1E6E41D5287AB006770F1 /* modelName.swift */,
-				1B9671071D6D59B30066A7C7 /* Downloader.swift */,
-				1BF692C81D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld */,
+				E9D6DF201D78820F00138A1F /* Custom Classes */,
 				81BA81471A49DA1800E65899 /* MyBridgeApp */,
 				814C3AC51B69877600E307BB /* Resources */,
 				81BA816A1A49DB5600E65899 /* Frameworks */,
@@ -179,30 +170,29 @@
 			isa = PBXGroup;
 			children = (
 				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
-				1BF5A6C21D1FAB1800EE6B95 /* TransitionManager.swift */,
 				CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */,
 				CB5829461CAA26D900DC86C9 /* ViewController.swift */,
-				1BE888D41D135A5800EA6DA4 /* SignupViewController.swift */,
+				E9D6DF4D1D78835800138A1F /* SignupViewController.swift */,
 				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
 				E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */,
-				1BF5A6C41D2174DF00EE6B95 /* NewBridgeStatusViewController.swift */,
+				E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */,
 				E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */,
-				1B4A11F61D1C4547002FB859 /* NewMessageViewController.swift */,
-				1B4A11FC1D1C5F56002FB859 /* NewMessageTableCell.swift */,
+				E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */,
+				E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */,
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
 				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
-				E99A66E61D70C967006F553B /* EditProfileViewController.swift */,
+				E9D6DF0E1D7880B700138A1F /* EditProfileViewController.swift */,
 				CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */,
 				1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */,
-				1B0E053D1D1A597C00FEF514 /* MessagesTableCell.swift */,
+				E9D6DF101D7880C400138A1F /* MessagesTableCell.swift */,
 				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
-				1BF57CEC1D3E9404005F2DE7 /* SingleMessageContent.swift */,
-				1BF57CEA1D3E9308005F2DE7 /* SingleMessageTableCell.swift */,
+				E9D6DF4F1D78836200138A1F /* SingleMessageContent.swift */,
+				E9D6DF501D78836200138A1F /* SingleMessageTableCell.swift */,
 				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
 				1BF692D71D09E32B0030B6D0 /* DataController.swift */,
-				E9BB65581D73A90D00799DAB /* TermsOfServiceViewController.swift */,
-				E9BB655C1D7480E400799DAB /* PrivacyPolicyViewController.swift */,
+				E9D6DF531D78836900138A1F /* TermsOfServiceViewController.swift */,
+				E9D6DF121D7880CC00138A1F /* PrivacyPolicyViewController.swift */,
 				CBEFCD761CEDED9600695B15 /* Main.storyboard */,
 			);
 			name = MyBridgeApp;
@@ -212,12 +202,12 @@
 		81BA816A1A49DB5600E65899 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1BE5C1F41D060CAF00D6AA81 /* Bolts.framework */,
-				1BE5C1F51D060CAF00D6AA81 /* Parse.framework */,
-				1BE5C1F01D06024400D6AA81 /* FBSDKCoreKit.framework */,
-				1BE5C1F11D06024400D6AA81 /* FBSDKLoginKit.framework */,
-				1BE5C1ED1D06016F00D6AA81 /* ParseFacebookUtilsV4.framework */,
-				1BE5C1EA1D06010600D6AA81 /* ParseUI.framework */,
+				E9D6DF141D7880EA00138A1F /* Bolts.framework */,
+				E9D6DF1E1D78811900138A1F /* Parse.framework */,
+				E9D6DF161D7880FC00138A1F /* FBSDKCoreKit.framework */,
+				E9D6DF181D78810100138A1F /* FBSDKLoginKit.framework */,
+				E9D6DF1A1D78810800138A1F /* ParseFacebookUtilsV4.framework */,
+				E9D6DF1C1D78810F00138A1F /* ParseUI.framework */,
 				81BA81751A49E0C500E65899 /* System Frameworks */,
 			);
 			name = Frameworks;
@@ -232,6 +222,24 @@
 				81BA81761A49E0D500E65899 /* libsqlite3.dylib */,
 			);
 			name = "System Frameworks";
+			sourceTree = "<group>";
+		};
+		E9D6DF201D78820F00138A1F /* Custom Classes */ = {
+			isa = PBXGroup;
+			children = (
+				E9D6DF391D7882F000138A1F /* LocalStorageUtility.swift */,
+				E9D6DF381D7882F000138A1F /* LocalData.swift */,
+				E9D6DF421D7882F600138A1F /* UserInfo.swift */,
+				E9D6DF3F1D7882F600138A1F /* PairInfo.swift */,
+				E9D6DF431D7882F600138A1F /* UserInfoPair.swift */,
+				E9D6DF4B1D7882FF00138A1F /* Users+CoreDataProperties.swift */,
+				E9D6DF491D7882FB00138A1F /* Users.swift */,
+				E9D6DF401D7882F600138A1F /* Timer.swift */,
+				E9D6DF3A1D7882F000138A1F /* modelName.swift */,
+				E9D6DF371D7882F000138A1F /* Downloader.swift */,
+				E9D6DF411D7882F600138A1F /* TransitionManager.swift */,
+			);
+			name = "Custom Classes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -312,42 +320,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B4A11FD1D1C5F56002FB859 /* NewMessageTableCell.swift in Sources */,
-				1BF57CED1D3E9404005F2DE7 /* SingleMessageContent.swift in Sources */,
-				1BE888D51D135A5800EA6DA4 /* SignupViewController.swift in Sources */,
+				E9D6DF4C1D7882FF00138A1F /* Users+CoreDataProperties.swift in Sources */,
+				E9D6DF131D7880CC00138A1F /* PrivacyPolicyViewController.swift in Sources */,
+				E9D6DF511D78836200138A1F /* SingleMessageContent.swift in Sources */,
+				E9D6DF441D7882F600138A1F /* PairInfo.swift in Sources */,
+				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
+				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
+				E9D6DF481D7882F600138A1F /* UserInfoPair.swift in Sources */,
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
-				E9BB65591D73A90D00799DAB /* TermsOfServiceViewController.swift in Sources */,
+				E9D6DF3D1D7882F000138A1F /* LocalStorageUtility.swift in Sources */,
+				E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
-				E9C1D1AE1D6CFDEA00E96E98 /* Timer.swift in Sources */,
-				1BF57CEB1D3E9308005F2DE7 /* SingleMessageTableCell.swift in Sources */,
-				1BE888D31D1300BF00EA6DA4 /* LocalStorageUtility.swift in Sources */,
-				E99A66E71D70C967006F553B /* EditProfileViewController.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
 				307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */,
-				1BF998DB1D0B13E400F79E00 /* UserInfo.swift in Sources */,
-				E9BB655D1D7480E400799DAB /* PrivacyPolicyViewController.swift in Sources */,
-				30F1E6E51D5287AB006770F1 /* modelName.swift in Sources */,
+				E9D6DF461D7882F600138A1F /* TransitionManager.swift in Sources */,
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
-				1B4A11F71D1C4547002FB859 /* NewMessageViewController.swift in Sources */,
+				E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */,
+				E9D6DF3B1D7882F000138A1F /* Downloader.swift in Sources */,
 				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
-				1BF5A6C31D1FAB1800EE6B95 /* TransitionManager.swift in Sources */,
-				1BF692D31D09E1950030B6D0 /* Users+CoreDataProperties.swift in Sources */,
-				1BF5A6C51D2174DF00EE6B95 /* NewBridgeStatusViewController.swift in Sources */,
+				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
-				1BF692CA1D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
+				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */,
-				1B0E053E1D1A597C00FEF514 /* MessagesTableCell.swift in Sources */,
+				E9D6DF4A1D7882FB00138A1F /* Users.swift in Sources */,
+				E9D6DF0F1D7880B700138A1F /* EditProfileViewController.swift in Sources */,
 				CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */,
-				1B9671081D6D59B30066A7C7 /* Downloader.swift in Sources */,
+				E9D6DF3E1D7882F000138A1F /* modelName.swift in Sources */,
+				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
-				1BF692D41D09E1950030B6D0 /* Users.swift in Sources */,
-				1BF998DD1D0B158E00F79E00 /* PairInfo.swift in Sources */,
-				1BF998DF1D0B315F00F79E00 /* UserInfoPair.swift in Sources */,
-				1BA782271D11FE47000B0B3C /* LocalData.swift in Sources */,
+				E9D6DF451D7882F600138A1F /* Timer.swift in Sources */,
+				E9D6DF471D7882F600138A1F /* UserInfo.swift in Sources */,
+				E9D6DF3C1D7882F000138A1F /* LocalData.swift in Sources */,
+				E9D6DF4E1D78835800138A1F /* SignupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,18 +448,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Blake Engelhard (7Y7JRS85QB)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					/Users/BHEngelhard/Desktop/ParseSDK,
 					/Users/BHEngelhard/Desktop/FacebookSDK,
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Beta;
 				PRODUCT_NAME = MyBridgeApp;
+				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -462,18 +473,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Blake Engelhard (7Y7JRS85QB)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					/Users/BHEngelhard/Desktop/ParseSDK,
 					/Users/BHEngelhard/Desktop/FacebookSDK,
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Beta;
 				PRODUCT_NAME = MyBridgeApp;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -501,12 +515,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		1BF692C81D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodeld */ = {
+		E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				1BF692C91D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodel */,
+				E9D6DF561D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodel */,
 			);
-			currentVersion = 1BF692C91D09DA2E0030B6D0 /* MyBridgeAppDataModel.xcdatamodel */;
+			currentVersion = E9D6DF561D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodel */;
 			path = MyBridgeAppDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

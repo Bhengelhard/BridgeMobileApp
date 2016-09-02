@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     var geoPoint:PFGeoPoint?
     
     //Login with Facebook button tapped
-    @IBAction func fbLogin(sender: AnyObject) {
+    @IBAction func fbLogin(sender: AnyObject) { 
         
         print("pressed")
         // Spinner sparts animating before the segue can be accesses
