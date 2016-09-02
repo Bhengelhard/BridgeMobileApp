@@ -16,8 +16,6 @@
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
             <string>BentonSans-Light</string>
-            <string>BentonSans-Light</string>
-            <string>BentonSans-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -444,17 +442,6 @@
                                     <action selector="friendshipSwitchTapped:" destination="nIP-ev-yX8" eventType="valueChanged" id="NfH-Ic-jEc"/>
                                 </connections>
                             </switch>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6gq-OI-bvo">
-                                <rect key="frame" x="92" y="596" width="191" height="31"/>
-                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="20"/>
-                                <state key="normal" title="Begin connecting">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="beginBridgingTouched:" destination="nIP-ev-yX8" eventType="touchUpInside" id="KbV-sh-Wu4"/>
-                                    <segue destination="cMo-Jt-lEF" kind="show" id="ZMu-OO-A5m"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="I am interested in being connected for:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R8X-Cq-PbN">
                                 <rect key="frame" x="20" y="275" width="335" height="44"/>
                                 <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
@@ -478,7 +465,6 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="beginConnectingButton" destination="6gq-OI-bvo" id="Emn-IS-cOD"/>
                         <outlet property="businessLabel" destination="4d3-SK-io1" id="Zbg-2p-0XC"/>
                         <outlet property="businessSwitch" destination="diD-LT-SEq" id="O6a-6v-ONA"/>
                         <outlet property="editImageButton" destination="FVI-zC-w4v" id="90n-U9-7iv"/>
@@ -488,11 +474,12 @@
                         <outlet property="loveLabel" destination="ubP-oB-DcF" id="n22-YI-Fjf"/>
                         <outlet property="loveSwitch" destination="fco-Wt-tFB" id="4Yd-U5-edg"/>
                         <outlet property="nameTextField" destination="LLM-vU-zqu" id="vqf-jX-js1"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromSignUpView" id="O6c-jV-xV8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Av-h3-KLN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1740.5" y="-1104.5"/>
+            <point key="canvasLocation" x="1707.5" y="-1104.5"/>
         </scene>
         <!--Options From Bot View Controller-->
         <scene sceneID="doL-75-kLW">
@@ -582,38 +569,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="label" destination="xjg-vb-aRK" id="1mZ-OI-EUW"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell2" id="bsf-NA-W6Z" customClass="ProfileTableViewCell2" customModule="MyBridgeApp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bsf-NA-W6Z" id="d96-SM-OjJ">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aio-OV-b6R">
-                                                    <rect key="frame" x="293" y="6" width="51" height="31"/>
-                                                    <connections>
-                                                        <action selector="preferencesSwitchTapped:" destination="bsf-NA-W6Z" eventType="valueChanged" id="9EW-5Y-04p"/>
-                                                    </connections>
-                                                </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YFd-UJ-CdR">
-                                                    <rect key="frame" x="33" y="11" width="247" height="21"/>
-                                                    <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Aio-OV-b6R" firstAttribute="centerY" secondItem="d96-SM-OjJ" secondAttribute="centerY" id="2gF-Z7-ScI"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Aio-OV-b6R" secondAttribute="trailing" constant="25" id="gyh-dz-PID"/>
-                                                <constraint firstItem="YFd-UJ-CdR" firstAttribute="centerY" secondItem="d96-SM-OjJ" secondAttribute="centerY" id="mo3-Fc-Y5P"/>
-                                                <constraint firstItem="YFd-UJ-CdR" firstAttribute="leading" secondItem="d96-SM-OjJ" secondAttribute="leadingMargin" constant="25" id="wPY-Va-E1q"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="label" destination="YFd-UJ-CdR" id="Ceb-Le-Ko7"/>
-                                            <outlet property="preferencesSwitch" destination="Aio-OV-b6R" id="rqB-7x-MVg"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -750,12 +705,12 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="B19-eu-GHC"/>
-        <segue reference="ORi-q2-txU"/>
-        <segue reference="5HO-NE-nlq"/>
-        <segue reference="0EB-Fw-YUx"/>
         <segue reference="cy1-Ds-r2Z"/>
+        <segue reference="5HO-NE-nlq"/>
+        <segue reference="ORi-q2-txU"/>
         <segue reference="4OI-Nx-18t"/>
+        <segue reference="0EB-Fw-YUx"/>
+        <segue reference="B19-eu-GHC"/>
         <segue reference="RFd-6z-IK0"/>
     </inferredMetricsTieBreakers>
 </document>
