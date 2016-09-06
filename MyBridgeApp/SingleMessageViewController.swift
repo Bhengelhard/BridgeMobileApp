@@ -27,7 +27,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     let toolbar = UIToolbar()
     let messageText = UITextView()
     let sendButton = UIButton()
-    var necterTypeColor = UIColor()
+    var necterTypeColor = UIColor.grayColor()
     
     //setting the height of the keyboard
     var keyboardHeight = CGFloat()
@@ -678,7 +678,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             ob.append((PFUser.currentUser()?.objectId)!)
                             object["message_viewed"] = ob
                         }
-                        
                     }
                     else {
                         object["message_viewed"] = [(PFUser.currentUser()?.objectId)!]
@@ -752,7 +751,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 if let object = object {
                     if let x = object["message_type"] as? String? {
                         if let x = x {
-                        self.bridgeType = x
+                            self.bridgeType = x
                         }
                         else {
                         self.bridgeType = "Friendship"
@@ -761,7 +760,19 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     else {
                         self.bridgeType = "Friendship"
                     }
+                    switch (self.bridgeType) {
+                        case "Business":
+                            self.necterTypeColor = self.businessBlue
+                        case "Love":
+                            self.necterTypeColor = self.loveRed
+                        case "Friendship":
+                            self.necterTypeColor = self.friendshipGreen
+                        default:
+                            self.necterTypeColor = self.friendshipGreen
+                            print("necterTypeColor is set to default")
+                    }
                 }
+                self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: self.necterTypeColor]
             }
         })
         NSNotificationCenter.defaultCenter().removeObserver("reloadTheThread")
