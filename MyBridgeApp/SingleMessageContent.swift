@@ -18,7 +18,8 @@ class SingleMessageContent {
     var previousSenderId: String?
     var timestamp: String?
     var showTimestamp: Bool?
-    var isNotification: Bool?
+    var notificationText: String?
+    var isNotification = false
     
     //necter Colors
     let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
@@ -29,9 +30,11 @@ class SingleMessageContent {
     init(messageContent: [String: AnyObject]) {
         if let m = messageContent["messageText"] as? String {
             messageText = m
+            notificationText = m
         }
         else {
             messageText = ""
+            notificationText = ""
         }
         if let b = messageContent["bridgeType"] as? String {
             bridgeType = b
@@ -75,27 +78,29 @@ class SingleMessageContent {
         else {
             isNotification = false
         }
+        if let n = messageContent["notification"] as? String {
+            notificationText = n
+        }
+        else {
+            notificationText = ""
+        }
         if let s = messageContent["showTimestamp"] as? Bool {
             showTimestamp = s
         }
         else {
             showTimestamp = false
         }
-
-        
         
     }
     
     var backgroundColor: UIColor {
         if senderId == PFUser.currentUser()?.objectId {
-            //print("bridgeType == PFUser.currentUser()?.objectId")
             return UIColor.lightGrayColor()
         }
         else if bridgeType == "Business" {
             return businessBlue
         }
         else if bridgeType == "Love" {
-            //print("bridgeType == Love")
             return loveRed
         }
         else if bridgeType == "Friendship" {

@@ -9,8 +9,6 @@
 import UIKit
 import Parse
 
-//var segueFromExitedMessage = false
-
 class SingleMessageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     
     //Creating the navigationBar
@@ -48,8 +46,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
     let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
     
-    var messageTextArray = [String]()
+    //var messageTextArray = [String]()
     var newMessageId = String()
+    var isNotification = false
     var bridgeType =  String()
     var isSeguedFromNewMessage = false
     var isSeguedFromBridgePage = false
@@ -376,47 +375,65 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             toolbar.frame = CGRectMake(0, 0.925*screenHeight, screenWidth, 0.075*screenHeight)
             messageText.frame = CGRect(x: 0.025*screenWidth, y: 0, width: 0.675*screenWidth, height: 35.5)
             messageText.scrollEnabled = false
-            let sendingMessageText = messageText.text
             sendButton.enabled = false
+            sendMessageAndNotification()
             messageText.text = ""
-            let senderName = (PFUser.currentUser()?["name"] as? String) ?? ""
-            let singleMessage = PFObject(className: "SingleMessages")
-            let acl = PFACL()
-            acl.publicReadAccess = true
-            acl.publicWriteAccess = true
-            singleMessage.ACL = acl
-            singleMessage["message_text"] = sendingMessageText
-            singleMessage["sender"] = PFUser.currentUser()?.objectId
-            singleMessage["sender_name"] = senderName
-            //save users_in_message to singleMessage
-            singleMessage["message_id"] = messageId
-            singleMessage["bridge_type"] = bridgeType
-            singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
-                
-                if (success) {
-                    //self.objectIDToMessageContentArrayMapping = [String:[String:AnyObject]]()
-                    //self.singleMessagePositionToObjectIDMapping = [Int:String]()
-                    //self.updateMessages()
-                    
+        }
+
+    }
+    
+    func sendMessageAndNotification() {
+        print("got to sendMessageAndNotification")
+        var sendingMessageText = ""
+        var senderName = ""
+        let singleMessage = PFObject(className: "SingleMessages")
+        if isNotification == true {
+            if let username = PFUser.currentUser()?["name"] as? String {
+                sendingMessageText = username + " left the conversation."
+                senderName = username
+            }
+            singleMessage["is_notification"] = true
+            print("is notification == true in sendMessageAndNotification")
+        } else {
+            senderName = (PFUser.currentUser()?["name"] as? String) ?? ""
+            sendingMessageText = messageText.text
+            print("messageText.text is set to \(messageText.text)")
+            print("else reached in sendMessageAndNotification")
+        }
+        print(sendingMessageText)
+        let acl = PFACL()
+        acl.publicReadAccess = true
+        acl.publicWriteAccess = true
+        
+        singleMessage.ACL = acl
+        singleMessage["message_text"] = sendingMessageText
+        singleMessage["sender"] = PFUser.currentUser()?.objectId
+        singleMessage["sender_name"] = senderName
+        //save users_in_message to singleMessage
+        singleMessage["message_id"] = messageId
+        singleMessage["bridge_type"] = bridgeType
+        singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
+            
+            if (success) {
+                if self.isNotification == false {
                     //taking the noMessagesLabel off of the screen upon the first message sent
                     UIView.animateWithDuration(0.05, animations: {
                         self.noMessagesLabel.alpha = 0
                         }, completion: { (success) in
                             self.noMessagesLabel.removeFromSuperview()
                     })
-                    
-                    
-                    // push notification starts
-                    let singleMessagePosition = self.objectIDToMessageContentArrayMapping.count
-                    var previousSenderName = ""
-                    var previousSenderId = ""
-                    var previousDate:NSDate? = nil
-                    if singleMessagePosition > 0 {
+                }
+                
+                // push notification starts
+                let singleMessagePosition = self.objectIDToMessageContentArrayMapping.count
+                var previousSenderName = ""
+                var previousSenderId = ""
+                var previousDate:NSDate? = nil
+                if singleMessagePosition > 0 {
                     let temp = self.objectIDToMessageContentArrayMapping[self.singleMessagePositionToObjectIDMapping[singleMessagePosition - 1]!]!
                     previousDate = (temp["date"] as? NSDate)!
                     previousSenderName = temp["senderName"]! as! String
                     previousSenderId = temp["senderId"]! as! String
-                    
                 }
                 
                 let currentdate = singleMessage.createdAt!
@@ -427,118 +444,115 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 df.dateFormat = "hh:mm a"
                 timestamp = df.stringFromDate(currentdate)
                 if let previousDate = previousDate {
-                var components = calendar.components([.Minute],
-                    fromDate: previousDate, toDate: currentdate, options: NSCalendarOptions.WrapComponents)
-                if components.minute > 2 {
-                    showTimestamp = true
-                }
-                else{
-                    showTimestamp = false
-                }
-    
-                let dateFormatter = NSDateFormatter()
-                dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
-                
-                components = calendar.components([.Day],
-                        fromDate: previousDate, toDate: currentdate, options: [])
-                if components.day > 7 {
-                    let dateFormatter = NSDateFormatter()
-                    dateFormatter.dateFormat = "MM/dd/yyy"
-                    timestamp = dateFormatter.stringFromDate(currentdate)
-                }
-                else if components.day >= 2 {
-                    let calendar = NSCalendar.currentCalendar()
-                    let components2 = calendar.components([.Weekday],
-                            fromDate: currentdate)
-                    timestamp = String(getWeekDay(components2.weekday))
-                }
-                else if components.day >= 1 {
-                    timestamp = "Yesterday"
-                }
-                else {
-                    let dateFormatter = NSDateFormatter()
-                    dateFormatter.dateFormat = "hh:mm a"
-                    timestamp = dateFormatter.stringFromDate(currentdate)
-                        
-                }
-                }
-
-                self.objectIDToMessageContentArrayMapping[(singleMessage.objectId!)]=["messageText":sendingMessageText!,"bridgeType":self.bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":false, "senderId":(PFUser.currentUser()?.objectId)!, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":singleMessage.createdAt! ]
-                    self.singleMessagePositionToObjectIDMapping[singleMessagePosition] = (singleMessage.objectId!)
-                    self.singleMessageTableView.reloadData()
-                    if self.objectIDToMessageContentArrayMapping.count >= 1 {
-                        self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                    var components = calendar.components([.Minute],
+                        fromDate: previousDate, toDate: currentdate, options: NSCalendarOptions.WrapComponents)
+                    if components.minute > 2 {
+                        showTimestamp = true
+                    }
+                    else{
+                        showTimestamp = false
                     }
                     
-                    //self.singleMessageTableView.setContentOffset(CGPointZero, animated:true)
-                    let messageQuery = PFQuery(className: "Messages")
-                    messageQuery.getObjectInBackgroundWithId(self.messageId, block: { (object, error) in
-                        if error == nil {
-                            if let object = object {
-                                // update the no of message in a Thread - Start
-                                if let noOfSingleMessages = object["no_of_single_messages"] as? Int {
-                                    object["no_of_single_messages"] = noOfSingleMessages + 1
-                                }
-                                else {
-                                    object["no_of_single_messages"] = 1
-                                }
-                                if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
-                                    noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = (object["no_of_single_messages"] as! Int)
-                                    object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
-                                }
-                                object["last_single_message"] = sendingMessageText
-                                object["lastSingleMessageAt"] = NSDate()
-                                object["message_viewed"] = [(PFUser.currentUser()?.objectId)!]
-                                object.saveInBackgroundWithBlock{
-                                    (success, error) -> Void in
-                                    if error == nil {
-                                        for userId in object["ids_in_message"] as! [String] {
-                                            // Skip sending the current user a notification
-                                            if userId == PFUser.currentUser()!.objectId {
-                                                continue
-                                            }
-                                            // Skip sending a notification to a user who hasn't viewed the bridge notification yet.
-                                            // But in order to mainatain sync with other users set no of meesages viewed by this user to 1
-                                            if object["no_of_single_messages"] as! Int == 2 {
-                                                if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
-                                                    if noOfSingleMessagesViewed[userId] == nil {
-                                                        noOfSingleMessagesViewed[userId] = 1
-                                                        object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
-                                                        object.saveInBackground()
-                                                        continue
-                                                    }
+                    let dateFormatter = NSDateFormatter()
+                    dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
+                    
+                    components = calendar.components([.Day],
+                        fromDate: previousDate, toDate: currentdate, options: [])
+                    if components.day > 7 {
+                        let dateFormatter = NSDateFormatter()
+                        dateFormatter.dateFormat = "MM/dd/yyy"
+                        timestamp = dateFormatter.stringFromDate(currentdate)
+                    }
+                    else if components.day >= 2 {
+                        let calendar = NSCalendar.currentCalendar()
+                        let components2 = calendar.components([.Weekday],
+                            fromDate: currentdate)
+                        timestamp = String(getWeekDay(components2.weekday))
+                    }
+                    else if components.day >= 1 {
+                        timestamp = "Yesterday"
+                    }
+                    else {
+                        let dateFormatter = NSDateFormatter()
+                        dateFormatter.dateFormat = "hh:mm a"
+                        timestamp = dateFormatter.stringFromDate(currentdate)
+                        
+                    }
+                }
+                
+                self.objectIDToMessageContentArrayMapping[(singleMessage.objectId!)]=["messageText":sendingMessageText,"bridgeType":self.bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":false, "senderId":(PFUser.currentUser()?.objectId)!, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":singleMessage.createdAt! ]
+                self.singleMessagePositionToObjectIDMapping[singleMessagePosition] = (singleMessage.objectId!)
+                self.singleMessageTableView.reloadData()
+                if self.objectIDToMessageContentArrayMapping.count >= 1 {
+                    self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                }
+                
+                //self.singleMessageTableView.setContentOffset(CGPointZero, animated:true)
+                let messageQuery = PFQuery(className: "Messages")
+                messageQuery.getObjectInBackgroundWithId(self.messageId, block: { (object, error) in
+                    if error == nil {
+                        if let object = object {
+                            // update the no of message in a Thread - Start
+                            if let noOfSingleMessages = object["no_of_single_messages"] as? Int {
+                                object["no_of_single_messages"] = noOfSingleMessages + 1
+                            }
+                            else {
+                                object["no_of_single_messages"] = 1
+                            }
+                            if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                                noOfSingleMessagesViewed[PFUser.currentUser()!.objectId!] = (object["no_of_single_messages"] as! Int)
+                                object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                            }
+                            object["last_single_message"] = sendingMessageText
+                            object["lastSingleMessageAt"] = NSDate()
+                            object["message_viewed"] = [(PFUser.currentUser()?.objectId)!]
+                            object.saveInBackgroundWithBlock{
+                                (success, error) -> Void in
+                                if error == nil {
+                                    for userId in object["ids_in_message"] as! [String] {
+                                        // Skip sending the current user a notification
+                                        if userId == PFUser.currentUser()!.objectId {
+                                            continue
+                                        }
+                                        // Skip sending a notification to a user who hasn't viewed the bridge notification yet.
+                                        // But in order to mainatain sync with other users set no of meesages viewed by this user to 1
+                                        if object["no_of_single_messages"] as! Int == 2 {
+                                            if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(object["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                                                if noOfSingleMessagesViewed[userId] == nil {
+                                                    noOfSingleMessagesViewed[userId] = 1
+                                                    object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedDataWithRootObject(noOfSingleMessagesViewed)
+                                                    object.saveInBackground()
+                                                    continue
                                                 }
-                                                
                                             }
-                                            let notificationMessage = "Message from " + (PFUser.currentUser()!["name"] as! String)
-                                            PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage",  "messageId": self.newMessageId]) {
-                                                (response: AnyObject?, error: NSError?) -> Void in
-                                                if error == nil {
-                                                    if let response = response as? String {
-                                                        print(response)
-                                                    }
+                                            
+                                        }
+                                        let notificationMessage = "Message from " + (PFUser.currentUser()!["name"] as! String)
+                                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage",  "messageId": self.newMessageId]) {
+                                            (response: AnyObject?, error: NSError?) -> Void in
+                                            if error == nil {
+                                                if let response = response as? String {
+                                                    print(response)
                                                 }
                                             }
                                         }
-                                        //self.updateNoOfPushNotificationsOnBadge()
                                     }
+                                    //self.updateNoOfPushNotificationsOnBadge()
                                 }
-                                // update the no of message in a Thread - End
-                                
                             }
+                            // update the no of message in a Thread - End
+                            
                         }
-                    })
-                    // push notification ends
-                    
-                } else {
-                    
-                    print(error)
-                    
-                }
+                    }
+                })
+                // push notification ends
+                
+            } else {
+                
+                print(error)
+                
             }
-            
         }
-
     }
     
     func displayNavigationBar(){
@@ -581,7 +595,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func leaveConversationTapped(sender: UIBarButtonItem) {
         leaveConversation.selected = true
-        
         //create the alert controller
         let alert = UIAlertController(title: "Leaving the Conversation", message: "Are you sure you want to leave this conversation? You will not be able to return.", preferredStyle: UIAlertControllerStyle.Alert)
         //Create the actions
@@ -590,6 +603,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         }))
         
         alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) in
+            //send notification that user has left the message
+            self.isNotification = true
+            self.sendMessageAndNotification()
             
             //take currentUser out of the current ids_in_message
             let messageQuery = PFQuery(className: "Messages")
@@ -622,7 +638,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     })
                 }
             })
-            
             
             
         }))
@@ -847,9 +862,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let senderNameLabel = UITextView(frame: CGRectZero)
         let messageTextLabel = UITextView(frame: CGRectZero)
         let timestampLabel = UILabel(frame: CGRectZero)
+        let notificationLabel = UILabel(frame: CGRectZero)
         messageTextLabel.font = UIFont(name: "Verdana", size: 16)
         senderNameLabel.font = UIFont(name: "Verdana", size: 12)
         timestampLabel.font = UIFont(name: "BentonSans", size: 10)
+        notificationLabel.font = UIFont(name: "BentonSans", size: 10)
         
         if ((messageContent["senderId"] as? String)! != (PFUser.currentUser()?.objectId)!)  {
             if ( (messageContent["senderName"] as? String)! != (messageContent["previousSenderName"] as? String)!) {
@@ -863,7 +880,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         else {
             addTimestamp = false
         }
-        
         
         if addTimestamp {
             timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, 0, UIScreen.mainScreen().bounds.width*0.30, 27)
@@ -882,21 +898,34 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height + 1)
             senderNameLabel.frame = newFrame
         }
-
         
+        var addNotification = false
+        if (messageContent["isNotification"] as? Bool)! {
+            addNotification = true
+        }
+        else {
+            addNotification = false
+        }
         
-        messageTextLabel.text = (messageContent["messageText"] as? String)!
-        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/3.0, 0, UIScreen.mainScreen().bounds.width/1.5, 25)
-        let fixedWidth = messageTextLabel.frame.size.width
-        let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        var newFrame = messageTextLabel.frame
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-        messageTextLabel.frame = newFrame
-        
-
-        //print("tableView \(indexPath.row) : \(newFrame.height)")
-        return messageTextLabel.frame.height + senderNameLabel.frame.height + timestampLabel.frame.height + CGFloat(2)
-
+        var messageHeight = CGFloat()
+        if addNotification {
+            notificationLabel.text = (messageContent["messageText"] as? String)!
+            notificationLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, 0, UIScreen.mainScreen().bounds.width*0.30, 27)
+            messageHeight = notificationLabel.frame.height
+        }
+        else {
+            messageTextLabel.text = (messageContent["messageText"] as? String)!
+            messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/3.0, 0, UIScreen.mainScreen().bounds.width/1.5, 25)
+            let fixedWidth = messageTextLabel.frame.size.width
+            let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+            var newFrame = messageTextLabel.frame
+            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+            messageTextLabel.frame = newFrame
+            messageHeight = messageTextLabel.frame.height
+            
+            //print("tableView \(indexPath.row) : \(newFrame.height)")
+        }
+        return messageHeight + senderNameLabel.frame.height + timestampLabel.frame.height + CGFloat(2)
         
     }
 

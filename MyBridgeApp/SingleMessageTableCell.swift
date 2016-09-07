@@ -14,9 +14,11 @@ class SingleMessageTableCell: UITableViewCell {
     var senderNameLabel: UITextView!
     var messageTextLabel: UITextView!
     var timestampLabel: UILabel!
+    var notificationLabel: UILabel!
     var senderId:String = ""
     var addSenderName = false
     var addTimestamp = false
+    var isNotification = false
     let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
     var singleMessageContent: SingleMessageContent? {
         didSet {
@@ -26,8 +28,9 @@ class SingleMessageTableCell: UITableViewCell {
                 senderNameLabel.text = s.senderName
                 messageTextLabel.text = s.messageText
                 senderId = s.senderId!
+                notificationLabel.text = s.messageText
+                isNotification = s.isNotification
                 if (senderId != PFUser.currentUser()?.objectId) && (singleMessageContent?.senderId != singleMessageContent?.previousSenderId )  {
-                    
                     addSenderName = true
                     contentView.addSubview(senderNameLabel)
                 }
@@ -35,11 +38,15 @@ class SingleMessageTableCell: UITableViewCell {
                     if t == true{
                         addTimestamp = true
                         contentView.addSubview(timestampLabel)
-                        
                     }
-                    
                 }
-
+                if isNotification {
+                    print("n was true")
+                    contentView.addSubview(notificationLabel)
+                }
+                else {
+                    contentView.addSubview(messageTextLabel)
+                }
                 setNeedsLayout()
             }
         }
@@ -52,28 +59,36 @@ class SingleMessageTableCell: UITableViewCell {
         background.alpha = 0.6
         //contentView.addSubview(background)
         
+        
         messageTextLabel = UITextView(frame: CGRectZero)
         messageTextLabel.textAlignment = .Left
         messageTextLabel.textColor = necterGray
         messageTextLabel.font = UIFont(name: "Verdana", size: 16)
         messageTextLabel.userInteractionEnabled = false
         messageTextLabel.backgroundColor = UIColor.lightGrayColor()
-        contentView.addSubview(messageTextLabel)
+        
+        /*print("isNotification - from tableCell \(isNotification)" )
+        if isNotification == false {
+            print("contentView.addSubview(messageTextLabel)")
+            contentView.addSubview(messageTextLabel)
+        }*/
         
         senderNameLabel = UITextView(frame: CGRectZero)
         senderNameLabel.textAlignment = .Left
         senderNameLabel.textColor = necterGray
         senderNameLabel.font = UIFont(name: "Verdana", size: 12)
         senderNameLabel.userInteractionEnabled = false
-        //senderNameLabel.backgroundColor = UIColor.lightGrayColor()
         
         timestampLabel = UILabel(frame: CGRectZero)
         timestampLabel.textAlignment = .Center
         timestampLabel.textColor = UIColor.lightGrayColor()
-        //timestampLabel.font = timestampLabel.font.fontWithSize(10)
-        timestampLabel.font = UIFont(name: "BentonSans", size: 10)
-
-        //contentView.addSubview(timestampLabel)
+        timestampLabel.font = UIFont(name: "BentonSans", size: 12)
+        
+        notificationLabel = UILabel(frame: CGRectZero)
+        notificationLabel.textAlignment = .Center
+        notificationLabel.textColor = UIColor.lightGrayColor()
+        notificationLabel.font = UIFont(name: "BentonSans", size: 12)
+        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -98,7 +113,11 @@ class SingleMessageTableCell: UITableViewCell {
             y += timestampLabel.frame.height + 2
 
         }
-
+        if isNotification == true {
+            notificationLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.1, y, UIScreen.mainScreen().bounds.width*0.8, 25)
+            y += notificationLabel.frame.height + 2
+        }
+        
         if addSenderName {
             var width = (UIScreen.mainScreen().bounds.width/3 )
             width += CGFloat(5)
@@ -122,6 +141,8 @@ class SingleMessageTableCell: UITableViewCell {
             width += CGFloat(5)
             messageTextLabel.frame = CGRectMake(5, y, width, 25)
         }
+        
+        
         let fixedWidth = messageTextLabel.frame.size.width
         var newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
 //        var newFrame = messageTextLabel.frame

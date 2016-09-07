@@ -84,7 +84,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var messageId = String()
     var singleMessageTitle = "Conversation"
     
-   
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             NSNotificationCenter.defaultCenter().removeObserver(self)
         if segueToSingleMessage {
