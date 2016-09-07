@@ -10,15 +10,8 @@ import UIKit
 
 class MessagesTableCell: UITableViewCell {
     
-
-//    @IBOutlet weak var participants: UILabel!
-//    @IBOutlet weak var messageTimestamp: UILabel!
-//    @IBOutlet weak var messageSnapshot: UILabel!
-//    @IBOutlet weak var arrow: UILabel!
-//    @IBOutlet weak var notificationDot: UIView!
     var participants: UILabel!
     var messageTimestamp: UILabel!
-    //var messageSnapshot: UILabel!
     var messageSnapshot: UITextView!
     var arrow: UILabel!
     var notificationDot: UIView!
@@ -52,12 +45,10 @@ class MessagesTableCell: UITableViewCell {
         messageTimestamp.font = UIFont(name: "BentonSans", size: 16)
         messageTimestamp.textAlignment = NSTextAlignment.Right
         
-        //messageSnapshot = UILabel(frame:CGRectZero)
         messageSnapshot = UITextView(frame:CGRectZero)
         messageSnapshot.font = UIFont(name: "BentonSans", size: 16)
-        //messageSnapshot.numberOfLines = 2
         messageSnapshot.textContainer.maximumNumberOfLines = 2
-        messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.ByTruncatingTail//NSLineBreakByTruncatingTail
+        messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         messageSnapshot.sizeToFit()
         messageSnapshot.userInteractionEnabled = false
         messageSnapshot.contentInset = UIEdgeInsetsMake(-7.0,0.0,0,0.0)
@@ -84,8 +75,8 @@ class MessagesTableCell: UITableViewCell {
         cellHeight = cellHeight ?? contentView.frame.height
         if let _ = setSeparator {
            // print("setSeparator")
-        line.frame = CGRectMake(0.025*cellWidth! + 0.15*cellHeight!, 0, bounds.size.width, 1)
-        contentView.addSubview(line)
+            line.frame = CGRectMake(0.025*cellWidth! + 0.15*cellHeight!, 0, bounds.size.width, 1)
+            contentView.addSubview(line)
         }
         //setting line to begin with text and go to end of frame
         participants.frame = CGRect(x: 0.1*cellWidth!, y: 0.1*cellHeight!, width: 0.55*cellWidth!, height: 0.25*cellHeight!)
@@ -99,7 +90,7 @@ class MessagesTableCell: UITableViewCell {
         messageTimestamp.frame = CGRect(x: 0.7*cellWidth!, y: 0.15*cellHeight!, width: 0.25*cellWidth!, height: 0.2*cellHeight!)
         arrow.frame = CGRect(x: 0.9*cellWidth!, y: 0.375*cellHeight!, width: 0.05*cellWidth!, height: 0.25*cellHeight!)
         
-        messageSnapshot.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.4*cellHeight!, width: 0.8*cellWidth!-0.15*cellHeight!, height: 0.4*cellHeight!)
+        messageSnapshot.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.4*cellHeight!, width: 0.8*cellWidth!-0.15*cellHeight!, height: 0.65*cellHeight!)
         
         notificationDot.frame = CGRect(x: 0.025*cellWidth!, y: 0.4375*cellHeight!, width: 0.15*cellHeight!, height: 0.15*cellHeight!)
         notificationDot.layer.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor

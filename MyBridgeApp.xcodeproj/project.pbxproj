@@ -28,6 +28,7 @@
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
 		CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEFCD761CEDED9600695B15 /* Main.storyboard */; };
 		E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */; };
+		E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */; };
 		E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */; };
 		E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */; };
 		E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */; };
@@ -83,6 +84,7 @@
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD761CEDED9600695B15 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = MyBridgeApp/StatusTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalProfileViewController.swift; path = MyBridgeApp/ExternalProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OptionsFromBotViewController.swift; path = MyBridgeApp/OptionsFromBotViewController.swift; sourceTree = SOURCE_ROOT; };
 		E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMessageTableCell.swift; path = MyBridgeApp/NewMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
 		E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMessageViewController.swift; path = MyBridgeApp/NewMessageViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -182,6 +184,7 @@
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
 				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
+				E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */,
 				E9D6DF0E1D7880B700138A1F /* EditProfileViewController.swift */,
 				CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */,
 				1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */,
@@ -341,6 +344,7 @@
 				E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */,
 				E9D6DF3B1D7882F000138A1F /* Downloader.swift in Sources */,
 				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
+				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,

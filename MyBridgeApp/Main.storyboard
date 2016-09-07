@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="VvB-sH-Hxl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="VvB-sH-Hxl">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -691,11 +691,34 @@
                     <connections>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromSingleMessage" id="00U-Jg-Jap"/>
                         <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesTableFromSingleMessage" id="fLD-mo-7R5"/>
+                        <segue destination="j0v-Ba-HI5" kind="show" identifier="showExternalProfileFromSingleMessage" id="fZF-Uh-rbI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u5J-8h-7eI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1150.5" y="691.5"/>
+        </scene>
+        <!--External Profile View Controller-->
+        <scene sceneID="CaH-1v-N0X">
+            <objects>
+                <viewController id="j0v-Ba-HI5" customClass="ExternalProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="WOF-r8-Smk"/>
+                        <viewControllerLayoutGuide type="bottom" id="GZF-bT-fZd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LA3-Ku-qqJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <segue destination="ABc-Ef-uKn" kind="show" identifier="showSingleMessageFromExternalProfile" id="VqF-EN-U5i"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G58-mu-jE9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1721.5" y="691.5"/>
         </scene>
     </scenes>
     <resources>
@@ -707,10 +730,10 @@
     <inferredMetricsTieBreakers>
         <segue reference="cy1-Ds-r2Z"/>
         <segue reference="5HO-NE-nlq"/>
-        <segue reference="ORi-q2-txU"/>
-        <segue reference="4OI-Nx-18t"/>
         <segue reference="0EB-Fw-YUx"/>
-        <segue reference="B19-eu-GHC"/>
-        <segue reference="RFd-6z-IK0"/>
+        <segue reference="fLD-mo-7R5"/>
+        <segue reference="VqF-EN-U5i"/>
+        <segue reference="wYg-RW-AbN"/>
+        <segue reference="CNh-Pt-C4t"/>
     </inferredMetricsTieBreakers>
 </document>

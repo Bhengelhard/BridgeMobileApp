@@ -16,6 +16,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     let navItem = UINavigationItem()
     let messagesButton = UIButton()
     let leaveConversation = UIButton()
+    let navBarTitleButton =  UIButton(type: .Custom)
+    var userName1 = ""
+    var userId1 = ""
+    var userName2 = ""
+    var userId2 = ""
     
     //Creating the tableView
     let singleMessageTableView = UITableView()
@@ -590,9 +595,27 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         navigationBar.barStyle = .Black
         navigationBar.barTintColor = UIColor.whiteColor()
         
+        /*navBarTitleButton.frame.size = CGSize(width: 0.6*screenWidth, height: navigationBar.frame.height)
+        navBarTitleButton.center.x = navigationBar.center.x
+        navBarTitleButton.center.y = navigationBar.center.y
+        navBarTitleButton.setTitle(singleMessageTitle, forState: UIControlState.Normal)
+        navBarTitleButton.titleLabel?.font = UIFont(name: "Verdana", size: 24)
+        navBarTitleButton.setTitleColor(necterTypeColor, forState: .Normal)
+        navBarTitleButton.setTitleColor(necterYellow, forState: .Highlighted)
+        navBarTitleButton.setTitleColor(necterYellow, forState: .Selected)
+        navBarTitleButton.addTarget(self, action: #selector(navBarTitleButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        navigationBar.topItem?.titleView = navBarTitleButton*/
+        
         self.view.addSubview(navigationBar)
         
     }
+    
+    func navBarTitleButtonTapped(sender: UIButton) {
+        //navBarTitleButton.titleColor
+        navBarTitleButton.selected = true
+        performSegueWithIdentifier("showExternalProfileFromSingleMessage", sender: self)
+    }
+    
     func leaveConversationTapped(sender: UIBarButtonItem) {
         leaveConversation.selected = true
         //create the alert controller
@@ -787,7 +810,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             print("necterTypeColor is set to default")
                     }
                 }
-                self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: self.necterTypeColor]
+                //self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: self.necterTypeColor]
+                //self.navBarTitleButton.titleLabel?.textColor = self.necterTypeColor
             }
         })
         NSNotificationCenter.defaultCenter().removeObserver("reloadTheThread")
@@ -796,6 +820,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), forControlEvents: UIControlEvents.ValueChanged)
         singleMessageTableView.addSubview(refresher)
         navigationBar.topItem?.title = singleMessageTitle
+        //navBarTitleButton.setTitle(singleMessageTitle, forState: UIControlState.Normal)
         singleMessageTableView.registerClass(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
         messageId = newMessageId
         updateMessages()
@@ -829,30 +854,20 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self || mirror.subjectType == MessagesViewController.self {
             self.transitionManager.animationDirection = "Left"
+        } else if mirror.subjectType == ExternalProfileViewController.self {
+            let vc2 = vc as! ExternalProfileViewController
+            vc2.singleMessageTitle = singleMessageTitle
+            vc2.necterTypeColor = necterTypeColor
+            vc2.seguedFrom = seguedFrom
+            //send which button was clicked
+            //send the user's objectId
+            self.transitionManager.animationDirection = "Bottom"
         }
         vc.transitioningDelegate = self.transitionManager
-//        updateMessagesViewed()
-//        if let _ = self.navigationController{
-//            print("no - \(navigationController?.viewControllers.count)")
-//            if (navigationController?.viewControllers.count)! > 1 {
-//                for _ in (1..<(navigationController?.viewControllers.count)!).reverse()  {
-//                    navigationController?.viewControllers.removeAtIndex(0)
-//                }
-//            }
-//            
-//            navigationController?.viewControllers.removeAll()
-//        }
-
-        
-        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        //return messageTextArray.count
-        //print("objectIDToMessageContentArrayMapping.count - \(objectIDToMessageContentArrayMapping.count)")
         return objectIDToMessageContentArrayMapping.count
-        
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -922,8 +937,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
             messageTextLabel.frame = newFrame
             messageHeight = messageTextLabel.frame.height
-            
-            //print("tableView \(indexPath.row) : \(newFrame.height)")
         }
         return messageHeight + senderNameLabel.frame.height + timestampLabel.frame.height + CGFloat(2)
         
