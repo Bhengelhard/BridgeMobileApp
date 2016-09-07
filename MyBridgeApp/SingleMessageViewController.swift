@@ -43,6 +43,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     var seguedFrom = ""
     var messageId = String()
     var singleMessageTitle = "Conversation"
+    var firstTableAppearance = true
     
     //necter Colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
@@ -113,9 +114,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         self.singleMessagePositionToObjectIDMapping = [Int:String]()
         self.updateMessages()
     }
+    
     func updateMessages() {
         singleMessageTableView.userInteractionEnabled = false
-        //print("messageId is \(messageId)")
+        
         let query: PFQuery = PFQuery(className: "SingleMessages")
         query.whereKey("message_id", equalTo: messageId)
         query.orderByDescending("createdAt")
@@ -170,7 +172,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     if let previousDate = previousDate {
                         let components = calendar.components([.Minute],
                             fromDate: previousDate, toDate: date, options: NSCalendarOptions.WrapComponents)
-                        //print("components.minute - \(components.minute)")
                         if components.minute > 2 {
                             showTimestamp = true
                         }
@@ -178,10 +179,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             showTimestamp = false
                         }
                     }
-                    //print("date - \(date), toDate - \(NSDate())")
                     let components = calendar.components([.Day],
                             fromDate: date, toDate: NSDate(), options: [])
-                    //print(components)
                     if components.day > 7 {
                         let dateFormatter = NSDateFormatter()
                         dateFormatter.dateFormat = "MM/dd/yyy"
@@ -209,7 +208,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     previousSenderName = senderName
                     previousSenderId = senderId
                     previousDate = date
-                    //update the older entry's previousSenderName, Id and timestamp
                     if (i == 0 && self.objectIDToMessageContentArrayMapping.count > results.count){
                         var show = false
                         let temp = self.objectIDToMessageContentArrayMapping[self.singleMessagePositionToObjectIDMapping[results.count]!]!
@@ -228,7 +226,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 }
                 else {
                     //results.count <= 0, so no messages label should be displayed since there are no messages to add with the update and there are no messages currently displayed
-                    
                     query.countObjectsInBackgroundWithBlock{
                         (count: Int32, error: NSError?) -> Void in
                         //print("returned")
@@ -249,12 +246,12 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 
             }
             self.updateNoOfPushNotificationsOnBadge()
-            //self.updateMessagesViewed()
             dispatch_async(dispatch_get_main_queue(), {
                 self.refresher.endRefreshing()
                 self.singleMessageTableView.reloadData()
-                if self.objectIDToMessageContentArrayMapping.count >= 1 {
+                if self.firstTableAppearance && self.objectIDToMessageContentArrayMapping.count >= 1 {
                     self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: false)
+                    self.firstTableAppearance = false
                 }
                 self.singleMessageTableView.userInteractionEnabled = true
             })

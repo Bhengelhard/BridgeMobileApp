@@ -134,7 +134,7 @@ class SingleMessageTableCell: UITableViewCell {
 //            addSenderName = false
         }
         if senderId == PFUser.currentUser()?.objectId {
-        messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/3.0, y, UIScreen.mainScreen().bounds.width/1.5, 25)
+            messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/3.0, y, UIScreen.mainScreen().bounds.width/1.5, 25)
         }
         else {
             var width = (UIScreen.mainScreen().bounds.width/1.5)
@@ -152,6 +152,9 @@ class SingleMessageTableCell: UITableViewCell {
             newSize.width = 33
             messageTextLabel.textContainer.maximumNumberOfLines = 1
         }
+        if newSize.height < 33 {
+            newSize.height = 33
+        }
         var x = 0.05*screenWidth
         if senderId == PFUser.currentUser()?.objectId {
             x = 0.95*screenWidth - newSize.width
@@ -161,12 +164,11 @@ class SingleMessageTableCell: UITableViewCell {
         messageTextLabel.layer.borderWidth = 1
         if messageTextLabel.text.characters.count < 3 {
             messageTextLabel.layer.cornerRadius = messageTextLabel.frame.width/2.0
-             messageTextLabel.textAlignment = NSTextAlignment.Center
+            messageTextLabel.textAlignment = NSTextAlignment.Center
         } else {
             messageTextLabel.layer.cornerRadius = 15
         }
         messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.CGColor
-        
     }
     override func awakeFromNib() {
         super.awakeFromNib()
