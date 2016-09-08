@@ -728,12 +728,12 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cy1-Ds-r2Z"/>
-        <segue reference="5HO-NE-nlq"/>
         <segue reference="0EB-Fw-YUx"/>
+        <segue reference="5HO-NE-nlq"/>
+        <segue reference="Lus-h1-21q"/>
+        <segue reference="HGT-Vo-Kl8"/>
+        <segue reference="CNh-Pt-C4t"/>
         <segue reference="fLD-mo-7R5"/>
         <segue reference="VqF-EN-U5i"/>
-        <segue reference="wYg-RW-AbN"/>
-        <segue reference="CNh-Pt-C4t"/>
     </inferredMetricsTieBreakers>
 </document>

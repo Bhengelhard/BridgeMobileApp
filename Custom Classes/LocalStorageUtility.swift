@@ -72,7 +72,7 @@ class LocalStorageUtility{
             let rejectedBridges2 = rejectedBridges as! [[String]]
             ignoredPairings = ignoredPairings + rejectedBridges2
         }
-        var friendPairings =  [[String]]()
+        let friendPairings =  [[String]]()
         for friend1 in friendList {
             for friend2 in friendList {
                 let containedInIgnoredPairings = ignoredPairings.contains {$0 == [friend1, friend2]} || ignoredPairings.contains {$0 == [friend2, friend1]}
@@ -555,7 +555,7 @@ class LocalStorageUtility{
                     bridge_status = ob as? String
                 }
                 
-                user = PairInfo(name:name, mainProfilePicture: main_profile_picture_file?.url, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil, userId: nil, city: nil )
+                user = PairInfo(name:name, mainProfilePicture: main_profile_picture_file?.url, profilePictures: nil,location: location, bridgeStatus: bridge_status, objectId: object.objectId,  bridgeType: nil, userId: nil, city: nil, savedProfilePicture: nil)
             }
         }
         catch {
@@ -859,8 +859,8 @@ class LocalStorageUtility{
                         }
                         result.saveInBackground()
                         
-                        user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
-                        user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
+                        user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1, savedProfilePicture: nil)
+                        user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2, savedProfilePicture: nil)
                         let userInfoPair = UserInfoPair(user1: user1, user2: user2)
                         pairings.append(userInfoPair)
                         print("userId1, userId2 - \(userId1),\(userId2)")

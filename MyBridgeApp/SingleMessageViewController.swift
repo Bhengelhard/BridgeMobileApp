@@ -758,6 +758,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         messageText.resignFirstResponder()
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         singleMessageTableView.delegate = self
@@ -806,6 +807,40 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             self.necterTypeColor = self.friendshipGreen
                             print("necterTypeColor is set to default")
                     }
+                    
+                    //setting the singleMessageTitle
+                    if self.singleMessageTitle == "Conversation" {
+                        var stringOfNames = ""
+                        if var users = object["names_in_message"] as? [String] {
+                            users = users.filter { $0 != PFUser.currentUser()?["name"] as! String }
+                            for i in 0 ..< users.count  {
+                                var name = users[i]
+                                if users.count > 2 && i < users.count - 2 {
+                                    var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
+                                    stringOfNames = stringOfNames + fullNameArr[0] + ", "
+                                    
+                                } else if users.count >= 2 && i == users.count - 2 {
+                                    var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
+                                    stringOfNames = stringOfNames + fullNameArr[0] + " & "
+                                    
+                                }
+                                else {
+                                    if users.count > 1{
+                                        name = name.characters.split{$0 == " "}.map(String.init)[0]
+                                    }
+                                    stringOfNames = stringOfNames + name
+                                }
+                            }
+                            self.singleMessageTitle = stringOfNames
+                        }
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.navigationBar.topItem?.title = self.singleMessageTitle
+                            self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: self.necterTypeColor]
+                        })
+                    }
+                    
+                    
+                    
                 }
                 //self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: self.necterTypeColor]
                 //self.navBarTitleButton.titleLabel?.textColor = self.necterTypeColor
@@ -816,12 +851,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), forControlEvents: UIControlEvents.ValueChanged)
         singleMessageTableView.addSubview(refresher)
+
         navigationBar.topItem?.title = singleMessageTitle
+        
         //navBarTitleButton.setTitle(singleMessageTitle, forState: UIControlState.Normal)
         singleMessageTableView.registerClass(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
         messageId = newMessageId
         updateMessages()
-       
+        
+        
         // Do any additional setup after loading the view.
     }
     override func viewDidLayoutSubviews() {

@@ -10,13 +10,14 @@ import Foundation
 import UIKit
 
 class Downloader {
-    class func load(URL: NSURL, imageView:UIImageView) {
+    class func load(URL: NSURL, imageView:UIImageView, bridgePairingObjectId: String?, isUpperDeckCard: Bool) {
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "GET"
         let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             if (error == nil && data != nil) {
+                
                 
                 //applying filter to make the white text more legible
                 let beginImage = CIImage(data: data!)
@@ -28,13 +29,24 @@ class Downloader {
                 //edgeDetectFilter.setValue(CIImage(image: edgeDetectFilter.outputImage!), forKey: kCIInputImageKey)
                 let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, fromRect: (edgeDetectFilter.outputImage?.extent)!)
                 
+                if let pairings = LocalData().getPairings() {
+                    for pair in pairings {
+                        if pair.user1?.objectId == bridgePairingObjectId {
+                            if isUpperDeckCard {
+                                pair.user1?.savedProfilePicture = data
+                            }
+                            else {
+                                pair.user2?.savedProfilePicture = data
+                            }
+                            let localData = LocalData()
+                            localData.setPairings(pairings)
+                            localData.synchronize()
+                        }
+                    }
+                }
+                
                 
                 let newImage = UIImage(CGImage: newCGImage)
-                //let newImage = UIImage(data: data!)
-                //newImage.resizableImageWithCapInsets(UIEdgeInsetsZero)
-                
-                
-                //img2.image = newImage
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     //imageView.image = UIImage(data: data!)

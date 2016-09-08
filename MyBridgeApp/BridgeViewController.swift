@@ -211,14 +211,14 @@ class BridgeViewController: UIViewController {
     }
     func getUpperDeckCard(name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing: UserInfoPair) -> UIView{
         let frame = getUpperDeckCardFrame()
-        return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag: 0)
+        return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag: 0, isUpperDeckCard: true)
         
     }
     func getLowerDeckCard(name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing: UserInfoPair) -> UIView{
         let frame = getLowerDeckCardFrame()
-        return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag:1)
+        return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag:1, isUpperDeckCard: false)
     }
-    func getCard(deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int) -> UIView {
+    func getCard(deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int, isUpperDeckCard: Bool) -> UIView {
         
         let locationFrame = CGRectMake(0.05*cardWidth,0.18*cardHeight,0.8*cardWidth,0.075*cardHeight)
         let statusFrame = CGRectMake(0.05*cardWidth,0.65*cardHeight,0.9*cardWidth,0.3*cardHeight)
@@ -277,11 +277,56 @@ class BridgeViewController: UIViewController {
         statusLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
         let photoView = UIImageView(frame: photoFrame)
-        if let photo = photo{
-        if let URL = NSURL(string: photo) {
-            Downloader.load(URL, imageView: photoView)
+        if isUpperDeckCard {
+            if let data = pairing.user1?.savedProfilePicture {
+                //applying filter to make the white text more legible
+                let beginImage = CIImage(data: data)
+                let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+                edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+                edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+                edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+                
+                let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, fromRect: (edgeDetectFilter.outputImage?.extent)!)
+                
+                let newImage = UIImage(CGImage: newCGImage)
+                photoView.image = newImage
+                photoView.contentMode = UIViewContentMode.ScaleAspectFill
+                photoView.clipsToBounds = true
+            }
+            else {
+                if let photo = photo{
+                    if let URL = NSURL(string: photo) {
+                        Downloader.load(URL, imageView: photoView, bridgePairingObjectId: pairing.user1?.objectId, isUpperDeckCard: isUpperDeckCard)
+                    }
+                }
+            }
         }
+        else {
+            if let data = pairing.user2?.savedProfilePicture {
+                //applying filter to make the white text more legible
+                let beginImage = CIImage(data: data)
+                let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+                edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+                edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+                edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+                
+                let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, fromRect: (edgeDetectFilter.outputImage?.extent)!)
+                
+                let newImage = UIImage(CGImage: newCGImage)
+                photoView.image = newImage
+                photoView.contentMode = UIViewContentMode.ScaleAspectFill
+                photoView.clipsToBounds = true
+            }
+            else {
+                if let photo = photo{
+                    if let URL = NSURL(string: photo) {
+                        Downloader.load(URL, imageView: photoView, bridgePairingObjectId: pairing.user2?.objectId, isUpperDeckCard: isUpperDeckCard)
+                    }
+                }
+            }
+            
         }
+        
 
 //        if photo != nil {
 //            photo!.getDataInBackgroundWithBlock({ (data, error) in
@@ -635,7 +680,7 @@ class BridgeViewController: UIViewController {
         view.addSubview(postStatusButton)
     }
     // downloads  bridge pairings of different types depending upon the typeOfCards
-    func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String, callBack: ((bridgeType: String)->Void)?, bridgeType: String?){
+    func getBridgePairings(maxNoOfCards:Int, typeOfCards:String, callBack: ((bridgeType: String)->Void)?, bridgeType: String?){
         if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
             displayNoMoreCardsLabel.removeFromSuperview()
             self.displayNoMoreCardsLabel = nil
@@ -679,7 +724,7 @@ class BridgeViewController: UIViewController {
                         query.findObjectsInBackgroundWithBlock ({ (results, error) -> Void in
                             var noOfResults = 0
                                 if let results = results {
-                                var aboveView:UIView? = self.lastCardInStack
+                                
                                 for result in results {
                                     noOfResults += 1
                                     var user1:PairInfo? = nil
@@ -764,8 +809,8 @@ class BridgeViewController: UIViewController {
                                         profilePictureFile2 = ob.url
                                     }
                                     result.saveInBackground()
-                                    user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1)
-                                    user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2)
+                                    user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1, savedProfilePicture: nil)
+                                    user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2, savedProfilePicture: nil)
                                     let userInfoPair = UserInfoPair(user1: user1, user2: user2)
                                     let bridgePairings = self.localData.getPairings()
                                     var pairings = [UserInfoPair]()
@@ -786,7 +831,7 @@ class BridgeViewController: UIViewController {
                                         }
                                         let bridgeType = bridgeType1 ?? "Business"
                                         let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
-                                        
+                                        var aboveView:UIView? = self.lastCardInStack
                                         aboveView = self.addCardPairView(aboveView, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, name2: name2, location2: city2, status2: bridgeStatus1, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
                                         self.lastCardInStack = aboveView!
                                         
@@ -893,10 +938,29 @@ class BridgeViewController: UIViewController {
                     self.badgeCount = 0
                     for i in 0..<results.count{
                         let result = results[i]
-                        if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(result["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
-                            let noOfMessagesViewed = noOfSingleMessagesViewed[(PFUser.currentUser()?.objectId)!] ?? 0
-                            self.badgeCount += (result["no_of_single_messages"] as! Int) - noOfMessagesViewed
+                        if let _ = result["message_viewed"] {
+                            let whoViewed = result["message_viewed"] as! ([String])
+                            if whoViewed.contains((PFUser.currentUser()?.objectId)!) {
+                                self.badgeCount += 0 //(true)
+                                //print("1")
+                            }
+                            else {
+                                self.badgeCount += 1//(false)
+                                //print("2")
+                            }
                         }
+                        else {
+                            self.badgeCount += 1//(false)
+                            //print("3")
+                        }
+                        
+                        /*if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObjectWithData(result["no_of_single_messages_viewed"] as! NSData)! as? [String:Int] {
+                            let noOfMessagesViewed = noOfSingleMessagesViewed[(PFUser.currentUser()?.objectId)!] ?? 0
+                            print("noOfMessagesViewed \(noOfMessagesViewed)")
+                            self.badgeCount += (result["no_of_single_messages"] as! Int) - noOfMessagesViewed
+                            print("result[no_of_single_messages] \(result["no_of_single_messages"])")
+                            print(result.objectId)
+                        }*/
                     }
                     dispatch_async(dispatch_get_main_queue(), {
                         //self.badgeCount = 0
@@ -929,7 +993,7 @@ class BridgeViewController: UIViewController {
         
         let bridgePairings = localData.getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
-            getBridgePairingsFromCloud(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+            getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
         }
         else {
             displayCards()
@@ -1332,14 +1396,14 @@ class BridgeViewController: UIViewController {
             bridgePairings.removeAtIndex(x)
             localData.setPairings(bridgePairings)
             localData.synchronize()
-            getBridgePairingsFromCloud(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
+            getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
             segueToSingleMessage = true
             performSegueWithIdentifier("showSingleMessage", sender: nil)
             //pagingSpinner.stopAnimating()
             //pagingSpinner.removeFromSuperview()
         }
     }
-    func nextPairHelper(bridgeType:String) -> Void {
+    func callbackForNextPair(bridgeType:String) -> Void {
         if arrayOfCardsInDeck.count > 0 {
             arrayOfCardsInDeck.removeAtIndex(0)
             arrayOfCardColors.removeAtIndex(0)
@@ -1347,33 +1411,57 @@ class BridgeViewController: UIViewController {
                 arrayOfCardsInDeck[0].userInteractionEnabled = true
             }
             else {
-                
-                //create the alert controller
-                let alert = UIAlertController(title: "Revisit Pairs of Friends?", message: "You have ran out of pairs to connect. Would you like to revisit the ones you passed on?", preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
-                    self.displayNoMoreCards()
-                    
-                }))
-                alert.addAction(UIAlertAction(title: "Revisit", style: .Default, handler: { (action) in
-                    PFCloud.callFunctionInBackground("revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)]) {
-                        (response: AnyObject?, error: NSError?) -> Void in
-                        if error == nil {
-                            if let response = response as? String {
-                                print(response)
+                lastCardInStack = nil
+                //check if a bridgePairing is already stored in localData
+                var bridgePairingAlreadyStored = false
+                if currentTypeOfCardsOnDisplay == typesOfCard.All {
+                    let pairings = localData.getPairings()
+                    if pairings != nil && pairings?.count > 0 {
+                        print("bridgePairingAlreadyStored set to true " + String(pairings?.count))
+                        bridgePairingAlreadyStored = true
+                    }
+                }
+                else {
+                    if let bridgePairings = localData.getPairings() {
+                        for pair in bridgePairings {
+                            if pair.user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(currentTypeOfCardsOnDisplay) {
+                                bridgePairingAlreadyStored = true
                             }
-                            self.lastCardInStack = nil
-                            self.getBridgePairingsFromCloud(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
                         }
                     }
-                }))
-                self.presentViewController(alert, animated: true, completion: nil)
+                }
+                
+                
+                
+                if bridgePairingAlreadyStored == false {
+                    //create the alert controller
+                    let alert = UIAlertController(title: "Revisit Pairs of Friends?", message: "You have ran out of pairs to connect. Would you like to revisit the ones you passed on?", preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) in
+                        self.displayNoMoreCards()
+                        
+                    }))
+                    alert.addAction(UIAlertAction(title: "Revisit", style: .Default, handler: { (action) in
+                        PFCloud.callFunctionInBackground("revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)]) {
+                            (response: AnyObject?, error: NSError?) -> Void in
+                            if error == nil {
+                                if let response = response as? String {
+                                    print(response)
+                                }
+                                self.lastCardInStack = nil
+                                self.getBridgePairings(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
+                            }
+                        }
+                    }))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
                 
             }
+            
         }
 
     }
     func nextPair(){
-        // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in NextPairHelper. cIgAr - 08/25/16
+        // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in callbackForNextPair. cIgAr - 08/25/16
         let bridgePairings = localData.getPairings()
         if var bridgePairings = bridgePairings {
             var x = 0
@@ -1403,7 +1491,7 @@ class BridgeViewController: UIViewController {
             localData.setPairings(bridgePairings)
             localData.synchronize()
             
-            getBridgePairingsFromCloud(1, typeOfCards: bridgeType, callBack: nextPairHelper, bridgeType:bridgeType)
+            getBridgePairings(1, typeOfCards: bridgeType, callBack: callbackForNextPair, bridgeType:bridgeType)
             }
     }
     

@@ -1,6 +1,6 @@
 //
 //  PairInfo.swift
-//  HitList
+//  MyBridgeApp
 //
 //  Created by Sagar Sinha on 6/14/16.
 //  Copyright © 2016 SagarSinha. All rights reserved.
@@ -16,10 +16,11 @@ class PairInfo:NSObject, NSCoding {
     var location:[Double]? = nil
     var bridgeStatus:String? = nil
     var city:String? = nil
+    var savedProfilePicture:NSData? = nil
 //    var profilePicturePFFile:PFFile? = nil
     var bridgeType:String? = nil
     var userId:String? = nil
-    init( name:String?, mainProfilePicture: String?, profilePictures: [NSData]?, location:[Double]?, bridgeStatus:String?, objectId:String?,bridgeType:String?,userId:String?,city:String? ) { //, profilePicturePFFile:PFFile?
+    init( name:String?, mainProfilePicture: String?, profilePictures: [NSData]?, location:[Double]?, bridgeStatus:String?, objectId:String?,bridgeType:String?,userId:String?,city:String?, savedProfilePicture:NSData? ) {
         self.name = name
         self.mainProfilePicture = mainProfilePicture
         self.profilePictures = profilePictures
@@ -30,6 +31,7 @@ class PairInfo:NSObject, NSCoding {
         self.bridgeType = bridgeType
         self.userId = userId
         self.city = city
+        self.savedProfilePicture = savedProfilePicture
         
     }
     
@@ -44,8 +46,9 @@ class PairInfo:NSObject, NSCoding {
         let bridgeType = aDecoder.decodeObjectForKey("bridgeType") as! String?
         let userId = aDecoder.decodeObjectForKey("userId") as! String?
         let city = aDecoder.decodeObjectForKey("city") as! String?
+        let savedProfilePicture = aDecoder.decodeObjectForKey("savedProfilePicture") as! NSData?
         self.init(name: name, mainProfilePicture: mainProfilePicture, profilePictures: profilePictures,
-                  location: location, bridgeStatus: bridgeStatus, objectId:objectId, bridgeType: bridgeType, userId:userId, city: city )
+                  location: location, bridgeStatus: bridgeStatus, objectId:objectId, bridgeType: bridgeType, userId:userId, city: city, savedProfilePicture: savedProfilePicture)
         //, profilePicturePFFile: profilePicturePFFile
     }
     
@@ -60,7 +63,7 @@ class PairInfo:NSObject, NSCoding {
         aCoder.encodeObject(bridgeType, forKey: "bridgeType")
         aCoder.encodeObject(userId, forKey: "userId")
         aCoder.encodeObject(city, forKey: "city")
-        
+        aCoder.encodeObject(savedProfilePicture, forKey: "savedProfilePicture")
     }
     
 }

@@ -856,6 +856,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             cell.notificationDot.hidden = false
         }
+        
         switch messageType[messagePositionToMessageIdMapping[indexPath.row]!]!{
             
         case "Business":

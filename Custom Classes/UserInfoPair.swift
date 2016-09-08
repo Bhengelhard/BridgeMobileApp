@@ -1,6 +1,6 @@
 //
 //  UserInfoPair.swift
-//  HitList
+//  MyBridgeApp
 //
 //  Created by Sagar Sinha on 6/14/16.
 //  Copyright © 2016 SagarSinha. All rights reserved.
