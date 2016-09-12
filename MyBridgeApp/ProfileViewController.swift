@@ -487,21 +487,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         if indexPath.row == 0 {
             performSegueWithIdentifier("showEditProfileViewFromProfilePage", sender: self)
-        } /*else if indexPath.row == 1 {
+        } else if indexPath.row == 1 {
             
-            
-        } else if indexPath.row == 2 {
-            
-            
-            
-        }*/else if indexPath.row == 1 {
-            
-            //opens user's email application with email ready to be sent to bridge email
-            
-            let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
-            let encodedParams = "subject=\(subject)"
-            let email = "blake@necter.social"
-            let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
+            //opens user's email application with email ready to be sent to necter email -> commented out and replaced with link to survey
+            //let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
+            //let encodedParams = "subject=\(subject)"
+            //let email = "blake@necter.social"
+            //let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
+            let surveyURL = "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR"
+            let url = NSURL(string: "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR")
             
             if UIApplication.sharedApplication().canOpenURL(url!) {
                 
