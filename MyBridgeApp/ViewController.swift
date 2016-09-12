@@ -234,6 +234,11 @@ class ViewController: UIViewController {
                     
                     
                     
+                } else {
+                    print("there is no user")
+                    self.activityIndicator.stopAnimating()
+                    UIApplication.sharedApplication().endIgnoringInteractionEvents()
+
                 }
             }
         }

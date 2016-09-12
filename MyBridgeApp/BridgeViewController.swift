@@ -276,6 +276,7 @@ class BridgeViewController: UIViewController {
         statusLabel.layer.shadowColor = UIColor.blackColor().CGColor
         statusLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
         
+        //card's profile pictures are retrieved if they are already saved to the phone using mapping to the associated bridgePairing objectId and the position of the card (i.e. either upperDeckCard or not)
         let photoView = UIImageView(frame: photoFrame)
         if isUpperDeckCard {
             if let data = pairing.user1?.savedProfilePicture {
@@ -1430,8 +1431,6 @@ class BridgeViewController: UIViewController {
                         }
                     }
                 }
-                
-                
                 
                 if bridgePairingAlreadyStored == false {
                     //create the alert controller
