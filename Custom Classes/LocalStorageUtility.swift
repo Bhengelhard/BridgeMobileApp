@@ -620,6 +620,12 @@ class LocalStorageUtility{
                                     //add updated friendlist to the user's device
                                     
                                     //Update Iphone's local storage and Parse to store the friendlist with newly added fb friends -> this does not remove friends from facebook that were unfriended on Facebook
+                                    
+                                    //error with var parseFriendList = = PFUser.currentUser()?["friend_list"] as? [String]
+                                    //var parseFriendList = [String]()
+                                    /*if let foundFriendList = PFUser.currentUser()?["friend_list"] as? [String] {
+                                        parseFriendList = foundFriendList
+                                    }*/
                                     let parseFriendList = PFUser.currentUser()?["friend_list"] as? [String] ?? []
                                     let localData = LocalData()
                                     //adding newly added fb friends to the user's friendlist

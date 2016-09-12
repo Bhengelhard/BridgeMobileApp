@@ -146,6 +146,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         }
         let localData = LocalData()
         localData.setUsername(editableName)
+        localData.setHasSignedUp(true)
         localData.synchronize()
         
         performSegueWithIdentifier("showBridgePageFromSignUpView", sender: self)

@@ -92,6 +92,7 @@
                         <outlet property="appName" destination="Smv-xO-RG3" id="wPU-x5-w7P"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginFromLoadPage" animates="NO" id="HGT-Vo-Kl8"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromLoadPage" id="Lus-h1-21q"/>
+                        <segue destination="nIP-ev-yX8" kind="show" identifier="showSignupFromLoadPage" id="NMz-iK-zUZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="622-Vr-V33" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -728,12 +729,13 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="0EB-Fw-YUx"/>
-        <segue reference="5HO-NE-nlq"/>
-        <segue reference="Lus-h1-21q"/>
+        <segue reference="NMz-iK-zUZ"/>
         <segue reference="HGT-Vo-Kl8"/>
+        <segue reference="Lus-h1-21q"/>
         <segue reference="CNh-Pt-C4t"/>
         <segue reference="fLD-mo-7R5"/>
         <segue reference="VqF-EN-U5i"/>
+        <segue reference="5HO-NE-nlq"/>
+        <segue reference="0EB-Fw-YUx"/>
     </inferredMetricsTieBreakers>
 </document>

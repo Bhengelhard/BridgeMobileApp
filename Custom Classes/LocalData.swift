@@ -19,6 +19,7 @@ class LocalData {
     var newBridgesPushNotifications:Bool? = nil
     var firstTimeSwipingRight:Bool? = nil
     var firstTimeSwipingLeft:Bool? = nil
+    var hasSignedUp:Bool? = nil
     init(){
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let decoded = userDefaults.objectForKey("userInfo") {
@@ -33,7 +34,22 @@ class LocalData {
                 newBridgesPushNotifications = (userInfo as! UserInfo).newBridgesPushNotifications
                 firstTimeSwipingRight = (userInfo as! UserInfo).firstTimeSwipingRight
                 firstTimeSwipingLeft = (userInfo as! UserInfo).firstTimeSwipingLeft
+                hasSignedUp = (userInfo as! UserInfo).hasSignedUp
             }
+        }
+    }
+    func setHasSignedUp(hasSignedUp:Bool){
+        self.hasSignedUp = hasSignedUp
+    }
+    func getHasSignedUp()->Bool? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let _ = userDefaults.objectForKey("userInfo"){
+            let decoded  = userDefaults.objectForKey("userInfo") as! NSData
+            let userInfo = NSKeyedUnarchiver.unarchiveObjectWithData(decoded) as! UserInfo
+            return userInfo.hasSignedUp
+        }
+        else{
+            return nil
         }
     }
     
@@ -213,7 +229,7 @@ class LocalData {
     
     func synchronize(){
         //print("Setting mainProfilePicture to \(mainProfilePicture)")
-        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft)
+        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp)
         let userDefaults = NSUserDefaults.standardUserDefaults()
         let encodedData = NSKeyedArchiver.archivedDataWithRootObject(userInfo)
         userDefaults.setObject(encodedData, forKey: "userInfo")

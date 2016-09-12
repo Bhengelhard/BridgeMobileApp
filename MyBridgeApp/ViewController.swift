@@ -39,12 +39,14 @@ class ViewController: UIViewController {
         
         let localData = LocalData()
         
-        //setting first Time Swiping Right to false so the user will be notified of what swiping does for their first swipe
+        //setting first Time Swiping Right to true so the user will be notified of what swiping does for their first swipe
         localData.setFirstTimeSwipingRight(true)
-        localData.synchronize()
         
-        //setting first Time SwipingRight to false so the user will be notified of what swiping does for their first swipe
+        //setting first Time SwipingRight to true so the user will be notified of what swiping does for their first swipe
         localData.setFirstTimeSwipingLeft(true)
+        
+        //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
+        localData.setHasSignedUp(false)
         localData.synchronize()
         
         //Log user in with permissions public_profile, email and user_friends
