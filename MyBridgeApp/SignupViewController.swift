@@ -17,7 +17,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     //@IBOutlet weak var main_title: UILabel!
     let mainTitle = UILabel()
     @IBOutlet weak var nameTextField: UITextField!
-    @IBOutlet weak var editImageButton: UIButton!
+    let profilePictureButton = UIButton()
+    let profilePictureView = UIImageView()
+    //@IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var friendshipLabel: UILabel!
     @IBOutlet weak var loveLabel: UILabel!
     @IBOutlet weak var businessLabel: UILabel!
@@ -46,9 +48,16 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     let imagePicker = UIImagePickerController()
     var editableName:String = ""
     let noNameText = "Click to enter your full name"
-    
-    
-    @IBAction func editImageTapped(sender: AnyObject) {
+
+    func profilePictureTouchDown(sender: AnyObject) {
+        profilePictureButton.layer.borderColor = necterYellow.CGColor
+    }
+    func profilePictureTouchDragExit(sender: AnyObject) {
+        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+    }
+    func profilePictureTapped(sender: AnyObject) {
+        profilePictureButton.layer.borderColor = necterYellow.CGColor
+        
         let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.Default)
         {
@@ -63,6 +72,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
         {
             UIAlertAction in
+            self.profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
         }
         
         // Add the actions
@@ -92,6 +102,40 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         self.presentViewController(imagePicker, animated: true, completion: nil)
     }
+    
+    //update the UIImageView once an image has been picked
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            let fixedPickedImage = fixOrientation(pickedImage)
+            profilePictureView.image = fixedPickedImage
+            //profilePictureButton.setBackgroundImage(fixedPickedImage, forState: .Normal)
+        }
+        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    //fix the orientation of the image picked by the ImagePickerController
+    func fixOrientation(img:UIImage) -> UIImage {
+        
+        if (img.imageOrientation == UIImageOrientation.Up) {
+            return img;
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale);
+        let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
+        img.drawInRect(rect)
+        
+        let normalizedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        return normalizedImage;
+        
+    }
+/*
 
     //update the UIImageView once an image has been picked
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
@@ -118,7 +162,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
-    }
+    }*/
     //stopping user from entering name with length greater than 25
     @IBAction func nameTextFieldChanges(sender: AnyObject) {
         if let characterCount = nameTextField.text?.characters.count {
@@ -133,6 +177,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     //Begin Connecting Button Clicked
     func beginConnectingTapped(send: UIButton) {
         beginConnectingButton.layer.borderColor = necterYellow.CGColor
+        
         if let _ = PFUser.currentUser() {
             PFUser.currentUser()?["name"] = editableName
             PFUser.currentUser()?["interested_in_business"] = businessSwitch.on
@@ -144,7 +189,12 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
                 }
             })
         }
+        let pickedImage = profilePictureView.image
+        
         let localData = LocalData()
+        if let imageData = UIImageJPEGRepresentation(pickedImage!, 1.0){
+            localData.setMainProfilePicture(imageData)
+        }
         localData.setUsername(editableName)
         localData.setHasSignedUp(true)
         localData.synchronize()
@@ -184,8 +234,44 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         }
     }
 
-    
+    //get and display the profile picture view and associated button for editing the profile picture
+    func displayProfilePictureButton() {
+        let mainProfilePicture = LocalData().getMainProfilePicture()
+        if let mainProfilePicture = mainProfilePicture {
+            let image = UIImage(data:mainProfilePicture,scale:1.0)
+            profilePictureView.image = image
+        } else {
+            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+            if let pfData = pfData {
+                pfData.getDataInBackgroundWithBlock({ (data, error) in
+                    if error != nil || data == nil {
+                        print(error)
+                    } else {
+                        let image = UIImage(data: data!, scale: 1.0)
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.profilePictureView.image = image
+                        })
+                    }
+                })
+            }
+            
+        }
+        
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDown(_:)), forControlEvents: .TouchDown)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDragExit(_:)), forControlEvents: .TouchDragExit)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
+        profilePictureButton.layer.borderWidth = 4
+        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        profilePictureButton.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureButton.backgroundColor = UIColor.clearColor()
+        
+        profilePictureView.contentMode = UIViewContentMode.ScaleAspectFill
+        
+        self.view.addSubview(profilePictureView)
+        self.view.addSubview(profilePictureButton)
+    }
 
+    
     override func viewDidLoad() {
                 super.viewDidLoad()
         
@@ -234,25 +320,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         outsideTapGesture.numberOfTapsRequired = 1
         view.addGestureRecognizer(outsideTapGesture)
         
-        let mainProfilePicture = LocalData().getMainProfilePicture()
-        if let mainProfilePicture = mainProfilePicture {
-            let image = UIImage(data:mainProfilePicture,scale:1.0)
-            editImageButton.setImage(image, forState: .Normal)
-        } else {
-            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
-            if let pfData = pfData {
-                pfData.getDataInBackgroundWithBlock({ (data, error) in
-                    if error != nil || data == nil {
-                        print(error)
-                    } else {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.editImageButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
-                        })
-                    }
-                })
-            }
-            
-        }
+        displayProfilePictureButton()
+    
         if mainTitle.text == noNameText {
             beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
             beginConnectingButton.setTitleColor(UIColor.grayColor(), forState: .Normal)
@@ -313,6 +382,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         //mainTitle.textColor = UIColor.lightGrayColor()
         mainTitle.textColor = UIColor.lightGrayColor()
         mainTitle.attributedText = twoColoredString(mainTitle.text!, partLength: 12, start: 12, color: UIColor.blackColor())
+        
+        
+        
         self.view.addSubview(mainTitle)
         self.view.addSubview(beginConnectingButton)
         self.view.addSubview(updateLaterLabel)
@@ -340,10 +412,14 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         //placing elements on smaller sized iPhones
             mainTitle.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.15*screenHeight)
             nameTextField.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
-            editImageButton.frame = CGRect(x: 0, y:0.19*screenHeight, width:0.23*screenHeight, height:0.23*screenHeight)
-            editImageButton.center.x = self.view.center.x
-            editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
-            editImageButton.clipsToBounds = true
+            profilePictureButton.frame = CGRect(x: 0, y:0.19*screenHeight, width:0.23*screenHeight, height:0.23*screenHeight)
+            profilePictureButton.center.x = self.view.center.x
+            profilePictureButton.layer.cornerRadius = profilePictureButton.frame.size.width/2
+            profilePictureButton.clipsToBounds = true
+            profilePictureView.frame = CGRect(x: 0, y:0.19*screenHeight, width:0.23*screenHeight, height:0.23*screenHeight)
+            profilePictureView.center.x = self.view.center.x
+            profilePictureView.layer.cornerRadius = profilePictureView.frame.size.width/2
+            profilePictureView.clipsToBounds = true
             interestedLabel.frame = CGRect(x:0.05*screenWidth , y:0.45*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
             businessIcon.frame = CGRect(x:0.125*screenWidth , y:0.55*screenHeight, width:0.1*screenWidth, height:0.1*screenWidth)
             businessLabel.frame = CGRect(x:0.25*screenWidth , y:0, width:0.4*screenWidth, height:0.04*screenHeight)
@@ -367,10 +443,14 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         //placing elements on larger iPhones
             mainTitle.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
             nameTextField.frame = CGRect(x:0.05*screenWidth , y:0.05*screenHeight, width:0.9*screenWidth, height:0.08*screenHeight)
-            editImageButton.frame = CGRect(x: 0, y:0.17*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
-            editImageButton.center.x = self.view.center.x
-            editImageButton.layer.cornerRadius = editImageButton.frame.size.width/2
-            editImageButton.clipsToBounds = true
+            profilePictureButton.frame = CGRect(x: 0, y:0.17*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
+            profilePictureButton.center.x = self.view.center.x
+            profilePictureButton.layer.cornerRadius = profilePictureButton.frame.size.width/2
+            profilePictureButton.clipsToBounds = true
+            profilePictureView.frame = CGRect(x: 0, y:0.17*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
+            profilePictureView.center.x = self.view.center.x
+            profilePictureView.layer.cornerRadius = profilePictureView.frame.size.width/2
+            profilePictureView.clipsToBounds = true
             interestedLabel.frame = CGRect(x:0.05*screenWidth , y:0.45*screenHeight, width:0.9*screenWidth, height:0.1*screenHeight)
             businessIcon.frame = CGRect(x:0.125*screenWidth , y:0.55*screenHeight, width:0.1*screenWidth, height:0.1*screenWidth)
             businessLabel.frame = CGRect(x:0.25*screenWidth , y:0.55*screenHeight, width:0.4*screenWidth, height:0.04*screenHeight)

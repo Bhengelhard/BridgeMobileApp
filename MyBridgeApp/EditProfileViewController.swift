@@ -58,7 +58,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
     
-    
+    func profilePictureTouchDown(sender: AnyObject) {
+        profilePictureButton.layer.borderColor = necterYellow.CGColor
+    }
+    func profilePictureTouchDragExit(sender: AnyObject) {
+        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+    }
     func profilePictureTapped(sender: UIButton) {
         profilePictureButton.layer.borderColor = necterYellow.CGColor
         
@@ -252,6 +257,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             
         }
         
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDown(_:)), forControlEvents: .TouchDown)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDragExit(_:)), forControlEvents: .TouchDragExit)
         profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
         
         profilePictureButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)

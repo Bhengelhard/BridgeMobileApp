@@ -448,13 +448,6 @@
                                 <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FVI-zC-w4v">
-                                <rect key="frame" x="117" y="107" width="140" height="140"/>
-                                <state key="normal" image="Profile_Icon_Gray"/>
-                                <connections>
-                                    <action selector="editImageTapped:" destination="nIP-ev-yX8" eventType="touchUpInside" id="bQW-Ve-MbY"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ErP-fN-6ni">
                                 <rect key="frame" x="63" y="47" width="268" height="41"/>
                                 <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="22"/>
@@ -468,7 +461,6 @@
                     <connections>
                         <outlet property="businessLabel" destination="4d3-SK-io1" id="Zbg-2p-0XC"/>
                         <outlet property="businessSwitch" destination="diD-LT-SEq" id="O6a-6v-ONA"/>
-                        <outlet property="editImageButton" destination="FVI-zC-w4v" id="90n-U9-7iv"/>
                         <outlet property="friendshipLabel" destination="SYW-Fw-7XN" id="xGB-wv-Mt6"/>
                         <outlet property="friendshipSwitch" destination="RLW-6N-Wmp" id="Uhz-QS-LmP"/>
                         <outlet property="interestedLabel" destination="R8X-Cq-PbN" id="bUq-Am-WeR"/>
@@ -724,7 +716,6 @@
     </scenes>
     <resources>
         <image name="Load Page Option A Scaled to Iphone 6.png" width="200" height="360"/>
-        <image name="Profile_Icon_Gray" width="360" height="360"/>
         <image name="Screen over Image.png" width="200" height="358"/>
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
