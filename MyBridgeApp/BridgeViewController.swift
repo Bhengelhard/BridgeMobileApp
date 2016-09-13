@@ -278,6 +278,8 @@ class BridgeViewController: UIViewController {
         
         //card's profile pictures are retrieved if they are already saved to the phone using mapping to the associated bridgePairing objectId and the position of the card (i.e. either upperDeckCard or not)
         let photoView = UIImageView(frame: photoFrame)
+        //photoView.image = UIImage(named: "Profile_Icon_Gray")
+        
         if isUpperDeckCard {
             if let data = pairing.user1?.savedProfilePicture {
                 //applying filter to make the white text more legible

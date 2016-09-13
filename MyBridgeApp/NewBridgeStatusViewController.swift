@@ -30,6 +30,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     var enablePost = Bool()
     var seguedFrom = ""
     var didSendPost = false
+    var isFirstPost = true
     
     let screenWidth = UIScreen.mainScreen().bounds.width
     let screenHeight = UIScreen.mainScreen().bounds.height
@@ -42,6 +43,16 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     
     
     func textViewDidChange(textView: UITextView) {
+        if isFirstPost {
+            let newCharacter = bridgeStatus.text.characters.last
+            if newCharacter == " " || newCharacter == "."{
+                bridgeStatus.text = "I am looking for "
+            } else {
+                bridgeStatus.text = "I am looking for \(newCharacter!)"
+            }
+            
+            isFirstPost = false
+        }
         
         if enablePost || bridgeStatus.text?.characters.count == 18 {
             postButton.layer.borderColor = necterYellow.CGColor
@@ -252,7 +263,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
             let beginImage = CIImage(data: mainProfilePicture)
             let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
             edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
-            edgeDetectFilter.setValue(0.1, forKey: "inputIntensity")
+            edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
             edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
             let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, fromRect: (edgeDetectFilter.outputImage?.extent)!)
             let newImage = UIImage(CGImage: newCGImage)
@@ -300,7 +311,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         bridgeStatus.alpha = 0
         bridgeStatus.textColor = UIColor.whiteColor()
         bridgeStatus.backgroundColor = UIColor.clearColor()
-        bridgeStatus.text = "I am looking for "
+        bridgeStatus.text = "I am looking for... "
         bridgeStatus.font = UIFont(name: "Verdana", size: 14)
         bridgeStatus.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: 0.65*profilePictureHeight + profilePictureY, width: 0.9*profilePictureWidth, height: 0.3*profilePictureHeight)
         bridgeStatus.textAlignment = NSTextAlignment.Center
@@ -358,16 +369,18 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
             //return i + 1 < attributedGreeting.string.characters.count
             //fade out select necter Type screen
             //using optionTableView.alpha as an indicator that the user has not yet clicked the back button
-            UIView.animateWithDuration(0.6, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-                    //fade in post status screen
-                    self.bridgeStatus.becomeFirstResponder()
-                    self.profilePicture.alpha = 1
-                    self.nameLabel.alpha = 1
-                    self.locationLabel.alpha = 1
-                    self.bridgeStatus.alpha = 1
-                    self.necterTypeLine.alpha = 1
-                    self.necterTypeIcon.alpha = 1
-            }, completion: nil)
+        bridgeStatus.autocapitalizationType = UITextAutocapitalizationType.None
+
+        UIView.animateWithDuration(0.6, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
+            //fade in post status screen
+            self.bridgeStatus.becomeFirstResponder()
+            self.profilePicture.alpha = 1
+            self.nameLabel.alpha = 1
+            self.locationLabel.alpha = 1
+            self.bridgeStatus.alpha = 1
+            self.necterTypeLine.alpha = 1
+            self.necterTypeIcon.alpha = 1
+        }, completion: nil)
             
             //return i < 2
         //}

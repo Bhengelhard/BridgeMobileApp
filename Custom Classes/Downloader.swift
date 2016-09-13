@@ -18,7 +18,6 @@ class Downloader {
         let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             if (error == nil && data != nil) {
                 
-                
                 //applying filter to make the white text more legible
                 let beginImage = CIImage(data: data!)
                 let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
