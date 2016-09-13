@@ -417,14 +417,12 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         singleMessage.saveInBackgroundWithBlock { (success, error) -> Void in
             
             if (success) {
-                if self.isNotification == false {
-                    //taking the noMessagesLabel off of the screen upon the first message sent
-                    UIView.animateWithDuration(0.05, animations: {
-                        self.noMessagesLabel.alpha = 0
-                        }, completion: { (success) in
-                            self.noMessagesLabel.removeFromSuperview()
-                    })
-                }
+                //taking the noMessagesLabel off of the screen upon the first message sent
+                UIView.animateWithDuration(0.05, animations: {
+                    self.noMessagesLabel.alpha = 0
+                    }, completion: { (success) in
+                        self.noMessagesLabel.removeFromSuperview()
+                })
                 
                 // push notification starts
                 let singleMessagePosition = self.objectIDToMessageContentArrayMapping.count
@@ -482,12 +480,16 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     }
                 }
                 
-                self.objectIDToMessageContentArrayMapping[(singleMessage.objectId!)]=["messageText":sendingMessageText,"bridgeType":self.bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":false, "senderId":(PFUser.currentUser()?.objectId)!, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":singleMessage.createdAt! ]
-                self.singleMessagePositionToObjectIDMapping[singleMessagePosition] = (singleMessage.objectId!)
-                self.singleMessageTableView.reloadData()
-                if self.objectIDToMessageContentArrayMapping.count >= 1 {
-                    self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                //if the message is not a notification of the current User leaving the message then add it to user's view
+                if self.isNotification == false {
+                    self.objectIDToMessageContentArrayMapping[(singleMessage.objectId!)]=["messageText":sendingMessageText,"bridgeType":self.bridgeType,"senderName":senderName, "timestamp":timestamp, "isNotification":false, "senderId":(PFUser.currentUser()?.objectId)!, "previousSenderName":previousSenderName, "previousSenderId":previousSenderId, "showTimestamp":showTimestamp, "date":singleMessage.createdAt! ]
+                    self.singleMessagePositionToObjectIDMapping[singleMessagePosition] = (singleMessage.objectId!)
+                    self.singleMessageTableView.reloadData()
+                    if self.objectIDToMessageContentArrayMapping.count >= 1 {
+                        self.singleMessageTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.objectIDToMessageContentArrayMapping.count - 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                    }
                 }
+                
                 
                 //self.singleMessageTableView.setContentOffset(CGPointZero, animated:true)
                 let messageQuery = PFQuery(className: "Messages")
