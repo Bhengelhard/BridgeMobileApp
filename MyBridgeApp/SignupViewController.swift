@@ -20,13 +20,14 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     let profilePictureButton = UIButton()
     let profilePictureView = UIImageView()
     //@IBOutlet weak var editImageButton: UIButton!
-    @IBOutlet weak var friendshipLabel: UILabel!
-    @IBOutlet weak var loveLabel: UILabel!
-    @IBOutlet weak var businessLabel: UILabel!
-    @IBOutlet weak var businessSwitch: UISwitch!
-    @IBOutlet weak var friendshipSwitch: UISwitch!
-    @IBOutlet weak var loveSwitch: UISwitch!
-    @IBOutlet weak var interestedLabel: UILabel!
+    //@IBOutlet weak var friendshipLabel: UILabel!
+    let friendshipLabel = UILabel()
+    let loveLabel = UILabel()
+    let businessLabel = UILabel()
+    let businessSwitch = UISwitch()
+    let friendshipSwitch = UISwitch()
+    let loveSwitch = UISwitch()
+    let interestedLabel = UILabel()
     let beginConnectingButton = UIButton()
     let updateLaterLabel = UILabel()
     let businessIcon = UIImageView()
@@ -271,6 +272,36 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         self.view.addSubview(profilePictureButton)
     }
 
+    func displayInterests() {
+        
+        businessLabel.text = "Business"
+        loveLabel.text = "Love"
+        friendshipLabel.text = "Friendship"
+        interestedLabel.text = "I am interested in being connected for:"
+        
+        businessLabel.font = UIFont(name: "BentonSans", size: 18)
+        loveLabel.font = UIFont(name: "BentonSans", size: 18)
+        friendshipLabel.font = UIFont(name: "BentonSans", size: 18)
+        interestedLabel.font = UIFont(name: "BentonSans", size: 18)
+        
+        businessSwitch.onTintColor = businessBlue
+        loveSwitch.onTintColor = loveRed
+        friendshipSwitch.onTintColor = friendshipGreen
+        
+        businessSwitch.on = true
+        loveSwitch.on = true
+        friendshipSwitch.on = true
+        
+        
+        
+        self.view.addSubview(friendshipLabel)
+        self.view.addSubview(loveLabel)
+        self.view.addSubview(businessLabel)
+        self.view.addSubview(businessSwitch)
+        self.view.addSubview(friendshipSwitch)
+        self.view.addSubview(loveSwitch)
+        self.view.addSubview(interestedLabel)
+    }
     
     override func viewDidLoad() {
                 super.viewDidLoad()
@@ -383,8 +414,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         mainTitle.textColor = UIColor.lightGrayColor()
         mainTitle.attributedText = twoColoredString(mainTitle.text!, partLength: 12, start: 12, color: UIColor.blackColor())
         
-        
-        
+        displayInterests()
         self.view.addSubview(mainTitle)
         self.view.addSubview(beginConnectingButton)
         self.view.addSubview(updateLaterLabel)
