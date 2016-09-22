@@ -835,7 +835,7 @@ class BridgeViewController: UIViewController {
                                         let bridgeType = bridgeType1 ?? "Business"
                                         let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
                                         var aboveView:UIView? = self.lastCardInStack
-                                        aboveView = self.addCardPairView(aboveView, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, name2: name2, location2: city2, status2: bridgeStatus1, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
+                                        aboveView = self.addCardPairView(aboveView, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, name2: name2, location2: city2, status2: bridgeStatus2, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
                                         self.lastCardInStack = aboveView!
                                         
 
@@ -1346,8 +1346,8 @@ class BridgeViewController: UIViewController {
                 try message.save()
                 let objectId = bridgePairings[x].user1?.objectId
                 let query = PFQuery(className:"BridgePairings")
-                let notificationMessage1 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                let notificationMessage2 = PFUser.currentUser()!["name"] as! String + " has Bridged you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+                let notificationMessage1 = PFUser.currentUser()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+                let notificationMessage2 = PFUser.currentUser()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
                 let userObjectId1 = bridgePairings[x].user1!.userId!
                 let userObjectId2 = bridgePairings[x].user2!.userId!
                 query.getObjectInBackgroundWithId(objectId!, block: { (result, error) -> Void in

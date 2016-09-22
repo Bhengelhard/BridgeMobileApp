@@ -508,11 +508,27 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
         } else if indexPath.row == 2 {
             
-            performSegueWithIdentifier("showTermsofService", sender: self)
+            let url = NSURL(string: "https://necter.social/termsofservice")
+            
+            if UIApplication.sharedApplication().canOpenURL(url!) {
+                
+                UIApplication.sharedApplication().openURL(url!)
+                
+            }
+            
+            //performSegueWithIdentifier("showTermsofService", sender: self)
             
         } else if indexPath.row == 3 {
             
-            performSegueWithIdentifier("showPrivacyPolicy", sender: self)
+            let url = NSURL(string: "https://necter.social/privacypolicy")
+            
+            if UIApplication.sharedApplication().canOpenURL(url!) {
+                
+                UIApplication.sharedApplication().openURL(url!)
+                
+            }
+            
+            //performSegueWithIdentifier("showPrivacyPolicy", sender: self)
             
         } else {
             

@@ -65,7 +65,7 @@ class TermsOfServiceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         displayNavigationBar()
         // Do any additional setup after loading the view.
     }

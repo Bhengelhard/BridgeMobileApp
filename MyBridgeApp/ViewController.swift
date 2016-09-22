@@ -46,7 +46,8 @@ class ViewController: UIViewController {
         localData.setFirstTimeSwipingLeft(true)
         
         //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
-        localData.setHasSignedUp(false)
+        let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
+        localData.setHasSignedUp(hasSignedUp)
         localData.synchronize()
         
         //Log user in with permissions public_profile, email and user_friends
@@ -74,6 +75,7 @@ class ViewController: UIViewController {
                     LocalStorageUtility().getUserFriends()
                     
                     if user.isNew {
+                        
                         //sync profile picture with facebook profile picture
                         LocalStorageUtility().getMainProfilePicture()
                         
@@ -184,7 +186,8 @@ class ViewController: UIViewController {
 
                                 PFUser.currentUser()?.saveInBackground()
                                
-                                //LocalStorageUtility().getBridgePairings()
+                                //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
+                                localData.setHasSignedUp(false)
                                 localData.synchronize()
                                 
                                 
@@ -230,7 +233,12 @@ class ViewController: UIViewController {
                             self.activityIndicator.stopAnimating()
                             UIApplication.sharedApplication().endIgnoringInteractionEvents()
                             
-                            self.performSegueWithIdentifier("showBridgeViewController", sender: self)
+                            if hasSignedUp == true {
+                                self.performSegueWithIdentifier("showBridgeViewController", sender: self)
+                            } else {
+                                self.performSegueWithIdentifier("showSignUp", sender: self)
+                            }
+                            
                          })
                     }
                     
@@ -240,7 +248,6 @@ class ViewController: UIViewController {
                     print("there is no user")
                     self.activityIndicator.stopAnimating()
                     UIApplication.sharedApplication().endIgnoringInteractionEvents()
-
                 }
             }
         }
@@ -389,8 +396,11 @@ class ViewController: UIViewController {
         let geoPoint = notification.userInfo!["geoPoint"] as? PFGeoPoint
         if let geoPoint = geoPoint {
             self.geoPoint = geoPoint
+            print(geoPoint)
+        } else {
+            //self.geoPoint = PFGeoPoint.init(latitude: 0.0, longitude: 0.0)
+            print("initialize PFGeoPoint at 0,0")
         }
-        
     }
     
     override func viewDidLoad() {

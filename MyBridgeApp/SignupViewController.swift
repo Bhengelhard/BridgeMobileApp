@@ -186,7 +186,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             PFUser.currentUser()?["interested_in_friendship"] = friendshipSwitch.on
             PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
                 if success {
-                    LocalStorageUtility().updateBridgePairingsTable()// remember to uncomment this!
+                    LocalStorageUtility().updateBridgePairingsTable()
                 }
             })
         }
@@ -288,11 +288,23 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         loveSwitch.onTintColor = loveRed
         friendshipSwitch.onTintColor = friendshipGreen
         
-        businessSwitch.on = true
-        loveSwitch.on = true
-        friendshipSwitch.on = true
+        if let businessInterest = PFUser.currentUser()?["interested_in_business"] {
+            businessSwitch.on = businessInterest as! Bool
+        } else {
+            businessSwitch.on = true
+        }
         
+        if let loveInterest = PFUser.currentUser()?["interested_in_love"] {
+            loveSwitch.on = loveInterest as! Bool
+        } else {
+            loveSwitch.on = true
+        }
         
+        if let friendshipInterest = PFUser.currentUser()?["interested_in_friendship"] {
+            friendshipSwitch.on = friendshipInterest as! Bool
+        } else {
+            friendshipSwitch.on = true
+        }
         
         self.view.addSubview(friendshipLabel)
         self.view.addSubview(loveLabel)
@@ -357,31 +369,6 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
             beginConnectingButton.setTitleColor(UIColor.grayColor(), forState: .Normal)
             beginConnectingButton.enabled = false
-        } else {
-            /*dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
-                var i = 1
-                while i < 4 {
-                    sleep(1)
-                    dispatch_async(dispatch_get_main_queue(), {
-                        if i == 1 {
-                            self.main_title.textColor = UIColor.lightGrayColor()
-                            self.main_title.attributedText = self.twoColoredString(self.editableName+"'s Interests", partLength: self.editableName.characters.count, start: (self.editableName.characters.count + 12), color: self.necterYellow)
-                        } else if i == 2 {
-                            if self.nameTextField.hidden != false {
-                            }
-                        } else if i == 3 {
-                            if self.nameTextField.hidden != false {
-                                self.beginConnectingButton.layer.borderColor = self.necterYellow.CGColor
-                                self.main_title.textColor = UIColor.lightGrayColor()
-                                self.main_title.attributedText = self.twoColoredString(self.editableName+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
-                            }
-                            self.interestedLabel.textColor = UIColor.blackColor()
-                        }
-                        i += 1
-                    })
-                }
-                
-            }*/
         }
         
         beginConnectingButton.setTitle("Begin Connecting", forState: .Normal)

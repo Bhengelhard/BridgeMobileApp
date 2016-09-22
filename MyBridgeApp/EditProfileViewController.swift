@@ -233,7 +233,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         //get profile picture and set to a button
         let mainProfilePicture = localData.getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
-            print("got main profile picture")
             let image = UIImage(data: mainProfilePicture, scale: 1.0)
             originalProfilePicture = image!
             profilePictureView.image = image
@@ -417,8 +416,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             }
             
             //saving the users interests
-            print("interestedInBusiness - \(interestedInBusiness)")
-            print("businessSwitch.on - \(businessSwitch.on)")
             if interestedInBusiness != businessSwitch.on {
                 PFUser.currentUser()?["interested_in_business"] = businessSwitch.on
                 interestsUpdated = true
@@ -435,7 +432,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             if somethingWasUpdated || interestsUpdated {
                 PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
                     if success {
-                        print("success")
                         //updating profile picture in bridgePairings Table if the picture was changed
                         if self.originalProfilePicture != pickedImage {
                             PFCloud.callFunctionInBackground("changeBridgePairingsOnProfilePictureUpdate", withParameters: [:]) {
@@ -455,6 +451,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                                 if error == nil {
                                     if let response = response as? String {
                                         print(response)
+                                        print("changeMessagesTableOnNameUpdate")
                                     }
                                 }
                             }
@@ -463,6 +460,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                                 if error == nil {
                                     if let response = response as? String {
                                         print(response)
+                                        print("changeSingleMessagesTableOnNameUpdate")
                                     }
                                 }
                             }
@@ -472,6 +470,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                                 if error == nil {
                                     if let response = response as? String {
                                         print(response)
+                                        print("changeBridgePairingsOnNameUpdate")
                                     }
                                 }
                             }
@@ -480,10 +479,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                         
                         //updated interests in bridgepairings table if the interests were changed
                         if interestsUpdated {
+                            print("interestsUpdated")
                             PFCloud.callFunctionInBackground("changeBridgePairingsOnInterestedInUpdate", withParameters: [:]) {
                                 (response:AnyObject?, error: NSError?) -> Void in
                                 if error == nil {
                                     if let response = response as? String {
+                                        print("changeBridgePairingsOnInterestedInUpdate")
                                         print(response)
                                     }
                                 }
@@ -498,7 +499,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         //saving to local data on the user's device
         //saving the user's name
         if nameTextField.text != username {
-            print("name saved to device")
             localData.setUsername(nameTextField.text!)
         }
         
