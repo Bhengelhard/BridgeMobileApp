@@ -31,8 +31,6 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 class BridgeViewController: UIViewController {
     
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
     let localData = LocalData()
     
     //set to the height and width of the images in the superDeck
@@ -83,13 +81,6 @@ class BridgeViewController: UIViewController {
     //Send title and title Color singleMessageViewController
     var singleMessageTitle = ""
     var necterTypeColor = UIColor()
-    
-    //necter Colors
-    let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
-    let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
-    let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
-    let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
-    let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
     
     enum typesOfCard {
         case all
@@ -145,11 +136,11 @@ class BridgeViewController: UIViewController {
     func getCGColor (_ color:typesOfColor) -> CGColor {
         switch(color) {
         case typesOfColor.business:
-            return businessBlue.cgColor
+            return DisplayUtility.businessBlue.cgColor
         case typesOfColor.love:
-            return  loveRed.cgColor
+            return  DisplayUtility.loveRed.cgColor
         case typesOfColor.friendship:
-            return  friendshipGreen.cgColor
+            return  DisplayUtility.friendshipGreen.cgColor
         }
         
     }
@@ -195,7 +186,7 @@ class BridgeViewController: UIViewController {
     
     
     func displayNoMoreCards() {
-        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*screenWidth,height: screenHeight * 0.2)
+        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
         displayNoMoreCardsLabel = UILabel()
         displayNoMoreCardsLabel!.frame = labelFrame
         displayNoMoreCardsLabel!.numberOfLines = 0
@@ -214,9 +205,9 @@ class BridgeViewController: UIViewController {
         displayNoMoreCardsLabel!.textAlignment = NSTextAlignment.center
         displayNoMoreCardsLabel!.center.y = view.center.y
         displayNoMoreCardsLabel!.center.x = view.center.x
-        displayNoMoreCardsLabel!.layer.borderWidth = 2
-        displayNoMoreCardsLabel!.layer.borderColor = necterGray.cgColor
-        displayNoMoreCardsLabel!.layer.cornerRadius = 15
+//        displayNoMoreCardsLabel!.layer.borderWidth = 2
+//        displayNoMoreCardsLabel!.layer.borderColor = DisplayUtility.necterGray.cgColor
+//        displayNoMoreCardsLabel!.layer.cornerRadius = 15
 
         view.addSubview(displayNoMoreCardsLabel!)
         
@@ -410,16 +401,16 @@ class BridgeViewController: UIViewController {
         necterTypeIcon.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
         
         if cardColor == typesOfColor.business {
-            necterTypeLine.backgroundColor = businessBlue
-            //rightNecterTypeLine.backgroundColor = businessBlue
+            necterTypeLine.backgroundColor = DisplayUtility.businessBlue
+            //rightNecterTypeLine.backgroundColor = DisplayUtility.businessBlue
             necterTypeIcon.image = UIImage(named: "Business_Icon_Blue")
         } else if cardColor == typesOfColor.love {
-            necterTypeLine.backgroundColor = loveRed
-            //rightNecterTypeLine.backgroundColor = loveRed
+            necterTypeLine.backgroundColor = DisplayUtility.loveRed
+            //rightNecterTypeLine.backgroundColor = DisplayUtility.loveRed
             necterTypeIcon.image = UIImage(named: "Love_Icon_Red")
         } else if cardColor == typesOfColor.friendship{
-            necterTypeLine.backgroundColor = friendshipGreen
-            //rightNecterTypeLine.backgroundColor = friendshipGreen
+            necterTypeLine.backgroundColor = DisplayUtility.friendshipGreen
+            //rightNecterTypeLine.backgroundColor = DisplayUtility.friendshipGreen
             necterTypeIcon.image = UIImage(named: "Friendship_Icon_Green")
         }
         
@@ -445,6 +436,7 @@ class BridgeViewController: UIViewController {
         arrayOfCardColors.append(superDeckView.layer.borderColor!)
         return superDeckView
     }
+    
     // Does not download bridge pairings. Only presents the existing ones in the localData to the user
     func displayCards(){
         if let displayNoMoreCardsLabel = displayNoMoreCardsLabel {
@@ -552,7 +544,7 @@ class BridgeViewController: UIViewController {
         profileButton.setImage(UIImage(named: "Profile_Icon_Yellow"), for: .selected)
         profileButton.setImage(UIImage(named: "Profile_Icon_Yellow"), for: .highlighted)
         profileButton.addTarget(self, action: #selector(profileTapped(_:)), for: .touchUpInside)
-        profileButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
+        profileButton.frame = CGRect(x: 0, y: 0, width: 0.085*DisplayUtility.screenWidth, height: 0.085*DisplayUtility.screenWidth)
         let leftBarButton = UIBarButtonItem(customView: profileButton)
         navItem.leftBarButtonItem = leftBarButton
         
@@ -570,7 +562,7 @@ class BridgeViewController: UIViewController {
         }
         
         messagesButton.addTarget(self, action: #selector(messagesTapped(_:)), for: .touchUpInside)
-        messagesButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
+        messagesButton.frame = CGRect(x: 0, y: 0, width: 0.085*DisplayUtility.screenWidth, height: 0.085*DisplayUtility.screenWidth)
         messagesButton.contentMode = UIViewContentMode.scaleAspectFill
         messagesButton.clipsToBounds = true
         let rightBarButton = UIBarButtonItem(customView: messagesButton)
@@ -580,12 +572,12 @@ class BridgeViewController: UIViewController {
         navigationBar.setItems([navItem], animated: false)
         //navigationBar.topItem?.title = "necter"
         let navBarTitle = UILabel()
-        navBarTitle.frame = CGRect(x: 0, y: 0, width: 0.4*screenWidth, height: 0.1*screenHeight)
+        navBarTitle.frame = CGRect(x: 0, y: 0, width: 0.4*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
         navBarTitle.center.x = navigationBar.center.x
         navBarTitle.center.y = navigationBar.center.y
         navBarTitle.text = "necter"
         navBarTitle.font = UIFont(name: "Verdana", size: 34)
-        navBarTitle.textColor = necterYellow
+        navBarTitle.textColor = DisplayUtility.necterYellow
         navBarTitle.textAlignment = NSTextAlignment.center
         
         navigationBar.topItem?.titleView = navBarTitle
@@ -605,83 +597,83 @@ class BridgeViewController: UIViewController {
     }
     func displayToolBar(){
         
-        toolbar.frame = CGRect(x: 0, y: 0.9*screenHeight, width: screenWidth, height: 0.1*screenHeight)
+        toolbar.frame = CGRect(x: 0, y: 0.9*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
         toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
         
         //creating buttons to be added to the toolbar and evenly spaced across
         allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
         allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), for: .disabled)
-        allTypesButton.frame = CGRect(x: 0.07083*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
-        allTypesButton.center.y = toolbar.center.y - 0.005*screenHeight
+        allTypesButton.frame = CGRect(x: 0.07083*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+        allTypesButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
         allTypesButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         allTypesButton.tag = 0
         
         //coloring allTypesText three different colors
         let allTypesText = "All Types" as NSString
         let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.range(of: "All"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.range(of: "Ty"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.range(of: "pes"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
         
         //setting allTypesText
         allTypesLabel.attributedText = allTypesAttributedText
         allTypesLabel.textAlignment =  NSTextAlignment.center
-        allTypesLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        allTypesLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
         allTypesLabel.center.x = allTypesButton.center.x
         
         
         businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
         businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .disabled)
-        businessButton.frame = CGRect(x: 0.24166*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
-        businessButton.center.y = toolbar.center.y - 0.005*screenHeight
+        businessButton.frame = CGRect(x: 0.24166*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+        businessButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
         businessButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         businessButton.tag = 1
         
         businessLabel.text = "Business"
-        businessLabel.textColor = necterGray
+        businessLabel.textColor = DisplayUtility.necterGray
         businessLabel.font = UIFont(name: "BentonSans", size: 11)
         businessLabel.textAlignment =  NSTextAlignment.center
-        businessLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        businessLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
         businessLabel.center.x = businessButton.center.x
         
         loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
         loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .disabled)
-        loveButton.frame = CGRect(x: 0.65832*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
-        loveButton.center.y = toolbar.center.y - 0.005*screenHeight
+        loveButton.frame = CGRect(x: 0.65832*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+        loveButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
         loveButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         loveButton.tag = 2
         
         loveLabel.text = "Love"
         loveLabel.font = UIFont(name: "BentonSans", size: 11)
-        loveLabel.textColor = necterGray
+        loveLabel.textColor = DisplayUtility.necterGray
         loveLabel.textAlignment =  NSTextAlignment.center
-        loveLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        loveLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
         loveLabel.center.x = loveButton.center.x
         
         friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
         friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .disabled)
-        friendshipButton.frame = CGRect(x: 0.82915*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1150*screenWidth)
-        friendshipButton.center.y = toolbar.center.y - 0.005*screenHeight
+        friendshipButton.frame = CGRect(x: 0.82915*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1150*DisplayUtility.screenWidth)
+        friendshipButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
         friendshipButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         friendshipButton.tag = 3
         
         friendshipLabel.text = "Friendship"
         friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
-        friendshipLabel.textColor = necterGray
+        friendshipLabel.textColor = DisplayUtility.necterGray
         friendshipLabel.textAlignment =  NSTextAlignment.center
-        friendshipLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
+        friendshipLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
         friendshipLabel.center.x = friendshipButton.center.x
         
         
-        postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*screenWidth, height: 0.175*screenWidth)
-        postStatusButton.backgroundColor = necterYellow
+        postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*DisplayUtility.screenWidth, height: 0.175*DisplayUtility.screenWidth)
+        postStatusButton.backgroundColor = DisplayUtility.necterYellow
         postStatusButton.showsTouchWhenHighlighted = true
         postStatusButton.layer.borderWidth = 2.0
         postStatusButton.layer.borderColor = UIColor.white.cgColor
         postStatusButton.layer.cornerRadius = postStatusButton.frame.size.width/2.0
         postStatusButton.clipsToBounds = true
         //loveButton.layer.borderColor =
-        postStatusButton.center.y = toolbar.center.y - 0.25*0.175*screenWidth
+        postStatusButton.center.y = toolbar.center.y - 0.25*0.175*DisplayUtility.screenWidth
         postStatusButton.center.x = view.center.x
         postStatusButton.setTitle("+", for: UIControlState())
         postStatusButton.setTitleColor(UIColor.white, for: UIControlState())
@@ -908,20 +900,20 @@ class BridgeViewController: UIViewController {
     }
     func displayMessageFromBot(_ notification: Notification) {
         let botNotificationView = UIView()
-        botNotificationView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
+        botNotificationView.frame = CGRect(x: 0, y: -0.12*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         //always fill the view
         blurEffectView.frame = botNotificationView.bounds
         //blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        let messageLabel = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.01*screenHeight, width: 0.9*screenWidth, height: 0.11*screenHeight))
+        let messageLabel = UILabel(frame: CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.01*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight))
         messageLabel.text = (notification as NSNotification).userInfo!["message"] as? String ?? "No Message Came Up"
         messageLabel.textColor = UIColor.darkGray
         messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = NSTextAlignment.center
-        //botNotificationView.backgroundColor = necterYellow
+        //botNotificationView.backgroundColor = DisplayUtility.necterYellow
         
         //botNotificationView.addSubview(blurEffectView)
         botNotificationView.addSubview(messageLabel)
@@ -935,7 +927,7 @@ class BridgeViewController: UIViewController {
         
         let _ = CustomTimer(interval: 4) {i -> Bool in
             UIView.animate(withDuration: 0.7, animations: {
-                botNotificationView.frame.origin.y = -0.12*self.screenHeight
+                botNotificationView.frame.origin.y = -0.12*DisplayUtility.screenHeight
             })
             return i < 1
         }
@@ -1024,13 +1016,13 @@ class BridgeViewController: UIViewController {
         
         
         connectIcon.image = UIImage(named: "Necter_Icon")
-        //connectIcon.frame = CGRect(x: 0.6*screenWidth+10, y: 0.33*self.screenHeight, width: 0.1*screenWidth, height: 0.1*screenWidth)
+        //connectIcon.frame = CGRect(x: 0.6*DisplayUtility.screenWidth+10, y: 0.33*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
         connectIcon.alpha = 0.0
         view.insertSubview(connectIcon, aboveSubview: self.toolbar)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
-        //disconnectIcon.frame = CGRect(x: 0, y: 0.33*self.screenHeight, width: 0.1*self.screenWidth, height: 0.1*self.screenWidth)
-        //CGRect(x: -10, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+        //disconnectIcon.frame = CGRect(x: 0, y: 0.33*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+        //CGRect(x: -10, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
         disconnectIcon.alpha = 0.0
         view.insertSubview(disconnectIcon, aboveSubview: self.toolbar)
         
@@ -1040,7 +1032,7 @@ class BridgeViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
    
-        navigationBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0.11*screenHeight)
+        navigationBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight)
 
     }
     
@@ -1063,13 +1055,13 @@ class BridgeViewController: UIViewController {
                 //updating textColor necter-Type labels
                 let allTypesText = "All Types" as NSString
                 let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.range(of: "All"))
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.range(of: "Ty"))
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.range(of: "pes"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
                 allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = necterGray
-                loveLabel.textColor = necterGray
-                friendshipLabel.textColor = necterGray
+                businessLabel.textColor = DisplayUtility.necterGray
+                loveLabel.textColor = DisplayUtility.necterGray
+                friendshipLabel.textColor = DisplayUtility.necterGray
                     break
             case 1:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
@@ -1083,11 +1075,11 @@ class BridgeViewController: UIViewController {
                 //updating textColor necter-Type labels
                 let allTypesText = "All Types" as NSString
                 let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.range(of: "All Types"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
                 allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = businessBlue
-                loveLabel.textColor = necterGray
-                friendshipLabel.textColor = necterGray
+                businessLabel.textColor = DisplayUtility.businessBlue
+                loveLabel.textColor = DisplayUtility.necterGray
+                friendshipLabel.textColor = DisplayUtility.necterGray
                 
                     break
             case 2:
@@ -1102,11 +1094,11 @@ class BridgeViewController: UIViewController {
                 //updating textColor necter-Type labels
                 let allTypesText = "All Types" as NSString
                 let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.range(of: "All Types"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
                 allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = necterGray
-                loveLabel.textColor = loveRed
-                friendshipLabel.textColor = necterGray
+                businessLabel.textColor = DisplayUtility.necterGray
+                loveLabel.textColor = DisplayUtility.loveRed
+                friendshipLabel.textColor = DisplayUtility.necterGray
                     break
             case 3:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
@@ -1121,11 +1113,11 @@ class BridgeViewController: UIViewController {
                 //updating textColor necter-Type labels
                 let allTypesText = "All Types" as NSString
                 let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.range(of: "All Types"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
                 allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = necterGray
-                loveLabel.textColor = necterGray
-                friendshipLabel.textColor = friendshipGreen
+                businessLabel.textColor = DisplayUtility.necterGray
+                loveLabel.textColor = DisplayUtility.necterGray
+                friendshipLabel.textColor = DisplayUtility.friendshipGreen
                     break
             default:
                 currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
@@ -1139,13 +1131,13 @@ class BridgeViewController: UIViewController {
                 //updating textColor necter-Type labels
                 let allTypesText = "All Types" as NSString
                 let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.range(of: "All"))
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.range(of: "Ty"))
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.range(of: "pes"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
+                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
                 allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = necterGray
-                loveLabel.textColor = necterGray
-                friendshipLabel.textColor = necterGray
+                businessLabel.textColor = DisplayUtility.necterGray
+                loveLabel.textColor = DisplayUtility.necterGray
+                friendshipLabel.textColor = DisplayUtility.necterGray
         }
         for i in 0..<arrayOfCardsInDeck.count {
             arrayOfCardsInDeck[i].removeFromSuperview()
@@ -1166,7 +1158,7 @@ class BridgeViewController: UIViewController {
 
         let translation = gesture.translation(in: self.view)
         let superDeckView = gesture.view!
-        superDeckView.center = CGPoint(x: self.screenWidth / 2 + translation.x, y: self.screenHeight / 2 + translation.y)
+        superDeckView.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
         let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
         let scale = min(CGFloat(1.0), 1)
         var rotation = CGAffineTransform(rotationAngle: -xFromCenter / 1000)
@@ -1174,43 +1166,43 @@ class BridgeViewController: UIViewController {
         superDeckView.transform = stretch
         var removeCard = false
         
-        //let disconnectIconSize = max(min((-2.0*(superDeckView.center.x/self.screenWidth)+0.9)*screenWidth, 0.4*screenWidth), 0.1*screenWidth)
-        //let connectIconSize = max(min((2.0*(superDeckView.center.x/self.screenWidth))*screenWidth, 0.4*screenWidth), 0.1*screenWidth)
-        //let disconnectIconX = min((-1.66*(superDeckView.center.x/self.screenWidth)+0.66)*screenWidth, 0.15*screenWidth)
+        //let disconnectIconSize = max(min((-2.0*(superDeckView.center.x/DisplayUtility.screenWidth)+0.9)*DisplayUtility.screenWidth, 0.4*DisplayUtility.screenWidth), 0.1*DisplayUtility.screenWidth)
+        //let connectIconSize = max(min((2.0*(superDeckView.center.x/DisplayUtility.screenWidth))*DisplayUtility.screenWidth, 0.4*DisplayUtility.screenWidth), 0.1*DisplayUtility.screenWidth)
+        //let disconnectIconX = min((-1.66*(superDeckView.center.x/DisplayUtility.screenWidth)+0.66)*DisplayUtility.screenWidth, 0.15*DisplayUtility.screenWidth)
         
-        let disconnectIconX = max(min((-1.5*(superDeckView.center.x/self.screenWidth)+0.6)*screenWidth, 0.1*screenWidth), 0)
-        //let connectIconX = max((-1.66*(superDeckView.center.x/self.screenWidth)+1.6)*screenWidth, 0.35*screenWidth)
-        let connectIconX = max(min(((-2.0/3.0)*(superDeckView.center.x/self.screenWidth)+1.0)*screenWidth, 0.6*screenWidth), 0.5*screenWidth)
+        let disconnectIconX = max(min((-1.5*(superDeckView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
+        //let connectIconX = max((-1.66*(superDeckView.center.x/DisplayUtility.screenWidth)+1.6)*DisplayUtility.screenWidth, 0.35*DisplayUtility.screenWidth)
+        let connectIconX = max(min(((-2.0/3.0)*(superDeckView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
         
         
 
-        //animating connect and disconnect icons when card is positioned from 0.4% of screenwidth to 0.25% of screenWidth
-        if superDeckView.center.x < 0.4*screenWidth{
-            //fading in with swipe left from 0.4% of screenWidth to 0.25% of screen width
-            self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
-            //self.disconnectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)
-            //self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+        //animating connect and disconnect icons when card is positioned from 0.4% of DisplayUtility.screenWidth to 0.25% of DisplayUtility.screenWidth
+        if superDeckView.center.x < 0.4*DisplayUtility.screenWidth{
+            //fading in with swipe left from 0.4% of DisplayUtility.screenWidth to 0.25% of screen width
+            self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/DisplayUtility.screenWidth)+2.66
+            //self.disconnectIcon.alpha = 6.66*(superDeckView.center.x/DisplayUtility.screenWidth)
+            //self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
+            self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
             //})
-        } else if superDeckView.center.x > 0.6*screenWidth {
+        } else if superDeckView.center.x > 0.6*DisplayUtility.screenWidth {
             
-            //fading in with swipe right from 0.6% of screenWidth to 0.75% of screen width
-            self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
-            //self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
+            //fading in with swipe right from 0.6% of DisplayUtility.screenWidth to 0.75% of screen width
+            self.connectIcon.alpha = 6.66*(superDeckView.center.x/DisplayUtility.screenWidth)-4
+            //self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
+            self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
         } else {
-            self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/self.screenWidth)+2.66
-            //self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*self.screenHeight, width: 0.4*screenWidth, height: 0.4*screenWidth)
-           // self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*self.screenWidth, height: 0.4*self.screenWidth)
-            self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*self.screenHeight, width: 0.4*screenWidth, height: 0.4*screenWidth)
+            self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/DisplayUtility.screenWidth)+2.66
+            //self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
+            self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
+           // self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
+            self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
 
-            self.connectIcon.alpha = 6.66*(superDeckView.center.x/self.screenWidth)-4
+            self.connectIcon.alpha = 6.66*(superDeckView.center.x/DisplayUtility.screenWidth)-4
         }
         
         if gesture.state == UIGestureRecognizerState.ended {
             
-            if superDeckView.center.x < 0.25*screenWidth {
+            if superDeckView.center.x < 0.25*DisplayUtility.screenWidth {
                 
                 
                 let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
@@ -1223,8 +1215,8 @@ class BridgeViewController: UIViewController {
                     }))
                     alert.addAction(UIAlertAction(title: "Don't Connect", style: .default, handler: { (action) in
                         UIView.animate(withDuration: 0.2, animations: {
-                            superDeckView.center.x = -1.0*self.screenWidth
-                            self.disconnectIcon.center.x = -1.0*self.screenWidth
+                            superDeckView.center.x = -1.0*DisplayUtility.screenWidth
+                            self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                             self.disconnectIcon.alpha = 0.0
                             }, completion: { (success) in
                                 self.nextPair()
@@ -1237,15 +1229,15 @@ class BridgeViewController: UIViewController {
                     self.localData.synchronize()
                 } else {
                     UIView.animate(withDuration: 0.2, animations: {
-                        superDeckView.center.x = -1.0*self.screenWidth
-                        self.disconnectIcon.center.x = -1.0*self.screenWidth
+                        superDeckView.center.x = -1.0*DisplayUtility.screenWidth
+                        self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                         self.disconnectIcon.alpha = 0.0
                         }, completion: { (success) in
                             self.nextPair()
                     })
                     removeCard = true
                 }
-            } else if superDeckView.center.x > 0.75*screenWidth {
+            } else if superDeckView.center.x > 0.75*DisplayUtility.screenWidth {
                 
                 let isFirstTimeSwipedRight : Bool = localData.getFirstTimeSwipingRight()!
                 if isFirstTimeSwipedRight{
@@ -1257,9 +1249,9 @@ class BridgeViewController: UIViewController {
                     }))
                     alert.addAction(UIAlertAction(title: "Connect", style: .default, handler: { (action) in
                         UIView.animate(withDuration: 0.2, animations: {
-                            superDeckView.center.x = 1.6*self.screenWidth
+                            superDeckView.center.x = 1.6*DisplayUtility.screenWidth
                             superDeckView.alpha = 0.0
-                            self.connectIcon.center.x = 1.6*self.screenWidth
+                            self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                             self.connectIcon.alpha = 0.0
                             }, completion: { (success) in
                                 self.connectIcon.removeFromSuperview()
@@ -1273,8 +1265,8 @@ class BridgeViewController: UIViewController {
                     self.localData.synchronize()
                 } else {
                     UIView.animate(withDuration: 0.2, animations: {
-                        superDeckView.center.x = 1.6*self.screenWidth
-                        self.connectIcon.center.x = 1.6*self.screenWidth
+                        superDeckView.center.x = 1.6*DisplayUtility.screenWidth
+                        self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.alpha = 0.0
                         }, completion: { (success) in
                             self.connectIcon.removeFromSuperview()
@@ -1293,9 +1285,9 @@ class BridgeViewController: UIViewController {
                     stretch = rotation.scaledBy(x: 1, y: 1)
                     superDeckView.transform = stretch
                     superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
-                    self.disconnectIcon.center.x = -1.0*self.screenWidth
+                    self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                     self.disconnectIcon.alpha = 0.0
-                    self.connectIcon.center.x = 1.6*self.screenWidth
+                    self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                     self.connectIcon.alpha = 0.0
                 })
                 
@@ -1340,13 +1332,13 @@ class BridgeViewController: UIViewController {
                 message["message_type"] = necterType
                 switch(necterType) {
                 case "Business":
-                    necterTypeColor = businessBlue
+                    necterTypeColor = DisplayUtility.businessBlue
                 case "Love":
-                    necterTypeColor = loveRed
+                    necterTypeColor = DisplayUtility.loveRed
                 case "Friendship":
-                    necterTypeColor = friendshipGreen
+                    necterTypeColor = DisplayUtility.friendshipGreen
                 default:
-                    necterTypeColor = necterGray
+                    necterTypeColor = DisplayUtility.necterGray
                 }
                 
 
