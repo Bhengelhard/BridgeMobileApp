@@ -40,8 +40,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     var interestedInLove = Bool()
     var interestedInFriendship = Bool()
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     let transitionManager = TransitionManager()
     let localData = LocalData()
     var seguedFrom = ""
@@ -58,35 +58,35 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     // globally required as we do not want to re-create them everytime and for persistence
     let imagePicker = UIImagePickerController()
     
-    func profilePictureTouchDown(sender: AnyObject) {
-        profilePictureButton.layer.borderColor = necterYellow.CGColor
+    func profilePictureTouchDown(_ sender: AnyObject) {
+        profilePictureButton.layer.borderColor = necterYellow.cgColor
     }
-    func profilePictureTouchDragExit(sender: AnyObject) {
-        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+    func profilePictureTouchDragExit(_ sender: AnyObject) {
+        profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
     }
-    func profilePictureTapped(sender: UIButton) {
-        profilePictureButton.layer.borderColor = necterYellow.CGColor
+    func profilePictureTapped(_ sender: UIButton) {
+        profilePictureButton.layer.borderColor = necterYellow.cgColor
         
-        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let facebookProfilePictureAction = UIAlertAction(title: "Facebook Profile Picture", style: UIAlertActionStyle.Default)
+        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let facebookProfilePictureAction = UIAlertAction(title: "Facebook Profile Picture", style: UIAlertActionStyle.default)
         {
             UIAlertAction in
             self.getMainProfilePictureFromFacebook()
         }
-        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.Default)
+        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.default)
         {
             UIAlertAction in
             self.openCamera()
         }
-        let galleryAction = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.Default)
+        let galleryAction = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default)
         {
             UIAlertAction in
             self.openGallary()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel)
         {
             UIAlertAction in
-            self.profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+            self.profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
         }
         
         // Add the actions
@@ -95,31 +95,31 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         alert.addAction(cameraAction)
         alert.addAction(galleryAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
         imagePicker.allowsEditing = false
         
     }
     //saves  to LocalDataStorage & Parse
     func getMainProfilePictureFromFacebook(){
-        var pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        pagingSpinner.color = UIColor.darkGrayColor()
+        var pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        pagingSpinner.color = UIColor.darkGray
         pagingSpinner.hidesWhenStopped = true
         pagingSpinner.center.x = profilePictureButton.center.x
         pagingSpinner.center.y = profilePictureButton.center.y
         view.addSubview(pagingSpinner)
         pagingSpinner.startAnimating()
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest.startWithCompletionHandler{ (connection, result, error) -> Void in
+        graphRequest?.start{ (connection, result, error) -> Void in
             if error != nil {
                 print(error)
             }
-            else if let result = result {
+            else if let result = result as? [String: AnyObject]{
                 let userId = result["id"]! as! String
                 let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
-                if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
-                    if let data = NSData(contentsOfURL: fbpicUrl) {
-                        dispatch_async(dispatch_get_main_queue(), {
+                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
+                    if let data = try? Data(contentsOf: fbpicUrl) {
+                        DispatchQueue.main.async(execute: {
                             self.profilePictureView.image = UIImage(data: data)
                             //self.profilePictureButton.setBackgroundImage(UIImage(data: data), forState: .Normal)
                             pagingSpinner.stopAnimating()
@@ -131,51 +131,51 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         }
     }
     func openCamera(){
-        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
-            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+            self.present(imagePicker, animated: true, completion: nil)
         }else{
             let alert = UIAlertView()
             alert.title = "Warning"
             alert.message = "You don't have camera"
-            alert.addButtonWithTitle("OK")
+            alert.addButton(withTitle: "OK")
             alert.show()
         }
     }
     func openGallary(){
-        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        self.presentViewController(imagePicker, animated: true, completion: nil)
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        self.present(imagePicker, animated: true, completion: nil)
     }
     
     
     //update the UIImageView once an image has been picked
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             let fixedPickedImage = fixOrientation(pickedImage)
             profilePictureView.image = fixedPickedImage
             //profilePictureButton.setBackgroundImage(fixedPickedImage, forState: .Normal)
         }
-        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-        dismissViewControllerAnimated(true, completion: nil)
+        profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
+        dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
+        dismiss(animated: true, completion: nil)
     }
     
     //fix the orientation of the image picked by the ImagePickerController
-    func fixOrientation(img:UIImage) -> UIImage {
+    func fixOrientation(_ img:UIImage) -> UIImage {
         
-        if (img.imageOrientation == UIImageOrientation.Up) {
+        if (img.imageOrientation == UIImageOrientation.up) {
             return img;
         }
         
         UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale);
         let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
-        img.drawInRect(rect)
+        img.draw(in: rect)
         
-        let normalizedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        let normalizedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext();
         return normalizedImage;
         
@@ -195,14 +195,14 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         navItem.leftBarButtonItem = leftBarButton*/
         
         //cancel edit bar buton item
-        cancelButton.setTitle(">", forState: .Normal)
-        cancelButton.setTitleColor(necterGray, forState: .Normal)
-        cancelButton.setTitleColor(necterYellow, forState: .Selected)
-        cancelButton.setTitleColor(necterYellow, forState: .Highlighted)
+        cancelButton.setTitle(">", for: UIControlState())
+        cancelButton.setTitleColor(necterGray, for: UIControlState())
+        cancelButton.setTitleColor(necterYellow, for: .selected)
+        cancelButton.setTitleColor(necterYellow, for: .highlighted)
         cancelButton.titleLabel!.font = UIFont(name: "Verdana-Bold", size: 24)!
         //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Selected)
         //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Highlighted)
-        cancelButton.addTarget(self, action: #selector(cancelTapped(_:)), forControlEvents: .TouchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancelTapped(_:)), for: .touchUpInside)
         cancelButton.frame = CGRect(x: 0, y: 0, width: 0.2*screenWidth, height: 0.06*screenHeight)
         let rightBarButtonItem = UIBarButtonItem(customView: cancelButton)
         navItem.rightBarButtonItem = rightBarButtonItem
@@ -213,19 +213,19 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         navigationBar.setItems([navItem], animated: false)
         navigationBar.topItem?.title = "Edit Profile"
         navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: necterYellow]
-        navigationBar.barStyle = .Black
-        navigationBar.barTintColor = UIColor.whiteColor()
+        navigationBar.barStyle = .black
+        navigationBar.barTintColor = UIColor.white
         
         self.view.addSubview(navigationBar)
         
     }
     
-    func cancelTapped(sender: UIBarButtonItem) {
-        cancelButton.selected = true
+    func cancelTapped(_ sender: UIBarButtonItem) {
+        cancelButton.isSelected = true
         if tempSeguedFrom == "OptionsFromBotViewController" {
-            performSegueWithIdentifier("showOptionsViewFromEditProfileView", sender: self)
+            performSegue(withIdentifier: "showOptionsViewFromEditProfileView", sender: self)
         } else {
-            performSegueWithIdentifier("showProfilePageFromEditProfileView", sender: self)
+            performSegue(withIdentifier: "showProfilePageFromEditProfileView", sender: self)
         }
     }
     
@@ -233,20 +233,20 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         //get profile picture and set to a button
         let mainProfilePicture = localData.getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
-            let image = UIImage(data: mainProfilePicture, scale: 1.0)
+            let image = UIImage(data: mainProfilePicture as Data, scale: 1.0)
             originalProfilePicture = image!
             profilePictureView.image = image
             //profilePictureButton.setBackgroundImage(image, forState: .Normal)
         }  else {
-            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+            let pfData = PFUser.current()?["profile_picture"] as? PFFile
             if let pfData = pfData {
-                pfData.getDataInBackgroundWithBlock({ (data, error) in
+                pfData.getDataInBackground(block: { (data, error) in
                     if error != nil || data == nil {
                         print(error)
                     } else {
                         let image = UIImage(data: data!, scale: 1.0)
                         self.originalProfilePicture = image!
-                        dispatch_async(dispatch_get_main_queue(), {
+                        DispatchQueue.main.async(execute: {
                             self.profilePictureView.image = image
                             //self.profilePictureButton.setBackgroundImage(image, forState:  .Normal)
                         })
@@ -256,23 +256,23 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             
         }
         
-        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDown(_:)), forControlEvents: .TouchDown)
-        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDragExit(_:)), forControlEvents: .TouchDragExit)
-        profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDown(_:)), for: .touchDown)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDragExit(_:)), for: .touchDragExit)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), for: .touchUpInside)
         
         profilePictureButton.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
         profilePictureButton.center.x = self.view.center.x
         profilePictureButton.layer.cornerRadius = profilePictureButton.frame.size.width/2
         profilePictureButton.layer.borderWidth = 4
-        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-        profilePictureButton.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
+        profilePictureButton.contentMode = UIViewContentMode.scaleAspectFill
         profilePictureButton.clipsToBounds = true
-        profilePictureButton.backgroundColor = UIColor.clearColor()
+        profilePictureButton.backgroundColor = UIColor.clear
         
         profilePictureView.frame = profilePictureButton.frame
         profilePictureView.center.x = self.view.center.x
         profilePictureView.layer.cornerRadius = profilePictureView.frame.size.width/2
-        profilePictureView.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureView.contentMode = UIViewContentMode.scaleAspectFill
         profilePictureView.clipsToBounds = true
         
         view.addSubview(profilePictureView)
@@ -296,13 +296,13 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             name.text = noNameText
         }
         
-        nameTextField.hidden = true
-        name.userInteractionEnabled = true
+        nameTextField.isHidden = true
+        name.isUserInteractionEnabled = true
         
         if let username = username {
             name.text = username
         }
-        name.textColor = UIColor.lightGrayColor()
+        name.textColor = UIColor.lightGray
         
         let aSelector : Selector = #selector(EditProfileViewController.lblTapped)
         let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
@@ -310,25 +310,25 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         name.addGestureRecognizer(tapGesture)
         
         name.font = UIFont(name: "Verdana", size: 18)
-        name.textAlignment = NSTextAlignment.Center
+        name.textAlignment = NSTextAlignment.center
         name.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
         
         nameTextField.font = UIFont(name: "Verdana", size: 18)
-        nameTextField.textAlignment = NSTextAlignment.Center
+        nameTextField.textAlignment = NSTextAlignment.center
         nameTextField.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
-        nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
         
         view.addSubview(name)
         view.addSubview(nameTextField)
     }
     
     //stopping user from entering name with length greater than 25
-    func textFieldDidChange(sender: UITextField) {
+    func textFieldDidChange(_ sender: UITextField) {
         if let characterCount = nameTextField.text?.characters.count {
             if characterCount > 25 {
                 let aboveMaxBy = characterCount - 25
-                let index1 = nameTextField.text!.endIndex.advancedBy(-aboveMaxBy)
-                nameTextField.text = nameTextField.text!.substringToIndex(index1)
+                let index1 = nameTextField.text!.characters.index(nameTextField.text!.endIndex, offsetBy: -aboveMaxBy)
+                nameTextField.text = nameTextField.text!.substring(to: index1)
             }
         }
     }
@@ -336,8 +336,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     // Username label is tapped. Textfield should appear and replace the label
     func lblTapped(){
         nameTextField.becomeFirstResponder()
-        name.hidden = true
-        nameTextField.hidden = false
+        name.isHidden = true
+        nameTextField.isHidden = false
         if editableName != noNameText {
             nameTextField.text = editableName
         }
@@ -348,10 +348,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     }
     // Tapped anywhere else on the main view. Textfield should be replaced by label
     func tappedOutside(){
-        if nameTextField.isFirstResponder() {
+        if nameTextField.isFirstResponder {
             nameTextField.endEditing(true)
-            name.hidden = false
-            nameTextField.hidden = true
+            name.isHidden = false
+            nameTextField.isHidden = true
             if let editableNameTemp = nameTextField.text{
                 if editableNameTemp != "" {
                     name.text = editableNameTemp
@@ -367,10 +367,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         }
     }
     // User returns after editing
-    func textFieldShouldReturn(userText: UITextField) -> Bool {
+    func textFieldShouldReturn(_ userText: UITextField) -> Bool {
         userText.resignFirstResponder()
-        nameTextField.hidden = true
-        name.hidden = false
+        nameTextField.isHidden = true
+        name.isHidden = false
         if let editableNameTemp = nameTextField.text{
             name.text = editableNameTemp
             editableName = editableNameTemp
@@ -381,10 +381,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     func saveTapped() {
         
         //setting saveButton to selected for title coloring in UI
-        saveButton.selected = true
+        saveButton.isSelected = true
         
         let pickedImage = profilePictureView.image
-        saveButton.layer.borderColor = necterYellow.CGColor
+        saveButton.layer.borderColor = necterYellow.cgColor
         
         var somethingWasUpdated = false
         var interestsUpdated = false
@@ -394,11 +394,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         }
         
         //saving to parse
-        if let _ = PFUser.currentUser() {
+        if let _ = PFUser.current() {
             //saving the user's name
             if nameTextField.text != username {
                 print("new name save")
-                PFUser.currentUser()?["name"] = nameTextField.text
+                PFUser.current()?["name"] = nameTextField.text
                 somethingWasUpdated = true
             }
             
@@ -407,88 +407,88 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
                 
                 if let imageData = UIImageJPEGRepresentation(pickedImage!, 1.0){
                     //update the user's profile picture in Database
-                    if let _ = PFUser.currentUser() {
+                    if let _ = PFUser.current() {
                         let file = PFFile(data:imageData)
-                        PFUser.currentUser()!["profile_picture"] = file
+                        PFUser.current()!["profile_picture"] = file
                         somethingWasUpdated = true
                     }
                 }
             }
             
             //saving the users interests
-            if interestedInBusiness != businessSwitch.on {
-                PFUser.currentUser()?["interested_in_business"] = businessSwitch.on
+            if interestedInBusiness != businessSwitch.isOn {
+                PFUser.current()?["interested_in_business"] = businessSwitch.isOn
                 interestsUpdated = true
             }
-            if interestedInLove != loveSwitch.on {
-                PFUser.currentUser()?["interested_in_love"] = loveSwitch.on
+            if interestedInLove != loveSwitch.isOn {
+                PFUser.current()?["interested_in_love"] = loveSwitch.isOn
                 interestsUpdated = true
             }
-            if interestedInFriendship != friendshipSwitch.on {
-                PFUser.currentUser()?["interested_in_friendship"] = friendshipSwitch.on
+            if interestedInFriendship != friendshipSwitch.isOn {
+                PFUser.current()?["interested_in_friendship"] = friendshipSwitch.isOn
                 interestsUpdated = true
             }
             
             if somethingWasUpdated || interestsUpdated {
-                PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
+                PFUser.current()?.saveInBackground(block: { (success, error) in
                     if success {
                         //updating profile picture in bridgePairings Table if the picture was changed
                         if self.originalProfilePicture != pickedImage {
-                            PFCloud.callFunctionInBackground("changeBridgePairingsOnProfilePictureUpdate", withParameters: [:]) {
-                                (response:AnyObject?, error: NSError?) -> Void in
+                            PFCloud.callFunction(inBackground: "changeBridgePairingsOnProfilePictureUpdate", withParameters: [:], block: {
+                                (response:Any?, error: Error?) in
                                 if error == nil {
                                     if let response = response as? String {
                                         print(response)
                                     }
                                 }
-                            }
+                            })
                         }
                         
                         //updating name in BridgePairings, Messages, and SingleMessages tables if the name was changed
                         if self.nameTextField.text != self.username {
-                            PFCloud.callFunctionInBackground("changeMessagesTableOnNameUpdate", withParameters: [:]) {
-                                (response:AnyObject?, error: NSError?) -> Void in
+                            PFCloud.callFunction(inBackground: "changeMessagesTableOnNameUpdate", withParameters: [:], block: {
+                                (response:Any?, error: Error?) in
                                 if error == nil {
                                     if let response = response as? String {
                                         print(response)
                                         print("changeMessagesTableOnNameUpdate")
                                     }
                                 }
-                            }
-                            PFCloud.callFunctionInBackground("changeSingleMessagesTableOnNameUpdate", withParameters: [:]) {
-                                (response:AnyObject?, error: NSError?) -> Void in
+                            })
+                            PFCloud.callFunction(inBackground: "changeSingleMessagesTableOnNameUpdate", withParameters: [:], block: {
+                                (response:Any?, error: Error?) in
                                 if error == nil {
                                     if let response = response as? String {
                                         print(response)
                                         print("changeSingleMessagesTableOnNameUpdate")
                                     }
                                 }
-                            }
+                            })
                             
-                            PFCloud.callFunctionInBackground("changeBridgePairingsOnNameUpdate", withParameters: [:]) {
-                                (response:AnyObject?, error: NSError?) -> Void in
+                            PFCloud.callFunction(inBackground: "changeBridgePairingsOnNameUpdate", withParameters: [:], block: {
+                                (response:Any?, error: Error?) in
                                 if error == nil {
                                     if let response = response as? String {
                                         print(response)
                                         print("changeBridgePairingsOnNameUpdate")
                                     }
                                 }
-                            }
+                            })
                             
                         }
                         
                         //updated interests in bridgepairings table if the interests were changed
                         if interestsUpdated {
                             print("interestsUpdated")
-                            PFCloud.callFunctionInBackground("changeBridgePairingsOnInterestedInUpdate", withParameters: [:]) {
-                                (response:AnyObject?, error: NSError?) -> Void in
+                            PFCloud.callFunction(inBackground: "changeBridgePairingsOnInterestedInUpdate", withParameters: [:], block: {
+                                (response:Any?, error: Error?) in
                                 if error == nil {
                                     if let response = response as? String {
                                         print("changeBridgePairingsOnInterestedInUpdate")
                                         print(response)
                                     }
                                 }
-                            }
+                            })
                         }
                     }
                 })
@@ -512,41 +512,41 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         
         localData.synchronize()
         if tempSeguedFrom == "OptionsFromBotViewController" {
-            performSegueWithIdentifier("showOptionsViewFromEditProfileView", sender: self)
+            performSegue(withIdentifier: "showOptionsViewFromEditProfileView", sender: self)
         } else {
-            performSegueWithIdentifier("showProfilePageFromEditProfileView", sender: self)
+            performSegue(withIdentifier: "showProfilePageFromEditProfileView", sender: self)
         }
     }
     
     // Switches tapped
-    func businessSwitchTapped(sender: UISwitch) {
-        if businessSwitch.on{
+    func businessSwitchTapped(_ sender: UISwitch) {
+        if businessSwitch.isOn{
             businessLabel.textColor = businessBlue
             businessIcon.image = UIImage(named: "Business_Icon_Blue")
         }
         else{
-            businessLabel.textColor = UIColor.grayColor()
+            businessLabel.textColor = UIColor.gray
             businessIcon.image = UIImage(named: "Business_Icon_Gray")
         }
     }
-    func loveSwitchTapped(sender: UISwitch) {
-        if loveSwitch.on{
+    func loveSwitchTapped(_ sender: UISwitch) {
+        if loveSwitch.isOn{
             loveLabel.textColor = loveRed
             loveIcon.image = UIImage(named: "Love_Icon_Red")
         }
         else{
             
-            loveLabel.textColor = UIColor.grayColor()
+            loveLabel.textColor = UIColor.gray
             loveIcon.image = UIImage(named: "Love_Icon_Gray")
         }
     }
-    func friendshipSwitchTapped(sender: UISwitch) {
-        if friendshipSwitch.on{
+    func friendshipSwitchTapped(_ sender: UISwitch) {
+        if friendshipSwitch.isOn{
             friendshipLabel.textColor = friendshipGreen
             friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
         }
         else{
-            friendshipLabel.textColor = UIColor.grayColor()
+            friendshipLabel.textColor = UIColor.gray
             friendshipIcon.image = UIImage(named: "Friendship_Icon_Gray")
         }
     }
@@ -585,59 +585,59 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         friendshipLabel.text = "Friendship"
         
         //adding Targets for actions to take place when the switches are clicked
-        businessSwitch.addTarget(self, action: #selector(businessSwitchTapped(_:)), forControlEvents: .TouchUpInside)
-        loveSwitch.addTarget(self, action: #selector(loveSwitchTapped(_:)), forControlEvents: .TouchUpInside)
-        friendshipSwitch.addTarget(self, action: #selector(friendshipSwitchTapped(_:)), forControlEvents: .TouchUpInside)
+        businessSwitch.addTarget(self, action: #selector(businessSwitchTapped(_:)), for: .touchUpInside)
+        loveSwitch.addTarget(self, action: #selector(loveSwitchTapped(_:)), for: .touchUpInside)
+        friendshipSwitch.addTarget(self, action: #selector(friendshipSwitchTapped(_:)), for: .touchUpInside)
         
         //setting the switches to bool values based on parse and then setting the UI of the corresponding labels, and Icons accoridingly
         //Setting whether the user is interested in business
-        if let businessInterest = PFUser.currentUser()?["interested_in_business"] as? Bool {
-            businessSwitch.on = businessInterest
+        if let businessInterest = PFUser.current()?["interested_in_business"] as? Bool {
+            businessSwitch.isOn = businessInterest
             interestedInBusiness = businessInterest
         }
         else {
-            businessSwitch.on = true
+            businessSwitch.isOn = true
         }
         businessSwitch.onTintColor = businessBlue
-        if businessSwitch.on {
+        if businessSwitch.isOn {
             businessLabel.textColor = businessBlue
             businessIcon.image = UIImage(named: "Business_Icon_Blue")
         } else {
-            businessLabel.textColor = UIColor.grayColor()
+            businessLabel.textColor = UIColor.gray
             businessIcon.image = UIImage(named: "Business_Icon_Gray")
         }
         //Setting whether the user is interested in love
-        if let loveInterest = PFUser.currentUser()?["interested_in_love"] as? Bool {
-            loveSwitch.on = loveInterest
+        if let loveInterest = PFUser.current()?["interested_in_love"] as? Bool {
+            loveSwitch.isOn = loveInterest
             interestedInLove = loveInterest
         }
         else {
-            loveSwitch.on = true
+            loveSwitch.isOn = true
         }
         loveSwitch.onTintColor = loveRed
-        if loveSwitch.on{
+        if loveSwitch.isOn{
             loveLabel.textColor = loveRed
             loveIcon.image = UIImage(named: "Love_Icon_Red")
         }
         else{
-            loveLabel.textColor = UIColor.grayColor()
+            loveLabel.textColor = UIColor.gray
             loveIcon.image = UIImage(named: "Love_Icon_Gray")
         }
         //Setting whether the user is interested in friendship
-        if let friendshipInterest = PFUser.currentUser()?["interested_in_friendship"] as? Bool {
-            friendshipSwitch.on = friendshipInterest
+        if let friendshipInterest = PFUser.current()?["interested_in_friendship"] as? Bool {
+            friendshipSwitch.isOn = friendshipInterest
             interestedInFriendship = friendshipInterest
         }
         else {
-            friendshipSwitch.on = true
+            friendshipSwitch.isOn = true
         }
         friendshipSwitch.onTintColor = friendshipGreen
-        if friendshipSwitch.on{
+        if friendshipSwitch.isOn{
             friendshipLabel.textColor = friendshipGreen
             friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
         }
         else{
-            friendshipLabel.textColor = UIColor.grayColor()
+            friendshipLabel.textColor = UIColor.gray
             friendshipIcon.image = UIImage(named: "Friendship_Icon_Gray")
         }
         
@@ -667,14 +667,14 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         saveButton.frame = CGRect(x: 0, y:0.9*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
         saveButton.center.x = view.center.x
         saveButton.layer.borderWidth = 4.0
-        saveButton.layer.borderColor = necterGray.CGColor
+        saveButton.layer.borderColor = necterGray.cgColor
         saveButton.layer.cornerRadius = 7.0
-        saveButton.setTitle("save", forState: .Normal)
-        saveButton.setTitleColor(necterGray, forState: .Normal)
-        saveButton.setTitleColor(necterYellow, forState: .Highlighted)
-        saveButton.setTitleColor(necterYellow, forState: .Selected)
+        saveButton.setTitle("save", for: UIControlState())
+        saveButton.setTitleColor(necterGray, for: UIControlState())
+        saveButton.setTitleColor(necterYellow, for: .highlighted)
+        saveButton.setTitleColor(necterYellow, for: .selected)
         saveButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
-        saveButton.addTarget(self, action: #selector(saveTapped), forControlEvents: .TouchUpInside)
+        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
         view.addSubview(saveButton)
         
     }
@@ -687,7 +687,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     override func viewDidLayoutSubviews() {
         let border = CALayer()
         let width = CGFloat(2.0)
-        border.borderColor = necterYellow.CGColor
+        border.borderColor = necterYellow.cgColor
         border.frame = CGRect(x: 0, y: nameTextField.frame.size.height - width, width:  nameTextField.frame.size.width, height: nameTextField.frame.size.height)
         
         border.borderWidth = width
@@ -695,16 +695,16 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         nameTextField.layer.masksToBounds = true
         
         let nameBorder = CALayer()
-        nameBorder.borderColor = UIColor.blackColor().CGColor
+        nameBorder.borderColor = UIColor.black.cgColor
         nameBorder.frame = CGRect(x: 0, y: name.frame.size.height - width, width:  name.frame.size.width, height: name.frame.size.height)
 
         name.layer.addSublayer(nameBorder)
         name.layer.masksToBounds = true
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
-        let vc = segue.destinationViewController
+        let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == ProfileViewController.self {
             self.transitionManager.animationDirection = "Right"

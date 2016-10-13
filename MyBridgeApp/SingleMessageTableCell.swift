@@ -30,7 +30,7 @@ class SingleMessageTableCell: UITableViewCell {
                 senderId = s.senderId!
                 notificationLabel.text = s.messageText
                 isNotification = s.isNotification
-                if (senderId != PFUser.currentUser()?.objectId) && (singleMessageContent?.senderId != singleMessageContent?.previousSenderId )  {
+                if (senderId != PFUser.current()?.objectId) && (singleMessageContent?.senderId != singleMessageContent?.previousSenderId )  {
                     addSenderName = true
                     contentView.addSubview(senderNameLabel)
                 }
@@ -53,19 +53,19 @@ class SingleMessageTableCell: UITableViewCell {
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor.clearColor()
-        selectionStyle = .None
-        background = UIView(frame: CGRectZero)
+        backgroundColor = UIColor.clear
+        selectionStyle = .none
+        background = UIView(frame: CGRect.zero)
         background.alpha = 0.6
         //contentView.addSubview(background)
         
         
-        messageTextLabel = UITextView(frame: CGRectZero)
-        messageTextLabel.textAlignment = .Left
+        messageTextLabel = UITextView(frame: CGRect.zero)
+        messageTextLabel.textAlignment = .left
         messageTextLabel.textColor = necterGray
         messageTextLabel.font = UIFont(name: "Verdana", size: 16)
-        messageTextLabel.userInteractionEnabled = false
-        messageTextLabel.backgroundColor = UIColor.lightGrayColor()
+        messageTextLabel.isUserInteractionEnabled = false
+        messageTextLabel.backgroundColor = UIColor.lightGray
         
         /*print("isNotification - from tableCell \(isNotification)" )
         if isNotification == false {
@@ -73,20 +73,20 @@ class SingleMessageTableCell: UITableViewCell {
             contentView.addSubview(messageTextLabel)
         }*/
         
-        senderNameLabel = UITextView(frame: CGRectZero)
-        senderNameLabel.textAlignment = .Left
+        senderNameLabel = UITextView(frame: CGRect.zero)
+        senderNameLabel.textAlignment = .left
         senderNameLabel.textColor = necterGray
         senderNameLabel.font = UIFont(name: "Verdana", size: 12)
-        senderNameLabel.userInteractionEnabled = false
+        senderNameLabel.isUserInteractionEnabled = false
         
-        timestampLabel = UILabel(frame: CGRectZero)
-        timestampLabel.textAlignment = .Center
-        timestampLabel.textColor = UIColor.lightGrayColor()
+        timestampLabel = UILabel(frame: CGRect.zero)
+        timestampLabel.textAlignment = .center
+        timestampLabel.textColor = UIColor.lightGray
         timestampLabel.font = UIFont(name: "BentonSans", size: 12)
         
-        notificationLabel = UILabel(frame: CGRectZero)
-        notificationLabel.textAlignment = .Center
-        notificationLabel.textColor = UIColor.lightGrayColor()
+        notificationLabel = UILabel(frame: CGRect.zero)
+        notificationLabel.textAlignment = .center
+        notificationLabel.textColor = UIColor.lightGray
         notificationLabel.font = UIFont(name: "BentonSans", size: 12)
         
     }
@@ -103,9 +103,9 @@ class SingleMessageTableCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         var y = CGFloat(0)
-        let screenWidth = UIScreen.mainScreen().bounds.width
+        let screenWidth = UIScreen.main.bounds.width
         if addTimestamp == true {
-            timestampLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.35, y, UIScreen.mainScreen().bounds.width*0.30, 25)
+            timestampLabel.frame = CGRect(x: UIScreen.main.bounds.width*0.35, y: y, width: UIScreen.main.bounds.width*0.30, height: 25)
             //timestampLabel.layer.borderWidth = 1
             //timestampLabel.layer.cornerRadius = 10
             //timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
@@ -114,37 +114,37 @@ class SingleMessageTableCell: UITableViewCell {
 
         }
         if isNotification == true {
-            notificationLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width*0.1, y, UIScreen.mainScreen().bounds.width*0.8, 25)
+            notificationLabel.frame = CGRect(x: UIScreen.main.bounds.width*0.1, y: y, width: UIScreen.main.bounds.width*0.8, height: 25)
             y += notificationLabel.frame.height + 2
         }
         
         if addSenderName {
-            var width = (UIScreen.mainScreen().bounds.width/3 )
+            var width = (UIScreen.main.bounds.width/3 )
             width += CGFloat(5)
-            senderNameLabel.frame = CGRectMake(0.05*screenWidth, y, width, 15)
+            senderNameLabel.frame = CGRect(x: 0.05*screenWidth, y: y, width: width, height: 15)
             let fixedWidth = senderNameLabel.frame.size.width
-            let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+            let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
             var newFrame = senderNameLabel.frame
             newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
             senderNameLabel.frame = newFrame
             senderNameLabel.layer.borderWidth = 1
             senderNameLabel.layer.cornerRadius = 5
-            senderNameLabel.layer.borderColor = senderNameLabel.backgroundColor?.CGColor
+            senderNameLabel.layer.borderColor = senderNameLabel.backgroundColor?.cgColor
             y += newFrame.height + 2
 //            addSenderName = false
         }
-        if senderId == PFUser.currentUser()?.objectId {
-            messageTextLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width/3.0, y, UIScreen.mainScreen().bounds.width/1.5, 25)
+        if senderId == PFUser.current()?.objectId {
+            messageTextLabel.frame = CGRect(x: UIScreen.main.bounds.width/3.0, y: y, width: UIScreen.main.bounds.width/1.5, height: 25)
         }
         else {
-            var width = (UIScreen.mainScreen().bounds.width/1.5)
+            var width = (UIScreen.main.bounds.width/1.5)
             width += CGFloat(5)
-            messageTextLabel.frame = CGRectMake(5, y, width, 25)
+            messageTextLabel.frame = CGRect(x: 5, y: y, width: width, height: 25)
         }
         
         
         let fixedWidth = messageTextLabel.frame.size.width
-        var newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+        var newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
 //        var newFrame = messageTextLabel.frame
 //        //max(newSize.width, fixedWidth)
 //        newFrame.size = CGSize(width: newSize.width, height: newSize.height)
@@ -156,26 +156,26 @@ class SingleMessageTableCell: UITableViewCell {
             newSize.height = 33
         }
         var x = 0.05*screenWidth
-        if senderId == PFUser.currentUser()?.objectId {
+        if senderId == PFUser.current()?.objectId {
             x = 0.95*screenWidth - newSize.width
         }
-        let newFrame = CGRectMake(x, y, newSize.width, newSize.height)
+        let newFrame = CGRect(x: x, y: y, width: newSize.width, height: newSize.height)
         messageTextLabel.frame = newFrame
         messageTextLabel.layer.borderWidth = 1
         if messageTextLabel.text.characters.count < 3 {
             messageTextLabel.layer.cornerRadius = messageTextLabel.frame.width/2.0
-            messageTextLabel.textAlignment = NSTextAlignment.Center
+            messageTextLabel.textAlignment = NSTextAlignment.center
         } else {
             messageTextLabel.layer.cornerRadius = 15
         }
-        messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.CGColor
+        messageTextLabel.layer.borderColor = messageTextLabel.backgroundColor?.cgColor
     }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

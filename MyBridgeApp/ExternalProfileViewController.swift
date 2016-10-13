@@ -11,8 +11,8 @@ import Parse
 
 class ExternalProfileViewController: UIViewController {
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     let localData = LocalData()
     
     var singleMessageTitle = "Conversation"
@@ -29,17 +29,17 @@ class ExternalProfileViewController: UIViewController {
         //get profile picture and set to a button
         let mainProfilePicture = localData.getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
-            let image = UIImage(data: mainProfilePicture, scale: 1.0)
+            let image = UIImage(data: mainProfilePicture as Data, scale: 1.0)
             //profilePictureButton.setImage(image, forState: .Normal)
             profilePictureView.image = image
         }  else {
-            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+            let pfData = PFUser.current()?["profile_picture"] as? PFFile
             if let pfData = pfData {
-                pfData.getDataInBackgroundWithBlock({ (data, error) in
+                pfData.getDataInBackground(block: { (data, error) in
                     if error != nil || data == nil {
                         print(error)
                     } else {
-                        dispatch_async(dispatch_get_main_queue(), {
+                        DispatchQueue.main.async(execute: {
                             //self.profilePictureButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
                             profilePictureView.image = UIImage(data: data!, scale: 1.0)
                         })
@@ -49,7 +49,7 @@ class ExternalProfileViewController: UIViewController {
             
         }
         
-        profilePictureView.contentMode = UIViewContentMode.ScaleAspectFit
+        profilePictureView.contentMode = UIViewContentMode.scaleAspectFit
         profilePictureView.clipsToBounds = true
         
         view.addSubview(profilePictureView)
@@ -75,7 +75,7 @@ class ExternalProfileViewController: UIViewController {
                 view.removeGestureRecognizer(gesture)
             }
         }
-        performSegueWithIdentifier("showSingleMessageFromExternalProfile", sender: self)
+        performSegue(withIdentifier: "showSingleMessageFromExternalProfile", sender: self)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +83,7 @@ class ExternalProfileViewController: UIViewController {
         //adding a black background
         let backgroundView = UIImageView()
         backgroundView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        backgroundView.backgroundColor = UIColor.blackColor()
+        backgroundView.backgroundColor = UIColor.black
         view.addSubview(backgroundView)
 
         displayProfilePicture()
@@ -103,11 +103,11 @@ class ExternalProfileViewController: UIViewController {
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //Update the fact that you have viewed the message Thread when you segue
         // Segue is not the best place to put this. If you are about to close the view this should get called
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        let vc = segue.destinationViewController
+        NotificationCenter.default.removeObserver(self)
+        let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == SingleMessageViewController.self {
             let vc2 = vc as! SingleMessageViewController

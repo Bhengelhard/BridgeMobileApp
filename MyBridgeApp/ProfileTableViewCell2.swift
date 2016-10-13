@@ -13,8 +13,8 @@ class ProfileTableViewCell2: UITableViewCell {
 
     //@IBOutlet weak var label: UILabel!
     //@IBOutlet weak var preferencesSwitch: UISwitch!
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     /*//Switches Tapped
     @IBAction func preferencesSwitchTapped(sender: AnyObject) {
@@ -79,7 +79,7 @@ class ProfileTableViewCell2: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

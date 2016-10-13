@@ -15,8 +15,8 @@ class TermsOfServiceViewController: UIViewController {
     let navigationBar = UINavigationBar()
     let backButton = UIButton()
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     //necter Colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
@@ -31,14 +31,14 @@ class TermsOfServiceViewController: UIViewController {
         let navItem = UINavigationItem()
         
         //cancel edit bar buton item
-        backButton.setTitle(">", forState: .Normal)
-        backButton.setTitleColor(necterGray, forState: .Normal)
-        backButton.setTitleColor(necterYellow, forState: .Selected)
-        backButton.setTitleColor(necterYellow, forState: .Highlighted)
+        backButton.setTitle(">", for: UIControlState())
+        backButton.setTitleColor(necterGray, for: UIControlState())
+        backButton.setTitleColor(necterYellow, for: .selected)
+        backButton.setTitleColor(necterYellow, for: .highlighted)
         backButton.titleLabel!.font = UIFont(name: "Verdana-Bold", size: 24)!
         //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Selected)
         //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Highlighted)
-        backButton.addTarget(self, action: #selector(backTapped(_:)), forControlEvents: .TouchUpInside)
+        backButton.addTarget(self, action: #selector(backTapped(_:)), for: .touchUpInside)
         backButton.frame = CGRect(x: 0, y: 0, width: 0.2*screenWidth, height: 0.06*screenHeight)
         let rightBarButtonItem = UIBarButtonItem(customView: backButton)
         navItem.rightBarButtonItem = rightBarButtonItem
@@ -49,8 +49,8 @@ class TermsOfServiceViewController: UIViewController {
         navigationBar.setItems([navItem], animated: false)
         navigationBar.topItem?.title = "Terms of Service"
         navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: necterYellow]
-        navigationBar.barStyle = .Black
-        navigationBar.barTintColor = UIColor.whiteColor()
+        navigationBar.barStyle = .black
+        navigationBar.barTintColor = UIColor.white
         self.view.addSubview(navigationBar)
         
     }
@@ -58,9 +58,9 @@ class TermsOfServiceViewController: UIViewController {
     
     
     
-    func backTapped (sender: UIButton) {
-        backButton.selected = true
-        performSegueWithIdentifier("showProfilePageFromTermsOfService", sender: self)
+    func backTapped (_ sender: UIButton) {
+        backButton.isSelected = true
+        performSegue(withIdentifier: "showProfilePageFromTermsOfService", sender: self)
     }
     
     override func viewDidLoad() {
@@ -75,9 +75,9 @@ class TermsOfServiceViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
-        let vc = segue.destinationViewController
+        let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == ProfileViewController.self {
             self.transitionManager.animationDirection = "Right"

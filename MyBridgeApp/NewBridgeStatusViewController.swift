@@ -32,8 +32,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     var didSendPost = false
     var isFirstPost = true
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
     let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
@@ -42,7 +42,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     var necterType = ""
     
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         if isFirstPost {
             let newCharacter = bridgeStatus.text.characters.last
             if newCharacter == " " || newCharacter == "."{
@@ -55,13 +55,13 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         }
         
         if enablePost || bridgeStatus.text?.characters.count == 18 {
-            postButton.layer.borderColor = necterYellow.CGColor
-            postButton.setTitleColor(necterYellow, forState: .Highlighted)
-            postButton.enabled = true
+            postButton.layer.borderColor = necterYellow.cgColor
+            postButton.setTitleColor(necterYellow, for: .highlighted)
+            postButton.isEnabled = true
             enablePost = false
         } else if bridgeStatus.text?.characters.count == 0 {
-            postButton.layer.borderColor = necterGray.CGColor
-            postButton.enabled = false
+            postButton.layer.borderColor = necterGray.cgColor
+            postButton.isEnabled = false
             enablePost = true
         }
         
@@ -69,14 +69,14 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         if let characterCount = bridgeStatus.text?.characters.count {
             if characterCount > 100 {
                 let aboveMaxBy = characterCount - 100
-                let index1 = bridgeStatus.text!.endIndex.advancedBy(-aboveMaxBy)
-                bridgeStatus.text = bridgeStatus.text!.substringToIndex(index1)
+                let index1 = bridgeStatus.text!.characters.index(bridgeStatus.text!.endIndex, offsetBy: -aboveMaxBy)
+                bridgeStatus.text = bridgeStatus.text!.substring(to: index1)
             }
         }
 
     }
     
-    func backTapped(sender: UIButton ){
+    func backTapped(_ sender: UIButton ){
         
         bridgeStatus.resignFirstResponder()
         
@@ -90,10 +90,10 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         necterTypeLine.alpha = 0
         necterTypeIcon.alpha = 0*/
         
-        performSegueWithIdentifier("showOptionsViewFromNewStatus", sender: self)
+        performSegue(withIdentifier: "showOptionsViewFromNewStatus", sender: self)
         
     }
-    func postTapped(sender: UIButton){
+    func postTapped(_ sender: UIButton){
         //self.vc?.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
         bridgeStatus.resignFirstResponder()
         
@@ -131,44 +131,44 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         let bridgeStatusObject = PFObject(className: "BridgeStatus")
         bridgeStatusObject["bridge_status"] = self.bridgeStatus.text!
         bridgeStatusObject["bridge_type"] = self.necterType
-        bridgeStatusObject["userId"] = PFUser.currentUser()?.objectId
-        bridgeStatusObject.saveInBackgroundWithBlock { (success, error) in
+        bridgeStatusObject["userId"] = PFUser.current()?.objectId
+        bridgeStatusObject.saveInBackground { (success, error) in
             
             
             if error != nil {
                 //sends notification to call displayMessageFromBot function
                 let userInfo = ["message" : "Your post did not go through. Please wait a minute and try posting again"]
-                NSNotificationCenter.defaultCenter().postNotificationName("displayMessageFromBot", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "displayMessageFromBot"), object: nil, userInfo: userInfo)
             } else if success {
                 //sends notification to call displayMessageFromBot function
                 let userInfo = ["message" : "Your post is now being shown to friends so they can connect you!"]
                 self.didSendPost = true
-                NSNotificationCenter.defaultCenter().postNotificationName("displayMessageFromBot", object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "displayMessageFromBot"), object: nil, userInfo: userInfo)
             }
         }
         
-        PFCloud.callFunctionInBackground("changeBridgePairingsOnStatusUpdate", withParameters: ["status":self.bridgeStatus.text!, "bridgeType":self.necterType]) {
-            (response:AnyObject?, error: NSError?) -> Void in
+        PFCloud.callFunction(inBackground: "changeBridgePairingsOnStatusUpdate", withParameters: ["status":self.bridgeStatus.text!, "bridgeType":self.necterType], block: {
+            (response:Any?, error: Error?) in
             if error == nil {
                 if let response = response as? String {
                     print(response)
                 }
             }
-        }
+        })
         
         performSegueToPriorView()
     }
     
     func performSegueToPriorView() {
         if seguedFrom == "ProfileViewController" {
-            performSegueWithIdentifier("showProfilePageFromNewStatusView", sender: self)
+            performSegue(withIdentifier: "showProfilePageFromNewStatusView", sender: self)
         } else if seguedFrom == "BridgeViewController" {
-            performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
+            performSegue(withIdentifier: "showBridgePageFromStatus", sender: self)
         } else if seguedFrom == "MessagesViewController" {
-            performSegueWithIdentifier("showMessagesViewfromStatus", sender: self)
+            performSegue(withIdentifier: "showMessagesViewfromStatus", sender: self)
         } else {
             //default case
-            performSegueWithIdentifier("showBridgePageFromStatus", sender: self)
+            performSegue(withIdentifier: "showBridgePageFromStatus", sender: self)
         }
     }
     
@@ -176,7 +176,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         print("instructions should display")
         let botInstructionsView = UIView()
         botInstructionsView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         //always fill the view
         blurEffectView.frame = botInstructionsView.bounds
@@ -184,10 +184,10 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
         let messageLabel = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.01*screenHeight, width: 0.9*screenWidth, height: 0.11*screenHeight))
         messageLabel.text = "Awesome! Now post a status to give your friends more information."
-        messageLabel.textColor = UIColor.darkGrayColor()
+        messageLabel.textColor = UIColor.darkGray
         messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
         messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = NSTextAlignment.Center
+        messageLabel.textAlignment = NSTextAlignment.center
         
         botInstructionsView.addSubview(messageLabel)
         botInstructionsView.insertSubview(blurEffectView, belowSubview: messageLabel)
@@ -198,8 +198,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         //UIView.animateWithDuration(0.7) {
             
         //}
-        let _ = Timer(interval: 1) {i -> Bool in
-            UIView.animateWithDuration(0.7, animations: {
+        let _ = CustomTimer(interval: 1) {i -> Bool in
+            UIView.animate(withDuration: 0.7, animations: {
                 if i == 0 {
                     botInstructionsView.frame.origin.y = 0
                 } else if i == 4 {
@@ -225,34 +225,34 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         else {
             username.text = "Enter Name on your Profile"
         }
-        username.textColor = UIColor.whiteColor()
+        username.textColor = UIColor.white
         username.font = UIFont(name: "BentonSans", size: 20)
 
         //backButton.frame = CGRect(x: 0.05*screenWidth, y:0.07*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
         backButton.frame = CGRect(x: 0.05*screenWidth, y:0.07*screenHeight, width:0.33*screenWidth, height:0.06*screenHeight)
         backButton.layer.borderWidth = 4.0
-        backButton.layer.borderColor = necterGray.CGColor
+        backButton.layer.borderColor = necterGray.cgColor
         backButton.layer.cornerRadius = 7.0
-        backButton.setTitle("go back", forState: .Normal)
-        backButton.setTitleColor(necterGray, forState: .Normal)
-        backButton.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
+        backButton.setTitle("go back", for: UIControlState())
+        backButton.setTitleColor(necterGray, for: UIControlState())
+        backButton.setTitleColor(UIColor.lightGray, for: .highlighted)
         backButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
-        backButton.addTarget(self, action: #selector(backTapped), forControlEvents: .TouchUpInside)
+        backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         backButton.alpha = 0
         view.addSubview(backButton)
         
         //postButton.frame = CGRect(x: 0.65*screenWidth, y:0.07*screenHeight, width:0.3*screenWidth, height:0.06*screenHeight)
         postButton.frame = CGRect(x: 0.62*screenWidth, y:0.07*screenHeight, width:0.33*screenWidth, height:0.06*screenHeight)
         postButton.layer.borderWidth = 4.0
-        postButton.layer.borderColor = necterGray.CGColor
+        postButton.layer.borderColor = necterGray.cgColor
         postButton.layer.cornerRadius = 7.0
-        postButton.setTitle("post", forState: .Normal)
-        postButton.setTitleColor(necterGray, forState: .Normal)
-        postButton.setTitleColor(UIColor.lightGrayColor(), forState: .Highlighted)
+        postButton.setTitle("post", for: UIControlState())
+        postButton.setTitleColor(necterGray, for: UIControlState())
+        postButton.setTitleColor(UIColor.lightGray, for: .highlighted)
         postButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
-        postButton.addTarget(self, action: #selector(postTapped), forControlEvents: .TouchUpInside)
+        postButton.addTarget(self, action: #selector(postTapped), for: .touchUpInside)
         postButton.alpha = 0
-        postButton.enabled = false
+        postButton.isEnabled = false
         view.addSubview(postButton)
         
         //get and set profile picture
@@ -260,19 +260,19 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         if let mainProfilePicture = mainProfilePicture {
             
             //applying filter to make the white text more legible
-            let beginImage = CIImage(data: mainProfilePicture)
+            let beginImage = CIImage(data: mainProfilePicture as Data)
             let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
             edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
             edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
             edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
-            let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, fromRect: (edgeDetectFilter.outputImage?.extent)!)
-            let newImage = UIImage(CGImage: newCGImage)
+            let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+            let newImage = UIImage(cgImage: newCGImage!)
             profilePicture.image = newImage
         }
         
         profilePicture.layer.cornerRadius = 15
         
-        profilePicture.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePicture.contentMode = UIViewContentMode.scaleAspectFill
         profilePicture.clipsToBounds = true
         
         let profilePictureHeight = 0.3825*self.screenHeight
@@ -286,39 +286,39 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
         
         nameLabel.alpha = 0
-        nameLabel.textAlignment = NSTextAlignment.Left
-        nameLabel.textColor = UIColor.whiteColor()
+        nameLabel.textAlignment = NSTextAlignment.left
+        nameLabel.textColor = UIColor.white
         nameLabel.font = UIFont(name: "Verdana", size: 20)
         nameLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.05*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.12*profilePictureHeight)
         nameLabel.text = username.text
         nameLabel.layer.shadowOpacity = 0.5
         nameLabel.layer.shadowRadius = 0.5
-        nameLabel.layer.shadowColor = UIColor.blackColor().CGColor
-        nameLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
+        nameLabel.layer.shadowColor = UIColor.black.cgColor
+        nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
         
         //set users location to the PFUsers stored city and if there is no city stored then set it to ""
-        locationLabel.text = PFUser.currentUser()?["city"] as? String ?? ""
+        locationLabel.text = PFUser.current()?["city"] as? String ?? ""
         locationLabel.alpha = 0
         locationLabel.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: profilePictureY + 0.17*profilePictureHeight, width: 0.8*profilePictureWidth, height: 0.075*profilePictureHeight)
-        locationLabel.textAlignment = NSTextAlignment.Left
-        locationLabel.textColor = UIColor.whiteColor()
+        locationLabel.textAlignment = NSTextAlignment.left
+        locationLabel.textColor = UIColor.white
         locationLabel.font = UIFont(name: "Verdana", size: 14)
         locationLabel.layer.shadowOpacity = 0.5
         locationLabel.layer.shadowRadius = 0.5
-        locationLabel.layer.shadowColor = UIColor.blackColor().CGColor
-        locationLabel.layer.shadowOffset = CGSizeMake(0.0, -0.5)
+        locationLabel.layer.shadowColor = UIColor.black.cgColor
+        locationLabel.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
         
         bridgeStatus.alpha = 0
-        bridgeStatus.textColor = UIColor.whiteColor()
-        bridgeStatus.backgroundColor = UIColor.clearColor()
+        bridgeStatus.textColor = UIColor.white
+        bridgeStatus.backgroundColor = UIColor.clear
         bridgeStatus.text = "I am looking for... "
         bridgeStatus.font = UIFont(name: "Verdana", size: 14)
         bridgeStatus.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: 0.65*profilePictureHeight + profilePictureY, width: 0.9*profilePictureWidth, height: 0.3*profilePictureHeight)
-        bridgeStatus.textAlignment = NSTextAlignment.Center
+        bridgeStatus.textAlignment = NSTextAlignment.center
         bridgeStatus.layer.shadowOpacity = 0.5
         bridgeStatus.layer.shadowRadius = 0.5
-        bridgeStatus.layer.shadowColor = UIColor.blackColor().CGColor
-        bridgeStatus.layer.shadowOffset = CGSizeMake(0.0, -0.5)
+        bridgeStatus.layer.shadowColor = UIColor.black.cgColor
+        bridgeStatus.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
         
         //line that represents the necter Type and is located between user cards -> half on the current user card in the Status page
         necterTypeLine.alpha = 0
@@ -327,13 +327,13 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         //icon that represents the necter Type
         necterTypeIcon.alpha = 0
         necterTypeIcon.frame = CGRect(x: profilePictureX + 0.45*profilePictureWidth, y: profilePictureY + profilePictureHeight - 0.08*profilePictureWidth, width: 0.1*profilePictureWidth, height: 0.1*profilePictureWidth)
-        necterTypeIcon.contentMode = UIViewContentMode.ScaleAspectFill
+        necterTypeIcon.contentMode = UIViewContentMode.scaleAspectFill
         necterTypeIcon.clipsToBounds = true
         
         necterTypeIcon.layer.shadowOpacity = 0.5
         necterTypeIcon.layer.shadowRadius = 0.5
-        necterTypeIcon.layer.shadowColor = UIColor.blackColor().CGColor
-        necterTypeIcon.layer.shadowOffset = CGSizeMake(0.0, -0.5)
+        necterTypeIcon.layer.shadowColor = UIColor.black.cgColor
+        necterTypeIcon.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
         
         ////setting placeholder text as examples for each type of connection.
         //var placeholderText = String()
@@ -369,9 +369,9 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
             //return i + 1 < attributedGreeting.string.characters.count
             //fade out select necter Type screen
             //using optionTableView.alpha as an indicator that the user has not yet clicked the back button
-        bridgeStatus.autocapitalizationType = UITextAutocapitalizationType.None
+        bridgeStatus.autocapitalizationType = UITextAutocapitalizationType.none
 
-        UIView.animateWithDuration(0.6, delay: 0, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
+        UIView.animate(withDuration: 0.6, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
             //fade in post status screen
             self.bridgeStatus.becomeFirstResponder()
             self.profilePicture.alpha = 1
@@ -396,8 +396,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let vc = segue.destinationViewController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Bottom"

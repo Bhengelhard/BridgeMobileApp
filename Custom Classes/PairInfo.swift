@@ -12,14 +12,14 @@ class PairInfo:NSObject, NSCoding {
     var name:String? = nil
     var objectId:String? = nil
     var mainProfilePicture:String? = nil
-    var profilePictures: [NSData]? = nil
+    var profilePictures: [Data]? = nil
     var location:[Double]? = nil
     var bridgeStatus:String? = nil
     var city:String? = nil
-    var savedProfilePicture:NSData? = nil
+    var savedProfilePicture:Data? = nil
     var bridgeType:String? = nil
     var userId:String? = nil
-    init(name:String?, mainProfilePicture: String?, profilePictures: [NSData]?, location:[Double]?, bridgeStatus:String?, objectId:String?,bridgeType:String?,userId:String?,city:String?, savedProfilePicture:NSData? ) {
+    init(name:String?, mainProfilePicture: String?, profilePictures: [Data]?, location:[Double]?, bridgeStatus:String?, objectId:String?,bridgeType:String?,userId:String?,city:String?, savedProfilePicture:Data? ) {
         self.name = name
         self.mainProfilePicture = mainProfilePicture
         self.profilePictures = profilePictures
@@ -33,31 +33,31 @@ class PairInfo:NSObject, NSCoding {
     }
     
     required convenience init(coder aDecoder: NSCoder) {
-        let name = aDecoder.decodeObjectForKey("name") as! String?
-        let mainProfilePicture = aDecoder.decodeObjectForKey("mainProfilePicture") as! String?
-        let profilePictures = aDecoder.decodeObjectForKey("profilePictures") as! [NSData]?
-        let location = aDecoder.decodeObjectForKey("location") as! [Double]?
-        let bridgeStatus = aDecoder.decodeObjectForKey("bridgeStatus") as! String?
-        let objectId = aDecoder.decodeObjectForKey("objectId") as! String?
-        let bridgeType = aDecoder.decodeObjectForKey("bridgeType") as! String?
-        let userId = aDecoder.decodeObjectForKey("userId") as! String?
-        let city = aDecoder.decodeObjectForKey("city") as! String?
-        let savedProfilePicture = aDecoder.decodeObjectForKey("savedProfilePicture") as! NSData?
+        let name = aDecoder.decodeObject(forKey: "name") as! String?
+        let mainProfilePicture = aDecoder.decodeObject(forKey: "mainProfilePicture") as! String?
+        let profilePictures = aDecoder.decodeObject(forKey: "profilePictures") as! [Data]?
+        let location = aDecoder.decodeObject(forKey: "location") as! [Double]?
+        let bridgeStatus = aDecoder.decodeObject(forKey: "bridgeStatus") as! String?
+        let objectId = aDecoder.decodeObject(forKey: "objectId") as! String?
+        let bridgeType = aDecoder.decodeObject(forKey: "bridgeType") as! String?
+        let userId = aDecoder.decodeObject(forKey: "userId") as! String?
+        let city = aDecoder.decodeObject(forKey: "city") as! String?
+        let savedProfilePicture = aDecoder.decodeObject(forKey: "savedProfilePicture") as! Data?
         self.init(name: name, mainProfilePicture: mainProfilePicture, profilePictures: profilePictures,
                   location: location, bridgeStatus: bridgeStatus, objectId:objectId, bridgeType: bridgeType, userId:userId, city: city, savedProfilePicture: savedProfilePicture)
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(name, forKey: "name")
-        aCoder.encodeObject(mainProfilePicture, forKey: "mainProfilePicture")
-        aCoder.encodeObject(profilePictures, forKey: "profilePictures")
-        aCoder.encodeObject(location, forKey: "location")
-        aCoder.encodeObject(bridgeStatus, forKey: "bridgeStatus")
-        aCoder.encodeObject(objectId, forKey: "objectId")
-        aCoder.encodeObject(bridgeType, forKey: "bridgeType")
-        aCoder.encodeObject(userId, forKey: "userId")
-        aCoder.encodeObject(city, forKey: "city")
-        aCoder.encodeObject(savedProfilePicture, forKey: "savedProfilePicture")
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(mainProfilePicture, forKey: "mainProfilePicture")
+        aCoder.encode(profilePictures, forKey: "profilePictures")
+        aCoder.encode(location, forKey: "location")
+        aCoder.encode(bridgeStatus, forKey: "bridgeStatus")
+        aCoder.encode(objectId, forKey: "objectId")
+        aCoder.encode(bridgeType, forKey: "bridgeType")
+        aCoder.encode(userId, forKey: "userId")
+        aCoder.encode(city, forKey: "city")
+        aCoder.encode(savedProfilePicture, forKey: "savedProfilePicture")
     }
     
 }

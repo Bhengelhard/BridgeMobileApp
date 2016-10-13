@@ -9,31 +9,31 @@ import CoreLocation
 //var currentUser = PFUser.currentUser()
 
 class ViewController: UIViewController {
-   
+   var geoPoint:PFGeoPoint?
     
     @IBOutlet weak var fbLoginButton: UIButton!
     @IBOutlet weak var appName: UILabel!
 
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
-    var geoPoint:PFGeoPoint?
+    
     
     //Login with Facebook button tapped
-    @IBAction func fbLogin(sender: AnyObject) { 
+    @IBAction func fbLogin(_ sender: AnyObject) { 
         
         print("pressed")
         // Spinner sparts animating before the segue can be accesses
-        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0.475*screenWidth,0.16*screenHeight,0.05*screenWidth,0.05*screenWidth))
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0.475*screenWidth,y: 0.16*screenHeight,width: 0.05*screenWidth,height: 0.05*screenWidth))
         //activityIndicator.center = self.view.center
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
         view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
-        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         
-        fbLoginButton.backgroundColor = UIColor.clearColor()
+        fbLoginButton.backgroundColor = UIColor.clear
         
         var global_name:String = ""
         
@@ -52,7 +52,7 @@ class ViewController: UIViewController {
         
         //Log user in with permissions public_profile, email and user_friends
         let permissions = ["public_profile", "email", "user_friends"]
-        PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) { (user, error) in
+        PFFacebookUtils.logInInBackground(withReadPermissions: permissions) { (user, error) in
             print("got past permissions")
             if let error = error {
                 print(error)
@@ -62,14 +62,14 @@ class ViewController: UIViewController {
                     print("got user")
                     /* Check if the global variable geoPoint has been set to the user's location. If so, store it in Parse. Extremely important since the location would be used to get the user's current city in LocalUtility().getBridgePairings() which is indeed called in SignupViewController - cIgAr 08/18/16 */
                     if let geoPoint = self.geoPoint {
-                    PFUser.currentUser()?["location"] = geoPoint
-                    PFUser.currentUser()?.saveInBackground()
+                        PFUser.current()?["location"] = geoPoint
+                        PFUser.current()?.saveInBackground()
                     }
                     // identify user id with the device
-                    let installation = PFInstallation.currentInstallation()
+                    let installation = PFInstallation.current()
                     //installation.setDeviceTokenFromData(deviceToken)
-                    installation["user"] = PFUser.currentUser()
-                    installation["userObjectId"] = PFUser.currentUser()?.objectId
+                    installation["user"] = PFUser.current()
+                    installation["userObjectId"] = PFUser.current()?.objectId
                     installation.saveInBackground()
                     
                     LocalStorageUtility().getUserFriends()
@@ -83,7 +83,7 @@ class ViewController: UIViewController {
                         let localData = LocalData()
                         
                         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, friends, birthday, location"])
-                        graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
+                        graphRequest!.start { (connection, result, error) -> Void in
                             print("got into graph request")
                             
                             if error != nil {
@@ -91,29 +91,27 @@ class ViewController: UIViewController {
                                 print(error)
                                 print("got error")
                                 
-                            } else if let result = result {
+                            } else if let result = result as? [String: AnyObject]{
                                 // saves these to parse at every login
                                 print("got result")
-                                if let interested_in = result["interested_in"]! {
-                                    
-                                    localData.setInterestedIN(interested_in as! String)
-                                    PFUser.currentUser()?["interested_in"] = interested_in
-                                }
+                                let interested_in = result["interested_in"]!
+                                localData.setInterestedIN(interested_in as! String)
+                                PFUser.current()?["interested_in"] = interested_in
                                 
                                 if let gender: String = result["gender"]! as? String {
                                     
-                                    PFUser.currentUser()?["gender"] = gender
-                                    PFUser.currentUser()?["fb_gender"] = gender
+                                    PFUser.current()?["gender"] = gender
+                                    PFUser.current()?["fb_gender"] = gender
                                     //saves a guess at the gender the current user is interested in if it doesn't already exist
                                 if result["interested_in"]! == nil {
                                     
                                     if gender == "male" {
                                         
-                                        PFUser.currentUser()?["interested_in"] = "female"
+                                        PFUser.current()?["interested_in"] = "female"
                                         
                                     } else if gender == "female" {
                                             
-                                        PFUser.currentUser()?["interested_in"] = "male"
+                                        PFUser.current()?["interested_in"] = "male"
                                     }
                                         
                                 }
@@ -122,48 +120,35 @@ class ViewController: UIViewController {
                                 }
                                 
                                 //setting main name and names for Bridge Types to Facebook name
-                                if let name = result["name"]! {
+                                let name = result["name"]!
                                     // Store the name in core data 06/09
-                                    
-                                    global_name = name as! String
-                                    localData.setUsername(global_name)
-                                    PFUser.currentUser()?["fb_name"] = name
-                                    PFUser.currentUser()?["name"] = name
-                                    PFUser.currentUser()?["business_name"] = name
-                                    PFUser.currentUser()?["love_name"] = name
-                                    PFUser.currentUser()?["friendship_name"] = name
-                                                                       
-                                }
+                                global_name = name as! String
+                                localData.setUsername(global_name)
+                                PFUser.current()?["fb_name"] = name
+                                PFUser.current()?["name"] = name
+                                PFUser.current()?["business_name"] = name
+                                PFUser.current()?["love_name"] = name
+                                PFUser.current()?["friendship_name"] = name
                                 
-                                if let email = result["email"]! {
-                                    
-                                    PFUser.currentUser()?["email"] = email
-                                }
+                                let email = result["email"]!
+                                PFUser.current()?["email"] = email
                                 
-                                if let id = result["id"]! {
-                                    
-                                    PFUser.currentUser()?["fb_id"] =  id
-                                    
-                                }
+                                let id = result["id"]!
+                                PFUser.current()?["fb_id"] =  id
                                 
-                                if let birthday = result["birthday"]! {
-                                    
-                                    print(result["birthday"]!)
-                                    print("birthday")
-                                    //getting birthday from Facebook and calculating age
-                                    PFUser.currentUser()?["fb_birthday"] = birthday
-                                    //newUser.setValue(birthday, forKey: "fb_birthday")
-                                    let NSbirthday: NSDate = birthday as! NSDate
-                                    let calendar: NSCalendar = NSCalendar.currentCalendar()
-                                    let now = NSDate()
-                                    let age = calendar.components(.Year, fromDate: NSbirthday, toDate: now, options: [])
-                                    
-                                    print(age)
-                                    
-                                    PFUser.currentUser()?["age"] = age
-                                    //newUser.setValue(age, forKey: "age")
-                                    
-                                }
+                                let birthday = result["birthday"]!
+                                print(result["birthday"]!)
+                                print("birthday")
+                                //getting birthday from Facebook and calculating age
+                                PFUser.current()?["fb_birthday"] = birthday
+                                //newUser.setValue(birthday, forKey: "fb_birthday")
+                                let NSbirthday: Date = birthday as! Date
+                                let calendar: Calendar = Calendar.current
+                                let now = Date()
+                                let age = (calendar as NSCalendar).components(.year, from: NSbirthday, to: now, options: [])
+                                print(age)
+                                PFUser.current()?["age"] = age
+                                //newUser.setValue(age, forKey: "age")
                                 // Commenting this out since we are using Apple's Location Manager Services to get the user's location. In the graph request above we are still requesting for the user's location which is kind of useless now. cIgaR - 08/18/16
                                 //if let location = result["location"]! {
                                 //    print("location")
@@ -173,30 +158,30 @@ class ViewController: UIViewController {
                                 
 
                                 
-                                PFUser.currentUser()?["distance_interest"] = 100
-                                PFUser.currentUser()?["new_message_push_notifications"] = true
+                                PFUser.current()?["distance_interest"] = 100
+                                PFUser.current()?["new_message_push_notifications"] = true
                                 localData.setNewMessagesPushNotifications(true)
-                                PFUser.currentUser()?["new_bridge_push_notifications"] = true
+                                PFUser.current()?["new_bridge_push_notifications"] = true
                                 localData.setNewBridgesPushNotifications(true)
-                                PFUser.currentUser()?["built_bridges"] = []
-                                PFUser.currentUser()?["rejected_bridges"] = []
-                                PFUser.currentUser()?["interested_in_business"] = true
-                                PFUser.currentUser()?["interested_in_love"] = true
-                                PFUser.currentUser()?["interested_in_friendship"] = true
+                                PFUser.current()?["built_bridges"] = []
+                                PFUser.current()?["rejected_bridges"] = []
+                                PFUser.current()?["interested_in_business"] = true
+                                PFUser.current()?["interested_in_love"] = true
+                                PFUser.current()?["interested_in_friendship"] = true
 
-                                PFUser.currentUser()?.saveInBackground()
+                                PFUser.current()?.saveInBackground()
                                
                                 //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
                                 localData.setHasSignedUp(false)
                                 localData.synchronize()
                                 
                                 
-                                PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
+                                PFUser.current()?.saveInBackground(block: { (success, error) in
                                     
                                     if success == true {
                                         self.activityIndicator.stopAnimating()
-                                        UIApplication.sharedApplication().endIgnoringInteractionEvents()
-                                        self.performSegueWithIdentifier("showSignUp", sender: self)
+                                        UIApplication.shared.endIgnoringInteractionEvents()
+                                        self.performSegue(withIdentifier: "showSignUp", sender: self)
                                         
                                     } else {
                                         
@@ -218,9 +203,9 @@ class ViewController: UIViewController {
                         //update user and friends
                         //use while access token is nil instead of delay
                          print("not new")
-                        if let _ = (PFUser.currentUser()?["name"]) as? String {
+                        if let _ = (PFUser.current()?["name"]) as? String {
                             let localData = LocalData()
-                            localData.setUsername((PFUser.currentUser()?["name"])! as! String)
+                            localData.setUsername((PFUser.current()?["name"])! as! String)
                             localData.synchronize()
                         }
                         let localData = LocalData()
@@ -228,15 +213,15 @@ class ViewController: UIViewController {
                             print("user is not new but we are getting his picture")
                             LocalStorageUtility().getMainProfilePictureFromParse()
                         }
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.5 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: { () -> Void in
                             //stop the spinner animation and reactivate the interaction with user
                             self.activityIndicator.stopAnimating()
-                            UIApplication.sharedApplication().endIgnoringInteractionEvents()
+                            UIApplication.shared.endIgnoringInteractionEvents()
                             
                             if hasSignedUp == true {
-                                self.performSegueWithIdentifier("showBridgeViewController", sender: self)
+                                self.performSegue(withIdentifier: "showBridgeViewController", sender: self)
                             } else {
-                                self.performSegueWithIdentifier("showSignUp", sender: self)
+                                self.performSegue(withIdentifier: "showSignUp", sender: self)
                             }
                             
                          })
@@ -247,20 +232,20 @@ class ViewController: UIViewController {
                 } else {
                     print("there is no user")
                     self.activityIndicator.stopAnimating()
-                    UIApplication.sharedApplication().endIgnoringInteractionEvents()
+                    UIApplication.shared.endIgnoringInteractionEvents()
                 }
             }
         }
         
     }
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     /* This was me experimenting with coreData. Leaving it here if someone wants to have a look - cIgAr - 08/18/16*/
     func seedUsers(){
         print("seedUsers method called")
         let moc = DataController().managedObjectContext
-        let entity = NSEntityDescription.insertNewObjectForEntityForName("Users", inManagedObjectContext: moc) as! Users
+        let entity = NSEntityDescription.insertNewObject(forEntityName: "Users", into: moc) as! Users
         entity.setValue("Udta Punjab", forKey: "name")
         entity.setValue("/home/picture", forKey: "profilePicture")
         do{
@@ -275,9 +260,9 @@ class ViewController: UIViewController {
     func fetchUsers(){
         print("fetchUsers method called")
         let moc = DataController().managedObjectContext
-        let userFetch = NSFetchRequest(entityName: "Users")
+        let userFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
         do {
-            let fetchUser = try moc.executeFetchRequest(userFetch) as! [Users]
+            let fetchUser = try moc.fetch(userFetch) as! [Users]
             print(fetchUser.first!.name)
             
         }
@@ -291,109 +276,72 @@ class ViewController: UIViewController {
     func updateUser() {
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
-        graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
+        graphRequest?.start { (connection, result, error) -> Void in
             if error != nil {
                 
                 print(error)
                 
-            } else if let result = result {
+            } else if let result = result as? [String:AnyObject]{
                 
                 if let friends = result["friends"]! as? NSDictionary {
-                    
-                    let friendsData : NSArray = friends.objectForKey("data") as! NSArray
-                    
+                    let friendsData : NSArray = friends.object(forKey: "data") as! NSArray
                     var fbFriendIds = [String]()
-                    
                     for friend in friendsData {
-                        
                         let valueDict : NSDictionary = friend as! NSDictionary
-                        fbFriendIds.append(valueDict.objectForKey("id") as! String)
-                        
+                        fbFriendIds.append(valueDict.object(forKey: "id") as! String)
                     }
-                    
-                    
-                    PFUser.currentUser()?["fb_friends"] = fbFriendIds
-                    
-                    PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
-                        
+                    PFUser.current()?["fb_friends"] = fbFriendIds
+                    PFUser.current()?.saveInBackground(block: { (success, error) in
                         if error != nil {
-                            
                             print(error)
-                            
                         } else {
-                            
                             self.updateFriendList()
-                            
                         }
-                        
                     })
-                    
                 }
-                
             }
-        
         }
-        
     }
+    
     /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
     func updateFriendList() {
         //add graph request to update users fb_friends
         //query to find and save fb_friends
         
-        let currentUserFbFriends = PFUser.currentUser()!["fb_friends"] as! NSArray
+        let currentUserFbFriends = PFUser.current()!["fb_friends"] as! NSArray
         let query: PFQuery = PFQuery(className: "_User")
         
         query.whereKey("fb_id", containedIn: currentUserFbFriends as [AnyObject])
         
-        query.findObjectsInBackgroundWithBlock({ (objects: [PFObject]?, error: NSError?) in
-            
+        query.findObjectsInBackground(block: { (objects: [PFObject]?, error: Error?) in
             if error != nil {
-                
                 print(error)
-                
             } else if let objects = objects {
-                
-                PFUser.currentUser()?.fetchInBackgroundWithBlock({ (success, error) in
-                
+                PFUser.current()?.fetchInBackground(block: { (success, error) in
                     for object in objects {
-                    
                         var containedInFriendList = false
-                        
-                        if let friendList: NSArray = PFUser.currentUser()!["friend_list"] as? NSArray {
-                            
-                            containedInFriendList = friendList.contains {$0 as! String == object.objectId!}
-                            
+                        if let friendList: NSArray = PFUser.current()!["friend_list"] as? NSArray {
+                            //This was exchanged for the following in Swift3 migration -> containedInFriendList = friendList.contains {$0 as! String == object.objectId!}
+                            containedInFriendList = friendList.contains(object.objectId!)
                         }
-                        
                         if containedInFriendList == false {
-                            
-                            if PFUser.currentUser()!["friend_list"] != nil {
-                                
-                                let currentFriendList = PFUser.currentUser()!["friend_list"]
-                                PFUser.currentUser()!["friend_list"] = currentFriendList as! Array + [object.objectId!]
-                                
+                            if PFUser.current()!["friend_list"] != nil {
+                                let currentFriendList = PFUser.current()!["friend_list"]
+                                PFUser.current()!["friend_list"] = currentFriendList as! Array + [object.objectId!]
                             } else {
-                                
-                                PFUser.currentUser()!["friend_list"] = [object.objectId!]
-                                
+                                PFUser.current()!["friend_list"] = [object.objectId!]
                             }
-                            
                         }
-                        
-                        PFUser.currentUser()?.saveInBackground()
-                        
+                        PFUser.current()?.saveInBackground()
                     }
-                    
                 })
-                
             }
-            
         })
-        
     }
-    func storeUserLocationOnParse(notification: NSNotification) {
-        print("storeUserLocationOnParse - \(notification.userInfo)")
-        let geoPoint = notification.userInfo!["geoPoint"] as? PFGeoPoint
+    
+    func storeUserLocationOnParse(_ notification: Notification) {
+        print("storeUserLocationOnParse - \((notification as NSNotification).userInfo)")
+        let geoPoint = (notification as NSNotification).userInfo!["geoPoint"] as? PFGeoPoint
         if let geoPoint = geoPoint {
             self.geoPoint = geoPoint
             print(geoPoint)
@@ -406,41 +354,37 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Listen for a notification from LoadPageViewController when it has got the user's location. cIgaR 08/18/16
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.storeUserLocationOnParse), name: "storeUserLocationOnParse", object: nil)
-        fbLoginButton.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), forState: UIControlState.Highlighted)
-        
-        fbLoginButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.storeUserLocationOnParse), name: NSNotification.Name(rawValue: "storeUserLocationOnParse"), object: nil)
+        fbLoginButton.setTitleColor(UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0), for: UIControlState.highlighted)
+        fbLoginButton.setTitleColor(UIColor.white, for: UIControlState())
         fbLoginButton.layer.cornerRadius = 7.0
         fbLoginButton.layer.borderWidth = 4.0
-        fbLoginButton.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
+        fbLoginButton.layer.borderColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).cgColor
         fbLoginButton.clipsToBounds = true
-        let appDescriptions = UILabel(frame: CGRectMake(0.05*screenWidth, 0.49*screenHeight, 0.90*screenWidth, 0.15*screenHeight))
-        appDescriptions.textAlignment = NSTextAlignment.Center
+        let appDescriptions = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.49*screenHeight, width: 0.90*screenWidth, height: 0.15*screenHeight))
+        appDescriptions.textAlignment = NSTextAlignment.center
         appDescriptions.text = "Connect your friends with the people they are looking for"
         appDescriptions.font = UIFont(name: "BentonSans", size: 24)
-        appDescriptions.textColor = UIColor.whiteColor()
+        appDescriptions.textColor = UIColor.white
         appDescriptions.numberOfLines = 0
         self.view.addSubview(appDescriptions)
         
-        
-        let label = UILabel(frame: CGRectMake(0.05*screenWidth, 0.775*screenHeight, 0.9*screenWidth, 0.075*screenHeight))
+        let label = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.775*screenHeight, width: 0.9*screenWidth, height: 0.075*screenHeight))
         //label.center = CGPointMake(160, 284)
-        label.textAlignment = NSTextAlignment.Center
+        label.textAlignment = NSTextAlignment.center
         label.text = "No need to get sour! We never post to Facebook."
         label.font = UIFont(name: "BentonSans", size: 14)
-        label.textColor = UIColor.whiteColor()
+        label.textColor = UIColor.white
         label.numberOfLines = 0
         self.view.addSubview(label)
         
         let appDescriptionsArray = ["Connect your friends with the people they are looking for", "Discover the sweetness of your community", "Be the (con)necter you wish to see in the world"]
         
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async { () -> Void in
             var i = 1
             while i < 10 {
                 sleep(4)
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                 appDescriptions.text = appDescriptionsArray[i % appDescriptionsArray.count]
                 i += 1
                 })
@@ -460,13 +404,11 @@ class ViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        
         appName.frame = CGRect(x: 0.1*screenWidth, y:0.36*screenHeight, width:0.80*screenWidth, height:0.15*screenHeight)
         fbLoginButton.frame = CGRect(x:0.16*screenWidth, y:0.7*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
-        
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         
     }
     

@@ -17,13 +17,13 @@ class UserInfoPair:NSObject, NSCoding {
     }
     
     required convenience init(coder aDecoder: NSCoder) {
-        let user1 = aDecoder.decodeObjectForKey("user1") as! PairInfo?
-        let user2 = aDecoder.decodeObjectForKey("user2") as! PairInfo?
+        let user1 = aDecoder.decodeObject(forKey: "user1") as! PairInfo?
+        let user2 = aDecoder.decodeObject(forKey: "user2") as! PairInfo?
         self.init(user1: user1, user2: user2)
     }
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(user1, forKey: "user1")
-        aCoder.encodeObject(user2, forKey: "user2")
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(user1, forKey: "user1")
+        aCoder.encode(user2, forKey: "user2")
     }
     
 }

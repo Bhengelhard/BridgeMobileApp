@@ -29,7 +29,7 @@ class MessagesTableCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
@@ -38,27 +38,27 @@ class MessagesTableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         cellWidth = cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
-        participants = UILabel(frame: CGRectZero)
+        participants = UILabel(frame: CGRect.zero)
         participants.font = UIFont(name: "Verdana", size: 18)
         
-        messageTimestamp = UILabel(frame:CGRectZero)
+        messageTimestamp = UILabel(frame:CGRect.zero)
         messageTimestamp.font = UIFont(name: "BentonSans", size: 16)
-        messageTimestamp.textAlignment = NSTextAlignment.Right
+        messageTimestamp.textAlignment = NSTextAlignment.right
         
-        messageSnapshot = UITextView(frame:CGRectZero)
+        messageSnapshot = UITextView(frame:CGRect.zero)
         messageSnapshot.font = UIFont(name: "BentonSans", size: 16)
         messageSnapshot.textContainer.maximumNumberOfLines = 2
-        messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.byTruncatingTail
         messageSnapshot.sizeToFit()
-        messageSnapshot.userInteractionEnabled = false
+        messageSnapshot.isUserInteractionEnabled = false
         messageSnapshot.contentInset = UIEdgeInsetsMake(-7.0,0.0,0,0.0)
         
-        arrow = UILabel(frame:CGRectZero)
+        arrow = UILabel(frame:CGRect.zero)
         arrow.font = UIFont(name: "Mishafi Regular", size: 30)
         
-        notificationDot = UIView(frame:CGRectZero)
-        line = UIView(frame:CGRectZero)
-        line.backgroundColor = UIColor.grayColor()
+        notificationDot = UIView(frame:CGRect.zero)
+        line = UIView(frame:CGRect.zero)
+        line.backgroundColor = UIColor.gray
         contentView.addSubview(participants)
         contentView.addSubview(messageTimestamp)
         contentView.addSubview(messageSnapshot)
@@ -75,7 +75,7 @@ class MessagesTableCell: UITableViewCell {
         cellHeight = cellHeight ?? contentView.frame.height
         if let _ = setSeparator {
            // print("setSeparator")
-            line.frame = CGRectMake(0.025*cellWidth! + 0.15*cellHeight!, 0, bounds.size.width, 1)
+            line.frame = CGRect(x: 0.025*cellWidth! + 0.15*cellHeight!, y: 0, width: bounds.size.width, height: 1)
             contentView.addSubview(line)
         }
         //setting line to begin with text and go to end of frame
@@ -83,7 +83,7 @@ class MessagesTableCell: UITableViewCell {
         messageTimestamp.frame = CGRect(x: 0.65*cellWidth!, y: 0.15*cellHeight!, width: 0.35*cellWidth!, height: 0.2*cellHeight!)
         
         //setting line to begin with text and go to end of frame
-        line.frame = CGRectMake(0.05*cellWidth! + 0.15*cellHeight!, 0.99*cellHeight!, bounds.size.width, 1)
+        line.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.99*cellHeight!, width: bounds.size.width, height: 1)
         
         participants.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.1*cellHeight!, width: 0.55*cellWidth!, height: 0.25*cellHeight!)
         
@@ -93,7 +93,7 @@ class MessagesTableCell: UITableViewCell {
         messageSnapshot.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.4*cellHeight!, width: 0.8*cellWidth!-0.15*cellHeight!, height: 0.65*cellHeight!)
         
         notificationDot.frame = CGRect(x: 0.025*cellWidth!, y: 0.4375*cellHeight!, width: 0.15*cellHeight!, height: 0.15*cellHeight!)
-        notificationDot.layer.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).CGColor
+        notificationDot.layer.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).cgColor
         notificationDot.layer.cornerRadius = notificationDot.frame.size.height/2
         notificationDot.clipsToBounds = true
         

@@ -12,6 +12,26 @@ import FBSDKCoreKit
 import ParseFacebookUtilsV4
 import FBSDKLoginKit
 import CoreData
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 class LocalStorageUtility{
     var userLocation = [String : (Double,Double)] ()
     var userFriendList = [String : [String]]()
@@ -19,12 +39,12 @@ class LocalStorageUtility{
     var userLoveInterest = [String : Bool]()
     var userFriendshipInterest = [String : Bool]()
     var userBridgeStatuses = [String : [String]]()
-    var userBridgeStatusePostedAt = [String : [NSDate]]()
+    var userBridgeStatusePostedAt = [String : [Date]]()
     var userBridgeTypes = [String : [String]]()
     var objectsDownloaded = 0
     var result = true
     //defunct now since we moved to using the Cloud
-    func ifNotFriends(friend1:String, friend2:String) -> Bool{
+    func ifNotFriends(_ friend1:String, friend2:String) -> Bool{
         var result = true
         if userFriendList[friend1] != nil {
             if userFriendList[friend1]!.contains(friend2){
@@ -39,7 +59,7 @@ class LocalStorageUtility{
         return result
     }
     //defunct now since we moved to using the Cloud
-    func ifHaveCommonInterest(friend1:String, friend2:String) -> Bool {
+    func ifHaveCommonInterest(_ friend1:String, friend2:String) -> Bool {
         var businessInterest = false
         var loveInterest = false
         var friendshipInterest = false
@@ -62,13 +82,13 @@ class LocalStorageUtility{
 
     }
     //defunct now since we moved to using the Cloud
-    func runBridgeAlgorithm(friendList:[String]){
+    func runBridgeAlgorithm(_ friendList:[String]){
         var ignoredPairings = [[String]]()
-        if let builtBridges = PFUser.currentUser()?["built_bridges"] {
+        if let builtBridges = PFUser.current()?["built_bridges"] {
             let builtBridges2 = builtBridges as! [[String]]
             ignoredPairings = ignoredPairings + builtBridges2
         }
-        if let rejectedBridges = PFUser.currentUser()?["rejected_bridges"] {
+        if let rejectedBridges = PFUser.current()?["rejected_bridges"] {
             let rejectedBridges2 = rejectedBridges as! [[String]]
             ignoredPairings = ignoredPairings + rejectedBridges2
         }
@@ -92,10 +112,10 @@ class LocalStorageUtility{
         }
     }
     //defunct now since we moved to using the Cloud
-    func getBridgePairings(friendIds:[String]) {
+    func getBridgePairings(_ friendIds:[String]) {
         let noOfFriends = friendIds.count
         getFriendsInfo(friendIds)
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async { () -> Void in
             while self.userBusinessInterest.count < noOfFriends ||
                 self.userBridgeStatuses.count < noOfFriends {
                 
@@ -105,10 +125,10 @@ class LocalStorageUtility{
         }
     }
     //defunct now since we moved to using the Cloud
-    func setUserBridgeStatusInfo(friendId:String, results:[PFObject]) {
+    func setUserBridgeStatusInfo(_ friendId:String, results:[PFObject]) {
         var statuses = [String]()
         var bridgeTypes = [String]()
-        var postedAt = [NSDate]()
+        var postedAt = [Date]()
         for user in results {
             if let ob = user["bridge_status"] as? String {
                 statuses.append(ob)
@@ -125,33 +145,32 @@ class LocalStorageUtility{
         self.userBridgeStatusePostedAt[friendId] = postedAt
     }
     //defunct now since we moved to using the Cloud
-    func getFriendsInfo(friendIds:[String]){
+    func getFriendsInfo(_ friendIds:[String]){
        
-        let todaysDate =  NSDate(); // gets today
-        let date14DaysAgo = todaysDate.dateByAddingTimeInterval(-1000 * 60 * 60 * 24 * 14); // gets 14 days ago
+        let todaysDate =  Date(); // gets today
+        let date14DaysAgo = todaysDate.addingTimeInterval(-1000 * 60 * 60 * 24 * 14); // gets 14 days ago
 
         let splitSize = 1000
-        let allFriendIds = friendIds.startIndex.stride(to: friendIds.count, by: splitSize).map {
-            friendIds[$0 ..< $0.advancedBy(splitSize, limit: friendIds.endIndex)]
+        let allFriendIds = stride(from: friendIds.startIndex, to: friendIds.count, by: splitSize).map {
+            friendIds[$0 ..< $0.advanced(by: splitSize)] //, limit: friendIds.endIndex
         }
-        
         for friendId in friendIds {
             
             let query = PFQuery(className:"BridgeStatus")
             
             query.whereKey("userId", equalTo:friendId)
             query.limit = 1000
-            query.orderByDescending("createdAt")
+            query.order(byDescending: "createdAt")
             query.whereKey("createdAt", greaterThan: date14DaysAgo)
-            query.findObjectsInBackgroundWithBlock({ (results, error) in
+            query.findObjectsInBackground(block: { (results, error) in
                 if error == nil {
                     if let results = results {
                         if results.count < 1 {
                             let query = PFQuery(className:"BridgeStatus")
                             query.whereKey("userId", equalTo:friendId)
                             query.limit = 1000
-                            query.orderByDescending("createdAt")
-                            query.findObjectsInBackgroundWithBlock({ (results, error) in
+                            query.order(byDescending: "createdAt")
+                            query.findObjectsInBackground(block: { (results, error) in
                                 if error == nil {
                                     if let results = results {
                                         self.setUserBridgeStatusInfo(friendId,results: results)
@@ -167,8 +186,8 @@ class LocalStorageUtility{
                         let query = PFQuery(className:"BridgeStatus")
                         query.whereKey("userId", equalTo:friendId)
                         query.limit = 1000
-                        query.orderByDescending("createdAt")
-                        query.findObjectsInBackgroundWithBlock({ (results, error) in
+                        query.order(byDescending: "createdAt")
+                        query.findObjectsInBackground(block: { (results, error) in
                             if error == nil {
                                 if let results = results {
                                     self.setUserBridgeStatusInfo(friendId,results: results)
@@ -187,7 +206,7 @@ class LocalStorageUtility{
         let query = PFQuery(className:"_User")
         query.whereKey("objectId", containedIn: friendIds)
         query.limit = 1000
-        query.findObjectsInBackgroundWithBlock({ (results, error) in
+        query.findObjectsInBackground(block: { (results, error) in
             if error == nil {
                 if let results = results {
                     for user in results {
@@ -214,7 +233,7 @@ class LocalStorageUtility{
         
     }
     //defunct now since we moved to using the Cloud
-    func checkComptability (friend1:String, friend2:String)->Bool {
+    func checkComptability (_ friend1:String, friend2:String)->Bool {
         var friend1BridgeStatus:String? = nil
         var friend1Location:[Double]? = nil
         var friend1FriendList:[String]? = nil
@@ -318,18 +337,18 @@ class LocalStorageUtility{
         var friend1BridgeStatusTypes = [String]()
         var friend2BridgeStatuses = [String]()
         var friend2BridgeStatusTypes = [String]()
-        let d =  NSDate(); // gets today
-        let d1 = d.dateByAddingTimeInterval(-1000 * 60 * 60 * 24 * 14); // gets 14 days ago
+        let d =  Date(); // gets today
+        let d1 = d.addingTimeInterval(-1000 * 60 * 60 * 24 * 14); // gets 14 days ago
         let query3 = PFQuery(className:"BridgeStatus")
         query3.whereKey("userId", equalTo:friend1)
         query3.whereKey("createdAt", greaterThan: d1)
-        query3.orderByDescending("createdAt")
+        query3.order(byDescending: "createdAt")
         do{
             var objects = try query3.findObjects()
             if objects.count < 1 {
                 let query3 = PFQuery(className:"BridgeStatus")
                 query3.whereKey("userId", equalTo:friend1)
-                query3.orderByDescending("createdAt")
+                query3.order(byDescending: "createdAt")
                 objects = try query.findObjects()
 
             }
@@ -351,13 +370,13 @@ class LocalStorageUtility{
         let query4 = PFQuery(className:"BridgeStatus")
         query4.whereKey("userId", equalTo:friend2)
         query4.whereKey("createdAt", greaterThan: d1)
-        query4.orderByDescending("createdAt")
+        query4.order(byDescending: "createdAt")
         do{
             var objects = try query4.findObjects()
             if objects.count < 1 {
                 let query4 = PFQuery(className:"BridgeStatus")
                 query4.whereKey("userId", equalTo:friend2)
-                query4.orderByDescending("createdAt")
+                query4.order(byDescending: "createdAt")
                 objects = try query.findObjects()
                 
             }
@@ -392,28 +411,28 @@ class LocalStorageUtility{
         if commonInterest {
             if friend1InterestedInBusiness && friend2InterestedInBusiness {
                 
-                if let status = friend1BridgeStatusTypes.indexOf("Business") {
+                if let status = friend1BridgeStatusTypes.index(of: "Business") {
                     friend1RelevantBusinessBridgeStatus = friend1BridgeStatuses[status]
                 }
-                if let status2 = friend2BridgeStatusTypes.indexOf("Business") {
+                if let status2 = friend2BridgeStatusTypes.index(of: "Business") {
                     friend2RelevantBusinessBridgeStatus = friend1BridgeStatuses[status2]
                 }
             }
             if friend1InterestedInLove && friend2InterestedInLove {
                 
-                if let status = friend1BridgeStatusTypes.indexOf("Love") {
+                if let status = friend1BridgeStatusTypes.index(of: "Love") {
                     friend1RelevantLoveBridgeStatus = friend1BridgeStatuses[status]
                 }
-                if let status2 = friend2BridgeStatusTypes.indexOf("Love") {
+                if let status2 = friend2BridgeStatusTypes.index(of: "Love") {
                     friend2RelevantLoveBridgeStatus = friend1BridgeStatuses[status2]
                 }
             }
             if friend1InterestedInFriendship && friend2InterestedInFriendship {
                 
-                if let status = friend1BridgeStatusTypes.indexOf("Friendship") {
+                if let status = friend1BridgeStatusTypes.index(of: "Friendship") {
                     friend1RelevantFriendshipBridgeStatus = friend1BridgeStatuses[status]
                 }
-                if let status2 = friend2BridgeStatusTypes.indexOf("Friendship") {
+                if let status2 = friend2BridgeStatusTypes.index(of: "Friendship") {
                     friend2RelevantFriendshipBridgeStatus = friend1BridgeStatuses[status2]
                 }
             }
@@ -427,25 +446,25 @@ class LocalStorageUtility{
     func getUserPhotos(){
         // Need to be worked upon after we get permission
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name"])
-        graphRequest.startWithCompletionHandler{ (connection, result, error) -> Void in
+        graphRequest?.start{ (connection, result, error) -> Void in
             print(" graph request")
+            print("connection \(connection)")
             if error != nil {
-                
                 print(error)
                 print("got error")
                 
-            } else if let result = result {
+            } else if let result = result as? [String: AnyObject]{
                 print("got result")
                 let userId = result["id"]! as! String
-                let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+                let accessToken = FBSDKAccessToken.current().tokenString
                 
                 let facebookProfilePictureUrl = "https://graph.facebook.com/\(userId)/albums?access_token=\(accessToken)"
-                if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
+                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
                     print(fbpicUrl)
-                    if let data = NSData(contentsOfURL: fbpicUrl) {
+                    if let data = try? Data(contentsOf: fbpicUrl) {
                         var error: NSError?
                         do{
-                            var albumsDictionary: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                            var albumsDictionary: NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                             print(albumsDictionary["data"]!)
                         }
                         catch{
@@ -461,9 +480,9 @@ class LocalStorageUtility{
         }
     }
     func getMainProfilePictureFromParse(){
-        let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+        let pfData = PFUser.current()?["profile_picture"] as? PFFile
         if let pfData = pfData {
-            pfData.getDataInBackgroundWithBlock({ (data, error) in
+            pfData.getDataInBackground(block: { (data, error) in
                 if error == nil && data != nil {
                     let localData = LocalData()
                     localData.setMainProfilePicture(data!)
@@ -475,18 +494,18 @@ class LocalStorageUtility{
     //saves  to LocalDataStorage & Parse
     func getMainProfilePicture(){
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest.startWithCompletionHandler{ (connection, result, error) -> Void in
+        graphRequest?.start{ (connection, result, error) -> Void in
                 if error != nil {
                 print(error)
                 }
-                else if let result = result {
+                else if let result = result as? [String:AnyObject] {
                 let localData = LocalData()
                 let userId = result["id"]! as! String
                 /*let username = result["name"]! as! String
                 localData.setUsername(username)*/
                 let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
-                if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
-                    if let data = NSData(contentsOfURL: fbpicUrl) {
+                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
+                    if let data = try? Data(contentsOf: fbpicUrl) {
                         let imageFile: PFFile = PFFile(data: data)!
                         var updateProfilePic = true
                         // commenting this out since we will be asking the user if he wants to upload the FB profile picture - cIgAr - 
@@ -510,9 +529,9 @@ class LocalStorageUtility{
 //                            localData.synchronize()
 //                            
 //                        }
-                        PFUser.currentUser()?["fb_profile_picture"] = imageFile
-                        PFUser.currentUser()?["profile_picture"] = imageFile
-                        PFUser.currentUser()?.saveInBackground()
+                        PFUser.current()?["fb_profile_picture"] = imageFile
+                        PFUser.current()?["profile_picture"] = imageFile
+                        PFUser.current()?.saveInBackground()
                         localData.setMainProfilePicture(data)
                         localData.synchronize()
 
@@ -523,7 +542,7 @@ class LocalStorageUtility{
         }
     }
     
-    func getUserDetails(id:String)->PairInfo?{
+    func getUserDetails(_ id:String)->PairInfo?{
         var user:PairInfo? = nil
         let query = PFQuery(className:"_User")
         query.whereKey("objectId", equalTo:id)
@@ -535,11 +554,11 @@ class LocalStorageUtility{
                     //name with max characters of 25
                     if name?.characters.count > 25 {
                         name = ob as? String
-                        let index1 = name!.endIndex.advancedBy(name!.characters.count - 25)
-                        name = name!.substringToIndex(index1)
+                        let index1 = name!.characters.index(name!.endIndex, offsetBy: name!.characters.count - 25)
+                        name = name!.substring(to: index1)
                     }
                 }
-                var main_profile_picture:NSData? = nil
+                var main_profile_picture:Data? = nil
                 var  main_profile_picture_file:PFFile? = nil
                 if let ob = object["fb_profile_picture"] {
                     main_profile_picture_file = ob as! PFFile
@@ -568,23 +587,23 @@ class LocalStorageUtility{
     func getUserFriends(){
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name"])
-        graphRequest.startWithCompletionHandler{ (connection, result, error) -> Void in
+        graphRequest?.start{ (connection, result, error) -> Void in
             if error != nil {
-                print(print("Error: \(error!) \(error!.userInfo)"))
+                print("Error: \(error!)")
             }
-            else if let result = result {
+            else if let result = result  as? [String:AnyObject] {
                 let userId = result["id"]! as! String
-                let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+                let accessToken = FBSDKAccessToken.current().tokenString
                 let facebookFriendsUrl = "https://graph.facebook.com/\(userId)/friends?access_token=\(accessToken)"
                 
-                if let fbfriendsUrl = NSURL(string: facebookFriendsUrl) {
+                if let fbfriendsUrl = URL(string: facebookFriendsUrl) {
                     
-                    if let data = NSData(contentsOfURL: fbfriendsUrl) {
+                    if let data = try? Data(contentsOf: fbfriendsUrl) {
                         //background thread to parse the JSON data
                         
-                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+                        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).async {
                             do{
-                                let friendList: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                                let friendList: NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                                 
                                 if let data = friendList["data"] as? [[String: AnyObject]] {
                                     var friendsArray:[String] = []
@@ -604,14 +623,14 @@ class LocalStorageUtility{
                                                 
                                             }
                                             else {
-                                                print("Error: \(error!) \(error!.userInfo)")
+                                                print("Error: \(error!)")
                                             }
                                             
                                         }
                                     }
                                     //Update Parse DB to store the FBfriendlist
                                     
-                                    PFUser.currentUser()?["fb_friends"] = friendsArrayFbId
+                                    PFUser.current()?["fb_friends"] = friendsArrayFbId
                                     
                                     
                                     
@@ -626,7 +645,7 @@ class LocalStorageUtility{
                                     /*if let foundFriendList = PFUser.currentUser()?["friend_list"] as? [String] {
                                         parseFriendList = foundFriendList
                                     }*/
-                                    let parseFriendList = PFUser.currentUser()?["friend_list"] as? [String] ?? []
+                                    let parseFriendList = PFUser.current()?["friend_list"] as? [String] ?? []
                                     let localData = LocalData()
                                     //adding newly added fb friends to the user's friendlist
                                     var finalFriendList = parseFriendList
@@ -639,8 +658,8 @@ class LocalStorageUtility{
                                     }
                                     localData.setFriendList(finalFriendList)
                                     localData.synchronize()
-                                    PFUser.currentUser()?["friend_list"] = finalFriendList
-                                    PFUser.currentUser()?.saveInBackground()
+                                    PFUser.current()?["friend_list"] = finalFriendList
+                                    PFUser.current()?.saveInBackground()
                                 }
                                 
                             }
@@ -655,25 +674,25 @@ class LocalStorageUtility{
         }
     }
     func runBridgeAlgorithmOnCloud(){
-        if let friendList = PFUser.currentUser()?["friend_list"] as? [String] {
-            PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
-                (response: AnyObject?, error: NSError?) -> Void in
-                if let ratings = response as? String {
-                    print(ratings)
-                }
-                else {
+        if let friendList = PFUser.current()?["friend_list"] as? [String] {
+            PFCloud.callFunction(inBackground: "updateBridgePairingsTable", withParameters: ["friendList":friendList], block: {
+                (response: Any?, error: Error?) in
+                if error == nil {
+                    if let response = response as? String {
+                        print(response)
+                    }
+                } else {
                     print(error)
                 }
-            }
-            
+            })
         }
     }
     func updateBridgePairingsTable(){
         // The user will have a default city at co-ordinates (-122,37). Mind you, the city is set during Logging In from Facebook. cIgAr - 08/22
-        if let friendList = PFUser.currentUser()?["friend_list"] as? [String] {
+        if let friendList = PFUser.current()?["friend_list"] as? [String] {
             var latitude:CLLocationDegrees = -122.0312186
             var longitude:CLLocationDegrees = 37.33233141
-            if let location = PFUser.currentUser()?["location"] as? PFGeoPoint {
+            if let location = PFUser.current()?["location"] as? PFGeoPoint {
                 latitude = location.latitude
                 longitude = location.longitude
             }
@@ -681,41 +700,41 @@ class LocalStorageUtility{
             CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
                 if error != nil {
                     print("Reverse geocoder failed with error" + error!.localizedDescription)
-                    PFUser.currentUser()?["city"] = ""
+                    PFUser.current()?["city"] = ""
                 }
                 else {
                 if placemarks!.count > 0 {
                     let pm = placemarks![0]
-                    PFUser.currentUser()?["city"] = pm.locality
+                    PFUser.current()?["city"] = pm.locality
                 }
                 else {
-                    PFUser.currentUser()?["city"] = ""
+                    PFUser.current()?["city"] = ""
                     print("Problem with the data received from geocoder")
                 }
                 }
-                PFUser.currentUser()?.saveInBackgroundWithBlock{
+                PFUser.current()?.saveInBackground{
                 (success, error) -> Void in
                 // Perform the bridgePairings table update irresepctive of the save being a success or failure - cIgAr 08/22
-                PFCloud.callFunctionInBackground("updateBridgePairingsTable", withParameters: ["friendList":friendList]) {
-                    (response: AnyObject?, error: NSError?) -> Void in
-                    if let ratings = response as? String {
-                        print(ratings)
-                    }
-                    else {
-                        print(error)
-                    }
-                }
+                    PFCloud.callFunction(inBackground: "updateBridgePairingsTable", withParameters: ["friendList":friendList], block: { (response: Any?, error: Error?) in
+                        if error == nil {
+                            if let response = response as? String {
+                                print(response)
+                            }
+                        } else {
+                            print(error)
+                        }
+                    })
 
                 }
             })
 
         }
     }
-    func getBridgePairingsFromCloud(maxNoOfCards:Int, typeOfCards:String){
+    func getBridgePairingsFromCloud(_ maxNoOfCards:Int, typeOfCards:String){
         let q = PFQuery(className: "_User")
         var flist = [String]()
         do {
-        let object = try q.getObjectWithId((PFUser.currentUser()?.objectId)!)
+        let object = try q.getObjectWithId((PFUser.current()?.objectId)!)
 //        q.getObjectInBackgroundWithId((PFUser.currentUser()?.objectId)!){
 //            (object, error) -> Void in
         //if error == nil && object != nil {
@@ -726,7 +745,7 @@ class LocalStorageUtility{
         if (bridgePairings != nil) {
             pairings = bridgePairings!
         }
-        if let _ = PFUser.currentUser()?.objectId {
+        if let _ = PFUser.current()?.objectId {
             var getMorePairings = true
             var i = 1
             while getMorePairings {
@@ -736,9 +755,9 @@ class LocalStorageUtility{
 //                    flist = friendlist
 //                }
                 query.whereKey("user_objectIds", containedIn :flist)
-                query.whereKey("user_objectIds", notEqualTo:(PFUser.currentUser()?.objectId)!) //change this to notEqualTo
+                query.whereKey("user_objectIds", notEqualTo:(PFUser.current()?.objectId)!) //change this to notEqualTo
                 query.whereKey("checked_out", equalTo: false)
-                query.whereKey("shown_to", notEqualTo:(PFUser.currentUser()?.objectId)!)
+                query.whereKey("shown_to", notEqualTo:(PFUser.current()?.objectId)!)
                 if (typeOfCards != "All" && typeOfCards != "EachOfAllType") {
                     query.whereKey("bridge_type", equalTo: typeOfCards)
                 }
@@ -773,7 +792,7 @@ class LocalStorageUtility{
                             userId1 =  ob[0]
                             userId2 =  ob[1]
                             /* Performing this important check here to make sure that each individual in the pair is friend's with the current user. Parse query -"query.whereKey("user_objectIds", containedIn :flist)" returns true even if anyone of those user's is friend with the current user - cIgAr - 08/18/16*/
-                            if flist.indexOf(userId1!) == nil || flist.indexOf(userId2!) == nil {
+                            if flist.index(of: userId1!) == nil || flist.index(of: userId2!) == nil {
                                 continue
                             }
                         }
@@ -800,8 +819,8 @@ class LocalStorageUtility{
                             print("location1-\(location1),location2- \(location2)")
                         }
                         print("location1 - \(location2)")
-                        var profilePicture1:NSData? = nil
-                        var profilePicture2:NSData? = nil
+                        var profilePicture1:Data? = nil
+                        var profilePicture2:Data? = nil
                         var profilePictureFile1:String? = nil
                         var profilePictureFile2:String? = nil
                         
@@ -852,16 +871,16 @@ class LocalStorageUtility{
                         result["checked_out"]  = true
                         if let _ = result["shown_to"] {
                             if var ar = result["shown_to"] as? [String] {
-                                let s = (PFUser.currentUser()?.objectId)! as String
+                                let s = (PFUser.current()?.objectId)! as String
                                 ar.append(s)
                                 result["shown_to"] = ar
                             }
                             else {
-                                result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
+                                result["shown_to"] = [(PFUser.current()?.objectId)!]
                             }
                         }
                         else {
-                            result["shown_to"] = [(PFUser.currentUser()?.objectId)!]
+                            result["shown_to"] = [(PFUser.current()?.objectId)!]
                         }
                         result.saveInBackground()
                         

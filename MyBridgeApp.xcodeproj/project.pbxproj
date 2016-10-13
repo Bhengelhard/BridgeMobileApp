@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */; };
 		1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D71D09E32B0030B6D0 /* DataController.swift */; };
+		303753EF1DB0020F006DB4E5 /* DisplayUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303753EE1DB0020F006DB4E5 /* DisplayUtility.swift */; };
+		303753F11DB04160006DB4E5 /* CustomTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303753F01DB04160006DB4E5 /* CustomTimer.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -47,7 +49,6 @@
 		E9D6DF3D1D7882F000138A1F /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF391D7882F000138A1F /* LocalStorageUtility.swift */; };
 		E9D6DF3E1D7882F000138A1F /* modelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF3A1D7882F000138A1F /* modelName.swift */; };
 		E9D6DF441D7882F600138A1F /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF3F1D7882F600138A1F /* PairInfo.swift */; };
-		E9D6DF451D7882F600138A1F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF401D7882F600138A1F /* Timer.swift */; };
 		E9D6DF461D7882F600138A1F /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF411D7882F600138A1F /* TransitionManager.swift */; };
 		E9D6DF471D7882F600138A1F /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF421D7882F600138A1F /* UserInfo.swift */; };
 		E9D6DF481D7882F600138A1F /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF431D7882F600138A1F /* UserInfoPair.swift */; };
@@ -63,6 +64,9 @@
 /* Begin PBXFileReference section */
 		1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageContent.swift; path = MyBridgeApp/MessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BF692D71D09E32B0030B6D0 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = MyBridgeApp/DataController.swift; sourceTree = SOURCE_ROOT; };
+		303753EE1DB0020F006DB4E5 /* DisplayUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayUtility.swift; path = "Custom Classes/DisplayUtility.swift"; sourceTree = "<group>"; };
+		303753F01DB04160006DB4E5 /* CustomTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomTimer.swift; path = "Custom Classes/CustomTimer.swift"; sourceTree = SOURCE_ROOT; };
+		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
@@ -103,7 +107,6 @@
 		E9D6DF391D7882F000138A1F /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalStorageUtility.swift; path = "Custom Classes/LocalStorageUtility.swift"; sourceTree = "<group>"; };
 		E9D6DF3A1D7882F000138A1F /* modelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = modelName.swift; path = "Custom Classes/modelName.swift"; sourceTree = "<group>"; };
 		E9D6DF3F1D7882F600138A1F /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PairInfo.swift; path = "Custom Classes/PairInfo.swift"; sourceTree = "<group>"; };
-		E9D6DF401D7882F600138A1F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Timer.swift; path = "Custom Classes/Timer.swift"; sourceTree = "<group>"; };
 		E9D6DF411D7882F600138A1F /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = "Custom Classes/TransitionManager.swift"; sourceTree = "<group>"; };
 		E9D6DF421D7882F600138A1F /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserInfo.swift; path = "Custom Classes/UserInfo.swift"; sourceTree = "<group>"; };
 		E9D6DF431D7882F600138A1F /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserInfoPair.swift; path = "Custom Classes/UserInfoPair.swift"; sourceTree = "<group>"; };
@@ -171,14 +174,15 @@
 		81BA81471A49DA1800E65899 /* MyBridgeApp */ = {
 			isa = PBXGroup;
 			children = (
+				305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */,
 				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
 				CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */,
 				CB5829461CAA26D900DC86C9 /* ViewController.swift */,
 				E9D6DF4D1D78835800138A1F /* SignupViewController.swift */,
 				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
 				E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */,
-				E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */,
 				E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */,
+				E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */,
 				E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */,
 				E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */,
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
@@ -236,11 +240,12 @@
 				E9D6DF3F1D7882F600138A1F /* PairInfo.swift */,
 				E9D6DF431D7882F600138A1F /* UserInfoPair.swift */,
 				E9D6DF4B1D7882FF00138A1F /* Users+CoreDataProperties.swift */,
+				303753F01DB04160006DB4E5 /* CustomTimer.swift */,
 				E9D6DF491D7882FB00138A1F /* Users.swift */,
-				E9D6DF401D7882F600138A1F /* Timer.swift */,
 				E9D6DF3A1D7882F000138A1F /* modelName.swift */,
 				E9D6DF371D7882F000138A1F /* Downloader.swift */,
 				E9D6DF411D7882F600138A1F /* TransitionManager.swift */,
+				303753EE1DB0020F006DB4E5 /* DisplayUtility.swift */,
 			);
 			name = "Custom Classes";
 			sourceTree = "<group>";
@@ -272,12 +277,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Parse;
 				TargetAttributes = {
 					81BA81441A49DA1800E65899 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 7Y7JRS85QB;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -334,6 +340,7 @@
 				E9D6DF3D1D7882F000138A1F /* LocalStorageUtility.swift in Sources */,
 				E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
+				303753EF1DB0020F006DB4E5 /* DisplayUtility.swift in Sources */,
 				E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
@@ -343,6 +350,7 @@
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
 				E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */,
 				E9D6DF3B1D7882F000138A1F /* Downloader.swift in Sources */,
+				303753F11DB04160006DB4E5 /* CustomTimer.swift in Sources */,
 				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
 				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
@@ -356,7 +364,6 @@
 				E9D6DF3E1D7882F000138A1F /* modelName.swift in Sources */,
 				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
-				E9D6DF451D7882F600138A1F /* Timer.swift in Sources */,
 				E9D6DF471D7882F600138A1F /* UserInfo.swift in Sources */,
 				E9D6DF3C1D7882F000138A1F /* LocalData.swift in Sources */,
 				E9D6DF4E1D78835800138A1F /* SignupViewController.swift in Sources */,
@@ -379,8 +386,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -389,6 +398,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -423,8 +433,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -432,6 +444,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -441,6 +454,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -452,8 +466,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Blake Engelhard (7Y7JRS85QB)";
+				CODE_SIGN_ENTITLEMENTS = MyBridgeApp/MyBridgeApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7Y7JRS85QB;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -468,6 +484,7 @@
 				PRODUCT_NAME = MyBridgeApp;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -478,8 +495,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Blake Engelhard (7Y7JRS85QB)";
+				CODE_SIGN_ENTITLEMENTS = MyBridgeApp/MyBridgeApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7Y7JRS85QB;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -493,6 +512,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Beta;
 				PRODUCT_NAME = MyBridgeApp;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

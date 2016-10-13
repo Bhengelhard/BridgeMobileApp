@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - UIApplicationDelegate
     //--------------------------------------
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Enable storing and querying data from Local Datastore.
         // Remove this line if you don't want to use Local Datastore features or want to use cachePolicy.
         Parse.enableLocalDatastore()
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ParseMutableClientConfiguration.server = "https://mybridgeapp.herokuapp.com/parse"
         })
         
-        Parse.initializeWithConfiguration(parseConfiguration)
+        Parse.initialize(with: parseConfiguration)
 
 
         // ****************************************************************************
@@ -43,34 +43,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // PFFacebookUtils.initializeFacebook()
         // ****************************************************************************
         
-        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
+        PFFacebookUtils.initializeFacebook(applicationLaunchOptions: launchOptions)
 
         PFUser.enableAutomaticUser()
 
         let defaultACL = PFACL();
 
         // If you would like all objects to be private by default, remove this line.
-        defaultACL.publicReadAccess = true
+        defaultACL.getPublicReadAccess = true
 
-        PFACL.setDefaultACL(defaultACL, withAccessForCurrentUser: true)
+        PFACL.setDefault(defaultACL, withAccessForCurrentUser: true)
 
-        if application.applicationState != UIApplicationState.Background {
+        if application.applicationState != UIApplicationState.background {
             // Track an app open here if we launch with a push, unless
             // "content_available" was used to trigger a background push (introduced in iOS 7).
             // In that case, we skip tracking here to avoid double counting the app-open.
 
-            let preBackgroundPush = !application.respondsToSelector("backgroundRefreshStatus")
-            let oldPushHandlerOnly = !self.respondsToSelector("application:didReceiveRemoteNotification:fetchCompletionHandler:")
+            let preBackgroundPush = !application.responds(to: #selector(getter: UIApplication.backgroundRefreshStatus))
+            let oldPushHandlerOnly = !self.responds(to: #selector(UIApplicationDelegate.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)))
             var noPushPayload = false;
             if let options = launchOptions {
-                noPushPayload = options[UIApplicationLaunchOptionsRemoteNotificationKey] != nil;
+                noPushPayload = options[UIApplicationLaunchOptionsKey.remoteNotification] != nil;
             }
             if (preBackgroundPush || oldPushHandlerOnly || noPushPayload) {
-                PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+                PFAnalytics.trackAppOpened(launchOptions: launchOptions)
             }
         }
-        let types: UIUserNotificationType = [.Alert, .Badge, .Sound]
-        let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
+        let types: UIUserNotificationType = [.alert, .badge, .sound]
+        let settings = UIUserNotificationSettings(types: types, categories: nil)
         application.registerUserNotificationSettings(settings)
         application.registerForRemoteNotifications()
 
@@ -108,12 +108,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Push Notifications
     //--------------------------------------
 
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        let installation = PFInstallation.currentInstallation()
-        installation.setDeviceTokenFromData(deviceToken)
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let installation = PFInstallation.current()
+        installation.setDeviceTokenFrom(deviceToken)
         installation.saveInBackground()
 
-        PFPush.subscribeToChannelInBackground("") { (succeeded: Bool, error: NSError?) in
+        PFPush.subscribeToChannel(inBackground: "") { (succeeded: Bool, error: Error?) in
             if succeeded {
                 print("ParseStarterProject successfully subscribed to push notifications on the broadcast channel.\n");
             } else {
@@ -122,20 +122,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        if error.code == 3010 {
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        if error._code == 3010 {
             print("Push notifications are not supported in the iOS Simulator.\n")
         } else {
             print("application:didFailToRegisterForRemoteNotificationsWithError: %@\n", error)
         }
     }
 
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
         print("Listener is set at didReceiveRemoteNotification")
         
-        NSNotificationCenter.defaultCenter().postNotificationName("reloadTheThread", object: nil)
-        NSNotificationCenter.defaultCenter().postNotificationName("reloadTheMessageTable", object: nil)
-        NSNotificationCenter.defaultCenter().postNotificationName("updateBridgePage", object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadTheThread"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadTheMessageTable"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "updateBridgePage"), object: nil, userInfo: userInfo)
         //        if userInfo.objectForKey("badge") {
         //            let badgeNumber: Int = userInfo.objectForKey("badge").integerValue
         //            application.applicationIconBadgeNumber = badgeNumber
@@ -150,25 +150,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("userInfo - \(userInfo)")
         let messageId = userInfo["messageId"] as? String
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc : SingleMessageViewController = storyboard.instantiateViewControllerWithIdentifier("SingleMessageViewController") as! SingleMessageViewController
+        let vc : SingleMessageViewController = storyboard.instantiateViewController(withIdentifier: "SingleMessageViewController") as! SingleMessageViewController
         vc.newMessageId = messageId!
 //        let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)
 //        
 //        print("top navController - \(navController.topViewController)")
-        if application.applicationState == UIApplicationState.Inactive {
+        if application.applicationState == UIApplicationState.inactive {
             print("UIApplicationState.Inactive but ")
               self.window?.rootViewController = vc
 //            navController.viewControllers.removeAll()
 //            navController.pushViewController(vc, animated: true)
         }
-        else if application.applicationState == UIApplicationState.Background {
+        else if application.applicationState == UIApplicationState.background {
             print("UIApplicationState.Background")
         }
-        else if application.applicationState == UIApplicationState.Active {
+        else if application.applicationState == UIApplicationState.active {
             print("UIApplicationState.Active")
             let aps = userInfo["aps"] as? NSDictionary
             let badge = aps!["badge"] as? Int
-            let installation = PFInstallation.currentInstallation()
+            let installation = PFInstallation.current()
             installation.badge = badge ?? 1
             installation.saveInBackground()
         }
@@ -177,8 +177,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         //PFPush.handlePush(userInfo)
-        if application.applicationState == UIApplicationState.Inactive {
-            PFAnalytics.trackAppOpenedWithRemoteNotificationPayload(userInfo)
+        if application.applicationState == UIApplicationState.inactive {
+            PFAnalytics.trackAppOpened(withRemoteNotificationPayload: userInfo)
         }
     }
 
@@ -196,31 +196,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //--------------------------------------
     
     
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
     
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
     
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
     
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBSDKAppEvents.activateApp()
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         
-        return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        return FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
@@ -228,31 +228,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Core Data stack
     
-    lazy var applicationDocumentsDirectory: NSURL = {
+    lazy var applicationDocumentsDirectory: URL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.Blake.Bridge" in the application's documents Application Support directory.
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
         // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-        let modelURL = NSBundle.mainBundle().URLForResource("Bridge", withExtension: "momd")!
-        return NSManagedObjectModel(contentsOfURL: modelURL)!
+        let modelURL = Bundle.main.url(forResource: "Bridge", withExtension: "momd")!
+        return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         // The persistent store coordinator for the application. This implementation creates and returns a coordinator, having added the store for the application to it. This property is optional since there are legitimate error conditions that could cause the creation of the store to fail.
         // Create the coordinator and store
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("SingleViewCoreData.sqlite")
+        let url = self.applicationDocumentsDirectory.appendingPathComponent("SingleViewCoreData.sqlite")
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
         } catch {
             // Report any error we got.
             var dict = [String: AnyObject]()
-            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
-            dict[NSLocalizedFailureReasonErrorKey] = failureReason
+            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
+            dict[NSLocalizedFailureReasonErrorKey] = failureReason as AnyObject?
             
             dict[NSUnderlyingErrorKey] = error as NSError
             let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
@@ -268,7 +268,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var managedObjectContext: NSManagedObjectContext = {
         // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
         let coordinator = self.persistentStoreCoordinator
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext
     }()

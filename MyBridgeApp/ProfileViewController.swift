@@ -18,8 +18,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     let necterButton = UIButton()
     let bridgeStatus = UIButton()
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     var editableName:String = ""
     let noNameText = "Click to enter your full name"
     let transitionManager = TransitionManager()
@@ -156,12 +156,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         //setting the necterIcon to the rightBarButtonItem
         //setting messagesIcon to the icon specifying if there are or are not notifications
-        necterButton.setImage(UIImage(named: "All_Types_Icon_Gray"), forState: .Normal)
-        necterButton.setImage(UIImage(named: "Necter_Icon"), forState: .Selected)
-        necterButton.setImage(UIImage(named: "Necter_Icon"), forState: .Highlighted)
-        necterButton.addTarget(self, action: #selector(necterIconTapped(_:)), forControlEvents: .TouchUpInside)
+        necterButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
+        necterButton.setImage(UIImage(named: "Necter_Icon"), for: .selected)
+        necterButton.setImage(UIImage(named: "Necter_Icon"), for: .highlighted)
+        necterButton.addTarget(self, action: #selector(necterIconTapped(_:)), for: .touchUpInside)
         necterButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
-        necterButton.contentMode = UIViewContentMode.ScaleAspectFill
+        necterButton.contentMode = UIViewContentMode.scaleAspectFill
         necterButton.clipsToBounds = true
         let rightBarButton = UIBarButtonItem(customView: necterButton)
         navItem.rightBarButtonItem = rightBarButton
@@ -174,7 +174,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         //navBarTitleView.backgroundColor = UIColor.greenColor()
         let titleImageView = UIImageView(image: UIImage(named: "Profile_Icon_Yellow"))
         titleImageView.frame = CGRect(x: 0, y: 0, width: 0.06*screenHeight, height: 0.06*screenHeight)
-        titleImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        titleImageView.contentMode = UIViewContentMode.scaleAspectFill
         titleImageView.clipsToBounds = true
         navBarTitleView.addSubview(titleImageView)
         navigationBar.topItem?.titleView = navBarTitleView
@@ -185,31 +185,31 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         titleImageView.frame = CGRectMake(45, 5,titleImageView.frame.size.width , titleImageView.frame.size.height); // Here I am passing origin as (45,5) but can pass them as your requirement.
         [backView addSubview:titleImageView];*/
         
-        navigationBar.barStyle = .Black
-        navigationBar.barTintColor = UIColor.whiteColor()
+        navigationBar.barStyle = .black
+        navigationBar.barTintColor = UIColor.white
         
         self.view.addSubview(navigationBar)
         
     }
-    func necterIconTapped (sender: UIBarButtonItem) {
-        necterButton.selected = true
-        performSegueWithIdentifier("showBridgeViewFromProfilePage", sender: self)
+    func necterIconTapped (_ sender: UIBarButtonItem) {
+        necterButton.isSelected = true
+        performSegue(withIdentifier: "showBridgeViewFromProfilePage", sender: self)
     }
-    func displayMessageFromBot(notification: NSNotification) {
+    func displayMessageFromBot(_ notification: Notification) {
         let botNotificationView = UIView()
         botNotificationView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         //always fill the view
         blurEffectView.frame = botNotificationView.bounds
         //blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let messageLabel = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.01*screenHeight, width: 0.9*screenWidth, height: 0.11*screenHeight))
-        messageLabel.text = notification.userInfo!["message"] as? String ?? "No Message Came Up"
-        messageLabel.textColor = UIColor.darkGrayColor()
+        messageLabel.text = (notification as NSNotification).userInfo!["message"] as? String ?? "No Message Came Up"
+        messageLabel.textColor = UIColor.darkGray
         messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
         messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = NSTextAlignment.Center
+        messageLabel.textAlignment = NSTextAlignment.center
         //botNotificationView.backgroundColor = necterYellow
         
         //botNotificationView.addSubview(blurEffectView)
@@ -218,19 +218,19 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         view.insertSubview(botNotificationView, aboveSubview: profilePictureView)
         
         
-        UIView.animateWithDuration(0.7) {
+        UIView.animate(withDuration: 0.7, animations: {
             botNotificationView.frame.origin.y = 0
-        }
+        }) 
         
-        let _ = Timer(interval: 4) {i -> Bool in
-            UIView.animateWithDuration(0.7, animations: {
+        let _ = CustomTimer(interval: 4) {i -> Bool in
+            UIView.animate(withDuration: 0.7, animations: {
                 botNotificationView.frame.origin.y = -0.12*self.screenHeight
             })
             return i < 1
         }
 
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         //botNotificationView.removeFromSuperview()
         
     }
@@ -238,7 +238,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         
         // Do any additional setup after loading the view.
         //imagePicker.delegate = self
@@ -276,22 +276,22 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         if let username = username {
             name.text = username
         }
-        name.textColor = UIColor.blackColor()
+        name.textColor = UIColor.black
         
         //get profile picture and set to a button
         let mainProfilePicture = localData.getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
-            let image = UIImage(data: mainProfilePicture, scale: 1.0)
+            let image = UIImage(data: mainProfilePicture as Data, scale: 1.0)
             //profilePictureButton.setImage(image, forState: .Normal)
             profilePictureView.image = image
         }  else {
-            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+            let pfData = PFUser.current()?["profile_picture"] as? PFFile
             if let pfData = pfData {
-                pfData.getDataInBackgroundWithBlock({ (data, error) in
+                pfData.getDataInBackground(block: { (data, error) in
                     if error != nil || data == nil {
                         print(error)
                     } else {
-                        dispatch_async(dispatch_get_main_queue(), {
+                        DispatchQueue.main.async(execute: {
                             //self.profilePictureButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
                             self.profilePictureView.image = UIImage(data: data!, scale: 1.0)
                         })
@@ -303,24 +303,24 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         //profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
         
-        bridgeStatus.setTitle("Post Status", forState: .Normal)
+        bridgeStatus.setTitle("Post Status", for: UIControlState())
         bridgeStatus.titleLabel!.font = UIFont(name: "Verdana", size: 20)
-        bridgeStatus.setTitleColor(necterYellow, forState: UIControlState.Highlighted)
-        bridgeStatus.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        bridgeStatus.setTitleColor(necterYellow, for: UIControlState.highlighted)
+        bridgeStatus.setTitleColor(UIColor.black, for: UIControlState())
         bridgeStatus.layer.cornerRadius = 7.0
         bridgeStatus.layer.borderWidth = 4.0
-        bridgeStatus.layer.borderColor = necterYellow.CGColor
+        bridgeStatus.layer.borderColor = necterYellow.cgColor
         bridgeStatus.clipsToBounds = true
-        bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), forControlEvents: .TouchUpInside)
+        bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), for: .touchUpInside)
         
         view.addSubview(bridgeStatus)
         view.addSubview(profilePictureView)
         tableView.tableFooterView = UIView()
-        tableView.scrollEnabled = false
-        tableView.separatorInset = UIEdgeInsetsZero
+        tableView.isScrollEnabled = false
+        tableView.separatorInset = UIEdgeInsets.zero
     }
-    func statusTapped(sender: UIButton) {
-        performSegueWithIdentifier("showNewStatusViewFromProfilePage", sender: self)
+    func statusTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "showNewStatusViewFromProfilePage", sender: self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -333,7 +333,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         profilePictureView.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
         profilePictureView.center.x = self.view.center.x
         profilePictureView.layer.cornerRadius = profilePictureView.frame.size.width/2
-        profilePictureView.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureView.contentMode = UIViewContentMode.scaleAspectFill
         profilePictureView.clipsToBounds = true
         name.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
         bridgeStatus.frame = CGRect(x: 0, y:0.465*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
@@ -341,9 +341,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.frame = CGRect(x: 0, y:0.55*screenHeight, width:screenWidth, height:0.435*screenHeight)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
-        let vc = segue.destinationViewController
+        let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Right"
@@ -361,36 +361,36 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         vc.transitioningDelegate = self.transitionManager
     }
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
         return 5
         
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let heightOfEachRow = tableView.frame.height/5.0
         return heightOfEachRow //Choose your custom row height
     }
     
     // Data to be shown on an individual row
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
-        if indexPath.row == 0 {
+        if (indexPath as NSIndexPath).row == 0 {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ProfileTableViewCell
             cell.label.text = "Edit Profile"
             
             return cell
             
-        } else if indexPath.row == 1 {
+        } else if (indexPath as NSIndexPath).row == 1 {
             
             /*let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! ProfileTableViewCell2
             //cell2.label.text = "'nect for Business"
@@ -409,7 +409,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             return cell2
              */
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ProfileTableViewCell
             cell.label.text = "Give Feedback"
             
             return cell
@@ -455,17 +455,17 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             return cell2
             
-        }*/ else if indexPath.row == 2 {
+        }*/ else if (indexPath as NSIndexPath).row == 2 {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ProfileTableViewCell
             cell.label.text = "Terms of Service"
             //cell.label.textColor = UIColor.grayColor()
             
             return cell
             
-        } else if indexPath.row == 3 {
+        } else if (indexPath as NSIndexPath).row == 3 {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ProfileTableViewCell
             cell.label.text = "Privacy Policy"
             //cell.label.textColor = UIColor.grayColor()
             
@@ -473,7 +473,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
         } else {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ProfileTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ProfileTableViewCell
             cell.label.text = "Log Out"
             //cell.label.textColor = UIColor.grayColor()
             
@@ -483,11 +483,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
     }
     // A row is selected
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if indexPath.row == 0 {
-            performSegueWithIdentifier("showEditProfileViewFromProfilePage", sender: self)
-        } else if indexPath.row == 1 {
+        if (indexPath as NSIndexPath).row == 0 {
+            performSegue(withIdentifier: "showEditProfileViewFromProfilePage", sender: self)
+        } else if (indexPath as NSIndexPath).row == 1 {
             
             //opens user's email application with email ready to be sent to necter email -> commented out and replaced with link to survey
             //let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
@@ -495,36 +495,36 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             //let email = "blake@necter.social"
             //let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
             let surveyURL = "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR"
-            let url = NSURL(string: "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR")
+            let url = URL(string: "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR")
             
-            if UIApplication.sharedApplication().canOpenURL(url!) {
+            if UIApplication.shared.canOpenURL(url!) {
                 
-                UIApplication.sharedApplication().openURL(url!)
+                UIApplication.shared.openURL(url!)
                 
             }
             
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
 
             
-        } else if indexPath.row == 2 {
+        } else if (indexPath as NSIndexPath).row == 2 {
             
-            let url = NSURL(string: "https://necter.social/termsofservice")
+            let url = URL(string: "https://necter.social/termsofservice")
             
-            if UIApplication.sharedApplication().canOpenURL(url!) {
+            if UIApplication.shared.canOpenURL(url!) {
                 
-                UIApplication.sharedApplication().openURL(url!)
+                UIApplication.shared.openURL(url!)
                 
             }
             
             //performSegueWithIdentifier("showTermsofService", sender: self)
             
-        } else if indexPath.row == 3 {
+        } else if (indexPath as NSIndexPath).row == 3 {
             
-            let url = NSURL(string: "https://necter.social/privacypolicy")
+            let url = URL(string: "https://necter.social/privacypolicy")
             
-            if UIApplication.sharedApplication().canOpenURL(url!) {
+            if UIApplication.shared.canOpenURL(url!) {
                 
-                UIApplication.sharedApplication().openURL(url!)
+                UIApplication.shared.openURL(url!)
                 
             }
             
@@ -533,7 +533,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else {
             
             PFUser.logOut()
-            performSegueWithIdentifier("showLoginView", sender: self)
+            performSegue(withIdentifier: "showLoginView", sender: self)
             
         }
         

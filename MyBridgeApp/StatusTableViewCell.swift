@@ -14,7 +14,6 @@ class StatusTableViewCell: UITableViewCell {
     var optionImage = UIImageView()
     var cellHeight: CGFloat? {
         didSet {
-            print(cellHeight!)
             //setNeedsLayout()
         }
     }
@@ -24,15 +23,14 @@ class StatusTableViewCell: UITableViewCell {
     }
     
     override func layoutSubviews() {
-        print("layoutSubviews")
         cellHeight = cellHeight ?? self.frame.height
         optionImage.frame = CGRect(x: 0.1*self.frame.width, y: 0.1*cellHeight!, width: 0.6*cellHeight!, height: 0.6*cellHeight!)
-        optionImage.contentMode = UIViewContentMode.ScaleToFill
+        optionImage.contentMode = UIViewContentMode.scaleToFill
         optionImage.clipsToBounds = true
         
         //optionImage.center.y = self.center.y
         optionLabel.frame = CGRect(x: 0.15*self.frame.width + 0.6*cellHeight!, y: 0, width: 0.5*self.frame.width, height: self.frame.height)
-        optionLabel.textAlignment = NSTextAlignment.Left
+        optionLabel.textAlignment = NSTextAlignment.left
         optionLabel.center.y = optionImage.center.y
         optionLabel.font = UIFont(name: "BentonSans", size: 26)
         
@@ -40,7 +38,6 @@ class StatusTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        print("init called")
         contentView.addSubview(optionImage)
         contentView.addSubview(optionLabel)
         
@@ -52,7 +49,7 @@ class StatusTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

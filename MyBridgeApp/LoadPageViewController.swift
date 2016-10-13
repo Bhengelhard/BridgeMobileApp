@@ -19,131 +19,86 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var appName: UILabel!
     @IBOutlet weak var appDescription: UILabel!
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     let transitionManager = TransitionManager()
     var locationManager = CLLocationManager()
-    var geoPoint: PFGeoPoint? = nil
+    var geoPoint:PFGeoPoint?
     
      // Do we need this function anymore? Not being called from anywhere. cIgAr 08/18/16
     //right now just updates users Friends
     func updateUser() {
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
-        graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
+        graphRequest?.start { (connection, result, error) -> Void in
+            print("connection \(connection)")
+            
             if error != nil {
-                
                 print(error)
-                
-            } else if let result = result {
-                
-                
-                
+            } else if let result = result as? [String:AnyObject]{
                 let friends = result["friends"]! as! NSDictionary
-                
-                let friendsData : NSArray = friends.objectForKey("data") as! NSArray
-                
+                let friendsData : NSArray = friends.object(forKey: "data") as! NSArray
                 var fbFriendIds = [String]()
-                
                 for friend in friendsData {
-                    
                     let valueDict : NSDictionary = friend as! NSDictionary
-                    fbFriendIds.append(valueDict.objectForKey("id") as! String)
-                    
+                    fbFriendIds.append(valueDict.object(forKey: "id") as! String)
                 }
                 
-                
-                PFUser.currentUser()?["fb_friends"] = fbFriendIds
-                
-                PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
-                    
+                PFUser.current()?["fb_friends"] = fbFriendIds
+                PFUser.current()?.saveInBackground(block: { (success, error) in
                     if error != nil {
-                        
                         print(error)
-                        
                     } else {
-                        
                         self.updateFriendList()
-                        
                     }
-                    
                 })
-                
             }
-            
         }
-        
     }
-    // Do we need this function anymore? Not being called from anywhere. cIgAr 08/18/16
+    
     func updateFriendList() {
-        
         //add graph request to update users fb_friends
         //query to find and save fb_friends
-        
-        let currentUserFbFriends = PFUser.currentUser()!["fb_friends"] as! NSArray
-        
+        let currentUserFbFriends = PFUser.current()!["fb_friends"] as! NSArray
         let query: PFQuery = PFQuery(className: "_User")
-        
-        query.whereKey("fb_id", containedIn: currentUserFbFriends as [AnyObject])
-        
-        query.findObjectsInBackgroundWithBlock({ (objects: [PFObject]?, error: NSError?) in
-            
+        query.whereKey("fb_id", containedIn: currentUserFbFriends as! [Any])
+        query.findObjectsInBackground { (objects: [PFObject]?, error: Error?) in
             if error != nil {
-                
                 print(error)
-                
             } else if let objects = objects {
-                
-                PFUser.currentUser()?.fetchInBackgroundWithBlock({ (success, error) in
-                    
+                PFUser.current()?.fetchInBackground(block: { (success, error) in
                     for object in objects {
-                        
                         var containedInFriendList = false
-                        
-                        if let friendList: NSArray = PFUser.currentUser()!["friend_list"] as? NSArray {
-                            
-                            containedInFriendList = friendList.contains {$0 as! String == object.objectId!}
-                            
+                        if let friendList: NSArray = PFUser.current()!["friend_list"] as? NSArray {
+                            //This was exchanged for the following in Swift3 migration -> containedInFriendList = friendList.contains {$0 as! String == object.objectId!}
+                            containedInFriendList = friendList.contains(object.objectId!)
                         }
-                        
                         if containedInFriendList == false {
-                            
-                            if PFUser.currentUser()!["friend_list"] != nil {
-                                
-                                let currentFriendList = PFUser.currentUser()!["friend_list"]
-                                PFUser.currentUser()!["friend_list"] = currentFriendList as! Array + [object.objectId!]
-                                
+                            if PFUser.current()!["friend_list"] != nil {
+                                let currentFriendList = PFUser.current()!["friend_list"]
+                                PFUser.current()!["friend_list"] = currentFriendList as! Array + [object.objectId!]
                             } else {
-                                
-                                PFUser.currentUser()!["friend_list"] = [object.objectId!]
-                                
+                                PFUser.current()!["friend_list"] = [object.objectId!]
                             }
-                            
                         }
-                        
-                        PFUser.currentUser()?.saveInBackground()
-                        
+                        PFUser.current()?.saveInBackground()
                     }
-                    
                 })
-                
             }
-            
-        })
-        
+        }
     }
-    func locationManager(manager:CLLocationManager, didUpdateLocations locations:[CLLocation]) {
+    func locationManager(_ manager:CLLocationManager, didUpdateLocations locations:[CLLocation]) {
         locationManager.stopUpdatingLocation()
         print("didUpdateLocations")
         if manager.location != nil {
         geoPoint = PFGeoPoint(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
         print("LoadViewController posting a notification")
         print("\(geoPoint?.latitude),\(geoPoint?.longitude)")
-        NSNotificationCenter.defaultCenter().postNotificationName("storeUserLocationOnParse", object: nil, userInfo:  ["geoPoint":geoPoint!])
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "storeUserLocationOnParse"), object: nil, userInfo:  ["geoPoint":geoPoint!])
         }
         
-        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,25 +109,25 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
-        PFUser.currentUser()?.fetchInBackgroundWithBlock({ (object, error) in
+        PFUser.current()?.fetchInBackground(block: { (object, error) in
             let localData = LocalData()
             
-            if (localData.getUsername() != nil) && ((PFUser.currentUser()!.objectId) != nil){ //remember to change this back to username
+            if (localData.getUsername() != nil) && ((PFUser.current()!.objectId) != nil){ //remember to change this back to username
                 LocalStorageUtility().getUserFriends()
                 //LocalStorageUtility().getMainProfilePicture()
                 let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
 
                 if hasSignedUp == true {
-                    self.performSegueWithIdentifier("showBridgeFromLoadPage", sender: self)
+                    self.performSegue(withIdentifier: "showBridgeFromLoadPage", sender: self)
                 } else {
-                    self.performSegueWithIdentifier("showSignupFromLoadPage", sender: self)
+                    self.performSegue(withIdentifier: "showSignupFromLoadPage", sender: self)
                 }
                 
             }
             else{
-                self.performSegueWithIdentifier("showLoginFromLoadPage", sender: self)
+                self.performSegue(withIdentifier: "showLoginFromLoadPage", sender: self)
 
             }
             
@@ -181,8 +136,8 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         
         
     }
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let vc = segue.destinationViewController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == ViewController.self {
             let vc2 = vc as! ViewController

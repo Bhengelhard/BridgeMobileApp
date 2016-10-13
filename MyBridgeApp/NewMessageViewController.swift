@@ -41,8 +41,8 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         if let _ = friendList{
             let query: PFQuery = PFQuery(className: "_User")
             query.whereKey("objectId", containedIn: friendList!)
-            query.cachePolicy = .NetworkElseCache
-            query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+            query.cachePolicy = .networkElseCache
+            query.findObjectsInBackground(block: { (results, error) -> Void in
                 if let error = error {
                     print(error)
                 }
@@ -80,30 +80,30 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segueToSingleMessage {
         segueToSingleMessage = false
-        let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
+        let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
         singleMessageVC.transitioningDelegate = self.transitionManager
         singleMessageVC.isSeguedFromNewMessage = true
         singleMessageVC.newMessageId = self.messageId
         }
     }
     
-    @IBAction func sendButtonTapped(sender: AnyObject) {
+    @IBAction func sendButtonTapped(_ sender: AnyObject) {
         if bridgeMessage.text != "" || self.imageSet{
             //self.imageSet = false
-            imageMessage.hidden = true
+            imageMessage.isHidden = true
             
-            self.sendButon.userInteractionEnabled = false
+            self.sendButon.isUserInteractionEnabled = false
             //self.sendButon.setTitleColor(UIColor.grayColor(), forState: UIControlState.Normal)
             self.searchController.searchBar.text = ""
             let query: PFQuery = PFQuery(className: "Messages")
             sendToObjectIds = nameIdSelectedArray
             var objectIdsInMessage = sendToObjectIds
-            objectIdsInMessage.append((PFUser.currentUser()?.objectId)!)
+            objectIdsInMessage.append((PFUser.current()?.objectId)!)
             print("objectIdsInMessage - \(objectIdsInMessage)")
-            query.whereKey("ids_in_message", containsAllObjectsInArray: objectIdsInMessage)
+            query.whereKey("ids_in_message", containsAllObjectsIn: objectIdsInMessage)
             var messageIdNotFound = true
             do{
             let results = try query.findObjects()
@@ -113,18 +113,19 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
                 if objectIdsInMessage.count == objectIdsRetrieved.count{
                     // push Notification starts
                     for userId in objectIdsRetrieved {
-                        if userId == PFUser.currentUser()!.objectId {
+                        if userId == PFUser.current()!.objectId {
                             continue
                         }
-                        let notificationMessage = "Message from " + (PFUser.currentUser()!["name"] as! String)
-                        PFCloud.callFunctionInBackground("pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage"]) {
-                            (response: AnyObject?, error: NSError?) -> Void in
+                        let notificationMessage = "Message from " + (PFUser.current()!["name"] as! String)
+                        PFCloud.callFunction(inBackground: "pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage"], block: { (response: Any?, error: Error?) in
                             if error == nil {
                                 if let response = response as? String {
                                     print(response)
                                 }
+                            } else {
+                                print(error)
                             }
-                        }
+                        })
                     }
                     // push notification ends
                     print("object found")
@@ -144,7 +145,7 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
                         print("object not found")
                         let message = PFObject(className: "Messages")
                         message["ids_in_message"]  = objectIdsInMessage
-                        message["bridge_builder"] = PFUser.currentUser()?.objectId
+                        message["bridge_builder"] = PFUser.current()?.objectId
                         do{
                             try message.save()
                             self.messageId = message.objectId!
@@ -165,7 +166,7 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
                         singleMessage["message_image"] = file
                         self.imageSet = false
                     }
-                    singleMessage["sender"] = PFUser.currentUser()?.objectId
+                    singleMessage["sender"] = PFUser.current()?.objectId
                     singleMessage["message_id"] = self.messageId
                     do{
                         try singleMessage.save()
@@ -177,24 +178,24 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
                 }
             segueToSingleMessage = true
             print("Segue now")
-            searchController.active = false
-            performSegueWithIdentifier("showSingleMessageFromNewMessage", sender: self)
+            searchController.isActive = false
+            performSegue(withIdentifier: "showSingleMessageFromNewMessage", sender: self)
     }
-    @IBAction func photoButton(sender: AnyObject) {
+    @IBAction func photoButton(_ sender: AnyObject) {
         let savedSendTo = searchController.searchBar.text!
-        searchController.active = false
-        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.Default)
+        searchController.isActive = false
+        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.default)
         {
             UIAlertAction in
             self.openCamera()
         }
-        let galleryAction = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.Default)
+        let galleryAction = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default)
         {
             UIAlertAction in
             self.openGallary()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel)
         {
             UIAlertAction in
         }
@@ -204,28 +205,28 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         alert.addAction(cameraAction)
         alert.addAction(galleryAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         searchController.searchBar.text = savedSendTo
     }
     func openCamera(){
-        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
-            picker.sourceType = UIImagePickerControllerSourceType.Camera
-            self .presentViewController(picker, animated: true, completion: nil)
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
+            picker.sourceType = UIImagePickerControllerSourceType.camera
+            self .present(picker, animated: true, completion: nil)
         }else{
             let alert = UIAlertView()
             alert.title = "Warning"
             alert.message = "You don't have camera"
-            alert.addButtonWithTitle("OK")
+            alert.addButton(withTitle: "OK")
             alert.show()
         }
     }
     func openGallary(){
-        picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        self.presentViewController(picker, animated: true, completion: nil)
+        picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        self.present(picker, animated: true, completion: nil)
     }
    
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]){
-        picker .dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
+        picker .dismiss(animated: true, completion: nil)
         imageMessage.image = info[UIImagePickerControllerOriginalImage] as? UIImage
         //imageMessage.hidden = false
         
@@ -237,7 +238,7 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         bridgeMessage.leftView = imageView
         self.imageSet = true
     }
-    func imagePickerControllerDidCancel(picker: UIImagePickerController){
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
         print("picker cancel.")
         self.imageSet = false
     }
@@ -256,15 +257,15 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         self.tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "To:                                                        "
-        self.sendButon.userInteractionEnabled = false
-        self.sendButon.setTitleColor(UIColor.grayColor(), forState: UIControlState.Normal)
-        imageMessage.hidden = true
+        self.sendButon.isUserInteractionEnabled = false
+        self.sendButon.setTitleColor(UIColor.gray, for: UIControlState())
+        imageMessage.isHidden = true
         
-        bridgeMessage.leftViewMode = UITextFieldViewMode.Always
+        bridgeMessage.leftViewMode = UITextFieldViewMode.always
         
         
-        navigationBar.hidden = false
-        scrollView.hidden = true
+        navigationBar.isHidden = false
+        scrollView.isHidden = true
 
         // Do any additional setup after loading the view.
     }
@@ -273,8 +274,8 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
 
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        navigationBar.hidden = true
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        navigationBar.isHidden = true
         
         /*let xPosition = tableView.frame.origin.x - 10
         //View will slide 20px up
@@ -286,13 +287,13 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
             
             self.tableView.frame = CGRectMake(xPosition, yPosition, height, width)
         })*/
-        scrollView.hidden = true
+        scrollView.isHidden = true
         print("tapped")
         
     }
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        navigationBar.hidden = false
-        scrollView.hidden = true
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        navigationBar.isHidden = false
+        scrollView.isHidden = true
         let subViews = self.scrollView.subviews
         for subview in subViews{
             subview.removeFromSuperview()
@@ -329,19 +330,19 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         })
         scrollView.hidden = true
          */
-        self.sendButon.userInteractionEnabled = false
-        self.sendButon.setTitleColor(UIColor.grayColor(), forState: UIControlState.Normal)
+        self.sendButon.isUserInteractionEnabled = false
+        self.sendButon.setTitleColor(UIColor.gray, for: UIControlState())
         self.sendToObjectIds = [String]()
         print("cancel button tapped")
     }
-    func filterContentForSearchText(searchText:String, scope: String = "All"){
+    func filterContentForSearchText(_ searchText:String, scope: String = "All"){
         print("searchText is \(searchText) and friend ids are \(self.friendObjectIds)")
         self.filteredPositions = [Int]()
         var searchTerms = searchText.characters.split{$0 == ","}.map(String.init)
         var searchFor = searchText
         if searchTerms.count > 1 {
          print("searchTerms.count - \(searchTerms.count)")
-            if searchTerms.count == searchText.componentsSeparatedByString(",").count - 1{
+            if searchTerms.count == searchText.components(separatedBy: ",").count - 1{
                 searchFor = " "
             }
             else {
@@ -349,14 +350,14 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
             }
         }
         for i in 0 ..< self.friendNames.count  {
-            if self.friendNames[i].lowercaseString.containsString(searchFor.lowercaseString){
+            if self.friendNames[i].lowercased().contains(searchFor.lowercased()){
                 self.filteredPositions.append(i)
             }
 
         }
         tableView.reloadData()
     }
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
        /* if self.nameAdded {
             if let _ = searchController.searchBar.text{
             searchController.searchBar.text = searchController.searchBar.text! + ", "
@@ -367,18 +368,18 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         self.nameAdded = false
         filterContentForSearchText(searchController.searchBar.text!)
     }
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredPositions.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NewMessageTableCell
-        cell.name.text = self.friendNames[filteredPositions[indexPath.row]]
-       
-        self.friendProfilePicturesPfFile[filteredPositions[indexPath.row]].getDataInBackgroundWithBlock {
-            (imageData:NSData?, error:NSError?) -> Void in
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! NewMessageTableCell
+        cell.name.text = self.friendNames[filteredPositions[(indexPath as NSIndexPath).row]]
+        
+        self.friendProfilePicturesPfFile[filteredPositions[(indexPath as NSIndexPath).row]].getDataInBackground {
+            (imageData:Data?, error:Error?) in
             if error == nil {
                 cell.profilePhoto.image = UIImage(data:imageData!)!
                 cell.profilePhoto.layer.cornerRadius = cell.profilePhoto.frame.size.width/2
@@ -388,20 +389,20 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         return cell
        
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var preSearchedTerms = ""
-        if searchController.searchBar.text!.containsString(","){
+        if searchController.searchBar.text!.contains(","){
             var searchTerms = searchController.searchBar.text!.characters.split{$0 == ","}.map(String.init)
             
             for i in 0 ..< searchTerms.count-1 {
                 preSearchedTerms += searchTerms[i]+","
             }
-            self.sendToObjectIds.append(self.friendObjectIds[filteredPositions[indexPath.row]])
+            self.sendToObjectIds.append(self.friendObjectIds[filteredPositions[(indexPath as NSIndexPath).row]])
             
         }
         else {
             print("filteredPositions \(filteredPositions) ")
-            self.sendToObjectIds.append(self.friendObjectIds[filteredPositions[indexPath.row]])
+            self.sendToObjectIds.append(self.friendObjectIds[filteredPositions[(indexPath as NSIndexPath).row]])
             //searchController.searchBar.text = friendNames[filteredPositions[indexPath.row]] + ","
             
         }
@@ -412,25 +413,25 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
             scrollViewYPosition += 25
             shiftDown = true
         }
-        navigationBar.hidden = true
-        scrollView.hidden = false
+        navigationBar.isHidden = true
+        scrollView.isHidden = false
         if (shiftDown || noOfnamesSelected == 0) {
             print("shiftDown || noOfnamesSelected")
             //searchController.searchBar.userInteractionEnabled = false
-            navigationBar.hidden = true
-            scrollView.hidden = false
+            navigationBar.isHidden = true
+            scrollView.isHidden = false
         }
         
 
         let frame1 = CGRect(x: scrollViewXPosition, y: scrollViewYPosition, width: 50, height: 20 )
         let button = UIButton(frame: frame1)
-        button.setTitle(friendNames[filteredPositions[indexPath.row]], forState: .Normal)
+        button.setTitle(friendNames[filteredPositions[(indexPath as NSIndexPath).row]], for: UIControlState())
         
-        button.backgroundColor = UIColor.clearColor()
+        button.backgroundColor = UIColor.clear
         button.layer.cornerRadius = 5
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.blackColor().CGColor
-        button.backgroundColor = UIColor.blackColor()
+        button.layer.borderColor = UIColor.black.cgColor
+        button.backgroundColor = UIColor.black
         button.titleLabel?.font = UIFont(name:"HelveticaNeue", size:8)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NewMessageViewController.nameDoubleTapped(_:)))
         tapGesture.numberOfTapsRequired = 2
@@ -441,33 +442,33 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
         let frame2 = CGRect(x: scrollViewXPosition+50, y: scrollViewYPosition, width: 6, height: 6 )
         let cancelButton = UIButton(frame: frame2)
         cancelButton.layer.cornerRadius = 0.5 * button.bounds.size.width
-        cancelButton.setImage(UIImage(named:"iconCancel.png"), forState: .Normal)
-        cancelButton.addTarget(self, action: #selector(NewMessageViewController.removeNameTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        cancelButton.setImage(UIImage(named:"iconCancel.png"), for: UIControlState())
+        cancelButton.addTarget(self, action: #selector(NewMessageViewController.removeNameTapped(_:)), for: UIControlEvents.touchUpInside)
         cancelButton.tag = noOfnamesSelected
         
-        nameSelectedArray.append(friendNames[filteredPositions[indexPath.row]])
-        nameIdSelectedArray.append(friendObjectIds[filteredPositions[indexPath.row]])
+        nameSelectedArray.append(friendNames[filteredPositions[(indexPath as NSIndexPath).row]])
+        nameIdSelectedArray.append(friendObjectIds[filteredPositions[(indexPath as NSIndexPath).row]])
         
         self.scrollView.addSubview(cancelButton)
         self.scrollView.addSubview(button)
          searchController.searchBar.text = ""//preSearchedTerms+friendNames[filteredPositions[indexPath.row]]+","
         
         
-        self.sendButon.userInteractionEnabled = true
-        self.sendButon.setTitleColor(UIColor.init(red: 0.196, green: 0.3098, blue: 0.52, alpha: 1.0), forState: UIControlState.Normal)
+        self.sendButon.isUserInteractionEnabled = true
+        self.sendButon.setTitleColor(UIColor.init(red: 0.196, green: 0.3098, blue: 0.52, alpha: 1.0), for: UIControlState())
         self.nameAdded = true
         noOfnamesSelected += 1
         //tableView.reloadData()
     }
-    func removeNameTapped(button: UIButton) {
+    func removeNameTapped(_ button: UIButton) {
         print("button.tag \(button.tag)")
-        nameSelectedArray.removeAtIndex(button.tag)
-        nameIdSelectedArray.removeAtIndex(button.tag)
+        nameSelectedArray.remove(at: button.tag)
+        nameIdSelectedArray.remove(at: button.tag)
         removeAndAddNameButtons()
     }
-    func nameDoubleTapped(sender : UIGestureRecognizer){
-        nameSelectedArray.removeAtIndex(sender.view!.tag)
-        nameIdSelectedArray.removeAtIndex(sender.view!.tag)
+    func nameDoubleTapped(_ sender : UIGestureRecognizer){
+        nameSelectedArray.remove(at: sender.view!.tag)
+        nameIdSelectedArray.remove(at: sender.view!.tag)
         removeAndAddNameButtons()
         
     }
@@ -488,13 +489,13 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
             
             let frame1 = CGRect(x: scrollViewXPosition, y: scrollViewYPosition, width: 50, height: 20 )
             let button = UIButton(frame: frame1)
-            button.setTitle(nameSelectedArray[i], forState: .Normal)
+            button.setTitle(nameSelectedArray[i], for: UIControlState())
             
-            button.backgroundColor = UIColor.clearColor()
+            button.backgroundColor = UIColor.clear
             button.layer.cornerRadius = 5
             button.layer.borderWidth = 1
-            button.layer.borderColor = UIColor.blackColor().CGColor
-            button.backgroundColor = UIColor.blackColor()
+            button.layer.borderColor = UIColor.black.cgColor
+            button.backgroundColor = UIColor.black
             button.titleLabel?.font = UIFont(name:"HelveticaNeue", size:8)
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NewMessageViewController.nameDoubleTapped(_:)))
             tapGesture.numberOfTapsRequired = 2
@@ -505,16 +506,16 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
             let frame2 = CGRect(x: scrollViewXPosition+50, y: scrollViewYPosition, width: 6, height: 6 )
             let cancelButton = UIButton(frame: frame2)
             cancelButton.layer.cornerRadius = 0.5 * button.bounds.size.width
-            cancelButton.setImage(UIImage(named:"iconCancel.png"), forState: .Normal)
-            cancelButton.addTarget(self, action: #selector(NewMessageViewController.removeNameTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            cancelButton.setImage(UIImage(named:"iconCancel.png"), for: UIControlState())
+            cancelButton.addTarget(self, action: #selector(NewMessageViewController.removeNameTapped(_:)), for: UIControlEvents.touchUpInside)
             cancelButton.tag = i
             self.scrollView.addSubview(cancelButton)
             self.scrollView.addSubview(button)
         }
         noOfnamesSelected = nameSelectedArray.count
         if nameIdSelectedArray.count == 0{
-            self.sendButon.userInteractionEnabled = false
-            self.sendButon.setTitleColor(UIColor.grayColor(), forState: UIControlState.Normal)
+            self.sendButon.isUserInteractionEnabled = false
+            self.sendButon.setTitleColor(UIColor.gray, for: UIControlState())
         }
     }
 

@@ -35,8 +35,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     let friendshipIcon = UIImageView()
     
    
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
     let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
@@ -50,30 +50,30 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     var editableName:String = ""
     let noNameText = "Click to enter your full name"
 
-    func profilePictureTouchDown(sender: AnyObject) {
-        profilePictureButton.layer.borderColor = necterYellow.CGColor
+    func profilePictureTouchDown(_ sender: AnyObject) {
+        profilePictureButton.layer.borderColor = necterYellow.cgColor
     }
-    func profilePictureTouchDragExit(sender: AnyObject) {
-        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+    func profilePictureTouchDragExit(_ sender: AnyObject) {
+        profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
     }
-    func profilePictureTapped(sender: AnyObject) {
-        profilePictureButton.layer.borderColor = necterYellow.CGColor
+    func profilePictureTapped(_ sender: AnyObject) {
+        profilePictureButton.layer.borderColor = necterYellow.cgColor
         
-        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.Default)
+        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.default)
         {
             UIAlertAction in
             self.openCamera()
         }
-        let galleryAction = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.Default)
+        let galleryAction = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default)
         {
             UIAlertAction in
             self.openGallary()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel)
         {
             UIAlertAction in
-            self.profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+            self.profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
         }
         
         // Add the actions
@@ -81,57 +81,57 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         alert.addAction(cameraAction)
         alert.addAction(galleryAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
         imagePicker.allowsEditing = false
 
     }
     
     func openCamera(){
-        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
-            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+            self.present(imagePicker, animated: true, completion: nil)
         }else{
             let alert = UIAlertView()
             alert.title = "Warning"
             alert.message = "You don't have camera"
-            alert.addButtonWithTitle("OK")
+            alert.addButton(withTitle: "OK")
             alert.show()
         }
     }
     func openGallary(){
-        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        self.presentViewController(imagePicker, animated: true, completion: nil)
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        self.present(imagePicker, animated: true, completion: nil)
     }
     
     //update the UIImageView once an image has been picked
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             let fixedPickedImage = fixOrientation(pickedImage)
             profilePictureView.image = fixedPickedImage
             //profilePictureButton.setBackgroundImage(fixedPickedImage, forState: .Normal)
         }
-        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-        dismissViewControllerAnimated(true, completion: nil)
+        profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
+        dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
+        dismiss(animated: true, completion: nil)
     }
     
     //fix the orientation of the image picked by the ImagePickerController
-    func fixOrientation(img:UIImage) -> UIImage {
+    func fixOrientation(_ img:UIImage) -> UIImage {
         
-        if (img.imageOrientation == UIImageOrientation.Up) {
+        if (img.imageOrientation == UIImageOrientation.up) {
             return img;
         }
         
         UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale);
         let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
-        img.drawInRect(rect)
+        img.draw(in: rect)
         
-        let normalizedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        let normalizedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext();
         return normalizedImage;
         
@@ -165,26 +165,26 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         dismissViewControllerAnimated(true, completion: nil)
     }*/
     //stopping user from entering name with length greater than 25
-    @IBAction func nameTextFieldChanges(sender: AnyObject) {
+    @IBAction func nameTextFieldChanges(_ sender: AnyObject) {
         if let characterCount = nameTextField.text?.characters.count {
             if characterCount > 25 {
                 let aboveMaxBy = characterCount - 25
-                let index1 = nameTextField.text!.endIndex.advancedBy(-aboveMaxBy)
-                nameTextField.text = nameTextField.text!.substringToIndex(index1)
+                let index1 = nameTextField.text!.characters.index(nameTextField.text!.endIndex, offsetBy: -aboveMaxBy)
+                nameTextField.text = nameTextField.text!.substring(to: index1)
             }
         }
     }
     
     //Begin Connecting Button Clicked
-    func beginConnectingTapped(send: UIButton) {
-        beginConnectingButton.layer.borderColor = necterYellow.CGColor
+    func beginConnectingTapped(_ send: UIButton) {
+        beginConnectingButton.layer.borderColor = necterYellow.cgColor
         
-        if let _ = PFUser.currentUser() {
-            PFUser.currentUser()?["name"] = editableName
-            PFUser.currentUser()?["interested_in_business"] = businessSwitch.on
-            PFUser.currentUser()?["interested_in_love"] = loveSwitch.on
-            PFUser.currentUser()?["interested_in_friendship"] = friendshipSwitch.on
-            PFUser.currentUser()?.saveInBackgroundWithBlock({ (success, error) in
+        if let _ = PFUser.current() {
+            PFUser.current()?["name"] = editableName
+            PFUser.current()?["interested_in_business"] = businessSwitch.isOn
+            PFUser.current()?["interested_in_love"] = loveSwitch.isOn
+            PFUser.current()?["interested_in_friendship"] = friendshipSwitch.isOn
+            PFUser.current()?.saveInBackground(block: { (success, error) in
                 if success {
                     LocalStorageUtility().updateBridgePairingsTable()
                 }
@@ -200,37 +200,37 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         localData.setHasSignedUp(true)
         localData.synchronize()
         
-        performSegueWithIdentifier("showBridgePageFromSignUpView", sender: self)
+        performSegue(withIdentifier: "showBridgePageFromSignUpView", sender: self)
     }
     // Switches tapped
-    @IBAction func businessSwitchTapped(sender: AnyObject) {
-        if businessSwitch.on{
+    @IBAction func businessSwitchTapped(_ sender: AnyObject) {
+        if businessSwitch.isOn{
             businessLabel.textColor = businessBlue
             businessIcon.image = UIImage(named: "Business_Icon_Blue")
         }
         else{
-            businessLabel.textColor = UIColor.grayColor()
+            businessLabel.textColor = UIColor.gray
             businessIcon.image = UIImage(named: "Business_Icon_Gray")
         }
     }
-    @IBAction func loveSwitchTapped(sender: AnyObject) {
-        if loveSwitch.on{
+    @IBAction func loveSwitchTapped(_ sender: AnyObject) {
+        if loveSwitch.isOn{
             loveLabel.textColor = loveRed
             loveIcon.image = UIImage(named: "Love_Icon_Red")
         }
         else{
           
-            loveLabel.textColor = UIColor.grayColor()
+            loveLabel.textColor = UIColor.gray
             loveIcon.image = UIImage(named: "Love_Icon_Gray")
         }
     }
-    @IBAction func friendshipSwitchTapped(sender: AnyObject) {
-        if friendshipSwitch.on{
+    @IBAction func friendshipSwitchTapped(_ sender: AnyObject) {
+        if friendshipSwitch.isOn{
             friendshipLabel.textColor = friendshipGreen
             friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
         }
         else{
-            friendshipLabel.textColor = UIColor.grayColor()
+            friendshipLabel.textColor = UIColor.gray
             friendshipIcon.image = UIImage(named: "Friendship_Icon_Gray")
         }
     }
@@ -239,17 +239,17 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     func displayProfilePictureButton() {
         let mainProfilePicture = LocalData().getMainProfilePicture()
         if let mainProfilePicture = mainProfilePicture {
-            let image = UIImage(data:mainProfilePicture,scale:1.0)
+            let image = UIImage(data:mainProfilePicture as Data,scale:1.0)
             profilePictureView.image = image
         } else {
-            let pfData = PFUser.currentUser()?["profile_picture"] as? PFFile
+            let pfData = PFUser.current()?["profile_picture"] as? PFFile
             if let pfData = pfData {
-                pfData.getDataInBackgroundWithBlock({ (data, error) in
+                pfData.getDataInBackground(block: { (data, error) in
                     if error != nil || data == nil {
                         print(error)
                     } else {
                         let image = UIImage(data: data!, scale: 1.0)
-                        dispatch_async(dispatch_get_main_queue(), {
+                        DispatchQueue.main.async(execute: {
                             self.profilePictureView.image = image
                         })
                     }
@@ -258,15 +258,15 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             
         }
         
-        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDown(_:)), forControlEvents: .TouchDown)
-        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDragExit(_:)), forControlEvents: .TouchDragExit)
-        profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDown(_:)), for: .touchDown)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTouchDragExit(_:)), for: .touchDragExit)
+        profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), for: .touchUpInside)
         profilePictureButton.layer.borderWidth = 4
-        profilePictureButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-        profilePictureButton.contentMode = UIViewContentMode.ScaleAspectFill
-        profilePictureButton.backgroundColor = UIColor.clearColor()
+        profilePictureButton.layer.borderColor = UIColor.lightGray.cgColor
+        profilePictureButton.contentMode = UIViewContentMode.scaleAspectFill
+        profilePictureButton.backgroundColor = UIColor.clear
         
-        profilePictureView.contentMode = UIViewContentMode.ScaleAspectFill
+        profilePictureView.contentMode = UIViewContentMode.scaleAspectFill
         
         self.view.addSubview(profilePictureView)
         self.view.addSubview(profilePictureButton)
@@ -288,22 +288,22 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         loveSwitch.onTintColor = loveRed
         friendshipSwitch.onTintColor = friendshipGreen
         
-        if let businessInterest = PFUser.currentUser()?["interested_in_business"] {
-            businessSwitch.on = businessInterest as! Bool
+        if let businessInterest = PFUser.current()?["interested_in_business"] {
+            businessSwitch.isOn = businessInterest as! Bool
         } else {
-            businessSwitch.on = true
+            businessSwitch.isOn = true
         }
         
-        if let loveInterest = PFUser.currentUser()?["interested_in_love"] {
-            loveSwitch.on = loveInterest as! Bool
+        if let loveInterest = PFUser.current()?["interested_in_love"] {
+            loveSwitch.isOn = loveInterest as! Bool
         } else {
-            loveSwitch.on = true
+            loveSwitch.isOn = true
         }
         
-        if let friendshipInterest = PFUser.currentUser()?["interested_in_friendship"] {
-            friendshipSwitch.on = friendshipInterest as! Bool
+        if let friendshipInterest = PFUser.current()?["interested_in_friendship"] {
+            friendshipSwitch.isOn = friendshipInterest as! Bool
         } else {
-            friendshipSwitch.on = true
+            friendshipSwitch.isOn = true
         }
         
         self.view.addSubview(friendshipLabel)
@@ -328,8 +328,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             //name with max characters of 25
             if usernameString.characters.count > 25 {
                 let aboveMaxBy = usernameString.characters.count - 25
-                let index1 = usernameString.endIndex.advancedBy(-aboveMaxBy)
-                usernameString = usernameString.substringToIndex(index1)
+                let index1 = usernameString.characters.index(usernameString.endIndex, offsetBy: -aboveMaxBy)
+                usernameString = usernameString.substring(to: index1)
                 /*let localData = LocalData()
                 localData.setUsername(usernameString)
                 localData.synchronize()*/
@@ -337,7 +337,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             if usernameString != "" {
                 editableName = usernameString
                 nameTextField.text = usernameString
-                mainTitle.attributedText = twoColoredString(editableName+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
+                mainTitle.attributedText = twoColoredString(editableName+"'s Interests", partLength: 12, start: 12, color: UIColor.black)
             } else{
                 editableName = noNameText
                 mainTitle.text = noNameText
@@ -349,8 +349,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             mainTitle.text = noNameText
             mainTitle.textColor = necterYellow
         }
-        nameTextField.hidden = true
-        mainTitle.userInteractionEnabled = true
+        nameTextField.isHidden = true
+        mainTitle.isUserInteractionEnabled = true
         
         
         let aSelector : Selector = #selector(SignupViewController.lblTapped)
@@ -366,40 +366,40 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         displayProfilePictureButton()
     
         if mainTitle.text == noNameText {
-            beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-            beginConnectingButton.setTitleColor(UIColor.grayColor(), forState: .Normal)
-            beginConnectingButton.enabled = false
+            beginConnectingButton.layer.borderColor = UIColor.lightGray.cgColor
+            beginConnectingButton.setTitleColor(UIColor.gray, for: UIControlState())
+            beginConnectingButton.isEnabled = false
         }
         
-        beginConnectingButton.setTitle("Begin Connecting", forState: .Normal)
+        beginConnectingButton.setTitle("Begin Connecting", for: UIControlState())
         beginConnectingButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
         beginConnectingButton.layer.cornerRadius = 7.0
         beginConnectingButton.layer.borderWidth = 4.0
         beginConnectingButton.clipsToBounds = true
-        beginConnectingButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        beginConnectingButton.addTarget(self, action: #selector(beginConnectingTapped(_:)), forControlEvents: .TouchUpInside)
+        beginConnectingButton.setTitleColor(UIColor.black, for: UIControlState())
+        beginConnectingButton.addTarget(self, action: #selector(beginConnectingTapped(_:)), for: .touchUpInside)
         if editableName == "" || editableName == noNameText {
-            beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-            beginConnectingButton.enabled = false
+            beginConnectingButton.layer.borderColor = UIColor.lightGray.cgColor
+            beginConnectingButton.isEnabled = false
         } else {
-            beginConnectingButton.layer.borderColor = necterYellow.CGColor
-            beginConnectingButton.setTitleColor(necterYellow, forState: .Highlighted)
+            beginConnectingButton.layer.borderColor = necterYellow.cgColor
+            beginConnectingButton.setTitleColor(necterYellow, for: .highlighted)
         }
         
         //label below beginConnecting Button
-        updateLaterLabel.textAlignment = NSTextAlignment.Center
+        updateLaterLabel.textAlignment = NSTextAlignment.center
         updateLaterLabel.text = "You can always update your interests later"
         updateLaterLabel.font = UIFont(name: "BentonSans", size: 12)
-        updateLaterLabel.textColor = UIColor.blackColor()
+        updateLaterLabel.textColor = UIColor.black
         updateLaterLabel.numberOfLines = 0
         
         //setting the title to the view
-        mainTitle.textAlignment = NSTextAlignment.Center
+        mainTitle.textAlignment = NSTextAlignment.center
         mainTitle.font = UIFont(name: "Verdana", size: 22)
         mainTitle.numberOfLines = 2
         //mainTitle.textColor = UIColor.lightGrayColor()
-        mainTitle.textColor = UIColor.lightGrayColor()
-        mainTitle.attributedText = twoColoredString(mainTitle.text!, partLength: 12, start: 12, color: UIColor.blackColor())
+        mainTitle.textColor = UIColor.lightGray
+        mainTitle.attributedText = twoColoredString(mainTitle.text!, partLength: 12, start: 12, color: UIColor.black)
         
         displayInterests()
         self.view.addSubview(mainTitle)
@@ -410,7 +410,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     
     override func viewDidLayoutSubviews() {
         
-        let modelName = UIDevice.currentDevice().modelName
+        let modelName = UIDevice.current.modelName
         
         
         //setting up elements
@@ -454,7 +454,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             friendshipSwitch.center.y = friendshipLabel.center.y
             beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
-            updateLaterLabel.frame = CGRectMake(0.05*screenWidth, 0.925*screenHeight, 0.9*screenWidth, 0.05*screenHeight)
+            updateLaterLabel.frame = CGRect(x: 0.05*screenWidth, y: 0.925*screenHeight, width: 0.9*screenWidth, height: 0.05*screenHeight)
             
         } else {
         //placing elements on larger iPhones
@@ -485,7 +485,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             friendshipSwitch.center.y = friendshipLabel.center.y
             beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
-            updateLaterLabel.frame = CGRectMake(0.05*screenWidth, 0.925*screenHeight, 0.9*screenWidth, 0.05*screenHeight)
+            updateLaterLabel.frame = CGRect(x: 0.05*screenWidth, y: 0.925*screenHeight, width: 0.9*screenWidth, height: 0.05*screenHeight)
             
         }
         
@@ -499,7 +499,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     
     // Utility functions
     // generate a 2-colored string. Used for the title
-    func twoColoredString(full:String,partLength: Int, start: Int, color: UIColor)->NSMutableAttributedString{
+    func twoColoredString(_ full:String,partLength: Int, start: Int, color: UIColor)->NSMutableAttributedString{
         let mutableString = NSMutableAttributedString(string: full)
         mutableString.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(location:full.characters.count-start, length:partLength))
         return mutableString
@@ -511,49 +511,49 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     func lblTapped(){
         nameTextField.becomeFirstResponder()
         nameTextField.textColor = necterYellow
-        mainTitle.hidden = true
-        nameTextField.hidden = false
+        mainTitle.isHidden = true
+        nameTextField.isHidden = false
         if editableName != noNameText {
             nameTextField.text = editableName
         }
-        beginConnectingButton.layer.borderColor = UIColor.lightGrayColor().CGColor
-        beginConnectingButton.enabled = false
+        beginConnectingButton.layer.borderColor = UIColor.lightGray.cgColor
+        beginConnectingButton.isEnabled = false
     }
     // Tapped anywhere else on the main view. Textfield should be replaced by label
     func tappedOutside(){
         if mainTitle.text == self.noNameText {
-            mainTitle.hidden = true
-            nameTextField.hidden = false
+            mainTitle.isHidden = true
+            nameTextField.isHidden = false
             nameTextField.becomeFirstResponder()
             nameTextField.attributedPlaceholder = NSAttributedString(string:"Enter your full name", attributes: [NSForegroundColorAttributeName: necterYellow])
         } else {
-            beginConnectingButton.layer.borderColor = necterYellow.CGColor
-            beginConnectingButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-            beginConnectingButton.enabled = true
-            beginConnectingButton.setTitleColor(necterYellow, forState: .Highlighted)
-            mainTitle.hidden = false
-            nameTextField.hidden = true
+            beginConnectingButton.layer.borderColor = necterYellow.cgColor
+            beginConnectingButton.setTitleColor(UIColor.black, for: UIControlState())
+            beginConnectingButton.isEnabled = true
+            beginConnectingButton.setTitleColor(necterYellow, for: .highlighted)
+            mainTitle.isHidden = false
+            nameTextField.isHidden = true
             self.view.endEditing(true)
         }
         
         if let editableNameTemp = nameTextField.text{
             if editableNameTemp != "" {
                 editableName = editableNameTemp
-                mainTitle.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
+                mainTitle.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.black)
             }
         }
         if editableName != "" {
-            beginConnectingButton.layer.borderColor = necterYellow.CGColor
-            beginConnectingButton.enabled = true
+            beginConnectingButton.layer.borderColor = necterYellow.cgColor
+            beginConnectingButton.isEnabled = true
         }
     }
     // User returns after editing
-    func textFieldShouldReturn(userText: UITextField) -> Bool {
+    func textFieldShouldReturn(_ userText: UITextField) -> Bool {
         userText.resignFirstResponder()
-        nameTextField.hidden = true
-        mainTitle.hidden = false
+        nameTextField.isHidden = true
+        mainTitle.isHidden = false
         if let editableNameTemp = nameTextField.text{
-            mainTitle.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.blackColor())
+            mainTitle.attributedText = twoColoredString(editableNameTemp+"'s Interests", partLength: 12, start: 12, color: UIColor.black)
             editableName = editableNameTemp
         }
         /*let updatedText = nameTextField.text
@@ -565,7 +565,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         return true
     }
 
-     override func viewDidAppear(animated: Bool) {
+     override func viewDidAppear(_ animated: Bool) {
         
     }
     
@@ -574,9 +574,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        let vc = segue.destinationViewController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        NotificationCenter.default.removeObserver(self)
+        let vc = segue.destination
             let mirror = Mirror(reflecting: vc)
             if mirror.subjectType == BridgeViewController.self {
                 self.transitionManager.animationDirection = "Bottom"

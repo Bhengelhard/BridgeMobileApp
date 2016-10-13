@@ -47,13 +47,13 @@ class MessageContent {
             participantsTextColor = p
         }
         else {
-            participantsTextColor = UIColor.blackColor()
+            participantsTextColor = UIColor.black
         }
         if let p = messageContent["arrowTextColor"] as? UIColor {
             arrowTextColor = p
         }
         else {
-            arrowTextColor = UIColor.blackColor()
+            arrowTextColor = UIColor.black
         }
 }
 }

@@ -11,7 +11,7 @@ import Parse
 
 //Change to MessagesTableViewController so other can be MessageViewController
 
-func getWeekDay(num:Int)->String{
+func getWeekDay(_ num:Int)->String{
     switch num {
     case 1: return "Sunday"
     case 2: return "Monday"
@@ -29,8 +29,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet var tableView: UITableView!
     
     //screen proportions
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     //necter colors
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
@@ -61,7 +61,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var messages = [String : String]()
     var messageType = [String : String]()
     var messageViewed = [String : Bool]()
-    var messageTimestamps = [String : NSDate?]()
+    var messageTimestamps = [String : Date?]()
     var messagePositionToMessageIdMapping = [Int:String]()
     var necterTypeColor = UIColor()
     
@@ -84,12 +84,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var messageId = String()
     var singleMessageTitle = "Conversation"
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-            NSNotificationCenter.defaultCenter().removeObserver(self)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            NotificationCenter.default.removeObserver(self)
         if segueToSingleMessage {
             //print(" prepareForSegue was Called")
             segueToSingleMessage = false
-            let singleMessageVC:SingleMessageViewController = segue.destinationViewController as! SingleMessageViewController
+            let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
             singleMessageVC.transitioningDelegate = self.transitionManager
             singleMessageVC.isSeguedFromMessages = true
             singleMessageVC.newMessageId = self.singleMessageId
@@ -98,7 +98,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
            
         }
         else {
-            let vc = segue.destinationViewController
+            let vc = segue.destination
             let mirror = Mirror(reflecting: vc)
             if mirror.subjectType == BridgeViewController.self {
                 self.transitionManager.animationDirection = "Left"
@@ -120,12 +120,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         //self.refresher.endRefreshing()
         
         let query: PFQuery = PFQuery(className: "Messages")
-        query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
-        query.orderByDescending("lastSingleMessageAt")
+        query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
+        query.order(byDescending: "lastSingleMessageAt")
         query.skip = noOfElementsFetched
         query.limit = noOfElementsPerRefresher
-        query.cachePolicy = .NetworkElseCache
-        query.findObjectsInBackgroundWithBlock({ (results, error) -> Void in
+        query.cachePolicy = .networkElseCache
+        query.findObjectsInBackground(block: { (results, error) -> Void in
             
             if let error = error {
                 print("refresh findObjectsInBackgroundWithBlock error - \(error)")
@@ -145,14 +145,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         self.messageType[result.objectId!] = ("Default")
                     }
                     if let _ = result["lastSingleMessageAt"] {
-                        self.messageTimestamps[result.objectId!] =  (result["lastSingleMessageAt"] as! (NSDate))
+                        self.messageTimestamps[result.objectId!] =  (result["lastSingleMessageAt"] as! (Date))
                     }
                     else {
-                        self.messageTimestamps[result.objectId!] = NSDate()
+                        self.messageTimestamps[result.objectId!] = Date()
                     }
                     if let _ = result["message_viewed"] {
                         let whoViewed = result["message_viewed"] as! ([String])
-                        if whoViewed.contains((PFUser.currentUser()?.objectId)!) {
+                        if whoViewed.contains((PFUser.current()?.objectId)!) {
                             self.messageViewed[result.objectId!] = (true)
                             //print("1")
                         }
@@ -237,19 +237,19 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         })
     }
        // helper function for updateSearchResultsForSearchController
-    func filterContentForSearchText(searchText:String, scope: String = "All"){
+    func filterContentForSearchText(_ searchText:String, scope: String = "All"){
         filteredPositions = [Int]()
         for i in 0 ..< names.count  {
             var flag = true
             for individualNames in names[messagePositionToMessageIdMapping[i]!]!{
-                if individualNames.lowercaseString.containsString(searchText.lowercaseString){
+                if individualNames.lowercased().contains(searchText.lowercased()){
                     filteredPositions.append(i)
                     flag = false
                     break
                 }
             }
             
-            if flag && messages[messagePositionToMessageIdMapping[i]!]!.lowercaseString.containsString(searchText.lowercaseString){
+            if flag && messages[messagePositionToMessageIdMapping[i]!]!.lowercased().contains(searchText.lowercased()){
                 filteredPositions.append(i)
             }
         }
@@ -257,16 +257,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     // update search reults
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text!)
     }
-    func reloadMessageTable(notification: NSNotification) {
+    func reloadMessageTable(_ notification: Notification) {
          print("Listened at reloadMessageTable" )
          names = [String : [String]]()
          messages = [String : String]()
          messageType = [String : String]()
          messageViewed = [String : Bool]()
-         messageTimestamps = [String : NSDate?]()
+         messageTimestamps = [String : Date?]()
          messagePositionToMessageIdMapping = [Int:String]()
         
          filteredPositions = [Int]()
@@ -275,12 +275,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
          noOfElementsProcessed = 0
          noOfElementsFetched = 0
          let query: PFQuery = PFQuery(className: "Messages")
-         query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
-         query.orderByDescending("lastSingleMessageAt")
+         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
+         query.order(byDescending: "lastSingleMessageAt")
          query.limit = 1000
-         query.cachePolicy = .NetworkElseCache
-         query.countObjectsInBackgroundWithBlock{
-            (count: Int32, error: NSError?) -> Void in
+         query.cachePolicy = .networkElseCache
+         query.countObjectsInBackground{
+            (count: Int32, error: Error?) in
             if error == nil {
                 self.totalElements = Int(count)
                 self.refresh()
@@ -292,69 +292,69 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     func displayToolBar(){
         
-        toolbar.frame = CGRectMake(0, 0.9*screenHeight, screenWidth, 0.1*screenHeight)
+        toolbar.frame = CGRect(x: 0, y: 0.9*screenHeight, width: screenWidth, height: 0.1*screenHeight)
         toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
         
         //creating buttons to be added to the toolbar and evenly spaced across
-        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), forState: .Normal)
-        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), forState: .Disabled)
+        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
+        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), for: .disabled)
         allTypesButton.frame = CGRect(x: 0.07083*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
         allTypesButton.center.y = toolbar.center.y - 0.005*screenHeight
-        allTypesButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
+        allTypesButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         allTypesButton.tag = 0
         
         //coloring allTypesText three different colors
         let allTypesText = "All Types" as NSString
-        var allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
+        let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.range(of: "All"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.range(of: "Ty"))
+        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.range(of: "pes"))
         //setting allTypesText
         allTypesLabel.attributedText = allTypesAttributedText
-        allTypesLabel.textAlignment =  NSTextAlignment.Center
+        allTypesLabel.textAlignment =  NSTextAlignment.center
         allTypesLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
         allTypesLabel.center.x = allTypesButton.center.x
         
         
-        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), forState: .Normal)
-        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), forState: .Disabled)
+        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
+        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .disabled)
         businessButton.frame = CGRect(x: 0.24166*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
         businessButton.center.y = toolbar.center.y - 0.005*screenHeight
-        businessButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
+        businessButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         businessButton.tag = 1
         
         businessLabel.text = "Business"
         businessLabel.textColor = necterGray
         businessLabel.font = UIFont(name: "BentonSans", size: 11)
-        businessLabel.textAlignment =  NSTextAlignment.Center
+        businessLabel.textAlignment =  NSTextAlignment.center
         businessLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
         businessLabel.center.x = businessButton.center.x
         
-        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), forState: .Normal)
-        loveButton.setImage(UIImage(named: "Love_Icon_Red"), forState: .Disabled)
+        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
+        loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .disabled)
         loveButton.frame = CGRect(x: 0.65832*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1*screenWidth)
         loveButton.center.y = toolbar.center.y - 0.005*screenHeight
-        loveButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
+        loveButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         loveButton.tag = 2
         
         loveLabel.text = "Love"
         loveLabel.font = UIFont(name: "BentonSans", size: 11)
         loveLabel.textColor = necterGray
-        loveLabel.textAlignment =  NSTextAlignment.Center
+        loveLabel.textAlignment =  NSTextAlignment.center
         loveLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
         loveLabel.center.x = loveButton.center.x
         
-        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), forState: .Normal)
-        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), forState: .Disabled)
+        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
+        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .disabled)
         friendshipButton.frame = CGRect(x: 0.82915*screenWidth, y: 0, width: 0.1*screenWidth, height: 0.1150*screenWidth)
         friendshipButton.center.y = toolbar.center.y - 0.005*screenHeight
-        friendshipButton.addTarget(self, action: #selector(filterTapped), forControlEvents: .TouchUpInside)
+        friendshipButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
         friendshipButton.tag = 3
         
         friendshipLabel.text = "Friendship"
         friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
         friendshipLabel.textColor = necterGray
-        friendshipLabel.textAlignment =  NSTextAlignment.Center
+        friendshipLabel.textAlignment =  NSTextAlignment.center
         friendshipLabel.frame = CGRect(x: 0, y: 0.975*screenHeight, width: 0.2*screenWidth, height: 0.02*screenHeight)
         friendshipLabel.center.x = friendshipButton.center.x
         
@@ -363,16 +363,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         postStatusButton.backgroundColor = necterYellow
         postStatusButton.showsTouchWhenHighlighted = true
         postStatusButton.layer.borderWidth = 2.0
-        postStatusButton.layer.borderColor = UIColor.whiteColor().CGColor
+        postStatusButton.layer.borderColor = UIColor.white.cgColor
         postStatusButton.layer.cornerRadius = postStatusButton.frame.size.width/2.0
         postStatusButton.clipsToBounds = true
         //loveButton.layer.borderColor =
         postStatusButton.center.y = toolbar.center.y - 0.25*0.175*screenWidth
         postStatusButton.center.x = view.center.x
-        postStatusButton.setTitle("+", forState: .Normal)
-        postStatusButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        postStatusButton.setTitle("+", for: UIControlState())
+        postStatusButton.setTitleColor(UIColor.white, for: UIControlState())
         postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
-        postStatusButton.addTarget(self, action: #selector(postStatusTapped), forControlEvents: .TouchUpInside)
+        postStatusButton.addTarget(self, action: #selector(postStatusTapped), for: .touchUpInside)
         //loveButton.addTarget(self, action: #selector(filterTapped(_:)), forControlEvents: .TouchUpInside)
         //loveButton.tag = 2
         
@@ -388,22 +388,22 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         view.addSubview(friendshipLabel)
         view.addSubview(postStatusButton)
     }
-    func postStatusTapped(sender: UIButton ){
+    func postStatusTapped(_ sender: UIButton ){
         print("Post Tapped")
-        performSegueWithIdentifier("showNewStatusViewControllerFromMessages", sender: self)
+        performSegue(withIdentifier: "showNewStatusViewControllerFromMessages", sender: self)
     }
     
-    func filterTapped(sender: UIButton){
+    func filterTapped(_ sender: UIButton){
         let tag = sender.tag
         switch(tag){
             
         //all types filter tapped
         case 0:
             //updating which toolbar Button is selected
-            allTypesButton.enabled = false
-            businessButton.enabled = true
-            loveButton.enabled = true
-            friendshipButton.enabled = true
+            allTypesButton.isEnabled = false
+            businessButton.isEnabled = true
+            loveButton.isEnabled = true
+            friendshipButton.isEnabled = true
             
             //updating No Message Label Text
             noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
@@ -411,9 +411,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
             let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.range(of: "All"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.range(of: "Ty"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.range(of: "pes"))
             allTypesLabel.attributedText = allTypesAttributedText
             businessLabel.textColor = necterGray
             loveLabel.textColor = necterGray
@@ -426,10 +426,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         //business filter tapped
         case 1:
             //updating which toolbar Button is selected
-            allTypesButton.enabled = true
-            businessButton.enabled = false
-            loveButton.enabled = true
-            friendshipButton.enabled = true
+            allTypesButton.isEnabled = true
+            businessButton.isEnabled = false
+            loveButton.isEnabled = true
+            friendshipButton.isEnabled = true
             
             //updating No Message Label Text
             noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
@@ -437,7 +437,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
             let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.range(of: "All Types"))
             allTypesLabel.attributedText = allTypesAttributedText
             businessLabel.textColor = businessBlue
             loveLabel.textColor = necterGray
@@ -450,10 +450,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         //love filter tapped
         case 2:
             //updating which toolbar Button is selected
-            allTypesButton.enabled = true
-            businessButton.enabled = true
-            loveButton.enabled = false
-            friendshipButton.enabled = true
+            allTypesButton.isEnabled = true
+            businessButton.isEnabled = true
+            loveButton.isEnabled = false
+            friendshipButton.isEnabled = true
             
             //updating No Message Label Text
             noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
@@ -461,7 +461,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
             let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.range(of: "All Types"))
             allTypesLabel.attributedText = allTypesAttributedText
             businessLabel.textColor = necterGray
             loveLabel.textColor = loveRed
@@ -474,10 +474,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         //friendship filter tapped
         case 3:
             //updating which toolbar Button is selected
-            allTypesButton.enabled = true
-            businessButton.enabled = true
-            loveButton.enabled = true
-            friendshipButton.enabled = false
+            allTypesButton.isEnabled = true
+            businessButton.isEnabled = true
+            loveButton.isEnabled = true
+            friendshipButton.isEnabled = false
             
             //updating No Message Label Text
             noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
@@ -485,7 +485,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
             let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.rangeOfString("All Types"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: necterGray , range: allTypesText.range(of: "All Types"))
             allTypesLabel.attributedText = allTypesAttributedText
             businessLabel.textColor = necterGray
             loveLabel.textColor = necterGray
@@ -496,19 +496,19 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             break
         default:
             //updating which toolbar Button is selected
-            allTypesButton.enabled = false
-            businessButton.enabled = true
-            loveButton.enabled = true
-            friendshipButton.enabled = true
+            allTypesButton.isEnabled = false
+            businessButton.isEnabled = true
+            loveButton.isEnabled = true
+            friendshipButton.isEnabled = true
             
             //updating No Message Label Text
             
             //updating textColor necter-Type labels
             let allTypesText = "All Types" as NSString
             let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.rangeOfString("All"))
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.rangeOfString("Ty"))
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.rangeOfString("pes"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: businessBlue , range: allTypesText.range(of: "All"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: loveRed , range: allTypesText.range(of: "Ty"))
+            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: friendshipGreen , range: allTypesText.range(of: "pes"))
             allTypesLabel.attributedText = allTypesAttributedText
             businessLabel.textColor = necterGray
             loveLabel.textColor = necterGray
@@ -576,12 +576,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //setting the necterIcon to the rightBarButtonItem
         //setting messagesIcon to the icon specifying if there are or are not notifications
-        necterButton.setImage(UIImage(named: "All_Types_Icon_Gray"), forState: .Normal)
-        necterButton.setImage(UIImage(named: "Necter_Icon"), forState: .Selected)
-        necterButton.setImage(UIImage(named: "Necter_Icon"), forState: .Highlighted)
-        necterButton.addTarget(self, action: #selector(necterIconTapped(_:)), forControlEvents: .TouchUpInside)
+        necterButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
+        necterButton.setImage(UIImage(named: "Necter_Icon"), for: .selected)
+        necterButton.setImage(UIImage(named: "Necter_Icon"), for: .highlighted)
+        necterButton.addTarget(self, action: #selector(necterIconTapped(_:)), for: .touchUpInside)
         necterButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
-        necterButton.contentMode = UIViewContentMode.ScaleAspectFill
+        necterButton.contentMode = UIViewContentMode.scaleAspectFill
         necterButton.clipsToBounds = true
         let rightBarButton = UIBarButtonItem(customView: necterButton)
         navItem.leftBarButtonItem = rightBarButton
@@ -593,65 +593,65 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         navBarTitleView.frame = CGRect(x: 0, y: 0, width: 0.06*screenHeight, height: 0.06*screenHeight)
         let titleImageView = UIImageView(image: UIImage(named: "Messages_Icon_Yellow"))
         titleImageView.frame = CGRect(x: 0, y: 0, width: navBarTitleView.frame.size.width , height: navBarTitleView.frame.size.height)
-        titleImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        titleImageView.contentMode = UIViewContentMode.scaleAspectFill
         titleImageView.clipsToBounds = true
         navBarTitleView.addSubview(titleImageView)
         navigationBar.topItem?.titleView = navBarTitleView
         
-        navigationBar.barStyle = .Black
-        navigationBar.barTintColor = UIColor.whiteColor()
+        navigationBar.barStyle = .black
+        navigationBar.barTintColor = UIColor.white
         
         self.view.addSubview(navigationBar)
     }
-    func necterIconTapped (sender: UIBarButtonItem) {
-        necterButton.selected = true
-        performSegueWithIdentifier("showBridgeFromMessages", sender: self)
+    func necterIconTapped (_ sender: UIBarButtonItem) {
+        necterButton.isSelected = true
+        performSegue(withIdentifier: "showBridgeFromMessages", sender: self)
     }
     func displayNoMessages() {
-        let labelFrame: CGRect = CGRectMake(0,0, 0.85*screenWidth,screenHeight * 0.2)
+        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.85*screenWidth,height: screenHeight * 0.2)
         
         noMessagesLabel.frame = labelFrame
         noMessagesLabel.numberOfLines = 0
         noMessagesLabel.alpha = 1
         
-        if businessButton.enabled == false {
+        if businessButton.isEnabled == false {
             noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
             print("business enabled = false")
-        } else if loveButton.enabled == false {
+        } else if loveButton.isEnabled == false {
             noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
             print("love enabled = false")
-        } else if friendshipButton.enabled == false {
+        } else if friendshipButton.isEnabled == false {
             noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
         } else {
             noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
         }
         
         noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
-        noMessagesLabel.textAlignment = NSTextAlignment.Center
+        noMessagesLabel.textAlignment = NSTextAlignment.center
         noMessagesLabel.center.y = view.center.y
         noMessagesLabel.center.x = view.center.x
         noMessagesLabel.layer.borderWidth = 2
-        noMessagesLabel.layer.borderColor = necterGray.CGColor
+        noMessagesLabel.layer.borderColor = necterGray.cgColor
         noMessagesLabel.layer.cornerRadius = 15
         
         view.addSubview(noMessagesLabel)
         
     }
-    func displayMessageFromBot(notification: NSNotification) {
+    func displayMessageFromBot(_ notification: Notification) {
         let botNotificationView = UIView()
         botNotificationView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         //always fill the view
         blurEffectView.frame = botNotificationView.bounds
         //blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let messageLabel = UILabel(frame: CGRect(x: 0.05*screenWidth, y: 0.01*screenHeight, width: 0.9*screenWidth, height: 0.11*screenHeight))
-        messageLabel.text = notification.userInfo!["message"] as? String ?? "No Message Came Up"
-        messageLabel.textColor = UIColor.darkGrayColor()
+        messageLabel.text = (notification as NSNotification).userInfo!["message"] as? String ?? "No Message Came Up"
+        messageLabel.textColor = UIColor.darkGray
         messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
         messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = NSTextAlignment.Center
+        messageLabel.textAlignment = NSTextAlignment.center
         //botNotificationView.backgroundColor = necterYellow
         
         //botNotificationView.addSubview(blurEffectView)
@@ -660,31 +660,31 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         view.insertSubview(botNotificationView, aboveSubview: navigationBar)
         
         
-        UIView.animateWithDuration(0.7) {
+        UIView.animate(withDuration: 0.7, animations: {
             botNotificationView.frame.origin.y = 0
-        }
+        }) 
         
-        let _ = Timer(interval: 4) {i -> Bool in
-            UIView.animateWithDuration(0.7, animations: {
+        let _ = CustomTimer(interval: 4) {i -> Bool in
+            UIView.animate(withDuration: 0.7, animations: {
                 botNotificationView.frame.origin.y = -0.12*self.screenHeight
             })
             return i < 1
         }
         
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         //botNotificationView.removeFromSuperview()
         
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.displayMessageFromBot), name: "displayMessageFromBot", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         
         //create NavigationBar
         displayNavigationBar()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadMessageTable), name: "reloadTheMessageTable", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
         /*refresher = UIRefreshControl()
         refresher.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refresher.addTarget(self, action: #selector(MessagesViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
@@ -692,14 +692,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
         let query: PFQuery = PFQuery(className: "Messages")
-        query.whereKey("ids_in_message", containsString: PFUser.currentUser()?.objectId)
+        query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
         
-        query.orderByDescending("lastSingleMessageAt")
+        query.order(byDescending: "lastSingleMessageAt")
         query.limit = 1000
-        query.cachePolicy = .NetworkElseCache
+        query.cachePolicy = .networkElseCache
         //print("\n starting return")
-        query.countObjectsInBackgroundWithBlock{
-            (count: Int32, error: NSError?) -> Void in
+        query.countObjectsInBackground{
+            (count: Int32, error: Error?) in
             //print("returned")
             if error == nil {
                 
@@ -725,14 +725,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.sizeToFit()
         self.tableView.tableHeaderView = searchController.searchBar
-        pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        pagingSpinner.color = UIColor.darkGrayColor()
+        pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        pagingSpinner.color = UIColor.darkGray
         pagingSpinner.hidesWhenStopped = true
         tableView.tableFooterView = pagingSpinner
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         
         displayToolBar()
-        allTypesButton.enabled = false
+        allTypesButton.isEnabled = false
 
     }
     
@@ -743,7 +743,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         
     }
     override func didReceiveMemoryWarning() {
@@ -751,13 +751,13 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         // Dispose of any resources that can be recreated.
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         //print ("indexPath - \(indexPath.row) & noOfElementsFetched - \(noOfElementsFetched)" )
 //        if (indexPath.row == messages.count - 1 ) {
 //            //print("refresh should be  called - \(noOfElementsFetched), \(totalElements)")
 //            //print(messages)
 //        }
-        if (indexPath.row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
+        if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
             if self.encounteredBefore[self.noOfElementsFetched] == nil {
                 self.encounteredBefore[self.noOfElementsFetched] = true
                 refresh()
@@ -781,14 +781,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        self.pagingSpinner.stopAnimating()
 //        }
     }
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //print("numberOfRowsInSection \( IDsOfMessages.count + 1) \(LocalData().getUsername())")
-        if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
+        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
             //print ("Search term is \(searchController.searchBar.text) and number of results is \(filteredPositions.count)")
             return filteredPositions.count
         }
@@ -798,7 +798,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     // Data to be shown on an individual row
-     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = MessagesTableCell()//tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! MessagesTableCell
         //if indexPath.row != 0 {
@@ -807,7 +807,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 
         cell.cellHeight = screenHeight/6.0
         cell.cellHeight = 0.15 * screenHeight
-        if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
+        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
             var i = 0
             messagePositionToMessageIdMapping = [Int:String]()
             for index in filteredPositions {
@@ -815,17 +815,17 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                  i += 1
             }
         }
-        if messagePositionToMessageIdMapping[indexPath.row] == nil || names[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messages[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!] == nil || messageType[messagePositionToMessageIdMapping[indexPath.row]!] == nil{
+        if messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row] == nil || names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil{
             cell.participants.text = ""
             cell.messageSnapshot.text = ""
             cell.messageTimestamp.text = ""
-            cell.backgroundColor = UIColor.whiteColor()
+            cell.backgroundColor = UIColor.white
             return cell
         }
 
         var stringOfNames = ""
-        var users = names[messagePositionToMessageIdMapping[indexPath.row]!]!
-        users = users.filter { $0 != PFUser.currentUser()?["name"] as! String }
+        var users = names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
+        users = users.filter { $0 != PFUser.current()?["name"] as! String }
         
         for i in 0 ..< users.count  {
             var name = users[i]
@@ -847,17 +847,17 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         cell.participants.text = stringOfNames
-        cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[indexPath.row]!]!
+        cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
         cell.arrow.text = ">"
         
         
-        if messageViewed[messagePositionToMessageIdMapping[indexPath.row]!]! {
-            cell.notificationDot.hidden = true
+        if messageViewed[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]! {
+            cell.notificationDot.isHidden = true
         } else {
-            cell.notificationDot.hidden = false
+            cell.notificationDot.isHidden = false
         }
         
-        switch messageType[messagePositionToMessageIdMapping[indexPath.row]!]!{
+        switch messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!{
             
         case "Business":
             cell.participants.textColor = businessBlue
@@ -879,39 +879,39 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //cell.line.backgroundColor = friendshipGreen
             
         }
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
-        let calendar = NSCalendar.currentCalendar()
-        let date = (messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!]!)!
-        let components = calendar.components([ .Day],
-                                             fromDate: date, toDate: NSDate(), options: NSCalendarOptions.WrapComponents)
+        let calendar = Calendar.current
+        let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
+        let components = (calendar as NSCalendar).components([ .day],
+                                             from: date, to: Date(), options: NSCalendar.Options.wrapComponents)
         //print("row, date, day -\(indexPath.row) \(date) \(components.day)")
-        if components.day > 7 {
-            let dateFormatter = NSDateFormatter()
+        if components.day! > 7 {
+            let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyy"
             //print(dateFormatter.stringFromDate(date))
-            cell.messageTimestamp.text = dateFormatter.stringFromDate(date)
+            cell.messageTimestamp.text = dateFormatter.string(from: date)
         }
-        else if components.day >= 2 {
-            let calendar = NSCalendar.currentCalendar()
-            let date = (messageTimestamps[messagePositionToMessageIdMapping[indexPath.row]!]!)!
-            let components = calendar.components([.Weekday],
-                                                 fromDate: date)
+        else if components.day! >= 2 {
+            let calendar = Calendar.current
+            let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
+            let components = (calendar as NSCalendar).components([.weekday],
+                                                 from: date)
             //print(components.weekday)
-            cell.messageTimestamp.text = String(getWeekDay(components.weekday))
+            cell.messageTimestamp.text = String(getWeekDay(components.weekday!))
         }
-        else if components.day >= 1 {
+        else if components.day! >= 1 {
             //print ("Yesterday")
             cell.messageTimestamp.text = "Yesterday"
         }
         else {
-            let dateFormatter = NSDateFormatter()
+            let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "hh:mm a"
-            cell.messageTimestamp.text = dateFormatter.stringFromDate(date)
+            cell.messageTimestamp.text = dateFormatter.string(from: date)
             //print(dateFormatter.stringFromDate(date))
             
         }
-        if indexPath == filteredPositions.count - 1 {
+        if indexPath.row == filteredPositions.count - 1 {
             toolbarTapped = false
         }
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
@@ -919,15 +919,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 
         
     }
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return screenHeight/6.0
     }
     // A row is selected
-     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //var IDsOfMessages = self.IDsOfMessages
-        let currentCell = tableView.cellForRowAtIndexPath(indexPath)! as! MessagesTableCell
+        let currentCell = tableView.cellForRow(at: indexPath)! as! MessagesTableCell
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
-        if (searchController.active && searchController.searchBar.text != "") || toolbarTapped {
+        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
             //IDsOfMessages = [String]()
             messagePositionToMessageIdMapping = [Int:String]()
             var i = 0
@@ -944,9 +944,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //singleMessageTitle stays as "Conversation"
         }
         
-        singleMessageId = messagePositionToMessageIdMapping[indexPath.row]!
-        messageId = messagePositionToMessageIdMapping[indexPath.row ]!
-        let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[indexPath.row ]!]!
+        singleMessageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!
+        messageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!
+        let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!]!
         switch(necterTypeForMessage) {
         case "Business":
             necterTypeColor = businessBlue
@@ -961,16 +961,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
          //previousViewController = "MessagesViewController"
         toolbarTapped = false
         let query: PFQuery = PFQuery(className: "Messages")
-        query.getObjectInBackgroundWithId(messageId) {
-            (messageObject: PFObject?, error: NSError?) -> Void in
+        query.getObjectInBackground(withId: messageId) {
+            (messageObject: PFObject?, error: Error?) in
             if error != nil {
                 print(error)
             }
             else if let messageObject = messageObject {
                 if let _ = messageObject["message_viewed"] {
                     var whoViewed = messageObject["message_viewed"] as! [String]
-                    if !whoViewed.contains((PFUser.currentUser()?.objectId)!) {
-                        whoViewed.append((PFUser.currentUser()?.objectId)!)
+                    if !whoViewed.contains((PFUser.current()?.objectId)!) {
+                        whoViewed.append((PFUser.current()?.objectId)!)
                         messageObject["message_viewed"] = whoViewed
                         messageObject.saveInBackground()
                         //print("1")
@@ -978,14 +978,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
                 else {
                     //print ("messageObject[\"message_viewed\"] -\(messageObject["message_viewed"]) \(messageObject.objectId )")
-                    messageObject["message_viewed"] = [ (PFUser.currentUser()?.objectId)! ]
+                    messageObject["message_viewed"] = [ (PFUser.current()?.objectId)! ]
                     messageObject.saveInBackground()
                     //print("2 \(messageId)")
                 }
             }
         }
         segueToSingleMessage = true
-        performSegueWithIdentifier("showSingleMessageFromMessages", sender: self)
+        performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
     
         
     }

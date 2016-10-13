@@ -10,6 +10,9 @@ import UIKit
 import Parse
 
 class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    var myTimer = Timer()
+    var counter = 0
+    
     
     let selectTypeLabel = UILabel()
     let optionsTableView = UITableView()
@@ -23,8 +26,8 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
     
     var seguedFrom = ""
     
-    let screenWidth = UIScreen.mainScreen().bounds.width
-    let screenHeight = UIScreen.mainScreen().bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
     let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
@@ -33,28 +36,38 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
     var necterType = ""
     
     
-    func cancelTapped(sender: UIButton ){
-        cancelButton.selected = true
+    func cancelTapped(_ sender: UIButton ){
+        cancelButton.isSelected = true
         performSegueToPriorView()
     }
-    func editProfileTapped(sender: UIButton ){
-        editProfileButton.selected = true
-        performSegueWithIdentifier("showEditProfileViewFromOptionsView", sender: self)
+    func editProfileTapped(_ sender: UIButton ){
+        editProfileButton.isSelected = true
+        performSegue(withIdentifier: "showEditProfileViewFromOptionsView", sender: self)
     }
     
     func performSegueToPriorView() {
         if seguedFrom == "ProfileViewController" {
-            performSegueWithIdentifier("showProfilePageFromOptionsView", sender: self)
+            performSegue(withIdentifier: "showProfilePageFromOptionsView", sender: self)
         } else if seguedFrom == "BridgeViewController" {
-            performSegueWithIdentifier("showBridgePageFromOptionsView", sender: self)
+            performSegue(withIdentifier: "showBridgePageFromOptionsView", sender: self)
         } else if seguedFrom == "MessagesViewController" {
-            performSegueWithIdentifier("showMessagesViewfromOptionsView", sender: self)
+            performSegue(withIdentifier: "showMessagesViewfromOptionsView", sender: self)
         } else {
             //default case
-            performSegueWithIdentifier("showBridgePageFromOptionsView", sender: self)
+            performSegue(withIdentifier: "showBridgePageFromOptionsView", sender: self)
         }
     }
     
+    func fireTimer(){
+        print("Timer fired - \(counter)")
+        counter += 1
+        if counter == 4 {
+            // This might need to be myScheduledTimer
+            print("Time is being invalidated")
+            myTimer.invalidate()
+        }
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,55 +76,86 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
         
         if let name = localData.getUsername() {
             username.text = name
-            
-            print("got username")
         }
         else {
             username.text = "Enter Name on your Profile"
         }
-        username.textColor = UIColor.whiteColor()
+        username.textColor = UIColor.white
         username.font = UIFont(name: "BentonSans", size: 20)
         
         if username.text != "Enter name on your Profile" {
             if let username = username.text {
-                firstName = username.componentsSeparatedByString(" ").first!
+                firstName = username.components(separatedBy: " ").first!
             }
         }
         
         //setting up instructions and buttons
         selectTypeLabel.frame = CGRect(x: 0.05*screenWidth, y: 0.045*screenHeight, width: 0.9*screenWidth, height: 0.25*screenHeight)
         //setting multi-font label
-        var greeting = "Hello \(firstName), \n\nWhat type of connection are you looking for?" as NSString
+        let greeting = "Hello \(firstName), \n\nWhat type of connection are you looking for?" as NSString
         var attributedGreeting = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22)!])
         // Part of string to be bolded
-        selectTypeLabel.textAlignment = NSTextAlignment.Left
+        selectTypeLabel.textAlignment = NSTextAlignment.left
         selectTypeLabel.numberOfLines = 0
         selectTypeLabel.textColor = necterGray
         selectTypeLabel.alpha = 0
         
         view.addSubview(selectTypeLabel)
-        
+
+        //adding the optionsTableView
+        optionsTableView.register(StatusTableViewCell.self, forCellReuseIdentifier: "cell")
+        optionsTableView.frame = CGRect(x: 0, y: 0.3*screenHeight, width: screenWidth, height: 0.6*screenHeight)
+        optionsTableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        optionsTableView.tableFooterView = UIView()
+        optionsTableView.rowHeight = optionsTableView.frame.size.height/CGFloat(optionsTableView.numberOfRows(inSection: 0))
+        optionsTableView.alpha = 0.001
+        optionsTableView.isScrollEnabled = false
+        view.addSubview(optionsTableView)
         
         //Bot that fades in and down to speak with you
-        let _ = Timer(interval: 0.25) {i -> Bool in
-            
-            UIView.animateWithDuration(0.7, delay: 0.2, options: UIViewAnimationOptions.AllowAnimatedContent, animations: {
-                if i == 0 {
+//        let _ = Timer.init(interval: 1) { (i) -> Bool in
+//            print("Timer worked")
+//            return i < 2
+//        }
+        //var t = Timer.init(interval: TimeInterval, handler: Timer.TimerFunction)
+//        var timer = Timer.init(timeInterval: 0.4, target: self,userInfo: nil, repeats: true)
+// 
+//        
+//        let t = Timer(fireAt: Date().addTimeInterval(TimeInterval(1.0)), interval: 1.0, target: self, selector: #selector(timerFired(_:)), userInfo: nil, repeat: true)
+        //let t = Timer.scheduleTimer(TimeInterval: 1.0, target: self, selector: #selector(timerFired(_:)), userInfor)
+        
+        
+        
+        
+        let _ = CustomTimer(interval: 0.25) {i -> Bool in
+        
+            print("started Up the Timer")
+        
+//        let myScheduledTimer = Timer(timeInterval: 1, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+//        
+//        myScheduledTimer.fire()
+//        
+            UIView.animate(withDuration: 0.7, delay: 0.2, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+//                if i == 0 {
                     self.selectTypeLabel.frame = CGRect(x: 0.05*self.screenWidth, y: 0.05*self.screenHeight, width: 0.9*self.screenWidth, height: 0.25*self.screenHeight)
                     let attributedGreeting2 = NSMutableAttributedString(string: greeting as String, attributes: [NSFontAttributeName: UIFont.init(name: "Verdana", size: 22)!])
-                    let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as! AnyObject]
-                    let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as! AnyObject]
-                    attributedGreeting2.addAttributes(boldedFontAttribute, range: greeting.rangeOfString("Hello \(self.firstName),"))
-                    attributedGreeting2.addAttributes(lineBreakAttribute, range: greeting.rangeOfString("\n\n"))
-                    self.selectTypeLabel.attributedText = attributedGreeting2
-                    self.selectTypeLabel.alpha = 1
-                } else if i == 2 {
-                    self.optionsTableView.alpha = 1.0
-                }
+                //Adding attributes to particular portions of the strings
+                let boldedFontAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 22) as Any]
+                let boldedFontRange = greeting.range(of: "Hello \(self.firstName)")
+                attributedGreeting2.addAttributes([:], range: boldedFontRange)
+                let lineBreakAttribute = [NSFontAttributeName: UIFont.init(name: "Verdana-Bold", size: 10) as Any]
+                let lineBreakRange = greeting.range(of: "\n\n")
+                attributedGreeting2.addAttributes([:], range: lineBreakRange)
                 
-                }, completion: nil)
+                self.selectTypeLabel.attributedText = attributedGreeting2
+                    self.selectTypeLabel.alpha = 1.0
+//                } else if i == 2 {
+                    self.optionsTableView.alpha = 1.0
+//                }
+                
+                })
             return i < 4
-        }
+      }
         
         //Bot that pops in to speak with you
         /*let _ = Timer(interval: 0.5) {i -> Bool in
@@ -171,15 +215,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
         
         
         
-        //adding the optionsTableView
-        optionsTableView.registerClass(StatusTableViewCell.self, forCellReuseIdentifier: "cell")
-        optionsTableView.frame = CGRect(x: 0, y: 0.3*screenHeight, width: screenWidth, height: 0.6*screenHeight)
-        optionsTableView.separatorStyle = UITableViewCellSeparatorStyle.None
-        optionsTableView.tableFooterView = UIView()
-        optionsTableView.rowHeight = optionsTableView.frame.size.height/CGFloat(optionsTableView.numberOfRowsInSection(0))
-        optionsTableView.alpha = 0.001
-        optionsTableView.scrollEnabled = false
-        view.addSubview(optionsTableView)
+ 
         
         
         //adding the cancel button
@@ -187,28 +223,28 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
         cancelButton.frame = CGRect(x: 0.62*screenWidth, y:0.9*screenHeight, width:0.33*screenWidth, height:0.06*screenHeight)
         //cancelButton.center.x = view.center.x
         cancelButton.layer.borderWidth = 4.0
-        cancelButton.layer.borderColor = necterGray.CGColor
+        cancelButton.layer.borderColor = necterGray.cgColor
         cancelButton.layer.cornerRadius = 7.0
-        cancelButton.setTitle("cancel", forState: .Normal)
-        cancelButton.setTitleColor(necterGray, forState: .Normal)
-        cancelButton.setTitleColor(necterYellow, forState: .Highlighted)
-        cancelButton.setTitleColor(necterYellow, forState: .Selected)
+        cancelButton.setTitle("cancel", for: UIControlState())
+        cancelButton.setTitleColor(necterGray, for: UIControlState())
+        cancelButton.setTitleColor(necterYellow, for: .highlighted)
+        cancelButton.setTitleColor(necterYellow, for: .selected)
         cancelButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
-        cancelButton.addTarget(self, action: #selector(cancelTapped), forControlEvents: .TouchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
         view.addSubview(cancelButton)
         
         //adding the cancel button
         editProfileButton.frame = CGRect(x: 0.05*screenWidth, y:0.9*screenHeight, width:0.33*screenWidth, height:0.06*screenHeight)
         //editProfileButton.center.x = view.center.x
         editProfileButton.layer.borderWidth = 4.0
-        editProfileButton.layer.borderColor = necterGray.CGColor
+        editProfileButton.layer.borderColor = necterGray.cgColor
         editProfileButton.layer.cornerRadius = 7.0
-        editProfileButton.setTitle("edit profile", forState: .Normal)
-        editProfileButton.setTitleColor(necterGray, forState: .Normal)
-        editProfileButton.setTitleColor(necterYellow, forState: .Highlighted)
-        editProfileButton.setTitleColor(necterYellow, forState: .Selected)
+        editProfileButton.setTitle("edit profile", for: UIControlState())
+        editProfileButton.setTitleColor(necterGray, for: UIControlState())
+        editProfileButton.setTitleColor(necterYellow, for: .highlighted)
+        editProfileButton.setTitleColor(necterYellow, for: .selected)
         editProfileButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
-        editProfileButton.addTarget(self, action: #selector(editProfileTapped), forControlEvents: .TouchUpInside)
+        editProfileButton.addTarget(self, action: #selector(editProfileTapped), for: .touchUpInside)
         view.addSubview(editProfileButton)
 
         
@@ -226,13 +262,13 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     //Setting Up the optionsTable
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //returns the number of rows
         
         return 3
@@ -240,16 +276,16 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     // Data to be shown on an individual row
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = StatusTableViewCell()//optionsTableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! StatusTableViewCell
-        cell.cellHeight = optionsTableView.frame.size.height/CGFloat(optionsTableView.numberOfRowsInSection(0))
+        cell.cellHeight = optionsTableView.frame.size.height/CGFloat(optionsTableView.numberOfRows(inSection: 0))
         //CGRect(x: 0.1*self.frame.width, y: 0, width: 0.2*self.frame.width, height: 0.2*self.frame.width)
         //optionImage.center.y = self.center.y
         //setting the information in the rows of the optionTableView
-        if indexPath.row == 0 {
+        if (indexPath as NSIndexPath).row == 0 {
             //cell.optionImage.image = cell.optionImage.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
             //Setting whether the user is interested in business
-            if let businessInterest = PFUser.currentUser()?["interested_in_business"] as? Bool {
+            if let businessInterest = PFUser.current()?["interested_in_business"] as? Bool {
                 if businessInterest {
                     cell.optionImage.image = UIImage(named: "Business_Icon_Blue")
                     cell.optionLabel.text = "Business"
@@ -258,7 +294,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
                     cell.optionImage.image = UIImage(named: "Business_Icon_Gray")
                     cell.optionLabel.text = "Business"
                     cell.optionLabel.textColor = necterGray
-                    cell.userInteractionEnabled = false
+                    cell.isUserInteractionEnabled = false
                 }
             }
             else {
@@ -268,9 +304,9 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
             }
             
             //cell.backgroundColor = UIColor(red: 144.0/255, green: 207.0/255, blue: 214.0/255, alpha: 1.0)
-        } else if indexPath.row == 1 {
+        } else if (indexPath as NSIndexPath).row == 1 {
             //Setting whether the user is interested in love
-            if let loveInterest = PFUser.currentUser()?["interested_in_love"] as? Bool {
+            if let loveInterest = PFUser.current()?["interested_in_love"] as? Bool {
                 if loveInterest {
                     cell.optionImage.image = UIImage(named: "Love_Icon_Red")
                     cell.optionLabel.text = "Love"
@@ -280,7 +316,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
                     cell.optionImage.image = UIImage(named: "Love_Icon_Gray")
                     cell.optionLabel.text = "Love"
                     cell.optionLabel.textColor = necterGray
-                    cell.userInteractionEnabled = false
+                    cell.isUserInteractionEnabled = false
                 }
             }
             else {
@@ -290,7 +326,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
             }
         } else {
             //Setting whether the user is interested in friendship
-            if let friendshipInterest = PFUser.currentUser()?["interested_in_friendship"] as? Bool {
+            if let friendshipInterest = PFUser.current()?["interested_in_friendship"] as? Bool {
                 if friendshipInterest {
                     cell.optionImage.image = UIImage(named: "Friendship_Icon_Green")
                     cell.optionLabel.text = "Friendship"
@@ -299,7 +335,7 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
                     cell.optionImage.image = UIImage(named: "Friendship_Icon_Gray")
                     cell.optionLabel.text = "Friendship"
                     cell.optionLabel.textColor = necterGray
-                    cell.userInteractionEnabled = false
+                    cell.isUserInteractionEnabled = false
                 }
             }
             else {
@@ -314,26 +350,26 @@ class OptionsFromBotViewController: UIViewController, UITableViewDelegate, UITab
         
     }
     // A row is selected
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if indexPath.row == 0 {
+        if (indexPath as NSIndexPath).row == 0 {
             necterType = "Business"
-            performSegueWithIdentifier("showNewStatusFromOptionsView", sender: self)
-        } else if indexPath.row == 1 {
+            performSegue(withIdentifier: "showNewStatusFromOptionsView", sender: self)
+        } else if (indexPath as NSIndexPath).row == 1 {
             necterType = "Love"
-            performSegueWithIdentifier("showNewStatusFromOptionsView", sender: self)
+            performSegue(withIdentifier: "showNewStatusFromOptionsView", sender: self)
         } else {
             necterType = "Friendship"
-            performSegueWithIdentifier("showNewStatusFromOptionsView", sender: self)
+            performSegue(withIdentifier: "showNewStatusFromOptionsView", sender: self)
             
         }
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let vc = segue.destinationViewController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Bottom"
