@@ -3,7 +3,7 @@
 //  MyBridgeApp
 //
 //  Created by Sagar Sinha on 6/27/16.
-//  Copyright © 2016 Parse. All rights reserved.
+//  Copyright © 2016 BHE Ventures LLC. All rights reserved.
 //
 // This view allows the user to post a status with the necterType Selected in the OptionsFromBotViewController
 
@@ -43,6 +43,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     
     
     func textViewDidChange(_ textView: UITextView) {
+        print("isFirstPost \(isFirstPost)")
         if isFirstPost {
             let newCharacter = bridgeStatus.text.characters.last
             if newCharacter == " " || newCharacter == "."{
@@ -127,6 +128,18 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
             
             return i < 6
         }*/
+        
+        //setting the status to local data
+        if necterType == "Business" {
+            localData.setBusinessStatus(self.bridgeStatus.text!)
+            localData.synchronize()
+        } else if necterType == "Love" {
+            localData.setLoveStatus(self.bridgeStatus.text!)
+            localData.synchronize()
+        } else if necterType == "Friendship" {
+            localData.setFriendshipStatus(self.bridgeStatus.text!)
+            localData.synchronize()
+        }
         
         let bridgeStatusObject = PFObject(className: "BridgeStatus")
         bridgeStatusObject["bridge_status"] = self.bridgeStatus.text!
@@ -214,6 +227,79 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         
     }
 
+    //getting status from the currentUser's most recent status
+    func retrieveStatusForType() -> String {
+        var necterStatusForType = "I am looking for..."
+        if necterType == "Business" {
+            if let status = localData.getBusinessStatus() {
+                necterStatusForType = status
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Business")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        localData.setBusinessStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+        } else if necterType == "Love" {
+            if let status = localData.getLoveStatus() {
+                necterStatusForType = status
+            } else {
+                print("got into Love Statuses")
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Love")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        localData.setLoveStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+        } else if necterType == "Friendship" {
+            if let status = localData.getFriendshipStatus() {
+                necterStatusForType = status
+            } else {
+                print("got into Friendship Statuses")
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Friendship")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        localData.setFriendshipStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+        }
+        if necterStatusForType != "I am looking for..." {
+            print("isFirstPost set to \(isFirstPost)")
+            isFirstPost = false
+        }
+        return necterStatusForType
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -311,7 +397,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
         bridgeStatus.alpha = 0
         bridgeStatus.textColor = UIColor.white
         bridgeStatus.backgroundColor = UIColor.clear
-        bridgeStatus.text = "I am looking for... "
+        
+        bridgeStatus.text = retrieveStatusForType()
         bridgeStatus.font = UIFont(name: "Verdana", size: 14)
         bridgeStatus.frame = CGRect(x: profilePictureX + 0.05*profilePictureWidth, y: 0.65*profilePictureHeight + profilePictureY, width: 0.9*profilePictureWidth, height: 0.3*profilePictureHeight)
         bridgeStatus.textAlignment = NSTextAlignment.center

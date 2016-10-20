@@ -20,6 +20,10 @@ class LocalData {
     var firstTimeSwipingRight:Bool? = nil
     var firstTimeSwipingLeft:Bool? = nil
     var hasSignedUp:Bool? = nil
+    var businessStatus:String? = nil
+    var loveStatus:String? = nil
+    var friendshipStatus:String? = nil
+    
     init(){
         let userDefaults = UserDefaults.standard
         if let decoded = userDefaults.object(forKey: "userInfo") {
@@ -35,9 +39,62 @@ class LocalData {
                 firstTimeSwipingRight = (userInfo as! UserInfo).firstTimeSwipingRight
                 firstTimeSwipingLeft = (userInfo as! UserInfo).firstTimeSwipingLeft
                 hasSignedUp = (userInfo as! UserInfo).hasSignedUp
+                businessStatus = (userInfo as! UserInfo).businessStatus
+                loveStatus = (userInfo as! UserInfo).loveStatus
+                friendshipStatus = (userInfo as! UserInfo).friendshipStatus
             }
         }
     }
+    
+    func setLoveStatus(_ loveStatus:String){
+        self.loveStatus = loveStatus
+        print("setting loveStatus from local data file")
+    }
+    func getLoveStatus()-> String?{
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "userInfo"){
+            let decoded  = userDefaults.object(forKey: "userInfo") as! Data
+            let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
+            print("getting loveStatus from local data file")
+            return userInfo.loveStatus
+        }
+        else{
+            return nil
+        }
+    }
+    func setFriendshipStatus(_ friendshipStatus:String){
+        self.friendshipStatus = friendshipStatus
+        print("setting business status from local data file")
+    }
+    func getFriendshipStatus()-> String?{
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "userInfo"){
+            let decoded  = userDefaults.object(forKey: "userInfo") as! Data
+            let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
+            print("getting business status from local data file")
+            return userInfo.friendshipStatus
+        }
+        else{
+            return nil
+        }
+    }
+    func setBusinessStatus(_ businessStatus:String){
+        self.businessStatus = businessStatus
+        print("setting business status from local data file")
+    }
+    func getBusinessStatus()-> String?{
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "userInfo"){
+            let decoded  = userDefaults.object(forKey: "userInfo") as! Data
+            let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
+            print("getting business status from local data file")
+            return userInfo.businessStatus
+        }
+        else{
+            return nil
+        }
+    }
+    
     func setHasSignedUp(_ hasSignedUp:Bool){
         self.hasSignedUp = hasSignedUp
     }
@@ -229,7 +286,7 @@ class LocalData {
     
     func synchronize(){
         //print("Setting mainProfilePicture to \(mainProfilePicture)")
-        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp)
+        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: userInfo)
         userDefaults.set(encodedData, forKey: "userInfo")

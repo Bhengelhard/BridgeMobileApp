@@ -32,6 +32,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 class BridgeViewController: UIViewController {
     
     let localData = LocalData()
+    let pfCloudFunctions = PFCloudFunctions()
     
     //set to the height and width of the images in the superDeck
     let cardWidth = UIScreen.main.bounds.width - 0.06*UIScreen.main.bounds.width
@@ -184,7 +185,23 @@ class BridgeViewController: UIViewController {
         }
     }
     
-    
+    func displayRevisitButton() {
+        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
+        let revisitButton = UIButton()
+        
+        
+//        displayNoMoreCardsLabel!.frame = labelFrame
+//        displayNoMoreCardsLabel!.numberOfLines = 0
+//        
+//        displayNoMoreCardsLabel!.font = UIFont(name: "BentonSans", size: 20)
+//        displayNoMoreCardsLabel!.textAlignment = NSTextAlignment.center
+//        displayNoMoreCardsLabel!.center.y = view.center.y
+//        displayNoMoreCardsLabel!.center.x = view.center.x
+//
+//        displayNoMoreCardsLabel!.layer.borderWidth = 2
+//        displayNoMoreCardsLabel!.layer.borderColor = DisplayUtility.necterGray.cgColor
+//        displayNoMoreCardsLabel!.layer.cornerRadius = 15
+    }
     func displayNoMoreCards() {
         let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
         displayNoMoreCardsLabel = UILabel()
@@ -210,6 +227,8 @@ class BridgeViewController: UIViewController {
 //        displayNoMoreCardsLabel!.layer.cornerRadius = 15
 
         view.addSubview(displayNoMoreCardsLabel!)
+        
+        displayRevisitButton()
         
     }
     func getUpperDeckCardFrame() -> CGRect {
@@ -533,6 +552,7 @@ class BridgeViewController: UIViewController {
         }
         if  j == 0 {
             displayNoMoreCards()
+            
         }
         
     }
@@ -1450,19 +1470,24 @@ class BridgeViewController: UIViewController {
                     let alert = UIAlertController(title: "Revisit Pairs of Friends?", message: "You have ran out of pairs to connect. Would you like to revisit the ones you passed on?", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
                         self.displayNoMoreCards()
-                        
                     }))
                     alert.addAction(UIAlertAction(title: "Revisit", style: .default, handler: { (action) in
-                        PFCloud.callFunction(inBackground: "revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)], block: {
-                            (response: Any?, error: Error?) in
-                            if error == nil {
-                                if let response = response as? String {
-                                    print(response)
-                                }
-                                self.lastCardInStack = nil
-                                self.getBridgePairings(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
-                            }
-                        })
+//                        PFCloud.callFunction(inBackground: "revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)], block: {
+//                            (response: Any?, error: Error?) in
+//                            if error == nil {
+//                                if let response = response as? String {
+//                                    print(response)
+//                                }
+//                                self.lastCardInStack = nil
+//                                self.getBridgePairings(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
+//                            }
+//                        })
+                        NotificationCenter.default.addObserver(self, selector: #selector(self.revitalizeMyPairsHelper), name: NSNotification.Name(rawValue: "revitalizeMyPairsHelper"), object: nil)
+                        self.pfCloudFunctions.revitalizeMyPairs(parameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)])
+                        self.lastCardInStack = nil
+                        self.getBridgePairings(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
+                        
+                        
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
@@ -1471,6 +1496,13 @@ class BridgeViewController: UIViewController {
             
         }
 
+    }
+    //after response from revitalize pairs, run this code
+    func revitalizeMyPairsHelper(_ notification: Notification) {
+        print("revitalize pairs from PFCloudFunctions works")
+        let message = (notification as NSNotification).userInfo!["message"] as? String
+        print(message)
+        NotificationCenter.default.removeObserver(self)
     }
     func nextPair(){
         // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in callbackForNextPair. cIgAr - 08/25/16
