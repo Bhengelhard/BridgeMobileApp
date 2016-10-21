@@ -186,8 +186,26 @@ class BridgeViewController: UIViewController {
     }
     
     func displayRevisitButton() {
-        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
+        print("displayRevisitButton")
+        let revisitButtonY = (displayNoMoreCardsLabel?.frame.origin.y)! + (displayNoMoreCardsLabel?.frame.height)!
+        let labelFrame: CGRect = CGRect(x: 0,y: revisitButtonY, width: 0.45*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.06)
         let revisitButton = UIButton()
+        revisitButton.frame = labelFrame
+        revisitButton.setTitle("Revisit Matches", for: .normal)
+        revisitButton.setTitleColor(UIColor.black, for: .normal)
+        revisitButton.setTitleColor(DisplayUtility.necterYellow, for: .highlighted)
+        revisitButton.titleLabel?.font = UIFont(name: "BentonSans", size: 20)
+        revisitButton.titleLabel?.textAlignment = NSTextAlignment.center
+        revisitButton.center.x = view.center.x
+        //revisitButton.center.y = view.center.y + DisplayUtility.screenHeight*0.1
+        revisitButton.addTarget(self, action: #selector(revitalizeMyPairs(_:)), for: .touchUpInside)
+        
+        revisitButton.layer.borderWidth = 4
+        revisitButton.layer.borderColor = DisplayUtility.necterGray.cgColor
+        revisitButton.layer.cornerRadius = 7
+        revisitButton.clipsToBounds = true
+        
+        view.addSubview(revisitButton)
         
         
 //        displayNoMoreCardsLabel!.frame = labelFrame
@@ -203,7 +221,7 @@ class BridgeViewController: UIViewController {
 //        displayNoMoreCardsLabel!.layer.cornerRadius = 15
     }
     func displayNoMoreCards() {
-        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
+        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.1)
         displayNoMoreCardsLabel = UILabel()
         displayNoMoreCardsLabel!.frame = labelFrame
         displayNoMoreCardsLabel!.numberOfLines = 0
@@ -220,7 +238,7 @@ class BridgeViewController: UIViewController {
         
         displayNoMoreCardsLabel!.font = UIFont(name: "BentonSans", size: 20)
         displayNoMoreCardsLabel!.textAlignment = NSTextAlignment.center
-        displayNoMoreCardsLabel!.center.y = view.center.y
+        displayNoMoreCardsLabel!.center.y = view.center.y - DisplayUtility.screenHeight*0.05
         displayNoMoreCardsLabel!.center.x = view.center.x
 //        displayNoMoreCardsLabel!.layer.borderWidth = 2
 //        displayNoMoreCardsLabel!.layer.borderColor = DisplayUtility.necterGray.cgColor
@@ -1443,24 +1461,31 @@ class BridgeViewController: UIViewController {
                 }
                 
                 if bridgePairingAlreadyStored == false {
-                    //create the alert controller
+                    self.displayNoMoreCards()
+                    /*//create the alert controller
                     let alert = UIAlertController(title: "Revisit Pairs of Friends?", message: "You have ran out of pairs to connect. Would you like to revisit the ones you passed on?", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
                         self.displayNoMoreCards()
                     }))
                     alert.addAction(UIAlertAction(title: "Revisit", style: .default, handler: { (action) in
-                        NotificationCenter.default.addObserver(self, selector: #selector(self.revitalizeMyPairsHelper), name: NSNotification.Name(rawValue: "revitalizeMyPairsHelper"), object: nil)
+                        /*NotificationCenter.default.addObserver(self, selector: #selector(self.revitalizeMyPairsHelper), name: NSNotification.Name(rawValue: "revitalizeMyPairsHelper"), object: nil)
                         self.pfCloudFunctions.revitalizeMyPairs(parameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)])
                         self.lastCardInStack = nil
-                        self.getBridgePairings(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
+                        self.getBridgePairings(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)*/
+                        //self.revitalizeMyPairs(bridgeType: bridgeType)
+                        self.displayNoMoreCards()
                     }))
-                    self.present(alert, animated: true, completion: nil)
+                    self.present(alert, animated: true, completion: nil)*/
                 }
-                
             }
-            
         }
 
+    }
+    func revitalizeMyPairs(_ sender: UIButton!) {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.revitalizeMyPairsHelper), name: NSNotification.Name(rawValue: "revitalizeMyPairsHelper"), object: nil)
+        self.pfCloudFunctions.revitalizeMyPairs(parameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)])
+        self.lastCardInStack = nil
+        self.getBridgePairings(2, typeOfCards: self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay), callBack:nil, bridgeType:nil)
     }
     //after response from revitalize pairs, run this code
     func revitalizeMyPairsHelper(_ notification: Notification) {
