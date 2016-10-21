@@ -280,7 +280,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         //messageTextRecorder
         let messageTextButton = UIBarButtonItem(customView: messageText)
         
-        
         UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.search, target: self, action: nil)
 
         //adding the flexible space
@@ -534,13 +533,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                                             
                                         }
                                         let notificationMessage = "Message from " + (PFUser.current()!["name"] as! String)
-                                        PFCloud.callFunction(inBackground: "pushNotification", withParameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage",  "messageId": self.newMessageId], block: { (response: Any?, error: Error?) in
-                                            if error == nil {
-                                                if let response = response as? String {
-                                                    print(response)
-                                                }
-                                            }
-                                        })
+                                        print("userId that we are looking for is \(userId)")
+                                        let pfCloudFunctions = PFCloudFunctions()
+                                        pfCloudFunctions.pushNotification(parameters: ["userObjectId":userId,"alert":notificationMessage, "badge": "Increment", "messageType" : "SingleMessage",  "messageId": self.newMessageId])
                                     }
                                     //self.updateNoOfPushNotificationsOnBadge()
                                 }
@@ -693,11 +688,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             } else {
                 toolbar.frame.origin.y += keyboardHeight//keyboardSize.height
             }
-            print("toolbar")
-            print(toolbar.frame)
-            print("messageText")
-            print(messageText.frame)
-            
         }
     }
     // Tapped anywhere on the main view oustside of the messageText Textfield

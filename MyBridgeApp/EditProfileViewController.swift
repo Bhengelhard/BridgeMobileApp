@@ -432,63 +432,23 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             if somethingWasUpdated || interestsUpdated {
                 PFUser.current()?.saveInBackground(block: { (success, error) in
                     if success {
+                        let pfCloudFunctions = PFCloudFunctions()
                         //updating profile picture in bridgePairings Table if the picture was changed
                         if self.originalProfilePicture != pickedImage {
-                            PFCloud.callFunction(inBackground: "changeBridgePairingsOnProfilePictureUpdate", withParameters: [:], block: {
-                                (response:Any?, error: Error?) in
-                                if error == nil {
-                                    if let response = response as? String {
-                                        print(response)
-                                    }
-                                }
-                            })
+                            pfCloudFunctions.changeBridgePairingsOnProfilePictureUpdate(parameters: [:])
                         }
                         
                         //updating name in BridgePairings, Messages, and SingleMessages tables if the name was changed
                         if self.nameTextField.text != self.username {
-                            PFCloud.callFunction(inBackground: "changeMessagesTableOnNameUpdate", withParameters: [:], block: {
-                                (response:Any?, error: Error?) in
-                                if error == nil {
-                                    if let response = response as? String {
-                                        print(response)
-                                        print("changeMessagesTableOnNameUpdate")
-                                    }
-                                }
-                            })
-                            PFCloud.callFunction(inBackground: "changeSingleMessagesTableOnNameUpdate", withParameters: [:], block: {
-                                (response:Any?, error: Error?) in
-                                if error == nil {
-                                    if let response = response as? String {
-                                        print(response)
-                                        print("changeSingleMessagesTableOnNameUpdate")
-                                    }
-                                }
-                            })
-                            
-                            PFCloud.callFunction(inBackground: "changeBridgePairingsOnNameUpdate", withParameters: [:], block: {
-                                (response:Any?, error: Error?) in
-                                if error == nil {
-                                    if let response = response as? String {
-                                        print(response)
-                                        print("changeBridgePairingsOnNameUpdate")
-                                    }
-                                }
-                            })
-                            
+                            pfCloudFunctions.changeMessagesTableOnNameUpdate(parameters: [:])
+                            pfCloudFunctions.changeSingleMessagesTableOnNameUpdate(parameters: [:])
+                            pfCloudFunctions.changeBridgePairingsOnNameUpdate(parameters: [:])
                         }
                         
                         //updated interests in bridgepairings table if the interests were changed
                         if interestsUpdated {
                             print("interestsUpdated")
-                            PFCloud.callFunction(inBackground: "changeBridgePairingsOnInterestedInUpdate", withParameters: [:], block: {
-                                (response:Any?, error: Error?) in
-                                if error == nil {
-                                    if let response = response as? String {
-                                        print("changeBridgePairingsOnInterestedInUpdate")
-                                        print(response)
-                                    }
-                                }
-                            })
+                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
                         }
                     }
                 })

@@ -1388,34 +1388,11 @@ class BridgeViewController: UIViewController {
                     result?["bridged"] = true
                     if let result = result as? [String:AnyObject?]{
                         //when users are introduced, they are added to eachother's friend_lists in the _User table (i.e. they become friends)
-                        PFCloud.callFunction(inBackground: "addIntroducedUsersToEachothersFriendLists", withParameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2], block: { (response: Any?, error: Error?) in
-                            if error == nil {
-                                if let response = response as? String {
-                                    print(response)
-                                }
-                            }
-                        })
-                        
-                        PFCloud.callFunction(inBackground: "pushNotification", withParameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!], block: {
-                            (response: Any?, error: Error?) in
-                            if error == nil {
-                                if let response = response as? String {
-                                    //print(response)
-                                }
-                            }
-                        })
-                        
-                        PFCloud.callFunction(inBackground: "pushNotification", withParameters: ["userObjectId":userObjectId2,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!], block: {
-                            (response: Any?, error: Error?) in
-                            if error == nil {
-                                if let response = response as? String {
-                                    //print(response)
-                                }
-                            }
-                        })
+                        self.pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
+                        self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])
+                        self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId2,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])
                     }
                 })
-
                 self.messageId = message.objectId!
             }
             catch {
@@ -1472,22 +1449,10 @@ class BridgeViewController: UIViewController {
                         self.displayNoMoreCards()
                     }))
                     alert.addAction(UIAlertAction(title: "Revisit", style: .default, handler: { (action) in
-//                        PFCloud.callFunction(inBackground: "revitalizeMyPairs", withParameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)], block: {
-//                            (response: Any?, error: Error?) in
-//                            if error == nil {
-//                                if let response = response as? String {
-//                                    print(response)
-//                                }
-//                                self.lastCardInStack = nil
-//                                self.getBridgePairings(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
-//                            }
-//                        })
                         NotificationCenter.default.addObserver(self, selector: #selector(self.revitalizeMyPairsHelper), name: NSNotification.Name(rawValue: "revitalizeMyPairsHelper"), object: nil)
                         self.pfCloudFunctions.revitalizeMyPairs(parameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)])
                         self.lastCardInStack = nil
                         self.getBridgePairings(2, typeOfCards: bridgeType, callBack:nil, bridgeType:nil)
-                        
-                        
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }

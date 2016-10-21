@@ -43,7 +43,6 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
     
     
     func textViewDidChange(_ textView: UITextView) {
-        print("isFirstPost \(isFirstPost)")
         if isFirstPost {
             let newCharacter = bridgeStatus.text.characters.last
             if newCharacter == " " || newCharacter == "."{
@@ -53,9 +52,11 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
             }
             
             isFirstPost = false
+        } else {
+            enablePost = true
         }
         
-        if enablePost || bridgeStatus.text?.characters.count == 18 {
+        if enablePost /*|| bridgeStatus.text?.characters.count == 18*/ {
             postButton.layer.borderColor = necterYellow.cgColor
             postButton.setTitleColor(necterYellow, for: .highlighted)
             postButton.isEnabled = true
@@ -159,16 +160,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "displayMessageFromBot"), object: nil, userInfo: userInfo)
             }
         }
-        
-        PFCloud.callFunction(inBackground: "changeBridgePairingsOnStatusUpdate", withParameters: ["status":self.bridgeStatus.text!, "bridgeType":self.necterType], block: {
-            (response:Any?, error: Error?) in
-            if error == nil {
-                if let response = response as? String {
-                    print(response)
-                }
-            }
-        })
-        
+        let pfCloudFunctions = PFCloudFunctions()
+        pfCloudFunctions.changeBridgePairingsOnStatusUpdate(parameters: ["status":self.bridgeStatus.text!, "bridgeType":self.necterType])
         performSegueToPriorView()
     }
     

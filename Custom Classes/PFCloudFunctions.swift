@@ -30,4 +30,95 @@ class PFCloudFunctions {
             }
         })
     }
+    
+    func addIntroducedUsersToEachothersFriendLists(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "addIntroducedUsersToEachothersFriendLists", withParameters: parameters, block: { (response: Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                }
+            }
+        })
+    }
+    
+    func pushNotification(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "pushNotification", withParameters: parameters, block: {
+            (response: Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                }
+            }
+        })
+    }
+    
+    func changeBridgePairingsOnStatusUpdate(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "changeBridgePairingsOnStatusUpdate", withParameters: parameters, block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                }
+            }
+        })
+    }
+    
+    func changeBridgePairingsOnProfilePictureUpdate(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "changeBridgePairingsOnProfilePictureUpdate", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                }
+            }
+        })
+    }
+    
+    func changeMessagesTableOnNameUpdate(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "changeMessagesTableOnNameUpdate", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                    print("changeMessagesTableOnNameUpdate")
+                }
+            }
+        })
+    }
+    
+    func changeSingleMessagesTableOnNameUpdate(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "changeSingleMessagesTableOnNameUpdate", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                    print("changeSingleMessagesTableOnNameUpdate")
+                }
+            }
+        })
+    }
+    
+    func changeBridgePairingsOnNameUpdate(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "changeBridgePairingsOnNameUpdate", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                    print("changeBridgePairingsOnNameUpdate")
+                }
+            }
+        })
+    }
+    
+    func changeBridgePairingsOnInterestedInUpdate(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "changeBridgePairingsOnInterestedInUpdate", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print("changeBridgePairingsOnInterestedInUpdate")
+                    print(response)
+                }
+            }
+        })
+    }
 }
