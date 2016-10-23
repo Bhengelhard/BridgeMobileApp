@@ -167,10 +167,10 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         
         
         
-        //running getMainAppMetrics
+        /*//running getMainAppMetrics
         print("running getMainAppMetrics")
         let pfCloudFunctions = PFCloudFunctions()
-        pfCloudFunctions.getMainAppMetrics(parameters: [:])
+        pfCloudFunctions.getMainAppMetrics(parameters: [:])*/
     }
     
     override func viewDidAppear(_ animated: Bool) {
