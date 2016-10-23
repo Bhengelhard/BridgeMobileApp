@@ -1402,9 +1402,10 @@ class BridgeViewController: UIViewController {
                 let userObjectId2 = bridgePairings[x].user2!.userId!
                 query.getObjectInBackground(withId: objectId!, block: { (result, error) -> Void in
                     //this should only happen if result can equal result - i.e. in the result if let statement, but the code was not allow for this, so it was taken out and should be tested.
-                    result?["checked_out"] = true
-                    result?["bridged"] = true
-                    if let result = result as? [String:AnyObject?]{
+                    if let result = result as? PFObject?{
+                        result?["checked_out"] = true
+                        result?["bridged"] = true
+                        result?.saveInBackground()
                         //when users are introduced, they are added to eachother's friend_lists in the _User table (i.e. they become friends)
                         self.pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
                         self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])

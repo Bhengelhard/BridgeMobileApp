@@ -107,6 +107,12 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         //locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
+        
+        
+        //running getMainAppMetrics
+        print("running getMainAppMetrics")
+        let pfCloudFunctions = PFCloudFunctions()
+        pfCloudFunctions.getMainAppMetrics(parameters: [:])
     }
     
     override func viewDidAppear(_ animated: Bool) {

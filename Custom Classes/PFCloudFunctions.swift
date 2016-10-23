@@ -12,6 +12,20 @@ import Parse
 
 class PFCloudFunctions {
     
+    //running app metrics scraper
+    func getMainAppMetrics(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "getMainAppMetrics", withParameters: parameters, block: {
+            (response: Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                } else {
+                    
+                }
+            }
+        })
+    }
+    
     func revitalizeMyPairs(parameters: [AnyHashable: Any]?) {
         PFCloud.callFunction(inBackground: "revitalizeMyPairs", withParameters: parameters, block: {
             (response: Any?, error: Error?) in
