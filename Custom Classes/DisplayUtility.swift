@@ -2,7 +2,7 @@
 //  DisplayUtility.swift
 //  MyBridgeApp
 //
-//  Created by Blake Engelhard on 10/13/16.
+//  Created by Blake H. Engelhard on 10/13/16.
 //  Copyright © 2016 BHE Ventures. All rights reserved.
 //
 //This class is meant as a helper class for displaying a message when there is no objects for the user on a viewController, for creating the buttons for different pages, and for revisiting Cards in the BridgeViewController as well as holding screenWidths, colors and other display objects that are commonly reused
@@ -54,7 +54,11 @@ class DisplayUtility {
         
     }
     
+    //make displayNoMoreCards work and pass throughout the app
+    
     //add functions using the buttons so that you don't have to pass anything to it
+    
+    //Add activity indicator design/function here with parameters of the frame of the activity indicator
 
     
 }

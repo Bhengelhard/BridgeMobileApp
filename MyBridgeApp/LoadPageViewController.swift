@@ -3,7 +3,7 @@
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 5/10/16.
-//  Copyright © 2016 Parse. All rights reserved.
+//  Copyright © 2016 BHE Ventures LLC. All rights reserved.
 //
 
 import UIKit
@@ -165,12 +165,6 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
             }
         }*/
         
-        
-        
-        /*//running getMainAppMetrics
-        print("running getMainAppMetrics")
-        let pfCloudFunctions = PFCloudFunctions()
-        pfCloudFunctions.getMainAppMetrics(parameters: [:])*/
     }
     
     override func viewDidAppear(_ animated: Bool) {

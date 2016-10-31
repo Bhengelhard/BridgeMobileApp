@@ -3,7 +3,7 @@
 //  MyBridgeApp
 //
 //  Created by Sagar Sinha on 6/14/16. cIgAr.
-//  Copyright © 2016 SagarSinha. All rights reserved.
+//  Copyright © 2016 BHE Ventures LLC. All rights reserved.
 //
 
 import Foundation

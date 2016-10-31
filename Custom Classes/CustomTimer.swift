@@ -3,7 +3,7 @@
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 8/23/16.
-//  Copyright © 2016 Parse. All rights reserved.
+//  Copyright © 2016 BHE Ventures LLC. All rights reserved.
 //
 
 import Foundation

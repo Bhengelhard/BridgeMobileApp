@@ -2,8 +2,8 @@
 //  ProfileViewController.swift
 //  MyBridgeApp
 //
-//  Created by Blake Engelhard on 7/25/16.
-//  Copyright © 2016 Parse. All rights reserved.
+//  Created by Blake H. Engelhard on 7/25/16.
+//  Copyright © 2016 BHE Ventures LLC. All rights reserved.
 //
 
 import UIKit
@@ -237,6 +237,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /*//running getMainAppMetrics
+        print("running getMainAppMetrics")
+        let pfCloudFunctions = PFCloudFunctions()
+        pfCloudFunctions.getMainAppMetrics(parameters: [:])*/
+
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         

@@ -130,6 +130,8 @@ class ViewController: UIViewController {
                                 PFUser.current()?["love_name"] = name
                                 PFUser.current()?["friendship_name"] = name
                                 
+                                PFUser.current()?["ran_out_of_pairs"] = 0
+                                
                                 let email = result["email"]!
                                 PFUser.current()?["email"] = email
                                 

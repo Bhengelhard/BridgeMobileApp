@@ -2,8 +2,8 @@
 //  StatusTableViewCell.swift
 //  MyBridgeApp
 //
-//  Created by Daniel Fine on 8/10/16.
-//  Copyright © 2016 Parse. All rights reserved.
+//  Created by Blake H Engelhard on 8/10/16.
+//  Copyright © 2016 BHE Ventures LLC. All rights reserved.
 //
 
 import UIKit
