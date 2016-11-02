@@ -16,6 +16,7 @@
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
 		309837031DB16264006AD2C1 /* PFCloudFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309837021DB16264006AD2C1 /* PFCloudFunctions.swift */; };
 		30E12C931DCA303A00DC9CF6 /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E12C921DCA303A00DC9CF6 /* CustomNavigationBar.swift */; };
+		30E12C951DCA98CC00DC9CF6 /* MissionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E12C941DCA98CB00DC9CF6 /* MissionControlView.swift */; };
 		30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */; };
 		814C3ACB1B69877600E307BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814C3AC81B69877600E307BB /* Images.xcassets */; };
 		81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81761A49E0D500E65899 /* libsqlite3.dylib */; };
@@ -74,6 +75,7 @@
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
 		309837021DB16264006AD2C1 /* PFCloudFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PFCloudFunctions.swift; path = "Custom Classes/PFCloudFunctions.swift"; sourceTree = "<group>"; };
 		30E12C921DCA303A00DC9CF6 /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBar.swift; path = "Custom Classes/CustomNavigationBar.swift"; sourceTree = "<group>"; };
+		30E12C941DCA98CB00DC9CF6 /* MissionControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MissionControlView.swift; path = "Custom Classes/MissionControlView.swift"; sourceTree = "<group>"; };
 		30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Page Option A Scaled to Iphone 6.png"; sourceTree = "<group>"; };
 		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		814C3AC91B69877600E307BB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				E9D6DF371D7882F000138A1F /* Downloader.swift */,
 				E9D6DF411D7882F600138A1F /* TransitionManager.swift */,
 				30E12C921DCA303A00DC9CF6 /* CustomNavigationBar.swift */,
+				30E12C941DCA98CB00DC9CF6 /* MissionControlView.swift */,
 				303753EE1DB0020F006DB4E5 /* DisplayUtility.swift */,
 			);
 			name = "Custom Classes";
@@ -361,6 +364,7 @@
 				303753F11DB04160006DB4E5 /* CustomTimer.swift in Sources */,
 				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
 				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,
+				30E12C951DCA98CC00DC9CF6 /* MissionControlView.swift in Sources */,
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,

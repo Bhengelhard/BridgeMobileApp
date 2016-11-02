@@ -26,9 +26,13 @@ func getWeekDay(_ num:Int)->String{
 
 class MessagesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating {
     @IBOutlet var tableView: UITableView!
+    //let tableView = UITableView()
     
     //creating navigation Bar
     let leftBarButton = UIButton()
+    
+    //creating Mission Control
+    let missionControlTabButton = UIButton()
     
     //toolbar buttons
     let toolbar = UIView()
@@ -223,7 +227,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
     }
-    func displayToolBar(){
+    func displayMissionControlTab(){
+        let missionControlView = MissionControlView()
+        missionControlView.createMissionControlTab(view: view, missionControlTabButton: missionControlTabButton)
+        missionControlTabButton.addTarget(self, action: #selector(missionControlTabButtonTapped(_:)), for: .touchUpInside)
+    }
+    func missionControlTabButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "showNewStatusViewControllerFromMessages", sender: self)
+    }
+    
+    /*func displayToolBar(){
         
         toolbar.frame = CGRect(x: 0, y: 0.9*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
         toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
@@ -498,7 +511,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         self.tableView.reloadData()
-    }
+    }*/
     func displayNavigationBar(){
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
         let customNavigationBar = CustomNavigationBar()
@@ -536,7 +549,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         noMessagesLabel.layer.cornerRadius = 15
         
         view.addSubview(noMessagesLabel)
-        
     }
     func displayMessageFromBot(_ notification: Notification) {
         let botNotificationView = UIView()
@@ -581,6 +593,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
         
+        tableView.delegate = self
+        tableView.dataSource = self
         
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
@@ -620,13 +634,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.tableFooterView = pagingSpinner
         tableView.separatorStyle = .none
         
-        displayToolBar()
+        //displayToolBar()
+        displayMissionControlTab()
         allTypesButton.isEnabled = false
 
     }
     
     override func viewDidLayoutSubviews() {
-        tableView.frame = CGRect(x: 0, y:0.11*DisplayUtility.screenHeight, width:DisplayUtility.screenWidth, height:0.79*DisplayUtility.screenHeight)
+        tableView.frame = CGRect(x: 0, y:0.11*DisplayUtility.screenHeight, width:DisplayUtility.screenWidth, height:0.89*DisplayUtility.screenHeight)
     }
     
     override func viewDidAppear(_ animated: Bool) {
