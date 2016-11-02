@@ -14,8 +14,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     let profilePictureView = UIImageView()
     @IBOutlet weak var name: UILabel!
-    let navigationBar = UINavigationBar()
-    let necterButton = UIButton()
+    let rightBarButton = UIButton()
     let bridgeStatus = UIButton()
     
     let screenWidth = UIScreen.main.bounds.width
@@ -28,173 +27,16 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     
-    /*// globally required as we do not want to re-create them everytime and for persistence
-    let imagePicker = UIImagePickerController()
-    
-    func profilePictureTapped(sender: UIButton) {
-    
-        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let facebookProfilePictureAction = UIAlertAction(title: "Facebook Profile Picture", style: UIAlertActionStyle.Default)
-        {
-            UIAlertAction in
-            self.getMainProfilePictureFromFacebook()
-        }
-        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.Default)
-        {
-            UIAlertAction in
-            self.openCamera()
-        }
-        let galleryAction = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.Default)
-        {
-            UIAlertAction in
-            self.openGallary()
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
-        {
-            UIAlertAction in
-        }
-        
-        // Add the actions
-        //self.picker.delegate = self
-        alert.addAction(facebookProfilePictureAction)
-        alert.addAction(cameraAction)
-        alert.addAction(galleryAction)
-        alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
-        
-        imagePicker.allowsEditing = false
-    
-    }
-    
-    //saves  to LocalDataStorage & Parse
-    func getMainProfilePictureFromFacebook(){
-        var pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        pagingSpinner.color = UIColor.darkGrayColor()
-        pagingSpinner.hidesWhenStopped = true
-        pagingSpinner.center.x = profilePictureButton.center.x
-        pagingSpinner.center.y = profilePictureButton.center.y
-        view.addSubview(pagingSpinner)
-        pagingSpinner.startAnimating()
-        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest.startWithCompletionHandler{ (connection, result, error) -> Void in
-            if error != nil {
-                print(error)
-            }
-            else if let result = result {
-                let localData = LocalData()
-                let userId = result["id"]! as! String
-                let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
-                if let fbpicUrl = NSURL(string: facebookProfilePictureUrl) {
-                    if let data = NSData(contentsOfURL: fbpicUrl) {
-                        let imageFile: PFFile = PFFile(data: data)!
-                        PFUser.currentUser()?["fb_profile_picture"] = imageFile
-                        PFUser.currentUser()?["profile_picture"] = imageFile
-                        PFUser.currentUser()?.saveInBackground()
-                        localData.setMainProfilePicture(data)
-                        localData.synchronize()
-                        
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.profilePictureButton.setImage(UIImage(data: data), forState: .Normal)
-                            pagingSpinner.stopAnimating()
-                            pagingSpinner.removeFromSuperview()
-                        })
-                        
-                        
-                    }
-                }
-                
-            }
-        }
-    }
-    func openCamera(){
-        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
-            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-        }else{
-            let alert = UIAlertView()
-            alert.title = "Warning"
-            alert.message = "You don't have camera"
-            alert.addButtonWithTitle("OK")
-            alert.show()
-        }
-    }
-    func openGallary(){
-        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        self.presentViewController(imagePicker, animated: true, completion: nil)
-    }
-
-    
-    //update the UIImageView once an image has been picked
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profilePictureButton.setImage(pickedImage, forState: .Normal)
-            if let imageData = UIImageJPEGRepresentation(pickedImage, 1.0){
-                localData.setMainProfilePicture(imageData)
-                localData.synchronize()
-                
-                //update the user's profile picture in Database
-                if let _ = PFUser.currentUser() {
-                    let file = PFFile(data:imageData)
-                    PFUser.currentUser()!["profile_picture"] = file
-                    PFUser.currentUser()?.saveInBackground()
-                }
-                
-            }
-            
-        }
-        
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }*/
-    
-    func displayNavigationBar(){
-        
-        let navItem = UINavigationItem()
-
-        //setting the necterIcon to the rightBarButtonItem
-        //setting messagesIcon to the icon specifying if there are or are not notifications
-        necterButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
-        necterButton.setImage(UIImage(named: "Necter_Icon"), for: .selected)
-        necterButton.setImage(UIImage(named: "Necter_Icon"), for: .highlighted)
-        necterButton.addTarget(self, action: #selector(necterIconTapped(_:)), for: .touchUpInside)
-        necterButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
-        necterButton.contentMode = UIViewContentMode.scaleAspectFill
-        necterButton.clipsToBounds = true
-        let rightBarButton = UIBarButtonItem(customView: necterButton)
-        navItem.rightBarButtonItem = rightBarButton
-        
-        //setting the navBar color and title
-        navigationBar.setItems([navItem], animated: false)
-        
-        let navBarTitleView = UIView()
-        navBarTitleView.frame = CGRect(x: 0, y: 0, width: 0.06*screenHeight, height: 0.06*screenHeight)
-        //navBarTitleView.backgroundColor = UIColor.greenColor()
-        let titleImageView = UIImageView(image: UIImage(named: "Profile_Icon_Yellow"))
-        titleImageView.frame = CGRect(x: 0, y: 0, width: 0.06*screenHeight, height: 0.06*screenHeight)
-        titleImageView.contentMode = UIViewContentMode.scaleAspectFill
-        titleImageView.clipsToBounds = true
-        navBarTitleView.addSubview(titleImageView)
-        navigationBar.topItem?.titleView = navBarTitleView
-        //navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 30)!, NSForegroundColorAttributeName: necterYellow]
-        /*UIView *backView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];// Here you can set View width and height as per your requirement for displaying titleImageView position in navigationbar
-        [backView setBackgroundColor:[UIColor greenColor]];
-        UIImageView *titleImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SelectAnAlbumTitleLettering"]];
-        titleImageView.frame = CGRectMake(45, 5,titleImageView.frame.size.width , titleImageView.frame.size.height); // Here I am passing origin as (45,5) but can pass them as your requirement.
-        [backView addSubview:titleImageView];*/
-        
-        navigationBar.barStyle = .black
-        navigationBar.barTintColor = UIColor.white
-        
-        self.view.addSubview(navigationBar)
-        
-    }
-    func necterIconTapped (_ sender: UIBarButtonItem) {
-        necterButton.isSelected = true
+    func rightBarButtonTapped (_ sender: UIBarButtonItem){
         performSegue(withIdentifier: "showBridgeViewFromProfilePage", sender: self)
+        rightBarButton.isSelected = true
     }
+    func displayNavigationBar(){
+        let customNavigationBar = CustomNavigationBar()
+        rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: nil, leftBarButtonSelectedIcon: nil, leftBarButton: nil, rightBarButtonIcon: "All_Types_Icon_Gray", rightBarButtonSelectedIcon: "Necter_Icon", rightBarButton: rightBarButton, title: "Profile")
+    }
+    
     func displayMessageFromBot(_ notification: Notification) {
         let botNotificationView = UIView()
         botNotificationView.frame = CGRect(x: 0, y: -0.12*self.screenHeight, width: self.screenWidth, height: 0.12*self.screenHeight)
@@ -235,6 +77,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
     }
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -335,7 +178,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func viewDidLayoutSubviews() {
-        navigationBar.frame = CGRect(x: 0, y:0, width:screenWidth, height:0.11*screenHeight)
         profilePictureView.frame = CGRect(x: 0, y:0.12*screenHeight, width:0.25*screenHeight, height:0.25*screenHeight)
         profilePictureView.center.x = self.view.center.x
         profilePictureView.layer.cornerRadius = profilePictureView.frame.size.width/2

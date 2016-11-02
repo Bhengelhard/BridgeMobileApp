@@ -13,8 +13,7 @@ import FBSDKCoreKit
 class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     //creating the elements on the View
-    let navigationBar = UINavigationBar()
-    let cancelButton = UIButton()
+    let rightBarButton = UIButton()
     let profilePictureButton = UIButton()
     let profilePictureView = UIImageView()
     let name = UILabel()
@@ -181,52 +180,18 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         
     }
     
-    func displayNavigationBar(){
-        let navItem = UINavigationItem()
-        /*//setting the messagesIcon to the leftBarButtonItem
-        messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), forState: .Normal)
-        messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Selected)
-        messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), forState: .Highlighted)
-        messagesButton.addTarget(self, action: #selector(messagesTapped(_:)), forControlEvents: .TouchUpInside)
-        messagesButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
-        messagesButton.contentMode = UIViewContentMode.ScaleAspectFill
-        messagesButton.clipsToBounds = true
-        let leftBarButton = UIBarButtonItem(customView: messagesButton)
-        navItem.leftBarButtonItem = leftBarButton*/
-        
-        //cancel edit bar buton item
-        cancelButton.setTitle(">", for: UIControlState())
-        cancelButton.setTitleColor(necterGray, for: UIControlState())
-        cancelButton.setTitleColor(necterYellow, for: .selected)
-        cancelButton.setTitleColor(necterYellow, for: .highlighted)
-        cancelButton.titleLabel!.font = UIFont(name: "Verdana-Bold", size: 24)!
-        //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Selected)
-        //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Highlighted)
-        cancelButton.addTarget(self, action: #selector(cancelTapped(_:)), for: .touchUpInside)
-        cancelButton.frame = CGRect(x: 0, y: 0, width: 0.2*screenWidth, height: 0.06*screenHeight)
-        let rightBarButtonItem = UIBarButtonItem(customView: cancelButton)
-        navItem.rightBarButtonItem = rightBarButtonItem
-        
-        
-        //setting the navBar color and title
-        navigationBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0.11*screenHeight)
-        navigationBar.setItems([navItem], animated: false)
-        navigationBar.topItem?.title = "Edit Profile"
-        navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: necterYellow]
-        navigationBar.barStyle = .black
-        navigationBar.barTintColor = UIColor.white
-        
-        self.view.addSubview(navigationBar)
-        
-    }
-    
-    func cancelTapped(_ sender: UIBarButtonItem) {
-        cancelButton.isSelected = true
+    func rightBarButtonTapped (_ sender: UIBarButtonItem){
         if tempSeguedFrom == "OptionsFromBotViewController" {
             performSegue(withIdentifier: "showOptionsViewFromEditProfileView", sender: self)
         } else {
             performSegue(withIdentifier: "showProfilePageFromEditProfileView", sender: self)
         }
+        rightBarButton.isSelected = true
+    }
+    func displayNavigationBar(){
+        let customNavigationBar = CustomNavigationBar()
+        rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: nil, leftBarButtonSelectedIcon: nil, leftBarButton: nil, rightBarButtonIcon: "Profile_Icon_Gray", rightBarButtonSelectedIcon: "Profile_Icon_Yellow", rightBarButton: rightBarButton, title: "Edit Profile")
     }
     
     func displayProfilePictureButton() {

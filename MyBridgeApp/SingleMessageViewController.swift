@@ -12,15 +12,8 @@ import Parse
 class SingleMessageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     
     //Creating the navigationBar
-    let navigationBar = UINavigationBar()
-    let navItem = UINavigationItem()
-    let messagesButton = UIButton()
-    let leaveConversation = UIButton()
-    let navBarTitleButton =  UIButton(type: .custom)
-    var userName1 = ""
-    var userId1 = ""
-    var userName2 = ""
-    var userId2 = ""
+    let leftBarButton = UIButton()
+    let rightBarButton = UIButton()
     
     //Creating the tableView
     let singleMessageTableView = UITableView()
@@ -554,70 +547,16 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             }
         }
     }
-    
-    func displayNavigationBar(){
-        
-        //setting the messagesIcon to the leftBarButtonItem
-        messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), for: UIControlState())
-        messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), for: .selected)
-        messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), for: .highlighted)
-        messagesButton.addTarget(self, action: #selector(messagesTapped(_:)), for: .touchUpInside)
-        messagesButton.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
-        messagesButton.contentMode = UIViewContentMode.scaleAspectFill
-        messagesButton.clipsToBounds = true
-        let leftBarButton = UIBarButtonItem(customView: messagesButton)
-        navItem.leftBarButtonItem = leftBarButton
-        
-        //setting the leave conversation button to the rightBarButtonItem
-        //let leaveConversationIcon = UIImage(named: "Profile_Icon_Gray")
-        leaveConversation.setImage(UIImage(named: "Leave_Conversation_Gray"), for: UIControlState())
-        leaveConversation.setImage(UIImage(named: "Leave_Conversation_Yellow"), for: .highlighted)
-        leaveConversation.setImage(UIImage(named: "Leave_Conversation_Yellow"), for: .selected)
-        //leaveConversation.titleLabel!.font = UIFont(name: "Verdana-Bold", size: 24)!
-        //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Selected)
-        //leaveConversation.setImage(UIImage(named: "Profile_Icon_Yellow"), forState: .Highlighted)
-        leaveConversation.addTarget(self, action: #selector(leaveConversationTapped(_:)), for: .touchUpInside)
-        leaveConversation.frame = CGRect(x: 0, y: 0, width: 0.085*screenWidth, height: 0.085*screenWidth)
-        let rightBarButton = UIBarButtonItem(customView: leaveConversation)
-        navItem.rightBarButtonItem = rightBarButton
-
-        
-        //setting the navBar color and title
-        navigationBar.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 0.11*screenHeight)
-        navigationBar.setItems([navItem], animated: false)
-        navigationBar.topItem?.title = "Conversation"
-        navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: necterTypeColor]
-        navigationBar.barStyle = .black
-        navigationBar.barTintColor = UIColor.white
-        
-        /*navBarTitleButton.frame.size = CGSize(width: 0.6*screenWidth, height: navigationBar.frame.height)
-        navBarTitleButton.center.x = navigationBar.center.x
-        navBarTitleButton.center.y = navigationBar.center.y
-        navBarTitleButton.setTitle(singleMessageTitle, forState: UIControlState.Normal)
-        navBarTitleButton.titleLabel?.font = UIFont(name: "Verdana", size: 24)
-        navBarTitleButton.setTitleColor(necterTypeColor, forState: .Normal)
-        navBarTitleButton.setTitleColor(necterYellow, forState: .Highlighted)
-        navBarTitleButton.setTitleColor(necterYellow, forState: .Selected)
-        navBarTitleButton.addTarget(self, action: #selector(navBarTitleButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        navigationBar.topItem?.titleView = navBarTitleButton*/
-        
-        self.view.addSubview(navigationBar)
-        
+    func leftBarButtonTapped (_ sender: UIBarButtonItem){
+        toolbar.frame = CGRect(x: 0, y: 0.925*screenHeight, width: screenWidth, height: 0.075*screenHeight)
+        performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
+        leftBarButton.isSelected = true
     }
-    
-    func navBarTitleButtonTapped(_ sender: UIButton) {
-        //navBarTitleButton.titleColor
-        navBarTitleButton.isSelected = true
-        performSegue(withIdentifier: "showExternalProfileFromSingleMessage", sender: self)
-    }
-    
-    func leaveConversationTapped(_ sender: UIBarButtonItem) {
-        leaveConversation.isSelected = true
-        //create the alert controller
+    func rightBarButtonTapped (_ sender: UIBarButtonItem){
         let alert = UIAlertController(title: "Leaving the Conversation", message: "Are you sure you want to leave this conversation? You will not be able to return.", preferredStyle: UIAlertControllerStyle.alert)
         //Create the actions
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
-            self.leaveConversation.isSelected = false
+            self.rightBarButton.isSelected = false
         }))
         
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
@@ -661,12 +600,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         }))
         
         self.present(alert, animated: true, completion: nil)
+        rightBarButton.isSelected = true
     }
-    
-    func messagesTapped(_ sender: UIBarButtonItem) {
-        messagesButton.isSelected = true
-        toolbar.frame = CGRect(x: 0, y: 0.925*screenHeight, width: screenWidth, height: 0.075*screenHeight)
-        performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
+    func displayNavigationBar(){
+        let customNavigationBar = CustomNavigationBar()
+        rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Messages_Icon_Gray", leftBarButtonSelectedIcon: "Messages_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: "Leave_Conversation_Gray", rightBarButtonSelectedIcon: "Leave_Conversation_Yellow", rightBarButton: rightBarButton, title: singleMessageTitle)
     }
     func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
@@ -773,87 +713,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let outsideTapGesture = UITapGestureRecognizer(target: self, action: outSelector)
         outsideTapGesture.numberOfTapsRequired = 1
         view.addGestureRecognizer(outsideTapGesture)
-        
-        let messageQuery = PFQuery(className: "Messages")
-        messageQuery.getObjectInBackground(withId: newMessageId, block: { (object, error) in
-            if error == nil {
-                if let object = object {
-                    if let x = object["message_type"] as? String? {
-                        if let x = x {
-                            self.bridgeType = x
-                        }
-                        else {
-                        self.bridgeType = "Friendship"
-                        }
-                    }
-                    else {
-                        self.bridgeType = "Friendship"
-                    }
-                    switch (self.bridgeType) {
-                        case "Business":
-                            self.necterTypeColor = self.businessBlue
-                        case "Love":
-                            self.necterTypeColor = self.loveRed
-                        case "Friendship":
-                            self.necterTypeColor = self.friendshipGreen
-                        default:
-                            self.necterTypeColor = self.friendshipGreen
-                            print("necterTypeColor is set to default")
-                    }
-                    
-                    //setting the singleMessageTitle
-                    if self.singleMessageTitle == "Conversation" {
-                        var stringOfNames = ""
-                        if var users = object["names_in_message"] as? [String] {
-                            users = users.filter { $0 != PFUser.current()?["name"] as! String }
-                            for i in 0 ..< users.count  {
-                                var name = users[i]
-                                if users.count > 2 && i < users.count - 2 {
-                                    var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                                    stringOfNames = stringOfNames + fullNameArr[0] + ", "
-                                    
-                                } else if users.count >= 2 && i == users.count - 2 {
-                                    var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                                    stringOfNames = stringOfNames + fullNameArr[0] + " & "
-                                    
-                                }
-                                else {
-                                    if users.count > 1{
-                                        name = name.characters.split{$0 == " "}.map(String.init)[0]
-                                    }
-                                    stringOfNames = stringOfNames + name
-                                }
-                            }
-                            self.singleMessageTitle = stringOfNames
-                        }
-                        DispatchQueue.main.async(execute: {
-                            self.navigationBar.topItem?.title = self.singleMessageTitle
-                            self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: self.necterTypeColor]
-                        })
-                    }
-                    
-                    
-                    
-                }
-                //self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 24)!, NSForegroundColorAttributeName: self.necterTypeColor]
-                //self.navBarTitleButton.titleLabel?.textColor = self.necterTypeColor
-            }
-        })
+
         NotificationCenter.default.removeObserver("reloadTheThread")
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadThread), name: NSNotification.Name(rawValue: "reloadTheThread"), object: nil)
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), for: UIControlEvents.valueChanged)
         singleMessageTableView.addSubview(refresher)
-
-        navigationBar.topItem?.title = singleMessageTitle
-        
-        //navBarTitleButton.setTitle(singleMessageTitle, forState: UIControlState.Normal)
         singleMessageTableView.register(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
         messageId = newMessageId
         updateMessages()
-        
-        
-        // Do any additional setup after loading the view.
     }
     override func viewDidLayoutSubviews() {
         
@@ -861,7 +729,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //This prevents rare crashes which happens when you are changing your view.
@@ -971,15 +838,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(SingleMessageTableCell), forIndexPath: indexPath) as! SingleMessageTableCell
         let cell = SingleMessageTableCell()
         let messageContent = objectIDToMessageContentArrayMapping[singleMessagePositionToObjectIDMapping[(indexPath as NSIndexPath).row]!]!
         let singleMessageContent = SingleMessageContent(messageContent: messageContent)
-        //print("senderName - \(singleMessageContent.senderName!) previousSenderName - \(singleMessageContent.previousSenderName!) messageText -  \(singleMessageContent.messageText!) ")
-        //print("")
-        //print("messageContentArray[indexPath.row] - \(messageContentArray[indexPath.row])")
         cell.singleMessageContent = singleMessageContent
-        //print("cell \(indexPath.row) \(cell.frame.height)")
         return cell
         
     }

@@ -71,12 +71,10 @@ class BridgeViewController: UIViewController {
     let postStatusButton = UIButton()
     
     //navigation bar creation
-    let navigationBar = UINavigationBar()
-    let navItem = UINavigationItem()
     var badgeCount = Int()
-    let profileButton = UIButton()
-    let messagesButton = UIButton()
-    
+    let leftBarButton = UIButton()
+    let rightBarButton = UIButton()
+    let customNavigationBar = CustomNavigationBar()
     
     //Connect and disconnect Icons
     let connectIcon = UIImageView()
@@ -146,7 +144,6 @@ class BridgeViewController: UIViewController {
         case typesOfColor.friendship:
             return  DisplayUtility.friendshipGreen.cgColor
         }
-        
     }
     func setCityName(_ locationLabel: UILabel, locationCoordinates:[Double], pairing:UserInfoPair) {
         // We will store the city names to LocalData.  Not required now. But will ne be needed in fututre when when optimize. 
@@ -161,8 +158,8 @@ class BridgeViewController: UIViewController {
             })
         }
         else {
-            var longitude :CLLocationDegrees = -122.0312186//locationCoordinates[0]//-122.0312186
-            var latitude :CLLocationDegrees = 37.33233141//locationCoordinates[1]//37.33233141
+            var longitude :CLLocationDegrees = -122.0312186
+            var latitude :CLLocationDegrees = 37.33233141
             if locationCoordinates.count == 2 {
                 longitude = locationCoordinates[1]
                 latitude = locationCoordinates[0]
@@ -233,11 +230,6 @@ class BridgeViewController: UIViewController {
         view.addSubview(displayNoMoreCardsLabel!)
         
         displayRevisitButton()
-        
-        /*if wasLastSwipeInDeck {
-            PFUser.current()?.incrementKey("ran_out_of_pairs")
-            PFUser.current()?.saveInBackground()
-        }*/
         
     }
     func getUpperDeckCardFrame() -> CGRect {
@@ -367,23 +359,6 @@ class BridgeViewController: UIViewController {
             }
             
         }
-        
-
-//        if photo != nil {
-//            photo!.getDataInBackgroundWithBlock({ (data, error) in
-//                if error == nil && data != nil {
-//                    dispatch_async(dispatch_get_main_queue(), {
-//                        photoView.image = UIImage(data: data!)
-//                    })
-//                    
-//                }
-//                }
-//            )
-//        }
-        //photoView.image = UIImage(data: photo)
-        //photoView.contentMode = UIViewContentMode.ScaleAspectFill
-        //photoView.contentMode = UIViewContentMode.Center
-        //photoView.clipsToBounds = true
         
         let card = UIView(frame:deckFrame)
         
@@ -550,65 +525,28 @@ class BridgeViewController: UIViewController {
         
     }
     func displayNavigationBar(){
-        
-        //setting the profileIcon to the leftBarButtonItem
-        let profileIcon = UIImage(named: "Profile_Icon_Gray")
-        profileButton.setImage(profileIcon, for: UIControlState())
-        profileButton.setImage(UIImage(named: "Profile_Icon_Yellow"), for: .selected)
-        profileButton.setImage(UIImage(named: "Profile_Icon_Yellow"), for: .highlighted)
-        profileButton.addTarget(self, action: #selector(profileTapped(_:)), for: .touchUpInside)
-        profileButton.frame = CGRect(x: 0, y: 0, width: 0.085*DisplayUtility.screenWidth, height: 0.085*DisplayUtility.screenWidth)
-        let leftBarButton = UIBarButtonItem(customView: profileButton)
-        navItem.leftBarButtonItem = leftBarButton
-        
-        //setting the messagesIcon to the rightBarButtonItem
-        var messagesIcon = UIImage()
-        
+        rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
         //setting messagesIcon to the icon specifying if there are or are not notifications
+        var rightBarButtonIcon = ""
+        var rightBarButtonSelectedIcon = ""
         if badgeCount > 0 {
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), for: UIControlState())
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), for: .highlighted)
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), for: .selected)
+            rightBarButtonIcon = "Messages_Icon_Gray_Notification"
+            rightBarButtonSelectedIcon = "Messages_Icon_Yellow_Notification"
         } else {
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), for: UIControlState())
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), for: .selected)
-            messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), for: .highlighted)
+            rightBarButtonIcon = "Messages_Icon_Gray"
+            rightBarButtonSelectedIcon = "Messages_Icon_Yellow"
         }
-        
-        messagesButton.addTarget(self, action: #selector(messagesTapped(_:)), for: .touchUpInside)
-        messagesButton.frame = CGRect(x: 0, y: 0, width: 0.085*DisplayUtility.screenWidth, height: 0.085*DisplayUtility.screenWidth)
-        messagesButton.contentMode = UIViewContentMode.scaleAspectFill
-        messagesButton.clipsToBounds = true
-        let rightBarButton = UIBarButtonItem(customView: messagesButton)
-        navItem.rightBarButtonItem = rightBarButton
-        
-        //setting the navBar color and title
-        navigationBar.setItems([navItem], animated: false)
-        
-        //navigationBar.topItem?.title = "necter"
-        let navBarTitle = UILabel()
-        navBarTitle.frame = CGRect(x: 0, y: 0, width: 0.4*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
-        navBarTitle.center.x = navigationBar.center.x
-        navBarTitle.center.y = navigationBar.center.y
-        navBarTitle.text = "necter"
-        navBarTitle.font = UIFont(name: "Verdana", size: 34)
-        navBarTitle.textColor = DisplayUtility.necterYellow
-        navBarTitle.textAlignment = NSTextAlignment.center
-        
-        navigationBar.topItem?.titleView = navBarTitle
-        navigationBar.barStyle = .black
-        navigationBar.barTintColor = UIColor.white
-        
-        self.view.addSubview(navigationBar)
-        
-        //setting the number of notifications to the iconLabel -> this has been removed
-        /*iconLabel = UILabel(frame: messagesButton.frame)
-         iconLabel.center.x = messagesButton.center.x
-         iconLabel.center.y = messagesButton.center.y
-         //iconLabel.font = UIFont(name: "BentonSans", size: 14)
-         iconLabel.textColor = necterColor
-         //iconLabel.text = String(badgeCount)
-         //view.addSubview(iconLabel)*/
+
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Profile_Icon_Gray", leftBarButtonSelectedIcon: "Profile_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: rightBarButtonIcon, rightBarButtonSelectedIcon: rightBarButtonSelectedIcon, rightBarButton: rightBarButton, title: "necter")
+    }
+    func leftBarButtonTapped (_ sender: UIBarButtonItem){
+        performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
+        leftBarButton.isSelected = true
+    }
+    func rightBarButtonTapped (_ sender: UIBarButtonItem){
+        performSegue(withIdentifier: "showMessagesPageFromBridgeView", sender: self)
+        rightBarButton.isSelected = true
     }
     func displayToolBar(){
         
@@ -693,8 +631,6 @@ class BridgeViewController: UIViewController {
         postStatusButton.setTitleColor(UIColor.white, for: UIControlState())
         postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
         postStatusButton.addTarget(self, action: #selector(postStatusTapped), for: .touchUpInside)
-        //loveButton.addTarget(self, action: #selector(filterTapped(_:)), forControlEvents: .TouchUpInside)
-        //loveButton.tag = 2
         
         
         view.addSubview(toolbar)
@@ -898,11 +834,7 @@ class BridgeViewController: UIViewController {
         DispatchQueue.main.async(execute: {
             
             if self.badgeCount > 0 {
-                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), for: UIControlState())
-                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), for: .highlighted)
-                self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), for: .selected)
-                self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
-                self.navigationBar.setItems([self.navItem], animated: false)
+                self.customNavigationBar.updateRightBarButton(newIcon: "Messages_Icon_Gray_Notification", newSelectedIcon: "Messages_Icon_Yellow_Notification")
             }
             
             
@@ -915,9 +847,7 @@ class BridgeViewController: UIViewController {
         botNotificationView.frame = CGRect(x: 0, y: -0.12*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        //always fill the view
         blurEffectView.frame = botNotificationView.bounds
-        //blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let messageLabel = UILabel(frame: CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.01*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight))
         messageLabel.text = (notification as NSNotification).userInfo!["message"] as? String ?? "No Message Came Up"
@@ -928,8 +858,8 @@ class BridgeViewController: UIViewController {
 
         botNotificationView.addSubview(messageLabel)
         botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
-        view.insertSubview(botNotificationView, aboveSubview: navigationBar)
-        
+        view.addSubview(botNotificationView)
+        view.bringSubview(toFront: botNotificationView)
         
         UIView.animate(withDuration: 0.7, animations: {
             botNotificationView.frame.origin.y = 0
@@ -966,34 +896,21 @@ class BridgeViewController: UIViewController {
                             let whoViewed = result["message_viewed"] as! ([String])
                             if whoViewed.contains((PFUser.current()?.objectId)!) {
                                 self.badgeCount += 0 //(true)
-                                //print("1")
                             }
                             else {
                                 self.badgeCount += 1//(false)
-                                //print("2")
                             }
                         }
                         else {
                             self.badgeCount += 1//(false)
-                            //print("3")
                         }
                         
                     }
                     DispatchQueue.main.async(execute: {
-                        //self.badgeCount = 0
                         if self.badgeCount > 0 {
-                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray_Notification"), for: UIControlState())
-                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), for: .highlighted)
-                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow_Notification"), for: .selected)
-                            self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
-                            self.navigationBar.setItems([self.navItem], animated: false)
+                            self.customNavigationBar.updateRightBarButton(newIcon: "Messages_Icon_Gray_Notification", newSelectedIcon: "Messages_Icon_Yellow_Notification")
                         } else {
-                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Gray"), for: UIControlState())
-                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), for: .highlighted)
-                            self.messagesButton.setImage(UIImage(named: "Messages_Icon_Yellow"), for: .selected)
-                            
-                            self.navItem.rightBarButtonItem = UIBarButtonItem(customView: self.messagesButton)
-                            self.navigationBar.setItems([self.navItem], animated: false)
+                            self.customNavigationBar.updateRightBarButton(newIcon: "Messages_Icon_Gray", newSelectedIcon: "Messages_Icon_Yellow")
                         }
                     })
                     
@@ -1023,8 +940,6 @@ class BridgeViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-   
-        navigationBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight)
 
     }
     
@@ -1136,14 +1051,6 @@ class BridgeViewController: UIViewController {
         arrayOfCardsInDeck.removeAll()
         arrayOfCardColors.removeAll()
         displayCards()
-    }
-    func profileTapped(_ sender: UIBarButtonItem) {
-        profileButton.isSelected = true
-        performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
-    }
-    func messagesTapped(_ sender: UIBarButtonItem) {
-        messagesButton.isSelected = true
-        performSegue(withIdentifier: "showMessagesPageFromBridgeView", sender: self)
     }
     func isDragged(_ gesture: UIPanGestureRecognizer) {
 
@@ -1314,8 +1221,6 @@ class BridgeViewController: UIViewController {
                 default:
                     necterTypeColor = DisplayUtility.necterGray
                 }
-                
-
             }
             else {
             message["message_type"] = "Friendship"
@@ -1352,7 +1257,6 @@ class BridgeViewController: UIViewController {
             catch {
                 
             }
-            
             var bridgeType = "All"
             if let bt = bridgePairings[x].user1?.bridgeType {
                 bridgeType = bt
@@ -1465,7 +1369,7 @@ class BridgeViewController: UIViewController {
             }
             var bridgeType = "All"
             bridgeType = convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)
-                        
+                         
             localData.setPairings(bridgePairings)
             localData.synchronize()
             

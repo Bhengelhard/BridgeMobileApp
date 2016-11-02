@@ -648,13 +648,13 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NMz-iK-zUZ"/>
-        <segue reference="1Bx-ML-R6e"/>
-        <segue reference="00U-Jg-Jap"/>
-        <segue reference="VqF-EN-U5i"/>
         <segue reference="fLD-mo-7R5"/>
+        <segue reference="VqF-EN-U5i"/>
+        <segue reference="NMz-iK-zUZ"/>
+        <segue reference="O6c-jV-xV8"/>
+        <segue reference="1Bx-ML-R6e"/>
         <segue reference="szG-GP-VfO"/>
-        <segue reference="0EB-Fw-YUx"/>
         <segue reference="cy1-Ds-r2Z"/>
+        <segue reference="0EB-Fw-YUx"/>
     </inferredMetricsTieBreakers>
 </document>
