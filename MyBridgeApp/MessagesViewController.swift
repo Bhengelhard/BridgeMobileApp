@@ -45,6 +45,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let friendshipButton = UIButton()
     let friendshipLabel = UILabel()
     let postStatusButton = UIButton()
+    let missionControlView = MissionControlView()
     
     //message information
     let noMessagesLabel = UILabel()
@@ -228,240 +229,57 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     func displayMissionControlTab(){
-        let missionControlView = MissionControlView()
         missionControlView.createMissionControlTab(view: view, missionControlTabButton: missionControlTabButton)
-        missionControlTabButton.addTarget(self, action: #selector(missionControlTabButtonTapped(_:)), for: .touchUpInside)
+        missionControlTabButton.addTarget(self, action: #selector(displayMissionControlFilters(_:)), for: .touchUpInside)
     }
-    func missionControlTabButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "showNewStatusViewControllerFromMessages", sender: self)
+    func displayMissionControlFilters(_ sender: UIButton) {
+        //display missionControl filters
+        missionControlView.showMissionControlFilters(view: view, businessButton: businessButton, loveButton: loveButton, friendshipButton: friendshipButton)
+        businessButton.addTarget(self, action: #selector(businessTapped(_:)), for: .touchUpInside)
+        loveButton.addTarget(self, action: #selector(loveTapped(_:)), for: .touchUpInside)
+        friendshipButton.addTarget(self, action: #selector(friendshipTapped(_:)), for: .touchUpInside)
+        
+        missionControlTabButton.removeTarget(self, action: #selector(displayMissionControlFilters(_:)), for: .touchUpInside)
+        missionControlTabButton.addTarget(self,action:#selector(displayMissionControlPostStatus(_:)), for: .touchUpInside)
     }
-    
-    /*func displayToolBar(){
-        
-        toolbar.frame = CGRect(x: 0, y: 0.9*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
-        toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
-        
-        //creating buttons to be added to the toolbar and evenly spaced across
-        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
-        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), for: .disabled)
-        allTypesButton.frame = CGRect(x: 0.07083*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-        allTypesButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-        allTypesButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        allTypesButton.tag = 0
-        
-        //coloring allTypesText three different colors
-        let allTypesText = "All Types" as NSString
-        let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
-        //setting allTypesText
-        allTypesLabel.attributedText = allTypesAttributedText
-        allTypesLabel.textAlignment =  NSTextAlignment.center
-        allTypesLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-        allTypesLabel.center.x = allTypesButton.center.x
-        
-        
-        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
-        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .disabled)
-        businessButton.frame = CGRect(x: 0.24166*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-        businessButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-        businessButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        businessButton.tag = 1
-        
-        businessLabel.text = "Business"
-        businessLabel.textColor = DisplayUtility.necterGray
-        businessLabel.font = UIFont(name: "BentonSans", size: 11)
-        businessLabel.textAlignment =  NSTextAlignment.center
-        businessLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-        businessLabel.center.x = businessButton.center.x
-        
-        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
-        loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .disabled)
-        loveButton.frame = CGRect(x: 0.65832*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-        loveButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-        loveButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        loveButton.tag = 2
-        
-        loveLabel.text = "Love"
-        loveLabel.font = UIFont(name: "BentonSans", size: 11)
-        loveLabel.textColor = DisplayUtility.necterGray
-        loveLabel.textAlignment =  NSTextAlignment.center
-        loveLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-        loveLabel.center.x = loveButton.center.x
-        
-        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
-        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .disabled)
-        friendshipButton.frame = CGRect(x: 0.82915*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1150*DisplayUtility.screenWidth)
-        friendshipButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-        friendshipButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        friendshipButton.tag = 3
-        
-        friendshipLabel.text = "Friendship"
-        friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
-        friendshipLabel.textColor = DisplayUtility.necterGray
-        friendshipLabel.textAlignment =  NSTextAlignment.center
-        friendshipLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-        friendshipLabel.center.x = friendshipButton.center.x
-        
-        
-        postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*DisplayUtility.screenWidth, height: 0.175*DisplayUtility.screenWidth)
-        postStatusButton.backgroundColor = DisplayUtility.necterYellow
-        postStatusButton.showsTouchWhenHighlighted = true
-        postStatusButton.layer.borderWidth = 2.0
-        postStatusButton.layer.borderColor = UIColor.white.cgColor
-        postStatusButton.layer.cornerRadius = postStatusButton.frame.size.width/2.0
-        postStatusButton.clipsToBounds = true
-        postStatusButton.center.y = toolbar.center.y - 0.25*0.175*DisplayUtility.screenWidth
-        postStatusButton.center.x = view.center.x
-        postStatusButton.setTitle("+", for: UIControlState())
-        postStatusButton.setTitleColor(UIColor.white, for: UIControlState())
-        postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
-        postStatusButton.addTarget(self, action: #selector(postStatusTapped), for: .touchUpInside)
-        
-        
-        view.addSubview(toolbar)
-        view.addSubview(allTypesButton)
-        view.addSubview(allTypesLabel)
-        view.addSubview(businessButton)
-        view.addSubview(businessLabel)
-        view.addSubview(loveButton)
-        view.addSubview(loveLabel)
-        view.addSubview(friendshipButton)
-        view.addSubview(friendshipLabel)
-        view.addSubview(postStatusButton)
-    }
-    func postStatusTapped(_ sender: UIButton ){
-        print("Post Tapped")
-        performSegue(withIdentifier: "showNewStatusViewControllerFromMessages", sender: self)
+    func displayMissionControlPostStatus(_ sender: UIButton) {
+        missionControlView.showMissionControlPostStatus()
     }
     
-    func filterTapped(_ sender: UIButton){
-        let tag = sender.tag
-        switch(tag){
-            
-        //all types filter tapped
-        case 0:
-            //updating which toolbar Button is selected
-            allTypesButton.isEnabled = false
-            businessButton.isEnabled = true
-            loveButton.isEnabled = true
-            friendshipButton.isEnabled = true
-            
-            //updating No Message Label Text
-            noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
-            
-            //updating textColor necter-Type labels
-            let allTypesText = "All Types" as NSString
-            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
-            allTypesLabel.attributedText = allTypesAttributedText
-            businessLabel.textColor = DisplayUtility.necterGray
-            loveLabel.textColor = DisplayUtility.necterGray
-            friendshipLabel.textColor = DisplayUtility.necterGray
-            
-            //filtering the messages table
-            allBridgesTapped()
-            break
-            
-        //business filter tapped
-        case 1:
-            //updating which toolbar Button is selected
-            allTypesButton.isEnabled = true
-            businessButton.isEnabled = false
-            loveButton.isEnabled = true
-            friendshipButton.isEnabled = true
-            
-            //updating No Message Label Text
-            noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
-            
-            //updating textColor necter-Type labels
-            let allTypesText = "All Types" as NSString
-            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
-            allTypesLabel.attributedText = allTypesAttributedText
-            businessLabel.textColor = DisplayUtility.businessBlue
-            loveLabel.textColor = DisplayUtility.necterGray
-            friendshipLabel.textColor = DisplayUtility.necterGray
-            
-            //filtering the messages table
-            businessTapped()
-            break
-            
-        //love filter tapped
-        case 2:
-            //updating which toolbar Button is selected
-            allTypesButton.isEnabled = true
-            businessButton.isEnabled = true
-            loveButton.isEnabled = false
-            friendshipButton.isEnabled = true
-            
-            //updating No Message Label Text
-            noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
-            
-            //updating textColor necter-Type labels
-            let allTypesText = "All Types" as NSString
-            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
-            allTypesLabel.attributedText = allTypesAttributedText
-            businessLabel.textColor = DisplayUtility.necterGray
-            loveLabel.textColor = DisplayUtility.loveRed
-            friendshipLabel.textColor = DisplayUtility.necterGray
-            
-            //filtering the messages table
-            loveTapped()
-            break
+    func businessTapped(_ sender: UIButton) {
+        print("Business Tapped")
+        //updating which toolbar Button is selected
+        allTypesButton.isEnabled = true
+        businessButton.isEnabled = false
+        loveButton.isEnabled = true
+        friendshipButton.isEnabled = true
         
-        //friendship filter tapped
-        case 3:
-            //updating which toolbar Button is selected
-            allTypesButton.isEnabled = true
-            businessButton.isEnabled = true
-            loveButton.isEnabled = true
-            friendshipButton.isEnabled = false
-            
-            //updating No Message Label Text
-            noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
-            
-            //updating textColor necter-Type labels
-            let allTypesText = "All Types" as NSString
-            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
-            allTypesLabel.attributedText = allTypesAttributedText
-            businessLabel.textColor = DisplayUtility.necterGray
-            loveLabel.textColor = DisplayUtility.necterGray
-            friendshipLabel.textColor = DisplayUtility.friendshipGreen
-            
-            //filtering the messages table
-            friendshipTapped()
-            break
-        default:
-            //updating which toolbar Button is selected
-            allTypesButton.isEnabled = false
-            businessButton.isEnabled = true
-            loveButton.isEnabled = true
-            friendshipButton.isEnabled = true
-            
-            //updating No Message Label Text
-            
-            //updating textColor necter-Type labels
-            let allTypesText = "All Types" as NSString
-            let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
-            allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
-            allTypesLabel.attributedText = allTypesAttributedText
-            businessLabel.textColor = DisplayUtility.necterGray
-            loveLabel.textColor = DisplayUtility.necterGray
-            friendshipLabel.textColor = DisplayUtility.necterGray
-            
-            //filtering the messages table
-            allBridgesTapped()
+        //updating No Message Label Text
+        noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
+        
+        toolbarTapped = true
+        filteredPositions = [Int]()
+        noMessagesLabel.alpha = 1
+        for i in 0 ..< messageType.count{
+            if messageType[messagePositionToMessageIdMapping[i]!]! == "Business" {
+                filteredPositions.append(i)
+                noMessagesLabel.alpha = 0
+            }
         }
+        self.tableView.reloadData()
+        
+        businessButton.removeTarget(self, action: #selector(businessTapped(_:)), for: .touchUpInside)
+        businessButton.addTarget(self, action: #selector(allBridgesTapped(_:)), for: .touchUpInside)
     }
-    func friendshipTapped() {
+    func friendshipTapped(_ sender: UIButton) {
+        allTypesButton.isEnabled = true
+        businessButton.isEnabled = true
+        loveButton.isEnabled = true
+        friendshipButton.isEnabled = false
+        
+        //updating No Message Label Text
+        noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
+        
         toolbarTapped = true
         filteredPositions = [Int]()
         
@@ -475,10 +293,18 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         self.tableView.reloadData()
     }
-    func loveTapped() {
+    func loveTapped(_ sender: UIButton) {
+        //updating which toolbar Button is selected
+        allTypesButton.isEnabled = true
+        businessButton.isEnabled = true
+        loveButton.isEnabled = false
+        friendshipButton.isEnabled = true
+        
+        //updating No Message Label Text
+        noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
+        
         toolbarTapped = true
         filteredPositions = [Int]()
-        print("loveButtonClicked")
         noMessagesLabel.alpha = 1
         for i in 0 ..< messageType.count{
             if messageType[messagePositionToMessageIdMapping[i]!]! == "Love" {
@@ -488,20 +314,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         self.tableView.reloadData()
     }
-    func businessTapped() {
-        toolbarTapped = true
-        filteredPositions = [Int]()
-        noMessagesLabel.alpha = 1
-        for i in 0 ..< messageType.count{
-            if messageType[messagePositionToMessageIdMapping[i]!]! == "Business" {
-                filteredPositions.append(i)
-                noMessagesLabel.alpha = 0
-            }
-        }
-        self.tableView.reloadData()
-    }
     
-    func allBridgesTapped() {
+    func allBridgesTapped(_ sender: UIButton) {
+        print("All bridges tapped")
+        //updating which toolbar Button is selected
+        allTypesButton.isEnabled = false
+        businessButton.isEnabled = true
+        loveButton.isEnabled = true
+        friendshipButton.isEnabled = true
+
         toolbarTapped = true
         filteredPositions = [Int]()
         noMessagesLabel.alpha = 1
@@ -511,7 +332,109 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         self.tableView.reloadData()
-    }*/
+    }
+    
+    
+    
+    /*func displayToolBar(){
+     
+     toolbar.frame = CGRect(x: 0, y: 0.9*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
+     toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
+     
+     //creating buttons to be added to the toolbar and evenly spaced across
+     allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
+     allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), for: .disabled)
+     allTypesButton.frame = CGRect(x: 0.07083*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+     allTypesButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
+     allTypesButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
+     allTypesButton.tag = 0
+     
+     //coloring allTypesText three different colors
+     let allTypesText = "All Types" as NSString
+     let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
+     allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
+     allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
+     allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
+     //setting allTypesText
+     allTypesLabel.attributedText = allTypesAttributedText
+     allTypesLabel.textAlignment =  NSTextAlignment.center
+     allTypesLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
+     allTypesLabel.center.x = allTypesButton.center.x
+     
+     
+     businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
+     businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .disabled)
+     businessButton.frame = CGRect(x: 0.24166*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+     businessButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
+     businessButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
+     businessButton.tag = 1
+     
+     businessLabel.text = "Business"
+     businessLabel.textColor = DisplayUtility.necterGray
+     businessLabel.font = UIFont(name: "BentonSans", size: 11)
+     businessLabel.textAlignment =  NSTextAlignment.center
+     businessLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
+     businessLabel.center.x = businessButton.center.x
+     
+     loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
+     loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .disabled)
+     loveButton.frame = CGRect(x: 0.65832*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+     loveButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
+     loveButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
+     loveButton.tag = 2
+     
+     loveLabel.text = "Love"
+     loveLabel.font = UIFont(name: "BentonSans", size: 11)
+     loveLabel.textColor = DisplayUtility.necterGray
+     loveLabel.textAlignment =  NSTextAlignment.center
+     loveLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
+     loveLabel.center.x = loveButton.center.x
+     
+     friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
+     friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .disabled)
+     friendshipButton.frame = CGRect(x: 0.82915*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1150*DisplayUtility.screenWidth)
+     friendshipButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
+     friendshipButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
+     friendshipButton.tag = 3
+     
+     friendshipLabel.text = "Friendship"
+     friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
+     friendshipLabel.textColor = DisplayUtility.necterGray
+     friendshipLabel.textAlignment =  NSTextAlignment.center
+     friendshipLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
+     friendshipLabel.center.x = friendshipButton.center.x
+     
+     
+     postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*DisplayUtility.screenWidth, height: 0.175*DisplayUtility.screenWidth)
+     postStatusButton.backgroundColor = DisplayUtility.necterYellow
+     postStatusButton.showsTouchWhenHighlighted = true
+     postStatusButton.layer.borderWidth = 2.0
+     postStatusButton.layer.borderColor = UIColor.white.cgColor
+     postStatusButton.layer.cornerRadius = postStatusButton.frame.size.width/2.0
+     postStatusButton.clipsToBounds = true
+     postStatusButton.center.y = toolbar.center.y - 0.25*0.175*DisplayUtility.screenWidth
+     postStatusButton.center.x = view.center.x
+     postStatusButton.setTitle("+", for: UIControlState())
+     postStatusButton.setTitleColor(UIColor.white, for: UIControlState())
+     postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
+     postStatusButton.addTarget(self, action: #selector(postStatusTapped), for: .touchUpInside)
+     
+     
+     view.addSubview(toolbar)
+     view.addSubview(allTypesButton)
+     view.addSubview(allTypesLabel)
+     view.addSubview(businessButton)
+     view.addSubview(businessLabel)
+     view.addSubview(loveButton)
+     view.addSubview(loveLabel)
+     view.addSubview(friendshipButton)
+     view.addSubview(friendshipLabel)
+     view.addSubview(postStatusButton)
+     }
+     func postStatusTapped(_ sender: UIButton ){
+     print("Post Tapped")
+     performSegue(withIdentifier: "showNewStatusViewControllerFromMessages", sender: self)
+     }*/
     func displayNavigationBar(){
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
         let customNavigationBar = CustomNavigationBar()

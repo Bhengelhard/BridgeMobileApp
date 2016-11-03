@@ -59,6 +59,21 @@ class DisplayUtility {
     //add functions using the buttons so that you don't have to pass anything to it
     
     //Add activity indicator design/function here with parameters of the frame of the activity indicator
-
+    
+    
+    //setting a view to be blurred
+    func setBlurredView (view: UIView, viewToBlur: UIView) {
+        if !UIAccessibilityIsReduceTransparencyEnabled() {
+            viewToBlur.backgroundColor = UIColor.clear
+            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            blurEffectView.frame = viewToBlur.bounds
+            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            
+            viewToBlur.addSubview(blurEffectView)
+        } else {
+            viewToBlur.backgroundColor = UIColor.black
+        }
+    }
     
 }

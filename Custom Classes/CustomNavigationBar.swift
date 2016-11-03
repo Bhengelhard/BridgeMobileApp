@@ -18,8 +18,11 @@ class CustomNavigationBar {
     
     func createCustomNavigationBar (view: UIView, leftBarButtonIcon: String?, leftBarButtonSelectedIcon: String?, leftBarButton: UIButton?, rightBarButtonIcon: String?, rightBarButtonSelectedIcon: String?, rightBarButton: UIButton?, title: String?){
         navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight)
-        navBar.barStyle = .black
-        navBar.barTintColor = DisplayUtility.necterGray
+        navBar.barStyle = .default
+        //navBar.barTintColor = DisplayUtility.necterGray
+        
+        let displayUtility = DisplayUtility()
+        displayUtility.setBlurredView(view: view, viewToBlur: navBar)
         
         let maskPath = UIBezierPath(roundedRect: navBar.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10.0, height: 10.0))
         let navBarShape = CAShapeLayer()
@@ -86,9 +89,7 @@ class CustomNavigationBar {
         navBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 30)!, NSForegroundColorAttributeName: DisplayUtility.necterYellow]
         
         view.addSubview(navBar)
-
-        
-
+        view.bringSubview(toFront: navBar)
     }
     
     
