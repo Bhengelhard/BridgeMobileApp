@@ -62,21 +62,21 @@ class MissionControlView {
         
         //adding the filterButtons
         businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
-        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .disabled)
+        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .selected)
         businessButton.frame = CGRect(x: 0, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
         businessButton.center.y = missionControlFilters.center.y
         businessButton.center.x = missionControlFilters.center.x - 0.2*DisplayUtility.screenWidth
         businessButton.tag = 1
         
         loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
-        loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .disabled)
+        loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .selected)
         loveButton.frame = CGRect(x: 0, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
         loveButton.center.y = missionControlFilters.center.y
         loveButton.center.x = missionControlFilters.center.x
         loveButton.tag = 2
         
         friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
-        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .disabled)
+        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .selected)
         friendshipButton.frame = CGRect(x: 0, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1150*DisplayUtility.screenWidth)
         friendshipButton.center.y = missionControlFilters.center.y
         friendshipButton.center.x = missionControlFilters.center.x + 0.2*DisplayUtility.screenWidth
@@ -93,6 +93,30 @@ class MissionControlView {
     
     func showMissionControlPostStatus() {
         print("showMissionControlPostStatus")
+    }
+    
+    func toggleFilters(type: String, businessButton: UIButton, loveButton: UIButton, friendshipButton: UIButton, noMessagesLabel: UILabel) {
+            //updating which toolbar Button is selected and No Message Label Text
+        if (type == "Business" && !businessButton.isSelected) {
+            businessButton.isSelected = true
+            loveButton.isSelected = false
+            friendshipButton.isSelected = false
+            noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
+        } else if (type == "Love" && !loveButton.isSelected) {
+            loveButton.isSelected = true
+            businessButton.isSelected = false
+            friendshipButton.isSelected = false
+            noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
+        } else if (type == "Friendship" && !friendshipButton.isSelected) {
+            friendshipButton.isSelected = true
+            businessButton.isSelected = false
+            loveButton.isSelected = false
+            noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
+        } else {
+            businessButton.isSelected = false
+            loveButton.isSelected = false
+            friendshipButton.isSelected = false
+        }
     }
 
 }

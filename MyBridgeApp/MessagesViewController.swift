@@ -245,95 +245,37 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func displayMissionControlPostStatus(_ sender: UIButton) {
         missionControlView.showMissionControlPostStatus()
     }
-    
     func businessTapped(_ sender: UIButton) {
-        print("Business Tapped")
-        //updating which toolbar Button is selected
-        allTypesButton.isEnabled = true
-        businessButton.isEnabled = false
-        loveButton.isEnabled = true
-        friendshipButton.isEnabled = true
-        
-        //updating No Message Label Text
-        noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
-        
-        toolbarTapped = true
-        filteredPositions = [Int]()
-        noMessagesLabel.alpha = 1
-        for i in 0 ..< messageType.count{
-            if messageType[messagePositionToMessageIdMapping[i]!]! == "Business" {
-                filteredPositions.append(i)
-                noMessagesLabel.alpha = 0
-            }
-        }
-        self.tableView.reloadData()
-        
-        businessButton.removeTarget(self, action: #selector(businessTapped(_:)), for: .touchUpInside)
-        businessButton.addTarget(self, action: #selector(allBridgesTapped(_:)), for: .touchUpInside)
-    }
-    func friendshipTapped(_ sender: UIButton) {
-        allTypesButton.isEnabled = true
-        businessButton.isEnabled = true
-        loveButton.isEnabled = true
-        friendshipButton.isEnabled = false
-        
-        //updating No Message Label Text
-        noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
-        
-        toolbarTapped = true
-        filteredPositions = [Int]()
-        
-        //displaying noMessagesLabel when there are no messages in the filtered message type
-        noMessagesLabel.alpha = 1
-        for i in 0 ..< messageType.count{
-            if messageType[messagePositionToMessageIdMapping[i]!]! == "Friendship" {
-                filteredPositions.append(i)
-                noMessagesLabel.alpha = 0
-            }
-        }
-        self.tableView.reloadData()
+        filtersTapped(type: "Business")
     }
     func loveTapped(_ sender: UIButton) {
-        //updating which toolbar Button is selected
-        allTypesButton.isEnabled = true
-        businessButton.isEnabled = true
-        loveButton.isEnabled = false
-        friendshipButton.isEnabled = true
-        
-        //updating No Message Label Text
-        noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
-        
+        filtersTapped(type: "Love")
+    }
+    func friendshipTapped(_ sender: UIButton) {
+        filtersTapped(type: "Friendship")
+    }
+    func filtersTapped(type: String) {
         toolbarTapped = true
         filteredPositions = [Int]()
-        noMessagesLabel.alpha = 1
-        for i in 0 ..< messageType.count{
-            if messageType[messagePositionToMessageIdMapping[i]!]! == "Love" {
+        missionControlView.toggleFilters(type: type, businessButton: businessButton, loveButton: loveButton, friendshipButton: friendshipButton, noMessagesLabel: noMessagesLabel)
+        if (businessButton.isSelected || loveButton.isSelected || friendshipButton.isSelected) {
+            //displaying noMessagesLabel when there are no messages in the filtered message type
+            noMessagesLabel.alpha = 1
+            for i in 0 ..< messageType.count{
+                if messageType[messagePositionToMessageIdMapping[i]!]! == type {
+                    filteredPositions.append(i)
+                    noMessagesLabel.alpha = 0
+                }
+            }
+        } else {
+            noMessagesLabel.alpha = 1
+            for i in 0 ..< messageType.count{
                 filteredPositions.append(i)
                 noMessagesLabel.alpha = 0
             }
         }
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
-    
-    func allBridgesTapped(_ sender: UIButton) {
-        print("All bridges tapped")
-        //updating which toolbar Button is selected
-        allTypesButton.isEnabled = false
-        businessButton.isEnabled = true
-        loveButton.isEnabled = true
-        friendshipButton.isEnabled = true
-
-        toolbarTapped = true
-        filteredPositions = [Int]()
-        noMessagesLabel.alpha = 1
-        for i in 0 ..< messageType.count{
-            filteredPositions.append(i)
-            noMessagesLabel.alpha = 0
-        }
-        
-        self.tableView.reloadData()
-    }
-    
     
     
     /*func displayToolBar(){
@@ -368,14 +310,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
      businessButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
      businessButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
      businessButton.tag = 1
-     
-     businessLabel.text = "Business"
-     businessLabel.textColor = DisplayUtility.necterGray
-     businessLabel.font = UIFont(name: "BentonSans", size: 11)
-     businessLabel.textAlignment =  NSTextAlignment.center
-     businessLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-     businessLabel.center.x = businessButton.center.x
-     
+
      loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
      loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .disabled)
      loveButton.frame = CGRect(x: 0.65832*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
@@ -383,12 +318,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
      loveButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
      loveButton.tag = 2
      
-     loveLabel.text = "Love"
-     loveLabel.font = UIFont(name: "BentonSans", size: 11)
-     loveLabel.textColor = DisplayUtility.necterGray
-     loveLabel.textAlignment =  NSTextAlignment.center
-     loveLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-     loveLabel.center.x = loveButton.center.x
      
      friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
      friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .disabled)
@@ -396,13 +325,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
      friendshipButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
      friendshipButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
      friendshipButton.tag = 3
-     
-     friendshipLabel.text = "Friendship"
-     friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
-     friendshipLabel.textColor = DisplayUtility.necterGray
-     friendshipLabel.textAlignment =  NSTextAlignment.center
-     friendshipLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-     friendshipLabel.center.x = friendshipButton.center.x
      
      
      postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*DisplayUtility.screenWidth, height: 0.175*DisplayUtility.screenWidth)
@@ -419,17 +341,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
      postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
      postStatusButton.addTarget(self, action: #selector(postStatusTapped), for: .touchUpInside)
      
-     
-     view.addSubview(toolbar)
-     view.addSubview(allTypesButton)
-     view.addSubview(allTypesLabel)
-     view.addSubview(businessButton)
-     view.addSubview(businessLabel)
-     view.addSubview(loveButton)
-     view.addSubview(loveLabel)
-     view.addSubview(friendshipButton)
-     view.addSubview(friendshipLabel)
-     view.addSubview(postStatusButton)
      }
      func postStatusTapped(_ sender: UIButton ){
      print("Post Tapped")
