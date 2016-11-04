@@ -277,55 +277,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.reloadData()
     }
     
+    func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
+        missionControlView.drag(gestureRecognizer: gestureRecognizer)
+    }
     
     /*func displayToolBar(){
-     
-     toolbar.frame = CGRect(x: 0, y: 0.9*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
-     toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
-     
-     //creating buttons to be added to the toolbar and evenly spaced across
-     allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
-     allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), for: .disabled)
-     allTypesButton.frame = CGRect(x: 0.07083*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-     allTypesButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-     allTypesButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-     allTypesButton.tag = 0
-     
-     //coloring allTypesText three different colors
-     let allTypesText = "All Types" as NSString
-     let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-     allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
-     allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
-     allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
-     //setting allTypesText
-     allTypesLabel.attributedText = allTypesAttributedText
-     allTypesLabel.textAlignment =  NSTextAlignment.center
-     allTypesLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-     allTypesLabel.center.x = allTypesButton.center.x
-     
-     
-     businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
-     businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .disabled)
-     businessButton.frame = CGRect(x: 0.24166*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-     businessButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-     businessButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-     businessButton.tag = 1
-
-     loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
-     loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .disabled)
-     loveButton.frame = CGRect(x: 0.65832*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-     loveButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-     loveButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-     loveButton.tag = 2
-     
-     
-     friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
-     friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .disabled)
-     friendshipButton.frame = CGRect(x: 0.82915*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1150*DisplayUtility.screenWidth)
-     friendshipButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-     friendshipButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-     friendshipButton.tag = 3
-     
      
      postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*DisplayUtility.screenWidth, height: 0.175*DisplayUtility.screenWidth)
      postStatusButton.backgroundColor = DisplayUtility.necterYellow
@@ -470,6 +426,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //displayToolBar()
         displayMissionControlTab()
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
+        missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
         allTypesButton.isEnabled = false
 
     }

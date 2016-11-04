@@ -18,7 +18,7 @@ class MissionControlView {
     //let tabShadowView = UIView()
 
     func createMissionControlTab (view: UIView, missionControlTabButton: UIButton) {
-        missionControlTab.frame = CGRect(x:0, y: 0.95*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
+        missionControlTab.frame = CGRect(x:0, y: 0.95*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.051*DisplayUtility.screenHeight)
         missionControlTab.center.x = view.center.x
         missionControlTab.layer.borderWidth = 0
         
@@ -44,16 +44,20 @@ class MissionControlView {
         missionControlTabButton.setTitle("^", for: .normal)
         missionControlTab.addSubview(missionControlTabButton)
         
-        
+        missionControlFilters.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
+        view.addSubview(missionControlFilters)
+        displayUtility.setBlurredView(view: view, viewToBlur: missionControlFilters)
         
     }
     
     func showMissionControlFilters(view: UIView, businessButton: UIButton, loveButton: UIButton, friendshipButton: UIButton) {
         print("showMissionControlFilters")
-        missionControlTab.frame = CGRect(x: 0, y: 0.85*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.051*DisplayUtility.screenHeight)
-        missionControlTab.center.x = view.center.x
-        missionControlFilters.frame = CGRect(x: 0, y: 0.9*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
-        missionControlFilters.layer.borderWidth = 0
+        
+        UIView.animate(withDuration: 0.7, delay: 0.2, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+            self.missionControlTab.frame.origin.y = 0.85*DisplayUtility.screenHeight
+            self.missionControlFilters.frame.origin.y = 0.9*DisplayUtility.screenHeight
+        })
+        
         
         let maskPath = UIBezierPath(roundedRect: missionControlFilters.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 2.0, height: 2.0))
         let missionControlFiltersShape = CAShapeLayer()
@@ -81,9 +85,6 @@ class MissionControlView {
         friendshipButton.center.y = missionControlFilters.center.y
         friendshipButton.center.x = missionControlFilters.center.x + 0.2*DisplayUtility.screenWidth
         friendshipButton.tag = 3
-
-        view.addSubview(missionControlFilters)
-        displayUtility.setBlurredView(view: view, viewToBlur: missionControlFilters)
         
         view.addSubview(businessButton)
         view.addSubview(loveButton)
@@ -118,5 +119,34 @@ class MissionControlView {
             friendshipButton.isSelected = false
         }
     }
+    
+    func drag(gestureRecognizer: UIPanGestureRecognizer) {
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            let translation = gestureRecognizer.translation(in: missionControlTab)
+            gestureRecognizer.view?.center = CGPoint(x: (gestureRecognizer.view?.center.x)!, y: max(0.85*DisplayUtility.screenWidth,(gestureRecognizer.view?.center.y)! + translation.y))
+            gestureRecognizer.setTranslation(CGPoint.zero, in: missionControlTab)
+        } else if gestureRecognizer.state == .ended {
+            print(missionControlTab.frame.origin.y)
+            if missionControlTab.frame.origin.y > 0.93*DisplayUtility.screenHeight {
+                UIView.animate(withDuration: 0.4, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+                    self.missionControlTab.frame.origin.y = 0.95*DisplayUtility.screenHeight
+                    self.missionControlFilters.frame.origin.y = DisplayUtility.screenHeight
+                })
+            } else if missionControlTab.frame.origin.y > 0.75*DisplayUtility.screenHeight {
+                UIView.animate(withDuration: 0.4, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+                    self.missionControlTab.frame.origin.y = 0.85*DisplayUtility.screenHeight
+                    self.missionControlFilters.frame.origin.y = 0.9*DisplayUtility.screenHeight
+                })
+            } else {//if missionControlTab.frame.origin.y > 0.9*DisplayUtility.screenHeight {
+                UIView.animate(withDuration: 0.4, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
+                    self.missionControlTab.frame.origin.y = 0.55*DisplayUtility.screenHeight
+                })
+            }
+        }
+    }
 
+    func addGestureRecognizer(gestureRecognizer: UIPanGestureRecognizer) {
+        missionControlTab.addGestureRecognizer(gestureRecognizer)
+    }
+    
 }
