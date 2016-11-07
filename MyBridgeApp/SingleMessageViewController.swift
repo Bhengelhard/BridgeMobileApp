@@ -28,22 +28,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     //setting the height of the keyboard
     var keyboardHeight = CGFloat()
     
-    //screen dimensions
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    
     //getting information on which viewController the user was on prior to this one
     var seguedFrom = ""
     var messageId = String()
     var singleMessageTitle = "Conversation"
     var firstTableAppearance = true
-    
-    //necter Colors
-    let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
-    let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
-    let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
-    let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
-    let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
     
     //var messageTextArray = [String]()
     var newMessageId = String()
@@ -257,8 +246,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func displayToolbar() {
         //setting the text field
         messageText.delegate = self
-        messageText.frame.size = CGSize(width: 0.675*screenWidth, height: 35.5)
-        messageText.frame.origin.x = 0.025*screenWidth
+        messageText.frame.size = CGSize(width: 0.675*DisplayUtility.screenWidth, height: 35.5)
+        messageText.frame.origin.x = 0.025*DisplayUtility.screenWidth
         messageText.center.y = toolbar.center.y
         //messageText.placeholder = " Write Message"
         messageText.layer.borderWidth = 1
@@ -280,11 +269,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
         
         //setting the send button
-        sendButton.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0.2*screenWidth, height: 0.0605*screenHeight)
+        sendButton.frame = CGRect(x: 0.7*DisplayUtility.screenWidth, y: 0, width: 0.2*DisplayUtility.screenWidth, height: 0.0605*DisplayUtility.screenHeight)
         sendButton.center.y = toolbar.center.y
         sendButton.setTitle("Send", for: UIControlState())
-        sendButton.setTitleColor(necterYellow, for: UIControlState())
-        sendButton.setTitleColor(necterGray, for: .disabled)
+        sendButton.setTitleColor(DisplayUtility.necterYellow, for: UIControlState())
+        sendButton.setTitleColor(DisplayUtility.necterGray, for: .disabled)
         sendButton.titleLabel?.textAlignment = NSTextAlignment.right
         sendButton.titleLabel!.font = UIFont(name: "Verdana", size: 16)
         //sendButton.layer.borderWidth = 4
@@ -292,7 +281,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         sendButton.addTarget(self, action: #selector(sendTapped(_:)), for: .touchUpInside)
         let sendBarButton = UIBarButtonItem(customView: sendButton)
         
-        toolbar.frame = CGRect(x: 0, y: 0.925*screenHeight, width: screenWidth, height: 0.075*screenHeight)
+        toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
         
         toolbar.sizeToFit()
         //toolbar.translucent = false
@@ -313,7 +302,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             var messageTextNewFrame = messageText.frame
             messageTextNewFrame.size = CGSize(width: max(messageTextNewSize.width, messageTextFixedWidth), height: messageTextNewSize.height)
             
-            let toolbarFixedHeight = 0.89*screenHeight-keyboardHeight
+            let toolbarFixedHeight = 0.89*DisplayUtility.screenHeight-keyboardHeight
             
             
             if toolbarFixedHeight < messageTextNewFrame.size.height + 8.5 {
@@ -350,6 +339,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     //taking away the placeholder to begin editing the textView
     func textViewDidBeginEditing(_ textView: UITextView) {
+        print("begin editing is working")
         if messageText.textColor == UIColor.lightGray {
             messageText.text = nil
             messageText.textColor = UIColor.black
@@ -357,6 +347,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     //adding a placeholder when the user is not editing the textView
     func textViewDidEndEditing(_ textView: UITextView) {
+        ("end editing is working")
         if messageText.text.isEmpty {
             messageText.text = "Type a message..."
             messageText.textColor = UIColor.lightGray
@@ -368,8 +359,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func sendTapped(_ sender: UIBarButtonItem) {
         if messageText.text != "" {
             messageText.resignFirstResponder()
-            toolbar.frame = CGRect(x: 0, y: 0.925*screenHeight, width: screenWidth, height: 0.075*screenHeight)
-            messageText.frame = CGRect(x: 0.025*screenWidth, y: 0, width: 0.675*screenWidth, height: 35.5)
+            toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
+            messageText.frame = CGRect(x: 0.025*DisplayUtility.screenWidth, y: 0, width: 0.675*DisplayUtility.screenWidth, height: 35.5)
             messageText.isScrollEnabled = false
             sendButton.isEnabled = false
             sendMessageAndNotification()
@@ -548,7 +539,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
-        toolbar.frame = CGRect(x: 0, y: 0.925*screenHeight, width: screenWidth, height: 0.075*screenHeight)
+        toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
         performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
         leftBarButton.isSelected = true
     }
@@ -621,9 +612,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func keyboardWillHide(_ notification: Notification) {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            singleMessageTableView.frame.origin.y = 0.11*screenHeight
+            singleMessageTableView.frame.origin.y = 0.11*DisplayUtility.screenHeight
             if messageText.text.isEmpty {
-                toolbar.frame = CGRect(x: 0, y: 0.925*screenHeight, width: screenWidth, height: 0.075*screenHeight)
+                toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
                 messageText.frame.size.height = 35.5
             } else {
                 toolbar.frame.origin.y += keyboardHeight//keyboardSize.height
@@ -660,7 +651,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     func displayNoMessages() {
-        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.85*screenWidth,height: screenHeight * 0.2)
+        let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.85*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
         
         noMessagesLabel.frame = labelFrame
         noMessagesLabel.numberOfLines = 0
@@ -673,7 +664,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         noMessagesLabel.center.y = view.center.y
         noMessagesLabel.center.x = view.center.x
         noMessagesLabel.layer.borderWidth = 2
-        noMessagesLabel.layer.borderColor = necterGray.cgColor
+        noMessagesLabel.layer.borderColor = DisplayUtility.necterGray.cgColor
         noMessagesLabel.layer.cornerRadius = 15
         
         view.insertSubview(noMessagesLabel, belowSubview: toolbar)
@@ -696,7 +687,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         super.viewDidLoad()
         singleMessageTableView.delegate = self
         singleMessageTableView.dataSource = self
-        singleMessageTableView.frame = CGRect(x: 0, y: 0.11*screenHeight, width: screenWidth, height: 0.8*screenHeight)
+        singleMessageTableView.frame = CGRect(x: 0, y: 0.11*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.8*DisplayUtility.screenHeight)
         singleMessageTableView.separatorStyle = UITableViewCellSeparatorStyle.none
         singleMessageTableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
         view.addSubview(singleMessageTableView)

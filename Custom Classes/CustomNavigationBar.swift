@@ -19,17 +19,20 @@ class CustomNavigationBar {
     func createCustomNavigationBar (view: UIView, leftBarButtonIcon: String?, leftBarButtonSelectedIcon: String?, leftBarButton: UIButton?, rightBarButtonIcon: String?, rightBarButtonSelectedIcon: String?, rightBarButton: UIButton?, title: String?){
         navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight)
         navBar.barStyle = .default
+        navBar.isTranslucent = true
         //navBar.barTintColor = DisplayUtility.necterGray
         
         let displayUtility = DisplayUtility()
-        displayUtility.setBlurredView(view: view, viewToBlur: navBar)
+        //navBar = displayUtility.setBlurredView(viewToBlur: navBar as UIView) as! UINavigationBar
+        navBar.backgroundColor = UIColor.black
+        view.addSubview(navBar)
         
-        let maskPath = UIBezierPath(roundedRect: navBar.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10.0, height: 10.0))
+        /*let maskPath = UIBezierPath(roundedRect: navBar.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10.0, height: 10.0))
         let navBarShape = CAShapeLayer()
         navBarShape.path = maskPath.cgPath
-        navBar.layer.mask = navBarShape
+        navBar.layer.mask = navBarShape*/
         
-        let shadowView = UIView(frame: navBar.frame)
+        /*let shadowView = UIView(frame: navBar.frame)
         shadowView.backgroundColor = UIColor.lightGray
         shadowView.layer.masksToBounds = false
         shadowView.layer.shadowColor = UIColor.black.cgColor
@@ -37,7 +40,9 @@ class CustomNavigationBar {
         shadowView.layer.shadowOffset = CGSize(width: 0, height: 4)
         shadowView.layer.shadowRadius = 10
         shadowView.layer.shouldRasterize = true
-        view.addSubview(shadowView)
+        view.addSubview(shadowView)*/
+        
+        navBar.clipsToBounds = true
         
         if leftBarButtonIcon != nil {
             let leftBarButtonIconImage = UIImage(named: leftBarButtonIcon!)

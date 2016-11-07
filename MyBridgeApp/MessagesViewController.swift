@@ -32,20 +32,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let leftBarButton = UIButton()
     
     //creating Mission Control
-    let missionControlTabButton = UIButton()
+    let missionControlView = MissionControlView()
     
     //toolbar buttons
-    let toolbar = UIView()
-    let allTypesButton = UIButton()
-    let allTypesLabel = UILabel()
-    let businessButton = UIButton()
-    let businessLabel = UILabel()
-    let loveButton = UIButton()
-    let loveLabel = UILabel()
-    let friendshipButton = UIButton()
-    let friendshipLabel = UILabel()
     let postStatusButton = UIButton()
-    let missionControlView = MissionControlView()
     
     //message information
     let noMessagesLabel = UILabel()
@@ -228,37 +218,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
     }
-    func displayMissionControlTab(){
-        missionControlView.createMissionControlTab(view: view, missionControlTabButton: missionControlTabButton)
-        missionControlTabButton.addTarget(self, action: #selector(displayMissionControlFilters(_:)), for: .touchUpInside)
+    func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
+        missionControlView.drag(gestureRecognizer: gestureRecognizer)
     }
-    func displayMissionControlFilters(_ sender: UIButton) {
-        //display missionControl filters
-        missionControlView.showMissionControlFilters(view: view, businessButton: businessButton, loveButton: loveButton, friendshipButton: friendshipButton)
-        businessButton.addTarget(self, action: #selector(businessTapped(_:)), for: .touchUpInside)
-        loveButton.addTarget(self, action: #selector(loveTapped(_:)), for: .touchUpInside)
-        friendshipButton.addTarget(self, action: #selector(friendshipTapped(_:)), for: .touchUpInside)
-        
-        missionControlTabButton.removeTarget(self, action: #selector(displayMissionControlFilters(_:)), for: .touchUpInside)
-        missionControlTabButton.addTarget(self,action:#selector(displayMissionControlPostStatus(_:)), for: .touchUpInside)
-    }
-    func displayMissionControlPostStatus(_ sender: UIButton) {
-        missionControlView.showMissionControlPostStatus()
-    }
-    func businessTapped(_ sender: UIButton) {
-        filtersTapped(type: "Business")
-    }
-    func loveTapped(_ sender: UIButton) {
-        filtersTapped(type: "Love")
-    }
-    func friendshipTapped(_ sender: UIButton) {
-        filtersTapped(type: "Friendship")
-    }
-    func filtersTapped(type: String) {
+    func filtersTapped(_ notification: Notification) {
+        let type = missionControlView.whichFilter()
         toolbarTapped = true
         filteredPositions = [Int]()
-        missionControlView.toggleFilters(type: type, businessButton: businessButton, loveButton: loveButton, friendshipButton: friendshipButton, noMessagesLabel: noMessagesLabel)
-        if (businessButton.isSelected || loveButton.isSelected || friendshipButton.isSelected) {
+        if !(type == "All Types") {
             //displaying noMessagesLabel when there are no messages in the filtered message type
             noMessagesLabel.alpha = 1
             for i in 0 ..< messageType.count{
@@ -276,10 +243,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         tableView.reloadData()
     }
-    
-    func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
-        missionControlView.drag(gestureRecognizer: gestureRecognizer)
-    }
+
     
     /*func displayToolBar(){
      
@@ -318,16 +282,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         noMessagesLabel.numberOfLines = 0
         noMessagesLabel.alpha = 1
         
-        if businessButton.isEnabled == false {
-            noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
-            print("business enabled = false")
-        } else if loveButton.isEnabled == false {
-            noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
-            print("love enabled = false")
-        } else if friendshipButton.isEnabled == false {
-            noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
-        } else {
+        let type = missionControlView.whichFilter()
+        
+        if type == "All Types" {
             noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
+        } else {
+            noMessagesLabel.text = "You do not have any messages for \(type.lowercased()). Connect your friends for love to start a conversation."
         }
         
         noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
@@ -379,9 +339,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
-        displayNavigationBar()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
+        
+        displayNavigationBar()
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -425,17 +386,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorStyle = .none
         
         //displayToolBar()
-        displayMissionControlTab()
+        missionControlView.createTabView(view: view)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
-        allTypesButton.isEnabled = false
 
     }
     
     override func viewDidLayoutSubviews() {
         tableView.frame = CGRect(x: 0, y:0.11*DisplayUtility.screenHeight, width:DisplayUtility.screenWidth, height:0.89*DisplayUtility.screenHeight)
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         
     }
