@@ -14,16 +14,16 @@ class MissionControlView {
     let customKeyboard = CustomKeyboard()
     var currentView = UIView()
     
-    
     var tabView = UIView()
     let tabViewButton = UIButton()
     var filtersView = UIView()
+    let postBackgroundView = UIView()
     var blurOverViewController = UIView()
     
     let businessButton = UIButton()
     let loveButton = UIButton()
     let friendshipButton = UIButton()
-
+    
     func createTabView (view: UIView) {
         currentView = view
         tabView.frame = CGRect(x:0, y: 0.95*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.051*DisplayUtility.screenHeight)
@@ -35,7 +35,7 @@ class MissionControlView {
         tabViewShape.path = maskPath.cgPath
         tabView.layer.mask = tabViewShape
         
-        displayUtility.setBlurredView(view: currentView, viewToBlur: tabView)
+        displayUtility.setBlurredView(viewToBlur: tabView)
         view.addSubview(tabView)
         
         tabViewButton.addTarget(self, action: #selector(showFiltersView(_:)), for: .touchUpInside)
@@ -43,12 +43,9 @@ class MissionControlView {
         tabViewButton.setTitle("^", for: .normal)
         tabView.addSubview(tabViewButton)
         
-        print("createTabView")
-        
     }
     
     @objc func showFiltersView(_ sender: UIButton) {
-        print("showMissionControlFilters")
         businessButton.addTarget(self, action: #selector(businessTapped(_:)), for: .touchUpInside)
         loveButton.addTarget(self, action: #selector(loveTapped(_:)), for: .touchUpInside)
         friendshipButton.addTarget(self, action: #selector(friendshipTapped(_:)), for: .touchUpInside)
@@ -58,7 +55,7 @@ class MissionControlView {
         
         filtersView.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
         currentView.addSubview(filtersView)
-        displayUtility.setBlurredView(view: currentView, viewToBlur: filtersView)
+        displayUtility.setBlurredView(viewToBlur: filtersView)
         
         let maskPath = UIBezierPath(roundedRect: filtersView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 2.0, height: 2.0))
         let filtersViewShape = CAShapeLayer()
@@ -104,29 +101,52 @@ class MissionControlView {
     }
     
     @objc func showPostView(_ sender: UIButton) {
-        print("showMissionControlPostStatus")
         //creating this here with intention to move it over to CustomKeyboard so the keyboard, with text field and button can be reused
         //add screen over back
         //disable table and search bar
         //if user clicks on back screen, the mission control will close
         //if user clicks return, the mission control will close
         
+        
         blurOverViewController.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         blurOverViewController.alpha = 0
-        displayUtility.setBlurredView(view: currentView, viewToBlur: blurOverViewController)
+        displayUtility.setBlurredView(viewToBlur: blurOverViewController)
         //currentView.insertSubview(blurOverViewController, belowSubview: tabView)
         
         
         tabViewButton.removeTarget(self, action: #selector(showPostView(_:)), for: .touchUpInside)
         tabViewButton.addTarget(self,action:#selector(closeMissionControl(_:)), for: .touchUpInside)
         
+        postBackgroundView.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenHeight)
+        postBackgroundView.backgroundColor = UIColor.black
+        let maskPath = UIBezierPath(roundedRect: postBackgroundView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5.0, height: 5.0))
+        let postViewShape = CAShapeLayer()
+        postViewShape.path = maskPath.cgPath
+        postBackgroundView.layer.mask = postViewShape
+        currentView.addSubview(postBackgroundView)
+        
+        //setting the label to inform the user to choose a type
+        let selectTypeLabel = UILabel()
+        selectTypeLabel.text = "^ CHOOSE CATEGORY FROM ABOVE ^"
+        selectTypeLabel.textColor = UIColor.white
+        selectTypeLabel.font =  UIFont(name: "BentonSans-light", size: 18)
+        selectTypeLabel.frame.size = CGSize(width: 0.9*postBackgroundView.frame.width, height: 0.2*postBackgroundView.frame.height)
+        selectTypeLabel.frame.origin.x = 0.05*DisplayUtility.screenWidth
+        selectTypeLabel.numberOfLines = 3
+        selectTypeLabel.textAlignment = NSTextAlignment.center
+        postBackgroundView.addSubview(selectTypeLabel)
         
         //add custom keyboard
         customKeyboard.display(view: currentView)
+        let type = whichFilter()
+        customKeyboard.updatePostType(updatedPostType: type)
+        let customKeyboardHeight = customKeyboard.height()
+        postBackgroundView.frame.size.height = customKeyboardHeight
         
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
-            self.tabView.frame.origin.y = 0.45*DisplayUtility.screenHeight
-            self.filtersView.frame.origin.y = 0.5*DisplayUtility.screenHeight
+            self.postBackgroundView.frame.origin.y = DisplayUtility.screenHeight - customKeyboardHeight
+            self.filtersView.frame.origin.y = self.postBackgroundView.frame.origin.y - self.filtersView.frame.height
+            self.tabView.frame.origin.y = self.filtersView.frame.origin.y - self.tabView.frame.height
             self.blurOverViewController.alpha = 1.0
         })
     }
@@ -136,6 +156,7 @@ class MissionControlView {
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
             self.tabView.frame.origin.y = 0.95*DisplayUtility.screenHeight
             self.filtersView.frame.origin.y = DisplayUtility.screenHeight
+            self.postBackgroundView.frame.origin.y = DisplayUtility.screenHeight
         })
         
         blurOverViewController.removeFromSuperview()
@@ -143,7 +164,7 @@ class MissionControlView {
         tabViewButton.removeTarget(self, action: #selector(closeMissionControl(_:)), for: .touchUpInside)
         tabViewButton.addTarget(self,action:#selector(showFiltersView(_:)), for: .touchUpInside)
     }
-
+    
     @objc func businessTapped(_ sender: UIButton) {
         toggleFilters(type: "Business")
         //messagesViewController.filtersTapped(type: "Business", businessButton: businessButton, loveButton: loveButton, friendshipButton: friendshipButton)
@@ -158,29 +179,32 @@ class MissionControlView {
     }
     
     func toggleFilters(type: String) {
-            //updating which toolbar Button is selected
+        //updating which toolbar Button is selected
         if (type == "Business" && !businessButton.isSelected) {
             businessButton.isSelected = true
             loveButton.isSelected = false
             friendshipButton.isSelected = false
+            customKeyboard.updatePostType(updatedPostType: "Business")
         } else if (type == "Love" && !loveButton.isSelected) {
             loveButton.isSelected = true
             businessButton.isSelected = false
             friendshipButton.isSelected = false
+            customKeyboard.updatePostType(updatedPostType: "Love")
         } else if (type == "Friendship" && !friendshipButton.isSelected) {
             friendshipButton.isSelected = true
             businessButton.isSelected = false
             loveButton.isSelected = false
+            customKeyboard.updatePostType(updatedPostType: "Friendship")
         } else {
             businessButton.isSelected = false
             loveButton.isSelected = false
             friendshipButton.isSelected = false
+            customKeyboard.updatePostType(updatedPostType: "All Types")
         }
         
-        if tabView.frame.origin.y > 0.95*DisplayUtility.screenHeight {
+        if tabView.frame.origin.y > 0.75*DisplayUtility.screenHeight {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
         }
-        
     }
     
     func drag(gestureRecognizer: UIPanGestureRecognizer) {
@@ -189,7 +213,6 @@ class MissionControlView {
             gestureRecognizer.view?.center = CGPoint(x: (gestureRecognizer.view?.center.x)!, y: max(0.85*DisplayUtility.screenWidth,(gestureRecognizer.view?.center.y)! + translation.y))
             gestureRecognizer.setTranslation(CGPoint.zero, in: tabView)
         } else if gestureRecognizer.state == .ended {
-            print(tabView.frame.origin.y)
             if tabView.frame.origin.y > 0.93*DisplayUtility.screenHeight {
                 UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
                     self.tabView.frame.origin.y = 0.95*DisplayUtility.screenHeight
@@ -207,7 +230,7 @@ class MissionControlView {
             }
         }
     }
-
+    
     func addGestureRecognizer(gestureRecognizer: UIPanGestureRecognizer) {
         tabView.addGestureRecognizer(gestureRecognizer)
     }

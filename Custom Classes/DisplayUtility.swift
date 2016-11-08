@@ -62,7 +62,7 @@ class DisplayUtility {
     
     
     //setting a view to be blurred
-    func setBlurredView (view: UIView, viewToBlur: UIView) {
+    func setBlurredView (viewToBlur: UIView) {
         if !UIAccessibilityIsReduceTransparencyEnabled() {
             viewToBlur.backgroundColor = UIColor.clear
             let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)

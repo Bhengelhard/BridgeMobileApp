@@ -67,7 +67,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     var singleMessageTitle = "Conversation"
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         if segueToSingleMessage {
             //print(" prepareForSegue was Called")
             segueToSingleMessage = false
@@ -161,10 +161,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     }
                     self.names[result.objectId!] = (names_per_message)                }
             }
-           self.tableView.reloadData()
+            self.tableView.reloadData()
         })
     }
-       // helper function for updateSearchResultsForSearchController
+    // helper function for updateSearchResultsForSearchController
     func filterContentForSearchText(_ searchText:String, scope: String = "All"){
         filteredPositions = [Int]()
         for i in 0 ..< names.count  {
@@ -189,25 +189,25 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         filterContentForSearchText(searchController.searchBar.text!)
     }
     func reloadMessageTable(_ notification: Notification) {
-         print("Listened at reloadMessageTable" )
-         names = [String : [String]]()
-         messages = [String : String]()
-         messageType = [String : String]()
-         messageViewed = [String : Bool]()
-         messageTimestamps = [String : Date?]()
-         messagePositionToMessageIdMapping = [Int:String]()
+        print("Listened at reloadMessageTable" )
+        names = [String : [String]]()
+        messages = [String : String]()
+        messageType = [String : String]()
+        messageViewed = [String : Bool]()
+        messageTimestamps = [String : Date?]()
+        messagePositionToMessageIdMapping = [Int:String]()
         
-         filteredPositions = [Int]()
-         toolbarTapped = false
-         encounteredBefore = [:]
-         noOfElementsProcessed = 0
-         noOfElementsFetched = 0
-         let query: PFQuery = PFQuery(className: "Messages")
-         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
-         query.order(byDescending: "lastSingleMessageAt")
-         query.limit = 1000
-         query.cachePolicy = .networkElseCache
-         query.countObjectsInBackground{
+        filteredPositions = [Int]()
+        toolbarTapped = false
+        encounteredBefore = [:]
+        noOfElementsProcessed = 0
+        noOfElementsFetched = 0
+        let query: PFQuery = PFQuery(className: "Messages")
+        query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
+        query.order(byDescending: "lastSingleMessageAt")
+        query.limit = 1000
+        query.cachePolicy = .networkElseCache
+        query.countObjectsInBackground{
             (count: Int32, error: Error?) in
             if error == nil {
                 self.totalElements = Int(count)
@@ -243,7 +243,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         tableView.reloadData()
     }
-
+    
     
     /*func displayToolBar(){
      
@@ -322,7 +322,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         UIView.animate(withDuration: 0.7, animations: {
             botNotificationView.frame.origin.y = 0
-        }) 
+        })
         
         let _ = CustomTimer(interval: 4) {i -> Bool in
             UIView.animate(withDuration: 0.7, animations: {
@@ -335,12 +335,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         NotificationCenter.default.removeObserver(self)
         
     }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
+        
+        //view.addSubview(tableView)
         
         displayNavigationBar()
         
@@ -371,9 +373,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 print(" not alive")
             }
         }
-       
-        tableView.delegate = self
-        tableView.dataSource = self
+        
         searchController.searchResultsUpdater = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
@@ -389,7 +389,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         missionControlView.createTabView(view: view)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
-
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -410,7 +410,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 refresh()
                 pagingSpinner.startAnimating()
             }
-
+            
         }
         else {
             self.pagingSpinner.stopAnimating()
@@ -429,21 +429,21 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         return messages.count
         
     }
-
+    
     // Data to be shown on an individual row
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         let cell = MessagesTableCell()
         cell.setSeparator = true
-
+        
         cell.cellHeight = DisplayUtility.screenHeight/6.0
         cell.cellHeight = 0.15 * DisplayUtility.screenHeight
         if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
             var i = 0
             messagePositionToMessageIdMapping = [Int:String]()
             for index in filteredPositions {
-                 messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
-                 i += 1
+                messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
+                i += 1
             }
         }
         if messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row] == nil || names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil{
@@ -453,7 +453,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.backgroundColor = UIColor.white
             return cell
         }
-
+        
         var stringOfNames = ""
         var users = names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
         users = users.filter { $0 != PFUser.current()?["name"] as! String }
@@ -474,7 +474,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     name = name.characters.split{$0 == " "}.map(String.init)[0]
                 }
                 stringOfNames = stringOfNames + name
-                }
+            }
         }
         
         cell.participants.text = stringOfNames
@@ -503,7 +503,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.arrow.textColor = DisplayUtility.friendshipGreen
             break
         default: cell.participants.textColor = DisplayUtility.friendshipGreen
-            cell.arrow.textColor = DisplayUtility.friendshipGreen
+        cell.arrow.textColor = DisplayUtility.friendshipGreen
             
         }
         let dateFormatter = DateFormatter()
@@ -511,7 +511,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         let calendar = Calendar.current
         let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
         let components = (calendar as NSCalendar).components([ .day],
-                                             from: date, to: Date(), options: NSCalendar.Options.wrapComponents)
+                                                             from: date, to: Date(), options: NSCalendar.Options.wrapComponents)
         if components.day! > 7 {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyy"
@@ -521,7 +521,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             let calendar = Calendar.current
             let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
             let components = (calendar as NSCalendar).components([.weekday],
-                                                 from: date)
+                                                                 from: date)
             cell.messageTimestamp.text = String(getWeekDay(components.weekday!))
         }
         else if components.day! >= 1 {
@@ -536,15 +536,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             toolbarTapped = false
         }
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
-                return cell
-
+        return cell
+        
         
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return DisplayUtility.screenHeight/6.0
     }
     // A row is selected
-     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let currentCell = tableView.cellForRow(at: indexPath)! as! MessagesTableCell
         var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
         if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
@@ -555,7 +555,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 i += 1
             }
         }
-
+        
         if (currentCell.participants?.text)! != "" {
             singleMessageTitle = (currentCell.participants?.text)!
         } else {
@@ -601,8 +601,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         segueToSingleMessage = true
         performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
-    
+        
         
     }
-
+    
 }

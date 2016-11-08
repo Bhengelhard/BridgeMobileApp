@@ -10,29 +10,43 @@ import UIKit
 
 class CustomKeyboard: NSObject, UITextViewDelegate {
     
-    var postView = UIView()
-    let messageView = UITextView()
+    var messageView = UIView()
+    let messageTextView = UITextView()
     let messageButton = UIButton()
+    var type = String()
+    
+    var updatedText = String()
     
     //setting the height of the keyboard
     var keyboardHeight = CGFloat()
     
     func display (view: UIView){
-        postView.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenHeight)
-        postView.backgroundColor = UIColor.black
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        let maskPath = UIBezierPath(roundedRect: postView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5.0, height: 5.0))
-        let postViewShape = CAShapeLayer()
-        postViewShape.path = maskPath.cgPath
-        postView.layer.mask = postViewShape
+        messageView.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
+        let displayUtility = DisplayUtility()
+        displayUtility.setBlurredView(viewToBlur: messageView)
+        view.addSubview(messageView)
         
-        view.addSubview(postView)
+        //setting the textView for writing messages
+        messageTextView.delegate = self
+        messageTextView.frame = CGRect(x: 0.05*messageView.frame.width, y: 0.1*messageView.frame.height, width: 0.65*messageView.frame.width, height: 0.8*messageView.frame.height)
+        messageTextView.layer.borderWidth = 2
+        messageTextView.layer.borderColor = UIColor.white.cgColor
+        messageTextView.layer.cornerRadius = 5
+        messageTextView.textColor = UIColor.lightGray
+        messageTextView.font = UIFont(name: "BentonSans-light", size: 18)
+        messageTextView.backgroundColor = DisplayUtility.necterGray
+        messageTextView.text = "I am looking for..."
+        messageTextView.keyboardAppearance = UIKeyboardAppearance.alert
+        messageTextView.autocorrectionType = UITextAutocorrectionType.no
+        messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
+        messageTextView.becomeFirstResponder()
+        messageView.addSubview(messageTextView)
         
-        //adding the post status text field and the post button
-
-        
-        //setting the send button
-        messageButton.frame = CGRect(x: 0.75*postView.frame.width, y: 0.05*postView.frame.height, width: 0.2*DisplayUtility.screenWidth, height: 0.0605*DisplayUtility.screenHeight)
+        //setting the button for sending/posting messages
+        messageButton.frame = CGRect(x: 0.75*messageView.frame.width, y: 0.1*messageView.frame.height, width: 0.2*DisplayUtility.screenWidth, height: 0.8*messageView.frame.height)
         messageButton.setTitle("Post", for: .normal)
         messageButton.setTitleColor(DisplayUtility.necterYellow, for: .normal)
         messageButton.setTitleColor(DisplayUtility.necterGray, for: .disabled)
@@ -43,125 +57,90 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageButton.layer.cornerRadius = 5
         messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
         messageButton.isEnabled = false
-        
-        postView.addSubview(messageButton)
-        
-        messageView.delegate = self
-        messageView.frame = CGRect(x: 0.05*postView.frame.width, y: 0.05*postView.frame.height, width: 0.65*DisplayUtility.screenWidth, height: 0.0605*DisplayUtility.screenHeight)
-        messageView.layer.borderWidth = 2
-        messageView.layer.borderColor = UIColor.white.cgColor
-        messageView.layer.cornerRadius = 5
-        messageView.textColor = UIColor.lightGray
-        messageView.text = "I am looking for..."
-        messageView.backgroundColor = DisplayUtility.necterGray
-        //messageView.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.editingChanged)
-    
-        messageView.keyboardAppearance = UIKeyboardAppearance.alert
-        messageView.autocorrectionType = UITextAutocorrectionType.no
-        messageView.becomeFirstResponder()
-        
-        postView.addSubview(messageView)
-        
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
-            self.postView.frame.origin.y = 0.6*DisplayUtility.screenHeight
-        })
-        
+        messageView.addSubview(messageButton)
     }
     
     func resign() {
-        messageView.resignFirstResponder()
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
-            self.postView.frame.origin.y = DisplayUtility.screenHeight
-        })
-        postView.removeFromSuperview()
-        
+        messageTextView.resignFirstResponder()
+        messageView.frame.origin.y = 0.9*DisplayUtility.screenHeight
+        messageView.removeFromSuperview()
+    }
+    
+    func updatePostType(updatedPostType: String){
+        type = updatedPostType
+            //setting the placeholder based on whether an option is selected
+            if type != "All Types" {
+                messageTextView.isUserInteractionEnabled = true
+                if !messageTextView.isFirstResponder {
+                    messageTextView.becomeFirstResponder()
+                }
+                    //setting the placeholder
+                if messageTextView.textColor == UIColor.white && !updatedText.isEmpty {
+                    messageButton.isEnabled = true
+                }
+            } else {
+                //no filter is selected
+                messageTextView.isUserInteractionEnabled = false
+                if messageTextView.isFirstResponder {
+                    messageTextView.resignFirstResponder()
+                }
+                messageButton.isEnabled = false
+        }
+    }
+    
+    func height() -> CGFloat {
+        return keyboardHeight + messageView.frame.height
     }
     
     @objc func messageButtonTapped(_ sender: UIButton) {
         print("postTapped")
     }
     
-    
-    
-    
-    func textViewDidChange(_ textView: UITextView) {
-        print("TextViewDidChange")
-        /*if messageView.text != "" {
-            messageButton.isEnabled = true
-            
-            //changing the height of the messageText based on the content
-            let messageTextFixedWidth = messageView.frame.size.width
-            let messageTextNewSize = messageView.sizeThatFits(CGSize(width: messageTextFixedWidth, height: CGFloat.greatestFiniteMagnitude))
-            var messageTextNewFrame = messageView.frame
-            messageTextNewFrame.size = CGSize(width: max(messageTextNewSize.width, messageTextFixedWidth), height: messageTextNewSize.height)
-            
-            let toolbarFixedHeight = 0.89*DisplayUtility.screenHeight-keyboardHeight
-            
-            
-            if toolbarFixedHeight < messageTextNewFrame.size.height + 8.5 {
-                
-                print("reached the navBar")
-                messageView.isScrollEnabled = true
-                //messageText.frame.size.height = previousMessageHeight
-                //toolbar.frame.size.height = previousToolbarHeight
-            } else {
-                
-                messageView.frame = messageTextNewFrame
-                
-                /*//changing the height of the toolbar based on the content
-                let previousToolbarHeight = toolbar.frame.height
-                let newToolbarHeight = messageTextNewFrame.size.height + 8.5
-                let changeInToolbarHeight = newToolbarHeight - previousToolbarHeight
-                let toolbarFixedWidth = toolbar.frame.size.width
-                
-                //toolbar.sizeThatFits(CGSize(width: toolbarFixedWidth, height: toolbarFixedHeight))
-                let toolbarNewSize = toolbar.sizeThatFits(CGSize(width: toolbarFixedWidth, height: toolbarFixedHeight))
-                var toolbarNewFrame = toolbar.frame
-                toolbarNewFrame.size = CGSize(width: max(toolbarNewSize.width, toolbarFixedWidth), height: min(messageTextNewFrame.size.height + 8.5, toolbarFixedHeight))
-                toolbarNewFrame.origin.y = toolbar.frame.origin.y - changeInToolbarHeight
-                //if the toolbar has grown to the size where it is just below the navigation bar then enable the textView to scroll
-                toolbar.frame = toolbarNewFrame*/
-            }
-            
-            
-        } else {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        //Combine the textView text and the replacement text to create the updated text string
+        let currentText:NSString = textView.text as NSString
+        updatedText = currentText.replacingCharacters(in: range, with: text)
+        
+        //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
+        if updatedText.isEmpty {
+            //setting the placeholder
+            messageTextView.text = "I am looking for..."
+            textView.textColor = UIColor.lightGray
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             messageButton.isEnabled = false
-        }*/
+            return false
+        }
+            // else if the text view's placeholder is showing and the length of the replacement string is greater than 0, clear the text veiw and set the color to white to prepare for entry
+        else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+            textView.text = nil
+            textView.textColor = UIColor.white
+            messageButton.isEnabled = true
+        }
+        return true
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if messageView.window != nil {
+            if textView.textColor == UIColor.lightGray {
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            }
+        }
         
-        
     }
     
-    //taking away the placeholder to begin editing the textView
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        print("textViewDidBeginEditing")
-        /*if messageView.textColor == UIColor.lightGray {
-            messageView.text = nil
-            messageView.textColor = UIColor.white
-        }*/
-    }
-    //adding a placeholder when the user is not editing the textView
-    func textViewDidEndEditing(_ textView: UITextView) {
-        print("textViewDidEndEditing")
-        /*if messageView.text.isEmpty {
-            messageView.text = "Type a message..."
-            messageView.textColor = UIColor.lightGray
-        }*/
-    }
-    
-
-    
-    func keyboardWillShow(notification: Notification) {
+    func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
-            print("keyboardWillShow")
+            messageView.frame.origin.y = DisplayUtility.screenHeight - keyboardHeight - messageView.frame.height
+            print("keyboard will show")
         }
         
     }
-    func keyboardWillHide(notification: Notification) {
+    func keyboardWillHide(_ notification: Notification) {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            print("keyboardWillHide")
+            messageView.frame.origin.y = DisplayUtility.screenHeight - messageView.frame.height
+            print("keyboard will hide")
         }
     }
-    
     
 }
