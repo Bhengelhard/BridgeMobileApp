@@ -35,6 +35,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let missionControlView = MissionControlView()
     
     //toolbar buttons
+    //toolbar buttons
+    let toolbar = UIView()
+    let allTypesButton = UIButton()
+    let allTypesLabel = UILabel()
+    let businessButton = UIButton()
+    let businessLabel = UILabel()
+    let loveButton = UIButton()
+    let loveLabel = UILabel()
+    let friendshipButton = UIButton()
+    let friendshipLabel = UILabel()
     let postStatusButton = UIButton()
     
     //message information
