@@ -14,7 +14,7 @@ class CustomSearchBar: UISearchBar {
     
     class func customizeSearchController(searchController: UISearchController) {
         
-        // Modify Search Controller
+        //Modify Search Controller
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
         
@@ -29,7 +29,7 @@ class CustomSearchBar: UISearchBar {
         searchBar.layer.mask = searchBarShape
         searchBar.sizeToFit()
         
-        // Modify Text Field
+        //Modify Text Field
         let textFieldIdx = indexOfSearchFieldInSubviews(searchBarView: searchBar.subviews[0])
         let textField = searchBar.subviews[0].subviews[textFieldIdx] as! UITextField
         textField.backgroundColor = UIColor.clear
