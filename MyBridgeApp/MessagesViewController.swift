@@ -292,21 +292,45 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         noMessagesLabel.numberOfLines = 0
         noMessagesLabel.alpha = 1
         
-        let type = missionControlView.whichFilter()
-        
-        if type == "All Types" {
-            noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
+        if businessButton.isEnabled && loveButton.isEnabled && friendshipButton.isEnabled {
+            noMessagesLabel.text = "No active connections."
+        } else if businessButton.isEnabled && loveButton.isEnabled {
+            noMessagesLabel.text = "No active connections for business or dating."
+        } else if businessButton.isEnabled && friendshipButton.isEnabled {
+            noMessagesLabel.text = "No active connections for business or friendship."
+        } else if friendshipButton.isEnabled && loveButton.isEnabled {
+            noMessagesLabel.text = "No active connections for friendship or dating."
+        }else if businessButton.isEnabled == false {
+            //noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
+            noMessagesLabel.text = "No active connections for business."
+            print("business enabled = false")
+        } else if loveButton.isEnabled == false {
+            //noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
+            noMessagesLabel.text = "No active connections for love."
+            print("love enabled = false")
+        } else if friendshipButton.isEnabled == false {
+            noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
+            noMessagesLabel.text = "No active connections for friendship."
         } else {
-            noMessagesLabel.text = "You do not have any messages for \(type.lowercased()). Connect your friends for love to start a conversation."
+            noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
         }
         
-        noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
-        noMessagesLabel.textAlignment = NSTextAlignment.center
-        noMessagesLabel.center.y = view.center.y
+        noMessagesLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 16)
+        noMessagesLabel.textAlignment = .center
         noMessagesLabel.center.x = view.center.x
-        noMessagesLabel.layer.borderWidth = 2
-        noMessagesLabel.layer.borderColor = DisplayUtility.necterGray.cgColor
-        noMessagesLabel.layer.cornerRadius = 15
+        noMessagesLabel.center.y = view.center.y
+        noMessagesLabel.textColor = .red
+        
+        
+        /*
+         noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
+         noMessagesLabel.textAlignment = NSTextAlignment.center
+         noMessagesLabel.center.y = view.center.y
+         noMessagesLabel.center.x = view.center.x
+         noMessagesLabel.layer.borderWidth = 2
+         noMessagesLabel.layer.borderColor = DisplayUtility.necterGray.cgColor
+         noMessagesLabel.layer.cornerRadius = 15
+         */
         
         view.addSubview(noMessagesLabel)
     }
