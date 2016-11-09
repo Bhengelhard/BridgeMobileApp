@@ -408,10 +408,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
+        tableView.delegate = self
+        tableView.dataSource = self
+        CustomSearchBar.customizeSearchController(searchController: searchController)
         searchController.searchResultsUpdater = self
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.sizeToFit()
         self.tableView.tableHeaderView = searchController.searchBar
         pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         pagingSpinner.color = UIColor.darkGray
