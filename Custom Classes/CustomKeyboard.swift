@@ -77,9 +77,9 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             //setting the placeholder based on whether an option is selected
             if type != "All Types" {
                 messageTextView.isUserInteractionEnabled = true
-                if !messageTextView.isFirstResponder {
-                    messageTextView.becomeFirstResponder()
-                }
+                //if !messageTextView.isFirstResponder {
+                //    messageTextView.becomeFirstResponder()
+                //}
                     //setting the placeholder
                 if messageTextView.textColor == UIColor.white && !updatedText.isEmpty {
                     messageButton.isEnabled = true
@@ -87,9 +87,9 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             } else {
                 //no filter is selected
                 messageTextView.isUserInteractionEnabled = false
-                if messageTextView.isFirstResponder {
-                    messageTextView.resignFirstResponder()
-                }
+                //if messageTextView.isFirstResponder {
+                 //   messageTextView.resignFirstResponder()
+                //}
                 messageButton.isEnabled = false
         }
     }
