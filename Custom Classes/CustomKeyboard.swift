@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class CustomKeyboard: NSObject, UITextViewDelegate {
     
@@ -45,8 +46,13 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageTextView.becomeFirstResponder()
         messageView.addSubview(messageTextView)
         
+        //This changes the size of the messageTextView and message view (and below the messageButton) to the size needed to fit the placeholder text.
+        updateMessageHeights()
+        
         //setting the button for sending/posting messages
-        messageButton.frame = CGRect(x: 0.75*messageView.frame.width, y: 0.1*messageView.frame.height, width: 0.2*DisplayUtility.screenWidth, height: 0.8*messageView.frame.height)
+        messageButton.frame = CGRect(x: 0.75*messageView.frame.width, y: 0.1*messageView.frame.height, width: 0.2*messageView.frame.width, height: 0.8*messageView.frame.height)
+        messageButton.frame.size.height = messageTextView.frame.height
+        messageButton.frame.origin.y = messageTextView.frame.origin.y
         messageButton.setTitle("Post", for: .normal)
         messageButton.setTitleColor(DisplayUtility.necterYellow, for: .normal)
         messageButton.setTitleColor(DisplayUtility.necterGray, for: .disabled)
@@ -94,6 +100,43 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     
     @objc func messageButtonTapped(_ sender: UIButton) {
         print("postTapped")
+        sendPost()
+    }
+    
+    func sendPost () {
+        //setting the status to local data
+        let localData = LocalData()
+        if type == "Business" {
+            localData.setBusinessStatus(self.messageTextView.text!)
+            localData.synchronize()
+        } else if type == "Love" {
+            localData.setLoveStatus(self.messageTextView.text!)
+            localData.synchronize()
+        } else if type == "Friendship" {
+            localData.setFriendshipStatus(self.messageTextView.text!)
+            localData.synchronize()
+        }
+        
+        //saving the status to the database
+        let bridgeStatusObject = PFObject(className: "BridgeStatus")
+        bridgeStatusObject["bridge_status"] = self.messageTextView.text!
+        bridgeStatusObject["bridge_type"] = self.type
+        bridgeStatusObject["userId"] = PFUser.current()?.objectId
+        bridgeStatusObject.saveInBackground { (success, error) in
+            
+            
+            if error != nil {
+                //sends notification to call displayMessageFromBot function
+                let userInfo = ["message" : "Your post did not go through. Please wait a minute and try posting again"]
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "displayMessageFromBot"), object: nil, userInfo: userInfo)
+            } else if success {
+                //sends notification to call displayMessageFromBot function
+                let userInfo = ["message" : "Your post is now being shown to friends so they can connect you!"]
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "displayMessageFromBot"), object: nil, userInfo: userInfo)
+            }
+        }
+        let pfCloudFunctions = PFCloudFunctions()
+        pfCloudFunctions.changeBridgePairingsOnStatusUpdate(parameters: ["status":self.messageTextView.text!, "bridgeType":self.type])
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -125,7 +168,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             }
         }
-        
     }
     
     func keyboardWillShow(_ notification: Notification) {
@@ -141,6 +183,66 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             messageView.frame.origin.y = DisplayUtility.screenHeight - messageView.frame.height
             print("keyboard will hide")
         }
+    }
+    
+    //Changing the height of the messageTextView and messageView based on the content.
+    func textViewDidChange(_ textView: UITextView) {
+        updateMessageHeights()
+        //need to retrieve the chracter limit from the page the user is on, if there is one and pass it through as a parameter for the characterLimit function
+        characterLimit()
+    }
+    
+    func characterLimit() {
+        //need to retrieve the chracter limit from the page the user is on, if there is on.
+        
+        //stopping user from entering bridge status with more than a certain number of characters
+        if let characterCount = messageTextView.text?.characters.count {
+            if characterCount > 100 {
+                let aboveMaxBy = characterCount - 100
+                let index1 = messageTextView.text!.characters.index(messageTextView.text!.endIndex, offsetBy: -aboveMaxBy)
+                messageTextView.text = messageTextView.text!.substring(to: index1)
+            }
+        }
+    }
+    
+    func updateMessageHeights() {
+        if messageTextView.text != "" {
+            
+            //changing the height of the messageText based on the content
+            let messageTextFixedWidth = messageTextView.frame.size.width
+            let messageTextNewSize = messageTextView.sizeThatFits(CGSize(width: messageTextFixedWidth, height: CGFloat.greatestFiniteMagnitude))
+            var messageTextNewFrame = messageTextView.frame
+            messageTextNewFrame.size = CGSize(width: max(messageTextNewSize.width, messageTextFixedWidth), height: messageTextNewSize.height)
+            
+            let messageViewFixedHeight = 0.89*DisplayUtility.screenHeight-keyboardHeight
+            
+            
+            if messageViewFixedHeight < messageTextNewFrame.size.height + 8.5 {
+                
+                print("reached the navBar")
+                messageTextView.isScrollEnabled = true
+                //messageText.frame.size.height = previousMessageHeight
+                //toolbar.frame.size.height = previousToolbarHeight
+            } else {
+                
+                messageTextView.frame = messageTextNewFrame
+                
+                //changing the height of the messageView based on the content
+                let previousMessageViewHeight = messageView.frame.height
+                let newMessageViewHeight = messageTextNewFrame.size.height + 8.5
+                let changeInMessageViewHeight = newMessageViewHeight - previousMessageViewHeight
+                let messageViewFixedWidth = messageView.frame.size.width
+                
+                //toolbar.sizeThatFits(CGSize(width: toolbarFixedWidth, height: toolbarFixedHeight))
+                let messageViewNewSize = messageView.sizeThatFits(CGSize(width: messageViewFixedWidth, height: messageViewFixedHeight))
+                var messageViewNewFrame = messageView.frame
+                messageViewNewFrame.size = CGSize(width: max(messageViewNewSize.width, messageViewFixedWidth), height: min(messageTextNewFrame.size.height + 8.5, messageViewFixedHeight))
+                messageViewNewFrame.origin.y = messageView.frame.origin.y - changeInMessageViewHeight
+                //if the toolbar has grown to the size where it is just below the navigation bar then enable the textView to scroll
+                messageView.frame = messageViewNewFrame
+            }
+        }
+
     }
     
 }

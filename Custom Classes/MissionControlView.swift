@@ -18,7 +18,7 @@ class MissionControlView {
     let tabViewButton = UIButton()
     var filtersView = UIView()
     let postBackgroundView = UIView()
-    var blurOverViewController = UIView()
+    //var blurOverViewController = UIView()
     
     let businessButton = UIButton()
     let loveButton = UIButton()
@@ -97,23 +97,14 @@ class MissionControlView {
             customKeyboard.resign()
         }
         
-        blurOverViewController.removeFromSuperview()
+        //blurOverViewController.removeFromSuperview()
     }
     
     @objc func showPostView(_ sender: UIButton) {
-        //creating this here with intention to move it over to CustomKeyboard so the keyboard, with text field and button can be reused
-        //add screen over back
-        //disable table and search bar
-        //if user clicks on back screen, the mission control will close
-        //if user clicks return, the mission control will close
-        
-        
-        blurOverViewController.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
+        /*blurOverViewController.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         blurOverViewController.alpha = 0
         displayUtility.setBlurredView(viewToBlur: blurOverViewController)
-        //currentView.insertSubview(blurOverViewController, belowSubview: tabView)
-        
-        
+        //currentView.insertSubview(blurOverViewController, belowSubview: tabView)*/
         tabViewButton.removeTarget(self, action: #selector(showPostView(_:)), for: .touchUpInside)
         tabViewButton.addTarget(self,action:#selector(closeMissionControl(_:)), for: .touchUpInside)
         
@@ -147,7 +138,7 @@ class MissionControlView {
             self.postBackgroundView.frame.origin.y = DisplayUtility.screenHeight - customKeyboardHeight
             self.filtersView.frame.origin.y = self.postBackgroundView.frame.origin.y - self.filtersView.frame.height
             self.tabView.frame.origin.y = self.filtersView.frame.origin.y - self.tabView.frame.height
-            self.blurOverViewController.alpha = 1.0
+            //self.blurOverViewController.alpha = 1.0
         })
     }
     
@@ -159,7 +150,7 @@ class MissionControlView {
             self.postBackgroundView.frame.origin.y = DisplayUtility.screenHeight
         })
         
-        blurOverViewController.removeFromSuperview()
+        //blurOverViewController.removeFromSuperview()
         filtersView.removeFromSuperview()
         tabViewButton.removeTarget(self, action: #selector(closeMissionControl(_:)), for: .touchUpInside)
         tabViewButton.addTarget(self,action:#selector(showFiltersView(_:)), for: .touchUpInside)

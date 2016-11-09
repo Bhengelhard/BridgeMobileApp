@@ -67,7 +67,7 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
             enablePost = true
         }
         
-        //stopping user from entering bridge status with more than 140 characters
+        //stopping user from entering bridge status with more than 100 characters
         if let characterCount = bridgeStatus.text?.characters.count {
             if characterCount > 100 {
                 let aboveMaxBy = characterCount - 100
