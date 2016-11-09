@@ -28,10 +28,10 @@ class MessagesTableCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -74,7 +74,7 @@ class MessagesTableCell: UITableViewCell {
         cellWidth = bounds.size.width//cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
         if let _ = setSeparator {
-           // print("setSeparator")
+            // print("setSeparator")
             line.frame = CGRect(x: 0.025*cellWidth! + 0.15*cellHeight!, y: 0, width: bounds.size.width, height: 1)
             contentView.addSubview(line)
         }
@@ -93,20 +93,21 @@ class MessagesTableCell: UITableViewCell {
         messageSnapshot.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.4*cellHeight!, width: 0.8*cellWidth!-0.15*cellHeight!, height: 0.65*cellHeight!)
         
         notificationDot.frame = CGRect(x: 0.025*cellWidth!, y: 0.4375*cellHeight!, width: 0.15*cellHeight!, height: 0.15*cellHeight!)
-        notificationDot.layer.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).cgColor
+        //notificationDot.layer.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).cgColor
+        notificationDot.layer.backgroundColor = UIColor.init(patternImage: UIImage(named: "Inbox_Notification_Icon")!).cgColor
         notificationDot.layer.cornerRadius = notificationDot.frame.size.height/2
         notificationDot.clipsToBounds = true
         
-
-//        guard let superview = contentView.superview else {
-//            return
-//        }
-//        for subview in superview.subviews {
-//            if String(subview.dynamicType).hasSuffix("SeparatorView") {
-//                subview.hidden = false
-//            }
-//        }
-//
+        
+        //        guard let superview = contentView.superview else {
+        //            return
+        //        }
+        //        for subview in superview.subviews {
+        //            if String(subview.dynamicType).hasSuffix("SeparatorView") {
+        //                subview.hidden = false
+        //            }
+        //        }
+        //
     }
-
+    
 }
