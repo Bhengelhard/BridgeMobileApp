@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */; };
 		1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D71D09E32B0030B6D0 /* DataController.swift */; };
+		3030C0A81DD3976B0077F7AC /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0A71DD3976B0077F7AC /* CustomSearchBar.swift */; };
 		303753EF1DB0020F006DB4E5 /* DisplayUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303753EE1DB0020F006DB4E5 /* DisplayUtility.swift */; };
 		303753F11DB04160006DB4E5 /* CustomTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303753F01DB04160006DB4E5 /* CustomTimer.swift */; };
 		30632FFB1DCCD778004AC517 /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30632FFA1DCCD778004AC517 /* CustomKeyboard.swift */; };
@@ -68,6 +69,7 @@
 /* Begin PBXFileReference section */
 		1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageContent.swift; path = MyBridgeApp/MessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BF692D71D09E32B0030B6D0 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = MyBridgeApp/DataController.swift; sourceTree = SOURCE_ROOT; };
+		3030C0A71DD3976B0077F7AC /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomSearchBar.swift; path = "Custom Classes/CustomSearchBar.swift"; sourceTree = "<group>"; };
 		303753EE1DB0020F006DB4E5 /* DisplayUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayUtility.swift; path = "Custom Classes/DisplayUtility.swift"; sourceTree = "<group>"; };
 		303753F01DB04160006DB4E5 /* CustomTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomTimer.swift; path = "Custom Classes/CustomTimer.swift"; sourceTree = SOURCE_ROOT; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
@@ -254,6 +256,7 @@
 				E9D6DF3A1D7882F000138A1F /* modelName.swift */,
 				E9D6DF371D7882F000138A1F /* Downloader.swift */,
 				E9D6DF411D7882F600138A1F /* TransitionManager.swift */,
+				3030C0A71DD3976B0077F7AC /* CustomSearchBar.swift */,
 				30E12C921DCA303A00DC9CF6 /* CustomNavigationBar.swift */,
 				30E12C941DCA98CB00DC9CF6 /* MissionControlView.swift */,
 				30632FFA1DCCD778004AC517 /* CustomKeyboard.swift */,
@@ -376,6 +379,7 @@
 				E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */,
 				E9D6DF4A1D7882FB00138A1F /* Users.swift in Sources */,
 				E9D6DF0F1D7880B700138A1F /* EditProfileViewController.swift in Sources */,
+				3030C0A81DD3976B0077F7AC /* CustomSearchBar.swift in Sources */,
 				CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */,
 				E9D6DF3E1D7882F000138A1F /* modelName.swift in Sources */,
 				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,

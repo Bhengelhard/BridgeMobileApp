@@ -14,7 +14,7 @@ class MessagesTableCell: UITableViewCell {
     var messageTimestamp: UILabel!
     var messageSnapshot: UITextView!
     var arrow: UILabel!
-    var notificationDot: UIView!
+    var notificationDot: UIImageView!
     var line: UIView!
     var cellWidth:CGFloat?
     var cellHeight:CGFloat?
@@ -56,7 +56,7 @@ class MessagesTableCell: UITableViewCell {
         arrow = UILabel(frame:CGRect.zero)
         arrow.font = UIFont(name: "Mishafi Regular", size: 30)
         
-        notificationDot = UIView(frame:CGRect.zero)
+        notificationDot = UIImageView(frame:CGRect.zero)
         line = UIView(frame:CGRect.zero)
         line.backgroundColor = UIColor.gray
         contentView.addSubview(participants)
@@ -94,7 +94,7 @@ class MessagesTableCell: UITableViewCell {
         
         notificationDot.frame = CGRect(x: 0.025*cellWidth!, y: 0.4375*cellHeight!, width: 0.15*cellHeight!, height: 0.15*cellHeight!)
         //notificationDot.layer.backgroundColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0).cgColor
-        notificationDot.layer.backgroundColor = UIColor.init(patternImage: UIImage(named: "Inbox_Notification_Icon")!).cgColor
+        notificationDot.image = UIImage(named: "Inbox_Notification_Icon")
         notificationDot.layer.cornerRadius = notificationDot.frame.size.height/2
         notificationDot.clipsToBounds = true
         
