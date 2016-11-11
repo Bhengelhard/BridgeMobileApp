@@ -9,22 +9,23 @@
 //
 
 import UIKit
+import Parse
 
-class CustomNavigationBar {
+class CustomNavigationBar: UINavigationBar {
     
     let navBar = UINavigationBar()
     let navItem = UINavigationItem()
     var classRightBarButton = UIButton()
     
     func createCustomNavigationBar (view: UIView, leftBarButtonIcon: String?, leftBarButtonSelectedIcon: String?, leftBarButton: UIButton?, rightBarButtonIcon: String?, rightBarButtonSelectedIcon: String?, rightBarButton: UIButton?, title: String?){
-        navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight)
-        navBar.barStyle = .default
+        navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.0874*DisplayUtility.screenHeight)
+        navBar.barStyle = .black
         navBar.isTranslucent = true
         //navBar.barTintColor = DisplayUtility.necterGray
         
-        let displayUtility = DisplayUtility()
+        //let displayUtility = DisplayUtility()
         //navBar = displayUtility.setBlurredView(viewToBlur: navBar as UIView) as! UINavigationBar
-        navBar.backgroundColor = UIColor.black
+        navBar.backgroundColor = UIColor.darkGray
         view.addSubview(navBar)
         
         /*let maskPath = UIBezierPath(roundedRect: navBar.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10.0, height: 10.0))
@@ -81,17 +82,21 @@ class CustomNavigationBar {
         
         //setting the navBar title
         let navBarTitleView = UIView()
-        navBarTitleView.frame = CGRect(x: 0, y: 0, width: 0.06*DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
-        //let titleImageView = UIImageView(image: UIImage(named: "Profile_Icon_Yellow"))
-        let titleText = UILabel()
-        titleText.text = "Profile"
-        //titleImageView.frame = CGRect(x: 0, y: 0, width: 0.06*DisplayUtility.screenHeight, height: 0.06*DisplayUtility.screenHeight)
-        //titleImageView.contentMode = UIViewContentMode.scaleAspectFill
-        //titleImageView.clipsToBounds = true
-        //navBarTitleView.addSubview(titleText)
-        //navBar.topItem?.titleView = navBarTitleView
-        navBar.topItem?.title = title
-        navBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 30)!, NSForegroundColorAttributeName: DisplayUtility.necterYellow]
+        navBarTitleView.frame = CGRect(x: 0, y: 0, width: 0.3007*DisplayUtility.screenWidth, height: 0.0392*DisplayUtility.screenHeight)
+        let titleImageView = UIImageView()
+        if let title = title {
+            titleImageView.image = UIImage(named: title)
+        }
+        
+        //let titleText = UILabel()
+        //titleText.text = "Profile"
+        titleImageView.frame = CGRect(x: 0, y: 0, width: 0.3007*DisplayUtility.screenWidth, height: 0.0392*DisplayUtility.screenHeight)
+        titleImageView.contentMode = UIViewContentMode.scaleAspectFill
+        titleImageView.clipsToBounds = true
+        navBarTitleView.addSubview(titleImageView)
+        navBar.topItem?.titleView = navBarTitleView
+        //navBar.topItem?.title = title
+        //navBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 30)!, NSForegroundColorAttributeName: DisplayUtility.necterYellow]
         
         view.addSubview(navBar)
         view.bringSubview(toFront: navBar)
@@ -99,6 +104,7 @@ class CustomNavigationBar {
     
     
     func updateRightBarButton(newIcon: String, newSelectedIcon: String?) {
+        
         classRightBarButton.setImage(UIImage(named: newIcon), for: UIControlState())
         if newSelectedIcon != nil {
             classRightBarButton.setImage(UIImage(named: newSelectedIcon!), for: .highlighted)

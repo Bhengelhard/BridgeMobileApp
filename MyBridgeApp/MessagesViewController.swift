@@ -420,6 +420,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorStyle = .none
         
         //displayToolBar()
+        // Create Mission Control
         missionControlView.createTabView(view: view)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)

@@ -20,16 +20,18 @@
 		3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */; };
 		3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */; };
 		3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */; };
-		3030C0C71DD54E6F0077F7AC /* SwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C61DD54E6F0077F7AC /* SwipeCard.swift */; };
 		3030C0C91DD54E800077F7AC /* PFCloudFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C81DD54E800077F7AC /* PFCloudFunctions.swift */; };
 		3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0CA1DD54E8F0077F7AC /* CustomTimer.swift */; };
 		3030C0CE1DD54E8F0077F7AC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0CB1DD54E8F0077F7AC /* Downloader.swift */; };
 		3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0CC1DD54E8F0077F7AC /* modelName.swift */; };
 		3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */; };
 		3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */; };
+		3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D41DD550240077F7AC /* SwipeCard.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
+		30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */; };
+		30E2AF721DD65E840023AA95 /* BentonSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF711DD65E840023AA95 /* BentonSans-Bold.otf */; };
 		30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */; };
 		814C3ACB1B69877600E307BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814C3AC81B69877600E307BB /* Images.xcassets */; };
 		81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81761A49E0D500E65899 /* libsqlite3.dylib */; };
@@ -40,7 +42,7 @@
 		CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */; };
 		CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829461CAA26D900DC86C9 /* ViewController.swift */; };
 		CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */; };
-		CB6A329B1CC996F400FADB13 /* BentonSans-Light copy.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */; };
+		CB6A329B1CC996F400FADB13 /* BentonSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB6A329A1CC996F400FADB13 /* BentonSans-Light.otf */; };
 		CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */; };
 		CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */; };
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
@@ -81,17 +83,19 @@
 		3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBar.swift; path = "Custom Classes/Custom Views/CustomNavigationBar.swift"; sourceTree = "<group>"; };
 		3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomSearchBar.swift; path = "Custom Classes/Custom Views/CustomSearchBar.swift"; sourceTree = "<group>"; };
 		3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MissionControlView.swift; path = "Custom Classes/Custom Views/MissionControlView.swift"; sourceTree = "<group>"; };
-		3030C0C61DD54E6F0077F7AC /* SwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeCard.swift; path = "Custom Classes/Custom Views/SwipeCard.swift"; sourceTree = "<group>"; };
 		3030C0C81DD54E800077F7AC /* PFCloudFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PFCloudFunctions.swift; path = "Custom Classes/Parse Communication/PFCloudFunctions.swift"; sourceTree = "<group>"; };
 		3030C0CA1DD54E8F0077F7AC /* CustomTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomTimer.swift; path = "Custom Classes/Custom Functions/CustomTimer.swift"; sourceTree = "<group>"; };
 		3030C0CB1DD54E8F0077F7AC /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Downloader.swift; path = "Custom Classes/Custom Functions/Downloader.swift"; sourceTree = "<group>"; };
 		3030C0CC1DD54E8F0077F7AC /* modelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = modelName.swift; path = "Custom Classes/Custom Functions/modelName.swift"; sourceTree = "<group>"; };
 		3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayUtility.swift; path = "Custom Classes/UI Functions/DisplayUtility.swift"; sourceTree = "<group>"; };
 		3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = "Custom Classes/UI Functions/TransitionManager.swift"; sourceTree = "<group>"; };
+		3030C0D41DD550240077F7AC /* SwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeCard.swift; path = "Custom Classes/Custom Views/SwipeCard.swift"; sourceTree = "<group>"; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
+		30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HalfSwipeCard.swift; path = "Custom Classes/Custom Views/HalfSwipeCard.swift"; sourceTree = "<group>"; };
+		30E2AF711DD65E840023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Page Option A Scaled to Iphone 6.png"; sourceTree = "<group>"; };
 		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		814C3AC91B69877600E307BB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -104,7 +108,7 @@
 		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB5829461CAA26D900DC86C9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MyBridgeApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleMessageViewController.swift; path = MyBridgeApp/SingleMessageViewController.swift; sourceTree = SOURCE_ROOT; };
-		CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light copy.otf"; sourceTree = "<group>"; };
+		CB6A329A1CC996F400FADB13 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
 		CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadPageViewController.swift; path = MyBridgeApp/LoadPageViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MyBridgeApp/MessagesViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -173,7 +177,8 @@
 				3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */,
 				3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */,
 				3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */,
-				3030C0C61DD54E6F0077F7AC /* SwipeCard.swift */,
+				3030C0D41DD550240077F7AC /* SwipeCard.swift */,
+				30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -210,7 +215,8 @@
 			children = (
 				E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */,
 				30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */,
-				CB6A329A1CC996F400FADB13 /* BentonSans-Light copy.otf */,
+				CB6A329A1CC996F400FADB13 /* BentonSans-Light.otf */,
+				30E2AF711DD65E840023AA95 /* BentonSans-Bold.otf */,
 				814C3AC81B69877600E307BB /* Images.xcassets */,
 				814C3AC91B69877600E307BB /* Info.plist */,
 			);
@@ -373,9 +379,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30E2AF721DD65E840023AA95 /* BentonSans-Bold.otf in Resources */,
 				CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */,
 				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
-				CB6A329B1CC996F400FADB13 /* BentonSans-Light copy.otf in Resources */,
+				CB6A329B1CC996F400FADB13 /* BentonSans-Light.otf in Resources */,
 				30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,6 +414,7 @@
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
 				307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */,
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
+				30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
 				3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */,
 				3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */,
@@ -423,11 +431,11 @@
 				E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */,
 				E9D6DF0F1D7880B700138A1F /* EditProfileViewController.swift in Sources */,
 				3030C0C21DD54E5E0077F7AC /* CustomKeyboard.swift in Sources */,
+				3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */,
 				3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */,
 				CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */,
 				3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */,
 				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,
-				3030C0C71DD54E6F0077F7AC /* SwipeCard.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
 				3030C0CE1DD54E8F0077F7AC /* Downloader.swift in Sources */,
 				E9D6DF4E1D78835800138A1F /* SignupViewController.swift in Sources */,
