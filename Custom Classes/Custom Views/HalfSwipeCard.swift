@@ -29,42 +29,65 @@ class HalfSwipeCard: UIView {
         self.init(frame: CGRect.zero)
     }
     
-    func initialize(name: String, status: String, photoURL: String, connectionType: String) {
-        self.backgroundColor = UIColor.blue
+    func initialize(name: String, status: String, photoURL: String!, connectionType: String) {
         self.layer.masksToBounds = true
         
         //download Photo from URL
         let photoView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
-        photoView.image = UIImage(named: "Friendship_Icon_Gray")
+        let downloader = Downloader()
+        downloader.imageFromURL(URL: URL(string: photoURL)!, imageView: photoView)
         self.addSubview(photoView)
         
-        let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.origin.x, y: 0.7268*self.frame.origin.y, width: 0.1*self.frame.width, height: 0.1*self.frame.width))
+        let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.width, y: 0.7268*self.frame.height, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth))
         let typeImageName = "\(connectionType)_Card_Icon"
         connectionTypeIcon.image = UIImage(named: typeImageName)
         self.addSubview(connectionTypeIcon)
         
-        let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.origin.x, y: 0.7556*self.frame.origin.y, width: 0.8*self.frame.width, height: 0.1*self.frame.height))
-        nameLabel.text = name
+        let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0.7556*self.frame.height, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
+        nameLabel.center.y = connectionTypeIcon.center.y
+        nameLabel.text = firstNameLastNameInitial(name: name)
         nameLabel.textColor = UIColor.white
-        nameLabel.font = UIFont(name: "BentonSans-bold", size: 45)
+        nameLabel.font = UIFont(name: "BentonSans-Bold", size: 22)
         nameLabel.textAlignment = NSTextAlignment.left
-        nameLabel.layer.shadowOffset = CGSize(width: 8.63, height: -8.63)
-        nameLabel.layer.shadowOpacity = 0.95
+        nameLabel.layer.shadowOpacity = 0.5
+        nameLabel.layer.shadowRadius = 0.5
+        nameLabel.layer.shadowColor = UIColor.black.cgColor
+        nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
         self.addSubview(nameLabel)
         
-        let statusView = UIView(frame: CGRect(x: 0, y: 0.3553*DisplayUtility.screenHeight, width: self.frame.width, height: 0.1*DisplayUtility.screenHeight)) // this height needs to change based on text input
-        statusView.backgroundColor = DisplayUtility.necterGray
-        statusView.layer.opacity = 0.6
-        self.addSubview(statusView)
-        let statusLabel = UILabel(frame: statusView.frame)
-        statusLabel.text = status
-        statusLabel.font = UIFont(name: "BentonSans-Light", size: 29.4)
-        statusLabel.textAlignment = NSTextAlignment.center
-        self.addSubview(statusLabel)
+        if status != "" {
+            let statusView = UIView(frame: CGRect(x: 0, y: 0.8689*self.frame.height, width: self.frame.width, height: 0.1*self.frame.height)) // this height needs to change based on text input
+            statusView.backgroundColor = DisplayUtility.necterGray
+            statusView.layer.opacity = 0.6
+            self.addSubview(statusView)
+            
+            let statusLabel = UILabel(frame: statusView.frame)
+            statusLabel.text = status
+            statusLabel.textColor = UIColor.white
+            statusLabel.font = UIFont(name: "BentonSans-Light", size: 16)
+            statusLabel.textAlignment = NSTextAlignment.center
+            self.addSubview(statusLabel)
+        }
         
-        self.layer.borderColor = UIColor.black.cgColor
-        self.layer.borderWidth = 2
+    }
     
+    func firstNameLastNameInitial (name: String) -> String{
+        let wordsInName = name.components(separatedBy: " ")
+        if let firstName = wordsInName.first {
+            if let lastName = wordsInName.last {
+                if wordsInName.last != firstName {
+                    let lastNameInitial = lastName.characters.first!
+                    let firstNameLastNameInitial = "\(firstName) \(lastNameInitial)."
+                    
+                    return firstNameLastNameInitial
+                }
+            } else {
+                return firstName
+            }
+
+        }
+        
+        return name
     }
     
     /*func getCard(_ deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int, isUpperDeckCard: Bool) -> UIView {

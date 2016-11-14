@@ -18,7 +18,7 @@ class CustomNavigationBar: UINavigationBar {
     var classRightBarButton = UIButton()
     
     func createCustomNavigationBar (view: UIView, leftBarButtonIcon: String?, leftBarButtonSelectedIcon: String?, leftBarButton: UIButton?, rightBarButtonIcon: String?, rightBarButtonSelectedIcon: String?, rightBarButton: UIButton?, title: String?){
-        navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.0874*DisplayUtility.screenHeight)
+        navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
         navBar.barStyle = .black
         navBar.isTranslucent = true
         //navBar.barTintColor = DisplayUtility.necterGray

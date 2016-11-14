@@ -40,10 +40,7 @@ class BridgeViewController: UIViewController {
     let cardHeight = 0.8178*DisplayUtility.screenHeight//0.765*UIScreen.main.bounds.height*0.5
     
     //superDeck refers to the swipable rectangle containing the two images of the people to connect
-    let superDeckX = 0.071*DisplayUtility.screenWidth//0.03*UIScreen.main.bounds.width
-    let superDeckY = 0.1178*DisplayUtility.screenHeight//0.12*UIScreen.main.bounds.height
-    let superDeckWidth = 0.8586*DisplayUtility.screenWidth//UIScreen.main.bounds.width - 0.06*UIScreen.main.bounds.width
-    let superDeckHeight = 0.8178*DisplayUtility.screenHeight//0.765*UIScreen.main.bounds.height    let necterColor = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
+    var swipeCardFrame = CGRect()
     var totalNoOfCards = 0
     let localStorageUtility = LocalStorageUtility()
     var currentTypeOfCardsOnDisplay = typesOfCard.all
@@ -58,7 +55,7 @@ class BridgeViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var wasLastSwipeInDeck = Bool()
     
-    //toolbar buttons
+    /*//toolbar buttons
     let toolbar = UIView()
     let allTypesButton = UIButton()
     let allTypesLabel = UILabel()
@@ -68,7 +65,7 @@ class BridgeViewController: UIViewController {
     let loveLabel = UILabel()
     let friendshipButton = UIButton()
     let friendshipLabel = UILabel()
-    let postStatusButton = UIButton()
+    let postStatusButton = UIButton()*/
     
     //navigation bar creation
     var badgeCount = Int()
@@ -212,11 +209,13 @@ class BridgeViewController: UIViewController {
         displayNoMoreCardsLabel!.frame = labelFrame
         displayNoMoreCardsLabel!.numberOfLines = 0
         
-        if businessButton.isEnabled == false {
+        let type = missionControlView.whichFilter()
+        
+        if type == "Business" {
             displayNoMoreCardsLabel!.text = "You ran out of people to connect for business. Please check back tomorrow."
-        } else if loveButton.isEnabled == false {
+        } else if type == "Love" {
             displayNoMoreCardsLabel!.text = "You ran out of people to connect for love. Please check back tomorrow."
-        } else if friendshipButton.isEnabled == false {
+        } else if type == "Friendship" {
             displayNoMoreCardsLabel!.text = "You ran out of people to connect for friendship. Please check back tomorrow."
         } else {
             displayNoMoreCardsLabel!.text = "You ran out of people to connect. Please check back tomorrow."
@@ -232,7 +231,7 @@ class BridgeViewController: UIViewController {
         displayRevisitButton()
         
     }
-    func getUpperDeckCardFrame() -> CGRect {
+    /*func getUpperDeckCardFrame() -> CGRect {
         let upperDeckFrame : CGRect = CGRect(x: 0, y: 0, width: superDeckWidth, height: 0.5*superDeckHeight)
         return upperDeckFrame
     }
@@ -369,7 +368,7 @@ class BridgeViewController: UIViewController {
         
         return card
         
-    }
+    }*/
     // Does not download bridge pairings. Only presents the existing ones in the localData to the user
     func displayCards(){
         if let displayNoMoreCardsLabel = displayNoMoreCardsLabel {
@@ -469,40 +468,34 @@ class BridgeViewController: UIViewController {
 
     func addCardPairView(_ aboveView:UIView?, name:String?, location:String?, status:String?, photo:String?, locationCoordinates1:[Double]?, name2:String?, location2:String?, status2:String?, photo2:String?, locationCoordinates2:[Double]?, cardColor:typesOfColor?, pairing:UserInfoPair) -> UIView{
         
-        let upperDeckCard = getUpperDeckCard(name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates1, pairing:pairing)
-        let lowerDeckCard = getLowerDeckCard(name2, location: location2, status: status2, photo: photo2, cardColor: cardColor,locationCoordinates:locationCoordinates2, pairing:pairing)
-        let superDeckFrame : CGRect = CGRect(x: superDeckX, y: superDeckY, width: superDeckWidth, height: superDeckHeight)
-        let superDeckView = UIView(frame:superDeckFrame)
-        superDeckView.layer.cornerRadius = 13.379
-        //superDeckView.layer.masksToBounds = false
-        
-        superDeckView.layer.shadowOpacity = 0.35
-        superDeckView.layer.shadowOffset = CGSize(width: 7.15, height: 6.66)
-        superDeckView.layer.shadowColor = UIColor.black.cgColor
-        superDeckView.layer.shadowPath = UIBezierPath(rect: superDeckView.bounds).cgPath
-        //superDeckView.layer.shadowRadius = 0.35
-        //superDeckView.layer.blur = 4.76
-        
-        upperDeckCard.clipsToBounds = true
-        lowerDeckCard.clipsToBounds = true
-        superDeckView.clipsToBounds = true
-        superDeckView.addSubview(upperDeckCard)
-        superDeckView.addSubview(lowerDeckCard)
-        
-        let necterTypeLine = UIView()
-        necterTypeLine.frame = CGRect(x: 0, y: superDeckHeight/2.0 - 2, width: superDeckWidth, height: 4)
-        
-        let necterTypeIcon = UIImageView()
-        necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.08*superDeckWidth, width: 0.12*superDeckWidth, height: 0.12*superDeckWidth)
-        necterTypeIcon.contentMode = UIViewContentMode.scaleAspectFill
-        necterTypeIcon.clipsToBounds = true
-        
-        necterTypeIcon.layer.shadowOpacity = 0.5
-        necterTypeIcon.layer.shadowRadius = 0.5
-        necterTypeIcon.layer.shadowColor = UIColor.black.cgColor
-        necterTypeIcon.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
-        
+        var connectionType = String()
         if cardColor == typesOfColor.business {
+            connectionType = "Business"
+        } else if cardColor == typesOfColor.friendship {
+            connectionType = "Friendship"
+        } else if cardColor == typesOfColor.love {
+            connectionType = "Love"
+        } else {
+            connectionType = "All Types"
+        }
+        let swipeCardView = SwipeCard()
+        swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, connectionType: connectionType)
+        swipeCardFrame = swipeCardView.frame
+        
+        //let necterTypeLine = UIView()
+        //necterTypeLine.frame = CGRect(x: 0, y: superDeckHeight/2.0 - 2, width: superDeckWidth, height: 4)
+        
+        //let necterTypeIcon = UIImageView()
+        //necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.08*superDeckWidth, width: 0.12*superDeckWidth, height: 0.12*superDeckWidth)
+        //necterTypeIcon.contentMode = UIViewContentMode.scaleAspectFill
+        //necterTypeIcon.clipsToBounds = true
+        
+        //necterTypeIcon.layer.shadowOpacity = 0.5
+        //necterTypeIcon.layer.shadowRadius = 0.5
+        //necterTypeIcon.layer.shadowColor = UIColor.black.cgColor
+        //necterTypeIcon.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
+        
+        /*if cardColor == typesOfColor.business {
             necterTypeLine.backgroundColor = DisplayUtility.businessBlue
             necterTypeIcon.image = UIImage(named: "Business_Icon_Blue")
         } else if cardColor == typesOfColor.love {
@@ -514,23 +507,23 @@ class BridgeViewController: UIViewController {
         }
         
         superDeckView.addSubview(necterTypeLine)
-        superDeckView.addSubview(necterTypeIcon)
+        superDeckView.addSubview(necterTypeIcon)*/
         
         
-        superDeckView.backgroundColor = UIColor.white.withAlphaComponent(1.0)
+        //superDeckView.backgroundColor = UIColor.white.withAlphaComponent(1.0)
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
-        superDeckView.addGestureRecognizer(gesture)
-        superDeckView.isUserInteractionEnabled = true
+        swipeCardView.addGestureRecognizer(gesture)
+        swipeCardView.isUserInteractionEnabled = true
         if let aboveView = aboveView {
-            superDeckView.isUserInteractionEnabled = false
-            self.view.insertSubview(superDeckView, belowSubview: aboveView)
+            swipeCardView.isUserInteractionEnabled = false
+            self.view.insertSubview(swipeCardView, belowSubview: aboveView)
         }
         else {
-            self.view.insertSubview(superDeckView, belowSubview: self.toolbar)
+            self.view.insertSubview(swipeCardView, belowSubview: self.customNavigationBar)
         }
-        arrayOfCardsInDeck.append(superDeckView)
-        arrayOfCardColors.append(superDeckView.layer.borderColor!)
-        return superDeckView
+        arrayOfCardsInDeck.append(swipeCardView)
+        arrayOfCardColors.append(swipeCardView.layer.borderColor!)
+        return swipeCardView
     }
     
     func hasNotification() -> Bool{
@@ -606,7 +599,7 @@ class BridgeViewController: UIViewController {
         performSegue(withIdentifier: "showMessagesPageFromBridgeView", sender: self)
         rightBarButton.isSelected = true
     }
-    func displayToolBar(){
+    /*func displayToolBar(){
         toolbar.frame = CGRect(x: 0, y: 0.9*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
         toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
         
@@ -700,7 +693,7 @@ class BridgeViewController: UIViewController {
         view.addSubview(friendshipButton)
         view.addSubview(friendshipLabel)
         view.addSubview(postStatusButton)
-    }
+    }*/
     
     // downloads  bridge pairings of different types depending upon the typeOfCards
     func getBridgePairings(_ maxNoOfCards:Int, typeOfCards:String, callBack: ((_ bridgeType: String)->Void)?, bridgeType: String?){
@@ -965,21 +958,13 @@ class BridgeViewController: UIViewController {
         
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.alpha = 0.0
-        view.insertSubview(connectIcon, aboveSubview: self.toolbar)
+        view.insertSubview(connectIcon, aboveSubview: arrayOfCardsInDeck.last!)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
         disconnectIcon.alpha = 0.0
-        view.insertSubview(disconnectIcon, aboveSubview: self.toolbar)
+        view.insertSubview(disconnectIcon, aboveSubview: arrayOfCardsInDeck.last!)
         
         wasLastSwipeInDeck = false
-        
-        let testSwipeCard = SwipeCard()
-        testSwipeCard.initialize()
-        view.addSubview(testSwipeCard)
-        //let testHalfSwipeCard = HalfSwipeCard()
-        //testHalfSwipeCard.backgroundColor = UIColor.black
-        //testHalfSwipeCard.initialize(name: "", status: "", photoURL: "", connectionType: "")
-        //view.addSubview(testHalfSwipeCard)
     }
     
     override func viewDidLayoutSubviews() {
@@ -989,7 +974,7 @@ class BridgeViewController: UIViewController {
     func postStatusTapped(_ sender: UIButton ){
         performSegue(withIdentifier: "showNewStatusViewController", sender: self)
     }
-    func filterTapped(_ sender: UIButton){
+    /*func filterTapped(_ sender: UIButton){
         let tag = sender.tag
         switch(tag){
             case 0:
@@ -1094,47 +1079,47 @@ class BridgeViewController: UIViewController {
         arrayOfCardsInDeck.removeAll()
         arrayOfCardColors.removeAll()
         displayCards()
-    }
+    }*/
     func isDragged(_ gesture: UIPanGestureRecognizer) {
 
         let translation = gesture.translation(in: self.view)
-        let superDeckView = gesture.view!
-        superDeckView.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
-        let xFromCenter = superDeckView.center.x - self.view.bounds.width / 2
+        let swipeCardView = gesture.view!
+        swipeCardView.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
+        let xFromCenter = swipeCardView.center.x - self.view.bounds.width / 2
         let scale = min(CGFloat(1.0), 1)
         var rotation = CGAffineTransform(rotationAngle: -xFromCenter / 1000)
         var stretch = rotation.scaledBy(x: scale, y: scale)
-        superDeckView.transform = stretch
+        swipeCardView.transform = stretch
         var removeCard = false
         
         
-        let disconnectIconX = max(min((-1.5*(superDeckView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
-        let connectIconX = max(min(((-2.0/3.0)*(superDeckView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
+        let disconnectIconX = max(min((-1.5*(swipeCardView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
+        let connectIconX = max(min(((-2.0/3.0)*(swipeCardView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
         
         
 
         //animating connect and disconnect icons when card is positioned from 0.4% of DisplayUtility.screenWidth to 0.25% of DisplayUtility.screenWidth
-        if superDeckView.center.x < 0.4*DisplayUtility.screenWidth{
+        if swipeCardView.center.x < 0.4*DisplayUtility.screenWidth{
             //fading in with swipe left from 0.4% of DisplayUtility.screenWidth to 0.25% of screen width
-            self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/DisplayUtility.screenWidth)+2.66
+            self.disconnectIcon.alpha = -6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)+2.66
             self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
             //})
-        } else if superDeckView.center.x > 0.6*DisplayUtility.screenWidth {
+        } else if swipeCardView.center.x > 0.6*DisplayUtility.screenWidth {
             
             //fading in with swipe right from 0.6% of DisplayUtility.screenWidth to 0.75% of screen width
-            self.connectIcon.alpha = 6.66*(superDeckView.center.x/DisplayUtility.screenWidth)-4
+            self.connectIcon.alpha = 6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)-4
             self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
         } else {
-            self.disconnectIcon.alpha = -6.66*(superDeckView.center.x/DisplayUtility.screenWidth)+2.66
+            self.disconnectIcon.alpha = -6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)+2.66
             self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
             self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
 
-            self.connectIcon.alpha = 6.66*(superDeckView.center.x/DisplayUtility.screenWidth)-4
+            self.connectIcon.alpha = 6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)-4
         }
         
         if gesture.state == UIGestureRecognizerState.ended {
             
-            if superDeckView.center.x < 0.25*DisplayUtility.screenWidth {
+            if swipeCardView.center.x < 0.25*DisplayUtility.screenWidth {
                 
                 
                 let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
@@ -1147,7 +1132,7 @@ class BridgeViewController: UIViewController {
                     }))
                     alert.addAction(UIAlertAction(title: "Don't Connect", style: .default, handler: { (action) in
                         UIView.animate(withDuration: 0.2, animations: {
-                            superDeckView.center.x = -1.0*DisplayUtility.screenWidth
+                            swipeCardView.center.x = -1.0*DisplayUtility.screenWidth
                             self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                             self.disconnectIcon.alpha = 0.0
                             }, completion: { (success) in
@@ -1161,7 +1146,7 @@ class BridgeViewController: UIViewController {
                     self.localData.synchronize()
                 } else {
                     UIView.animate(withDuration: 0.2, animations: {
-                        superDeckView.center.x = -1.0*DisplayUtility.screenWidth
+                        swipeCardView.center.x = -1.0*DisplayUtility.screenWidth
                         self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                         self.disconnectIcon.alpha = 0.0
                         }, completion: { (success) in
@@ -1169,7 +1154,7 @@ class BridgeViewController: UIViewController {
                     })
                     removeCard = true
                 }
-            } else if superDeckView.center.x > 0.75*DisplayUtility.screenWidth {
+            } else if swipeCardView.center.x > 0.75*DisplayUtility.screenWidth {
                 
                 let isFirstTimeSwipedRight : Bool = localData.getFirstTimeSwipingRight()!
                 if isFirstTimeSwipedRight{
@@ -1181,8 +1166,8 @@ class BridgeViewController: UIViewController {
                     }))
                     alert.addAction(UIAlertAction(title: "Connect", style: .default, handler: { (action) in
                         UIView.animate(withDuration: 0.2, animations: {
-                            superDeckView.center.x = 1.6*DisplayUtility.screenWidth
-                            superDeckView.alpha = 0.0
+                            swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
+                            swipeCardView.alpha = 0.0
                             self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                             self.connectIcon.alpha = 0.0
                             }, completion: { (success) in
@@ -1197,7 +1182,7 @@ class BridgeViewController: UIViewController {
                     self.localData.synchronize()
                 } else {
                     UIView.animate(withDuration: 0.2, animations: {
-                        superDeckView.center.x = 1.6*DisplayUtility.screenWidth
+                        swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.alpha = 0.0
                         }, completion: { (success) in
@@ -1208,14 +1193,14 @@ class BridgeViewController: UIViewController {
                 }
             }
             if removeCard {
-                superDeckView.removeFromSuperview()
+                swipeCardView.removeFromSuperview()
             }
             else {
                 UIView.animate(withDuration: 0.7, animations: {
                     rotation = CGAffineTransform(rotationAngle: 0)
                     stretch = rotation.scaledBy(x: 1, y: 1)
-                    superDeckView.transform = stretch
-                    superDeckView.frame = CGRect(x: self.superDeckX, y: self.superDeckY, width: self.superDeckWidth, height: self.superDeckHeight)
+                    swipeCardView.transform = stretch
+                    swipeCardView.frame = self.swipeCardFrame
                     self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                     self.disconnectIcon.alpha = 0.0
                     self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
