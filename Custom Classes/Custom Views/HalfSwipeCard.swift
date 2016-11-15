@@ -13,7 +13,7 @@ class HalfSwipeCard: UIView {
     //var name:String?
     //var location:String?
     //var status:String?
-    var photo:UIImage?
+    var photo = UIImage()
     //var locationCoordinates:[Double]?
     //var connectionType:String?
     
@@ -35,10 +35,62 @@ class HalfSwipeCard: UIView {
         //download Photo from URL
         let photoView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
         let downloader = Downloader()
-        downloader.imageFromURL(URL: URL(string: photoURL)!, imageView: photoView)
-        if let image = photoView.image {
-            photo = image
+        
+        //card's profile pictures are retrieved if they are already saved to the phone using mapping to the associated bridgePairing objectId and the position of the card (i.e. either upperDeckCard or not)
+        let localData = LocalData()
+        if let pairings = localData.getPairings() {
+            for pair in pairings {
+                if self.frame.origin.y == 0 {
+                    if let data = pair.user1?.savedProfilePicture {
+                        //applying filter to make the white text more legible
+                        let beginImage = CIImage(data: data as Data)
+                        let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+                        edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+                        edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+                        edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+                        
+                        let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+                        
+                        let newImage = UIImage(cgImage: newCGImage!)
+                        photoView.image = newImage
+                        photoView.contentMode = UIViewContentMode.scaleAspectFill
+                        photoView.clipsToBounds = true
+                    }
+                    else {
+                        if let URL = URL(string: photoURL) {
+                            downloader.imageFromURL(URL: URL, imageView: photoView)
+                        }
+                    }
+                }
+                else {
+                    if let data = pair.user2?.savedProfilePicture {
+                        //applying filter to make the white text more legible
+                        let beginImage = CIImage(data: data as Data)
+                        let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+                        edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+                        edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+                        edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+                        
+                        let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+                        
+                        let newImage = UIImage(cgImage: newCGImage!)
+                        photoView.image = newImage
+                        photoView.contentMode = UIViewContentMode.scaleAspectFill
+                        photoView.clipsToBounds = true
+                    }
+                    else {
+                        if let URL = URL(string: photoURL) {
+                            downloader.imageFromURL(URL: URL, imageView: photoView)
+                        }
+                    }
+                }
+                    
+            }
         }
+
+        
+        
+        //downloader.imageFromURL(URL: URL(string: photoURL)!, imageView: photoView)
         self.addSubview(photoView)
         
         let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.width, y: 0.68*self.frame.height, width: 0.056*DisplayUtility.screenHeight, height: 0.056*DisplayUtility.screenHeight))
@@ -103,29 +155,13 @@ class HalfSwipeCard: UIView {
         return name
     }
     
+    func getImage() -> UIImage {
+        return photo
+    }
+    
     /*func getCard(_ deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int, isUpperDeckCard: Bool) -> UIView {
         
-        let locationFrame = CGRect(x: 0.05*cardWidth,y: 0.18*cardHeight,width: 0.8*cardWidth,height: 0.075*cardHeight)
-        let statusFrame = CGRect(x: 0.05*cardWidth,y: 0.65*cardHeight,width: 0.9*cardWidth,height: 0.3*cardHeight)
-        let photoFrame = CGRect(x: 0, y: 0, width: superDeckWidth, height: 0.5*superDeckHeight)
-        
-        let nameLabel = UILabel()
-        nameLabel.text = name
-        nameLabel.textAlignment = NSTextAlignment.left
-        nameLabel.textColor = UIColor.white
-        nameLabel.font = UIFont(name: "Verdana", size: 20)
-        //let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.12*cardHeight))
-        var nameFrame = CGRect(x: 0.05*cardWidth,y: 0.05*cardHeight,width: 0.8*cardWidth,height: 0.12*cardHeight)
-        //nameFrame.size = adjustedNameSize
-        //nameFrame.size.height = 0.12*cardHeight
-        nameLabel.frame = nameFrame
-        nameLabel.layer.cornerRadius = 2
-        nameLabel.clipsToBounds = true
-        
-        nameLabel.layer.shadowOpacity = 0.5
-        nameLabel.layer.shadowRadius = 0.5
-        nameLabel.layer.shadowColor = UIColor.black.cgColor
-        nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
+     
         let locationCoordinates = locationCoordinates ?? [-122.0,37.0]
         
         let locationLabel = UILabel(frame: locationFrame)
@@ -133,86 +169,8 @@ class HalfSwipeCard: UIView {
         if location == "" {
             setCityName(locationLabel, locationCoordinates: locationCoordinates, pairing:pairing)
         }
-        locationLabel.text = location
-        locationLabel.textAlignment = NSTextAlignment.left
-        locationLabel.textColor = UIColor.white
-        locationLabel.font = UIFont(name: "Verdana", size: 14)
-        locationLabel.layer.shadowOpacity = 0.5
-        locationLabel.layer.shadowRadius = 0.5
-        locationLabel.layer.shadowColor = UIColor.black.cgColor
-        locationLabel.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
-        
-        var statusText = ""
-        
-        if let status = status {
-            if status != "" {
-                statusText = "\"\(status)\""
-            }
-            
-        }
-        let statusLabel = UILabel(frame: statusFrame)
-        statusLabel.text = statusText
-        statusLabel.textColor = UIColor.white
-        statusLabel.font = UIFont(name: "Verdana", size: 14)
-        statusLabel.textAlignment = NSTextAlignment.center
-        statusLabel.numberOfLines = 0
-        statusLabel.layer.shadowOpacity = 0.5
-        statusLabel.layer.shadowRadius = 0.5
-        statusLabel.layer.shadowColor = UIColor.black.cgColor
-        statusLabel.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
-        
-        //card's profile pictures are retrieved if they are already saved to the phone using mapping to the associated bridgePairing objectId and the position of the card (i.e. either upperDeckCard or not)
-        let photoView = UIImageView(frame: photoFrame)
-        
-        if isUpperDeckCard {
-            if let data = pairing.user1?.savedProfilePicture {
-                //applying filter to make the white text more legible
-                let beginImage = CIImage(data: data as Data)
-                let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
-                edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
-                edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
-                edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
-                
-                let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
-                
-                let newImage = UIImage(cgImage: newCGImage!)
-                photoView.image = newImage
-                photoView.contentMode = UIViewContentMode.scaleAspectFill
-                photoView.clipsToBounds = true
-            }
-            else {
-                if let photo = photo{
-                    if let URL = URL(string: photo) {
-                        Downloader.load(URL, imageView: photoView, bridgePairingObjectId: pairing.user1?.objectId, isUpperDeckCard: isUpperDeckCard)
-                    }
-                }
-            }
-        }
-        else {
-            if let data = pairing.user2?.savedProfilePicture {
-                //applying filter to make the white text more legible
-                let beginImage = CIImage(data: data as Data)
-                let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
-                edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
-                edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
-                edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
-                
-                let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
-                
-                let newImage = UIImage(cgImage: newCGImage!)
-                photoView.image = newImage
-                photoView.contentMode = UIViewContentMode.scaleAspectFill
-                photoView.clipsToBounds = true
-            }
-            else {
-                if let photo = photo{
-                    if let URL = URL(string: photo) {
-                        Downloader.load(URL, imageView: photoView, bridgePairingObjectId: pairing.user2?.objectId, isUpperDeckCard: isUpperDeckCard)
-                    }
-                }
-            }
-            
-        }
+     
+     
         
         let card = UIView(frame:deckFrame)
         

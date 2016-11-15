@@ -1091,6 +1091,7 @@ class BridgeViewController: UIViewController {
         var stretch = rotation.scaledBy(x: scale, y: scale)
         swipeCardView.transform = stretch
         var removeCard = false
+        var showReasonForConnection = false
         
         
         let disconnectIconX = max(min((-1.5*(swipeCardView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
@@ -1165,7 +1166,7 @@ class BridgeViewController: UIViewController {
                         
                     }))
                     alert.addAction(UIAlertAction(title: "Connect", style: .default, handler: { (action) in
-                        UIView.animate(withDuration: 0.2, animations: {
+                        UIView.animate(withDuration: 0.4, animations: {
                             swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
                             swipeCardView.alpha = 0.0
                             self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
@@ -1174,14 +1175,16 @@ class BridgeViewController: UIViewController {
                                 self.connectIcon.removeFromSuperview()
                         })
                         self.bridged()
-                        removeCard = true
+                        removeCard = false
+                        showReasonForConnection = true
+                        
                     }))
                     self.present(alert, animated: true, completion: nil)
                     
                     self.localData.setFirstTimeSwipingRight(false)
                     self.localData.synchronize()
                 } else {
-                    UIView.animate(withDuration: 0.2, animations: {
+                    UIView.animate(withDuration: 0.4, animations: {
                         swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.alpha = 0.0
@@ -1189,11 +1192,14 @@ class BridgeViewController: UIViewController {
                             self.connectIcon.removeFromSuperview()
                             self.bridged()
                     })
-                    removeCard = true
+                    removeCard = false
+                    showReasonForConnection = true
                 }
             }
-            if removeCard {
-                //swipeCardView.removeFromSuperview()
+            if removeCard{
+                swipeCardView.removeFromSuperview()
+            } else if showReasonForConnection {
+                
             }
             else {
                 //Put swipeCard back into place

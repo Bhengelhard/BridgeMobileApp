@@ -69,7 +69,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     func resign() {
         messageTextView.resignFirstResponder()
         messageView.frame.origin.y = 0.9*DisplayUtility.screenHeight
-        messageView.removeFromSuperview()
+        //messageView.removeFromSuperview()
     }
     
     func updatePostType(updatedPostType: String){

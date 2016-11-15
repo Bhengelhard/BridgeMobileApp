@@ -10,8 +10,8 @@ import UIKit
 
 class SwipeCard: UIView {
     
-    var user1Photo:UIImage?
-    var user2Photo:UIImage?
+    var cardsUser1PhotoURL:String?
+    var cardsUser2PhotoURL:String?
     
     override init (frame: CGRect) {
         super.init(frame: frame)
@@ -32,7 +32,7 @@ class SwipeCard: UIView {
         
         let topHalf = HalfSwipeCard(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height))
         topHalf.initialize(name: user1Name, status: user1Status, photoURL: user1PhotoURL, connectionType: connectionType)
-        user1Photo = topHalf.photo
+        cardsUser1PhotoURL = user1PhotoURL
         
         //applying rounded corners to the topHalf
         let maskPath = UIBezierPath(roundedRect: topHalf.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
@@ -42,7 +42,7 @@ class SwipeCard: UIView {
         
         let bottomHalf = HalfSwipeCard(frame: CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height))
         bottomHalf.initialize(name: user2Name, status: user2Status, photoURL: user2PhotoURL, connectionType: connectionType)
-        user2Photo = bottomHalf.photo
+        cardsUser2PhotoURL = user2PhotoURL
         
         //applying rounded corners to the bottomHalf
         let maskPath2 = UIBezierPath(roundedRect: bottomHalf.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
