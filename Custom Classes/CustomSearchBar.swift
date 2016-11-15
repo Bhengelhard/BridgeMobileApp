@@ -20,7 +20,7 @@ class CustomSearchBar: UISearchBar {
         
         //Modify Search Bar
         let searchBar = searchController.searchBar
-        searchBar.frame = CGRect(x: 0, y: 0.11*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.07*DisplayUtility.screenHeight)
+        searchBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.07*DisplayUtility.screenHeight)
         searchBar.showsCancelButton = false
         searchBar.barTintColor = UIColor.black
         let maskPath = UIBezierPath(roundedRect: searchController.searchBar.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10.0, height: 10.0))
@@ -33,7 +33,7 @@ class CustomSearchBar: UISearchBar {
         let textFieldIdx = indexOfSearchFieldInSubviews(searchBarView: searchBar.subviews[0])
         let textField = searchBar.subviews[0].subviews[textFieldIdx] as! UITextField
         textField.backgroundColor = UIColor.clear
-        textField.font = UIFont(name: "HelveticaNeue-Thin", size: 20)
+        textField.font = UIFont(name: "BentonSans", size: 23)
         textField.textColor = .white
         textField.attributedPlaceholder = NSAttributedString(string: "search", attributes: [NSForegroundColorAttributeName: UIColor.white])
         textField.autocapitalizationType = .none

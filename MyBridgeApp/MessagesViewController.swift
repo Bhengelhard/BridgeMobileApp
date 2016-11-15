@@ -47,6 +47,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let friendshipLabel = UILabel()
     let postStatusButton = UIButton()
     
+    let filterLabel = UILabel()
+    let searchBarContainer = UIView()
+    let newMatchesView = UIScrollView()
+    
     //message information
     let noMessagesLabel = UILabel()
     var names = [String : [String]]()
@@ -244,11 +248,20 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     noMessagesLabel.alpha = 0
                 }
             }
+            if noMessagesLabel.alpha == 1 {
+                displayNoMessages()
+            } else {
+                displayFilterLabel(type: type)
+            }
         } else {
+            displayFilterLabel(type: type)
             noMessagesLabel.alpha = 1
             for i in 0 ..< messageType.count{
                 filteredPositions.append(i)
                 noMessagesLabel.alpha = 0
+            }
+            if noMessagesLabel.alpha == 1 {
+                displayNoMessages()
             }
         }
         tableView.reloadData()
@@ -286,29 +299,32 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         leftBarButton.isSelected = true
     }
     func displayNoMessages() {
+        print("displayNoMessages() called")
         let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.85*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
         
         noMessagesLabel.frame = labelFrame
         noMessagesLabel.numberOfLines = 0
         noMessagesLabel.alpha = 1
         
-        if businessButton.isEnabled && loveButton.isEnabled && friendshipButton.isEnabled {
+        let type = missionControlView.whichFilter()
+        
+        if type == "All Types" {
             noMessagesLabel.text = "No active connections."
-        } else if businessButton.isEnabled && loveButton.isEnabled {
-            noMessagesLabel.text = "No active connections for business or dating."
-        } else if businessButton.isEnabled && friendshipButton.isEnabled {
-            noMessagesLabel.text = "No active connections for business or friendship."
-        } else if friendshipButton.isEnabled && loveButton.isEnabled {
-            noMessagesLabel.text = "No active connections for friendship or dating."
-        }else if businessButton.isEnabled == false {
+            //} else if businessButton.isEnabled && loveButton.isEnabled {
+            //noMessagesLabel.text = "No active connections for business or dating."
+            //} else if businessButton.isEnabled && friendshipButton.isEnabled {
+            //noMessagesLabel.text = "No active connections for business or friendship."
+            //} else if friendshipButton.isEnabled && loveButton.isEnabled {
+            //noMessagesLabel.text = "No active connections for friendship or dating."
+        } else if type == "Business" {
             //noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
             noMessagesLabel.text = "No active connections for business."
             print("business enabled = false")
-        } else if loveButton.isEnabled == false {
+        } else if type == "Love" {
             //noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
             noMessagesLabel.text = "No active connections for love."
             print("love enabled = false")
-        } else if friendshipButton.isEnabled == false {
+        } else if type == "Friendship" {
             noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
             noMessagesLabel.text = "No active connections for friendship."
         } else {
@@ -378,10 +394,20 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //view.addSubview(tableView)
         
+        filterLabel.frame = CGRect(x: 0, y: 0.18*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
+        filterLabel.font = UIFont(name: "BentonSans", size: 18)
+        filterLabel.textAlignment = .center
+        //view.addSubview(filterLabel)
+        
+        displayFilterLabel(type: "All Types")
+        
         displayNavigationBar()
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.tableHeaderView = newMatchesView
+        displayNewMatches()
         
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
@@ -410,9 +436,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         tableView.delegate = self
         tableView.dataSource = self
+        searchBarContainer.addSubview(searchController.searchBar)
+        searchBarContainer.frame = CGRect(x: 0, y: 0.11*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.08*DisplayUtility.screenHeight)
+        view.addSubview(searchBarContainer)
+        view.addSubview(filterLabel)
         CustomSearchBar.customizeSearchController(searchController: searchController)
         searchController.searchResultsUpdater = self
-        self.tableView.tableHeaderView = searchController.searchBar
         pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         pagingSpinner.color = UIColor.darkGray
         pagingSpinner.hidesWhenStopped = true
@@ -426,8 +455,38 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
+    func displayFilterLabel(type : String) {
+        if type == "All Types" {
+            filterLabel.isHidden = true
+            filterLabel.frame = CGRect(x: 0, y: searchBarContainer.frame.maxY, width: 0, height: 0)
+        } else {
+            filterLabel.isHidden = false
+            filterLabel.frame = CGRect(x: 0, y: searchBarContainer.frame.maxY, width: DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
+            if type == "Business" {
+                filterLabel.text = "BUSINESS"
+                filterLabel.textColor = DisplayUtility.businessBlue
+            }
+            if type == "Love" {
+                filterLabel.text = "LOVE"
+                filterLabel.textColor = DisplayUtility.loveRed
+            }
+            if type == "Friendship" {
+                filterLabel.text = "FRIENDSHIP"
+                filterLabel.textColor = DisplayUtility.friendshipGreen
+            }
+        }
+        
+        tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
+    }
+    
+    func displayNewMatches() {
+        newMatchesView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight)
+        newMatchesView.backgroundColor = .black
+    }
+    
     override func viewDidLayoutSubviews() {
-        tableView.frame = CGRect(x: 0, y:0.11*DisplayUtility.screenHeight, width:DisplayUtility.screenWidth, height:0.89*DisplayUtility.screenHeight)
+        displayFilterLabel(type: "All Types")
+        tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
     }
     override func viewDidAppear(_ animated: Bool) {
         
@@ -513,7 +572,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         cell.participants.text = stringOfNames
         cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
-        cell.arrow.text = ">"
+        //cell.arrow.text = ">"
         
         
         if messageViewed[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]! {
@@ -525,16 +584,19 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         switch messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!{
             
         case "Business":
-            cell.participants.textColor = DisplayUtility.businessBlue
-            cell.arrow.textColor = DisplayUtility.businessBlue
+            //cell.participants.textColor = DisplayUtility.businessBlue
+            //cell.arrow.textColor = DisplayUtility.businessBlue
+            cell.color = DisplayUtility.businessBlue
             break
         case "Love":
-            cell.participants.textColor = DisplayUtility.loveRed
-            cell.arrow.textColor = DisplayUtility.loveRed
+            //cell.participants.textColor = DisplayUtility.loveRed
+            //cell.arrow.textColor = DisplayUtility.loveRed
+            cell.color = DisplayUtility.loveRed
             break
         case "Friendship":
-            cell.participants.textColor = DisplayUtility.friendshipGreen
-            cell.arrow.textColor = DisplayUtility.friendshipGreen
+            //cell.participants.textColor = DisplayUtility.friendshipGreen
+            //cell.arrow.textColor = DisplayUtility.friendshipGreen
+            cell.color = DisplayUtility.friendshipGreen
             break
         default: cell.participants.textColor = DisplayUtility.friendshipGreen
         cell.arrow.textColor = DisplayUtility.friendshipGreen
@@ -548,7 +610,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                                              from: date, to: Date(), options: NSCalendar.Options.wrapComponents)
         if components.day! > 7 {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM/dd/yyy"
+            dateFormatter.dateFormat = "MM/dd"
             cell.messageTimestamp.text = dateFormatter.string(from: date)
         }
         else if components.day! >= 2 {
@@ -562,9 +624,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.messageTimestamp.text = "Yesterday"
         }
         else {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "hh:mm a"
-            cell.messageTimestamp.text = dateFormatter.string(from: date)
+            /*
+             let dateFormatter = DateFormatter()
+             dateFormatter.dateFormat = "hh:mm a"
+             cell.messageTimestamp.text = dateFormatter.string(from: date)
+             */
+            cell.messageTimestamp.text = "Today"
         }
         if indexPath.row == filteredPositions.count - 1 {
             toolbarTapped = false
