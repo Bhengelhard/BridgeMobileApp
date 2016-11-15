@@ -10,8 +10,12 @@ import UIKit
 
 class SwipeCard: UIView {
     
+    var user1Photo:UIImage?
+    var user2Photo:UIImage?
+    
     override init (frame: CGRect) {
         super.init(frame: frame)
+        
     }
     
     convenience init () {
@@ -28,6 +32,7 @@ class SwipeCard: UIView {
         
         let topHalf = HalfSwipeCard(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height))
         topHalf.initialize(name: user1Name, status: user1Status, photoURL: user1PhotoURL, connectionType: connectionType)
+        user1Photo = topHalf.photo
         
         //applying rounded corners to the topHalf
         let maskPath = UIBezierPath(roundedRect: topHalf.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
@@ -37,6 +42,7 @@ class SwipeCard: UIView {
         
         let bottomHalf = HalfSwipeCard(frame: CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height))
         bottomHalf.initialize(name: user2Name, status: user2Status, photoURL: user2PhotoURL, connectionType: connectionType)
+        user2Photo = bottomHalf.photo
         
         //applying rounded corners to the bottomHalf
         let maskPath2 = UIBezierPath(roundedRect: bottomHalf.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
@@ -57,7 +63,7 @@ class SwipeCard: UIView {
             shadowLayer.shadowColor = UIColor.lightGray.cgColor
             shadowLayer.shadowPath = shadowLayer.path
             shadowLayer.shadowOffset = CGSize(width: 0.5, height: 2.0)
-            shadowLayer.shadowOpacity = 0.1
+            shadowLayer.shadowOpacity = 0.8
             shadowLayer.shadowRadius = 2
             
             shadowLayer.shouldRasterize = false
@@ -70,6 +76,7 @@ class SwipeCard: UIView {
     func swipeCardFrame () -> CGRect {
         return CGRect(x: 0.071*DisplayUtility.screenWidth, y: 0.1178*DisplayUtility.screenHeight, width: 0.8586*DisplayUtility.screenWidth, height: 0.8178*DisplayUtility.screenHeight)
     }
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

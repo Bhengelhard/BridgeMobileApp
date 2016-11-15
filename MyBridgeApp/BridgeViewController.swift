@@ -958,11 +958,11 @@ class BridgeViewController: UIViewController {
         
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.alpha = 0.0
-        view.insertSubview(connectIcon, aboveSubview: arrayOfCardsInDeck.last!)
+        view.insertSubview(connectIcon, aboveSubview: arrayOfCardsInDeck.first!)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
         disconnectIcon.alpha = 0.0
-        view.insertSubview(disconnectIcon, aboveSubview: arrayOfCardsInDeck.last!)
+        view.insertSubview(disconnectIcon, aboveSubview: arrayOfCardsInDeck.first!)
         
         wasLastSwipeInDeck = false
     }
@@ -1193,9 +1193,10 @@ class BridgeViewController: UIViewController {
                 }
             }
             if removeCard {
-                swipeCardView.removeFromSuperview()
+                //swipeCardView.removeFromSuperview()
             }
             else {
+                //Put swipeCard back into place
                 UIView.animate(withDuration: 0.7, animations: {
                     rotation = CGAffineTransform(rotationAngle: 0)
                     stretch = rotation.scaledBy(x: 1, y: 1)
@@ -1211,7 +1212,11 @@ class BridgeViewController: UIViewController {
         }
     }
     func bridged(){
-        let bridgePairings = localData.getPairings()
+        let reasonForConnectionView = ReasonForConnection()
+        reasonForConnectionView.sendSwipeCard(swipeCardView: arrayOfCardsInDeck.first! as! SwipeCard)
+        view.addSubview(reasonForConnectionView)
+        
+        /*let bridgePairings = localData.getPairings()
             if var bridgePairings = bridgePairings {
             var x = 0
             for i in 0 ..< (bridgePairings.count) {
@@ -1297,7 +1302,7 @@ class BridgeViewController: UIViewController {
             segueToSingleMessage = true
             performSegue(withIdentifier: "showSingleMessage", sender: nil)
         }
-        nextPair()
+        nextPair()*/
     }
     func callbackForNextPair(_ bridgeType:String) -> Void {
         if arrayOfCardsInDeck.count > 0 {
@@ -1404,6 +1409,19 @@ class BridgeViewController: UIViewController {
             getBridgePairings(1, typeOfCards: bridgeType, callBack: callbackForNextPair, bridgeType:bridgeType)
             }
     }
+    func connectionCanceled(swipeCardView: SwipeCard) {
+        //Put swipeCard back into place
+        let rotation = CGAffineTransform(rotationAngle: 0)
+        let stretch = rotation.scaledBy(x: 1, y: 1)
+        UIView.animate(withDuration: 0.7, animations: {
+            swipeCardView.transform = stretch
+            swipeCardView.frame = swipeCardView.swipeCardFrame()
+            self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
+            self.disconnectIcon.alpha = 0.0
+            self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
+            self.connectIcon.alpha = 0.0
+        })
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         NotificationCenter.default.removeObserver(self)
@@ -1440,7 +1458,6 @@ class BridgeViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
 }
 

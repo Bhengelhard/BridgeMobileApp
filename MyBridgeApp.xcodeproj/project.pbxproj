@@ -33,6 +33,7 @@
 		30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */; };
 		30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */; };
 		30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */; };
+		30E2AF781DDA2AB70023AA95 /* ReasonForConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */; };
 		30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */; };
 		814C3ACB1B69877600E307BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814C3AC81B69877600E307BB /* Images.xcassets */; };
 		81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81761A49E0D500E65899 /* libsqlite3.dylib */; };
@@ -97,6 +98,7 @@
 		30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HalfSwipeCard.swift; path = "Custom Classes/Custom Views/HalfSwipeCard.swift"; sourceTree = "<group>"; };
 		30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
+		30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReasonForConnection.swift; path = "Custom Classes/Custom Views/ReasonForConnection.swift"; sourceTree = "<group>"; };
 		30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Page Option A Scaled to Iphone 6.png"; sourceTree = "<group>"; };
 		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		814C3AC91B69877600E307BB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */,
 				3030C0D41DD550240077F7AC /* SwipeCard.swift */,
 				30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */,
+				30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				3030C0C21DD54E5E0077F7AC /* CustomKeyboard.swift in Sources */,
 				3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */,
 				3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */,
+				30E2AF781DDA2AB70023AA95 /* ReasonForConnection.swift in Sources */,
 				CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */,
 				3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */,
 				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,

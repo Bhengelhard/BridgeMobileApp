@@ -197,8 +197,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         
         //stopping user from entering bridge status with more than a certain number of characters
         if let characterCount = messageTextView.text?.characters.count {
-            if characterCount > 126 {
-                let aboveMaxBy = characterCount - 126
+            if characterCount > 80 {
+                let aboveMaxBy = characterCount - 80
                 let index1 = messageTextView.text!.characters.index(messageTextView.text!.endIndex, offsetBy: -aboveMaxBy)
                 messageTextView.text = messageTextView.text!.substring(to: index1)
             }

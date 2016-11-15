@@ -13,7 +13,7 @@ class HalfSwipeCard: UIView {
     //var name:String?
     //var location:String?
     //var status:String?
-    //var photo:String?
+    var photo:UIImage?
     //var locationCoordinates:[Double]?
     //var connectionType:String?
     
@@ -36,14 +36,17 @@ class HalfSwipeCard: UIView {
         let photoView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
         let downloader = Downloader()
         downloader.imageFromURL(URL: URL(string: photoURL)!, imageView: photoView)
+        if let image = photoView.image {
+            photo = image
+        }
         self.addSubview(photoView)
         
-        let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.width, y: 0.7268*self.frame.height, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth))
+        let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.width, y: 0.68*self.frame.height, width: 0.056*DisplayUtility.screenHeight, height: 0.056*DisplayUtility.screenHeight))
         let typeImageName = "\(connectionType)_Card_Icon"
         connectionTypeIcon.image = UIImage(named: typeImageName)
         self.addSubview(connectionTypeIcon)
         
-        let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0.7556*self.frame.height, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
+        let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
         nameLabel.center.y = connectionTypeIcon.center.y
         nameLabel.text = firstNameLastNameInitial(name: name)
         nameLabel.textColor = UIColor.white
@@ -56,15 +59,25 @@ class HalfSwipeCard: UIView {
         self.addSubview(nameLabel)
         
         if status != "" {
-            let statusView = UIView(frame: CGRect(x: 0, y: 0.8689*self.frame.height, width: self.frame.width, height: 0.1*self.frame.height)) // this height needs to change based on text input
-            statusView.backgroundColor = DisplayUtility.necterGray
-            statusView.layer.opacity = 0.6
-            self.addSubview(statusView)
+            let statusTextView = UITextView(frame: CGRect(x: 0, y: connectionTypeIcon.frame.origin.y + connectionTypeIcon.frame.height, width: self.frame.width, height: 0.08*self.frame.height)) // this height needs to change based on text input
+            let displayUtility = DisplayUtility()
+            statusTextView.backgroundColor = UIColor.black
+            statusTextView.layer.opacity = 0.6
+            statusTextView.text = "This is the status"//status
+            statusTextView.textContainer.maximumNumberOfLines = 2
+            statusTextView.font = UIFont(name: "BentonSans-Light", size: 15)
+            statusTextView.textColor = UIColor.white
+            statusTextView.textAlignment = NSTextAlignment.center
+            statusTextView.textContainerInset = UIEdgeInsetsMake(4, 12, 4, 12)
+            statusTextView.isUserInteractionEnabled = false
+            displayUtility.setViewHeightFromContent(view: statusTextView)
+            statusTextView.text = ""
+            self.addSubview(statusTextView)
             
-            let statusLabel = UILabel(frame: statusView.frame)
+            let statusLabel = UILabel(frame: statusTextView.frame)
             statusLabel.text = status
             statusLabel.textColor = UIColor.white
-            statusLabel.font = UIFont(name: "BentonSans-Light", size: 16)
+            statusLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             statusLabel.textAlignment = NSTextAlignment.center
             self.addSubview(statusLabel)
         }
