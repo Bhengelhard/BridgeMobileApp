@@ -47,6 +47,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     let friendshipLabel = UILabel()
     let postStatusButton = UIButton()
     
+    let filterLabel = UILabel()
+    let searchBarContainer = UIView()
+    var newMatchesView = NewMatchesView()
+
+    
     //message information
     let noMessagesLabel = UILabel()
     var names = [String : [String]]()
@@ -378,10 +383,29 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //view.addSubview(tableView)
         
+        filterLabel.frame = CGRect(x: 0, y: 0.18*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
+        filterLabel.font = UIFont(name: "BentonSans", size: 18)
+        filterLabel.textAlignment = .center
+        displayFilterLabel(type: "All Types")
+
+        
         displayNavigationBar()
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        var profilePics = [UIImage]()
+        var names = [String]()
+        
+        for _ in 0...9 {
+            let profilePic = UIImage(named: "Business_Icon_Blue")
+            profilePics.append(profilePic!)
+            names.append("Doug")
+        }
+        
+        newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
+        tableView.tableHeaderView = newMatchesView
+
         
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
@@ -425,6 +449,30 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
         
+    }
+    
+    func displayFilterLabel(type : String) {
+        if type == "All Types" {
+            filterLabel.isHidden = true
+            filterLabel.frame = CGRect(x: 0, y: searchBarContainer.frame.maxY, width: 0, height: 0)
+        } else {
+            filterLabel.isHidden = false
+            filterLabel.frame = CGRect(x: 0, y: searchBarContainer.frame.maxY, width: DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
+            if type == "Business" {
+                filterLabel.text = "BUSINESS"
+                filterLabel.textColor = DisplayUtility.businessBlue
+            }
+            if type == "Love" {
+                filterLabel.text = "LOVE"
+                filterLabel.textColor = DisplayUtility.loveRed
+            }
+            if type == "Friendship" {
+                filterLabel.text = "FRIENDSHIP"
+                filterLabel.textColor = DisplayUtility.friendshipGreen
+            }
+        }
+        
+        tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
     }
     
     override func viewDidLayoutSubviews() {
@@ -526,16 +574,19 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         switch messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!{
             
         case "Business":
-            cell.participants.textColor = DisplayUtility.businessBlue
-            cell.arrow.textColor = DisplayUtility.businessBlue
+            //cell.participants.textColor = DisplayUtility.businessBlue
+            //cell.arrow.textColor = DisplayUtility.businessBlue
+            cell.color = DisplayUtility.businessBlue
             break
         case "Love":
-            cell.participants.textColor = DisplayUtility.loveRed
-            cell.arrow.textColor = DisplayUtility.loveRed
+            //cell.participants.textColor = DisplayUtility.loveRed
+            //cell.arrow.textColor = DisplayUtility.loveRed
+            cell.color = DisplayUtility.loveRed
             break
         case "Friendship":
             cell.participants.textColor = DisplayUtility.friendshipGreen
             cell.arrow.textColor = DisplayUtility.friendshipGreen
+            cell.color = DisplayUtility.friendshipGreen
             break
         default: cell.participants.textColor = DisplayUtility.friendshipGreen
         cell.arrow.textColor = DisplayUtility.friendshipGreen
