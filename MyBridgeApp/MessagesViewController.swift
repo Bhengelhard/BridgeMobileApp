@@ -49,7 +49,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     let filterLabel = UILabel()
     let searchBarContainer = UIView()
-    let newMatchesView = UIScrollView()
+    var newMatchesView = NewMatchesView()
     
     //message information
     let noMessagesLabel = UILabel()
@@ -406,8 +406,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         
+        let profilePic = UIImage(named: "Business_Icon_Blue")
+        var profilePics = [UIImage]()
+        profilePics.append(profilePic!)
+        var names = [String]()
+        names.append("Doug")
+        
+        
+        newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
         tableView.tableHeaderView = newMatchesView
-        displayNewMatches()
         
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
