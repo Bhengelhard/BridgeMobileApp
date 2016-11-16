@@ -34,7 +34,7 @@ class NewMatchesView: UIScrollView {
         for i in 0...profilePics.count-1 {
             let profilePic = profilePics[i]
             let profilePicView = UIImageView(image: profilePic)
-            profilePicView.frame = CGRect(x: CGFloat(i)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY, width: 0.168*frame.width, height: 0.168*contentSize.width)
+            profilePicView.frame = CGRect(x: CGFloat(i)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY, width: 0.168*frame.width, height: 0.168*frame.width)
             profilePicView.layer.cornerRadius = profilePicView.frame.height/2
             profilePicView.layer.borderWidth = 2
             profilePicView.clipsToBounds = true
