@@ -161,6 +161,7 @@ class Downloader {
                     imageView.contentMode = UIViewContentMode.scaleAspectFill
                     imageView.clipsToBounds = true
                 })
+               
                 
             }
             else {

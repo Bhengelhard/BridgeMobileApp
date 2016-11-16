@@ -15,13 +15,15 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     let messageTextView = UITextView()
     let messageButton = UIButton()
     var type = String()
+    var placeholderText = "Enter Text Here"
+    var target = String()
     
     var updatedText = String()
     
     //setting the height of the keyboard
     var keyboardHeight = CGFloat()
     
-    func display (view: UIView){
+    func display (view: UIView, placeholder: String, buttonTitle: String, buttonTarget: String){
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
@@ -39,7 +41,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageTextView.textColor = UIColor.lightGray
         messageTextView.font = UIFont(name: "BentonSans-light", size: 18)
         messageTextView.backgroundColor = DisplayUtility.necterGray
-        messageTextView.text = "Why should they 'nect?"
+        messageTextView.text = placeholder
+        placeholderText = placeholder
         messageTextView.keyboardAppearance = UIKeyboardAppearance.alert
         messageTextView.autocorrectionType = UITextAutocorrectionType.no
         messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
@@ -53,7 +56,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageButton.frame = CGRect(x: 0.75*messageView.frame.width, y: 0.1*messageView.frame.height, width: 0.2*messageView.frame.width, height: 0.8*messageView.frame.height)
         messageButton.frame.size.height = messageTextView.frame.height
         messageButton.frame.origin.y = messageTextView.frame.origin.y
-        messageButton.setTitle("send", for: .normal)
+        messageButton.setTitle(buttonTitle, for: .normal)
         messageButton.setTitleColor(DisplayUtility.necterYellow, for: .normal)
         messageButton.setTitleColor(DisplayUtility.necterGray, for: .disabled)
         messageButton.titleLabel?.textAlignment = NSTextAlignment.right
@@ -61,6 +64,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageButton.layer.borderWidth = 2
         messageButton.layer.borderColor = UIColor.white.cgColor
         messageButton.layer.cornerRadius = 5
+        target = buttonTarget
         messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
         messageButton.isEnabled = false
         messageView.addSubview(messageButton)
@@ -99,11 +103,20 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     }
     
     @objc func messageButtonTapped(_ sender: UIButton) {
-        print("postTapped")
-        sendPost()
+        if target == "postStatus" {
+            postStatus()
+        } else if target == "sendMessage" {
+            print("sendMessage")
+        } else if target == "bridgeUsers" {
+            bridgeUsers()
+        }
+        print("messageButtonTapped")
     }
     
-    func sendPost () {
+    func bridgeUsers() {
+        print("BridgeUsers")
+    }
+    func postStatus() {
         //setting the status to local data
         let localData = LocalData()
         if type == "Business" {
@@ -147,7 +160,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
         if updatedText.isEmpty {
             //setting the placeholder
-            messageTextView.text = "I am looking for..."
+            messageTextView.text = placeholderText
             textView.textColor = UIColor.lightGray
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             updateMessageHeights()

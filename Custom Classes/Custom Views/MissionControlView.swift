@@ -99,6 +99,8 @@ class MissionControlView {
     }
     
     func animateDisplayFiltersView() {
+        tabView.bringSubview(toFront: currentView)
+
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
             self.tabView.frame.origin.y = 0.85*DisplayUtility.screenHeight
             self.filtersView.frame.origin.y = 0.9*DisplayUtility.screenHeight
@@ -147,7 +149,7 @@ class MissionControlView {
     
     func animateDisplayPostView() {
         //add custom keyboard
-        customKeyboard.display(view: currentView)
+        customKeyboard.display(view: currentView, placeholder: "I am looking for...", buttonTitle: "post", buttonTarget: "postStatus")
         let type = whichFilter()
         customKeyboard.updatePostType(updatedPostType: type)
         customKeyboardHeight = customKeyboard.height()

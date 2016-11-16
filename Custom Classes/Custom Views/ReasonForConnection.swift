@@ -258,7 +258,7 @@ class ReasonForConnection: UIView {
     func displayCustomKeyboard() {
         //add custom keyboard
         
-        customKeyboard.display(view: self)
+        customKeyboard.display(view: self, placeholder: "Why should they 'nect?", buttonTitle: "send", buttonTarget: "bridgeUsers")
         customKeyboard.resign()
         //let type = whichFilter()
         //customKeyboard.updatePostType(updatedPostType: type)
@@ -314,21 +314,21 @@ class ReasonForConnection: UIView {
         self.addSubview(suggestion3Button)
         
         //Creating Parameters for Suggested Reason Labels
-        suggestion1Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion1Button.frame.origin.y, width: 0.8325*DisplayUtility.screenWidth, height: suggestion1Button.frame.height)
+        suggestion1Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion1Button.frame.origin.y, width: 0.8*DisplayUtility.screenWidth, height: suggestion1Button.frame.height)
         suggestion1Label.textColor = UIColor.white
         suggestion1Label.font = UIFont(name: "BentonSans-Light", size: 18)
         suggestion1Label.textAlignment = NSTextAlignment.justified
         suggestion1Label.numberOfLines = 2
         self.addSubview(suggestion1Label)
         
-        suggestion2Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion2Button.frame.origin.y, width: 0.8325*DisplayUtility.screenWidth, height: suggestion2Button.frame.height)
+        suggestion2Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion2Button.frame.origin.y, width: 0.8*DisplayUtility.screenWidth, height: suggestion2Button.frame.height)
         suggestion2Label.textColor = UIColor.white
         suggestion2Label.font = UIFont(name: "BentonSans-Light", size: 18)
         suggestion2Label.textAlignment = NSTextAlignment.justified
         suggestion2Label.numberOfLines = 2
         self.addSubview(suggestion2Label)
         
-        suggestion3Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion3Button.frame.origin.y, width: 0.8325*DisplayUtility.screenWidth, height: suggestion3Button.frame.height)
+        suggestion3Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion3Button.frame.origin.y, width: 0.8*DisplayUtility.screenWidth, height: suggestion3Button.frame.height)
         suggestion3Label.textColor = UIColor.white
         suggestion3Label.font = UIFont(name: "BentonSans-Light", size: 18)
         suggestion3Label.textAlignment = NSTextAlignment.justified
