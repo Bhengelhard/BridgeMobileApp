@@ -221,43 +221,47 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     }
     
     func updateMessageHeights() {
-        if messageTextView.text != "" {
+        //changing the height of the messageText based on the content
+        let messageTextFixedWidth = messageTextView.frame.size.width
+        let messageTextNewSize = messageTextView.sizeThatFits(CGSize(width: messageTextFixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        var messageTextNewFrame = messageTextView.frame
+        messageTextNewFrame.size = CGSize(width: max(messageTextNewSize.width, messageTextFixedWidth), height: messageTextNewSize.height)
+        
+        let messageViewFixedHeight = 0.89*DisplayUtility.screenHeight-keyboardHeight
+        
+        
+        if messageViewFixedHeight < messageTextNewFrame.size.height + 8.5 {
             
-            //changing the height of the messageText based on the content
-            let messageTextFixedWidth = messageTextView.frame.size.width
-            let messageTextNewSize = messageTextView.sizeThatFits(CGSize(width: messageTextFixedWidth, height: CGFloat.greatestFiniteMagnitude))
-            var messageTextNewFrame = messageTextView.frame
-            messageTextNewFrame.size = CGSize(width: max(messageTextNewSize.width, messageTextFixedWidth), height: messageTextNewSize.height)
+            print("reached the navBar")
+            messageTextView.isScrollEnabled = true
+            //messageText.frame.size.height = previousMessageHeight
+            //toolbar.frame.size.height = previousToolbarHeight
+        } else {
             
-            let messageViewFixedHeight = 0.89*DisplayUtility.screenHeight-keyboardHeight
+            messageTextView.frame = messageTextNewFrame
             
+            //changing the height of the messageView based on the content
+            let previousMessageViewHeight = messageView.frame.height
+            let newMessageViewHeight = messageTextNewFrame.size.height + 8.5
+            let changeInMessageViewHeight = newMessageViewHeight - previousMessageViewHeight
+            let messageViewFixedWidth = messageView.frame.size.width
             
-            if messageViewFixedHeight < messageTextNewFrame.size.height + 8.5 {
-                
-                print("reached the navBar")
-                messageTextView.isScrollEnabled = true
-                //messageText.frame.size.height = previousMessageHeight
-                //toolbar.frame.size.height = previousToolbarHeight
-            } else {
-                
-                messageTextView.frame = messageTextNewFrame
-                
-                //changing the height of the messageView based on the content
-                let previousMessageViewHeight = messageView.frame.height
-                let newMessageViewHeight = messageTextNewFrame.size.height + 8.5
-                let changeInMessageViewHeight = newMessageViewHeight - previousMessageViewHeight
-                let messageViewFixedWidth = messageView.frame.size.width
-                
-                //toolbar.sizeThatFits(CGSize(width: toolbarFixedWidth, height: toolbarFixedHeight))
-                let messageViewNewSize = messageView.sizeThatFits(CGSize(width: messageViewFixedWidth, height: messageViewFixedHeight))
-                var messageViewNewFrame = messageView.frame
-                messageViewNewFrame.size = CGSize(width: max(messageViewNewSize.width, messageViewFixedWidth), height: min(messageTextNewFrame.size.height + 8.5, messageViewFixedHeight))
-                messageViewNewFrame.origin.y = messageView.frame.origin.y - changeInMessageViewHeight
-                //if the toolbar has grown to the size where it is just below the navigation bar then enable the textView to scroll
-                messageView.frame = messageViewNewFrame
-            }
+            //toolbar.sizeThatFits(CGSize(width: toolbarFixedWidth, height: toolbarFixedHeight))
+            let messageViewNewSize = messageView.sizeThatFits(CGSize(width: messageViewFixedWidth, height: messageViewFixedHeight))
+            var messageViewNewFrame = messageView.frame
+            messageViewNewFrame.size = CGSize(width: max(messageViewNewSize.width, messageViewFixedWidth), height: min(messageTextNewFrame.size.height + 8.5, messageViewFixedHeight))
+            messageViewNewFrame.origin.y = messageView.frame.origin.y - changeInMessageViewHeight
+            //if the toolbar has grown to the size where it is just below the navigation bar then enable the textView to scroll
+            messageView.frame = messageViewNewFrame
         }
-
+        
+        if messageTextView.text.isEmpty {
+            //setting the placeholder
+            messageTextView.text = placeholderText
+            messageTextView.textColor = UIColor.lightGray
+            messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
+            messageButton.isEnabled = false
+        }
     }
     
 }

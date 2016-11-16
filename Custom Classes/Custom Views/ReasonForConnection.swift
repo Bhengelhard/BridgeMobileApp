@@ -388,19 +388,24 @@ class ReasonForConnection: UIView {
             suggestion1Circle.isHighlighted = true
             suggestion2Circle.isHighlighted = false
             suggestion3Circle.isHighlighted = false
+            customKeyboard.messageTextView.text = suggestion1Label.text
         } else if sender.tag == 2 && !suggestion2Circle.isHighlighted{
             print("suggestion2Button")
             suggestion1Circle.isHighlighted = false
             suggestion2Circle.isHighlighted = true
             suggestion3Circle.isHighlighted = false
+            customKeyboard.messageTextView.text = suggestion2Label.text
         } else if sender.tag == 3 && !suggestion3Circle.isHighlighted {
             print("suggestion3Button")
             suggestion1Circle.isHighlighted = false
             suggestion2Circle.isHighlighted = false
             suggestion3Circle.isHighlighted = true
+            customKeyboard.messageTextView.text = suggestion3Label.text
         } else {
             deselectCircles()
+            customKeyboard.messageTextView.text = nil
         }
+        customKeyboard.updateMessageHeights()
         
     }
     
