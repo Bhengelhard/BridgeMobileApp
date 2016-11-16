@@ -72,18 +72,18 @@ class MissionControlView {
         
         //adding the filterButtons
         businessButton.addTarget(self, action: #selector(businessTapped(_:)), for: .touchUpInside)
-        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
-        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .selected)
+        businessButton.setImage(UIImage(named: "Unselected_Business_Icon"), for: UIControlState())
+        businessButton.setImage(UIImage(named:  "Selected_Business_Icon"), for: .selected)
         businessButton.tag = 1
         
         loveButton.addTarget(self, action: #selector(loveTapped(_:)), for: .touchUpInside)
-        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
-        loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .selected)
+        loveButton.setImage(UIImage(named: "Unselected_Love_Icon"), for: UIControlState())
+        loveButton.setImage(UIImage(named: "Selected_Love_Icon"), for: .selected)
         loveButton.tag = 2
         
         friendshipButton.addTarget(self, action: #selector(friendshipTapped(_:)), for: .touchUpInside)
-        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
-        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .selected)
+        friendshipButton.setImage(UIImage(named: "Unselected_Friendship_Icon"), for: UIControlState())
+        friendshipButton.setImage(UIImage(named:  "Selected_Friendship_Icon"), for: .selected)
         friendshipButton.tag = 3
         
         businessButton.frame.size = CGSize(width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
