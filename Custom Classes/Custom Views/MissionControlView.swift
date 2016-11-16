@@ -150,6 +150,7 @@ class MissionControlView {
     func animateDisplayPostView() {
         //add custom keyboard
         customKeyboard.display(view: currentView, placeholder: "I am looking for...", buttonTitle: "post", buttonTarget: "postStatus")
+        customKeyboard.maxNumCharacters = 80
         let type = whichFilter()
         customKeyboard.updatePostType(updatedPostType: type)
         customKeyboardHeight = customKeyboard.height()

@@ -17,6 +17,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     var type = String()
     var placeholderText = "Enter Text Here"
     var target = String()
+    var maxNumCharacters = Int.max
     
     var updatedText = String()
     
@@ -208,11 +209,11 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     
     func characterLimit() {
         //need to retrieve the chracter limit from the page the user is on, if there is on.
-        
+        print(maxNumCharacters)
         //stopping user from entering bridge status with more than a certain number of characters
         if let characterCount = messageTextView.text?.characters.count {
-            if characterCount > 80 {
-                let aboveMaxBy = characterCount - 80
+            if characterCount > maxNumCharacters {
+                let aboveMaxBy = characterCount - maxNumCharacters
                 let index1 = messageTextView.text!.characters.index(messageTextView.text!.endIndex, offsetBy: -aboveMaxBy)
                 messageTextView.text = messageTextView.text!.substring(to: index1)
             }
