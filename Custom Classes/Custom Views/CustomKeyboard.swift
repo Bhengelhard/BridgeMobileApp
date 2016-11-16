@@ -261,6 +261,10 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             messageTextView.textColor = UIColor.lightGray
             messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
             messageButton.isEnabled = false
+        } else if messageTextView.text != placeholderText{
+            //removing the placeholder
+            messageTextView.textColor = UIColor.white
+            messageButton.isEnabled = true
         }
     }
     
