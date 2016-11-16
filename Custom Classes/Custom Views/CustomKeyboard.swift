@@ -39,7 +39,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageTextView.textColor = UIColor.lightGray
         messageTextView.font = UIFont(name: "BentonSans-light", size: 18)
         messageTextView.backgroundColor = DisplayUtility.necterGray
-        messageTextView.text = "I am looking for..."
+        messageTextView.text = "Why should they 'nect?"
         messageTextView.keyboardAppearance = UIKeyboardAppearance.alert
         messageTextView.autocorrectionType = UITextAutocorrectionType.no
         messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
@@ -53,7 +53,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageButton.frame = CGRect(x: 0.75*messageView.frame.width, y: 0.1*messageView.frame.height, width: 0.2*messageView.frame.width, height: 0.8*messageView.frame.height)
         messageButton.frame.size.height = messageTextView.frame.height
         messageButton.frame.origin.y = messageTextView.frame.origin.y
-        messageButton.setTitle("Post", for: .normal)
+        messageButton.setTitle("send", for: .normal)
         messageButton.setTitleColor(DisplayUtility.necterYellow, for: .normal)
         messageButton.setTitleColor(DisplayUtility.necterGray, for: .disabled)
         messageButton.titleLabel?.textAlignment = NSTextAlignment.right
@@ -68,7 +68,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     
     func resign() {
         messageTextView.resignFirstResponder()
-        messageView.frame.origin.y = 0.9*DisplayUtility.screenHeight
+        messageView.frame.origin.y = DisplayUtility.screenHeight - messageView.frame.height
         //messageView.removeFromSuperview()
     }
     
@@ -150,6 +150,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             messageTextView.text = "I am looking for..."
             textView.textColor = UIColor.lightGray
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            updateMessageHeights()
             messageButton.isEnabled = false
             return false
         }
