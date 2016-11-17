@@ -81,12 +81,21 @@ class MessagesTableCell: UITableViewCell {
         cellWidth = bounds.size.width//cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
         /*
+<<<<<<< HEAD
         if let _ = setSeparator {
             // print("setSeparator")
             line.frame = CGRect(x: 0.025*cellWidth! + 0.15*cellHeight!, y: 0, width: bounds.size.width, height: 1)
             contentView.addSubview(line)
         }
         */
+=======
+         if let _ = setSeparator {
+         // print("setSeparator")
+         line.frame = CGRect(x: 0.025*cellWidth! + 0.15*cellHeight!, y: 0, width: bounds.size.width, height: 1)
+         contentView.addSubview(line)
+         }
+         */
+>>>>>>> fcbbe143edff857e1e0cc2b99dfb320c325f9b1a
         
         profilePic.frame = CGRect(x: 0.0708*cellWidth!, y: 0.5*cellHeight!-0.168*cellWidth!/2, width: 0.168*cellWidth!, height: 0.168*cellWidth!)
         profilePic.layer.cornerRadius = profilePic.frame.height/2

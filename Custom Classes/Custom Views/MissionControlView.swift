@@ -24,6 +24,11 @@ class MissionControlView {
     let loveButton = UIButton()
     let friendshipButton = UIButton()
     
+    var isFiltersViewDisplayed = Bool()
+    var isPostViewDisplayed = Bool()
+    
+    var customKeyboardHeight = CGFloat()
+    
     func createTabView (view: UIView) {
         currentView = view
         tabView.frame = CGRect(x:0, y: 0.95*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.051*DisplayUtility.screenHeight)
@@ -43,9 +48,12 @@ class MissionControlView {
         tabViewButton.setTitle("^", for: .normal)
         tabView.addSubview(tabViewButton)
         
+        isFiltersViewDisplayed = false
+        isPostViewDisplayed = false
+        
     }
     
-    @objc func showFiltersView(_ sender: UIButton) {
+    func addFiltersView () {
         businessButton.addTarget(self, action: #selector(businessTapped(_:)), for: .touchUpInside)
         loveButton.addTarget(self, action: #selector(loveTapped(_:)), for: .touchUpInside)
         friendshipButton.addTarget(self, action: #selector(friendshipTapped(_:)), for: .touchUpInside)
@@ -64,18 +72,18 @@ class MissionControlView {
         
         //adding the filterButtons
         businessButton.addTarget(self, action: #selector(businessTapped(_:)), for: .touchUpInside)
-        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
-        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .selected)
+        businessButton.setImage(UIImage(named: "Unselected_Business_Icon"), for: UIControlState())
+        businessButton.setImage(UIImage(named:  "Selected_Business_Icon"), for: .selected)
         businessButton.tag = 1
         
         loveButton.addTarget(self, action: #selector(loveTapped(_:)), for: .touchUpInside)
-        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
-        loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .selected)
+        loveButton.setImage(UIImage(named: "Unselected_Love_Icon"), for: UIControlState())
+        loveButton.setImage(UIImage(named: "Selected_Love_Icon"), for: .selected)
         loveButton.tag = 2
         
         friendshipButton.addTarget(self, action: #selector(friendshipTapped(_:)), for: .touchUpInside)
-        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
-        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .selected)
+        friendshipButton.setImage(UIImage(named: "Unselected_Friendship_Icon"), for: UIControlState())
+        friendshipButton.setImage(UIImage(named:  "Selected_Friendship_Icon"), for: .selected)
         friendshipButton.tag = 3
         
         businessButton.frame.size = CGSize(width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
@@ -88,23 +96,34 @@ class MissionControlView {
         filtersView.addSubview(businessButton)
         filtersView.addSubview(loveButton)
         filtersView.addSubview(friendshipButton)
-        
+    }
+    
+    func animateDisplayFiltersView() {
+        tabView.bringSubview(toFront: currentView)
+
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
             self.tabView.frame.origin.y = 0.85*DisplayUtility.screenHeight
             self.filtersView.frame.origin.y = 0.9*DisplayUtility.screenHeight
+            self.postBackgroundView.frame.origin.y = DisplayUtility.screenHeight
         })
         if tabView.frame.origin.y == 0.45*DisplayUtility.screenHeight {
             customKeyboard.resign()
         }
-        
+        isFiltersViewDisplayed = true
+        isPostViewDisplayed = false
+    }
+    
+    @objc func showFiltersView(_ sender: UIButton) {
+        addFiltersView()
+        animateDisplayFiltersView()
         //blurOverViewController.removeFromSuperview()
     }
     
-    @objc func showPostView(_ sender: UIButton) {
+    func addPostView() {
         /*blurOverViewController.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
-        blurOverViewController.alpha = 0
-        displayUtility.setBlurredView(viewToBlur: blurOverViewController)
-        //currentView.insertSubview(blurOverViewController, belowSubview: tabView)*/
+         blurOverViewController.alpha = 0
+         displayUtility.setBlurredView(viewToBlur: blurOverViewController)
+         //currentView.insertSubview(blurOverViewController, belowSubview: tabView)*/
         tabViewButton.removeTarget(self, action: #selector(showPostView(_:)), for: .touchUpInside)
         tabViewButton.addTarget(self,action:#selector(closeMissionControl(_:)), for: .touchUpInside)
         
@@ -126,29 +145,45 @@ class MissionControlView {
         selectTypeLabel.numberOfLines = 3
         selectTypeLabel.textAlignment = NSTextAlignment.center
         postBackgroundView.addSubview(selectTypeLabel)
-        
+    }
+    
+    func animateDisplayPostView() {
         //add custom keyboard
-        customKeyboard.display(view: currentView)
+        customKeyboard.display(view: currentView, placeholder: "I am looking for...", buttonTitle: "post", buttonTarget: "postStatus")
+        customKeyboard.maxNumCharacters = 80
         let type = whichFilter()
         customKeyboard.updatePostType(updatedPostType: type)
-        let customKeyboardHeight = customKeyboard.height()
+        customKeyboardHeight = customKeyboard.height()
         postBackgroundView.frame.size.height = customKeyboardHeight
         
+        //postBackgroundView.frame.size.height = customKeyboardHeight
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
-            self.postBackgroundView.frame.origin.y = DisplayUtility.screenHeight - customKeyboardHeight
+            self.postBackgroundView.frame.origin.y = DisplayUtility.screenHeight - self.customKeyboardHeight
             self.filtersView.frame.origin.y = self.postBackgroundView.frame.origin.y - self.filtersView.frame.height
             self.tabView.frame.origin.y = self.filtersView.frame.origin.y - self.tabView.frame.height
             //self.blurOverViewController.alpha = 1.0
         })
+        isFiltersViewDisplayed = true
+        isPostViewDisplayed = true
     }
     
-    @objc func closeMissionControl(_ sender: UIButton) {
-        customKeyboard.resign()
+    @objc func showPostView(_ sender: UIButton) {
+        addPostView()
+        animateDisplayPostView()
+    }
+    
+    func animateCloseMissionControl() {
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
             self.tabView.frame.origin.y = 0.95*DisplayUtility.screenHeight
             self.filtersView.frame.origin.y = DisplayUtility.screenHeight
             self.postBackgroundView.frame.origin.y = DisplayUtility.screenHeight
         })
+        isPostViewDisplayed = false
+        isFiltersViewDisplayed = false
+    }
+    @objc func closeMissionControl(_ sender: UIButton) {
+        customKeyboard.resign()
+        animateCloseMissionControl()
         
         //blurOverViewController.removeFromSuperview()
         filtersView.removeFromSuperview()
@@ -200,24 +235,50 @@ class MissionControlView {
     
     func drag(gestureRecognizer: UIPanGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-            let translation = gestureRecognizer.translation(in: tabView)
-            gestureRecognizer.view?.center = CGPoint(x: (gestureRecognizer.view?.center.x)!, y: max(0.85*DisplayUtility.screenWidth,(gestureRecognizer.view?.center.y)! + translation.y))
+            let tabTranslation = gestureRecognizer.translation(in: tabView)
+            gestureRecognizer.view?.center = CGPoint(x: (gestureRecognizer.view?.center.x)!, y: max(0.85*DisplayUtility.screenWidth,(gestureRecognizer.view?.center.y)! + tabTranslation.y))
             gestureRecognizer.setTranslation(CGPoint.zero, in: tabView)
+            
+            // Set Bottom of View as Lower Limit for TabView Dragging
+            if tabView.frame.origin.y > DisplayUtility.screenHeight - tabView.frame.height {
+                tabView.frame.origin.y = DisplayUtility.screenHeight - tabView.frame.height
+            }
+            // Move PostView and FiltersView with TabView when applicable
+            else if tabView.frame.origin.y < DisplayUtility.screenHeight - tabView.frame.height - filtersView.frame.height{
+                if isPostViewDisplayed == false {
+                    addPostView()
+                }
+                if isFiltersViewDisplayed == false {
+                    addFiltersView()
+                }
+                filtersView.frame.origin.y = tabView.frame.origin.y + tabView.frame.height
+                postBackgroundView.frame.origin.y = filtersView.frame.origin.y + filtersView.frame.height
+                
+            }
+            // Move FiltersView with TabView when applicable
+            else if tabView.frame.origin.y < DisplayUtility.screenHeight - tabView.frame.height {
+                if isFiltersViewDisplayed == false {
+                    addFiltersView()
+                }
+                filtersView.frame.origin.y = tabView.frame.origin.y + tabView.frame.height
+            }
         } else if gestureRecognizer.state == .ended {
+            //Close Mission Control
             if tabView.frame.origin.y > 0.93*DisplayUtility.screenHeight {
-                UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
-                    self.tabView.frame.origin.y = 0.95*DisplayUtility.screenHeight
-                    self.filtersView.frame.origin.y = DisplayUtility.screenHeight
-                })
-            } else if tabView.frame.origin.y > 0.75*DisplayUtility.screenHeight {
-                UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
-                    self.tabView.frame.origin.y = 0.85*DisplayUtility.screenHeight
-                    self.filtersView.frame.origin.y = 0.9*DisplayUtility.screenHeight
-                })
-            } else {//if tabView.frame.origin.y > 0.9*DisplayUtility.screenHeight {
-                UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
-                    self.tabView.frame.origin.y = 0.55*DisplayUtility.screenHeight
-                })
+                animateCloseMissionControl()
+                customKeyboard.resign()
+                print("animateCloseMissionControl")
+            }
+            //Display Filters View
+            else if tabView.frame.origin.y > 0.65*DisplayUtility.screenHeight {
+                animateDisplayFiltersView()
+                customKeyboard.resign()
+                print("animateDisplayFiltersView")
+            }
+            //Display Post View
+            else {
+                animateDisplayPostView()
+                print("animateDisplayPostView")
             }
         }
     }

@@ -21,7 +21,7 @@ class DisplayUtility {
     static let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
     static let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
     static let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
-    static let necterGray = UIColor(red: 80.0/255.0, green: 81.0/255.0, blue: 79.0/255.0, alpha: 1.0)
+    static let necterGray = UIColor(red: 76.0/255.0, green: 76.0/255.0, blue: 77.0/255.0, alpha: 1.0)
     
     //This is a helper function for the BridgeViewController to display a message when there are no more cards to display
     
@@ -74,6 +74,13 @@ class DisplayUtility {
         } else {
             viewToBlur.backgroundColor = UIColor.black
         }
+    }
+    
+    //set the height of the text view based on its content
+    func setViewHeightFromContent(view: UITextView) {
+        let viewFixedWidth = view.frame.size.width
+        let viewNewSize = view.sizeThatFits(CGSize(width: viewFixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        view.frame.size.height = viewNewSize.height
     }
     
 }

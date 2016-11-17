@@ -132,4 +132,45 @@ class Downloader {
         task.resume()
     }
 
+    
+    func imageFromURL (URL: URL, imageView: UIImageView){
+        var newImage = UIImage()
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        var request = URLRequest(url: URL)
+        request.httpMethod = "GET"
+        let task = session.dataTask(with: request) { (data:Data?, response:URLResponse?, error:Error?) in
+            if (error == nil && data != nil) {
+                //applying filter to make the white text more legible
+                let beginImage = CIImage(data: data!)
+                let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+                edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+                edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+                edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+                
+                //edgeDetectFilter.setValue(CIImage(image: edgeDetectFilter.outputImage!), forKey: kCIInputImageKey)
+                let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+                
+                newImage = UIImage(cgImage: newCGImage!)
+                DispatchQueue.main.async(execute: {
+                    imageView.alpha = 0
+                    imageView.image = newImage
+                    UIView.animate(withDuration: 0.2, animations: {
+                        imageView.alpha = 1
+                    })
+                    imageView.contentMode = UIViewContentMode.scaleAspectFill
+                    imageView.clipsToBounds = true
+                })
+               
+                
+            }
+            else {
+                // Failure to retrieve Image from URL
+                print("Failure: %@", error!.localizedDescription)
+            }
+        }
+        task.resume()
+        
+    }
+    
 }

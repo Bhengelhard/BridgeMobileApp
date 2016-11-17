@@ -10,7 +10,7 @@ import Foundation
 class UserInfoPair:NSObject, NSCoding {
     var user1:PairInfo? = nil
     var user2:PairInfo? = nil
-    init( user1:PairInfo?, user2:PairInfo?) {//, mainProfilePicture: NSData?) {//,pairings:[UserInfoPair]? ) {
+    init(user1:PairInfo?, user2:PairInfo?) {//, mainProfilePicture: NSData?) {//,pairings:[UserInfoPair]? ) {
         self.user1 = user1
         self.user2 = user2
         
