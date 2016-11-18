@@ -36,21 +36,7 @@ class ReasonForConnection: UIView {
     
     override init (frame: CGRect) {
         super.init(frame: frame)
-        
-        self.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
-        self.alpha = 0
-        let displayUtility = DisplayUtility()
-        displayUtility.setBlurredView(viewToBlur: self)
-        
-        UIView.animate(withDuration: 0.4, animations: {
-           self.alpha = 1
-        })
-        
-        displayNavBar()
-        displayButtons()
-        decideSuggestedReasons()
-        displaySuggestedReasons()
-        displayCustomKeyboard()
+        //leaving empty because reasonForConnectionView in the BridgeViewController is initialized global to the class
     }
     
     convenience init () {
@@ -59,6 +45,23 @@ class ReasonForConnection: UIView {
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This is a fatal error message from CustomClasses/CustomViews/SwipeCard.swift")
+    }
+    func initialize () {
+        self.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
+
+        self.alpha = 0
+        let displayUtility = DisplayUtility()
+        displayUtility.setBlurredView(viewToBlur: self)
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.alpha = 1
+        })
+        
+        displayNavBar()
+        displayButtons()
+        decideSuggestedReasons()
+        displaySuggestedReasons()
+        displayCustomKeyboard()
     }
     
     func sendSwipeCard(swipeCardView: SwipeCard) {
@@ -171,7 +174,6 @@ class ReasonForConnection: UIView {
             self.alpha = 0
         })*/
         self.removeFromSuperview()
-        
         //bring back last card into place
         let bridgeVC = BridgeViewController()
         bridgeVC.connectionCanceled(swipeCardView: swipeCard)
@@ -259,6 +261,7 @@ class ReasonForConnection: UIView {
         //add custom keyboard
         
         customKeyboard.display(view: self, placeholder: "Why should they 'nect?", buttonTitle: "send", buttonTarget: "bridgeUsers")
+        customKeyboard.messageTextView.returnKeyType = UIReturnKeyType.done
         customKeyboard.resign()
         //let type = whichFilter()
         //customKeyboard.updatePostType(updatedPostType: type)
@@ -383,27 +386,41 @@ class ReasonForConnection: UIView {
     }
     
     func suggestedReasonChosen(_ sender: UIButton) {
+        print("chosen")
+        
         if sender.tag == 1 && !suggestion1Circle.isHighlighted{
             print("suggestion1Button")
             suggestion1Circle.isHighlighted = true
             suggestion2Circle.isHighlighted = false
             suggestion3Circle.isHighlighted = false
             customKeyboard.messageTextView.text = suggestion1Label.text
+            customKeyboard.messageTextView.becomeFirstResponder()
+            //customKeyboard.messageTextView.selectedTextRange =  customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
         } else if sender.tag == 2 && !suggestion2Circle.isHighlighted{
             print("suggestion2Button")
             suggestion1Circle.isHighlighted = false
             suggestion2Circle.isHighlighted = true
             suggestion3Circle.isHighlighted = false
             customKeyboard.messageTextView.text = suggestion2Label.text
+            customKeyboard.messageTextView.becomeFirstResponder()
+            let printLine = customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
+            print("printing \(printLine)")
+            //customKeyboard.messageTextView.selectedTextRange = customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
+            customKeyboard.messageTextView.selectedRange = NSMakeRange(customKeyboard.messageTextView.text.characters.count, 0)
         } else if sender.tag == 3 && !suggestion3Circle.isHighlighted {
             print("suggestion3Button")
             suggestion1Circle.isHighlighted = false
             suggestion2Circle.isHighlighted = false
             suggestion3Circle.isHighlighted = true
             customKeyboard.messageTextView.text = suggestion3Label.text
+            customKeyboard.messageTextView.becomeFirstResponder()
+            //customKeyboard.messageTextView.selectedTextRange =  customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
+            customKeyboard.messageTextView.selectedRange = NSMakeRange(customKeyboard.messageTextView.text.characters.count, 0)
+
         } else {
             deselectCircles()
             customKeyboard.messageTextView.text = nil
+            customKeyboard.messageTextView.resignFirstResponder()
         }
         customKeyboard.updateMessageHeights()
         

@@ -152,6 +152,7 @@ class MissionControlView {
         customKeyboard.display(view: currentView, placeholder: "I am looking for...", buttonTitle: "post", buttonTarget: "postStatus")
         customKeyboard.maxNumCharacters = 80
         let type = whichFilter()
+        customKeyboard.messageTextView.becomeFirstResponder()
         customKeyboard.updatePostType(updatedPostType: type)
         customKeyboardHeight = customKeyboard.height()
         postBackgroundView.frame.size.height = customKeyboardHeight

@@ -886,11 +886,7 @@ class BridgeViewController: UIViewController {
             if self.badgeCount > 0 {
                 self.customNavigationBar.updateRightBarButton(newIcon: "Messages_Icon_Gray_Notification", newSelectedIcon: "Messages_Icon_Yellow_Notification")
             }
-            
-            
         })
-        
-        
     }
     func displayMessageFromBot(_ notification: Notification) {
         let botNotificationView = UIView()
@@ -935,15 +931,14 @@ class BridgeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Creating Notifications
-        // Listener for Post Status Notification
+        //Creating Notifications
+        //Listener for Post Status Notification
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
-        // Listener for updating messages Icon with notifications
+        //Listener for updating messages Icon with notifications
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: NSNotification.Name(rawValue: "updateNoOfUnreadMessagesIcon"), object: nil)
         displayBackgroundView()
         displayNavigationBar()
-        //displayToolBar()
-        // Create Mission Control
+        //Create Mission Control
         missionControlView.createTabView(view: view)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
@@ -958,19 +953,19 @@ class BridgeViewController: UIViewController {
         
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.alpha = 0.0
-        view.insertSubview(connectIcon, aboveSubview: arrayOfCardsInDeck.first!)
+        view.addSubview(connectIcon)
+        connectIcon.bringSubview(toFront: view)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
         disconnectIcon.alpha = 0.0
-        view.insertSubview(disconnectIcon, aboveSubview: arrayOfCardsInDeck.first!)
+        view.addSubview(disconnectIcon)
+        disconnectIcon.bringSubview(toFront: view)
         
         wasLastSwipeInDeck = false
     }
-    
     override func viewDidLayoutSubviews() {
 
     }
-    
     func postStatusTapped(_ sender: UIButton ){
         performSegue(withIdentifier: "showNewStatusViewController", sender: self)
     }
@@ -1218,104 +1213,24 @@ class BridgeViewController: UIViewController {
         }
     }
     func bridged(){
-        let reasonForConnectionView = ReasonForConnection()
-        reasonForConnectionView.sendSwipeCard(swipeCardView: arrayOfCardsInDeck.first! as! SwipeCard)
-        view.addSubview(reasonForConnectionView)
-        
-        /*let bridgePairings = localData.getPairings()
-            if var bridgePairings = bridgePairings {
-            var x = 0
-            for i in 0 ..< (bridgePairings.count) {
-                if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
-                    break
-                }
-                x = i
-            }
-            let message = PFObject(className: "Messages")
-            let acl = PFACL()
-            acl.getPublicReadAccess = true
-            acl.getPublicWriteAccess = true
-            message.acl = acl
-
-            let currentUserId = PFUser.current()?.objectId
-            let currentUserName = (PFUser.current()?["name"] as? String) ?? ""
-            message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
-            message["names_in_message"] = [(bridgePairings[x].user1?.name)!, (bridgePairings[x].user2?.name)!, currentUserName]
-            let user1FirstName = (bridgePairings[x].user1?.name)!.components(separatedBy: " ").first!
-            let user2FirstName = (bridgePairings[x].user2?.name)!.components(separatedBy: " ").first!
-            singleMessageTitle = "\(user1FirstName) & \(user2FirstName)"
-            message["bridge_builder"] = currentUserId
-            var y = [String]()
-            y.append(currentUserId as String!)
-            message["message_viewed"] = y
-            if let necterType = bridgePairings[x].user1?.bridgeType {
-                message["message_type"] = necterType
-                switch(necterType) {
-                case "Business":
-                    necterTypeColor = DisplayUtility.businessBlue
-                case "Love":
-                    necterTypeColor = DisplayUtility.loveRed
-                case "Friendship":
-                    necterTypeColor = DisplayUtility.friendshipGreen
-                default:
-                    necterTypeColor = DisplayUtility.necterGray
-                }
-            }
-            else {
-            message["message_type"] = "Friendship"
-            }
-            message["lastSingleMessageAt"] = Date()
-            // update the no of message in a Thread - Start
-            message["no_of_single_messages"] = 1
-            var noOfSingleMessagesViewed = [String:Int]()
-            noOfSingleMessagesViewed[PFUser.current()!.objectId!] = 1
-            message["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
-            // update the no of message in a Thread - End
-            do {
-                try message.save()
-                let objectId = bridgePairings[x].user1?.objectId
-                let query = PFQuery(className:"BridgePairings")
-                let notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                let notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                let userObjectId1 = bridgePairings[x].user1!.userId!
-                let userObjectId2 = bridgePairings[x].user2!.userId!
-                query.getObjectInBackground(withId: objectId!, block: { (result, error) -> Void in
-                    //this should only happen if result can equal result - i.e. in the result if let statement, but the code was not allow for this, so it was taken out and should be tested.
-                    if let result = result as? PFObject?{
-                        result?["checked_out"] = true
-                        result?["bridged"] = true
-                        result?.saveInBackground()
-                        //when users are introduced, they are added to eachother's friend_lists in the _User table (i.e. they become friends)
-                        self.pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
-                        self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])
-                        self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId2,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])
-                    }
-                })
-                self.messageId = message.objectId!
-            }
-            catch {
-                
-            }
-            var bridgeType = "All"
-            if let bt = bridgePairings[x].user1?.bridgeType {
-                bridgeType = bt
-            }
-
-            bridgePairings.remove(at: x)
-            localData.setPairings(bridgePairings)
-            localData.synchronize()
-            getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
-            segueToSingleMessage = true
-            performSegue(withIdentifier: "showSingleMessage", sender: nil)
+        if let swipeCard = arrayOfCardsInDeck.first as? SwipeCard{
+            let reasonForConnectionView = ReasonForConnection()
+            reasonForConnectionView.initialize()
+            reasonForConnectionView.sendSwipeCard(swipeCardView: swipeCard)
+            view.addSubview(reasonForConnectionView)
         }
-        nextPair()*/
+        
     }
+    
     func callbackForNextPair(_ bridgeType:String) -> Void {
+        print("got to callbackfornextpair")
+        print("count of bridgepairings from callBack - \(arrayOfCardsInDeck.count)")
         if arrayOfCardsInDeck.count > 0 {
             arrayOfCardsInDeck.remove(at: 0)
             arrayOfCardColors.remove(at: 0)
             if arrayOfCardsInDeck.count > 0 {
                 arrayOfCardsInDeck[0].isUserInteractionEnabled = true
+                print("isUserInteractionEnabled")
             }
             else {
                 lastCardInStack = nil
@@ -1337,7 +1252,6 @@ class BridgeViewController: UIViewController {
                         }
                     }
                 }
-                
                 if bridgePairingAlreadyStored == false {
                     self.displayNoMoreCards()
                     PFUser.current()?.incrementKey("ran_out_of_pairs")
@@ -1345,7 +1259,6 @@ class BridgeViewController: UIViewController {
                 }
             }
         }
-
     }
     func revitalizeMyPairs(_ sender: UIButton!) {
         activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0,y: 0,width: 0.05*DisplayUtility.screenWidth,height: 0.05*DisplayUtility.screenWidth))
@@ -1376,8 +1289,12 @@ class BridgeViewController: UIViewController {
         PFUser.current()?.saveInBackground()
     }
     func nextPair(){
+        
+        
+        print("nextPair called")
         // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in callbackForNextPair. cIgAr - 08/25/16
         let bridgePairings = localData.getPairings()
+        print("count of bridgepairings from nextPair - \(arrayOfCardsInDeck.count)")
         if var bridgePairings = bridgePairings {
             var x = 0
             for i in 0 ..< (bridgePairings.count) {

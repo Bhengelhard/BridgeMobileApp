@@ -20,13 +20,14 @@
 		3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */; };
 		3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */; };
 		3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */; };
-		3030C0C91DD54E800077F7AC /* PFCloudFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C81DD54E800077F7AC /* PFCloudFunctions.swift */; };
 		3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0CA1DD54E8F0077F7AC /* CustomTimer.swift */; };
 		3030C0CE1DD54E8F0077F7AC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0CB1DD54E8F0077F7AC /* Downloader.swift */; };
 		3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0CC1DD54E8F0077F7AC /* modelName.swift */; };
 		3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */; };
 		3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */; };
 		3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D41DD550240077F7AC /* SwipeCard.swift */; };
+		304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */; };
+		304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -85,13 +86,14 @@
 		3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBar.swift; path = "Custom Classes/Custom Views/CustomNavigationBar.swift"; sourceTree = "<group>"; };
 		3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomSearchBar.swift; path = "Custom Classes/Custom Views/CustomSearchBar.swift"; sourceTree = "<group>"; };
 		3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MissionControlView.swift; path = "Custom Classes/Custom Views/MissionControlView.swift"; sourceTree = "<group>"; };
-		3030C0C81DD54E800077F7AC /* PFCloudFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PFCloudFunctions.swift; path = "Custom Classes/Parse Communication/PFCloudFunctions.swift"; sourceTree = "<group>"; };
 		3030C0CA1DD54E8F0077F7AC /* CustomTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomTimer.swift; path = "Custom Classes/Custom Functions/CustomTimer.swift"; sourceTree = "<group>"; };
 		3030C0CB1DD54E8F0077F7AC /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Downloader.swift; path = "Custom Classes/Custom Functions/Downloader.swift"; sourceTree = "<group>"; };
 		3030C0CC1DD54E8F0077F7AC /* modelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = modelName.swift; path = "Custom Classes/Custom Functions/modelName.swift"; sourceTree = "<group>"; };
 		3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayUtility.swift; path = "Custom Classes/UI Functions/DisplayUtility.swift"; sourceTree = "<group>"; };
 		3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = "Custom Classes/UI Functions/TransitionManager.swift"; sourceTree = "<group>"; };
 		3030C0D41DD550240077F7AC /* SwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeCard.swift; path = "Custom Classes/Custom Views/SwipeCard.swift"; sourceTree = "<group>"; };
+		304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PFCloudFunctions.swift; path = "Custom Classes/Backend Communication/PFCloudFunctions.swift"; sourceTree = "<group>"; };
+		304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBSavingFunctions.swift; path = "Custom Classes/Backend Communication/DBSavingFunctions.swift"; sourceTree = "<group>"; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -189,12 +191,13 @@
 			name = "Custom Views";
 			sourceTree = "<group>";
 		};
-		3030C0AD1DD54D310077F7AC /* Parse Communication */ = {
+		3030C0AD1DD54D310077F7AC /* Backend Communication */ = {
 			isa = PBXGroup;
 			children = (
-				3030C0C81DD54E800077F7AC /* PFCloudFunctions.swift */,
+				304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */,
+				304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */,
 			);
-			name = "Parse Communication";
+			name = "Backend Communication";
 			sourceTree = "<group>";
 		};
 		3030C0AE1DD54D800077F7AC /* UI Functions */ = {
@@ -313,7 +316,7 @@
 			children = (
 				3030C0AB1DD54CC70077F7AC /* Data Storage */,
 				3030C0AC1DD54CEA0077F7AC /* Custom Views */,
-				3030C0AD1DD54D310077F7AC /* Parse Communication */,
+				3030C0AD1DD54D310077F7AC /* Backend Communication */,
 				3030C0AF1DD54DA00077F7AC /* Custom Functions */,
 				3030C0AE1DD54D800077F7AC /* UI Functions */,
 			);
@@ -412,7 +415,6 @@
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */,
 				3030C0BD1DD54E4D0077F7AC /* Users+CoreDataProperties.swift in Sources */,
-				3030C0C91DD54E800077F7AC /* PFCloudFunctions.swift in Sources */,
 				3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */,
@@ -423,8 +425,10 @@
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
 				30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
+				304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */,
 				3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */,
 				3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */,
+				304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */,
 				E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */,
 				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
 				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,

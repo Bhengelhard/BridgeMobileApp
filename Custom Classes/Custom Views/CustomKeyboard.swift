@@ -18,6 +18,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     var placeholderText = "Enter Text Here"
     var target = String()
     var maxNumCharacters = Int.max
+    var reasonForConnectionView = UIView()
     
     var updatedText = String()
     
@@ -28,10 +29,12 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        reasonForConnectionView = view
+        
         messageView.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
         let displayUtility = DisplayUtility()
         displayUtility.setBlurredView(viewToBlur: messageView)
-        view.addSubview(messageView)
+        reasonForConnectionView.addSubview(messageView)
         
         //setting the textView for writing messages
         messageTextView.delegate = self
@@ -48,6 +51,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageTextView.autocorrectionType = UITextAutocorrectionType.no
         messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
         messageTextView.becomeFirstResponder()
+        messageTextView.keyboardDismissMode = .interactive
+        messageTextView.isScrollEnabled = false
         messageView.addSubview(messageTextView)
         
         //This changes the size of the messageTextView and message view (and below the messageButton) to the size needed to fit the placeholder text.
@@ -82,6 +87,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             //setting the placeholder based on whether an option is selected
             if type != "All Types" {
                 messageTextView.isUserInteractionEnabled = true
+                messageTextView.isEditable = true
                 //if !messageTextView.isFirstResponder {
                 //    messageTextView.becomeFirstResponder()
                 //}
@@ -95,6 +101,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 //if messageTextView.isFirstResponder {
                  //   messageTextView.resignFirstResponder()
                 //}
+                //messageTextView.isEditable = false
                 messageButton.isEnabled = false
         }
     }
@@ -104,56 +111,30 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     }
     
     @objc func messageButtonTapped(_ sender: UIButton) {
-        if target == "postStatus" {
-            postStatus()
-        } else if target == "sendMessage" {
-            print("sendMessage")
-        } else if target == "bridgeUsers" {
-            bridgeUsers()
-        }
-        print("messageButtonTapped")
-    }
-    
-    func bridgeUsers() {
-        print("BridgeUsers")
-    }
-    func postStatus() {
-        //setting the status to local data
-        let localData = LocalData()
-        if type == "Business" {
-            localData.setBusinessStatus(self.messageTextView.text!)
-            localData.synchronize()
-        } else if type == "Love" {
-            localData.setLoveStatus(self.messageTextView.text!)
-            localData.synchronize()
-        } else if type == "Friendship" {
-            localData.setFriendshipStatus(self.messageTextView.text!)
-            localData.synchronize()
-        }
-        
-        //saving the status to the database
-        let bridgeStatusObject = PFObject(className: "BridgeStatus")
-        bridgeStatusObject["bridge_status"] = self.messageTextView.text!
-        bridgeStatusObject["bridge_type"] = self.type
-        bridgeStatusObject["userId"] = PFUser.current()?.objectId
-        bridgeStatusObject.saveInBackground { (success, error) in
-            
-            
-            if error != nil {
-                //sends notification to call displayMessageFromBot function
-                let userInfo = ["message" : "Your post did not go through. Please wait a minute and try posting again"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "displayMessageFromBot"), object: nil, userInfo: userInfo)
-            } else if success {
-                //sends notification to call displayMessageFromBot function
-                let userInfo = ["message" : "Your post is now being shown to friends so they can connect you!"]
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "displayMessageFromBot"), object: nil, userInfo: userInfo)
+        let dbSavingFunctions = DBSavingFunctions()
+        if let messageText = messageTextView.text {
+            if target == "postStatus" {
+                dbSavingFunctions.postStatus(messageText: messageText, type: type)
+            } else if target == "sendMessage" {
+                dbSavingFunctions.sendMessage(messageText: messageText)
+            } else if target == "bridgeUsers" {
+                //Update CheckedOut and Bridged to true, add bridge_builder_name and bridge_builder_objectID to the BridgePairings table as the current user
+                dbSavingFunctions.bridgeUsers(messageText: messageText, type: type)
+                
+                //Dismiss the Reason For Connections View
+                reasonForConnectionView.removeFromSuperview()
+                //let bridgeVC = BridgeViewController()
+                //bridgeVC.nextPair()
             }
         }
-        let pfCloudFunctions = PFCloudFunctions()
-        pfCloudFunctions.changeBridgePairingsOnStatusUpdate(parameters: ["status":self.messageTextView.text!, "bridgeType":self.type])
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        if target == "bridgeUsers" && (text == "\n") {
+            textView.resignFirstResponder()
+        }
+        
         //Combine the textView text and the replacement text to create the updated text string
         let currentText:NSString = textView.text as NSString
         updatedText = currentText.replacingCharacters(in: range, with: text)
@@ -174,9 +155,9 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             textView.textColor = UIColor.white
             messageButton.isEnabled = true
         }
+        
         return true
     }
-    
     func textViewDidChangeSelection(_ textView: UITextView) {
         if messageView.window != nil {
             if textView.textColor == UIColor.lightGray {
@@ -197,6 +178,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             messageView.frame.origin.y = DisplayUtility.screenHeight - messageView.frame.height
             print("keyboard will hide")
+        } else {
+            
         }
     }
     
@@ -209,7 +192,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     
     func characterLimit() {
         //need to retrieve the chracter limit from the page the user is on, if there is on.
-        print(maxNumCharacters)
         //stopping user from entering bridge status with more than a certain number of characters
         if let characterCount = messageTextView.text?.characters.count {
             if characterCount > maxNumCharacters {
@@ -229,10 +211,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         
         let messageViewFixedHeight = 0.89*DisplayUtility.screenHeight-keyboardHeight
         
-        
+        //stops the growing of the messagesView and messagesTextView when the User reaches the max
         if messageViewFixedHeight < messageTextNewFrame.size.height + 8.5 {
-            
-            print("reached the navBar")
             messageTextView.isScrollEnabled = true
             //messageText.frame.size.height = previousMessageHeight
             //toolbar.frame.size.height = previousToolbarHeight
@@ -265,6 +245,24 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             //removing the placeholder
             messageTextView.textColor = UIColor.white
             messageButton.isEnabled = true
+        }
+    }
+    
+    //Gesture Recognition for messageView to Pull down with Keyboard
+    func drag(gestureRecognizer: UIPanGestureRecognizer) {
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            let tabTranslation = gestureRecognizer.translation(in: messageView)
+            gestureRecognizer.view?.center = CGPoint(x: (gestureRecognizer.view?.center.x)!, y: max(0.85*DisplayUtility.screenWidth,(gestureRecognizer.view?.center.y)! + tabTranslation.y))
+            gestureRecognizer.setTranslation(CGPoint.zero, in: messageView)
+            
+            // Set Bottom of View as Lower Limit for TabView Dragging
+            
+                // Move PostView and FiltersView with TabView when applicable
+            
+                // Move FiltersView with TabView when applicable
+           
+        } else if gestureRecognizer.state == .ended {
+            
         }
     }
     
