@@ -39,9 +39,9 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         //setting the textView for writing messages
         messageTextView.delegate = self
         messageTextView.frame = CGRect(x: 0.05*messageView.frame.width, y: 0.1*messageView.frame.height, width: 0.65*messageView.frame.width, height: 0.8*messageView.frame.height)
-        messageTextView.layer.borderWidth = 2
+        messageTextView.layer.borderWidth = 1
         messageTextView.layer.borderColor = UIColor.white.cgColor
-        messageTextView.layer.cornerRadius = 5
+        messageTextView.layer.cornerRadius = 7
         messageTextView.textColor = UIColor.lightGray
         messageTextView.font = UIFont(name: "BentonSans-light", size: 18)
         messageTextView.backgroundColor = DisplayUtility.necterGray
@@ -67,9 +67,9 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageButton.setTitleColor(DisplayUtility.necterGray, for: .disabled)
         messageButton.titleLabel?.textAlignment = NSTextAlignment.right
         messageButton.titleLabel!.font = UIFont(name: "Verdana", size: 16)
-        messageButton.layer.borderWidth = 2
+        messageButton.layer.borderWidth = 1
         messageButton.layer.borderColor = UIColor.white.cgColor
-        messageButton.layer.cornerRadius = 5
+        messageButton.layer.cornerRadius = 7
         target = buttonTarget
         messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
         messageButton.isEnabled = false

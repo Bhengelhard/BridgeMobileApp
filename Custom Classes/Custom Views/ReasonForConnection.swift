@@ -143,8 +143,9 @@ class ReasonForConnection: UIView {
                 }
             }
         
-        self.addSubview(user1Photo)
-        self.addSubview(user2Photo)
+        //inserting below business button so the buttons will always be clickable and so the keyboard will increas height over the pictures
+        self.insertSubview(user1Photo, belowSubview: businessButton)
+        self.insertSubview(user2Photo, belowSubview: businessButton)
         
         //displayDashedLines()
         
