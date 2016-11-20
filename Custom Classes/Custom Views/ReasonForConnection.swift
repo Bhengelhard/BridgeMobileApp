@@ -34,6 +34,10 @@ class ReasonForConnection: UIView {
     var loveSuggestions = [String]()
     var friendshipSuggestions = [String]()
     
+    //Reason for Connection User Photos
+    var user1Photo = UIImageView()
+    var user2Photo = UIImageView()
+    
     override init (frame: CGRect) {
         super.init(frame: frame)
         //leaving empty because reasonForConnectionView in the BridgeViewController is initialized global to the class
@@ -62,12 +66,12 @@ class ReasonForConnection: UIView {
         decideSuggestedReasons()
         displaySuggestedReasons()
         displayCustomKeyboard()
+        
     }
     
     func sendSwipeCard(swipeCardView: SwipeCard) {
         swipeCard = swipeCardView
         //Adding User's Profile Photos
-        let user1Photo = UIImageView()
         user1Photo.frame = CGRect(x: 0.0744*DisplayUtility.screenWidth, y: 0.1321*DisplayUtility.screenHeight, width: 0.3123*DisplayUtility.screenWidth, height: 0.3123*DisplayUtility.screenWidth)
         user1Photo.layer.cornerRadius = user1Photo.frame.size.width/2
         user1Photo.contentMode = UIViewContentMode.scaleAspectFill
@@ -75,7 +79,6 @@ class ReasonForConnection: UIView {
         user1Photo.layer.borderColor = UIColor.white.cgColor
         user1Photo.layer.borderWidth = 3
         
-        let user2Photo = UIImageView()
         user2Photo.frame = CGRect(x: 0.6017*DisplayUtility.screenWidth, y: 0, width: 0.3123*DisplayUtility.screenWidth, height: 0.3123*DisplayUtility.screenWidth)
         user2Photo.center.y = user1Photo.center.y
         user2Photo.layer.cornerRadius = user1Photo.frame.size.width/2
@@ -113,7 +116,6 @@ class ReasonForConnection: UIView {
                         
                     }
                 }
-                    print("got to else statement")
                 if let data = pair.user2?.savedProfilePicture {
                         //applying filter to make the white text more legible
                         let beginImage = CIImage(data: data as Data)
@@ -134,7 +136,6 @@ class ReasonForConnection: UIView {
                         if let photoURLString = swipeCardView.cardsUser2PhotoURL {
                             if let photoURL = URL(string: photoURLString) {
                                 downloader.imageFromURL(URL: photoURL, imageView: user2Photo)
-                                print("tried downloading image 2")
                             }
                         }
                         
@@ -145,6 +146,74 @@ class ReasonForConnection: UIView {
         self.addSubview(user1Photo)
         self.addSubview(user2Photo)
         
+        //displayDashedLines()
+        
+//        let dashedLine = UIView()
+//        let  path = UIBezierPath()
+//        
+//        let p1 = CGPoint(x: user1Photo.frame.maxX, y: user1Photo.frame.midY)
+//        path.move(to: p1)
+//        
+//        let  p2 = CGPoint(x: user2Photo.frame.minX, y: user2Photo.frame.midY)
+//        path.addLine(to: p2)
+//        
+//        let  dashes: [ CGFloat ] = [ 16.0, 32.0 ]
+//        path.setLineDash(dashes, count: dashes.count, phase: 0.0)
+//        
+//        path.lineWidth = 8.0
+//        path.lineCapStyle = .butt
+//        UIColor.magenta.set()
+//        path.stroke()
+//        dashedLine.layer.accessibilityPath = path
+//        self.addSubview(dashedLine)
+    }
+    
+    func displayDashedLines(){
+        
+       /*let distanceBetweenImages = user2Photo.frame.minX - user1Photo.frame.maxX
+        let numDashes:Int = Int(distanceBetweenImages/10)
+        for i in 1...numDashes  {
+            let usersDashedLine = UIImageView()
+            usersDashedLine.frame = CGRect(x: user1Photo.frame.maxX + CGFloat(10*i), y: user1Photo.frame.midY, width: 10, height: 3.0)
+            usersDashedLine.center.x = self.center.x
+            usersDashedLine.backgroundColor = UIColor.white
+            usersDashedLine.layer.borderWidth = 3
+            usersDashedLine.image = UIImage()
+            self.addSubview(usersDashedLine)
+        }*/
+        
+
+        
+        
+        
+        // create a new UIView and add it to the view controller
+        //let dashedLine = DashedLine()
+        //self.addSubview(dashedLine)
+        
+        
+        /*
+        // Create a CAShapeLayer
+        let shapeLayer = CAShapeLayer()
+        
+        // The Bezier path that we made needs to be converted to
+        // a CGPath before it can be used on a layer.
+        shapeLayer.path = path as UIBezierPath
+        // apply other properties related to the path
+        shapeLayer.strokeColor = UIColor.blue.cgColor
+        shapeLayer.fillColor = UIColor.white.cgColor
+        shapeLayer.lineWidth = 1.0
+        shapeLayer.position = CGPoint(x: 10, y: 10)
+        
+        // add the new layer to our custom view
+        self.layer.addSublayer(shapeLayer)*/
+        
+        /*let user1ToTypeDashedLine = UIView()
+        user1ToTypeDashedLine.frame = CGRect(x: user1Photo.frame.midX, y: user1Photo.frame.maxY, width: user2Photo.frame.minX - user1Photo.frame.maxX, height: 3.0)
+        user1ToTypeDashedLine.center.x = self.center.x
+        user1ToTypeDashedLine.backgroundColor = UIColor.white
+        self.addSubview(user1ToTypeDashedLine)*/
+        
+        
     }
     
     func displayNavBar() {
@@ -154,16 +223,18 @@ class ReasonForConnection: UIView {
         self.addSubview(cancelButton)
         
         let cancelIcon = UIImageView()
-        cancelIcon.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.05*DisplayUtility.screenHeight, width: 0.0328*DisplayUtility.screenWidth, height: 0.0206*DisplayUtility.screenHeight)
+        //cancelIcon.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.05*DisplayUtility.screenHeight, width: 0.0328*DisplayUtility.screenWidth, height: 0.0206*DisplayUtility.screenHeight)
+        cancelIcon.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.0433*DisplayUtility.screenHeight, width: 0.0328*DisplayUtility.screenWidth, height: 0.0206*DisplayUtility.screenHeight)
         cancelIcon.image = #imageLiteral(resourceName: "X_Icon")
         self.addSubview(cancelIcon)
         
         let title = UILabel()
+        //title.frame = CGRect(x: 0, y: 0.08*DisplayUtility.screenHeight, width: 0.8606*DisplayUtility.screenWidth, height: 0.0382*DisplayUtility.screenHeight)
         title.frame = CGRect(x: 0, y: 0.08*DisplayUtility.screenHeight, width: 0.8606*DisplayUtility.screenWidth, height: 0.0382*DisplayUtility.screenHeight)
         title.center.x = self.center.x
         title.text = "Sweet! You're almost there."
         title.textColor = UIColor.white
-        title.font = UIFont(name: "BentonSans-Light", size: 20)
+        title.font = UIFont(name: "BentonSans-Light", size: 21)
         title.textAlignment = NSTextAlignment.center
         self.addSubview(title)
         
@@ -261,13 +332,23 @@ class ReasonForConnection: UIView {
         //add custom keyboard
         
         customKeyboard.display(view: self, placeholder: "Why should they 'nect?", buttonTitle: "send", buttonTarget: "bridgeUsers")
-        customKeyboard.messageTextView.returnKeyType = UIReturnKeyType.done
+        //customKeyboard.messageTextView.returnKeyType = UIReturnKeyType.done
         customKeyboard.resign()
         //let type = whichFilter()
         //customKeyboard.updatePostType(updatedPostType: type)
         //customKeyboardHeight = customKeyboard.height()
         //postBackgroundView.frame.size.height = customKeyboardHeight
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(resignKeyboard(_:)))
+        
+        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
+        //tap.cancelsTouchesInView = false
+        
+        self.addGestureRecognizer(tap)
 
+    }
+    
+    func resignKeyboard(_ sender: UITapGestureRecognizer) {
+        customKeyboard.resign()
     }
     
     func displaySuggestedReasons() {
@@ -319,7 +400,7 @@ class ReasonForConnection: UIView {
         //Creating Parameters for Suggested Reason Labels
         suggestion1Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion1Button.frame.origin.y, width: 0.8*DisplayUtility.screenWidth, height: suggestion1Button.frame.height)
         suggestion1Label.textColor = UIColor.white
-        suggestion1Label.font = UIFont(name: "BentonSans-Light", size: 18)
+        suggestion1Label.font = UIFont(name: "BentonSans-Light", size: 17)
         suggestion1Label.textAlignment = NSTextAlignment.justified
         suggestion1Label.numberOfLines = 2
         self.addSubview(suggestion1Label)
@@ -361,7 +442,7 @@ class ReasonForConnection: UIView {
     func decideSuggestedReasons() {
         if false { //are the two users in the same city
             businessSuggestions.append("You two are in the same city and are both great at what you do.")
-            businessSuggestions.append("Both of you have an interest in working to make the world a better place.")
+            businessSuggestions.append("You both have an interest in working to make the world a better place.")
             
             loveSuggestions.append("You two are in the same city and would go well together.")
             loveSuggestions.append("Wine nights would be regular if you two met.")
@@ -370,8 +451,8 @@ class ReasonForConnection: UIView {
             friendshipSuggestions.append("You both have similar interests and should hang out.")
 
         } else {
-            businessSuggestions.append("Both of you have an interest making the world a better place.")
-            businessSuggestions.append("Both of you have interests and experience to help eachother.")
+            businessSuggestions.append("You both have an interest making the world a better place.")
+            businessSuggestions.append("You both have interests and experience to help eachother.")
             
             loveSuggestions.append("Wine nights would be regular if you two met.")
             loveSuggestions.append("Looks & personality, you've both got it. What are you waiting for?")
@@ -387,13 +468,14 @@ class ReasonForConnection: UIView {
     
     func suggestedReasonChosen(_ sender: UIButton) {
         print("chosen")
-        
+        var labelChosen = String()
         if sender.tag == 1 && !suggestion1Circle.isHighlighted{
             print("suggestion1Button")
             suggestion1Circle.isHighlighted = true
             suggestion2Circle.isHighlighted = false
             suggestion3Circle.isHighlighted = false
-            customKeyboard.messageTextView.text = suggestion1Label.text
+            //customKeyboard.messageTextView.text = suggestion1Label.text
+            labelChosen = suggestion1Label.text!
             customKeyboard.messageTextView.becomeFirstResponder()
             //customKeyboard.messageTextView.selectedTextRange =  customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
         } else if sender.tag == 2 && !suggestion2Circle.isHighlighted{
@@ -401,7 +483,8 @@ class ReasonForConnection: UIView {
             suggestion1Circle.isHighlighted = false
             suggestion2Circle.isHighlighted = true
             suggestion3Circle.isHighlighted = false
-            customKeyboard.messageTextView.text = suggestion2Label.text
+            //customKeyboard.messageTextView.text = suggestion2Label.text
+            labelChosen = suggestion2Label.text!
             customKeyboard.messageTextView.becomeFirstResponder()
             let printLine = customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
             print("printing \(printLine)")
@@ -412,18 +495,20 @@ class ReasonForConnection: UIView {
             suggestion1Circle.isHighlighted = false
             suggestion2Circle.isHighlighted = false
             suggestion3Circle.isHighlighted = true
-            customKeyboard.messageTextView.text = suggestion3Label.text
+            //customKeyboard.messageTextView.text = suggestion3Label.text
+            labelChosen = suggestion3Label.text!
             customKeyboard.messageTextView.becomeFirstResponder()
             //customKeyboard.messageTextView.selectedTextRange =  customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
             customKeyboard.messageTextView.selectedRange = NSMakeRange(customKeyboard.messageTextView.text.characters.count, 0)
 
         } else {
             deselectCircles()
-            customKeyboard.messageTextView.text = nil
+            labelChosen = ""
             customKeyboard.messageTextView.resignFirstResponder()
         }
+        customKeyboard.messageTextView.text = labelChosen
+        customKeyboard.updatePlaceholder()
         customKeyboard.updateMessageHeights()
-        
     }
     
     func deselectCircles() {

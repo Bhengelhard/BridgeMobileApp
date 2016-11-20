@@ -1219,7 +1219,6 @@ class BridgeViewController: UIViewController {
             reasonForConnectionView.sendSwipeCard(swipeCardView: swipeCard)
             view.addSubview(reasonForConnectionView)
         }
-        
     }
     
     func callbackForNextPair(_ bridgeType:String) -> Void {

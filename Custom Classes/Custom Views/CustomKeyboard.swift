@@ -18,7 +18,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     var placeholderText = "Enter Text Here"
     var target = String()
     var maxNumCharacters = Int.max
-    var reasonForConnectionView = UIView()
+    var currentView = UIView()
     
     var updatedText = String()
     
@@ -29,12 +29,12 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        reasonForConnectionView = view
+        currentView = view
         
         messageView.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
         let displayUtility = DisplayUtility()
         displayUtility.setBlurredView(viewToBlur: messageView)
-        reasonForConnectionView.addSubview(messageView)
+        currentView.addSubview(messageView)
         
         //setting the textView for writing messages
         messageTextView.delegate = self
@@ -122,7 +122,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 dbSavingFunctions.bridgeUsers(messageText: messageText, type: type)
                 
                 //Dismiss the Reason For Connections View
-                reasonForConnectionView.removeFromSuperview()
+                currentView.removeFromSuperview()
                 //let bridgeVC = BridgeViewController()
                 //bridgeVC.nextPair()
             }
@@ -131,33 +131,79 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
-        if target == "bridgeUsers" && (text == "\n") {
-            textView.resignFirstResponder()
-        }
-        
         //Combine the textView text and the replacement text to create the updated text string
         let currentText:NSString = textView.text as NSString
         updatedText = currentText.replacingCharacters(in: range, with: text)
+
+        //On the Reason For Connection Page -> return button closes the keyboard instead of adding lines.
+        if target == "bridgeUsers" && (text == "\n") {
+            textView.resignFirstResponder()
+            updatedText = updatedText.trimmingCharacters(in: .newlines)
+        }
         
         //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
         if updatedText.isEmpty {
             //setting the placeholder
             messageTextView.text = placeholderText
-            textView.textColor = UIColor.lightGray
-            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            messageTextView.textColor = UIColor.lightGray
+            messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
             updateMessageHeights()
             messageButton.isEnabled = false
+            print("set placeholder")
+            
+            //if messageTextView is empty, the circles should be deselected
+            if target == "bridgeUsers" {
+                let reasonForConnectionView = currentView as! ReasonForConnection
+                reasonForConnectionView.deselectCircles()
+            }
+            
+            
             return false
         }
             // else if the text view's placeholder is showing and the length of the replacement string is greater than 0, clear the text veiw and set the color to white to prepare for entry
-        else if textView.textColor == UIColor.lightGray && !text.isEmpty {
-            textView.text = nil
-            textView.textColor = UIColor.white
+        else if messageTextView.textColor == UIColor.lightGray && !updatedText.isEmpty && updatedText != placeholderText {
+            messageTextView.text = nil
+            messageTextView.textColor = UIColor.white
             messageButton.isEnabled = true
+            print("set no placeholder")
+        }
+        
+        return true
+        
+    }
+    
+    
+    func updatePlaceholder() -> Bool {
+        //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
+        if messageTextView.text.isEmpty {
+            //setting the placeholder
+            messageTextView.text = placeholderText
+            messageTextView.textColor = UIColor.lightGray
+            messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
+            updateMessageHeights()
+            messageButton.isEnabled = false
+            print("set placeholder")
+            
+            //if messageTextView is empty, the circles should be deselected
+            if target == "bridgeUsers" {
+                let reasonForConnectionView = currentView as! ReasonForConnection
+                reasonForConnectionView.deselectCircles()
+            }
+            
+            
+            return false
+        }
+            // else if the text view's placeholder is showing and the length of the replacement string is greater than 0, clear the text veiw and set the color to white to prepare for entry
+        else if messageTextView.textColor == UIColor.lightGray && !messageTextView.text.isEmpty && messageTextView.text != placeholderText {
+            messageTextView.textColor = UIColor.white
+            messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.endOfDocument, to: messageTextView.endOfDocument)
+            messageButton.isEnabled = true
+            print("set no placeholder")
         }
         
         return true
     }
+    
     func textViewDidChangeSelection(_ textView: UITextView) {
         if messageView.window != nil {
             if textView.textColor == UIColor.lightGray {
@@ -202,6 +248,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         }
     }
     
+    
     func updateMessageHeights() {
         //changing the height of the messageText based on the content
         let messageTextFixedWidth = messageTextView.frame.size.width
@@ -233,19 +280,26 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             messageViewNewFrame.origin.y = messageView.frame.origin.y - changeInMessageViewHeight
             //if the toolbar has grown to the size where it is just below the navigation bar then enable the textView to scroll
             messageView.frame = messageViewNewFrame
+            
+            //MessageButton to stay in place as messageView height changes
+            let previousMessagButtonY = messageButton.frame.origin.y
+            messageButton.frame.origin.y = previousMessagButtonY + changeInMessageViewHeight
         }
         
-        if messageTextView.text.isEmpty {
+        /*//If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
+        if updatedText.isEmpty {
             //setting the placeholder
             messageTextView.text = placeholderText
             messageTextView.textColor = UIColor.lightGray
             messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
             messageButton.isEnabled = false
-        } else if messageTextView.text != placeholderText{
-            //removing the placeholder
+        }
+            // else if the text view's placeholder is showing and the length of the replacement string is greater than 0, clear the text veiw and set the color to white to prepare for entry
+        else if messageTextView.textColor == UIColor.lightGray && !messageTextView.text.isEmpty && updatedText != placeholderText {
+            messageTextView.text = nil
             messageTextView.textColor = UIColor.white
             messageButton.isEnabled = true
-        }
+        }*/
     }
     
     //Gesture Recognition for messageView to Pull down with Keyboard
