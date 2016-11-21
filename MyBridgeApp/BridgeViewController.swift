@@ -479,36 +479,8 @@ class BridgeViewController: UIViewController {
             connectionType = "All Types"
         }
         let swipeCardView = SwipeCard()
-        swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, connectionType: connectionType)
+        swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
         swipeCardFrame = swipeCardView.frame
-        
-        //let necterTypeLine = UIView()
-        //necterTypeLine.frame = CGRect(x: 0, y: superDeckHeight/2.0 - 2, width: superDeckWidth, height: 4)
-        
-        //let necterTypeIcon = UIImageView()
-        //necterTypeIcon.frame = CGRect(x: 0.45*superDeckWidth, y: superDeckHeight/2.0 - 0.08*superDeckWidth, width: 0.12*superDeckWidth, height: 0.12*superDeckWidth)
-        //necterTypeIcon.contentMode = UIViewContentMode.scaleAspectFill
-        //necterTypeIcon.clipsToBounds = true
-        
-        //necterTypeIcon.layer.shadowOpacity = 0.5
-        //necterTypeIcon.layer.shadowRadius = 0.5
-        //necterTypeIcon.layer.shadowColor = UIColor.black.cgColor
-        //necterTypeIcon.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
-        
-        /*if cardColor == typesOfColor.business {
-            necterTypeLine.backgroundColor = DisplayUtility.businessBlue
-            necterTypeIcon.image = UIImage(named: "Business_Icon_Blue")
-        } else if cardColor == typesOfColor.love {
-            necterTypeLine.backgroundColor = DisplayUtility.loveRed
-            necterTypeIcon.image = UIImage(named: "Love_Icon_Red")
-        } else if cardColor == typesOfColor.friendship{
-            necterTypeLine.backgroundColor = DisplayUtility.friendshipGreen
-            necterTypeIcon.image = UIImage(named: "Friendship_Icon_Green")
-        }
-        
-        superDeckView.addSubview(necterTypeLine)
-        superDeckView.addSubview(necterTypeIcon)*/
-        
         
         //superDeckView.backgroundColor = UIColor.white.withAlphaComponent(1.0)
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
@@ -946,9 +918,11 @@ class BridgeViewController: UIViewController {
         let bridgePairings = localData.getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
             getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+            print("getting bridge Pairings")
         }
         else {
             displayCards()
+            print("displaying cards")
         }
         
         connectIcon.image = UIImage(named: "Necter_Icon")
@@ -1194,7 +1168,7 @@ class BridgeViewController: UIViewController {
             if removeCard{
                 swipeCardView.removeFromSuperview()
             } else if showReasonForConnection {
-                
+        
             }
             else {
                 //Put swipeCard back into place

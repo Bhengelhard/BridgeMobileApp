@@ -18,6 +18,7 @@ class ReasonForConnection: UIView {
     var loveButton = UIButton()
     var friendshipButton = UIButton()
     var selectedButtonLabel = UILabel()
+    var predictedNecterType = String()
     
     //Reason for Connection Suggested Reasons labels
     var suggestion1Label = UILabel()
@@ -37,6 +38,10 @@ class ReasonForConnection: UIView {
     //Reason for Connection User Photos
     var user1Photo = UIImageView()
     var user2Photo = UIImageView()
+    
+    // User's Cities
+    var user1City = String()
+    var user2City = String()
     
     override init (frame: CGRect) {
         super.init(frame: frame)
@@ -62,8 +67,6 @@ class ReasonForConnection: UIView {
         })
         
         displayNavBar()
-        displayButtons()
-        decideSuggestedReasons()
         displaySuggestedReasons()
         displayCustomKeyboard()
         
@@ -91,7 +94,7 @@ class ReasonForConnection: UIView {
         let localData = LocalData()
         if let pairings:[UserInfoPair] = localData.getPairings() {
             for pair in pairings {
-                if self.frame.origin.y == 0 {
+                //print(pair.user1?.savedProfilePicture)
                     if let data = pair.user1?.savedProfilePicture {
                         //applying filter to make the white text more legible
                         let beginImage = CIImage(data: data as Data)
@@ -106,6 +109,7 @@ class ReasonForConnection: UIView {
                         user1Photo.image = newImage
                         user1Photo.contentMode = UIViewContentMode.scaleAspectFill
                         user1Photo.clipsToBounds = true
+                        
                     }
                     else {
                         if let photoURLString = swipeCardView.cardsUser1PhotoURL {
@@ -113,9 +117,8 @@ class ReasonForConnection: UIView {
                                 downloader.imageFromURL(URL: photoURL, imageView: user1Photo)
                             }
                         }
-                        
                     }
-                }
+                //print(pair.user2?.savedProfilePicture)
                 if let data = pair.user2?.savedProfilePicture {
                         //applying filter to make the white text more legible
                         let beginImage = CIImage(data: data as Data)
@@ -131,6 +134,10 @@ class ReasonForConnection: UIView {
                         user2Photo.contentMode = UIViewContentMode.scaleAspectFill
                         user2Photo.clipsToBounds = true
                         print("Got data for user 2")
+                    
+                        if let city = pair.user1?.city {
+                            user1City = city
+                        }
                     }
                     else {
                         if let photoURLString = swipeCardView.cardsUser2PhotoURL {
@@ -138,17 +145,43 @@ class ReasonForConnection: UIView {
                                 downloader.imageFromURL(URL: photoURL, imageView: user2Photo)
                             }
                         }
+                    
+                    
                         
                     }
+                
                 }
+            
             }
         
         //inserting below business button so the buttons will always be clickable and so the keyboard will increas height over the pictures
         self.insertSubview(user1Photo, belowSubview: businessButton)
         self.insertSubview(user2Photo, belowSubview: businessButton)
         
-        //displayDashedLines()
         
+        //Saving cities for retrieved users and updating the Suggested Reasons based on them
+        if let city1 = swipeCardView.cardsUser1City {
+            user1City = city1
+            print("user1City - \(user1City)")
+        }
+        
+        if let city2 = swipeCardView.cardsUser2City {
+            user2City = city2
+            print("user2City - \(user2City)")
+        }
+        
+        //getting the necter type predicted for the pair
+        if swipeCardView.cardsPredictedType != nil {
+            predictedNecterType = swipeCardView.cardsPredictedType!
+        }
+        
+        displayButtons()
+        decideSuggestedReasons()
+        updateSuggestedReasons()
+        
+        
+        
+        //displayDashedLines()
 //        let dashedLine = UIView()
 //        let  path = UIBezierPath()
 //        
@@ -284,13 +317,24 @@ class ReasonForConnection: UIView {
         self.addSubview(friendshipButton)
         
         //need to add info pulled from card for type
-        businessButton.isSelected = true
+        if predictedNecterType == "Business" {
+            businessButton.isSelected = true
+            selectedButtonLabel.text = "WORK"
+            selectedButtonLabel.textColor = DisplayUtility.businessBlue
+        } else if predictedNecterType == "Love" {
+            loveButton.isSelected = true
+            selectedButtonLabel.text = "DATING"
+            selectedButtonLabel.textColor = DisplayUtility.loveRed
+        } else if predictedNecterType == "Friendship" {
+            friendshipButton.isSelected = true
+            selectedButtonLabel.text = "FRIENDSHIP"
+            selectedButtonLabel.textColor = DisplayUtility.friendshipGreen
+        }
+        
         selectedButtonLabel.frame = CGRect(x: 0, y: businessButton.frame.origin.y + businessButton.frame.height + 0.025*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
         selectedButtonLabel.center.x = self.center.x
         selectedButtonLabel.textAlignment = NSTextAlignment.center
-        selectedButtonLabel.text = "WORK"
         selectedButtonLabel.font = UIFont(name: "BentonSans-Light", size: 26)
-        selectedButtonLabel.textColor = DisplayUtility.businessBlue
         self.addSubview(selectedButtonLabel)
     }
     @objc func typeButtonTapped(_ sender: UIButton) {
@@ -435,15 +479,16 @@ class ReasonForConnection: UIView {
         self.addSubview(suggestion3Circle)
         
         //Creating Arrays of suggested reasons to connect
-        
-        updateSuggestedReasons()
     }
     
     //Algorithm to decide which suggested reasons to display
     func decideSuggestedReasons() {
-        if false { //are the two users in the same city
+        //Displays first suggested reason specific to if the two users are in the same city
+        
+        
+        if (user1City != "" && user2City != "" && user1City == user2City) {
             businessSuggestions.append("You two are in the same city and are both great at what you do.")
-            businessSuggestions.append("You both have an interest in working to make the world a better place.")
+            businessSuggestions.append("You both work to make the world a better place.")
             
             loveSuggestions.append("You two are in the same city and would go well together.")
             loveSuggestions.append("Wine nights would be regular if you two met.")
@@ -452,7 +497,7 @@ class ReasonForConnection: UIView {
             friendshipSuggestions.append("You both have similar interests and should hang out.")
 
         } else {
-            businessSuggestions.append("You both have an interest making the world a better place.")
+            businessSuggestions.append("You both work to make the world a better place.")
             businessSuggestions.append("You both have interests and experience to help eachother.")
             
             loveSuggestions.append("Wine nights would be regular if you two met.")
@@ -468,7 +513,6 @@ class ReasonForConnection: UIView {
     }
     
     func suggestedReasonChosen(_ sender: UIButton) {
-        print("chosen")
         var labelChosen = String()
         if sender.tag == 1 && !suggestion1Circle.isHighlighted{
             print("suggestion1Button")

@@ -40,7 +40,9 @@ class HalfSwipeCard: UIView {
         let localData = LocalData()
         if let pairings = localData.getPairings() {
             for pair in pairings {
+                print("pairs objectID -> \(pair.user1?.objectId)")
                 if self.frame.origin.y == 0 {
+                    //Sets the image on the HalfSwipeCard to user1's saved profile picture in the pair
                     if let data = pair.user1?.savedProfilePicture {
                         //applying filter to make the white text more legible
                         let beginImage = CIImage(data: data as Data)
@@ -56,13 +58,20 @@ class HalfSwipeCard: UIView {
                         photoView.contentMode = UIViewContentMode.scaleAspectFill
                         photoView.clipsToBounds = true
                     }
+                    //Downloads the photo from the URL and then saves to the pairing
                     else {
+                        /*if let bridgePairingObjectId = pair.user1?.objectId {
+                            if let URL = URL(string: photoURL) {
+                                Downloader.load(URL, imageView: photoView, bridgePairingObjectId: bridgePairingObjectId , isUpperDeckCard: true)
+                            }
+                        }*/
                         if let URL = URL(string: photoURL) {
                             downloader.imageFromURL(URL: URL, imageView: photoView)
                         }
                     }
                 }
                 else {
+                    //Sets the image on the HalfSwipeCard to user2's saved profile picture in the pair
                     if let data = pair.user2?.savedProfilePicture {
                         //applying filter to make the white text more legible
                         let beginImage = CIImage(data: data as Data)
@@ -78,13 +87,19 @@ class HalfSwipeCard: UIView {
                         photoView.contentMode = UIViewContentMode.scaleAspectFill
                         photoView.clipsToBounds = true
                     }
+                    //Downloads the photo from the URL and then saves to the pairing
                     else {
+                        /*if let bridgePairingObjectId = pair.user2?.objectId {
+                            if let URL = URL(string: photoURL) {
+                                Downloader.load(URL, imageView: photoView, bridgePairingObjectId: bridgePairingObjectId , isUpperDeckCard: false)
+                            }
+                        }*/
                         if let URL = URL(string: photoURL) {
                             downloader.imageFromURL(URL: URL, imageView: photoView)
                         }
                     }
                 }
-                    
+                
             }
         }
 

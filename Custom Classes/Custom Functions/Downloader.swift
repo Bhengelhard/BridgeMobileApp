@@ -132,7 +132,7 @@ class Downloader {
         task.resume()
     }
 
-    
+    //converts an image from a URL
     func imageFromURL (URL: URL, imageView: UIImageView){
         var newImage = UIImage()
         let sessionConfig = URLSessionConfiguration.default
@@ -172,5 +172,6 @@ class Downloader {
         task.resume()
         
     }
+
     
 }
