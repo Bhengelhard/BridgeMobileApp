@@ -33,7 +33,7 @@ class CustomSearchBar: UISearchBar {
         let textFieldIdx = indexOfSearchFieldInSubviews(searchBarView: searchBar.subviews[0])
         let textField = searchBar.subviews[0].subviews[textFieldIdx] as! UITextField
         textField.backgroundColor = UIColor.clear
-        textField.font = UIFont(name: "BentonSans", size: 23)
+        textField.font = UIFont(name: "BentonSans-Light", size: 23)
         textField.textColor = .white
         textField.attributedPlaceholder = NSAttributedString(string: "search", attributes: [NSForegroundColorAttributeName: UIColor.white])
         textField.autocapitalizationType = .none

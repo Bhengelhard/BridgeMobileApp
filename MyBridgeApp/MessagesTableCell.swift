@@ -42,18 +42,18 @@ class MessagesTableCell: UITableViewCell {
         cellWidth = cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
         participants = UILabel(frame: CGRect.zero)
-        participants.font = UIFont(name: "BentonSans", size: 18.5)
+        participants.font = UIFont(name: "BentonSans-Light", size: 18.5)
         
         profilePic = UIImageView()
         profilePic.backgroundColor = .black
         profilePic.layer.borderWidth = 2
         
         messageTimestamp = UILabel(frame:CGRect.zero)
-        messageTimestamp.font = UIFont(name: "BentonSans", size: 18.5)
+        messageTimestamp.font = UIFont(name: "BentonSans-Light", size: 18.5)
         messageTimestamp.textAlignment = NSTextAlignment.right
         
         messageSnapshot = UITextView(frame:CGRect.zero)
-        messageSnapshot.font = UIFont(name: "BentonSans", size: 16.5)
+        messageSnapshot.font = UIFont(name: "BentonSans-Light", size: 16.5)
         messageSnapshot.textContainer.maximumNumberOfLines = 2
         messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.byTruncatingTail
         messageSnapshot.sizeToFit()
@@ -81,12 +81,12 @@ class MessagesTableCell: UITableViewCell {
         cellWidth = bounds.size.width//cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
         /*
-         if let _ = setSeparator {
-         // print("setSeparator")
-         line.frame = CGRect(x: 0.025*cellWidth! + 0.15*cellHeight!, y: 0, width: bounds.size.width, height: 1)
-         contentView.addSubview(line)
-         }
-         */
+        if let _ = setSeparator {
+            // print("setSeparator")
+            line.frame = CGRect(x: 0.025*cellWidth! + 0.15*cellHeight!, y: 0, width: bounds.size.width, height: 1)
+            contentView.addSubview(line)
+        }
+        */
         
         profilePic.frame = CGRect(x: 0.0708*cellWidth!, y: 0.5*cellHeight!-0.168*cellWidth!/2, width: 0.168*cellWidth!, height: 0.168*cellWidth!)
         profilePic.layer.cornerRadius = profilePic.frame.height/2
@@ -104,7 +104,7 @@ class MessagesTableCell: UITableViewCell {
         messageSnapshot.textContainer.lineFragmentPadding = 0
         
         //setting line to begin with text and go to end of frame
-        line.frame = CGRect(x: profilePic.frame.minX, y: 0.99*cellHeight!, width: cellWidth! - profilePic.frame.minX, height: 1)
+        line.frame = CGRect(x: profilePic.frame.minX, y: 0.99*cellHeight!, width: 0.926*cellWidth!, height: 1)
         
         //participants.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.1*cellHeight!, width: 0.55*cellWidth!, height: 0.25*cellHeight!)
         
@@ -117,7 +117,6 @@ class MessagesTableCell: UITableViewCell {
         notificationDot.image = UIImage(named: "Inbox_Notification_Icon")
         notificationDot.layer.cornerRadius = notificationDot.frame.size.height/2
         notificationDot.clipsToBounds = true
-        
         
         //        guard let superview = contentView.superview else {
         //            return

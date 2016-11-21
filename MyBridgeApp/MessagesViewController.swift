@@ -49,11 +49,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     let filterLabel = UILabel()
     let searchBarContainer = UIView()
+    
+    //new matches
     var newMatchesView = NewMatchesView()
     
     //message information
     let noMessagesLabel = UILabel()
     var names = [String : [String]]()
+    var profilePicURLs = [String : [String: String]]()
     var messages = [String : String]()
     var messageType = [String : String]()
     var messageViewed = [String : Bool]()
@@ -109,6 +112,177 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             vc.transitioningDelegate = self.transitionManager
         }
     }
+    
+    /*
+    func addProfilePicURLsToMessages() {
+        print("adding profile_pic_ulrs to Messages table")
+        let query: PFQuery = PFQuery(className: "Messages")
+        query.limit = 10000
+        query.findObjectsInBackground(block: { (results, error) -> Void in
+            
+            if let error = error {
+                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+            }
+            else if let results = results {
+                for i in 0..<results.count{
+                    
+                    let result = results[i]
+                    if let id1 = result["user1_objectId"] {
+                        let query2 = PFQuery(className: "_User")
+                        query2.whereKey("objectId", equalTo: id1)
+                        query2.findObjectsInBackground(block: { (results2, error2) -> Void in
+                            
+                            if let error2 = error2 {
+                                print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
+                            }
+                            else if let results2 = results2 {
+                                print(results2.count)
+                                if results2.count > 0 {
+                                    result["user1_profile_picture_url"] = results2[0]["profile_picture_url"]
+                                    result.saveInBackground()
+                                }
+                            }
+                        })
+                    }
+                    if let id2 = result["user2_objectId"] {
+                        let query2 = PFQuery(className: "_User")
+                        query2.whereKey("objectId", equalTo: id2)
+                        query2.findObjectsInBackground(block: { (results2, error2) -> Void in
+                            
+                            if let error2 = error2 {
+                                print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
+                            }
+                            else if let results2 = results2 {
+                                if results2.count > 0 {
+                                    result["user2_profile_picture_url"] = results2[0]["profile_picture_url"]
+                                    result.saveInBackground()
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        })
+    }
+    */
+    
+    /*
+    func splitArraysInMessages() {
+        let query: PFQuery = PFQuery(className: "Messages")
+        query.limit = 10000
+        
+        query.findObjectsInBackground(block: { (results, error) -> Void in
+            
+            if let error = error {
+                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+            }
+            else if let results = results {
+                for i in 0..<results.count{
+                    
+                    let result = results[i]
+                    
+                    let bridge_builder_id = result["bridge_builder"] as! String
+                    let ids = result["ids_in_message"] as! [String]
+                    let names = result["names_in_message"] as! [String]
+                    var num = 1
+                    for i in 0..<ids.count {
+                        if ids[i] == bridge_builder_id {
+                            continue
+                        }
+                        result["user\(num)_objectId"] = ids[i]
+                        result["user\(num)_name"] = names[i]
+                        num = num+1
+                    }
+                    
+                    result.saveInBackground()
+                }
+            }
+        })
+    }
+     */
+    
+    /*
+    func setUserStatusesTo1() {
+        print("setting statuses")
+        let query: PFQuery = PFQuery(className: "BridgePairings")
+        query.whereKey("bridged", equalTo: true)
+        query.limit = 10000
+        query.findObjectsInBackground(block: { (results, error) -> Void in
+            
+            if let error = error {
+                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+            }
+            else if let results = results {
+                for i in 0..<results.count{
+                    
+                    let result = results[i]
+                    result["user1_response"] = 1
+                    result["user2_response"] = 1
+                    result.saveInBackground()
+                    print("status \(i) done")
+                }
+            }
+        })
+    }
+    */
+    
+    /*
+    func addProfilePicUrlsToMessages() {
+        print("adding profile_pic_ulrs to Messages table")
+        let query: PFQuery = PFQuery(className: "Messages")
+        query.limit = 10000
+        query.findObjectsInBackground(block: { (results, error) -> Void in
+            
+            if let error = error {
+                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+            }
+            else if let results = results {
+                for i in 0..<results.count{
+                    
+                    let result = results[i]
+                    let ids = result["ids_in_message"] as! [String]
+                    print("Message \(i): \(ids)")
+                    for id in ids {
+                        let query2: PFQuery = PFQuery(className: "_User")
+                        query2.whereKey("objectId", equalTo: id)
+                        query2.findObjectsInBackground(block: { (results2, error2) -> Void in
+                            if let error2 = error2 {
+                                print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
+                            }
+                            else if let results2 = results2 {
+                                print(results2.count)
+                                if results2.count > 0 {
+                                    print("!")
+                                    var urls: [String]
+                                    if let urls1 = result["profile_picture_urls"] {
+                                        urls = urls1 as! [String]
+                                    } else {
+                                        urls = [String]()
+                                    }
+                                    let url = results2[0]["profile_picture_url"] as! String
+                                    urls.append(url)
+                                    print(urls.count)
+                                    result["profile_picture_urls"] = urls
+                                    result.saveInBackground()
+                                }
+                                /*
+                                if results2.count > 0 {
+                                    profilePicURLs.append(results2[0]["profile_picture_url"] as! String)
+                                }
+                                if profilePicURLs.count == ids.count {
+                                    result["profile_picture_urls"] = profilePicURLs
+                                    result.saveInBackground()
+                                }
+                                 */
+                            }
+                        })
+                    }
+                }
+            }
+        })
+
+    }
+ */
     
     // refresh() fetches the data from Parse
     func refresh() {
@@ -173,7 +347,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                         
                     }
-                    self.names[result.objectId!] = (names_per_message)                }
+                    self.names[result.objectId!] = (names_per_message)
+                    self.profilePicURLs[result.objectId!] = [String: String]()
+                    if let user1PhotoURL = result["user1_profile_picture_url"] {
+                        self.profilePicURLs[result.objectId!]?[result["user1_objectId"] as! String] = user1PhotoURL as! String
+                    }
+                    
+                    if let user2PhotoURL = result["user2_profile_picture_url"] {
+                        self.profilePicURLs[result.objectId!]?[result["user2_objectId"] as! String] = user2PhotoURL as! String
+                    }
+                }
             }
             self.tableView.reloadData()
         })
@@ -406,6 +589,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         
+        /*
         var profilePics = [UIImage]()
         var names = [String]()
         
@@ -416,7 +600,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         
-        newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
+        newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)*/
+        
+        loadNewMatches()
+        
         tableView.tableHeaderView = newMatchesView
         
         let query: PFQuery = PFQuery(className: "Messages")
@@ -489,9 +676,70 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
     }
     
-    func displayNewMatches() {
-        newMatchesView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight)
-        newMatchesView.backgroundColor = .black
+    func loadNewMatches() {
+        print("loading new matches")
+        let query: PFQuery = PFQuery(className: "BridgePairings")
+        query.whereKey("bridged", equalTo: true)
+        query.limit = 10000
+        query.findObjectsInBackground(block: { (results, error) -> Void in
+            
+            if let error = error {
+                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+            }
+            else if let results = results {
+                for i in 0..<results.count{
+                    
+                    let result = results[i]
+                    
+                    var user = ""
+                    var otherUser = ""
+                    if let user1_objectId = result["user_objectId1"] {
+                        if user1_objectId as? String == PFUser.current()?.objectId {
+                            user = "user1"
+                            otherUser = "user2"
+                        }
+                    }
+                    if let user2_objectId = result["user_objectId2"] {
+                        if user2_objectId as? String == PFUser.current()?.objectId {
+                            user = "user2"
+                            otherUser = "user1"
+                        }
+                    }
+                    if user != "" && result["\(user)_response"] as! Int != 1 {
+                        let profilePicURL = URL(string: result["\(otherUser)_profile_picture_url"] as! String)
+                        let profilePicView = UIImageView()
+                        let downloader = Downloader()
+                        downloader.imageFromURL(URL: profilePicURL!, imageView: profilePicView, callBack: nil)
+                        let name = result["\(otherUser)_name"] as! String
+                        let wordsInName = name.components(separatedBy: " ")
+                        let firstName: String
+                        if wordsInName.count > 0 {
+                            firstName = wordsInName.first!
+                        } else {
+                            firstName = name
+                        }
+                        let dot = result["\(user)_response"] as! Int == 0
+                        var color: UIColor
+                        switch result["bridge_type"] as! String {
+                        case "Business":
+                            color = DisplayUtility.businessBlue
+                        case "Love":
+                            color = DisplayUtility.loveRed
+                        case "Friendship":
+                            color = DisplayUtility.friendshipGreen
+                        default:
+                            color = .black
+                        }
+                        let newMatch = NewMatch(profilePicView: profilePicView, firstName: firstName, color: color, dot: dot)
+                        self.newMatchesView.addNewMatch(newMatch: newMatch)
+                        self.tableView.tableHeaderView = self.newMatchesView
+                        
+                    }
+                }
+            }
+            
+        })
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -555,6 +803,16 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.messageTimestamp.text = ""
             cell.backgroundColor = UIColor.white
             return cell
+        }
+        
+        var profilePicsDict = profilePicURLs[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
+        for id in profilePicsDict.keys {
+            if id != PFUser.current()?.objectId {
+                let url = URL(string: profilePicsDict[id]!)!
+                let downloader = Downloader()
+                downloader.imageFromURL(URL: url, imageView: cell.profilePic, callBack: nil)
+                break
+            }
         }
         
         var stringOfNames = ""
