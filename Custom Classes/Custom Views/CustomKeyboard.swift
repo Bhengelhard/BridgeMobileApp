@@ -19,6 +19,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     var target = String()
     var maxNumCharacters = Int.max
     var currentView = UIView()
+    var currentViewController = UIViewController()
     
     var updatedText = String()
     
@@ -109,6 +110,9 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     func height() -> CGFloat {
         return keyboardHeight + messageView.frame.height
     }
+    func getCurrentViewController(vc: UIViewController) {
+        currentViewController = vc
+    }
     
     @objc func messageButtonTapped(_ sender: UIButton) {
         let dbSavingFunctions = DBSavingFunctions()
@@ -123,8 +127,10 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 
                 //Dismiss the Reason For Connections View
                 currentView.removeFromSuperview()
-                //let bridgeVC = BridgeViewController()
-                //bridgeVC.nextPair()
+                if let bridgeVC = currentViewController as? BridgeViewController {
+                    bridgeVC.reasonForConnectionSent()
+                }
+                
             }
         }
     }

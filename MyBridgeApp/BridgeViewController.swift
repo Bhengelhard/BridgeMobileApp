@@ -54,6 +54,7 @@ class BridgeViewController: UIViewController {
     let revisitButton = UIButton()
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var wasLastSwipeInDeck = Bool()
+    var shouldCheckInPair = Bool()
     
     /*//toolbar buttons
     let toolbar = UIView()
@@ -903,6 +904,11 @@ class BridgeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        print("View did load was called")
+        
+        
         //Creating Notifications
         //Listener for Post Status Notification
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
@@ -1090,8 +1096,6 @@ class BridgeViewController: UIViewController {
         if gesture.state == UIGestureRecognizerState.ended {
             
             if swipeCardView.center.x < 0.25*DisplayUtility.screenWidth {
-                
-                
                 let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
                 if isFirstTimeSwipedLeft {
                     //show alert for swiping right here and then bridging or not
@@ -1109,6 +1113,7 @@ class BridgeViewController: UIViewController {
                                 self.nextPair()
                         })
                         removeCard = true
+                        self.shouldCheckInPair = true
                     }))
                     self.present(alert, animated: true, completion: nil)
                     
@@ -1123,6 +1128,7 @@ class BridgeViewController: UIViewController {
                             self.nextPair()
                     })
                     removeCard = true
+                    shouldCheckInPair = true
                 }
             } else if swipeCardView.center.x > 0.75*DisplayUtility.screenWidth {
                 
@@ -1142,8 +1148,8 @@ class BridgeViewController: UIViewController {
                             self.connectIcon.alpha = 0.0
                             }, completion: { (success) in
                                 self.connectIcon.removeFromSuperview()
+                                self.bridged()
                         })
-                        self.bridged()
                         removeCard = false
                         showReasonForConnection = true
                         
@@ -1168,7 +1174,7 @@ class BridgeViewController: UIViewController {
             if removeCard{
                 swipeCardView.removeFromSuperview()
             } else if showReasonForConnection {
-        
+                
             }
             else {
                 //Put swipeCard back into place
@@ -1189,12 +1195,82 @@ class BridgeViewController: UIViewController {
     func bridged(){
         if let swipeCard = arrayOfCardsInDeck.first as? SwipeCard{
             let reasonForConnectionView = ReasonForConnection()
-            reasonForConnectionView.initialize()
+            reasonForConnectionView.initialize(vc: self)
             reasonForConnectionView.sendSwipeCard(swipeCardView: swipeCard)
             view.addSubview(reasonForConnectionView)
         }
+        print("Count of array of Cards from bridged \(arrayOfCardsInDeck.count)")
     }
-    
+    func reasonForConnectionSent() {
+        /*let bridgePairings = localData.getPairings()
+        if var bridgePairings = bridgePairings {
+            var x = 0
+            for i in 0 ..< (bridgePairings.count) {
+                if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
+                    break
+                }
+                x = i
+            }
+            var bridgeType = "All"
+            if let bt = bridgePairings[x].user1?.bridgeType {
+                bridgeType = bt
+            }
+            //bridgePairings.remove(at: x)
+            localData.setPairings(bridgePairings)
+            localData.synchronize()
+            //getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
+        }*/
+        print("Count of array of Cards from reason for Connection Sent \(arrayOfCardsInDeck.count)")
+        nextPair()
+    }
+    func nextPair(){
+        print("nextPair called")
+        // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in callbackForNextPair. cIgAr - 08/25/16
+        
+        let bridgePairings = localData.getPairings()
+        
+        if var bridgePairings = bridgePairings {
+            var x = 0
+            for i in 0 ..< (bridgePairings.count) {
+                if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
+                    break
+                }
+                x = i
+                
+            }
+            var objectId = String()
+            print("This is x \(x)")
+            print("right before nil and count check")
+            if bridgePairings != nil && bridgePairings.count > 0  {
+                print("got into nil/count check")
+                objectId = (bridgePairings[x].user1?.objectId)!
+                print("set objectId")
+                
+                //If current user has swiped left then turn checked out to false
+                if shouldCheckInPair {
+                    let query = PFQuery(className:"BridgePairings")
+                    query.getObjectInBackground(withId: objectId, block: { (result, error) -> Void in
+                        if let result = result {
+                            result["checked_out"] = false
+                            result.saveInBackground()
+                        }
+                    })
+                    shouldCheckInPair = false
+                }
+                bridgePairings.remove(at: x)
+            } else {
+                objectId = "no object to search for"
+            }
+            var bridgeType = "All"
+            bridgeType = convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)
+            
+            localData.setPairings(bridgePairings)
+            localData.synchronize()
+            
+            print("Synchronized and about to call back")
+            getBridgePairings(1, typeOfCards: bridgeType, callBack: callbackForNextPair, bridgeType:bridgeType)
+        }
+    }
     func callbackForNextPair(_ bridgeType:String) -> Void {
         print("got to callbackfornextpair")
         print("count of bridgepairings from callBack - \(arrayOfCardsInDeck.count)")
@@ -1260,50 +1336,6 @@ class BridgeViewController: UIViewController {
         self.getBridgePairings(2, typeOfCards: self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay), callBack:nil, bridgeType:nil)
         PFUser.current()?.incrementKey("revitalized_pairs_count")
         PFUser.current()?.saveInBackground()
-    }
-    func nextPair(){
-        
-        
-        print("nextPair called")
-        // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in callbackForNextPair. cIgAr - 08/25/16
-        let bridgePairings = localData.getPairings()
-        print("count of bridgepairings from nextPair - \(arrayOfCardsInDeck.count)")
-        if var bridgePairings = bridgePairings {
-            var x = 0
-            for i in 0 ..< (bridgePairings.count) {
-                if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
-                    break
-                }
-                x = i
-                
-            }
-            var objectId = String()
-            print("This is x \(x)")
-            print("right before nil and count check")
-            if bridgePairings != nil && bridgePairings.count > 0  {
-                print("got into nil/count check")
-                objectId = (bridgePairings[x].user1?.objectId)!
-                print("set objectId")
-                let query = PFQuery(className:"BridgePairings")
-                query.getObjectInBackground(withId: objectId, block: { (result, error) -> Void in
-                    if let result = result {
-                        result["checked_out"] = false
-                        result["bridged"] =  false
-                        result.saveInBackground()
-                    }
-                })
-                bridgePairings.remove(at: x)
-            } else {
-                objectId = "no object to search for"
-            }
-            var bridgeType = "All"
-            bridgeType = convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)
-                         
-            localData.setPairings(bridgePairings)
-            localData.synchronize()
-            
-            getBridgePairings(1, typeOfCards: bridgeType, callBack: callbackForNextPair, bridgeType:bridgeType)
-            }
     }
     func connectionCanceled(swipeCardView: SwipeCard) {
         //Put swipeCard back into place

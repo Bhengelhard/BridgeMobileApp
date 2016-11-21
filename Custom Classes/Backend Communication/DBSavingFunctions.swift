@@ -53,6 +53,8 @@ class DBSavingFunctions {
                     result?["connecter_name"] = PFUser.current()?["name"]
                     result?["connecter_profile_picture_url"] = PFUser.current()?["profile_picture_url"]
                     result?["reason_for_connection"] = messageText
+                    result?["predicted_bridge_type"] = result?["bridge_type"]
+                    result?["bridge_type"] = type
                     result?.saveInBackground()
                     print("saved in bridged Users DB Saving Function")
                     
@@ -75,98 +77,6 @@ class DBSavingFunctions {
             }*/
             
         }
-        
-
-        
-        
-        
-        /*let bridgePairings = localData.getPairings()
-        if var bridgePairings = bridgePairings {
-            var x = 0
-            for i in 0 ..< (bridgePairings.count) {
-                if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
-                    break
-                }
-                x = i
-            }
-            let message = PFObject(className: "Messages")
-            let acl = PFACL()
-            acl.getPublicReadAccess = true
-            acl.getPublicWriteAccess = true
-            message.acl = acl
-            
-            let currentUserId = PFUser.current()?.objectId
-            let currentUserName = (PFUser.current()?["name"] as? String) ?? ""
-            message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
-            message["names_in_message"] = [(bridgePairings[x].user1?.name)!, (bridgePairings[x].user2?.name)!, currentUserName]
-            let user1FirstName = (bridgePairings[x].user1?.name)!.components(separatedBy: " ").first!
-            let user2FirstName = (bridgePairings[x].user2?.name)!.components(separatedBy: " ").first!
-            singleMessageTitle = "\(user1FirstName) & \(user2FirstName)"
-            message["bridge_builder"] = currentUserId
-            var y = [String]()
-            y.append(currentUserId as String!)
-            message["message_viewed"] = y
-            if let necterType = bridgePairings[x].user1?.bridgeType {
-                message["message_type"] = necterType
-                switch(necterType) {
-                case "Business":
-                    necterTypeColor = DisplayUtility.businessBlue
-                case "Love":
-                    necterTypeColor = DisplayUtility.loveRed
-                case "Friendship":
-                    necterTypeColor = DisplayUtility.friendshipGreen
-                default:
-                    necterTypeColor = DisplayUtility.necterGray
-                }
-            }
-            else {
-                message["message_type"] = "Friendship"
-            }
-            message["lastSingleMessageAt"] = Date()
-            // update the no of message in a Thread - Start
-            message["no_of_single_messages"] = 1
-            var noOfSingleMessagesViewed = [String:Int]()
-            noOfSingleMessagesViewed[PFUser.current()!.objectId!] = 1
-            message["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
-            // update the no of message in a Thread - End
-            do {
-                try message.save()
-                let objectId = bridgePairings[x].user1?.objectId
-                let query = PFQuery(className:"BridgePairings")
-                let notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                let notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-                let userObjectId1 = bridgePairings[x].user1!.userId!
-                let userObjectId2 = bridgePairings[x].user2!.userId!
-                query.getObjectInBackground(withId: objectId!, block: { (result, error) -> Void in
-                    //this should only happen if result can equal result - i.e. in the result if let statement, but the code was not allow for this, so it was taken out and should be tested.
-                    if let result = result as? PFObject?{
-                        result?["checked_out"] = true
-                        result?["bridged"] = true
-                        result?.saveInBackground()
-                        //when users are introduced, they are added to eachother's friend_lists in the _User table (i.e. they become friends)
-                        //when users both accept, they are added to eachother's friend_lists in the _User table (i.e. they become friends)self.pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
-                        self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])
-                        self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId2,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])
-                    }
-                })
-                self.messageId = message.objectId!
-            }
-            catch {
-                
-            }
-            var bridgeType = "All"
-            if let bt = bridgePairings[x].user1?.bridgeType {
-                bridgeType = bt
-            }
-            // { Used for nextPair()
-            bridgePairings.remove(at: x)
-            localData.setPairings(bridgePairings)
-            localData.synchronize()
-            getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
-            // }
-            segueToSingleMessage = true
-            performSegue(withIdentifier: "showSingleMessage", sender: nil)
-        }*/
         
     }
     
@@ -211,4 +121,96 @@ class DBSavingFunctions {
         print("sendMessage")
     }
 
+    
+    
+    
+    //Creating a message
+    /*let bridgePairings = localData.getPairings()
+    if var bridgePairings = bridgePairings {
+        var x = 0
+        for i in 0 ..< (bridgePairings.count) {
+            if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
+                break
+            }
+            x = i
+        }
+        let message = PFObject(className: "Messages")
+        let acl = PFACL()
+        acl.getPublicReadAccess = true
+        acl.getPublicWriteAccess = true
+        message.acl = acl
+        
+        let currentUserId = PFUser.current()?.objectId
+        let currentUserName = (PFUser.current()?["name"] as? String) ?? ""
+        message["ids_in_message"] = [(bridgePairings[x].user1?.userId)!, (bridgePairings[x].user2?.userId)!, currentUserId!]
+        message["names_in_message"] = [(bridgePairings[x].user1?.name)!, (bridgePairings[x].user2?.name)!, currentUserName]
+        let user1FirstName = (bridgePairings[x].user1?.name)!.components(separatedBy: " ").first!
+        let user2FirstName = (bridgePairings[x].user2?.name)!.components(separatedBy: " ").first!
+        singleMessageTitle = "\(user1FirstName) & \(user2FirstName)"
+        message["bridge_builder"] = currentUserId
+        var y = [String]()
+        y.append(currentUserId as String!)
+        message["message_viewed"] = y
+        if let necterType = bridgePairings[x].user1?.bridgeType {
+            message["message_type"] = necterType
+            switch(necterType) {
+            case "Business":
+                necterTypeColor = DisplayUtility.businessBlue
+            case "Love":
+                necterTypeColor = DisplayUtility.loveRed
+            case "Friendship":
+                necterTypeColor = DisplayUtility.friendshipGreen
+            default:
+                necterTypeColor = DisplayUtility.necterGray
+            }
+        }
+        else {
+            message["message_type"] = "Friendship"
+        }
+        message["lastSingleMessageAt"] = Date()
+        // update the no of message in a Thread - Start
+        message["no_of_single_messages"] = 1
+        var noOfSingleMessagesViewed = [String:Int]()
+        noOfSingleMessagesViewed[PFUser.current()!.objectId!] = 1
+        message["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
+        // update the no of message in a Thread - End
+        do {
+            try message.save()
+            let objectId = bridgePairings[x].user1?.objectId
+            let query = PFQuery(className:"BridgePairings")
+            let notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+            let notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+            let userObjectId1 = bridgePairings[x].user1!.userId!
+            let userObjectId2 = bridgePairings[x].user2!.userId!
+            query.getObjectInBackground(withId: objectId!, block: { (result, error) -> Void in
+                //this should only happen if result can equal result - i.e. in the result if let statement, but the code was not allow for this, so it was taken out and should be tested.
+                if let result = result as? PFObject?{
+                    result?["checked_out"] = true
+                    result?["bridged"] = true
+                    result?.saveInBackground()
+                    //when users are introduced, they are added to eachother's friend_lists in the _User table (i.e. they become friends)
+                    //when users both accept, they are added to eachother's friend_lists in the _User table (i.e. they become friends)self.pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
+                    self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])
+                    self.pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId2,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge", "messageId": message.objectId!])
+                }
+            })
+            self.messageId = message.objectId!
+        }
+        catch {
+            
+        }
+        var bridgeType = "All"
+        if let bt = bridgePairings[x].user1?.bridgeType {
+            bridgeType = bt
+        }
+        // { Used for nextPair()
+        bridgePairings.remove(at: x)
+        localData.setPairings(bridgePairings)
+        localData.synchronize()
+        getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
+        // }
+        segueToSingleMessage = true
+        performSegue(withIdentifier: "showSingleMessage", sender: nil)
+    }*/
+    
 }

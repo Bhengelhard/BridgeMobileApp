@@ -40,7 +40,6 @@ class HalfSwipeCard: UIView {
         let localData = LocalData()
         if let pairings = localData.getPairings() {
             for pair in pairings {
-                print("pairs objectID -> \(pair.user1?.objectId)")
                 if self.frame.origin.y == 0 {
                     //Sets the image on the HalfSwipeCard to user1's saved profile picture in the pair
                     if let data = pair.user1?.savedProfilePicture {

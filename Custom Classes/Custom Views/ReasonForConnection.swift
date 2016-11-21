@@ -43,6 +43,9 @@ class ReasonForConnection: UIView {
     var user1City = String()
     var user2City = String()
     
+    //Current View Controller
+    var currentViewController = UIViewController()
+    
     override init (frame: CGRect) {
         super.init(frame: frame)
         //leaving empty because reasonForConnectionView in the BridgeViewController is initialized global to the class
@@ -55,7 +58,7 @@ class ReasonForConnection: UIView {
     required init(coder aDecoder: NSCoder) {
         fatalError("This is a fatal error message from CustomClasses/CustomViews/SwipeCard.swift")
     }
-    func initialize () {
+    func initialize (vc: BridgeViewController) {
         self.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
 
         self.alpha = 0
@@ -66,10 +69,9 @@ class ReasonForConnection: UIView {
             self.alpha = 1
         })
         
-        displayNavBar()
-        displaySuggestedReasons()
-        displayCustomKeyboard()
+        currentViewController = vc
         
+        displayNavBar()
     }
     
     func sendSwipeCard(swipeCardView: SwipeCard) {
@@ -176,10 +178,10 @@ class ReasonForConnection: UIView {
         }
         
         displayButtons()
+        displaySuggestedReasons()
         decideSuggestedReasons()
         updateSuggestedReasons()
-        
-        
+        displayCustomKeyboard()
         
         //displayDashedLines()
 //        let dashedLine = UIView()
@@ -378,6 +380,7 @@ class ReasonForConnection: UIView {
         
         customKeyboard.display(view: self, placeholder: "Why should they 'nect?", buttonTitle: "send", buttonTarget: "bridgeUsers")
         //customKeyboard.messageTextView.returnKeyType = UIReturnKeyType.done
+        customKeyboard.getCurrentViewController(vc: currentViewController as! UIViewController)
         customKeyboard.resign()
         //let type = whichFilter()
         //customKeyboard.updatePostType(updatedPostType: type)
