@@ -13,7 +13,7 @@ class HalfSwipeCard: UIView {
     //var name:String?
     //var location:String?
     //var status:String?
-    var photo = UIImage()
+    var photo: UIImage?
     //var locationCoordinates:[Double]?
     //var connectionType:String?
     
@@ -65,7 +65,7 @@ class HalfSwipeCard: UIView {
                             }
                         }*/
                         if let URL = URL(string: photoURL) {
-                            downloader.imageFromURL(URL: URL, imageView: photoView)
+                            downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
                         }
                     }
                 }
@@ -94,7 +94,7 @@ class HalfSwipeCard: UIView {
                             }
                         }*/
                         if let URL = URL(string: photoURL) {
-                            downloader.imageFromURL(URL: URL, imageView: photoView)
+                            downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
                         }
                     }
                 }
@@ -149,7 +149,10 @@ class HalfSwipeCard: UIView {
         }
         
     }
-    
+    func callbackToSetPhoto(_ image: UIImage) -> Void {
+        print("photo has been saved")
+        photo = image
+    }
     func firstNameLastNameInitial (name: String) -> String{
         let wordsInName = name.components(separatedBy: " ")
         if let firstName = wordsInName.first {
@@ -167,10 +170,6 @@ class HalfSwipeCard: UIView {
         }
         
         return name
-    }
-    
-    func getImage() -> UIImage {
-        return photo
     }
     
     /*func getCard(_ deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int, isUpperDeckCard: Bool) -> UIView {

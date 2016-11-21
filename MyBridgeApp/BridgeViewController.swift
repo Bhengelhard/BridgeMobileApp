@@ -55,6 +55,7 @@ class BridgeViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var wasLastSwipeInDeck = Bool()
     var shouldCheckInPair = Bool()
+    var swipeCardView = UIView()
     
     /*//toolbar buttons
     let toolbar = UIView()
@@ -1058,7 +1059,7 @@ class BridgeViewController: UIViewController {
     func isDragged(_ gesture: UIPanGestureRecognizer) {
 
         let translation = gesture.translation(in: self.view)
-        let swipeCardView = gesture.view!
+        swipeCardView = gesture.view!
         swipeCardView.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
         let xFromCenter = swipeCardView.center.x - self.view.bounds.width / 2
         let scale = min(CGFloat(1.0), 1)
@@ -1106,7 +1107,7 @@ class BridgeViewController: UIViewController {
                     }))
                     alert.addAction(UIAlertAction(title: "Don't Connect", style: .default, handler: { (action) in
                         UIView.animate(withDuration: 0.2, animations: {
-                            swipeCardView.center.x = -1.0*DisplayUtility.screenWidth
+                            self.swipeCardView.center.x = -1.0*DisplayUtility.screenWidth
                             self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                             self.disconnectIcon.alpha = 0.0
                             }, completion: { (success) in
@@ -1121,7 +1122,7 @@ class BridgeViewController: UIViewController {
                     self.localData.synchronize()
                 } else {
                     UIView.animate(withDuration: 0.2, animations: {
-                        swipeCardView.center.x = -1.0*DisplayUtility.screenWidth
+                        self.swipeCardView.center.x = -1.0*DisplayUtility.screenWidth
                         self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                         self.disconnectIcon.alpha = 0.0
                         }, completion: { (success) in
@@ -1142,8 +1143,8 @@ class BridgeViewController: UIViewController {
                     }))
                     alert.addAction(UIAlertAction(title: "Connect", style: .default, handler: { (action) in
                         UIView.animate(withDuration: 0.4, animations: {
-                            swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
-                            swipeCardView.alpha = 0.0
+                            self.swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
+                            self.swipeCardView.alpha = 0.0
                             self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                             self.connectIcon.alpha = 0.0
                             }, completion: { (success) in
@@ -1160,7 +1161,7 @@ class BridgeViewController: UIViewController {
                     self.localData.synchronize()
                 } else {
                     UIView.animate(withDuration: 0.4, animations: {
-                        swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
+                        self.swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.alpha = 0.0
                         }, completion: { (success) in
@@ -1181,8 +1182,8 @@ class BridgeViewController: UIViewController {
                 UIView.animate(withDuration: 0.7, animations: {
                     rotation = CGAffineTransform(rotationAngle: 0)
                     stretch = rotation.scaledBy(x: 1, y: 1)
-                    swipeCardView.transform = stretch
-                    swipeCardView.frame = self.swipeCardFrame
+                    self.swipeCardView.transform = stretch
+                    self.swipeCardView.frame = self.swipeCardFrame
                     self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                     self.disconnectIcon.alpha = 0.0
                     self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
@@ -1220,6 +1221,7 @@ class BridgeViewController: UIViewController {
             localData.synchronize()
             //getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
         }*/
+        swipeCardView.removeFromSuperview()
         print("Count of array of Cards from reason for Connection Sent \(arrayOfCardsInDeck.count)")
         nextPair()
     }

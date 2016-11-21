@@ -114,12 +114,16 @@ class ReasonForConnection: UIView {
                         
                     }
                     else {
-                        if let photoURLString = swipeCardView.cardsUser1PhotoURL {
-                            if let photoURL = URL(string: photoURLString) {
-                                downloader.imageFromURL(URL: photoURL, imageView: user1Photo)
+                        if let photo = swipeCardView.topHalf.photo {
+                            user1Photo.image = photo
+                        } else {
+                            if let photoURLString = swipeCardView.cardsUser1PhotoURL {
+                                if let photoURL = URL(string: photoURLString) {
+                                    downloader.imageFromURL(URL: photoURL, imageView: user1Photo, callBack: nil)
+                                }
                             }
-                        }
                     }
+                }
                 //print(pair.user2?.savedProfilePicture)
                 if let data = pair.user2?.savedProfilePicture {
                         //applying filter to make the white text more legible
@@ -142,18 +146,17 @@ class ReasonForConnection: UIView {
                         }
                     }
                     else {
-                        if let photoURLString = swipeCardView.cardsUser2PhotoURL {
-                            if let photoURL = URL(string: photoURLString) {
-                                downloader.imageFromURL(URL: photoURL, imageView: user2Photo)
+                        if let photo = swipeCardView.bottomHalf.photo {
+                            user2Photo.image = photo
+                        } else {
+                            if let photoURLString = swipeCardView.cardsUser2PhotoURL {
+                                if let photoURL = URL(string: photoURLString) {
+                                    downloader.imageFromURL(URL: photoURL, imageView: user2Photo, callBack: nil)
+                                }
                             }
                         }
-                    
-                    
-                        
                     }
-                
                 }
-            
             }
         
         //inserting below business button so the buttons will always be clickable and so the keyboard will increas height over the pictures

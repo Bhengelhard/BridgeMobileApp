@@ -133,7 +133,7 @@ class Downloader {
     }
 
     //converts an image from a URL
-    func imageFromURL (URL: URL, imageView: UIImageView){
+    func imageFromURL (URL: URL, imageView: UIImageView, callBack: ((_ image: UIImage)->Void)?){
         var newImage = UIImage()
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
@@ -160,6 +160,10 @@ class Downloader {
                     })
                     imageView.contentMode = UIViewContentMode.scaleAspectFill
                     imageView.clipsToBounds = true
+                    
+                    if let callBack = callBack {
+                         callBack(newImage)
+                    }
                 })
                
                 

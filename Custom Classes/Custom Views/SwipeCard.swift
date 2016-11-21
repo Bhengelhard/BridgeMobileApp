@@ -12,9 +12,13 @@ class SwipeCard: UIView {
     
     var cardsUser1PhotoURL:String?
     var cardsUser2PhotoURL:String?
+    var cardsUser1Photo: UIImage?
+    var cardsUser2Photo: UIImage?
     var cardsUser1City: String?
     var cardsUser2City: String?
     var cardsPredictedType: String?
+    let topHalf = HalfSwipeCard()
+    let bottomHalf = HalfSwipeCard()
     
     override init (frame: CGRect) {
         super.init(frame: frame)
@@ -35,7 +39,7 @@ class SwipeCard: UIView {
 
         cardsPredictedType = connectionType
         
-        let topHalf = HalfSwipeCard(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height))
+        topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         topHalf.initialize(name: user1Name, status: user1Status, photoURL: user1PhotoURL, connectionType: connectionType)
         cardsUser1PhotoURL = user1PhotoURL
         
@@ -45,7 +49,7 @@ class SwipeCard: UIView {
         topHalfShape.path = maskPath.cgPath
         topHalf.layer.mask = topHalfShape
         
-        let bottomHalf = HalfSwipeCard(frame: CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height))
+        bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         bottomHalf.initialize(name: user2Name, status: user2Status, photoURL: user2PhotoURL, connectionType: connectionType)
         cardsUser2PhotoURL = user2PhotoURL
         
