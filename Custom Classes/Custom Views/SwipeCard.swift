@@ -12,8 +12,6 @@ class SwipeCard: UIView {
     
     var cardsUser1PhotoURL:String?
     var cardsUser2PhotoURL:String?
-    var cardsUser1Photo: UIImage?
-    var cardsUser2Photo: UIImage?
     var cardsUser1City: String?
     var cardsUser2City: String?
     var cardsPredictedType: String?
