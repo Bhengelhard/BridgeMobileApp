@@ -958,11 +958,15 @@ class BridgeViewController: UIViewController {
         
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.alpha = 0.0
-        view.insertSubview(connectIcon, aboveSubview: arrayOfCardsInDeck.first!)
+        //view.insertSubview(connectIcon, aboveSubview: arrayOfCardsInDeck.first!)
+        view.addSubview(connectIcon)
+        connectIcon.bringSubview(toFront: view)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
         disconnectIcon.alpha = 0.0
-        view.insertSubview(disconnectIcon, aboveSubview: arrayOfCardsInDeck.first!)
+        //view.insertSubview(disconnectIcon, aboveSubview: arrayOfCardsInDeck.first!)
+        view.addSubview(disconnectIcon)
+        disconnectIcon.bringSubview(toFront: view)
         
         wasLastSwipeInDeck = false
     }
