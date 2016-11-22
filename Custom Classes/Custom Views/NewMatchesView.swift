@@ -10,6 +10,7 @@ import UIKit
 
 class NewMatchesView: UIScrollView {
     
+    var vc: UIViewController?
     let frameWithNoMatches: CGRect
     let frameWithMatches: CGRect
     var newMatches: [NewMatch]
@@ -27,10 +28,10 @@ class NewMatchesView: UIScrollView {
         line = UIView()
         gradientLayer = CAGradientLayer()
         super.init(frame: frameWithNoMatches)
-        let color1 = UIColor(red: 255.0/255.0, green: 204.0/255.0, blue: 0.0/255.0, alpha: 1).cgColor
-        let color2 = UIColor(red: 237.0/255.0, green: 104.0/255.0, blue: 60.0/255.0, alpha: 1).cgColor
-        let color3 = UIColor(red: 247.0/255.0, green: 237.0/255.0, blue: 144.0/255.0, alpha: 1).cgColor
-        let color4 = UIColor(red: 243.0/255.0, green: 144.0/255.0, blue: 63.0/255.0, alpha: 1).cgColor
+        let color1 = UIColor(red: 247.0/255.0, green: 237.0/255.0, blue: 144.0/255.0, alpha: 1).cgColor
+        let color2 = UIColor(red: 255.0/255.0, green: 204.0/255.0, blue: 0.0/255.0, alpha: 1).cgColor
+        let color3 = UIColor(red: 243.0/255.0, green: 144.0/255.0, blue: 63.0/255.0, alpha: 1).cgColor
+        let color4 = UIColor(red: 237.0/255.0, green: 104.0/255.0, blue: 60.0/255.0, alpha: 1).cgColor
         let color5 = UIColor(red: 233.0/255.0, green: 62.0/255.0, blue: 58.0/255.0, alpha: 1).cgColor
         gradientLayer.colors = [color1, color2, color3, color4, color5]
         gradientLayer.locations = [0.0, 0.25, 0.5, 0.75, 1.0]
@@ -41,6 +42,10 @@ class NewMatchesView: UIScrollView {
 
         line.isHidden = true
         addSubview(line)
+    }
+    
+    func setViewController(vc: UIViewController) {
+        self.vc = vc
     }
     
     func addNewMatch(newMatch: NewMatch) {
@@ -58,12 +63,13 @@ class NewMatchesView: UIScrollView {
         profilePicView.layer.borderWidth = 2
         profilePicView.layer.borderColor = newMatch.color.cgColor
         profilePicView.clipsToBounds = true
+        profilePicView.tag = newMatches.count-1
         addSubview(profilePicView)
         
-        /*
         // add gesture recognizer
-        let gesture = UITapGestureRecognizer(target: self, action: #selector("handleTap"))
-        profilePicView.addGestureRecognizer(gesture)*/
+        profilePicView.isUserInteractionEnabled = true
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        profilePicView.addGestureRecognizer(gesture)
         
         // add name
         let name = newMatch.firstName
@@ -81,11 +87,14 @@ class NewMatchesView: UIScrollView {
 
     }
     
-    /*
-    func handleTap(gr: UIGestureRecognizer) {
+    func handleTap(_ gesture: UIGestureRecognizer) {
         print("tapped")
+        let newMatchView = gesture.view!
+        //newMatchView.layer.borderColor = UIColor.white.cgColor
+        let acceptIgnoreVC = AcceptIgnoreViewController()
+        acceptIgnoreVC.setNewMatch(newMatch: newMatches[newMatchView.tag])
+        vc?.present(acceptIgnoreVC, animated: true, completion: nil)
     }
-    */
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

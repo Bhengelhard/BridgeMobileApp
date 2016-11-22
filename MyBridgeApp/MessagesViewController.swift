@@ -570,7 +570,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
@@ -601,6 +601,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
         newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)*/
+        
+        newMatchesView.setViewController(vc: self)
         
         loadNewMatches()
         
@@ -634,7 +636,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         searchBarContainer.addSubview(searchController.searchBar)
-        searchBarContainer.frame = CGRect(x: 0, y: 0.11*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.08*DisplayUtility.screenHeight)
+        searchBarContainer.frame = CGRect(x: 0, y: 0.1*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.08*DisplayUtility.screenHeight)
         view.addSubview(searchBarContainer)
         view.addSubview(filterLabel)
         CustomSearchBar.customizeSearchController(searchController: searchController)
