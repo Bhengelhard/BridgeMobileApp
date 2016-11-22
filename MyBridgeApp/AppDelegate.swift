@@ -146,35 +146,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Segueing to Appropriate View
         let messageId = userInfo["messageId"] as? String
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        //Segue to SingleMessageViewController
-        //let vc : SingleMessageViewController = storyboard.instantiateViewController(withIdentifier: "SingleMessageViewController") as! SingleMessageViewController
-        //vc.newMessageId = messageId!
-        //Segue to MessagesViewController -> this should be accept/ignor
-        let vc : MessagesViewController = storyboard.instantiateViewController(withIdentifier: "MessagesViewController") as! MessagesViewController
-        //vc.newMessageId = messageId!
-//        let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)
-//        
-//        print("top navController - \(navController.topViewController)")
-        if application.applicationState == UIApplicationState.inactive {
-            print("UIApplicationState.Inactive but ")
-              self.window?.rootViewController = vc
-//            navController.viewControllers.removeAll()
-//            navController.pushViewController(vc, animated: true)
+        if messageId != nil {
+            //Segue to SingleMessageViewController
+            let vc: SingleMessageViewController = storyboard.instantiateViewController(withIdentifier: "SingleMessageViewController") as! SingleMessageViewController
+            vc.newMessageId = messageId!
+            
+            //        print("top navController - \(navController.topViewController)")
+            if application.applicationState == UIApplicationState.inactive {
+                print("UIApplicationState.Inactive but ")
+                self.window?.rootViewController = vc
+                //            navController.viewControllers.removeAll()
+                //            navController.pushViewController(vc, animated: true)
+            }else if application.applicationState == UIApplicationState.background {
+                print("UIApplicationState.Background")
+            }else if application.applicationState == UIApplicationState.active {
+                print("UIApplicationState.Active")
+                let aps = userInfo["aps"] as? NSDictionary
+                let badge = aps!["badge"] as? Int
+                let installation = PFInstallation.current()
+                installation.badge = badge ?? 1
+                installation.saveInBackground()
+            }
+            else{
+                print("None")
+            }
+            
+        } else {
+            //Segue to MessagesViewController -> this should be accept/ignor
+            let vc: MessagesViewController = storyboard.instantiateViewController(withIdentifier: "MessagesViewController") as! MessagesViewController
+            //vc.newMessageId = messageId!
+            //        let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)
+            //  
+            
+            //        print("top navController - \(navController.topViewController)")
+            if application.applicationState == UIApplicationState.inactive {
+                print("UIApplicationState.Inactive but ")
+                self.window?.rootViewController = vc
+                //            navController.viewControllers.removeAll()
+                //            navController.pushViewController(vc, animated: true)
+            }else if application.applicationState == UIApplicationState.background {
+                print("UIApplicationState.Background")
+            }else if application.applicationState == UIApplicationState.active {
+                print("UIApplicationState.Active")
+                let aps = userInfo["aps"] as? NSDictionary
+                let badge = aps!["badge"] as? Int
+                let installation = PFInstallation.current()
+                installation.badge = badge ?? 1
+                installation.saveInBackground()
+            }
+            else{
+                print("None")
+            }
+
         }
-        else if application.applicationState == UIApplicationState.background {
-            print("UIApplicationState.Background")
-        }
-        else if application.applicationState == UIApplicationState.active {
-            print("UIApplicationState.Active")
-            let aps = userInfo["aps"] as? NSDictionary
-            let badge = aps!["badge"] as? Int
-            let installation = PFInstallation.current()
-            installation.badge = badge ?? 1
-            installation.saveInBackground()
-        }
-        else{
-            print("None")
-        }
+        
+        
+        
+        
+        
         
         //PFPush.handlePush(userInfo)
         if application.applicationState == UIApplicationState.inactive {
