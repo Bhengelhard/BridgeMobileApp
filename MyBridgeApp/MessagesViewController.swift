@@ -418,7 +418,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
         missionControlView.drag(gestureRecognizer: gestureRecognizer)
     }
-    func filtersTapped(_ notification: Notification) {
+    func filtersTapped() {
         let type = missionControlView.whichFilter()
         toolbarTapped = true
         filteredPositions = [Int]()
@@ -573,7 +573,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
         
         //view.addSubview(tableView)
         
@@ -646,9 +646,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorStyle = .none
         
         //displayToolBar()
-        missionControlView.createTabView(view: view)
+        //missionControlView.createTabView(view: view)
+        missionControlView.initialize(view: view, viewController: self)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
-        missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
+        missionControlView.addGestureRecognizer(gestureRecognizer)
         
     }
     

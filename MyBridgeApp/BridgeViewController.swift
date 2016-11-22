@@ -912,8 +912,9 @@ class BridgeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: NSNotification.Name(rawValue: "updateNoOfUnreadMessagesIcon"), object: nil)
         displayBackgroundView()
         displayNavigationBar()
+        
         //Create Mission Control
-        missionControlView.createTabView(view: view)
+        missionControlView.initialize(view: view, viewController: self)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
         
