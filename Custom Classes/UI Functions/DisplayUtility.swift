@@ -23,6 +23,23 @@ class DisplayUtility {
     static let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
     static let necterGray = UIColor(red: 76.0/255.0, green: 76.0/255.0, blue: 77.0/255.0, alpha: 1.0)
     
+    //gradient colors
+    static let gradientLayer = CAGradientLayer()
+    static let color1 = UIColor(red: 247.0/255.0, green: 237.0/255.0, blue: 144.0/255.0, alpha: 1).cgColor
+    static let color2 = UIColor(red: 255.0/255.0, green: 204.0/255.0, blue: 0.0/255.0, alpha: 1).cgColor
+    static let color3 = UIColor(red: 243.0/255.0, green: 144.0/255.0, blue: 63.0/255.0, alpha: 1).cgColor
+    static let color4 = UIColor(red: 237.0/255.0, green: 104.0/255.0, blue: 60.0/255.0, alpha: 1).cgColor
+    static let color5 = UIColor(red: 233.0/255.0, green: 62.0/255.0, blue: 58.0/255.0, alpha: 1).cgColor
+    
+    
+    static func getGradient() -> CAGradientLayer {
+        gradientLayer.colors = [color1, color2, color3, color4, color5]
+        gradientLayer.locations = [0.0, 0.25, 0.5, 0.75, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        return gradientLayer
+    }
+    
     //This is a helper function for the BridgeViewController to display a message when there are no more cards to display
     
     func displayNoMoreCards(view: UIView, businessButton: UIButton, loveButton: UIButton, friendshipButton: UIButton, displayNoMoreCardsLabel: UILabel?) {
