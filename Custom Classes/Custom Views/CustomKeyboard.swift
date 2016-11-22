@@ -122,7 +122,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             } else if target == "sendMessage" {
                 dbSavingFunctions.sendMessage(messageText: messageText)
             } else if target == "bridgeUsers" {
-                //Update CheckedOut and Bridged to true, add bridge_builder_name and bridge_builder_objectID to the BridgePairings table as the current user
+                //Update CheckedOut and Bridged to true, set user1_response and user2_response to zero, and add connecter_name, connecter_objectId, connecter_profile_picture_url, reason_for_connection, predicted_bridge_type, bridge_type  to the BridgePairings table as the current user's information, selected button, and messageTextView.text
                 dbSavingFunctions.bridgeUsers(messageText: messageText, type: type)
                 
                 //Dismiss the Reason For Connections View

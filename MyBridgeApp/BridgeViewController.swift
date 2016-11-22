@@ -1198,26 +1198,12 @@ class BridgeViewController: UIViewController {
         print("Count of array of Cards from bridged \(arrayOfCardsInDeck.count)")
     }
     func reasonForConnectionSent() {
-        /*let bridgePairings = localData.getPairings()
-        if var bridgePairings = bridgePairings {
-            var x = 0
-            for i in 0 ..< (bridgePairings.count) {
-                if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
-                    break
-                }
-                x = i
-            }
-            var bridgeType = "All"
-            if let bt = bridgePairings[x].user1?.bridgeType {
-                bridgeType = bt
-            }
-            //bridgePairings.remove(at: x)
-            localData.setPairings(bridgePairings)
-            localData.synchronize()
-            //getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
-        }*/
         swipeCardView.removeFromSuperview()
         print("Count of array of Cards from reason for Connection Sent \(arrayOfCardsInDeck.count)")
+        let sendingNotificationView = SendingNotificationView()
+        sendingNotificationView.initialize(view: view, sendingText: "Sending...", successText: "Success")
+        view.addSubview(sendingNotificationView)
+        view.bringSubview(toFront: view)
         nextPair()
     }
     func nextPair(){

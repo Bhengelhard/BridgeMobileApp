@@ -29,6 +29,8 @@
 		304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */; };
 		304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */; };
 		304FEBE11DE3918E00B3A8A7 /* DashedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */; };
+		304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */; };
+		304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -98,6 +100,8 @@
 		304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PFCloudFunctions.swift; path = "Custom Classes/Backend Communication/PFCloudFunctions.swift"; sourceTree = "<group>"; };
 		304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBSavingFunctions.swift; path = "Custom Classes/Backend Communication/DBSavingFunctions.swift"; sourceTree = "<group>"; };
 		304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DashedLine.swift; path = "Custom Classes/Custom Views/DashedLine.swift"; sourceTree = "<group>"; };
+		304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendingNotificationView.swift; path = "Custom Classes/Custom Views/SendingNotificationView.swift"; sourceTree = "<group>"; };
+		304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircleView.swift; path = "Custom Classes/Custom Views/CircleView.swift"; sourceTree = "<group>"; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -186,6 +190,8 @@
 		3030C0AC1DD54CEA0077F7AC /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */,
+				304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */,
 				3030C0BE1DD54E5E0077F7AC /* CustomKeyboard.swift */,
 				3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */,
 				3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */,
@@ -416,6 +422,7 @@
 				E9D6DF131D7880CC00138A1F /* PrivacyPolicyViewController.swift in Sources */,
 				E9D6DF511D78836200138A1F /* SingleMessageContent.swift in Sources */,
 				3030C0B81DD54E3F0077F7AC /* UserInfo.swift in Sources */,
+				304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */,
 				3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */,
 				9026A06A1DE34476007CE4D9 /* AcceptIgnoreViewController.swift in Sources */,
 				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
@@ -438,6 +445,7 @@
 				30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
 				304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */,
+				304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */,
 				3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */,
 				3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */,
 				304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */,

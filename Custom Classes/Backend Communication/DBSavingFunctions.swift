@@ -67,6 +67,25 @@ class DBSavingFunctions {
                 }
             })
             
+            /*let bridgePairings = localData.getPairings()
+             if var bridgePairings = bridgePairings {
+             var x = 0
+             for i in 0 ..< (bridgePairings.count) {
+             if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
+             break
+             }
+             x = i
+             }
+             var bridgeType = "All"
+             if let bt = bridgePairings[x].user1?.bridgeType {
+             bridgeType = bt
+             }
+             //bridgePairings.remove(at: x)
+             localData.setPairings(bridgePairings)
+             localData.synchronize()
+             //getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
+             }*/
+            
             //remove the swipeCard from the BridgeViewController View
             /*bridgePairings.remove(at: x)
             localData.setPairings(bridgePairings)

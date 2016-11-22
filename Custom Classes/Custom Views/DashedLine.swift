@@ -10,11 +10,6 @@ import UIKit
 
 class DashedLine: UIView {
     
-    /*var coordinates : [CGFloat] {
-        didSet {
-            setNeedsDisplay()
-        }
-    }*/
     var coordinates : [CGPoint] = [CGPoint]() {
         didSet {
             setNeedsDisplay()
