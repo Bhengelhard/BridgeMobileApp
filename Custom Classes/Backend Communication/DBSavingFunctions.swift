@@ -32,14 +32,14 @@ class DBSavingFunctions {
             //id of the BridgePairing
             let objectId = bridgePairings[x].user1?.objectId
             
-            /*//Push Notification Messages
+            //Push Notification Messages
             let pfCloudFunctions = PFCloudFunctions()
             let notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
             let notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
             //Users being connected
             let userObjectId1 = bridgePairings[x].user1!.userId!
             let userObjectId2 = bridgePairings[x].user2!.userId!
-            */
+ 
             
             //Query to Update to BridgePairings Table
             print("objectId is equal to \(objectId)")
@@ -61,12 +61,9 @@ class DBSavingFunctions {
                     print("saved in bridged Users DB Saving Function")
                     
                     
-                    //Add users to eachothers friendLists after they both accept
-                    //pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
-                    
                     //Update pushNotifications for new matches notifications that will bring the user to the accept/ignore page
-                    //pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge"])
-                    //pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId2,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge"])
+                    pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge"])
+                    pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId2,"alert":notificationMessage2, "badge": "Increment", "messageType" : "Bridge"])
                 }
             })
             
@@ -214,5 +211,9 @@ class DBSavingFunctions {
         segueToSingleMessage = true
         performSegue(withIdentifier: "showSingleMessage", sender: nil)
     }*/
+    
+    
+    //Add users to eachothers friendLists after they both accept
+    //pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
     
 }

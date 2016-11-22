@@ -94,71 +94,60 @@ class ViewController: UIViewController {
                             } else if let result = result as? [String: AnyObject]{
                                 // saves these to parse at every login
                                 print("got result")
-                                let interested_in = result["interested_in"]!
-                                localData.setInterestedIN(interested_in as! String)
-                                PFUser.current()?["interested_in"] = interested_in
+                                var hasInterestedIn = false
+                                if let interested_in = result["interested_in"] {
+                                    localData.setInterestedIN(interested_in as! String)
+                                    PFUser.current()?["interested_in"] = interested_in
+                                    hasInterestedIn = true
+                                }
+                                
                                 
                                 if let gender: String = result["gender"]! as? String {
-                                    
                                     PFUser.current()?["gender"] = gender
                                     PFUser.current()?["fb_gender"] = gender
                                     //saves a guess at the gender the current user is interested in if it doesn't already exist
-                                if result["interested_in"]! == nil {
-                                    
-                                    if gender == "male" {
-                                        
-                                        PFUser.current()?["interested_in"] = "female"
-                                        
-                                    } else if gender == "female" {
-                                            
-                                        PFUser.current()?["interested_in"] = "male"
+                                    if hasInterestedIn == false {
+                                        if gender == "male" {
+                                            PFUser.current()?["interested_in"] = "female"
+                                        } else if gender == "female" {
+                                            PFUser.current()?["interested_in"] = "male"
+                                        }
                                     }
-                                        
-                                }
-                                    
-                                    
                                 }
                                 
                                 //setting main name and names for Bridge Types to Facebook name
-                                let name = result["name"]!
+                                if let name = result["name"] {
+                                    global_name = name as! String
                                     // Store the name in core data 06/09
-                                global_name = name as! String
-                                localData.setUsername(global_name)
-                                PFUser.current()?["fb_name"] = name
-                                PFUser.current()?["name"] = name
-                                PFUser.current()?["business_name"] = name
-                                PFUser.current()?["love_name"] = name
-                                PFUser.current()?["friendship_name"] = name
+                                    localData.setUsername(global_name)
+                                    PFUser.current()?["fb_name"] = name
+                                    PFUser.current()?["name"] = name
+                                    //PFUser.current()?["business_name"] = name
+                                    //PFUser.current()?["love_name"] = name
+                                    //PFUser.current()?["friendship_name"] = name
+                                }
                                 
-                                PFUser.current()?["ran_out_of_pairs"] = 0
+                                if let email = result["email"] {
+                                    PFUser.current()?["email"] = email
+                                }
+                                if let id = result["id"] {
+                                    PFUser.current()?["fb_id"] =  id
+                                }
                                 
-                                let email = result["email"]!
-                                PFUser.current()?["email"] = email
-                                
-                                let id = result["id"]!
-                                PFUser.current()?["fb_id"] =  id
-                                
-                                let birthday = result["birthday"]!
-                                print(result["birthday"]!)
-                                print("birthday")
-                                //getting birthday from Facebook and calculating age
-                                PFUser.current()?["fb_birthday"] = birthday
-                                //newUser.setValue(birthday, forKey: "fb_birthday")
-                                let NSbirthday: Date = birthday as! Date
-                                let calendar: Calendar = Calendar.current
-                                let now = Date()
-                                let age = (calendar as NSCalendar).components(.year, from: NSbirthday, to: now, options: [])
-                                print(age)
-                                PFUser.current()?["age"] = age
-                                //newUser.setValue(age, forKey: "age")
-                                // Commenting this out since we are using Apple's Location Manager Services to get the user's location. In the graph request above we are still requesting for the user's location which is kind of useless now. cIgaR - 08/18/16
-                                //if let location = result["location"]! {
-                                //    print("location")
-                                //    PFUser.currentUser()?["fb_location"] = location
+                                if let birthday = result["birthday"] {
+                                    print(result["birthday"]!)
+                                    print("birthday")
+                                    //getting birthday from Facebook and calculating age
+                                    PFUser.current()?["fb_birthday"] = birthday
                                     
-                                //}
-                                
-
+                                    //getting age from Birthday
+                                    let NSbirthday: Date = birthday as! Date
+                                    let calendar: Calendar = Calendar.current
+                                    let now = Date()
+                                    let age = (calendar as NSCalendar).components(.year, from: NSbirthday, to: now, options: [])
+                                    print(age)
+                                    PFUser.current()?["age"] = age
+                                }
                                 
                                 PFUser.current()?["distance_interest"] = 100
                                 PFUser.current()?["new_message_push_notifications"] = true
@@ -170,6 +159,7 @@ class ViewController: UIViewController {
                                 PFUser.current()?["interested_in_business"] = true
                                 PFUser.current()?["interested_in_love"] = true
                                 PFUser.current()?["interested_in_friendship"] = true
+                                PFUser.current()?["ran_out_of_pairs"] = 0
 
                                 PFUser.current()?.saveInBackground()
                                
@@ -177,18 +167,14 @@ class ViewController: UIViewController {
                                 localData.setHasSignedUp(false)
                                 localData.synchronize()
                                 
-                                
                                 PFUser.current()?.saveInBackground(block: { (success, error) in
                                     
                                     if success == true {
                                         self.activityIndicator.stopAnimating()
                                         UIApplication.shared.endIgnoringInteractionEvents()
                                         self.performSegue(withIdentifier: "showSignUp", sender: self)
-                                        
                                     } else {
-                                        
-                                        print(error)
-                                        
+                                        print(error ?? "error")
                                     }
                                     
                                 })
@@ -243,7 +229,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    /* This was me experimenting with coreData. Leaving it here if someone wants to have a look - cIgAr - 08/18/16*/
+    /* This was me experimenting with coreData. Leaving it here if someone wants to have a look - cIgAr - 08/18/16
     func seedUsers(){
         print("seedUsers method called")
         let moc = DataController().managedObjectContext
@@ -271,7 +257,7 @@ class ViewController: UIViewController {
         catch{
             fatalError("failure to fetch user: \(error)")
         }
-    }
+    }*/
     
     //right now just updates users Friends
     /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/

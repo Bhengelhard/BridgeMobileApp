@@ -905,11 +905,6 @@ class BridgeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        print("View did load was called")
-        
-        
         //Creating Notifications
         //Listener for Post Status Notification
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)

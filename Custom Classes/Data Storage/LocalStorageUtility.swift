@@ -531,7 +531,22 @@ class LocalStorageUtility{
 //                        }
                         PFUser.current()?["fb_profile_picture"] = imageFile
                         PFUser.current()?["profile_picture"] = imageFile
-                        PFUser.current()?.saveInBackground()
+                        
+                        
+                        PFUser.current()?.saveInBackground(block: { (success, error) in
+                            
+                            if success {
+                            //Saving profilePicture url
+                                if let profilePictureFile = PFUser.current()?["profile_picture"] as? PFFile {
+                                    let url = profilePictureFile.url
+                                    PFUser.current()?["profile_picture_url"] = url
+                                    print("url is \(url)")
+                                }
+                            } else if error != nil {
+                                print(error ?? "error")
+                            }
+                            
+                        })
                         localData.setMainProfilePicture(data)
                         localData.synchronize()
 

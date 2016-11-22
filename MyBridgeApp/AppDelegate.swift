@@ -68,7 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let settings = UIUserNotificationSettings(types: types, categories: nil)
         application.registerUserNotificationSettings(settings)
         application.registerForRemoteNotifications()
-
         
         //
         //  Swift 1.2
@@ -143,10 +142,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        }
         
         print("userInfo - \(userInfo)")
+        
+        //Segueing to Appropriate View
         let messageId = userInfo["messageId"] as? String
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc : SingleMessageViewController = storyboard.instantiateViewController(withIdentifier: "SingleMessageViewController") as! SingleMessageViewController
-        vc.newMessageId = messageId!
+        //Segue to SingleMessageViewController
+        //let vc : SingleMessageViewController = storyboard.instantiateViewController(withIdentifier: "SingleMessageViewController") as! SingleMessageViewController
+        //vc.newMessageId = messageId!
+        //Segue to MessagesViewController -> this should be accept/ignor
+        let vc : MessagesViewController = storyboard.instantiateViewController(withIdentifier: "MessagesViewController") as! MessagesViewController
+        //vc.newMessageId = messageId!
 //        let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)
 //        
 //        print("top navController - \(navController.topViewController)")
