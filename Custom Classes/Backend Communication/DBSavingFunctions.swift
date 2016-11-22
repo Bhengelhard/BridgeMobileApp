@@ -55,6 +55,8 @@ class DBSavingFunctions {
                     result?["reason_for_connection"] = messageText
                     result?["predicted_bridge_type"] = result?["bridge_type"]
                     result?["bridge_type"] = type
+                    result?["user1_response"] = 0
+                    result?["user2_response"] = 0
                     result?.saveInBackground()
                     print("saved in bridged Users DB Saving Function")
                     

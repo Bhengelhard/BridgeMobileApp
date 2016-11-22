@@ -43,6 +43,10 @@ class ReasonForConnection: UIView {
     var user1City = String()
     var user2City = String()
     
+    //User to Selected Button Dashed Lines
+    var user1ToSelectedButton = DashedLine()
+    var user2ToSelectedButton = DashedLine()
+    
     //Current View Controller
     var currentViewController = UIViewController()
     
@@ -72,6 +76,12 @@ class ReasonForConnection: UIView {
         currentViewController = vc
         
         displayNavBar()
+        
+        /*let dashedLine = DashedLine()
+        dashedLine.backgroundColor = UIColor.white
+        dashedLine.frame = CGRect(x: 100, y: 100, width: 100, height: 3)
+        self.addSubview(dashedLine)*/
+        
     }
     
     func sendSwipeCard(swipeCardView: SwipeCard) {
@@ -82,7 +92,7 @@ class ReasonForConnection: UIView {
         user1Photo.contentMode = UIViewContentMode.scaleAspectFill
         user1Photo.clipsToBounds = true
         user1Photo.layer.borderColor = UIColor.white.cgColor
-        user1Photo.layer.borderWidth = 3
+        user1Photo.layer.borderWidth = 1.5
         
         user2Photo.frame = CGRect(x: 0.6017*DisplayUtility.screenWidth, y: 0, width: 0.3123*DisplayUtility.screenWidth, height: 0.3123*DisplayUtility.screenWidth)
         user2Photo.center.y = user1Photo.center.y
@@ -90,7 +100,7 @@ class ReasonForConnection: UIView {
         user2Photo.contentMode = UIViewContentMode.scaleAspectFill
         user2Photo.clipsToBounds = true
         user2Photo.layer.borderColor = UIColor.white.cgColor
-        user2Photo.layer.borderWidth = 3
+        user2Photo.layer.borderWidth = 1.5
         
         let downloader = Downloader()
         let localData = LocalData()
@@ -184,75 +194,61 @@ class ReasonForConnection: UIView {
         displaySuggestedReasons()
         decideSuggestedReasons()
         updateSuggestedReasons()
+        displayDashedLines()
         displayCustomKeyboard()
         
-        //displayDashedLines()
-//        let dashedLine = UIView()
-//        let  path = UIBezierPath()
-//        
-//        let p1 = CGPoint(x: user1Photo.frame.maxX, y: user1Photo.frame.midY)
-//        path.move(to: p1)
-//        
-//        let  p2 = CGPoint(x: user2Photo.frame.minX, y: user2Photo.frame.midY)
-//        path.addLine(to: p2)
-//        
-//        let  dashes: [ CGFloat ] = [ 16.0, 32.0 ]
-//        path.setLineDash(dashes, count: dashes.count, phase: 0.0)
-//        
-//        path.lineWidth = 8.0
-//        path.lineCapStyle = .butt
-//        UIColor.magenta.set()
-//        path.stroke()
-//        dashedLine.layer.accessibilityPath = path
-//        self.addSubview(dashedLine)
+        displayDashedLines()
+        /*let dashedLine = UIView()
+        let  path = UIBezierPath()
+        
+        let p1 = CGPoint(x: user1Photo.frame.maxX, y: user1Photo.frame.midY)
+        path.move(to: p1)
+        
+        let  p2 = CGPoint(x: user2Photo.frame.minX, y: user2Photo.frame.midY)
+        path.addLine(to: p2)
+    
+        let  dashes: [ CGFloat ] = [ 16.0, 32.0 ]
+        path.setLineDash(dashes, count: dashes.count, phase: 0.0)
+        
+        path.lineWidth = 8.0
+        path.lineCapStyle = .butt
+        UIColor.magenta.set()
+        path.stroke()
+        dashedLine.layer.accessibilityPath = path
+        self.addSubview(dashedLine)*/
     }
     
     func displayDashedLines(){
+        //Dashed Line Between the two users
+        let connectingUsersLine = DashedLine(frame: self.bounds)
+        connectingUsersLine.backgroundColor = UIColor.clear
+        connectingUsersLine.coordinates = [CGPoint(x: user1Photo.center.x, y: user1Photo.center.y), CGPoint(x: user2Photo.center.x, y: user2Photo.center.y)]
+        //self.insertSubview(connectingUsersLine, belowSubview: user1Photo)
+        self.insertSubview(connectingUsersLine, at: 1)
         
-       /*let distanceBetweenImages = user2Photo.frame.minX - user1Photo.frame.maxX
-        let numDashes:Int = Int(distanceBetweenImages/10)
-        for i in 1...numDashes  {
-            let usersDashedLine = UIImageView()
-            usersDashedLine.frame = CGRect(x: user1Photo.frame.maxX + CGFloat(10*i), y: user1Photo.frame.midY, width: 10, height: 3.0)
-            usersDashedLine.center.x = self.center.x
-            usersDashedLine.backgroundColor = UIColor.white
-            usersDashedLine.layer.borderWidth = 3
-            usersDashedLine.image = UIImage()
-            self.addSubview(usersDashedLine)
-        }*/
+        //setting point to top of selected button
+        var selectedButtonTop = CGPoint()
+        if businessButton.isSelected {
+            selectedButtonTop = CGPoint(x: businessButton.frame.midX, y: businessButton.frame.minY)
+        } else if loveButton.isSelected {
+            selectedButtonTop = CGPoint(x: loveButton.frame.midX, y: loveButton.frame.minY)
+        } else if friendshipButton.isSelected {
+            selectedButtonTop = CGPoint(x: friendshipButton.frame.midX, y: friendshipButton.frame.minY)
+        }
         
-
+        //Dashed Line between the first user and the selected Button
+        user1ToSelectedButton.frame = self.bounds
+        user1ToSelectedButton.backgroundColor = UIColor.clear
+        user1ToSelectedButton.coordinates = [CGPoint(x: user1Photo.center.x, y: user1Photo.center.y), selectedButtonTop]
+        //self.insertSubview(user1ToSelectedButton, at: self)
+        self.insertSubview(user1ToSelectedButton, at: 1)
         
-        
-        
-        // create a new UIView and add it to the view controller
-        //let dashedLine = DashedLine()
-        //self.addSubview(dashedLine)
-        
-        
-        /*
-        // Create a CAShapeLayer
-        let shapeLayer = CAShapeLayer()
-        
-        // The Bezier path that we made needs to be converted to
-        // a CGPath before it can be used on a layer.
-        shapeLayer.path = path as UIBezierPath
-        // apply other properties related to the path
-        shapeLayer.strokeColor = UIColor.blue.cgColor
-        shapeLayer.fillColor = UIColor.white.cgColor
-        shapeLayer.lineWidth = 1.0
-        shapeLayer.position = CGPoint(x: 10, y: 10)
-        
-        // add the new layer to our custom view
-        self.layer.addSublayer(shapeLayer)*/
-        
-        /*let user1ToTypeDashedLine = UIView()
-        user1ToTypeDashedLine.frame = CGRect(x: user1Photo.frame.midX, y: user1Photo.frame.maxY, width: user2Photo.frame.minX - user1Photo.frame.maxX, height: 3.0)
-        user1ToTypeDashedLine.center.x = self.center.x
-        user1ToTypeDashedLine.backgroundColor = UIColor.white
-        self.addSubview(user1ToTypeDashedLine)*/
-        
-        
+        //Dashed Line between the second user and the selected Button
+        user2ToSelectedButton.frame = self.bounds
+        user2ToSelectedButton.backgroundColor = UIColor.clear
+        user2ToSelectedButton.coordinates = [CGPoint(x: user2Photo.center.x, y: user2Photo.center.y), selectedButtonTop]
+        //self.insertSubview(user2ToSelectedButton, a: self)
+        self.insertSubview(user2ToSelectedButton, at: 1)
     }
     
     func displayNavBar() {
@@ -283,10 +279,13 @@ class ReasonForConnection: UIView {
         /*UIView.animate(withDuration: 0.4, animations: {
             self.alpha = 0
         })*/
+        print("got to cancelButtonTapped")
         self.removeFromSuperview()
         //bring back last card into place
-        let bridgeVC = BridgeViewController()
-        bridgeVC.connectionCanceled(swipeCardView: swipeCard)
+        if let bridgeVC = currentViewController as? BridgeViewController {
+            bridgeVC.connectionCanceled(swipeCardView: swipeCard)
+        }
+        
     }
     
     func displayUserPhotos() {
@@ -298,23 +297,25 @@ class ReasonForConnection: UIView {
     }
     
     func displayButtons() {
-        businessButton.frame = CGRect(x: 0.1522*DisplayUtility.screenWidth, y: 0.3635*DisplayUtility.screenHeight, width: 0.1956*DisplayUtility.screenWidth, height: 0.1956*DisplayUtility.screenWidth)
-        businessButton.setImage(#imageLiteral(resourceName: "Unselected_Business_Icon"), for: .normal)
-        businessButton.setImage(#imageLiteral(resourceName: "Selected_Business_Icon"), for: .selected)
-        businessButton.showsTouchWhenHighlighted = false
-        businessButton.addTarget(self, action: #selector(typeButtonTapped(_:)), for: .touchUpInside)
-        self.addSubview(businessButton)
-
-        loveButton.frame = CGRect(x: 0.391*DisplayUtility.screenWidth, y: 0, width: 0.1956*DisplayUtility.screenWidth, height: 0.1956*DisplayUtility.screenWidth)
-        loveButton.center.y = businessButton.center.y
+        loveButton.frame = CGRect(x: 0, y: 0.3635*DisplayUtility.screenHeight, width: 0.1956*DisplayUtility.screenWidth, height: 0.1956*DisplayUtility.screenWidth)
+        loveButton.center.x = self.center.x
         loveButton.setImage(#imageLiteral(resourceName: "Unselected_Love_Icon"), for: .normal)
         loveButton.setImage(#imageLiteral(resourceName: "Selected_Love_Icon"), for: .selected)
         loveButton.showsTouchWhenHighlighted = false
         loveButton.addTarget(self, action: #selector(typeButtonTapped(_:)), for: .touchUpInside)
         self.addSubview(loveButton)
         
-        friendshipButton.frame = CGRect(x: 0.6292*DisplayUtility.screenWidth, y: 0, width: 0.1956*DisplayUtility.screenWidth, height: 0.1956*DisplayUtility.screenWidth)
-        friendshipButton.center.y = businessButton.center.y
+        businessButton.frame.size = CGSize(width: 0.1956*DisplayUtility.screenWidth, height: 0.1956*DisplayUtility.screenWidth)
+        businessButton.frame.origin.x = loveButton.frame.minX - businessButton.frame.width - 0.05*DisplayUtility.screenWidth
+        businessButton.center.y = loveButton.center.y
+        businessButton.setImage(#imageLiteral(resourceName: "Unselected_Business_Icon"), for: .normal)
+        businessButton.setImage(#imageLiteral(resourceName: "Selected_Business_Icon"), for: .selected)
+        businessButton.showsTouchWhenHighlighted = false
+        businessButton.addTarget(self, action: #selector(typeButtonTapped(_:)), for: .touchUpInside)
+        self.addSubview(businessButton)
+        
+        friendshipButton.frame = CGRect(x: loveButton.frame.maxX + 0.05*DisplayUtility.screenWidth, y: 0, width: 0.1956*DisplayUtility.screenWidth, height: 0.1956*DisplayUtility.screenWidth)
+        friendshipButton.center.y = loveButton.center.y
         friendshipButton.setImage(#imageLiteral(resourceName: "Unselected_Friendship_Icon"), for: .normal)
         friendshipButton.setImage(#imageLiteral(resourceName: "Selected_Friendship_Icon"), for: .selected)
         friendshipButton.showsTouchWhenHighlighted = false
@@ -354,6 +355,10 @@ class ReasonForConnection: UIView {
             friendshipButton.isUserInteractionEnabled = true
             selectedButtonLabel.text = "WORK"
             selectedButtonLabel.textColor = DisplayUtility.businessBlue
+            
+            user1ToSelectedButton.coordinates = [CGPoint(x: user1Photo.center.x, y: user1Photo.center.y), CGPoint(x: businessButton.frame.midX, y: businessButton.frame.minY)]
+            user2ToSelectedButton.coordinates = [CGPoint(x: user2Photo.center.x, y: user2Photo.center.y), CGPoint(x: businessButton.frame.midX, y: businessButton.frame.minY)]
+            
             updateSuggestedReasons()
         } else if (sender == loveButton && !sender.isSelected) {
             loveButton.isSelected = true
@@ -364,6 +369,10 @@ class ReasonForConnection: UIView {
             friendshipButton.isUserInteractionEnabled = true
             selectedButtonLabel.text = "DATING"
             selectedButtonLabel.textColor = DisplayUtility.loveRed
+            
+            user1ToSelectedButton.coordinates = [CGPoint(x: user1Photo.center.x, y: user1Photo.center.y), CGPoint(x: loveButton.frame.midX, y: loveButton.frame.minY)]
+            user2ToSelectedButton.coordinates = [CGPoint(x: user2Photo.center.x, y: user2Photo.center.y), CGPoint(x: loveButton.frame.midX, y: loveButton.frame.minY)]
+            
             updateSuggestedReasons()
         } else if (sender == friendshipButton && !sender.isSelected) {
             friendshipButton.isSelected = true
@@ -374,6 +383,10 @@ class ReasonForConnection: UIView {
             loveButton.isUserInteractionEnabled = true
             selectedButtonLabel.text = "FRIENDSHIP"
             selectedButtonLabel.textColor = DisplayUtility.friendshipGreen
+            
+            user1ToSelectedButton.coordinates = [CGPoint(x: user1Photo.center.x, y: user1Photo.center.y), CGPoint(x: friendshipButton.frame.midX, y: friendshipButton.frame.minY)]
+            user2ToSelectedButton.coordinates = [CGPoint(x: user2Photo.center.x, y: user2Photo.center.y), CGPoint(x: friendshipButton.frame.midX, y: friendshipButton.frame.minY)]
+            
             updateSuggestedReasons()
         }
     }
@@ -412,19 +425,19 @@ class ReasonForConnection: UIView {
         self.addSubview(line1)
         
         let line2 = UIView()
-        line2.frame = CGRect(x: 0, y: 0.666*DisplayUtility.screenHeight, width: 0.4604*DisplayUtility.screenWidth, height: 1.0)
+        line2.frame = CGRect(x: 0, y: 0.666*DisplayUtility.screenHeight, width: 0.4604*DisplayUtility.screenWidth, height: 0.5)
         line2.center.x = self.center.x
         line2.backgroundColor = UIColor.white
         self.addSubview(line2)
         
         let line3 = UIView()
-        line3.frame = CGRect(x: 0, y: 0.7679*DisplayUtility.screenHeight, width: 0.4604*DisplayUtility.screenWidth, height: 1.0)
+        line3.frame = CGRect(x: 0, y: 0.7679*DisplayUtility.screenHeight, width: 0.4604*DisplayUtility.screenWidth, height: 0.5)
         line3.center.x = self.center.x
         line3.backgroundColor = UIColor.white
         self.addSubview(line3)
         
         let line4 = UIView()
-        line4.frame = CGRect(x: 0, y: 0.8717*DisplayUtility.screenHeight, width: 0.4604*DisplayUtility.screenWidth, height: 1.0)
+        line4.frame = CGRect(x: 0, y: 0.8717*DisplayUtility.screenHeight, width: 0.4604*DisplayUtility.screenWidth, height: 0.5)
         line4.center.x = self.center.x
         line4.backgroundColor = UIColor.white
         self.addSubview(line4)
@@ -608,4 +621,7 @@ class ReasonForConnection: UIView {
             suggestion3Circle.highlightedImage = UIImage(named: "Selected_Friendship_Circle")
         }
     }
+    
+    
+    
 }

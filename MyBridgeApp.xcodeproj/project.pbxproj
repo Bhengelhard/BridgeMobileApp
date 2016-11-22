@@ -28,7 +28,7 @@
 		3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D41DD550240077F7AC /* SwipeCard.swift */; };
 		304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */; };
 		304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */; };
-		304FEBDF1DDF7EBF00B3A8A7 /* DashedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDE1DDF7EBF00B3A8A7 /* DashedLine.swift */; };
+		304FEBE11DE3918E00B3A8A7 /* DashedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -97,7 +97,7 @@
 		3030C0D41DD550240077F7AC /* SwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeCard.swift; path = "Custom Classes/Custom Views/SwipeCard.swift"; sourceTree = "<group>"; };
 		304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PFCloudFunctions.swift; path = "Custom Classes/Backend Communication/PFCloudFunctions.swift"; sourceTree = "<group>"; };
 		304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBSavingFunctions.swift; path = "Custom Classes/Backend Communication/DBSavingFunctions.swift"; sourceTree = "<group>"; };
-		304FEBDE1DDF7EBF00B3A8A7 /* DashedLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DashedLine.swift; path = "Custom Classes/Custom Views/DashedLine.swift"; sourceTree = "<group>"; };
+		304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DashedLine.swift; path = "Custom Classes/Custom Views/DashedLine.swift"; sourceTree = "<group>"; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -193,7 +193,7 @@
 				3030C0D41DD550240077F7AC /* SwipeCard.swift */,
 				30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */,
 				30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */,
-				304FEBDE1DDF7EBF00B3A8A7 /* DashedLine.swift */,
+				304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */,
 				30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */,
 			);
 			name = "Custom Views";
@@ -434,6 +434,7 @@
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
 				307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */,
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
+				304FEBE11DE3918E00B3A8A7 /* DashedLine.swift in Sources */,
 				30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
 				304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */,
@@ -447,7 +448,6 @@
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
-				304FEBDF1DDF7EBF00B3A8A7 /* DashedLine.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */,

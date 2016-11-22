@@ -150,7 +150,6 @@ class HalfSwipeCard: UIView {
         
     }
     func callbackToSetPhoto(_ image: UIImage) -> Void {
-        print("photo has been saved")
         photo = image
     }
     func firstNameLastNameInitial (name: String) -> String{
