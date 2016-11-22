@@ -132,7 +132,6 @@ class BridgeViewController: UIViewController {
             default :
                 return typesOfColor.business
             }
-
     }
     func getCGColor (_ color:typesOfColor) -> CGColor {
         switch(color) {
@@ -385,6 +384,7 @@ class BridgeViewController: UIViewController {
             var aboveView:UIView? = nil
             for i in 0..<bridgePairings.count {
                 let pairing = bridgePairings[i]
+                print("These are the bridgeTypes of the pairs -> \(pairing.user1?.bridgeType)")
                 if self.currentTypeOfCardsOnDisplay != typesOfCard.all && pairing.user1?.bridgeType != convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
                     continue
                 }
@@ -403,13 +403,13 @@ class BridgeViewController: UIViewController {
                     name1 = name
                 }
                 else {
-                    name1 = "Man has no name"
+                    name1 = "Unnamed User"
                 }
                 if let name = pairing.user2?.name {
                     name2 = name
                 }
                 else {
-                    name2 = "Man has no name"
+                    name2 = "Unnamed User"
                 }
                 if let location_values1 = pairing.user1?.location {
                     locationCoordinates1 = location_values1
@@ -766,6 +766,7 @@ class BridgeViewController: UIViewController {
                                     if let ob = result["bridge_type"] {
                                         bridgeType1 =  ob as? String
                                          bridgeType2 =  ob as? String
+                                        print("This is the bridgeType1 - \(bridgeType1)")
                                     }
                                     
                                     var objectId1:String? = nil
@@ -910,11 +911,13 @@ class BridgeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         //Listener for updating messages Icon with notifications
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: NSNotification.Name(rawValue: "updateNoOfUnreadMessagesIcon"), object: nil)
+        //Lister for updating filter from Mission Control being tapped
+        NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
         displayBackgroundView()
         displayNavigationBar()
         
         //Create Mission Control
-        missionControlView.initialize(view: view, viewController: self)
+        missionControlView.initialize(view: view, isMessagesViewController: false)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
         
@@ -939,119 +942,71 @@ class BridgeViewController: UIViewController {
         disconnectIcon.bringSubview(toFront: view)
         
         wasLastSwipeInDeck = false
+        
+        
+        
+        
+//        let query: PFQuery = PFQuery(className: "Messages")
+//        query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
+//        query.cachePolicy = .networkElseCache
+//        query.findObjectsInBackground(block: { (results, error) -> Void in
+//            if error == nil {
+//                if let results = results {
+//                    for i in 0..<results.count{
+//                        let result = results[i]
+//                        if let _ = result["message_viewed"] {
+//                            let whoViewed = result["message_viewed"] as! ([String])
+//                            if whoViewed.contains((PFUser.current()?.objectId)!) {
+//                                self.badgeCount += 0 //current user viewed the message
+//                            }
+//                            else {
+//                                self.badgeCount += 1//current user did not view the message
+//                                break
+//                            }
+//                        }
+//                        else {
+//                            self.badgeCount += 1//current user did not view the message
+//                            break
+//                        }
+//                        
+//                    }
+//                    /*DispatchQueue.main.async(execute: {
+//                     if self.badgeCount > 0 {
+//                     rightBarButtonIcon = "Messages_Icon_Gray_Notification"
+//                     rightBarButtonSelectedIcon = "Messages_Icon_Yellow_Notification"
+//                     } else {
+//                     self.updateRightBarButton(newIcon: newIcon, newSelectedIcon: newSelectedIcon)
+//                     }
+//                     })*/
+//                    
+//                }
+//            }
+//        })
+        
+        let bridgeQuery: PFQuery = PFQuery(className: "BridgePairings")
+        bridgeQuery.whereKey("bridge_type", equalTo: "")
+        bridgeQuery.limit = 10000
+        bridgeQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            print("bridgeQuery ran")
+            if error == nil {
+                print("bridgeQuery error is not nil")
+                if let objects = objects {
+                    print("bridgeQuery got objects")
+                    for object in objects {
+                        object["bridge_type"] = "Friendship"
+                        object.saveInBackground()
+                        print("object saved")
+                    }
+                }
+                
+            } else {
+                print(error ?? "error from the bridgeQuery")
+            }
+        })
     }
     override func viewDidLayoutSubviews() {
 
     }
-    func postStatusTapped(_ sender: UIButton ){
-        performSegue(withIdentifier: "showNewStatusViewController", sender: self)
-    }
-    /*func filterTapped(_ sender: UIButton){
-        let tag = sender.tag
-        switch(tag){
-            case 0:
-                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
-                
-                //updating which toolbar Button is selected
-                allTypesButton.isEnabled = false
-                businessButton.isEnabled = true
-                loveButton.isEnabled = true
-                friendshipButton.isEnabled = true
-                
-                //updating textColor necter-Type labels
-                let allTypesText = "All Types" as NSString
-                let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
-                allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = DisplayUtility.necterGray
-                loveLabel.textColor = DisplayUtility.necterGray
-                friendshipLabel.textColor = DisplayUtility.necterGray
-                    break
-            case 1:
-                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
-                
-                //updating which toolbar Button is selected
-                allTypesButton.isEnabled = true
-                businessButton.isEnabled = false
-                loveButton.isEnabled = true
-                friendshipButton.isEnabled = true
-                
-                //updating textColor necter-Type labels
-                let allTypesText = "All Types" as NSString
-                let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
-                allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = DisplayUtility.businessBlue
-                loveLabel.textColor = DisplayUtility.necterGray
-                friendshipLabel.textColor = DisplayUtility.necterGray
-                
-                    break
-            case 2:
-                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
-                
-                //updating which toolbar Button is selected
-                allTypesButton.isEnabled = true
-                businessButton.isEnabled = true
-                loveButton.isEnabled = false
-                friendshipButton.isEnabled = true
-                
-                //updating textColor necter-Type labels
-                let allTypesText = "All Types" as NSString
-                let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
-                allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = DisplayUtility.necterGray
-                loveLabel.textColor = DisplayUtility.loveRed
-                friendshipLabel.textColor = DisplayUtility.necterGray
-                    break
-            case 3:
-                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
-                
-                //updating which toolbar Button is selected
-                allTypesButton.isEnabled = true
-                businessButton.isEnabled = true
-                loveButton.isEnabled = true
-                friendshipButton.isEnabled = false
-                
-                
-                //updating textColor necter-Type labels
-                let allTypesText = "All Types" as NSString
-                let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.necterGray , range: allTypesText.range(of: "All Types"))
-                allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = DisplayUtility.necterGray
-                loveLabel.textColor = DisplayUtility.necterGray
-                friendshipLabel.textColor = DisplayUtility.friendshipGreen
-                    break
-            default:
-                currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
-                
-                //updating which toolbar Button is selected
-                allTypesButton.isEnabled = false
-                businessButton.isEnabled = true
-                loveButton.isEnabled = true
-                friendshipButton.isEnabled = true
-                
-                //updating textColor necter-Type labels
-                let allTypesText = "All Types" as NSString
-                let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
-                allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
-                allTypesLabel.attributedText = allTypesAttributedText
-                businessLabel.textColor = DisplayUtility.necterGray
-                loveLabel.textColor = DisplayUtility.necterGray
-                friendshipLabel.textColor = DisplayUtility.necterGray
-        }
-        for i in 0..<arrayOfCardsInDeck.count {
-            arrayOfCardsInDeck[i].removeFromSuperview()
-        }
-        arrayOfCardsInDeck.removeAll()
-        arrayOfCardColors.removeAll()
-        displayCards()
-    }*/
     func isDragged(_ gesture: UIPanGestureRecognizer) {
 
         let translation = gesture.translation(in: self.view)
@@ -1292,6 +1247,34 @@ class BridgeViewController: UIViewController {
                 }
             }
         }
+    }
+    func postStatusTapped(_ sender: UIButton ){
+        performSegue(withIdentifier: "showNewStatusViewController", sender: self)
+    }
+    func filtersTapped(_ notification: Notification){
+        let type = missionControlView.whichFilter()
+        switch(type){
+        case "All Types":
+            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
+            break
+        case "Business":
+            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
+            break
+        case "Love":
+            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
+            break
+        case "Friendship":
+            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
+            break
+        default:
+            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
+        }
+        for i in 0..<arrayOfCardsInDeck.count {
+            arrayOfCardsInDeck[i].removeFromSuperview()
+        }
+        arrayOfCardsInDeck.removeAll()
+        arrayOfCardColors.removeAll()
+        displayCards()
     }
     func revitalizeMyPairs(_ sender: UIButton!) {
         activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0,y: 0,width: 0.05*DisplayUtility.screenWidth,height: 0.05*DisplayUtility.screenWidth))

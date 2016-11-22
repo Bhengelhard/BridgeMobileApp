@@ -13,7 +13,7 @@ class MissionControlView: UIView{
     let displayUtility = DisplayUtility()
     let customKeyboard = CustomKeyboard()
     var currentView = UIView()
-    var currentViewController = UIViewController()
+    var isMessagesViewController = Bool()
     
     //var tabView = UIView()
     //let tabViewButton = UIButton()
@@ -43,9 +43,11 @@ class MissionControlView: UIView{
         fatalError("This is a fatal error message from CustomClasses/CustomViews/SwipeCard.swift")
     }
     
-    func initialize (view: UIView, viewController: UIViewController) {
+    func initialize (view: UIView, isMessagesViewController: Bool) {
+        //setting global variables
         currentView = view
-        currentViewController = viewController
+        self.isMessagesViewController = isMessagesViewController
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(displayFilters(_:)))
         currentView.addGestureRecognizer(tapGestureRecognizer)
         
@@ -216,7 +218,11 @@ class MissionControlView: UIView{
             //let vc = currentViewController as! MessagesViewController
             //vc.filtersTapped(type: "Business", businessButton: businessButton, loveButton: loveButton, friendshipButton: friendshipButton)
         //}
-        //currentViewController.filtersTapped(type: "Business", businessButton: businessButton, loveButton: loveButton, friendshipButton: friendshipButton)
+        
+        //if isMessagesViewController {
+            
+        //}
+        
     }
     @objc func loveTapped(_ sender: UIButton) {
         toggleFilters(type: "Love")
@@ -251,9 +257,8 @@ class MissionControlView: UIView{
             customKeyboard.updatePostType(updatedPostType: "All Types")
         }
         
-//        if tabView.frame.origin.y > 0.75*DisplayUtility.screenHeight {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
-//        }
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
+        
     }
     
     func drag(gestureRecognizer: UIPanGestureRecognizer) {
