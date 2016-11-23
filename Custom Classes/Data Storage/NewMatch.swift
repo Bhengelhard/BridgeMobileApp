@@ -10,15 +10,21 @@ import Foundation
 import UIKit
 
 class NewMatch: NSObject {
-    var profilePicView: UIImageView
-    var firstName: String
+    var objectId: String
+    var profilePicURL: URL
+    var name: String
+    var type: String
     var color: UIColor
     var dot: Bool
+    var status: String?
     
-    init(profilePicView: UIImageView, firstName: String, color: UIColor, dot: Bool) {
-        self.profilePicView = profilePicView
-        self.firstName = firstName
+    init(objectId: String, profilePicURL: URL, name: String, type: String, color: UIColor, dot: Bool, status: String?) {
+        self.objectId = objectId
+        self.profilePicURL = profilePicURL
+        self.name = name
+        self.type = type
         self.color = color
         self.dot = dot
+        self.status = status
     }
 }

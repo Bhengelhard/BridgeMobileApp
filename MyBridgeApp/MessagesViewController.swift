@@ -422,7 +422,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         let type = missionControlView.whichFilter()
         toolbarTapped = true
         filteredPositions = [Int]()
-        if !(type == "All Types") {
+        displayFilterLabel(type: type)
+        newMatchesView.filterBy(type: type)
+        if type != "All Types" {
             //displaying noMessagesLabel when there are no messages in the filtered message type
             noMessagesLabel.alpha = 1
             for i in 0 ..< messageType.count{
@@ -433,11 +435,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             if noMessagesLabel.alpha == 1 {
                 displayNoMessages()
-            } else {
-                displayFilterLabel(type: type)
             }
         } else {
-            displayFilterLabel(type: type)
             noMessagesLabel.alpha = 1
             for i in 0 ..< messageType.count{
                 filteredPositions.append(i)
@@ -582,8 +581,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         filterLabel.textAlignment = .center
         //view.addSubview(filterLabel)
         
-        displayFilterLabel(type: "All Types")
-        
         displayNavigationBar()
         
         tableView.delegate = self
@@ -652,6 +649,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         missionControlView.initialize(view: view, isMessagesViewController: true)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer)
+        
+        displayFilterLabel(type: "All Types")
     }
     
     func displayFilterLabel(type : String) {
@@ -693,6 +692,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     let result = results[i]
                     
+                    let objectId = result.objectId
+                    
                     var user = ""
                     var otherUser = ""
                     if let user1_objectId = result["user_objectId1"] {
@@ -708,21 +709,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                     }
                     if user != "" && result["\(user)_response"] as! Int != 1 {
-                        let profilePicURL = URL(string: result["\(otherUser)_profile_picture_url"] as! String)
-                        let profilePicView = UIImageView()
-                        let downloader = Downloader()
-                        downloader.imageFromURL(URL: profilePicURL!, imageView: profilePicView, callBack: nil)
+                        let profilePicURL = URL(string: result["\(otherUser)_profile_picture_url"] as! String)                        
                         let name = result["\(otherUser)_name"] as! String
-                        let wordsInName = name.components(separatedBy: " ")
-                        let firstName: String
-                        if wordsInName.count > 0 {
-                            firstName = wordsInName.first!
-                        } else {
-                            firstName = name
-                        }
                         let dot = result["\(user)_response"] as! Int == 0
+                        let type = result["bridge_type"] as! String
                         var color: UIColor
-                        switch result["bridge_type"] as! String {
+                        switch type {
                         case "Business":
                             color = DisplayUtility.businessBlue
                         case "Love":
@@ -732,7 +724,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         default:
                             color = .black
                         }
-                        let newMatch = NewMatch(profilePicView: profilePicView, firstName: firstName, color: color, dot: dot)
+                        let status = result["\(otherUser)_bridge_status"] as? String
+                        let newMatch = NewMatch(objectId: objectId!, profilePicURL: profilePicURL!, name: name, type: type, color: color, dot: dot, status: status)
                         self.newMatchesView.addNewMatch(newMatch: newMatch)
                         self.tableView.tableHeaderView = self.newMatchesView
                         
@@ -745,7 +738,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     override func viewDidLayoutSubviews() {
-        displayFilterLabel(type: "All Types")
         tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
     }
     override func viewDidAppear(_ animated: Bool) {

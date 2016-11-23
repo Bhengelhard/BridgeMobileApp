@@ -20,7 +20,7 @@ class AcceptIgnoreViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        exitButton.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.03*DisplayUtility.screenHeight, width: 0.0328*DisplayUtility.screenWidth, height: 0.0206*DisplayUtility.screenHeight)
+        exitButton.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.04*DisplayUtility.screenHeight, width: 0.0230*DisplayUtility.screenHeight, height: 0.0230*DisplayUtility.screenHeight)
         exitButton.setTitle("X", for: .normal)
         exitButton.titleLabel?.textColor = .white
         exitButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 16)
@@ -77,6 +77,65 @@ class AcceptIgnoreViewController: UIViewController {
         gradient2.mask = shape2
         ignoreButton.layer.addSublayer(gradient2)
         view.addSubview(ignoreButton)
+        
+        if let newMatch = newMatch {
+            let profilePicView = UIImageView()
+            profilePicView.frame = CGRect(x: 0.0725*DisplayUtility.screenWidth, y: acceptButton.frame.maxY + 0.035*DisplayUtility.screenHeight, width: 0.855*DisplayUtility.screenWidth, height: 0.855*DisplayUtility.screenWidth)
+            let downloader = Downloader()
+            downloader.imageFromURL(URL: newMatch.profilePicURL, imageView: profilePicView, callBack: nil)
+            let maskPath = UIBezierPath(roundedRect: profilePicView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 0.08*profilePicView.frame.width, height: 0.1*profilePicView.frame.width))
+            let profilePicShape = CAShapeLayer()
+            profilePicShape.path = maskPath.cgPath
+            profilePicView.layer.mask = profilePicShape
+            view.addSubview(profilePicView)
+            
+            let connectionIcon = UIImageView()
+            switch newMatch.type {
+            case "Business":
+                connectionIcon.image = UIImage(named: "Business_Card_Icon")
+            case "Love":
+                connectionIcon.image = UIImage(named: "Love_Card_Icon")
+            case "Friendship":
+                connectionIcon.image = UIImage(named: "Friendship_Card_Icon")
+            default:
+                break
+            }
+            connectionIcon.frame = CGRect(x: 0.0164*profilePicView.frame.width, y: 0.75*profilePicView.frame.height, width: 0.105*profilePicView.frame.width, height: 0.105*profilePicView.frame.width)
+            profilePicView.addSubview(connectionIcon)
+            
+            let profileNameLabel = UILabel()
+            let name = newMatch.name
+            let wordsInName = name.components(separatedBy: " ")
+            let firstName: String
+            if wordsInName.count > 0 {
+                firstName = wordsInName.first!
+            } else {
+                firstName = name
+            }
+            var firstNameLastInitial = firstName
+            if wordsInName.count > 1 {
+                firstNameLastInitial += " \(wordsInName.last!.characters.first!)."
+            }
+            profileNameLabel.text = firstNameLastInitial
+            profileNameLabel.font = UIFont(name: "BentonSans-Bold", size: 26)
+            profileNameLabel.textColor = .white
+            profileNameLabel.frame = CGRect(x: connectionIcon.frame.maxX + 0.015*profilePicView.frame.width, y: connectionIcon.frame.minY, width: 0.9*profilePicView.frame.width - connectionIcon.frame.maxX, height: connectionIcon.frame.height)
+            profileNameLabel.layer.shadowOpacity = 0.95
+            profileNameLabel.layer.shadowOffset = CGSize(width: 0.013*profilePicView.frame.width, height: 0.013*profilePicView.frame.width)
+            profileNameLabel.layer.shadowRadius = 0.007*profilePicView.frame.width
+            profilePicView.addSubview(profileNameLabel)
+            
+            let statusLabel = UILabel()
+            statusLabel.frame = CGRect(x: 0, y: connectionIcon.frame.maxY + 0.01*profilePicView.frame.height, width: profilePicView.frame.width, height: 0.07*profilePicView.frame.height)
+            statusLabel.backgroundColor = DisplayUtility.necterGray.withAlphaComponent(0.6)
+            if let status = newMatch.status {
+                statusLabel.text = status
+                statusLabel.textAlignment = .center
+                statusLabel.textColor = .white
+                statusLabel.font = UIFont(name: "BentonSans-Light", size: 16)
+            }
+            profilePicView.addSubview(statusLabel)
+        }
     }
     
     func dismissVC(_ sender: UIButton) {

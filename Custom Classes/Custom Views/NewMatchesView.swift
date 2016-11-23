@@ -13,30 +13,19 @@ class NewMatchesView: UIScrollView {
     var vc: UIViewController?
     let frameWithNoMatches: CGRect
     let frameWithMatches: CGRect
-    var newMatches: [NewMatch]
-    var profilePics: [UIImage]
-    var names: [String]
+    var allNewMatches: [NewMatch]
+    var displayedNewMatches: [NewMatch]
     let line: UIView
     let gradientLayer: CAGradientLayer
     
     init() {
         frameWithNoMatches = CGRect(x: 0, y: 0, width: 0, height: 0)
         frameWithMatches = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight)
-        profilePics = [UIImage]()
-        names = [String]()
-        newMatches = [NewMatch]()
+        allNewMatches = [NewMatch]()
+        displayedNewMatches = [NewMatch]()
         line = UIView()
-        gradientLayer = CAGradientLayer()
+        gradientLayer = DisplayUtility.getGradient()
         super.init(frame: frameWithNoMatches)
-        let color1 = UIColor(red: 247.0/255.0, green: 237.0/255.0, blue: 144.0/255.0, alpha: 1).cgColor
-        let color2 = UIColor(red: 255.0/255.0, green: 204.0/255.0, blue: 0.0/255.0, alpha: 1).cgColor
-        let color3 = UIColor(red: 243.0/255.0, green: 144.0/255.0, blue: 63.0/255.0, alpha: 1).cgColor
-        let color4 = UIColor(red: 237.0/255.0, green: 104.0/255.0, blue: 60.0/255.0, alpha: 1).cgColor
-        let color5 = UIColor(red: 233.0/255.0, green: 62.0/255.0, blue: 58.0/255.0, alpha: 1).cgColor
-        gradientLayer.colors = [color1, color2, color3, color4, color5]
-        gradientLayer.locations = [0.0, 0.25, 0.5, 0.75, 1.0]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         line.backgroundColor = .clear
         line.layer.insertSublayer(gradientLayer, at: 0)
 
@@ -48,22 +37,50 @@ class NewMatchesView: UIScrollView {
         self.vc = vc
     }
     
+    func filterBy(type: String) {
+        displayedNewMatches = [NewMatch]()
+        for newMatch in allNewMatches {
+            if newMatch.type == type || type == "All Types" {
+                displayedNewMatches.append(newMatch)
+            }
+        }
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
+        addSubview(line)
+        if displayedNewMatches.count == 0 {
+            frame = frameWithNoMatches
+            line.isHidden = true
+        }
+        for i in 0..<displayedNewMatches.count {
+            layoutNewMatch(newMatch: displayedNewMatches[i], position: i)
+        }
+    }
+    
     func addNewMatch(newMatch: NewMatch) {
-        newMatches.append(newMatch)
+        allNewMatches.append(newMatch)
+        displayedNewMatches.append(newMatch)
+        layoutNewMatch(newMatch: newMatch, position: displayedNewMatches.count-1)
+    }
+    
+    func layoutNewMatch(newMatch: NewMatch, position: Int) {
         frame = frameWithMatches
-        contentSize = CGSize(width: max(DisplayUtility.screenWidth, CGFloat(profilePics.count)*0.2243*DisplayUtility.screenWidth), height: 0.17*DisplayUtility.screenHeight)
+        contentSize = CGSize(width: max(DisplayUtility.screenWidth, CGFloat(position+1)*0.2243*DisplayUtility.screenWidth), height: 0.17*DisplayUtility.screenHeight)
         line.frame = CGRect(x: 0.0463*frame.width, y: 0.99*frame.height, width: 0.9205*contentSize.width, height: 1)
         gradientLayer.frame = line.bounds
         line.isHidden = false
         
         // add profile picture
-        let profilePicView = newMatch.profilePicView
-        profilePicView.frame = CGRect(x: CGFloat(newMatches.count-1)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY, width: 0.168*frame.width, height: 0.168*frame.width)
+        let profilePicURL = newMatch.profilePicURL
+        let downloader = Downloader()
+        let profilePicView = UIImageView()
+        downloader.imageFromURL(URL: profilePicURL, imageView: profilePicView, callBack: nil)
+        profilePicView.frame = CGRect(x: CGFloat(position)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY, width: 0.168*frame.width, height: 0.168*frame.width)
         profilePicView.layer.cornerRadius = profilePicView.frame.height/2
         profilePicView.layer.borderWidth = 2
         profilePicView.layer.borderColor = newMatch.color.cgColor
         profilePicView.clipsToBounds = true
-        profilePicView.tag = newMatches.count-1
+        profilePicView.tag = position
         addSubview(profilePicView)
         
         // add gesture recognizer
@@ -72,9 +89,16 @@ class NewMatchesView: UIScrollView {
         profilePicView.addGestureRecognizer(gesture)
         
         // add name
-        let name = newMatch.firstName
+        let name = newMatch.name
+        let wordsInName = name.components(separatedBy: " ")
+        let firstName: String
+        if wordsInName.count > 0 {
+            firstName = wordsInName.first!
+        } else {
+            firstName = name
+        }
         let nameLabel = UILabel(frame: CGRect(x: profilePicView.frame.minX, y: profilePicView.frame.maxY + 0.1*frame.height, width: 0, height: 0.2*frame.height))
-        nameLabel.text = name
+        nameLabel.text = firstName
         nameLabel.sizeToFit()
         nameLabel.frame = CGRect(x: profilePicView.frame.midX - nameLabel.frame.width/2, y: nameLabel.frame.minY, width: nameLabel.frame.width, height: nameLabel.frame.height)
         addSubview(nameLabel)
@@ -92,7 +116,7 @@ class NewMatchesView: UIScrollView {
         let newMatchView = gesture.view!
         //newMatchView.layer.borderColor = UIColor.white.cgColor
         let acceptIgnoreVC = AcceptIgnoreViewController()
-        acceptIgnoreVC.setNewMatch(newMatch: newMatches[newMatchView.tag])
+        acceptIgnoreVC.setNewMatch(newMatch: displayedNewMatches[newMatchView.tag])
         vc?.present(acceptIgnoreVC, animated: true, completion: nil)
     }
     
