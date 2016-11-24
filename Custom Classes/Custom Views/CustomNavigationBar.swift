@@ -90,7 +90,8 @@ class CustomNavigationBar: UINavigationBar {
         titleImageView.clipsToBounds = true
         navBarTitleView.addSubview(titleImageView)
         navBar.topItem?.titleView = navBarTitleView
-        
+        /*navBar.topItem?.title = "NECTER"
+        navBar.titleTextAttributes = [NSForegroundColorAttributeName: DisplayUtility.necterYellow, NSFontAttributeName: UIFont(name: "BentonSans-Light", size: 26)!]*/
         view.addSubview(navBar)
         view.bringSubview(toFront: navBar)
     }

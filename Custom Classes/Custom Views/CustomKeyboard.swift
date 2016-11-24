@@ -87,18 +87,20 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         type = updatedPostType
             //setting the placeholder based on whether an option is selected
             if type != "All Types" {
-                messageTextView.isUserInteractionEnabled = true
-                messageTextView.isEditable = true
+                //messageTextView.isUserInteractionEnabled = true
+                //messageTextView.isEditable = true
                 //if !messageTextView.isFirstResponder {
                 //    messageTextView.becomeFirstResponder()
                 //}
                     //setting the placeholder
-                if messageTextView.textColor == UIColor.white && !updatedText.isEmpty {
+                if messageTextView.textColor == UIColor.white && !messageTextView.text.isEmpty {
                     messageButton.isEnabled = true
+                } else {
+                    messageButton.isEnabled = false
                 }
             } else {
                 //no filter is selected
-                messageTextView.isUserInteractionEnabled = false
+                //messageTextView.isUserInteractionEnabled = false
                 //if messageTextView.isFirstResponder {
                  //   messageTextView.resignFirstResponder()
                 //}

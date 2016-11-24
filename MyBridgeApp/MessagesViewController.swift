@@ -415,9 +415,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
     }
-    func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
+    /*func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
         missionControlView.drag(gestureRecognizer: gestureRecognizer)
-    }
+    }*/
     func filtersTapped(_ notification: Notification) {
         let type = missionControlView.whichFilter()
         toolbarTapped = true
@@ -649,9 +649,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //displayToolBar()
         //missionControlView.createTabView(view: view)
-        missionControlView.initialize(view: view, isMessagesViewController: true)
-        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
-        missionControlView.addGestureRecognizer(gestureRecognizer)
+        //missionControlView.initialize(view: view, isMessagesViewController: true)
+        /*let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
+        missionControlView.addGestureRecognizer(gestureRecognizer)*/
     }
     
     func displayFilterLabel(type : String) {
@@ -707,34 +707,72 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                             otherUser = "user1"
                         }
                     }
-                    if user != "" && result["\(user)_response"] as! Int != 1 {
-                        let profilePicURL = URL(string: result["\(otherUser)_profile_picture_url"] as! String)
+                    if let userResponse = result["\(user)_response"] as? Int {
+                        if user != "" && userResponse != 1 {
+                            let profilePicURL = URL(string: result["\(otherUser)_profile_picture_url"] as! String)
+                            let profilePicView = UIImageView()
+                            let downloader = Downloader()
+                            downloader.imageFromURL(URL: profilePicURL!, imageView: profilePicView, callBack: nil)
+                            let name = result["\(otherUser)_name"] as! String
+                            let wordsInName = name.components(separatedBy: " ")
+                            let firstName: String
+                            if wordsInName.count > 0 {
+                                firstName = wordsInName.first!
+                            } else {
+                                firstName = name
+                            }
+                            let dot = result["\(user)_response"] as! Int == 0
+                            var color: UIColor
+                            switch result["bridge_type"] as! String {
+                            case "Business":
+                                color = DisplayUtility.businessBlue
+                            case "Love":
+                                color = DisplayUtility.loveRed
+                            case "Friendship":
+                                color = DisplayUtility.friendshipGreen
+                            default:
+                                color = .black
+                            }
+                            let newMatch = NewMatch(profilePicView: profilePicView, firstName: firstName, color: color, dot: dot)
+                            self.newMatchesView.addNewMatch(newMatch: newMatch)
+                            self.tableView.tableHeaderView = self.newMatchesView
+                            
+                        }
+                    } else {
                         let profilePicView = UIImageView()
-                        let downloader = Downloader()
-                        downloader.imageFromURL(URL: profilePicURL!, imageView: profilePicView, callBack: nil)
-                        let name = result["\(otherUser)_name"] as! String
-                        let wordsInName = name.components(separatedBy: " ")
-                        let firstName: String
-                        if wordsInName.count > 0 {
-                            firstName = wordsInName.first!
-                        } else {
-                            firstName = name
+                        if let profilePicURLString = result["\(otherUser)_profile_picture_url"] as? String {
+                            let profilePicURL = URL(string: (profilePicURLString))
+                            let downloader = Downloader()
+                            downloader.imageFromURL(URL: profilePicURL!, imageView: profilePicView, callBack: nil)
                         }
-                        let dot = result["\(user)_response"] as! Int == 0
-                        var color: UIColor
-                        switch result["bridge_type"] as! String {
-                        case "Business":
-                            color = DisplayUtility.businessBlue
-                        case "Love":
-                            color = DisplayUtility.loveRed
-                        case "Friendship":
-                            color = DisplayUtility.friendshipGreen
-                        default:
-                            color = .black
+                        var firstName = String()
+                        if let name = result["\(otherUser)_name"] as? String {
+                            let wordsInName = name.components(separatedBy: " ")
+                            if wordsInName.count > 0 {
+                                firstName = wordsInName.first!
+                            } else {
+                                firstName = name
+                            }
                         }
-                        let newMatch = NewMatch(profilePicView: profilePicView, firstName: firstName, color: color, dot: dot)
-                        self.newMatchesView.addNewMatch(newMatch: newMatch)
-                        self.tableView.tableHeaderView = self.newMatchesView
+                        if let dot = result["\(user)_response"] as? Int  {
+                            if dot == 0 {
+                                var color: UIColor
+                                switch result["bridge_type"] as! String {
+                                case "Business":
+                                    color = DisplayUtility.businessBlue
+                                case "Love":
+                                    color = DisplayUtility.loveRed
+                                case "Friendship":
+                                    color = DisplayUtility.friendshipGreen
+                                default:
+                                    color = .black
+                                }
+                                let newMatch = NewMatch(profilePicView: profilePicView, firstName: firstName, color: color, dot: true)
+                                self.newMatchesView.addNewMatch(newMatch: newMatch)
+                                self.tableView.tableHeaderView = self.newMatchesView
+                            }
+                        }
+                        
                         
                     }
                 }

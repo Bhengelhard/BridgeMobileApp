@@ -105,65 +105,8 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
-        //locationManager.requestAlwaysAuthorization()
+        locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
-        
-        /*
-        //fixing app not setting bridges issue
-        var count = 0
-        print("fixing app not setting bridges issue")
-        let messagesQuery = PFQuery(className:"Messages")
-        messagesQuery.limit = 10000
-        messagesQuery.findObjectsInBackground { (objects, error) in
-            if error == nil {
-                if let objects = objects {
-                    let numMessages = objects.count
-                    print("numMessages = \(numMessages)")
-                    for object in objects {
-                        let idsInMessage = object["ids_in_message"]
-                        if let idsInMessage = idsInMessage as? [String] {
-                            //print("idsInMessage - \(idsInMessage)")
-                        
-                            let bridgeBuilder = object["bridge_builder"] as? String
-                            var fixedIdsInMessage = [String]()
-                            if (idsInMessage.contains(bridgeBuilder!)) {
-                                for id in idsInMessage {
-                                    if id != bridgeBuilder {
-                                        fixedIdsInMessage.append(id)
-                                    }
-                                }
-                            } else {
-                                fixedIdsInMessage = idsInMessage
-                            }
-                            print("fixedIdsInMessage - \(fixedIdsInMessage)")
-                            let bridgePairingsQuery = PFQuery(className: "BridgePairings")
-                            bridgePairingsQuery.limit = 10000
-                            bridgePairingsQuery.findObjectsInBackground(block: { (pairings, error2) in
-                                if error2 == nil {
-                                    if let pairings = pairings {
-                                        for pair in pairings {
-                                            let pairIdsArray = pair["user_objectIds"]
-                                            if let pairIdsArray = pairIdsArray as? [String]{
-                                                if (pairIdsArray == fixedIdsInMessage || (pairIdsArray.reversed()) == fixedIdsInMessage) && fixedIdsInMessage.count == 2 {
-                                                    print("\(pairIdsArray) should be bridge")
-                                                    count = count + 1
-                                                    pair["bridged"] = true
-                                                    pair.saveInBackground()
-                                                }
-                                            }
-                                        
-                                        }
-                                        print(count)
-                                        
-                                    }
-                                }
-                            
-                            })
-                        }
-                    }
-                }
-            }
-        }*/
         
     }
     
@@ -219,3 +162,62 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
     }
 
 }
+
+
+/*
+ //fixing app not setting bridges issue
+ var count = 0
+ print("fixing app not setting bridges issue")
+ let messagesQuery = PFQuery(className:"Messages")
+ messagesQuery.limit = 10000
+ messagesQuery.findObjectsInBackground { (objects, error) in
+ if error == nil {
+ if let objects = objects {
+ let numMessages = objects.count
+ print("numMessages = \(numMessages)")
+ for object in objects {
+ let idsInMessage = object["ids_in_message"]
+ if let idsInMessage = idsInMessage as? [String] {
+ //print("idsInMessage - \(idsInMessage)")
+ 
+ let bridgeBuilder = object["bridge_builder"] as? String
+ var fixedIdsInMessage = [String]()
+ if (idsInMessage.contains(bridgeBuilder!)) {
+ for id in idsInMessage {
+ if id != bridgeBuilder {
+ fixedIdsInMessage.append(id)
+ }
+ }
+ } else {
+ fixedIdsInMessage = idsInMessage
+ }
+ print("fixedIdsInMessage - \(fixedIdsInMessage)")
+ let bridgePairingsQuery = PFQuery(className: "BridgePairings")
+ bridgePairingsQuery.limit = 10000
+ bridgePairingsQuery.findObjectsInBackground(block: { (pairings, error2) in
+ if error2 == nil {
+ if let pairings = pairings {
+ for pair in pairings {
+ let pairIdsArray = pair["user_objectIds"]
+ if let pairIdsArray = pairIdsArray as? [String]{
+ if (pairIdsArray == fixedIdsInMessage || (pairIdsArray.reversed()) == fixedIdsInMessage) && fixedIdsInMessage.count == 2 {
+ print("\(pairIdsArray) should be bridge")
+ count = count + 1
+ pair["bridged"] = true
+ pair.saveInBackground()
+ }
+ }
+ 
+ }
+ print(count)
+ 
+ }
+ }
+ 
+ })
+ }
+ }
+ }
+ }
+ }*/
+

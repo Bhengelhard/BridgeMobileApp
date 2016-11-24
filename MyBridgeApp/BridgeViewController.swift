@@ -902,7 +902,7 @@ class BridgeViewController: UIViewController {
         view.addSubview(backgroundView)
     }
     func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
-        missionControlView.drag(gestureRecognizer: gestureRecognizer)
+        //missionControlView.drag(gestureRecognizer: gestureRecognizer)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -916,10 +916,6 @@ class BridgeViewController: UIViewController {
         displayBackgroundView()
         displayNavigationBar()
         
-        //Create Mission Control
-        missionControlView.initialize(view: view, isMessagesViewController: false)
-        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
-        missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
         
         let bridgePairings = localData.getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
@@ -943,66 +939,13 @@ class BridgeViewController: UIViewController {
         
         wasLastSwipeInDeck = false
         
-        
-        
-        
-//        let query: PFQuery = PFQuery(className: "Messages")
-//        query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
-//        query.cachePolicy = .networkElseCache
-//        query.findObjectsInBackground(block: { (results, error) -> Void in
-//            if error == nil {
-//                if let results = results {
-//                    for i in 0..<results.count{
-//                        let result = results[i]
-//                        if let _ = result["message_viewed"] {
-//                            let whoViewed = result["message_viewed"] as! ([String])
-//                            if whoViewed.contains((PFUser.current()?.objectId)!) {
-//                                self.badgeCount += 0 //current user viewed the message
-//                            }
-//                            else {
-//                                self.badgeCount += 1//current user did not view the message
-//                                break
-//                            }
-//                        }
-//                        else {
-//                            self.badgeCount += 1//current user did not view the message
-//                            break
-//                        }
-//                        
-//                    }
-//                    /*DispatchQueue.main.async(execute: {
-//                     if self.badgeCount > 0 {
-//                     rightBarButtonIcon = "Messages_Icon_Gray_Notification"
-//                     rightBarButtonSelectedIcon = "Messages_Icon_Yellow_Notification"
-//                     } else {
-//                     self.updateRightBarButton(newIcon: newIcon, newSelectedIcon: newSelectedIcon)
-//                     }
-//                     })*/
-//                    
-//                }
-//            }
-//        })
-        
-        let bridgeQuery: PFQuery = PFQuery(className: "BridgePairings")
-        bridgeQuery.whereKey("bridge_type", equalTo: "")
-        bridgeQuery.limit = 10000
-        bridgeQuery.findObjectsInBackground(block: { (objects, error) -> Void in
-            print("bridgeQuery ran")
-            if error == nil {
-                print("bridgeQuery error is not nil")
-                if let objects = objects {
-                    print("bridgeQuery got objects")
-                    for object in objects {
-                        object["bridge_type"] = "Friendship"
-                        object.saveInBackground()
-                        print("object saved")
-                    }
-                }
-                
-            } else {
-                print(error ?? "error from the bridgeQuery")
-            }
-        })
+        //Create Mission Control
+        missionControlView.initialize(view: view, isMessagesViewController: false)
+        view.addSubview(missionControlView)
+        missionControlView.bringSubview(toFront: view)
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
+        missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
+        //missionControlView.displayPostRequest()
     }
     override func viewDidLayoutSubviews() {
 

@@ -419,7 +419,7 @@ class ReasonForConnection: UIView {
         
         //Creating lines dividing suggested reasons
         let line1 = UIView()
-        line1.frame = CGRect(x: 0, y: 0.558*DisplayUtility.screenHeight, width: 0.4604*DisplayUtility.screenWidth, height: 1.0)
+        line1.frame = CGRect(x: 0, y: 0.558*DisplayUtility.screenHeight, width: 0.4604*DisplayUtility.screenWidth, height: 0.5)
         line1.center.x = self.center.x
         line1.backgroundColor = UIColor.white
         self.addSubview(line1)
@@ -465,21 +465,21 @@ class ReasonForConnection: UIView {
         suggestion1Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion1Button.frame.origin.y, width: 0.8*DisplayUtility.screenWidth, height: suggestion1Button.frame.height)
         suggestion1Label.textColor = UIColor.white
         suggestion1Label.font = UIFont(name: "BentonSans-Light", size: 17)
-        suggestion1Label.textAlignment = NSTextAlignment.justified
+        suggestion1Label.textAlignment = NSTextAlignment.center
         suggestion1Label.numberOfLines = 2
         self.addSubview(suggestion1Label)
         
         suggestion2Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion2Button.frame.origin.y, width: 0.8*DisplayUtility.screenWidth, height: suggestion2Button.frame.height)
         suggestion2Label.textColor = UIColor.white
         suggestion2Label.font = UIFont(name: "BentonSans-Light", size: 18)
-        suggestion2Label.textAlignment = NSTextAlignment.justified
+        suggestion2Label.textAlignment = NSTextAlignment.center
         suggestion2Label.numberOfLines = 2
         self.addSubview(suggestion2Label)
         
         suggestion3Label.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: suggestion3Button.frame.origin.y, width: 0.8*DisplayUtility.screenWidth, height: suggestion3Button.frame.height)
         suggestion3Label.textColor = UIColor.white
         suggestion3Label.font = UIFont(name: "BentonSans-Light", size: 18)
-        suggestion3Label.textAlignment = NSTextAlignment.justified
+        suggestion3Label.textAlignment = NSTextAlignment.center
         suggestion3Label.numberOfLines = 2
         self.addSubview(suggestion3Label)
         

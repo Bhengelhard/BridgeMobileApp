@@ -17,7 +17,7 @@ class DisplayUtility {
     static let screenHeight = UIScreen.main.bounds.height
     //necter colors
     //necter Colors
-    static let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
+    static let necterYellow = UIColor(red: 237/255, green: 203/255, blue: 116/255, alpha: 1.0)//UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     static let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
     static let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
     static let friendshipGreen = UIColor(red: 112.0/255, green: 193.0/255, blue: 179.0/255, alpha: 1.0)
