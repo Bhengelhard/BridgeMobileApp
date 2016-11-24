@@ -25,6 +25,7 @@ func getWeekDay(_ num:Int)->String{
 
 
 class MessagesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating {
+    
     @IBOutlet var tableView: UITableView!
     //let tableView = UITableView()
     
@@ -114,175 +115,175 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     /*
-    func addProfilePicURLsToMessages() {
-        print("adding profile_pic_ulrs to Messages table")
-        let query: PFQuery = PFQuery(className: "Messages")
-        query.limit = 10000
-        query.findObjectsInBackground(block: { (results, error) -> Void in
-            
-            if let error = error {
-                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
-            }
-            else if let results = results {
-                for i in 0..<results.count{
-                    
-                    let result = results[i]
-                    if let id1 = result["user1_objectId"] {
-                        let query2 = PFQuery(className: "_User")
-                        query2.whereKey("objectId", equalTo: id1)
-                        query2.findObjectsInBackground(block: { (results2, error2) -> Void in
-                            
-                            if let error2 = error2 {
-                                print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
-                            }
-                            else if let results2 = results2 {
-                                print(results2.count)
-                                if results2.count > 0 {
-                                    result["user1_profile_picture_url"] = results2[0]["profile_picture_url"]
-                                    result.saveInBackground()
-                                }
-                            }
-                        })
-                    }
-                    if let id2 = result["user2_objectId"] {
-                        let query2 = PFQuery(className: "_User")
-                        query2.whereKey("objectId", equalTo: id2)
-                        query2.findObjectsInBackground(block: { (results2, error2) -> Void in
-                            
-                            if let error2 = error2 {
-                                print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
-                            }
-                            else if let results2 = results2 {
-                                if results2.count > 0 {
-                                    result["user2_profile_picture_url"] = results2[0]["profile_picture_url"]
-                                    result.saveInBackground()
-                                }
-                            }
-                        })
-                    }
-                }
-            }
-        })
-    }
-    */
-    
-    /*
-    func splitArraysInMessages() {
-        let query: PFQuery = PFQuery(className: "Messages")
-        query.limit = 10000
-        
-        query.findObjectsInBackground(block: { (results, error) -> Void in
-            
-            if let error = error {
-                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
-            }
-            else if let results = results {
-                for i in 0..<results.count{
-                    
-                    let result = results[i]
-                    
-                    let bridge_builder_id = result["bridge_builder"] as! String
-                    let ids = result["ids_in_message"] as! [String]
-                    let names = result["names_in_message"] as! [String]
-                    var num = 1
-                    for i in 0..<ids.count {
-                        if ids[i] == bridge_builder_id {
-                            continue
-                        }
-                        result["user\(num)_objectId"] = ids[i]
-                        result["user\(num)_name"] = names[i]
-                        num = num+1
-                    }
-                    
-                    result.saveInBackground()
-                }
-            }
-        })
-    }
+     func addProfilePicURLsToMessages() {
+     print("adding profile_pic_ulrs to Messages table")
+     let query: PFQuery = PFQuery(className: "Messages")
+     query.limit = 10000
+     query.findObjectsInBackground(block: { (results, error) -> Void in
+     
+     if let error = error {
+     print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+     }
+     else if let results = results {
+     for i in 0..<results.count{
+     
+     let result = results[i]
+     if let id1 = result["user1_objectId"] {
+     let query2 = PFQuery(className: "_User")
+     query2.whereKey("objectId", equalTo: id1)
+     query2.findObjectsInBackground(block: { (results2, error2) -> Void in
+     
+     if let error2 = error2 {
+     print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
+     }
+     else if let results2 = results2 {
+     print(results2.count)
+     if results2.count > 0 {
+     result["user1_profile_picture_url"] = results2[0]["profile_picture_url"]
+     result.saveInBackground()
+     }
+     }
+     })
+     }
+     if let id2 = result["user2_objectId"] {
+     let query2 = PFQuery(className: "_User")
+     query2.whereKey("objectId", equalTo: id2)
+     query2.findObjectsInBackground(block: { (results2, error2) -> Void in
+     
+     if let error2 = error2 {
+     print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
+     }
+     else if let results2 = results2 {
+     if results2.count > 0 {
+     result["user2_profile_picture_url"] = results2[0]["profile_picture_url"]
+     result.saveInBackground()
+     }
+     }
+     })
+     }
+     }
+     }
+     })
+     }
      */
     
     /*
-    func setUserStatusesTo1() {
-        print("setting statuses")
-        let query: PFQuery = PFQuery(className: "BridgePairings")
-        query.whereKey("bridged", equalTo: true)
-        query.limit = 10000
-        query.findObjectsInBackground(block: { (results, error) -> Void in
-            
-            if let error = error {
-                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
-            }
-            else if let results = results {
-                for i in 0..<results.count{
-                    
-                    let result = results[i]
-                    result["user1_response"] = 1
-                    result["user2_response"] = 1
-                    result.saveInBackground()
-                    print("status \(i) done")
-                }
-            }
-        })
-    }
-    */
+     func splitArraysInMessages() {
+     let query: PFQuery = PFQuery(className: "Messages")
+     query.limit = 10000
+     
+     query.findObjectsInBackground(block: { (results, error) -> Void in
+     
+     if let error = error {
+     print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+     }
+     else if let results = results {
+     for i in 0..<results.count{
+     
+     let result = results[i]
+     
+     let bridge_builder_id = result["bridge_builder"] as! String
+     let ids = result["ids_in_message"] as! [String]
+     let names = result["names_in_message"] as! [String]
+     var num = 1
+     for i in 0..<ids.count {
+     if ids[i] == bridge_builder_id {
+     continue
+     }
+     result["user\(num)_objectId"] = ids[i]
+     result["user\(num)_name"] = names[i]
+     num = num+1
+     }
+     
+     result.saveInBackground()
+     }
+     }
+     })
+     }
+     */
     
     /*
-    func addProfilePicUrlsToMessages() {
-        print("adding profile_pic_ulrs to Messages table")
-        let query: PFQuery = PFQuery(className: "Messages")
-        query.limit = 10000
-        query.findObjectsInBackground(block: { (results, error) -> Void in
-            
-            if let error = error {
-                print("refresh findObjectsInBackgroundWithBlock error - \(error)")
-            }
-            else if let results = results {
-                for i in 0..<results.count{
-                    
-                    let result = results[i]
-                    let ids = result["ids_in_message"] as! [String]
-                    print("Message \(i): \(ids)")
-                    for id in ids {
-                        let query2: PFQuery = PFQuery(className: "_User")
-                        query2.whereKey("objectId", equalTo: id)
-                        query2.findObjectsInBackground(block: { (results2, error2) -> Void in
-                            if let error2 = error2 {
-                                print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
-                            }
-                            else if let results2 = results2 {
-                                print(results2.count)
-                                if results2.count > 0 {
-                                    print("!")
-                                    var urls: [String]
-                                    if let urls1 = result["profile_picture_urls"] {
-                                        urls = urls1 as! [String]
-                                    } else {
-                                        urls = [String]()
-                                    }
-                                    let url = results2[0]["profile_picture_url"] as! String
-                                    urls.append(url)
-                                    print(urls.count)
-                                    result["profile_picture_urls"] = urls
-                                    result.saveInBackground()
-                                }
-                                /*
-                                if results2.count > 0 {
-                                    profilePicURLs.append(results2[0]["profile_picture_url"] as! String)
-                                }
-                                if profilePicURLs.count == ids.count {
-                                    result["profile_picture_urls"] = profilePicURLs
-                                    result.saveInBackground()
-                                }
-                                 */
-                            }
-                        })
-                    }
-                }
-            }
-        })
-
-    }
- */
+     func setUserStatusesTo1() {
+     print("setting statuses")
+     let query: PFQuery = PFQuery(className: "BridgePairings")
+     query.whereKey("bridged", equalTo: true)
+     query.limit = 10000
+     query.findObjectsInBackground(block: { (results, error) -> Void in
+     
+     if let error = error {
+     print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+     }
+     else if let results = results {
+     for i in 0..<results.count{
+     
+     let result = results[i]
+     result["user1_response"] = 1
+     result["user2_response"] = 1
+     result.saveInBackground()
+     print("status \(i) done")
+     }
+     }
+     })
+     }
+     */
+    
+    /*
+     func addProfilePicUrlsToMessages() {
+     print("adding profile_pic_ulrs to Messages table")
+     let query: PFQuery = PFQuery(className: "Messages")
+     query.limit = 10000
+     query.findObjectsInBackground(block: { (results, error) -> Void in
+     
+     if let error = error {
+     print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+     }
+     else if let results = results {
+     for i in 0..<results.count{
+     
+     let result = results[i]
+     let ids = result["ids_in_message"] as! [String]
+     print("Message \(i): \(ids)")
+     for id in ids {
+     let query2: PFQuery = PFQuery(className: "_User")
+     query2.whereKey("objectId", equalTo: id)
+     query2.findObjectsInBackground(block: { (results2, error2) -> Void in
+     if let error2 = error2 {
+     print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
+     }
+     else if let results2 = results2 {
+     print(results2.count)
+     if results2.count > 0 {
+     print("!")
+     var urls: [String]
+     if let urls1 = result["profile_picture_urls"] {
+     urls = urls1 as! [String]
+     } else {
+     urls = [String]()
+     }
+     let url = results2[0]["profile_picture_url"] as! String
+     urls.append(url)
+     print(urls.count)
+     result["profile_picture_urls"] = urls
+     result.saveInBackground()
+     }
+     /*
+     if results2.count > 0 {
+     profilePicURLs.append(results2[0]["profile_picture_url"] as! String)
+     }
+     if profilePicURLs.count == ids.count {
+     result["profile_picture_urls"] = profilePicURLs
+     result.saveInBackground()
+     }
+     */
+     }
+     })
+     }
+     }
+     }
+     })
+     
+     }
+     */
     
     // refresh() fetches the data from Parse
     func refresh() {
@@ -416,13 +417,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     /*func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
-        missionControlView.drag(gestureRecognizer: gestureRecognizer)
-    }*/
+     missionControlView.drag(gestureRecognizer: gestureRecognizer)
+     }*/
     func filtersTapped(_ notification: Notification) {
         let type = missionControlView.whichFilter()
         toolbarTapped = true
         filteredPositions = [Int]()
-        if !(type == "All Types") {
+        displayFilterLabel(type: type)
+        newMatchesView.filterBy(type: type)
+        if type != "All Types" {
             //displaying noMessagesLabel when there are no messages in the filtered message type
             noMessagesLabel.alpha = 1
             for i in 0 ..< messageType.count{
@@ -433,11 +436,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             if noMessagesLabel.alpha == 1 {
                 displayNoMessages()
-            } else {
-                displayFilterLabel(type: type)
             }
         } else {
-            displayFilterLabel(type: type)
             noMessagesLabel.alpha = 1
             for i in 0 ..< messageType.count{
                 filteredPositions.append(i)
@@ -570,7 +570,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
@@ -582,25 +582,23 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         filterLabel.textAlignment = .center
         //view.addSubview(filterLabel)
         
-        displayFilterLabel(type: "All Types")
-        
         displayNavigationBar()
         
         tableView.delegate = self
         tableView.dataSource = self
         
         /*
-        var profilePics = [UIImage]()
-        var names = [String]()
-        
-        for _ in 0...9 {
-            let profilePic = UIImage(named: "Business_Icon_Blue")
-            profilePics.append(profilePic!)
-            names.append("Doug")
-        }
-        
-        
-        newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)*/
+         var profilePics = [UIImage]()
+         var names = [String]()
+         
+         for _ in 0...9 {
+         let profilePic = UIImage(named: "Business_Icon_Blue")
+         profilePics.append(profilePic!)
+         names.append("Doug")
+         }
+         
+         
+         newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)*/
         
         newMatchesView.setViewController(vc: self)
         
@@ -651,7 +649,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         //missionControlView.createTabView(view: view)
         //missionControlView.initialize(view: view, isMessagesViewController: true)
         /*let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
-        missionControlView.addGestureRecognizer(gestureRecognizer)*/
+         missionControlView.addGestureRecognizer(gestureRecognizer)*/
+        
+        displayFilterLabel(type: "All Types")
     }
     
     func displayFilterLabel(type : String) {
@@ -693,6 +693,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     let result = results[i]
                     
+                    let objectId = result.objectId
+                    
                     var user = ""
                     var otherUser = ""
                     if let user1_objectId = result["user_objectId1"] {
@@ -707,309 +709,275 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                             otherUser = "user1"
                         }
                     }
-                    if let userResponse = result["\(user)_response"] as? Int {
-                        if user != "" && userResponse != 1 {
-                            let profilePicURL = URL(string: result["\(otherUser)_profile_picture_url"] as! String)
-                            let profilePicView = UIImageView()
-                            let downloader = Downloader()
-                            downloader.imageFromURL(URL: profilePicURL!, imageView: profilePicView, callBack: nil)
-                            let name = result["\(otherUser)_name"] as! String
-                            let wordsInName = name.components(separatedBy: " ")
-                            let firstName: String
-                            if wordsInName.count > 0 {
-                                firstName = wordsInName.first!
-                            } else {
-                                firstName = name
-                            }
-                            let dot = result["\(user)_response"] as! Int == 0
-                            var color: UIColor
-                            switch result["bridge_type"] as! String {
-                            case "Business":
-                                color = DisplayUtility.businessBlue
-                            case "Love":
-                                color = DisplayUtility.loveRed
-                            case "Friendship":
-                                color = DisplayUtility.friendshipGreen
-                            default:
-                                color = .black
-                            }
-                            let newMatch = NewMatch(profilePicView: profilePicView, firstName: firstName, color: color, dot: dot)
-                            self.newMatchesView.addNewMatch(newMatch: newMatch)
-                            self.tableView.tableHeaderView = self.newMatchesView
-                            
+                    
+                    //These force unwraps need to be removed
+                    if user != nil {
+                        var userResponse = 0
+                        if let UR = result["\(user)_response"] as? Int {
+                            userResponse = UR
                         }
-                    } else {
-                        let profilePicView = UIImageView()
-                        if let profilePicURLString = result["\(otherUser)_profile_picture_url"] as? String {
-                            let profilePicURL = URL(string: (profilePicURLString))
-                            let downloader = Downloader()
-                            downloader.imageFromURL(URL: profilePicURL!, imageView: profilePicView, callBack: nil)
-                        }
-                        var firstName = String()
-                        if let name = result["\(otherUser)_name"] as? String {
-                            let wordsInName = name.components(separatedBy: " ")
-                            if wordsInName.count > 0 {
-                                firstName = wordsInName.first!
-                            } else {
-                                firstName = name
-                            }
-                        }
-                        if let dot = result["\(user)_response"] as? Int  {
-                            if dot == 0 {
-                                var color: UIColor
-                                switch result["bridge_type"] as! String {
-                                case "Business":
-                                    color = DisplayUtility.businessBlue
-                                case "Love":
-                                    color = DisplayUtility.loveRed
-                                case "Friendship":
-                                    color = DisplayUtility.friendshipGreen
-                                default:
-                                    color = .black
+                        if userResponse != 1 {
+                            if let profilePicURLString = result["\(otherUser)_profile_picture_url"] as? String {
+                                let profilePicURL = URL(string: profilePicURLString)
+                                if let name = result["\(otherUser)_name"] as? String {
+                                    let dot = (userResponse == 0)
+                                    if let type = result["bridge_type"] as? String {
+                                        var color: UIColor
+                                        switch type {
+                                        case "Business":
+                                            color = DisplayUtility.businessBlue
+                                        case "Love":
+                                            color = DisplayUtility.loveRed
+                                        case "Friendship":
+                                            color = DisplayUtility.friendshipGreen
+                                        default:
+                                            color = .black
+                                        }
+                                        if let status = result["\(otherUser)_bridge_status"] as? String {
+                                            let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURL!, name: name, type: type, color: color, dot: dot, status: status)
+                                            self.newMatchesView.addNewMatch(newMatch: newMatch)
+                                            self.tableView.tableHeaderView = self.newMatchesView
+                                        }
+                                    }
                                 }
-                                let newMatch = NewMatch(profilePicView: profilePicView, firstName: firstName, color: color, dot: true)
-                                self.newMatchesView.addNewMatch(newMatch: newMatch)
-                                self.tableView.tableHeaderView = self.newMatchesView
                             }
                         }
-                        
-                        
+                    }
                     }
                 }
-            }
-            
-        })
-
-    }
-    
-    override func viewDidLayoutSubviews() {
-        displayFilterLabel(type: "All Types")
-        tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        
-    }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
-            if self.encounteredBefore[self.noOfElementsFetched] == nil {
-                self.encounteredBefore[self.noOfElementsFetched] = true
-                refresh()
-                pagingSpinner.startAnimating()
-            }
-            
-        }
-        else {
-            self.pagingSpinner.stopAnimating()
-        }
-    }
-    func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
-            return filteredPositions.count
-        }
-        
-        return messages.count
-        
-    }
-    
-    // Data to be shown on an individual row
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
-        let cell = MessagesTableCell()
-        cell.setSeparator = true
-        
-        cell.cellHeight = DisplayUtility.screenHeight/6.0
-        cell.cellHeight = 0.15 * DisplayUtility.screenHeight
-        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
-            var i = 0
-            messagePositionToMessageIdMapping = [Int:String]()
-            for index in filteredPositions {
-                messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
-                i += 1
-            }
-        }
-        if messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row] == nil || names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil{
-            cell.participants.text = ""
-            cell.messageSnapshot.text = ""
-            cell.messageTimestamp.text = ""
-            cell.backgroundColor = UIColor.white
-            return cell
-        }
-        
-        var profilePicsDict = profilePicURLs[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
-        for id in profilePicsDict.keys {
-            if id != PFUser.current()?.objectId {
-                let url = URL(string: profilePicsDict[id]!)!
-                let downloader = Downloader()
-                downloader.imageFromURL(URL: url, imageView: cell.profilePic, callBack: nil)
-                break
-            }
-        }
-        
-        var stringOfNames = ""
-        var users = names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
-        users = users.filter { $0 != PFUser.current()?["name"] as! String }
-        
-        for i in 0 ..< users.count  {
-            var name = users[i]
-            if users.count > 2 && i < users.count - 2 {
-                var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                stringOfNames = stringOfNames + fullNameArr[0] + ", "
                 
-            } else if users.count >= 2 && i == users.count - 2 {
-                var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                stringOfNames = stringOfNames + fullNameArr[0] + " & "
+            })
+            
+        }
+        
+        override func viewDidLayoutSubviews() {
+            tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
+        }
+        override func viewDidAppear(_ animated: Bool) {
+            
+        }
+        override func didReceiveMemoryWarning() {
+            super.didReceiveMemoryWarning()
+            // Dispose of any resources that can be recreated.
+        }
+        
+        func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+            if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
+                if self.encounteredBefore[self.noOfElementsFetched] == nil {
+                    self.encounteredBefore[self.noOfElementsFetched] = true
+                    refresh()
+                    pagingSpinner.startAnimating()
+                }
                 
             }
             else {
-                if users.count > 1{
-                    name = name.characters.split{$0 == " "}.map(String.init)[0]
+                self.pagingSpinner.stopAnimating()
+            }
+        }
+        func numberOfSections(in tableView: UITableView) -> Int {
+            // #warning Incomplete implementation, return the number of sections
+            return 1
+        }
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            // #warning Incomplete implementation, return the number of rows
+            if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
+                return filteredPositions.count
+            }
+            
+            return messages.count
+            
+        }
+        
+        // Data to be shown on an individual row
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
+            let cell = MessagesTableCell()
+            cell.setSeparator = true
+            
+            cell.cellHeight = DisplayUtility.screenHeight/6.0
+            cell.cellHeight = 0.15 * DisplayUtility.screenHeight
+            if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
+                var i = 0
+                messagePositionToMessageIdMapping = [Int:String]()
+                for index in filteredPositions {
+                    messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
+                    i += 1
                 }
-                stringOfNames = stringOfNames + name
             }
-        }
-        
-        cell.participants.text = stringOfNames
-        cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
-        //cell.arrow.text = ">"
-        
-        
-        if messageViewed[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]! {
-            cell.notificationDot.isHidden = true
-        } else {
-            cell.notificationDot.isHidden = false
-        }
-        
-        switch messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!{
+            if messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row] == nil || names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil{
+                cell.participants.text = ""
+                cell.messageSnapshot.text = ""
+                cell.messageTimestamp.text = ""
+                cell.backgroundColor = UIColor.white
+                return cell
+            }
             
-        case "Business":
-            //cell.participants.textColor = DisplayUtility.businessBlue
-            //cell.arrow.textColor = DisplayUtility.businessBlue
-            cell.color = DisplayUtility.businessBlue
-            break
-        case "Love":
-            //cell.participants.textColor = DisplayUtility.loveRed
-            //cell.arrow.textColor = DisplayUtility.loveRed
-            cell.color = DisplayUtility.loveRed
-            break
-        case "Friendship":
-            //cell.participants.textColor = DisplayUtility.friendshipGreen
-            //cell.arrow.textColor = DisplayUtility.friendshipGreen
-            cell.color = DisplayUtility.friendshipGreen
-            break
-        default: cell.participants.textColor = DisplayUtility.friendshipGreen
-        cell.arrow.textColor = DisplayUtility.friendshipGreen
+            var profilePicsDict = profilePicURLs[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
+            for id in profilePicsDict.keys {
+                if id != PFUser.current()?.objectId {
+                    let url = URL(string: profilePicsDict[id]!)!
+                    let downloader = Downloader()
+                    downloader.imageFromURL(URL: url, imageView: cell.profilePic, callBack: nil)
+                    break
+                }
+            }
             
-        }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
-        let calendar = Calendar.current
-        let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
-        let components = (calendar as NSCalendar).components([ .day],
-                                                             from: date, to: Date(), options: NSCalendar.Options.wrapComponents)
-        if components.day! > 7 {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM/dd"
-            cell.messageTimestamp.text = dateFormatter.string(from: date)
-        }
-        else if components.day! >= 2 {
-            let calendar = Calendar.current
-            let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
-            let components = (calendar as NSCalendar).components([.weekday],
-                                                                 from: date)
-            cell.messageTimestamp.text = String(getWeekDay(components.weekday!))
-        }
-        else if components.day! >= 1 {
-            cell.messageTimestamp.text = "Yesterday"
-        }
-        else {
-            /*
-             let dateFormatter = DateFormatter()
-             dateFormatter.dateFormat = "hh:mm a"
-             cell.messageTimestamp.text = dateFormatter.string(from: date)
-             */
-            cell.messageTimestamp.text = "Today"
-        }
-        if indexPath.row == filteredPositions.count - 1 {
-            toolbarTapped = false
-        }
-        cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
-        return cell
-        
-        
-    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return DisplayUtility.screenHeight/6.0
-    }
-    // A row is selected
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let currentCell = tableView.cellForRow(at: indexPath)! as! MessagesTableCell
-        var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
-        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
-            messagePositionToMessageIdMapping = [Int:String]()
-            var i = 0
-            for index in filteredPositions {
-                messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
-                i += 1
-            }
-        }
-        
-        if (currentCell.participants?.text)! != "" {
-            singleMessageTitle = (currentCell.participants?.text)!
-        } else {
-            //singleMessageTitle stays as "Conversation"
-        }
-        
-        singleMessageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!
-        messageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!
-        let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!]!
-        switch(necterTypeForMessage) {
-        case "Business":
-            necterTypeColor = DisplayUtility.businessBlue
-        case "Love":
-            necterTypeColor = DisplayUtility.loveRed
-        case "Friendship":
-            necterTypeColor = DisplayUtility.friendshipGreen
-        default:
-            necterTypeColor = DisplayUtility.necterGray
-        }
-        
-        toolbarTapped = false
-        let query: PFQuery = PFQuery(className: "Messages")
-        query.getObjectInBackground(withId: messageId) {
-            (messageObject: PFObject?, error: Error?) in
-            if error != nil {
-                print(error)
-            }
-            else if let messageObject = messageObject {
-                if let _ = messageObject["message_viewed"] {
-                    var whoViewed = messageObject["message_viewed"] as! [String]
-                    if !whoViewed.contains((PFUser.current()?.objectId)!) {
-                        whoViewed.append((PFUser.current()?.objectId)!)
-                        messageObject["message_viewed"] = whoViewed
-                        messageObject.saveInBackground()
-                        //print("1")
-                    }
+            var stringOfNames = ""
+            var users = names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
+            users = users.filter { $0 != PFUser.current()?["name"] as! String }
+            
+            for i in 0 ..< users.count  {
+                var name = users[i]
+                if users.count > 2 && i < users.count - 2 {
+                    var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
+                    stringOfNames = stringOfNames + fullNameArr[0] + ", "
+                    
+                } else if users.count >= 2 && i == users.count - 2 {
+                    var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
+                    stringOfNames = stringOfNames + fullNameArr[0] + " & "
+                    
                 }
                 else {
-                    messageObject["message_viewed"] = [ (PFUser.current()?.objectId)! ]
-                    messageObject.saveInBackground()
+                    if users.count > 1{
+                        name = name.characters.split{$0 == " "}.map(String.init)[0]
+                    }
+                    stringOfNames = stringOfNames + name
                 }
             }
+            
+            cell.participants.text = stringOfNames
+            cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
+            //cell.arrow.text = ">"
+            
+            
+            if messageViewed[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]! {
+                cell.notificationDot.isHidden = true
+            } else {
+                cell.notificationDot.isHidden = false
+            }
+            
+            switch messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!{
+                
+            case "Business":
+                //cell.participants.textColor = DisplayUtility.businessBlue
+                //cell.arrow.textColor = DisplayUtility.businessBlue
+                cell.color = DisplayUtility.businessBlue
+                break
+            case "Love":
+                //cell.participants.textColor = DisplayUtility.loveRed
+                //cell.arrow.textColor = DisplayUtility.loveRed
+                cell.color = DisplayUtility.loveRed
+                break
+            case "Friendship":
+                //cell.participants.textColor = DisplayUtility.friendshipGreen
+                //cell.arrow.textColor = DisplayUtility.friendshipGreen
+                cell.color = DisplayUtility.friendshipGreen
+                break
+            default: cell.participants.textColor = DisplayUtility.friendshipGreen
+            cell.arrow.textColor = DisplayUtility.friendshipGreen
+                
+            }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
+            let calendar = Calendar.current
+            let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
+            let components = (calendar as NSCalendar).components([ .day],
+                                                                 from: date, to: Date(), options: NSCalendar.Options.wrapComponents)
+            if components.day! > 7 {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MM/dd"
+                cell.messageTimestamp.text = dateFormatter.string(from: date)
+            }
+            else if components.day! >= 2 {
+                let calendar = Calendar.current
+                let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
+                let components = (calendar as NSCalendar).components([.weekday],
+                                                                     from: date)
+                cell.messageTimestamp.text = String(getWeekDay(components.weekday!))
+            }
+            else if components.day! >= 1 {
+                cell.messageTimestamp.text = "Yesterday"
+            }
+            else {
+                /*
+                 let dateFormatter = DateFormatter()
+                 dateFormatter.dateFormat = "hh:mm a"
+                 cell.messageTimestamp.text = dateFormatter.string(from: date)
+                 */
+                cell.messageTimestamp.text = "Today"
+            }
+            if indexPath.row == filteredPositions.count - 1 {
+                toolbarTapped = false
+            }
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
+            return cell
+            
+            
         }
-        segueToSingleMessage = true
-        performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
-        
-        
-    }
-    
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return DisplayUtility.screenHeight/6.0
+        }
+        // A row is selected
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            let currentCell = tableView.cellForRow(at: indexPath)! as! MessagesTableCell
+            var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
+            if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
+                messagePositionToMessageIdMapping = [Int:String]()
+                var i = 0
+                for index in filteredPositions {
+                    messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
+                    i += 1
+                }
+            }
+            
+            if (currentCell.participants?.text)! != "" {
+                singleMessageTitle = (currentCell.participants?.text)!
+            } else {
+                //singleMessageTitle stays as "Conversation"
+            }
+            
+            singleMessageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!
+            messageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!
+            let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!]!
+            switch(necterTypeForMessage) {
+            case "Business":
+                necterTypeColor = DisplayUtility.businessBlue
+            case "Love":
+                necterTypeColor = DisplayUtility.loveRed
+            case "Friendship":
+                necterTypeColor = DisplayUtility.friendshipGreen
+            default:
+                necterTypeColor = DisplayUtility.necterGray
+            }
+            
+            toolbarTapped = false
+            let query: PFQuery = PFQuery(className: "Messages")
+            query.getObjectInBackground(withId: messageId) {
+                (messageObject: PFObject?, error: Error?) in
+                if error != nil {
+                    print(error)
+                }
+                else if let messageObject = messageObject {
+                    if let _ = messageObject["message_viewed"] {
+                        var whoViewed = messageObject["message_viewed"] as! [String]
+                        if !whoViewed.contains((PFUser.current()?.objectId)!) {
+                            whoViewed.append((PFUser.current()?.objectId)!)
+                            messageObject["message_viewed"] = whoViewed
+                            messageObject.saveInBackground()
+                            //print("1")
+                        }
+                    }
+                    else {
+                        messageObject["message_viewed"] = [ (PFUser.current()?.objectId)! ]
+                        messageObject.saveInBackground()
+                    }
+                }
+            }
+            segueToSingleMessage = true
+            performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
+            
+            
+        }
 }
+
+

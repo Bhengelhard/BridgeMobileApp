@@ -24,7 +24,6 @@ class DisplayUtility {
     static let necterGray = UIColor(red: 76.0/255.0, green: 76.0/255.0, blue: 77.0/255.0, alpha: 1.0)
     
     //gradient colors
-    static let gradientLayer = CAGradientLayer()
     static let color1 = UIColor(red: 247.0/255.0, green: 237.0/255.0, blue: 144.0/255.0, alpha: 1).cgColor
     static let color2 = UIColor(red: 255.0/255.0, green: 204.0/255.0, blue: 0.0/255.0, alpha: 1).cgColor
     static let color3 = UIColor(red: 243.0/255.0, green: 144.0/255.0, blue: 63.0/255.0, alpha: 1).cgColor
@@ -33,6 +32,7 @@ class DisplayUtility {
     
     
     static func getGradient() -> CAGradientLayer {
+        let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [color1, color2, color3, color4, color5]
         gradientLayer.locations = [0.0, 0.25, 0.5, 0.75, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
