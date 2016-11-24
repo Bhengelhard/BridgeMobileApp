@@ -725,7 +725,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                             color = .black
                         }
                         let status = result["\(otherUser)_bridge_status"] as? String
-                        let newMatch = NewMatch(objectId: objectId!, profilePicURL: profilePicURL!, name: name, type: type, color: color, dot: dot, status: status)
+                        let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURL!, name: name, type: type, color: color, dot: dot, status: status)
                         self.newMatchesView.addNewMatch(newMatch: newMatch)
                         self.tableView.tableHeaderView = self.newMatchesView
                         

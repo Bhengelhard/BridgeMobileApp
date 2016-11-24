@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import Parse
 
 class AcceptIgnoreViewController: UIViewController {
     
     var newMatch: NewMatch?
     let exitButton = UIButton()
+    let acceptButton = UIButton()
+    let ignoreButton = UIButton()
     
     func setNewMatch(newMatch: NewMatch) {
         self.newMatch = newMatch
@@ -38,10 +41,12 @@ class AcceptIgnoreViewController: UIViewController {
         line.backgroundColor = .white
         view.addSubview(line)
         
-        let acceptButton = UIButton()
         acceptButton.frame = CGRect(x: 0.2828*DisplayUtility.screenWidth, y: line.frame.maxY + 0.035*DisplayUtility.screenHeight, width: 0.1823*DisplayUtility.screenWidth, height: 0.0456*DisplayUtility.screenHeight)
         acceptButton.setTitle("accept", for: .normal)
         acceptButton.backgroundColor = .black
+        acceptButton.setTitleColor(.white, for: .normal)
+        acceptButton.setTitleColor(.white, for: .normal)
+        acceptButton.setTitleColor(.red, for: .highlighted)
         acceptButton.titleLabel?.textColor = .white
         acceptButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 18)
         acceptButton.layer.cornerRadius = 0.1*acceptButton.frame.height
@@ -58,7 +63,6 @@ class AcceptIgnoreViewController: UIViewController {
         acceptButton.layer.addSublayer(gradient1)
         view.addSubview(acceptButton)
         
-        let ignoreButton = UIButton()
         ignoreButton.frame = CGRect(x: 0.527*DisplayUtility.screenWidth, y: acceptButton.frame.minY, width: acceptButton.frame.width, height: acceptButton.frame.height)
         ignoreButton.setTitle("ignore", for: .normal)
         ignoreButton.backgroundColor = .black
@@ -79,6 +83,9 @@ class AcceptIgnoreViewController: UIViewController {
         view.addSubview(ignoreButton)
         
         if let newMatch = newMatch {
+            acceptButton.addTarget(self, action: #selector(accept(_:)), for: .touchUpInside)
+            ignoreButton.addTarget(self, action: #selector(ignore(_:)), for: .touchUpInside)
+            
             let profilePicView = UIImageView()
             profilePicView.frame = CGRect(x: 0.0725*DisplayUtility.screenWidth, y: acceptButton.frame.maxY + 0.035*DisplayUtility.screenHeight, width: 0.855*DisplayUtility.screenWidth, height: 0.855*DisplayUtility.screenWidth)
             let downloader = Downloader()
@@ -137,8 +144,92 @@ class AcceptIgnoreViewController: UIViewController {
             profilePicView.addSubview(statusLabel)
         }
     }
-    
+
     func dismissVC(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func accept(_ sender: UIButton) {
+        acceptButton.setTitleColor(.red, for: .normal)
+        if let newMatch = newMatch {
+            let query: PFQuery = PFQuery(className: "BridgePairings")
+            query.whereKey("objectId", equalTo: newMatch.objectId)
+            query.limit = 1
+            query.findObjectsInBackground(block: { (results, error) -> Void in
+                if let error = error {
+                    print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+                }
+                else if let results = results {
+                    if results.count > 0 {
+                        let result = results[0]
+                        result["\(newMatch.user)_response"] = 1
+                        result.saveInBackground()
+                        let otherUser = newMatch.user == "user1" ? "user2" : "user1"
+                        if result["\(otherUser)_response"] as! Int == 1 {
+                            print("creating message")
+                            let message = PFObject(className: "Messages")
+                            message["names_in_messages"] = [
+                                result["\(newMatch.user)_name"],
+                                result["\(otherUser)_name"]
+                            ]
+                            message["message_type"] = result["bridge_type"]
+                            if newMatch.user == "user1" {
+                                message["ids_in_message"] = [
+                                    result["user_objectId1"],
+                                    result["user_objectId2"]
+                                ]
+                            } else {
+                                message["ids_in_message"] = [
+                                    result["user_objectId2"],
+                                    result["user_objectId1"]
+                                ]
+                            }
+                            message["no_of_single_messages"] = 1
+                            message["profile_picture_urls"] = [
+                                result["\(newMatch.user)_profile_picture_url"],
+                                result["\(otherUser)_profile_picture_url"]
+                            ]
+                            message["user1_objectId"] = (message["ids_in_message"] as! [String])[0]
+                            message["user2_objectId"] = (message["ids_in_message"] as! [String])[1]
+                            message["user1_name"] = result["\(newMatch.user)_name"]
+                            message["user2_name"] = result["\(otherUser)_name"]
+                            message["user1_profile_picture_url"] = result["\(newMatch.user)_profile_picture_url"]
+                            message["user2_profile_picture_url"] = result["\(otherUser)_profile_picture_url"]
+                            message["message_viewed"] = [String]()
+                            message.saveInBackground()
+                        }
+                        
+                    }
+                }
+            })
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+            self.dismiss(animated: true, completion: nil)
+        })
+    }
+    
+    func ignore(_ sender: UIButton) {
+        ignoreButton.setTitleColor(.red, for: .normal)
+        if let newMatch = newMatch {
+            let query: PFQuery = PFQuery(className: "BridgePairings")
+            query.whereKey("objectId", equalTo: newMatch.objectId)
+            query.limit = 1
+            query.findObjectsInBackground(block: { (results, error) -> Void in
+                if let error = error {
+                    print("refresh findObjectsInBackgroundWithBlock error - \(error)")
+                }
+                else if let results = results {
+                    if results.count > 0 {
+                        let result = results[0]
+                        result["\(newMatch.user)_response"] = 2
+                        result.saveInBackground()
+                    }
+                    
+                }
+            })
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+            self.dismiss(animated: true, completion: nil)
+        })
     }
 }

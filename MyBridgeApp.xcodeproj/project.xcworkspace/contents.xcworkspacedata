@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "absolute:../MyBridgeApp">
+      location = "absolute:Users/Dolitsky_Doug/Documents/Douglas_Penn/Necter/BridgeMobileApp">
    </FileRef>
 </Workspace>
