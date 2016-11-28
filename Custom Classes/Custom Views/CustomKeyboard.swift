@@ -82,6 +82,11 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageView.frame.origin.y = DisplayUtility.screenHeight - messageView.frame.height
         //messageView.removeFromSuperview()
     }
+    func remove() {
+        messageTextView.resignFirstResponder()
+        messageView.frame.origin.y = DisplayUtility.screenHeight
+        messageView.removeFromSuperview()
+    }
     
     func updatePostType(updatedPostType: String){
         type = updatedPostType

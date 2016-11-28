@@ -902,7 +902,7 @@ class BridgeViewController: UIViewController {
         view.addSubview(backgroundView)
     }
     func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
-        //missionControlView.drag(gestureRecognizer: gestureRecognizer)
+        missionControlView.drag(gestureRecognizer: gestureRecognizer)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -944,7 +944,7 @@ class BridgeViewController: UIViewController {
         view.addSubview(missionControlView)
         missionControlView.bringSubview(toFront: view)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
-        missionControlView.addGestureRecognizer(gestureRecognizer: gestureRecognizer)
+        missionControlView.addGestureRecognizer(gestureRecognizer)
         //missionControlView.displayPostRequest()
     }
     override func viewDidLayoutSubviews() {

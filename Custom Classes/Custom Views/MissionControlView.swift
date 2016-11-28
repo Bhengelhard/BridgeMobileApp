@@ -15,28 +15,37 @@ class MissionControlView: UIView{
     var currentView = UIView()
     var isMessagesViewController = Bool()
     
-    //var tabView = UIView()
-    //let tabViewButton = UIButton()
-    //var filtersButton = UIButton()
+    //Post A Request and Filter Views
     var categoriesView = UIView()
     let categoriesLabel = UILabel()
     let postARequestView = UIView()
     let postBackgroundView = UIView()
+    let businessButton = UIButton()
+    let loveButton = UIButton()
+    let friendshipButton = UIButton()
+    //var isCategoriesViewDisplayed = Bool()
+    //var isPostViewDisplayed = Bool()
+    var customKeyboardHeight = CGFloat()
     var position = 0
+    
+    //Trending Views
     var trendingButton = UIButton()
     let trendingOptionsView = UIView()
     let dividingLine = UIView()
     let trendingLabel = UILabel()
-    //var blurOverViewController = UIView()
+    let trendingCarrot = UIImageView()
+    let blackBackgroundView = UIView()
+    var top6Options = [Int: [Any]]()
     
-    let businessButton = UIButton()
-    let loveButton = UIButton()
-    let friendshipButton = UIButton()
+    //TrendingOptionButtons
+    let trendingOption0 = UIButton()
+    let trendingOption1 = UIButton()
+    let trendingOption2 = UIButton()
+    let trendingOption3 = UIButton()
+    let trendingOption4 = UIButton()
+    let trendingOption5 = UIButton()
     
-    var isCategoriesViewDisplayed = Bool()
-    var isPostViewDisplayed = Bool()
-    
-    var customKeyboardHeight = CGFloat()
+    let initialFrameY = 0.94322*DisplayUtility.screenHeight
     
     override init (frame: CGRect) {
         super.init(frame: frame)
@@ -54,16 +63,28 @@ class MissionControlView: UIView{
         //Setting the frame of the missionControlView
         //self.frame = view.frame
         
+        //tabViewButton.removeTarget(self, action: #selector(showCategoriesView(_:)), for: .touchUpInside)
+        //tabViewButton.addTarget(self,action:#selector(showPostView(_:)), for: .touchUpInside)
+
+        
+        
         //setting global variables
         currentView = view
         self.isMessagesViewController = isMessagesViewController
+        self.frame = CGRect(x: 0, y: initialFrameY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         
-        //tabViewButton.removeTarget(self, action: #selector(showCategoriesView(_:)), for: .touchUpInside)
-        //tabViewButton.addTarget(self,action:#selector(showPostView(_:)), for: .touchUpInside)
+        blackBackgroundView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+        blackBackgroundView.backgroundColor = UIColor.black
+        blackBackgroundView.alpha = 0
+        self.addSubview(blackBackgroundView)
         
+        
+        /*(categoriesView.frame.size = CGSize(width: 0.9651*DisplayUtility.screenWidth, height: 0.10626*DisplayUtility.screenHeight)
+        categoriesView.center.x = currentView.center.x
+        categoriesView.frame.origin.y = DisplayUtility.screenHeight - 0.5*categoriesView.frame.height*/
         categoriesView.frame.size = CGSize(width: 0.9651*DisplayUtility.screenWidth, height: 0.10626*DisplayUtility.screenHeight)
         categoriesView.center.x = currentView.center.x
-        categoriesView.frame.origin.y = DisplayUtility.screenHeight - 0.5*categoriesView.frame.height
+        categoriesView.frame.origin.y = 0
         categoriesView.layer.cornerRadius = 5.5
         categoriesView.layer.masksToBounds = true
         categoriesView.backgroundColor = DisplayUtility.necterGray
@@ -123,8 +144,8 @@ class MissionControlView: UIView{
         categoriesView.addSubview(friendshipButton)
         
         
-        isCategoriesViewDisplayed = false
-        isPostViewDisplayed = false
+        //isCategoriesViewDisplayed = false
+        //isPostViewDisplayed = false
         
     }
     
@@ -183,10 +204,12 @@ class MissionControlView: UIView{
     
     //Initialize Post Request Features, remove PostARequestView in fade to keyboard and AnimateBackground to black as objects move into position
     func displayPostRequest() {
+        
+        position = 2
+        
         //Setting the frame of the MissionControlView on PostRequest
-        self.bringSubview(toFront: currentView)
-        self.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
-        self.backgroundColor = UIColor.black
+        //self.bringSubview(toFront: currentView)
+        //self.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         
         //Add Arrow
         let arrow = UIImageView(frame: CGRect(x: 0.026*self.frame.width, y: 0.03962*self.frame.height, width: 0.0532*self.frame.width, height: 0.02181*self.frame.height))
@@ -198,11 +221,11 @@ class MissionControlView: UIView{
         requestLabel.text = "Request"
         requestLabel.textColor = UIColor.white
         requestLabel.textAlignment = NSTextAlignment.right
-        requestLabel.font = UIFont(name: "BentonSans-Light", size: 47.5)
+        requestLabel.font = UIFont(name: "BentonSans-Light", size: 45)
         self.addSubview(requestLabel)
         
         //Setting trending label
-        trendingLabel.frame = CGRect(x: 0.02573*DisplayUtility.screenWidth, y: 0.28213*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.04*DisplayUtility.screenHeight)
+        trendingLabel.frame = CGRect(x: 0.02573*DisplayUtility.screenWidth, y: 0.28812*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.04*DisplayUtility.screenHeight)
         trendingLabel.text = "Trending"
         trendingLabel.textColor = UIColor.white
         trendingLabel.font = UIFont(name: "BentonSans-Light", size: 22.5)
@@ -211,10 +234,11 @@ class MissionControlView: UIView{
         //Setting trending options
         setTrendingOptions()
         
-        //Set Menu Carrot
-        let menuCarrot = UIImageView(frame: CGRect(x: 0.9015*self.frame.width, y: 0.28812*self.frame.height, width: 0.06037*self.frame.width, height: 0.01748*self.frame.height))
-        menuCarrot.image = UIImage(named: "Down_Carrot")
-        self.addSubview(menuCarrot)
+        //Set Menu Carrot for Trending Feature
+        trendingCarrot.frame = CGRect(x: 0.9015*self.frame.width, y: 0, width: 0.06037*self.frame.width, height: 0.01748*self.frame.height)
+        trendingCarrot.frame.origin.y = trendingLabel.frame.maxY - trendingCarrot.frame.height
+        trendingCarrot.image = UIImage(named: "Down_Carrot")
+        self.addSubview(trendingCarrot)
 
         //Setting Dividing Line
         dividingLine.frame = CGRect(x: 0, y: 0.33787*DisplayUtility.screenHeight, width: 0.92842*DisplayUtility.screenWidth, height: 0.5)
@@ -282,27 +306,214 @@ class MissionControlView: UIView{
     @objc func friendshipTapped(_ sender: UIButton) {
         toggleFilters(type: "Friendship")
     }
+    
+    //Setting the trending Options
+    func setTrendingOptions() {
+        trendingOptionsView.frame = CGRect(x: 0, y: 0.17325*self.frame.height, width: self.frame.width /*categoriesView.frame.width*/, height: 0.1574*self.frame.height)
+        trendingButton.frame.origin.y += trendingOptionsView.frame.height
+        //trendingOptionsView.backgroundColor = UIColor.green
+        trendingOptionsView.isHidden = true
+        self.addSubview(trendingOptionsView)
+        
+        trendingOption0.frame = CGRect(x: 0.02824*self.frame.width, y: 0, width: 0.465*self.frame.width, height: 0.04558*self.frame.height)
+        trendingOption0.layer.borderWidth = 1.5
+        trendingOption0.layer.cornerRadius = 5.5
+        trendingOption0.setTitleColor(UIColor.white, for: .normal)
+        trendingOption0.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
+        trendingOption0.titleLabel?.textAlignment = NSTextAlignment.center
+        trendingOption0.backgroundColor = UIColor.clear
+        trendingOption0.tag = 0
+        trendingOption0.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+        trendingOptionsView.addSubview(trendingOption0)
+        
+        trendingOption1.frame = CGRect(x: 0.02824*self.frame.width, y: 0.05609*self.frame.height, width: 0.465*self.frame.width, height: 0.04558*self.frame.height)
+        trendingOption1.layer.borderWidth = 1.5
+        trendingOption1.layer.cornerRadius = 5.5
+        trendingOption1.setTitleColor(UIColor.white, for: .normal)
+        trendingOption1.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
+        trendingOption1.titleLabel?.textAlignment = NSTextAlignment.center
+        trendingOption1.backgroundColor = UIColor.clear
+        trendingOption1.tag = 1
+        trendingOption1.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+        trendingOptionsView.addSubview(trendingOption1)
+ 
+        trendingOption2.frame = CGRect(x: 0.02824*self.frame.width, y: 0.11218*self.frame.height, width: 0.465*self.frame.width, height: 0.04558*self.frame.height)
+        trendingOption2.layer.borderWidth = 1.5
+        trendingOption2.layer.cornerRadius = 5.5
+        trendingOption2.setTitleColor(UIColor.white, for: .normal)
+        trendingOption2.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
+        trendingOption2.titleLabel?.textAlignment = NSTextAlignment.center
+        trendingOption2.backgroundColor = UIColor.clear
+        trendingOption2.tag = 2
+        trendingOption2.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+        trendingOptionsView.addSubview(trendingOption2)
+      
+        trendingOption3.frame = CGRect(x: 0.50544*self.frame.width, y: 0, width: 0.465*self.frame.width, height: 0.04558*self.frame.height)
+        trendingOption3.layer.borderWidth = 1.5
+        trendingOption3.layer.cornerRadius = 5.5
+        trendingOption3.setTitleColor(UIColor.white, for: .normal)
+        trendingOption3.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
+        trendingOption3.titleLabel?.textAlignment = NSTextAlignment.center
+        trendingOption3.backgroundColor = UIColor.clear
+        trendingOption3.tag = 3
+        trendingOption3.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+        trendingOptionsView.addSubview(trendingOption3)
+    
+        trendingOption4.frame = CGRect(x: 0.50544*self.frame.width, y: 0.05609*self.frame.height, width: 0.465*self.frame.width, height: 0.04558*self.frame.height)
+        trendingOption4.layer.borderWidth = 1.5
+        trendingOption4.layer.cornerRadius = 5.5
+        trendingOption4.setTitleColor(UIColor.white, for: .normal)
+        trendingOption4.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
+        trendingOption4.titleLabel?.textAlignment = NSTextAlignment.center
+        trendingOption4.backgroundColor = UIColor.clear
+        trendingOption4.tag = 4
+        trendingOption4.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+        trendingOptionsView.addSubview(trendingOption4)
+       
+        trendingOption5.frame = CGRect(x: 0.50544*self.frame.width, y: 0.11218*self.frame.height, width: 0.465*self.frame.width, height: 0.04558*self.frame.height)
+        trendingOption5.layer.borderWidth = 1.5
+        trendingOption5.layer.cornerRadius = 5.5
+        trendingOption5.setTitleColor(UIColor.white, for: .normal)
+        trendingOption5.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
+        trendingOption5.titleLabel?.textAlignment = NSTextAlignment.center
+        trendingOption5.backgroundColor = UIColor.clear
+        trendingOption5.tag = 5
+        trendingOption5.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+        trendingOptionsView.addSubview(trendingOption5)
+        
+        
+        let type = whichFilter()
+        getTop6TrendingOptions(type: type)
+        updateTrendingOptions()
+    }
+    
+    func updateTrendingOptions() {
+        trendingOption0.layer.borderColor = (top6Options[0]?[2] as! UIColor).cgColor
+        trendingOption0.setTitle(top6Options[0]?[0] as? String, for: .normal)
+        trendingOption0.setTitleColor(top6Options[0]?[2] as? UIColor, for: .highlighted)
+        
+        trendingOption1.layer.borderColor = (top6Options[1]?[2] as! UIColor).cgColor
+        trendingOption1.setTitle(top6Options[1]?[0] as? String, for: .normal)
+        trendingOption1.setTitleColor(top6Options[1]?[2] as? UIColor, for: .highlighted)
+        
+        trendingOption2.layer.borderColor = (top6Options[2]?[2] as! UIColor).cgColor
+        trendingOption2.setTitle(top6Options[2]?[0] as? String, for: .normal)
+        trendingOption2.setTitleColor(top6Options[2]?[2] as? UIColor, for: .highlighted)
+        
+        trendingOption3.layer.borderColor = (top6Options[3]?[2] as! UIColor).cgColor
+        trendingOption3.setTitle(top6Options[3]?[0] as? String, for: .normal)
+        trendingOption3.setTitleColor(top6Options[3]?[2] as? UIColor, for: .highlighted)
+        
+        trendingOption4.layer.borderColor = (top6Options[4]?[2] as! UIColor).cgColor
+        trendingOption4.setTitle(top6Options[4]?[0] as? String, for: .normal)
+        trendingOption4.setTitleColor(top6Options[4]?[2] as? UIColor, for: .highlighted)
+        
+        trendingOption5.layer.borderColor = (top6Options[5]?[2] as! UIColor).cgColor
+        trendingOption5.setTitle(top6Options[5]?[0] as? String, for: .normal)
+        trendingOption5.setTitleColor(top6Options[5]?[2] as? UIColor, for: .highlighted)
+    }
+    
+    func trendingOptionTapped (_ sender: UIButton) {
+        print("trendingOptionTapped")
+        
+        //Adding the corresponding text to the CustomKeyboard.messageTextView
+        if let trendingOptionText = top6Options[sender.tag]?[1] as? String {
+            print(trendingOptionText)
+            customKeyboard.messageTextView.text = trendingOptionText
+            customKeyboard.updatePlaceholder()
+            customKeyboard.updateMessageHeights()
+        }
+        
+        //Changing the button selection to the type of the trendingOption selected
+        if let trendingOptionType = top6Options[sender.tag]?[2] as? UIColor {
+            var type = String()
+            if trendingOptionType == DisplayUtility.businessBlue {
+                businessButton.isSelected = true
+                loveButton.isSelected = false
+                friendshipButton.isSelected = false
+                type = "Business"
+            } else if trendingOptionType == DisplayUtility.loveRed {
+                businessButton.isSelected = false
+                loveButton.isSelected = true
+                friendshipButton.isSelected = false
+                type = "Love"
+            } else if trendingOptionType == DisplayUtility.friendshipGreen {
+                businessButton.isSelected = false
+                loveButton.isSelected = false
+                friendshipButton.isSelected = true
+                type = "Friendship"
+            }
+            //getTop6TrendingOptions(type: type)
+            //updateTrendingOptions()
+        }
+    }
+    
+    //Finding the top 6 trending options and setting an Int: [Any] to each one where int represents the tag of the UIButton and the [Any] Array is set to [button title, text to display in customKeyboard.messageTextView on click of button, color of button]
+    func getTop6TrendingOptions (type: String) {
+        var option1 = [Any]()
+        var option2 = [Any]()
+        var option3 = [Any]()
+        var option4 = [Any]()
+        var option5 = [Any]()
+        var option6 = [Any]()
+        
+        if type == "Business" {
+            option1 = ["Study Group", "I'm looking for some people to study with for one of my classes", DisplayUtility.businessBlue]
+            option2 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
+            option3 = ["Investor", "I am raising money for a venture I am working on", DisplayUtility.businessBlue]
+            option4 = ["Investment", "I am looking to invest in something game-changing", DisplayUtility.businessBlue]
+            option5 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
+            option6 = ["Intern", "I am looking for an intern for a venture I started", DisplayUtility.businessBlue]
+        } else if type == "Love" {
+            option1 = ["Formal Date", "I'm looking for some one to go to a formal with me", DisplayUtility.loveRed]
+            option2 = ["See a Movie", "I want to take a date to see a cool new movie.", DisplayUtility.loveRed]
+            option3 = ["Soulmate", "I'm looking for my soulmate. Set me up with someone awesome!", DisplayUtility.loveRed]
+            option4 = ["Date Night", "I'm looking for someone to go to a date night with me", DisplayUtility.loveRed]
+            option5 = ["Dinner", "I'm looking for someone to go to dinner with me", DisplayUtility.loveRed]
+            option6 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
+        } else if type == "Friendship" {
+            option1 = ["Running Partner", "I am trying to find someone to run with me", DisplayUtility.friendshipGreen]
+            option2 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
+            option3 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
+            option4 = ["Drinking Buddy", "I just want to drink. Anyone else feel the same way?", DisplayUtility.friendshipGreen]
+            option5 = ["Beer Pong Partner", "I'm playing beer pong and need a partner. I could ask a friend, but someone new seems more fun", DisplayUtility.friendshipGreen]
+            option6 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
+        } else {
+            option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
+            option2 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
+            option3 = ["Date Night", "I'm looking for someone to go to a date night with me", DisplayUtility.loveRed]
+            option4 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
+            option5 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
+            option6 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
+        }
+        
+        top6Options = [0: option1, 1: option2, 2: option3, 3: option4, 4: option5, 5: option6]
+    }
+    
     //TrendingButton Selector
     @objc func trendingTapped(_ sender: UIButton) {
         if trendingOptionsView.isHidden {
             trendingOptionsView.isHidden = false
             dividingLine.isHidden = true
             
+            //Adjusting Trending Views
             trendingButton.frame.origin.y = 0.12953*self.frame.height
+            trendingLabel.frame.origin.y = 0.12953*self.frame.height
+            trendingCarrot.frame.origin.y = trendingLabel.frame.maxY - trendingCarrot.frame.height
+            print("Trending was hidden")
             
         } else {
             trendingOptionsView.isHidden = true
             dividingLine.isHidden = false
+            print("Trending was not hidden")
+            
+            //Adjusting Trending Views
+            trendingButton.frame.origin.y = 0.28812*self.frame.height
+            trendingLabel.frame.origin.y = 0.28812*self.frame.height
+            trendingCarrot.frame.origin.y = trendingLabel.frame.maxY - trendingCarrot.frame.height
+            
         }
     }
-    
-    func setTrendingOptions() {
-        trendingOptionsView.frame = CGRect(x: 0.02824*self.frame.width, y: 0.17325*self.frame.height, width: 0.465*self.frame.width, height: 0.1574*self.frame.height)
-        trendingOptionsView.backgroundColor = UIColor.green
-        trendingOptionsView.isHidden = true
-        self.addSubview(trendingOptionsView)
-    }
-    
     
     func toggleFilters(type: String) {
         //updating which toolbar Button is selected
@@ -311,33 +522,33 @@ class MissionControlView: UIView{
             loveButton.isSelected = false
             friendshipButton.isSelected = false
             customKeyboard.updatePostType(updatedPostType: "Business")
+            getTop6TrendingOptions(type: type)
         } else if (type == "Love" && !loveButton.isSelected) {
             loveButton.isSelected = true
             businessButton.isSelected = false
             friendshipButton.isSelected = false
             customKeyboard.updatePostType(updatedPostType: "Love")
+            getTop6TrendingOptions(type: type)
         } else if (type == "Friendship" && !friendshipButton.isSelected) {
             friendshipButton.isSelected = true
             businessButton.isSelected = false
             loveButton.isSelected = false
             customKeyboard.updatePostType(updatedPostType: "Friendship")
+            getTop6TrendingOptions(type: type)
         } else {
             businessButton.isSelected = false
             loveButton.isSelected = false
             friendshipButton.isSelected = false
             customKeyboard.updatePostType(updatedPostType: "All Types")
+            getTop6TrendingOptions(type: "All Types")
         }
         
-        position = 2
+        updateTrendingOptions()
         
         //Filters tapped adjusts the swipeCards when in positions 1 and 2
         if position == 0 || position == 1 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
         }
-    }
-    
-    func addGestureRecognizer(gestureRecognizer: UIPanGestureRecognizer) {
-        categoriesView.addGestureRecognizer(gestureRecognizer)
     }
     
     func whichFilter() -> String {
@@ -351,9 +562,112 @@ class MissionControlView: UIView{
             return "All Types"
         }
     }
+    func drag(gestureRecognizer: UIPanGestureRecognizer) {
+        print("dragged")
+        
+        //set alpha for background
+        let backgroundAlpha = (-1/0.6262)*self.frame.origin.y + (0.2/0.6262) + 1 //(self.frame.origin.y)*(-1/(initialFrameY-0.2))-0.2*(-1/(initialFrameY-0.2))+1
+        
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            let translation = gestureRecognizer.translation(in: self)
+            gestureRecognizer.view?.center = CGPoint(x: (gestureRecognizer.view?.center.x)!, y: max(0,(gestureRecognizer.view?.center.y)! + translation.y))
+            gestureRecognizer.setTranslation(CGPoint.zero, in: self)
+            
+            // Set Upper Limit for Dragging
+            if self.frame.origin.y < 0 {
+                self.frame.origin.y = 0
+                self.blackBackgroundView.alpha = max(min(backgroundAlpha, 0),1)
+                print(self.blackBackgroundView.alpha)
+            }
+            // Set Lower Limit for Dragging
+            else if self.frame.origin.y > 0.94322*DisplayUtility.screenHeight {
+                self.frame.origin.y = 0.94322*DisplayUtility.screenHeight
+                self.blackBackgroundView.alpha = max(min(backgroundAlpha, 0),1)
+                print(self.blackBackgroundView.alpha)
+            }
+        }
+        //Adjusting heights based on if the dragging has ended
+        else if gestureRecognizer.state == .ended {
+            // Close Mission Control
+            if self.frame.origin.y > 0.85*DisplayUtility.screenHeight {
+                //animateCloseMissionControl()
+                customKeyboard.remove()
+                customKeyboard.messageView.removeFromSuperview()
+                //print("animateCloseMissionControl")
+                
+                //create objects and remove objects
+                
+                UIView.animate(withDuration: 0.4) {
+                    //animate positions during drag
+                    self.frame.origin.y = self.initialFrameY
+                    self.blackBackgroundView.alpha = max(min(backgroundAlpha, 0),1)
+                    print(self.blackBackgroundView.alpha)
+                }
+            }
+            //Display Filters View
+            else if self.frame.origin.y > 0.5*DisplayUtility.screenHeight {
+                //animateDisplayCategoriesView()
+                customKeyboard.remove()
+                print("animateDisplayCategoriesView")
+                
+                //create and remove objects
+                
+                UIView.animate(withDuration: 0.4) {
+                    self.frame.origin.y = 0.8282*DisplayUtility.screenHeight
+                    self.blackBackgroundView.alpha = max(min(backgroundAlpha, 0),1)
+                    print(self.blackBackgroundView.alpha)
+                }
+                
+            }
+            //Display Post View
+            else {
+                //animateDisplayPostView()
+                print("animateDisplayPostView")
+                
+                //create and remove objects
+                
+                UIView.animate(withDuration: 0.4) {
+                    self.frame.origin.y = 0
+                    self.blackBackgroundView.alpha = max(min(backgroundAlpha, 0),1)
+                    print(self.blackBackgroundView.alpha)
+                }
+                displayPostRequest()
+            }
+        }
+        
+        
+        /*UIView.animate(withDuration: 0.4) {
+            
+        }*/
+        
+        
+            // Move PostView and CategoriesView with TabView when applicable
+            //            else if tabView.frame.origin.y < DisplayUtility.screenHeight - tabView.frame.height - categoriesView.frame.height{
+            //                if isPostViewDisplayed == false {
+            //                    addPostView()
+            //                }
+            //                if isCategoriesViewDisplayed == false {
+            //                    addCategoriesView()
+            //                }
+            //                categoriesView.frame.origin.y = tabView.frame.origin.y + tabView.frame.height
+            //                postBackgroundView.frame.origin.y = categoriesView.frame.origin.y + categoriesView.frame.height
+            //
+            //            }
+            //            // Move categoriesView with TabView when applicable
+            //            else if tabView.frame.origin.y < DisplayUtility.screenHeight - tabView.frame.height {
+            //                if isCategoriesViewDisplayed == false {
+            //                    addcategoriesView()
+            //                }
+            //                categoriesView.frame.origin.y = tabView.frame.origin.y + tabView.frame.height
+            //            }
+            //
+
+    }
 }
 
-    
+//func addGestureRecognizer(gestureRecognizer: UIPanGestureRecognizer) {
+//    categoriesView.addGestureRecognizer(gestureRecognizer)
+//}
 //    func animateDisplayCategoriesView() {
 //
 //        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
@@ -447,7 +761,7 @@ class MissionControlView: UIView{
 ////        tabViewButton.addTarget(self,action:#selector(showCategoriesView(_:)), for: .touchUpInside)
 //    }
 //
-    func drag(gestureRecognizer: UIPanGestureRecognizer) {
+   /* func drag(gestureRecognizer: UIPanGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             //let tabTranslation = gestureRecognizer.translation(in: tabView)
             //gestureRecognizer.view?.center = CGPoint(x: (gestureRecognizer.view?.center.x)!, y: max(0.85*DisplayUtility.screenWidth,(gestureRecognizer.view?.center.y)! + tabTranslation.y))
@@ -495,7 +809,7 @@ class MissionControlView: UIView{
 //                print("animateDisplayPostView")
 //            }
         }
-    }
+    }*/
 //    }
 //    
     /*let shadowView = UIView(frame: tabView.frame)
