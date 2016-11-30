@@ -941,8 +941,6 @@ class BridgeViewController: UIViewController {
         
         //Create Mission Control
         missionControlView.initialize(view: view, isMessagesViewController: false)
-        view.addSubview(missionControlView)
-        missionControlView.bringSubview(toFront: view)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer)
     }

@@ -17,7 +17,8 @@ class MissionControlView: UIView{
     
     //Filter Views
     var categoriesView = UIView()
-    let categoriesLabel = UILabel()
+    let filterLabel = UILabel()
+    let categoryLabel = UILabel()
     let businessButton = UIButton()
     let loveButton = UIButton()
     let friendshipButton = UIButton()
@@ -62,10 +63,10 @@ class MissionControlView: UIView{
         
         //tabViewButton.removeTarget(self, action: #selector(showCategoriesView(_:)), for: .touchUpInside)
         //tabViewButton.addTarget(self,action:#selector(showPostView(_:)), for: .touchUpInside)
-
         
         //setting global variables
         currentView = view
+        
         self.isMessagesViewController = isMessagesViewController
         self.frame = CGRect(x: 0, y: initialFrameY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         
@@ -73,6 +74,10 @@ class MissionControlView: UIView{
         blackBackgroundView.backgroundColor = UIColor.black
         blackBackgroundView.alpha = 0
         currentView.addSubview(blackBackgroundView)
+        
+        //adding MissionControlView in front of the blackBackgroundView
+        currentView.addSubview(self)
+        self.bringSubview(toFront: currentView)
         
         categoriesView.frame.size = CGSize(width: 0.9651*DisplayUtility.screenWidth, height: 0.10626*DisplayUtility.screenHeight)
         categoriesView.center.x = currentView.center.x
@@ -119,20 +124,21 @@ class MissionControlView: UIView{
         //friendshipButton.setImage(UIImage(named:  "Selected_Friendship_Icon"), for: .highlighted)
         friendshipButton.adjustsImageWhenHighlighted = false
         
-        //Creating Categories View label
-        categoriesLabel.frame = CGRect(x: categoriesView.frame.origin.x + 0.11469*categoriesView.frame.width, y: 0, width: 0.2*DisplayUtility.screenWidth, height: 0.2882*DisplayUtility.screenHeight)
-        categoriesLabel.center.y = categoriesView.center.y
-        categoriesLabel.text = "FILTER"
-        categoriesLabel.font = UIFont(name: "BentonSans-Light", size: 19)
-        categoriesLabel.textColor = UIColor.lightText
-        categoriesLabel.textAlignment = NSTextAlignment.left
-        //Adding subview to self so label can transition off of the categories view
-        self.addSubview(categoriesLabel)
-        
         //Adding categoriesView objects to the categoriesView
         categoriesView.addSubview(businessButton)
         categoriesView.addSubview(loveButton)
         categoriesView.addSubview(friendshipButton)
+        
+        //Creating Filter label
+        filterLabel.frame = CGRect(x: categoriesView.frame.origin.x + 0.11469*categoriesView.frame.width, y: 0, width: 0.4*self.frame.width, height: 0.04*self.frame.height)
+        filterLabel.center.y = categoriesView.center.y
+        filterLabel.text = "FILTER"
+        filterLabel.font = UIFont(name: "BentonSans-Light", size: 19)
+        filterLabel.textColor = UIColor.lightText
+        filterLabel.textAlignment = NSTextAlignment.left
+        //Adding subview to self so label can transition off of the categories view
+        categoriesView.addSubview(filterLabel)
+        
         
         //isCategoriesViewDisplayed = false
         //isPostViewDisplayed = false
@@ -244,6 +250,7 @@ class MissionControlView: UIView{
         trendingLabel.text = "Trending"
         trendingLabel.textColor = UIColor.white
         trendingLabel.font = UIFont(name: "BentonSans-Light", size: 22.5)
+        trendingLabel.textAlignment = NSTextAlignment.left
         trendingButton.addSubview(trendingLabel)
         
         //Set Menu Carrot for Trending Feature
@@ -267,15 +274,13 @@ class MissionControlView: UIView{
         trendingOptionsView.initialize(view: self, keyboard: customKeyboard, button: trendingButton, line: dividingLine)
         trendingOptionsView.frame.origin.y = dividingLine.center.y + trendingButton.frame.origin.y - trendingOptionsView.frame.height
         
-        
-        //fading background to black
-        //self.alpha = 0.0
-        
-        /*//postBackgroundView.frame.size.height = customKeyboardHeight
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowAnimatedContent, animations: {
-            self.alpha = 1.0
-            self.categoriesView.frame.origin.y = self.postBackgroundView.frame.origin.y - self.categoriesView.frame.height
-        })*/
+        //Setting Category Label
+        categoryLabel.frame = CGRect(x: trendingLabel.frame.minX, y: self.frame.minY - 0.05179*self.frame.height, width: 0.4*self.frame.width, height: 0.04*self.frame.height)
+        categoryLabel.text = "Category"
+        categoryLabel.font = UIFont(name: "BentonSans-Light", size: 22.5)
+        categoryLabel.textColor = UIColor.white
+        categoryLabel.textAlignment = NSTextAlignment.left
+        blackBackgroundView.addSubview(categoryLabel)
         
     }
     
@@ -372,8 +377,15 @@ class MissionControlView: UIView{
                 //categoriesLabel.frame.origin.y = 0.35713*self.frame.height
             }
             
+            //setting alphas based on change in background color to black
+            let backgroundAlpha = min(max(-5.9453*((self.frame.minY + categoriesView.frame.minY)/self.frame.height) + 4.9239, 0),1)
+            blackBackgroundView.alpha = backgroundAlpha
+            requestLabel.alpha = backgroundAlpha
+            arrow.alpha = backgroundAlpha
+            trendingButton.alpha = backgroundAlpha
+            categoryLabel.alpha = backgroundAlpha
+            filterLabel.alpha = 1 - backgroundAlpha
             
-            var backgroundAlpha:CGFloat = 0.0
             let vel = gestureRecognizer.velocity(in: self)
             //User is dragging up
             if vel.y < 0 {
@@ -381,10 +393,15 @@ class MissionControlView: UIView{
                 if self.frame.minY < 0.94322*DisplayUtility.screenHeight && self.frame.minY > 0.40892*self.frame.height{
                     trendingButton.frame.origin.y += translation.y
                     requestLabel.frame.origin.y += translation.y
-                    //categoriesLabel.frame.origin.y += translation.y
-                    //categoriesView.frame.origin.y += translation.y
+                    categoryLabel.frame.origin.y += translation.y
                     customKeyboard.messageView.frame.origin.y += translation.y
                 }
+                if loveButton.center.x > categoriesView.center.x && filterLabel.alpha == 0 {
+                    loveButton.frame.origin.x -= 1
+                    businessButton.frame.origin.x -= 1
+                    friendshipButton.frame.origin.x -= 1
+                }
+                
             }
                 //User is dragging down
             else if vel.y > 0 {
@@ -393,33 +410,28 @@ class MissionControlView: UIView{
                 if self.frame.minY < initialFrameY {
                     trendingButton.frame.origin.y += translation.y
                     requestLabel.frame.origin.y += translation.y
-                    //categoriesLabel.frame.origin.y += translation.y
-                    //categoriesView.frame.origin.y += translation.y
+                    categoryLabel.frame.origin.y += translation.y
                     customKeyboard.messageView.frame.origin.y += translation.y
                     customKeyboard.messageTextView.resignFirstResponder()
                 }
-            }
-            
-            //setting alphas based on change in background color to black
-            backgroundAlpha = -5.9453*((self.frame.minY + categoriesView.frame.minY)/self.frame.height) + 4.9239
-            blackBackgroundView.alpha = min(max(backgroundAlpha, 0),1)
-            requestLabel.alpha = min(max(backgroundAlpha, 0),1)
-            arrow.alpha = min(max(backgroundAlpha, 0),1)
-            trendingButton.alpha = min(max(backgroundAlpha, 0),1)
-            
-            
-            
-            //Adjust Category View when dragging past it's spot in the postView
-            if self.frame.minY < 0.40892*DisplayUtility.screenHeight && position != 2 {
-                print("Adjust on the way dragging up")
-                categoriesView.frame.origin.y = 0.40892*DisplayUtility.screenHeight - self.frame.minY
-            } else {
                 
+                if loveButton.frame.minX < 0.5474*DisplayUtility.screenWidth && filterLabel.alpha == 0 {
+                    loveButton.frame.origin.x += 1
+                    businessButton.frame.origin.x += 1
+                    friendshipButton.frame.origin.x += 1
+                }
             }
             
-            if categoriesView.frame.minY > 0 {
-                categoriesLabel.frame.origin.y = (categoriesView.frame.minY - 0.0517*self.frame.height - categoriesView.center.y)*backgroundAlpha + categoriesView.center.y
+            
+            
+            //Adjust Category View when dragging past CategoriesView's y placement in the postView
+            if self.frame.minY < 0.40892*DisplayUtility.screenHeight && position != 2 {
+                categoriesView.frame.origin.y = 0.40892*DisplayUtility.screenHeight - self.frame.minY
+                //categoriesLabel.frame.origin.y = 0.35713*DisplayUtility.screenHeight
+                print(1)
             }
+            
+            
             
             
             //Set upper and lower limits for dragging the postARequestView
@@ -432,8 +444,6 @@ class MissionControlView: UIView{
                     postARequestView.frame.size.width += 1
                 } else {
                     customKeyboard.messageView.alpha = 1
-                    print("should be shown now")
-                    print(customKeyboard.messageView.frame.minY)
                 }
                 
                 let maskPath = UIBezierPath(roundedRect: postARequestView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5.5, height: 5.5))
@@ -441,9 +451,6 @@ class MissionControlView: UIView{
                 postARequestViewShape.path = maskPath.cgPath
                 postARequestView.layer.mask = postARequestViewShape
                 
-                /*UIView.animate(withDuration: 0.1, animations: {
-                    self.postARequestView.alpha = 0
-                })*/
             } else {
                 postARequestView.center.x = self.center.x
                 if postARequestView.frame.width > categoriesView.frame.width {
@@ -462,21 +469,12 @@ class MissionControlView: UIView{
             // Close Mission Control
             if (wasDraggedUp < 5 && (position == 0 || position == 2)) || self.frame.origin.y > 0.9*DisplayUtility.screenHeight {
                 position = 0
-                //animateCloseMissionControl()
-                //customKeyboard.remove()
-                //customKeyboard.messageView.removeFromSuperview()=
-                //create objects and remove objects
                 trendingButton.isEnabled = false
                 UIView.animate(withDuration: 0.4) {
 
                     //reorienting the categories View with filters
                     self.frame.origin.y = self.initialFrameY
                     self.categoriesView.frame.origin.y = 0
-                    self.categoriesLabel.frame = CGRect(x: self.categoriesView.frame.origin.x + 0.11469*self.categoriesView.frame.width, y: 0, width: 0.2*DisplayUtility.screenWidth, height: 0.2882*DisplayUtility.screenHeight)
-                    self.categoriesLabel.center.y = self.categoriesView.center.y
-                    self.categoriesLabel.text = "FILTER"
-                    self.categoriesLabel.font = UIFont(name: "BentonSans-Light", size: 19)
-                    self.categoriesLabel.textColor = UIColor.lightText
                     self.businessButton.frame.origin.x = 0.37932*DisplayUtility.screenWidth
                     self.loveButton.frame.origin.x = 0.5474*DisplayUtility.screenWidth
                     self.friendshipButton.frame.origin.x = 0.7195*DisplayUtility.screenWidth
@@ -493,12 +491,15 @@ class MissionControlView: UIView{
                     //repositionPostView
                     self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
                     self.trendingButton.frame.origin.y = self.frame.minY - 0.12772*self.frame.height
+                    self.categoryLabel.frame.origin.y = self.frame.minY - 0.05179*self.frame.height
 
                     self.blackBackgroundView.alpha = 0
                     self.requestLabel.alpha = 0
                     self.arrow.alpha = 0
                     self.trendingButton.alpha = 0
                     self.postARequestView.alpha = 1
+                    self.filterLabel.alpha = 1
+                    self.categoryLabel.alpha = 0
                     
                 }
             }
@@ -515,11 +516,6 @@ class MissionControlView: UIView{
                     //reorienting the categories View with filters
                     self.frame.origin.y = 0.8282*DisplayUtility.screenHeight
                     self.categoriesView.frame.origin.y = 0
-                    self.categoriesLabel.frame = CGRect(x: self.categoriesView.frame.origin.x + 0.11469*self.categoriesView.frame.width, y: 0, width: 0.2*DisplayUtility.screenWidth, height: 0.2882*DisplayUtility.screenHeight)
-                    self.categoriesLabel.center.y = self.categoriesView.center.y
-                    self.categoriesLabel.text = "FILTER"
-                    self.categoriesLabel.font = UIFont(name: "BentonSans-Light", size: 19)
-                    self.categoriesLabel.textColor = UIColor.lightText
                     self.businessButton.frame.origin.x = 0.37932*DisplayUtility.screenWidth
                     self.loveButton.frame.origin.x = 0.5474*DisplayUtility.screenWidth
                     self.friendshipButton.frame.origin.x = 0.7195*DisplayUtility.screenWidth
@@ -536,12 +532,15 @@ class MissionControlView: UIView{
                     //repositionPostView
                     self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
                     self.trendingButton.frame.origin.y = self.frame.minY - 0.12772*self.frame.height
+                    self.categoryLabel.frame.origin.y = self.frame.minY - 0.05179*self.frame.height
                     
                     self.blackBackgroundView.alpha = 0
                     self.requestLabel.alpha = 0
                     self.arrow.alpha = 0
                     self.trendingButton.alpha = 0
                     self.postARequestView.alpha = 1
+                    self.filterLabel.alpha = 1
+                    self.categoryLabel.alpha = 0
                 }
                 
             }
@@ -554,7 +553,7 @@ class MissionControlView: UIView{
                 
                 trendingButton.isEnabled = true
                 
-                categoriesLabel.font = UIFont(name: "BentonSans-Light", size: 22.5)
+                //categoriesLabel.font = UIFont(name: "BentonSans-Light", size: 22.5)
                 
                 let distanceBetweenButtons = businessButton.center.x - loveButton.center.x
                 
@@ -563,9 +562,7 @@ class MissionControlView: UIView{
                     self.frame.origin.y = 0
                     self.categoriesView.frame.origin.y = 0.40892*DisplayUtility.screenHeight
                     //Adjusting the CategoriesLabel - this moves off of the categoriesView and onto the black background
-                    self.categoriesLabel.frame = CGRect(x: 0.02573*self.frame.width, y: 0.35713*self.frame.height, width: 0.4*self.frame.width, height: 0.04*self.frame.height)
-                    self.categoriesLabel.text = "Category"
-                    self.categoriesLabel.textColor = UIColor.white
+                    self.categoryLabel.frame.origin.y = 0.35713*self.frame.height
                     
                     //Adjusting the Buttons on the Categories View
                     self.loveButton.center.x = self.categoriesView.center.x
@@ -580,6 +577,8 @@ class MissionControlView: UIView{
                     self.requestLabel.alpha = 1
                     self.requestLabel.frame.origin.y = 0.04968*self.frame.height
                     self.arrow.alpha = 1
+                    self.filterLabel.alpha = 0
+                    self.categoryLabel.alpha = 1
                     
                     self.frame.origin.y = 0
                 }
