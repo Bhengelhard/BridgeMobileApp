@@ -101,9 +101,9 @@ class HalfSwipeCard: UIView {
                 
             }
         }
-
+        layoutHalfCard(name: name, status: status, photoView: photoView, connectionType: connectionType)
         
-        
+        /*
         //downloader.imageFromURL(URL: URL(string: photoURL)!, imageView: photoView)
         self.addSubview(photoView)
         
@@ -147,9 +147,58 @@ class HalfSwipeCard: UIView {
             statusLabel.textAlignment = NSTextAlignment.center
             self.addSubview(statusLabel)
         }
+         */
         
     }
+    
+    func layoutHalfCard(name: String, status: String, photoView: UIImageView, connectionType: String) {
+        //downloader.imageFromURL(URL: URL(string: photoURL)!, imageView: photoView)
+        self.addSubview(photoView)
+        
+        let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.width, y: 0.68*self.frame.height, width: 0.056*DisplayUtility.screenHeight, height: 0.056*DisplayUtility.screenHeight))
+        let typeImageName = "\(connectionType)_Card_Icon"
+        connectionTypeIcon.image = UIImage(named: typeImageName)
+        self.addSubview(connectionTypeIcon)
+        
+        let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
+        nameLabel.center.y = connectionTypeIcon.center.y
+        nameLabel.text = firstNameLastNameInitial(name: name)
+        nameLabel.textColor = UIColor.white
+        nameLabel.font = UIFont(name: "BentonSans-Bold", size: 22)
+        nameLabel.textAlignment = NSTextAlignment.left
+        nameLabel.layer.shadowOpacity = 0.5
+        nameLabel.layer.shadowRadius = 0.5
+        nameLabel.layer.shadowColor = UIColor.black.cgColor
+        nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
+        self.addSubview(nameLabel)
+        
+        if status != "" {
+            let statusTextView = UITextView(frame: CGRect(x: 0, y: connectionTypeIcon.frame.origin.y + connectionTypeIcon.frame.height, width: self.frame.width, height: 0.08*self.frame.height)) // this height needs to change based on text input
+            let displayUtility = DisplayUtility()
+            statusTextView.backgroundColor = UIColor.black
+            statusTextView.layer.opacity = 0.6
+            statusTextView.text = "This is the status"//status
+            statusTextView.textContainer.maximumNumberOfLines = 2
+            statusTextView.font = UIFont(name: "BentonSans-Light", size: 15)
+            statusTextView.textColor = UIColor.white
+            statusTextView.textAlignment = NSTextAlignment.center
+            statusTextView.textContainerInset = UIEdgeInsetsMake(4, 12, 4, 12)
+            statusTextView.isUserInteractionEnabled = false
+            displayUtility.setViewHeightFromContent(view: statusTextView)
+            statusTextView.text = ""
+            self.addSubview(statusTextView)
+            
+            let statusLabel = UILabel(frame: statusTextView.frame)
+            statusLabel.text = status
+            statusLabel.textColor = UIColor.white
+            statusLabel.font = UIFont(name: "BentonSans-Light", size: 15)
+            statusLabel.textAlignment = NSTextAlignment.center
+            self.addSubview(statusLabel)
+        }
+    }
+    
     func callbackToSetPhoto(_ image: UIImage) -> Void {
+        print("got the photo")
         photo = image
     }
     func firstNameLastNameInitial (name: String) -> String{

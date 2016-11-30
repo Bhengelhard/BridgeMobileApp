@@ -598,9 +598,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
         newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)*/
-        
-        newMatchesView.setViewController(vc: self)
-        
+                
         loadNewMatches()
         
         tableView.tableHeaderView = newMatchesView
@@ -679,6 +677,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func loadNewMatches() {
         print("loading new matches")
+        newMatchesView = NewMatchesView()
+        newMatchesView.setVC(vc: self)
+        
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("bridged", equalTo: true)
         query.limit = 10000
@@ -709,7 +710,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                     }
                     if user != "" && result["\(user)_response"] as! Int != 1 {
-                        let profilePicURL = URL(string: result["\(otherUser)_profile_picture_url"] as! String)                        
+                        let profilePicURL = result["\(otherUser)_profile_picture_url"] as! String
                         let name = result["\(otherUser)_name"] as! String
                         let dot = result["\(user)_response"] as! Int == 0
                         let type = result["bridge_type"] as! String
@@ -724,8 +725,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         default:
                             color = .black
                         }
-                        let status = result["\(otherUser)_bridge_status"] as? String
-                        let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURL!, name: name, type: type, color: color, dot: dot, status: status)
+                        let status = result["\(otherUser)_bridge_status"] as! String
+                        let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURL, name: name, type: type, color: color, dot: dot, status: status)
+                        let connecterName = result["connecter_name"] as? String
+                        let connecterPicURL = result["connecter_profile_picture_url"] as? String
+                        let reasonForConnection = result["reason_for_connection"] as? String
+                        newMatch.setConnecterInfo(name: connecterName, profilePicURL: connecterPicURL, reasonForConnection: reasonForConnection)
                         self.newMatchesView.addNewMatch(newMatch: newMatch)
                         self.tableView.tableHeaderView = self.newMatchesView
                         
@@ -823,9 +828,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
                 stringOfNames = stringOfNames + fullNameArr[0] + " & "
                 
-            }
-            else {
-                if users.count > 1{
+            } else {
+                if users.count > 1 {
                     name = name.characters.split{$0 == " "}.map(String.init)[0]
                 }
                 stringOfNames = stringOfNames + name

@@ -40,6 +40,31 @@ class DisplayUtility {
         return gradientLayer
     }
     
+    static func gradientButton(text: String, frame: CGRect) -> UIButton {
+        let button = UIButton(frame: frame)
+        button.setTitle(text, for: .normal)
+        button.backgroundColor = .clear
+        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.red, for: .highlighted)
+        button.titleLabel?.textColor = .white
+        button.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 18)
+        button.layer.cornerRadius = 0.2*button.frame.height
+        button.clipsToBounds = true
+        
+        let shape = CAShapeLayer()
+        shape.lineWidth = 2
+        shape.path = UIBezierPath(roundedRect: button.bounds, cornerRadius: button.layer.cornerRadius).cgPath
+        shape.strokeColor = UIColor.black.cgColor
+        shape.fillColor = UIColor.clear.cgColor
+        let gradient = getGradient()
+        gradient.frame = button.bounds
+        gradient.mask = shape
+        button.layer.addSublayer(gradient)
+        
+        return button
+    }
+    
     //This is a helper function for the BridgeViewController to display a message when there are no more cards to display
     
     func displayNoMoreCards(view: UIView, businessButton: UIButton, loveButton: UIButton, friendshipButton: UIButton, displayNoMoreCardsLabel: UILabel?) {
