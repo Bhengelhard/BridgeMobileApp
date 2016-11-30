@@ -64,7 +64,7 @@ class AcceptIgnoreView: UIView {
         
         let halfCard = HalfSwipeCard()
         //halfCard.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.85*frame.width, height: 0.85*frame.width)
-        halfCard.frame = CGRect(x: 2, y: 2, width: cardBackground.frame.width-4, height: cardBackground.frame.width-4)
+        halfCard.frame = CGRect(x: 0, y: 0, width: cardBackground.frame.width, height: cardBackground.frame.width)
         
         let name = self.firstNameLastNameInitial(name: newMatch.name)
         
@@ -102,7 +102,7 @@ class AcceptIgnoreView: UIView {
             downloader.imageFromURL(URL: url, imageView: connecterProfilePicView, callBack: nil)
             connecterProfilePicView.frame = CGRect(x: halfCard.frame.minX + 0.0953*frame.width, y: halfCard.frame.maxY + 0.02*frame.height, width: 0.168*frame.width, height: 0.168*frame.width)
             connecterProfilePicView.layer.cornerRadius = connecterProfilePicView.frame.height/2
-            connecterProfilePicView.layer.borderWidth = 2
+            connecterProfilePicView.layer.borderWidth = 1
             connecterProfilePicView.layer.borderColor = newMatch.color.cgColor
             connecterProfilePicView.clipsToBounds = true
             cardBackground.addSubview(connecterProfilePicView)
@@ -164,7 +164,6 @@ class AcceptIgnoreView: UIView {
     }
     
     func accept(_ sender: UIButton) {
-        acceptButton.setTitleColor(.red, for: .normal)
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("objectId", equalTo: newMatch.objectId)
         query.limit = 1
@@ -224,7 +223,6 @@ class AcceptIgnoreView: UIView {
     }
     
     func ignore(_ sender: UIButton) {
-        ignoreButton.setTitleColor(.red, for: .normal)
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("objectId", equalTo: newMatch.objectId)
         query.limit = 1
