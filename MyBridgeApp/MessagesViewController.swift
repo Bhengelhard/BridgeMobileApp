@@ -588,6 +588,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.dataSource = self
         
         /*
+<<<<<<< HEAD
          var profilePics = [UIImage]()
          var names = [String]()
          
@@ -598,10 +599,24 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
          }
          
          
-         newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)*/
+         newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
         
         newMatchesView.setViewController(vc: self)
         
+=======
+        var profilePics = [UIImage]()
+        var names = [String]()
+        
+        for _ in 0...9 {
+            let profilePic = UIImage(named: "Business_Icon_Blue")
+            profilePics.append(profilePic!)
+            names.append("Doug")
+        }
+        
+        
+        newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
+                
+>>>>>>> wiredFrame*/
         loadNewMatches()
         
         tableView.tableHeaderView = newMatchesView
@@ -680,6 +695,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func loadNewMatches() {
         print("loading new matches")
+        newMatchesView = NewMatchesView()
+        newMatchesView.setVC(vc: self)
+        
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("bridged", equalTo: true)
         query.limit = 10000
@@ -718,7 +736,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                         if userResponse != 1 {
                             if let profilePicURLString = result["\(otherUser)_profile_picture_url"] as? String {
-                                let profilePicURL = URL(string: profilePicURLString)
                                 if let name = result["\(otherUser)_name"] as? String {
                                     let dot = (userResponse == 0)
                                     if let type = result["bridge_type"] as? String {
@@ -734,7 +751,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                             color = .black
                                         }
                                         if let status = result["\(otherUser)_bridge_status"] as? String {
-                                            let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURL!, name: name, type: type, color: color, dot: dot, status: status)
+                                            let status = result["\(otherUser)_bridge_status"] as! String
+                                            let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURLString, name: name, type: type, color: color, dot: dot, status: status)
+                                            let connecterName = result["connecter_name"] as? String
+                                            let connecterPicURL = result["connecter_profile_picture_url"] as? String
+                                            let reasonForConnection = result["reason_for_connection"] as? String
+                                            newMatch.setConnecterInfo(name: connecterName, profilePicURL: connecterPicURL, reasonForConnection: reasonForConnection)
                                             self.newMatchesView.addNewMatch(newMatch: newMatch)
                                             self.tableView.tableHeaderView = self.newMatchesView
                                         }
@@ -747,7 +769,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
                 
             })
-            
         }
         
         override func viewDidLayoutSubviews() {
@@ -787,7 +808,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             return messages.count
             
         }
-        
+    
         // Data to be shown on an individual row
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
@@ -821,7 +842,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     break
                 }
             }
-            
             var stringOfNames = ""
             var users = names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
             users = users.filter { $0 != PFUser.current()?["name"] as! String }
@@ -847,8 +867,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             
             cell.participants.text = stringOfNames
             cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
-            //cell.arrow.text = ">"
-            
             
             if messageViewed[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]! {
                 cell.notificationDot.isHidden = true
@@ -859,18 +877,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             switch messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!{
                 
             case "Business":
-                //cell.participants.textColor = DisplayUtility.businessBlue
-                //cell.arrow.textColor = DisplayUtility.businessBlue
                 cell.color = DisplayUtility.businessBlue
                 break
             case "Love":
-                //cell.participants.textColor = DisplayUtility.loveRed
-                //cell.arrow.textColor = DisplayUtility.loveRed
                 cell.color = DisplayUtility.loveRed
                 break
             case "Friendship":
-                //cell.participants.textColor = DisplayUtility.friendshipGreen
-                //cell.arrow.textColor = DisplayUtility.friendshipGreen
                 cell.color = DisplayUtility.friendshipGreen
                 break
             default: cell.participants.textColor = DisplayUtility.friendshipGreen
@@ -899,11 +911,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.messageTimestamp.text = "Yesterday"
             }
             else {
-                /*
-                 let dateFormatter = DateFormatter()
-                 dateFormatter.dateFormat = "hh:mm a"
-                 cell.messageTimestamp.text = dateFormatter.string(from: date)
-                 */
                 cell.messageTimestamp.text = "Today"
             }
             if indexPath.row == filteredPositions.count - 1 {
@@ -911,7 +918,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
             return cell
-            
             
         }
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

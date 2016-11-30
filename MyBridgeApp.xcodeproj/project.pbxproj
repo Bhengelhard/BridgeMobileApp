@@ -47,7 +47,7 @@
 		81BA817B1A49E0E500E65899 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */; };
 		81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */; };
 		9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9026A0671DDF83F1007CE4D9 /* NewMatch.swift */; };
-		9026A06A1DE34476007CE4D9 /* AcceptIgnoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9026A0691DE34476007CE4D9 /* AcceptIgnoreViewController.swift */; };
+		9081C1001DEDE0EB00603393 /* AcceptIgnoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */; };
 		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
 		CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */; };
 		CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829461CAA26D900DC86C9 /* ViewController.swift */; };
@@ -122,7 +122,7 @@
 		81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
 		9026A0671DDF83F1007CE4D9 /* NewMatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatch.swift; path = "Custom Classes/Data Storage/NewMatch.swift"; sourceTree = "<group>"; };
-		9026A0691DE34476007CE4D9 /* AcceptIgnoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreViewController.swift; path = MyBridgeApp/AcceptIgnoreViewController.swift; sourceTree = SOURCE_ROOT; };
+		9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB5829461CAA26D900DC86C9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MyBridgeApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -204,6 +204,7 @@
 				30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */,
 				304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */,
 				30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */,
+				9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -293,7 +294,6 @@
 				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
 				E9D6DF4F1D78836200138A1F /* SingleMessageContent.swift */,
 				E9D6DF501D78836200138A1F /* SingleMessageTableCell.swift */,
-				9026A0691DE34476007CE4D9 /* AcceptIgnoreViewController.swift */,
 				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
 				1BF692D71D09E32B0030B6D0 /* DataController.swift */,
 				E9D6DF531D78836900138A1F /* TermsOfServiceViewController.swift */,
@@ -423,11 +423,11 @@
 			files = (
 				9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */,
 				E9D6DF131D7880CC00138A1F /* PrivacyPolicyViewController.swift in Sources */,
+				9081C1001DEDE0EB00603393 /* AcceptIgnoreView.swift in Sources */,
 				E9D6DF511D78836200138A1F /* SingleMessageContent.swift in Sources */,
 				3030C0B81DD54E3F0077F7AC /* UserInfo.swift in Sources */,
 				304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */,
 				3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */,
-				9026A06A1DE34476007CE4D9 /* AcceptIgnoreViewController.swift in Sources */,
 				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
 				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
 				3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */,

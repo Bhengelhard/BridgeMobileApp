@@ -12,14 +12,17 @@ import UIKit
 class NewMatch: NSObject {
     var user: String
     var objectId: String
-    var profilePicURL: URL
+    var profilePicURL: String
     var name: String
     var type: String
     var color: UIColor
     var dot: Bool
-    var status: String?
+    var status: String
+    var connecterName: String?
+    var connecterPicURL: String?
+    var reasonForConnection: String?
     
-    init(user: String, objectId: String, profilePicURL: URL, name: String, type: String, color: UIColor, dot: Bool, status: String?) {
+    init(user: String, objectId: String, profilePicURL: String, name: String, type: String, color: UIColor, dot: Bool, status: String) {
         self.user = user
         self.objectId = objectId
         self.profilePicURL = profilePicURL
@@ -28,5 +31,11 @@ class NewMatch: NSObject {
         self.color = color
         self.dot = dot
         self.status = status
+    }
+    
+    func setConnecterInfo(name: String?, profilePicURL: String?, reasonForConnection: String?) {
+        self.connecterName = name
+        self.connecterPicURL = profilePicURL
+        self.reasonForConnection = reasonForConnection
     }
 }

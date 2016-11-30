@@ -33,7 +33,7 @@ class NewMatchesView: UIScrollView {
         addSubview(line)
     }
     
-    func setViewController(vc: UIViewController) {
+    func setVC(vc: UIViewController) {
         self.vc = vc
     }
     
@@ -71,10 +71,10 @@ class NewMatchesView: UIScrollView {
         line.isHidden = false
         
         // add profile picture
-        let profilePicURL = newMatch.profilePicURL
         let downloader = Downloader()
         let profilePicView = UIImageView()
-        downloader.imageFromURL(URL: profilePicURL, imageView: profilePicView, callBack: nil)
+        let url = URL(string: newMatch.profilePicURL)!
+        downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
         profilePicView.frame = CGRect(x: CGFloat(position)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY, width: 0.168*frame.width, height: 0.168*frame.width)
         profilePicView.layer.cornerRadius = profilePicView.frame.height/2
         profilePicView.layer.borderWidth = 2
@@ -114,10 +114,11 @@ class NewMatchesView: UIScrollView {
     func handleTap(_ gesture: UIGestureRecognizer) {
         print("tapped")
         let newMatchView = gesture.view!
-        //newMatchView.layer.borderColor = UIColor.white.cgColor
-        let acceptIgnoreVC = AcceptIgnoreViewController()
-        acceptIgnoreVC.setNewMatch(newMatch: displayedNewMatches[newMatchView.tag])
-        vc?.present(acceptIgnoreVC, animated: true, completion: nil)
+        let acceptIgnoreView = AcceptIgnoreView(newMatch: displayedNewMatches[newMatchView.tag])
+        if let vc = self.vc {
+            acceptIgnoreView.setVC(vc: vc)
+            vc.view.addSubview(acceptIgnoreView)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

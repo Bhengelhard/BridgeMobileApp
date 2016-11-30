@@ -106,9 +106,13 @@ class HalfSwipeCard: UIView {
                 
             }
         }*/
+        
+        layoutHalfCard(name: name, status: status, photoView: photoView, connectionType: connectionType)
 
-        
-        
+    }
+
+    
+    func layoutHalfCard(name: String, status: String, photoView: UIImageView, connectionType: String) {
         //downloader.imageFromURL(URL: URL(string: photoURL)!, imageView: photoView)
         self.addSubview(photoView)
         
@@ -152,9 +156,10 @@ class HalfSwipeCard: UIView {
             statusLabel.textAlignment = NSTextAlignment.center
             self.addSubview(statusLabel)
         }
-        
     }
+    
     func callbackToSetPhoto(_ image: UIImage) -> Void {
+        print("got the photo")
         photo = image
     }
     func firstNameLastNameInitial (name: String) -> String{
