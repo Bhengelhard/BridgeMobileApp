@@ -945,7 +945,6 @@ class BridgeViewController: UIViewController {
         missionControlView.bringSubview(toFront: view)
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
         missionControlView.addGestureRecognizer(gestureRecognizer)
-        //missionControlView.displayPostRequest()
     }
     override func viewDidLayoutSubviews() {
 
@@ -1067,6 +1066,7 @@ class BridgeViewController: UIViewController {
                 }
             }
             if removeCard{
+                
                 swipeCardView.removeFromSuperview()
             } else if showReasonForConnection {
                 

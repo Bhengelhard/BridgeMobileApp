@@ -45,10 +45,10 @@ class Downloader {
                 
                 
                 let newImage = UIImage(cgImage: newCGImage!)
+                imageView.alpha = 0
                 
                 DispatchQueue.main.async(execute: {
                     //imageView.image = UIImage(data: data!)
-                    imageView.alpha = 0
                     imageView.image = newImage
                     UIView.animate(withDuration: 0.2, animations: {
                         imageView.alpha = 1
@@ -68,7 +68,7 @@ class Downloader {
         task.resume()
     }
     
-    class func loadBothUrls(_ URL1: URL, URL2: URL, imageView1:UIImageView, imageView2:UIImageView, superDeckView:UIView) {
+    /*class func loadBothUrls(_ URL1: URL, URL2: URL, imageView1:UIImageView, imageView2:UIImageView, superDeckView:UIView) {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         var request1 = URLRequest(url: URL1)
@@ -130,7 +130,7 @@ class Downloader {
         }
         
         task.resume()
-    }
+    }*/
 
     //converts an image from a URL
     func imageFromURL (URL: URL, imageView: UIImageView, callBack: ((_ image: UIImage)->Void)?){
@@ -152,6 +152,7 @@ class Downloader {
                 let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
                 
                 newImage = UIImage(cgImage: newCGImage!)
+                
                 DispatchQueue.main.async(execute: {
                     imageView.alpha = 0
                     imageView.image = newImage

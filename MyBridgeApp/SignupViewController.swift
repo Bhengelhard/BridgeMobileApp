@@ -246,7 +246,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             if let pfData = pfData {
                 pfData.getDataInBackground(block: { (data, error) in
                     if error != nil || data == nil {
-                        print(error)
+                        print(error ?? "Threre is an error in SignUpViewController.displayProfilePictureButton()")
                     } else {
                         let image = UIImage(data: data!, scale: 1.0)
                         DispatchQueue.main.async(execute: {

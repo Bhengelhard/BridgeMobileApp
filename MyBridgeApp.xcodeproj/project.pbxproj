@@ -31,6 +31,7 @@
 		304FEBE11DE3918E00B3A8A7 /* DashedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */; };
 		304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */; };
 		304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */; };
+		3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059ABF11DEC72FB0010A81B /* TrendingView.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -102,6 +103,7 @@
 		304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DashedLine.swift; path = "Custom Classes/Custom Views/DashedLine.swift"; sourceTree = "<group>"; };
 		304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendingNotificationView.swift; path = "Custom Classes/Custom Views/SendingNotificationView.swift"; sourceTree = "<group>"; };
 		304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircleView.swift; path = "Custom Classes/Custom Views/CircleView.swift"; sourceTree = "<group>"; };
+		3059ABF11DEC72FB0010A81B /* TrendingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrendingView.swift; path = "Custom Classes/Custom Views/TrendingView.swift"; sourceTree = "<group>"; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -196,6 +198,7 @@
 				3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */,
 				3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */,
 				3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */,
+				3059ABF11DEC72FB0010A81B /* TrendingView.swift */,
 				3030C0D41DD550240077F7AC /* SwipeCard.swift */,
 				30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */,
 				30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */,
@@ -427,6 +430,7 @@
 				9026A06A1DE34476007CE4D9 /* AcceptIgnoreViewController.swift in Sources */,
 				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
 				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
+				3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */,
 				3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */,
 				3030C0BB1DD54E470077F7AC /* Users.swift in Sources */,
 				30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */,

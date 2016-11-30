@@ -35,7 +35,10 @@ class HalfSwipeCard: UIView {
         //download Photo from URL
         let photoView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
         let downloader = Downloader()
-        
+        if let URL = URL(string: photoURL) {
+            downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
+        }
+        /*
         //card's profile pictures are retrieved if they are already saved to the phone using mapping to the associated bridgePairing objectId and the position of the card (i.e. either upperDeckCard or not)
         let localData = LocalData()
         if let pairings = localData.getPairings() {
@@ -66,6 +69,7 @@ class HalfSwipeCard: UIView {
                         }*/
                         if let URL = URL(string: photoURL) {
                             downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
+                            break
                         }
                     }
                 }
@@ -95,12 +99,13 @@ class HalfSwipeCard: UIView {
                         }*/
                         if let URL = URL(string: photoURL) {
                             downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
+                            break
                         }
                     }
                 }
                 
             }
-        }
+        }*/
 
         
         

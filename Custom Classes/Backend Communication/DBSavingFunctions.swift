@@ -46,20 +46,18 @@ class DBSavingFunctions {
             let query = PFQuery(className:"BridgePairings")
             query.getObjectInBackground(withId: objectId!, block: { (result, error) -> Void in
                 //Update pair in BridgePairings table fields: checked_out, bridged, connecter_objectId, connecter_name, connecter_profile_picture_url
-                if let result = result as? PFObject?{
-                    result?["checked_out"] = true
-                    result?["bridged"] = true
-                    result?["connecter_objectId"] = PFUser.current()?.objectId
-                    result?["connecter_name"] = PFUser.current()?["name"]
-                    result?["connecter_profile_picture_url"] = PFUser.current()?["profile_picture_url"]
-                    result?["reason_for_connection"] = messageText
-                    result?["predicted_bridge_type"] = result?["bridge_type"]
-                    result?["bridge_type"] = type
-                    result?["user1_response"] = 0
-                    result?["user2_response"] = 0
-                    result?.saveInBackground()
-                    print("saved in bridged Users DB Saving Function")
-                    
+                if let result = result {
+                    result["checked_out"] = true
+                    result["bridged"] = true
+                    result["connecter_objectId"] = PFUser.current()?.objectId
+                    result["connecter_name"] = PFUser.current()?["name"]
+                    result["connecter_profile_picture_url"] = PFUser.current()?["profile_picture_url"]
+                    result["reason_for_connection"] = messageText
+                    result["predicted_bridge_type"] = result["bridge_type"]
+                    result["bridge_type"] = type
+                    result["user1_response"] = 0
+                    result["user2_response"] = 0
+                    result.saveInBackground()
                     
                     //Update pushNotifications for new matches notifications that will bring the user to the accept/ignore page
                     pfCloudFunctions.pushNotification(parameters: ["userObjectId":userObjectId1,"alert":notificationMessage1, "badge": "Increment", "messageType" : "Bridge"])

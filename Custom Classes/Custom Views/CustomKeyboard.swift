@@ -1,4 +1,4 @@
-// 
+//
 //  CustomKeyboard.swift
 //  MyBridgeApp
 //
@@ -27,6 +27,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     var keyboardHeight = CGFloat()
     
     func display (view: UIView, placeholder: String, buttonTitle: String, buttonTarget: String){
+        print("Called Display CUSTOM KEYBOARD")
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
@@ -51,9 +53,9 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageTextView.keyboardAppearance = UIKeyboardAppearance.alert
         messageTextView.autocorrectionType = UITextAutocorrectionType.no
         messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
-        messageTextView.becomeFirstResponder()
-        messageTextView.keyboardDismissMode = .interactive
+        //messageTextView.becomeFirstResponder()
         messageTextView.isScrollEnabled = false
+        messageTextView.keyboardDismissMode = .interactive
         messageView.addSubview(messageTextView)
         
         //This changes the size of the messageTextView and message view (and below the messageButton) to the size needed to fit the placeholder text.
@@ -82,6 +84,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageView.frame.origin.y = DisplayUtility.screenHeight - messageView.frame.height
         //messageView.removeFromSuperview()
     }
+    
     func remove() {
         messageTextView.resignFirstResponder()
         messageView.frame.origin.y = DisplayUtility.screenHeight
@@ -136,8 +139,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 currentView.removeFromSuperview()
                 if let bridgeVC = currentViewController as? BridgeViewController {
                     bridgeVC.reasonForConnectionSent()
+               
                 }
-                
             }
         }
     }
@@ -234,7 +237,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         
     }
     func keyboardWillHide(_ notification: Notification) {
-        if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+        if (((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             messageView.frame.origin.y = DisplayUtility.screenHeight - messageView.frame.height
             print("keyboard will hide")
         } else {
