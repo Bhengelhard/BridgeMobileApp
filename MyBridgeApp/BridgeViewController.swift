@@ -384,7 +384,6 @@ class BridgeViewController: UIViewController {
             var aboveView:UIView? = nil
             for i in 0..<bridgePairings.count {
                 let pairing = bridgePairings[i]
-                print("These are the bridgeTypes of the pairs -> \(pairing.user1?.bridgeType)")
                 if self.currentTypeOfCardsOnDisplay != typesOfCard.all && pairing.user1?.bridgeType != convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
                     continue
                 }
@@ -864,7 +863,13 @@ class BridgeViewController: UIViewController {
         })
     }
     func displayMessageFromBot(_ notification: Notification) {
-        let botNotificationView = UIView()
+        //missionControlView.close()
+        
+        let sendingNotificationView = SendingNotificationView()
+        sendingNotificationView.initialize(view: view, sendingText: "Sending...", successText: "Success")
+        view.addSubview(sendingNotificationView)
+        view.bringSubview(toFront: view)
+        /*let botNotificationView = UIView()
         botNotificationView.frame = CGRect(x: 0, y: -0.12*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -894,15 +899,14 @@ class BridgeViewController: UIViewController {
         }
         
         
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self)*/
+        
+        
     }
     func displayBackgroundView(){
         let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
         backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         view.addSubview(backgroundView)
-    }
-    func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
-        missionControlView.drag(gestureRecognizer: gestureRecognizer)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -924,7 +928,6 @@ class BridgeViewController: UIViewController {
         }
         else {
             displayCards()
-            print("displaying cards")
         }
         
         connectIcon.image = UIImage(named: "Necter_Icon")
@@ -940,9 +943,7 @@ class BridgeViewController: UIViewController {
         wasLastSwipeInDeck = false
         
         //Create Mission Control
-        missionControlView.initialize(view: view, isMessagesViewController: false)
-        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
-        missionControlView.addGestureRecognizer(gestureRecognizer)
+        missionControlView.initialize(view: view)
     }
     override func viewDidLayoutSubviews() {
 
@@ -1289,11 +1290,9 @@ class BridgeViewController: UIViewController {
         }
 
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 }
 

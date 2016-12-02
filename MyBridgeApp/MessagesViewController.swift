@@ -416,9 +416,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
     }
-    /*func handlePanOfMissionControl(_ gestureRecognizer: UIPanGestureRecognizer) {
-     missionControlView.drag(gestureRecognizer: gestureRecognizer)
-     }*/
     func filtersTapped(_ notification: Notification) {
         let type = missionControlView.whichFilter()
         toolbarTapped = true
@@ -490,7 +487,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         noMessagesLabel.alpha = 1
         
         let type = missionControlView.whichFilter()
-        
         if type == "All Types" {
             noMessagesLabel.text = "No active connections."
             //} else if businessButton.isEnabled && loveButton.isEnabled {
@@ -534,38 +530,42 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         view.addSubview(noMessagesLabel)
     }
     func displayMessageFromBot(_ notification: Notification) {
-        let botNotificationView = UIView()
-        botNotificationView.frame = CGRect(x: 0, y: -0.12*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        //always fill the view
-        blurEffectView.frame = botNotificationView.bounds
-        
-        let messageLabel = UILabel(frame: CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.01*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight))
-        messageLabel.text = (notification as NSNotification).userInfo!["message"] as? String ?? "No Message Came Up"
-        messageLabel.textColor = UIColor.darkGray
-        messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
-        messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = NSTextAlignment.center
-        
-        botNotificationView.addSubview(messageLabel)
-        botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
-        view.addSubview(botNotificationView)
-        view.bringSubview(toFront: botNotificationView)
-        
-        UIView.animate(withDuration: 0.7, animations: {
-            botNotificationView.frame.origin.y = 0
-        })
-        
-        let _ = CustomTimer(interval: 4) {i -> Bool in
-            UIView.animate(withDuration: 0.7, animations: {
-                botNotificationView.frame.origin.y = -0.12*DisplayUtility.screenHeight
-            })
-            return i < 1
-        }
-        
-        
-        NotificationCenter.default.removeObserver(self)
+        let sendingNotificationView = SendingNotificationView()
+        sendingNotificationView.initialize(view: view, sendingText: "Sending...", successText: "Success")
+        view.addSubview(sendingNotificationView)
+        view.bringSubview(toFront: view)
+//        let botNotificationView = UIView()
+//        botNotificationView.frame = CGRect(x: 0, y: -0.12*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
+//        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+//        //always fill the view
+//        blurEffectView.frame = botNotificationView.bounds
+//        
+//        let messageLabel = UILabel(frame: CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.01*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight))
+//        messageLabel.text = (notification as NSNotification).userInfo!["message"] as? String ?? "No Message Came Up"
+//        messageLabel.textColor = UIColor.darkGray
+//        messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
+//        messageLabel.numberOfLines = 0
+//        messageLabel.textAlignment = NSTextAlignment.center
+//        
+//        botNotificationView.addSubview(messageLabel)
+//        botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
+//        view.addSubview(botNotificationView)
+//        view.bringSubview(toFront: botNotificationView)
+//        
+//        UIView.animate(withDuration: 0.7, animations: {
+//            botNotificationView.frame.origin.y = 0
+//        })
+//        
+//        let _ = CustomTimer(interval: 4) {i -> Bool in
+//            UIView.animate(withDuration: 0.7, animations: {
+//                botNotificationView.frame.origin.y = -0.12*DisplayUtility.screenHeight
+//            })
+//            return i < 1
+//        }
+//        
+//        
+//        NotificationCenter.default.removeObserver(self)
         
     }
     override func viewDidLoad() {
@@ -660,12 +660,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.tableFooterView = pagingSpinner
         tableView.separatorStyle = .none
         
-        //displayToolBar()
-        //missionControlView.createTabView(view: view)
-        //missionControlView.initialize(view: view, isMessagesViewController: true)
-        /*let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOfMissionControl(_:)))
-         missionControlView.addGestureRecognizer(gestureRecognizer)*/
-        
+        missionControlView.initialize(view: view)
         displayFilterLabel(type: "All Types")
     }
     

@@ -38,6 +38,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         let displayUtility = DisplayUtility()
         displayUtility.setBlurredView(viewToBlur: messageView)
         currentView.addSubview(messageView)
+        messageView.bringSubview(toFront: currentView)
         
         //setting the textView for writing messages
         messageTextView.delegate = self
@@ -128,7 +129,17 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         let dbSavingFunctions = DBSavingFunctions()
         if let messageText = messageTextView.text {
             if target == "postStatus" {
+                messageTextView.text = ""
+                updatePlaceholder()
+                /*if let bridgeVC = currentViewController as? BridgeViewController {
+                } else if let messagesVC = currentViewController as? MessagesViewController {
+                }*/
+                if let missionControlView = currentView as? MissionControlView {
+                    missionControlView.close()
+                    print("missioncontrol view is the current View")
+                }
                 dbSavingFunctions.postStatus(messageText: messageText, type: type)
+
             } else if target == "sendMessage" {
                 dbSavingFunctions.sendMessage(messageText: messageText)
             } else if target == "bridgeUsers" {
@@ -139,7 +150,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 currentView.removeFromSuperview()
                 if let bridgeVC = currentViewController as? BridgeViewController {
                     bridgeVC.reasonForConnectionSent()
-               
                 }
             }
         }

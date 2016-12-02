@@ -83,8 +83,8 @@ class CircleView: UIView {
         label.text = "Success!"
         
         let checkMark = UIImageView()
-        checkMark.frame = CGRect(x: 0.1*self.frame.width, y: 0.1*self.frame.height, width: 0.8*self.frame.width, height: 0.8*self.frame.width)
-        checkMark.image = UIImage(named: "Selected_Business_Circle")
+        checkMark.frame = CGRect(x: 0.2*self.frame.width, y: 0.2*self.frame.height, width: 0.6*self.frame.width, height: 0.6*self.frame.width)
+        checkMark.image = UIImage(named: "White_Check")
         self.addSubview(checkMark)
     }
     

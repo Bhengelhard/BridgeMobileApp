@@ -118,7 +118,6 @@ class DBSavingFunctions {
         bridgeStatusObject["userId"] = PFUser.current()?.objectId
         bridgeStatusObject.saveInBackground { (success, error) in
             
-            
             if error != nil {
                 //sends notification to call displayMessageFromBot function
                 let userInfo = ["message" : "Your post did not go through. Please wait a minute and try posting again"]

@@ -15,8 +15,6 @@ class SendingNotificationView: UIView {
     override init (frame: CGRect) {
         super.init(frame: frame)
         self.frame.size = CGSize(width: 0.5*DisplayUtility.screenWidth, height: 0.2*DisplayUtility.screenHeight)
-//        self.backgroundColor = UIColor.black
-//        self.layer.opacity = 0.8
         self.layer.cornerRadius = 15
         self.layer.masksToBounds = true
         let displayUtility = DisplayUtility()
