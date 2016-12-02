@@ -39,6 +39,8 @@ class MessagesTableCell: UITableViewCell {
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.layoutMargins = .zero
+        
         cellWidth = cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
         participants = UILabel(frame: CGRect.zero)
@@ -56,7 +58,6 @@ class MessagesTableCell: UITableViewCell {
         messageSnapshot.font = UIFont(name: "BentonSans-Light", size: 16.5)
         messageSnapshot.textContainer.maximumNumberOfLines = 2
         messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.byTruncatingTail
-        messageSnapshot.sizeToFit()
         messageSnapshot.isUserInteractionEnabled = false
         messageSnapshot.contentInset = UIEdgeInsetsMake(-7.0,0.0,0,0.0)
         
@@ -95,16 +96,17 @@ class MessagesTableCell: UITableViewCell {
         //setting line to begin with text and go to end of frame
         participants.frame = CGRect(x: profilePic.frame.maxX + 0.02*cellWidth!, y: profilePic.frame.minY, width: 0.2682*cellWidth!, height: 0.25*cellHeight!)
         participants.sizeToFit()
+        participants.frame.size.height = participants.frame.height+1
         messageTimestamp.frame = CGRect(x: 0.7554*cellWidth!, y: participants.frame.minY, width: 0.35*cellWidth!, height: 0.2*cellHeight!)
         messageTimestamp.sizeToFit()
-        messageTimestamp.frame = CGRect(x: cellWidth! - messageTimestamp.frame.width - 0.02*cellWidth!, y: messageTimestamp.frame.minY, width: messageTimestamp.frame.width, height: messageTimestamp.frame.height)
+        messageTimestamp.frame = CGRect(x: cellWidth! - messageTimestamp.frame.width - 0.02*cellWidth!, y: messageTimestamp.frame.minY, width: messageTimestamp.frame.width, height: messageTimestamp.frame.height+1)
         messageTimestamp.textColor = color
         
-        messageSnapshot.frame = CGRect(x: participants.frame.minX, y: participants.frame.maxY + 0.05*cellHeight!, width: 0.8*cellWidth!-0.15*cellHeight!, height: 0.65*cellHeight!)
+        messageSnapshot.frame = CGRect(x: participants.frame.minX, y: participants.frame.maxY + 0.05*cellHeight!, width: 0.9*(cellWidth! - participants.frame.minX), height: 0.65*cellHeight!)
         messageSnapshot.textContainer.lineFragmentPadding = 0
         
         //setting line to begin with text and go to end of frame
-        line.frame = CGRect(x: profilePic.frame.minX, y: 0.99*cellHeight!, width: 0.926*cellWidth!, height: 1)
+        line.frame = CGRect(x: profilePic.frame.minX, y: cellHeight!-1, width: 0.926*cellWidth!, height: 1)
         
         //participants.frame = CGRect(x: 0.05*cellWidth! + 0.15*cellHeight!, y: 0.1*cellHeight!, width: 0.55*cellWidth!, height: 0.25*cellHeight!)
         

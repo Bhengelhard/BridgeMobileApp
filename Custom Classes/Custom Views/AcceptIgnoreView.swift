@@ -38,20 +38,21 @@ class AcceptIgnoreView: UIView {
         let newConnectionLabel = UILabel()
         newConnectionLabel.text = "You have one new connection!"
         newConnectionLabel.textColor = .white
+        newConnectionLabel.textAlignment = .center
         newConnectionLabel.font = UIFont(name: "BentonSans-Light", size: 23.5)
-        newConnectionLabel.sizeToFit()
-        newConnectionLabel.frame = CGRect(x: 0.5*DisplayUtility.screenWidth - newConnectionLabel.frame.width/2, y: exitButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: newConnectionLabel.frame.width, height: newConnectionLabel.frame.height)
+        newConnectionLabel.adjustsFontSizeToFitWidth = true
+        newConnectionLabel.frame = CGRect(x: 0.05*frame.width, y: exitButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.9*frame.width, height: 0.0491*frame.height)
         addSubview(newConnectionLabel)
         let line = UIView()
-        line.frame = CGRect(x: 0.5*DisplayUtility.screenWidth - 0.45*newConnectionLabel.frame.width, y: newConnectionLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.9*newConnectionLabel.frame.width, height: 1)
+        line.frame = CGRect(x: 0.1*frame.width, y: newConnectionLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.8*frame.width, height: 1)
         line.backgroundColor = .white
         addSubview(line)
         
-        let acceptButtonFrame = CGRect(x: 0.2828*DisplayUtility.screenWidth, y: line.frame.maxY + 0.035*DisplayUtility.screenHeight, width: 0.1823*DisplayUtility.screenWidth, height: 0.0456*DisplayUtility.screenHeight)
+        let acceptButtonFrame = CGRect(x: 0.2328*DisplayUtility.screenWidth, y: line.frame.maxY + 0.035*DisplayUtility.screenHeight, width: 0.237*DisplayUtility.screenWidth, height: 0.0593*DisplayUtility.screenHeight)
         acceptButton = DisplayUtility.gradientButton(text: "accept", frame: acceptButtonFrame)
         addSubview(acceptButton)
         
-        let ignoreButtonFrame = CGRect(x: 0.527*DisplayUtility.screenWidth, y: acceptButton.frame.minY, width: acceptButton.frame.width, height: acceptButton.frame.height)
+        let ignoreButtonFrame = CGRect(x: 0.5302*DisplayUtility.screenWidth, y: acceptButton.frame.minY, width: acceptButton.frame.width, height: acceptButton.frame.height)
         ignoreButton = DisplayUtility.gradientButton(text: "ignore", frame: ignoreButtonFrame)
         addSubview(ignoreButton)
         
@@ -100,7 +101,7 @@ class AcceptIgnoreView: UIView {
             let connecterProfilePicView = UIImageView()
             let url = URL(string: connecterPicURL)!
             downloader.imageFromURL(URL: url, imageView: connecterProfilePicView, callBack: nil)
-            connecterProfilePicView.frame = CGRect(x: halfCard.frame.minX + 0.0953*frame.width, y: halfCard.frame.maxY + 0.02*frame.height, width: 0.168*frame.width, height: 0.168*frame.width)
+            connecterProfilePicView.frame = CGRect(x: 0.075*cardBackground.frame.width, y: halfCard.frame.maxY + 0.02*frame.height, width: 0.168*frame.width, height: 0.168*frame.width)
             connecterProfilePicView.layer.cornerRadius = connecterProfilePicView.frame.height/2
             connecterProfilePicView.layer.borderWidth = 1
             connecterProfilePicView.layer.borderColor = newMatch.color.cgColor
@@ -112,9 +113,10 @@ class AcceptIgnoreView: UIView {
                 let name = self.firstNameLastNameInitial(name: connecterName)
                 connecterNameLabel.text = "Introduced by \(name)"
                 connecterNameLabel.textColor = .white
-                connecterNameLabel.font = UIFont(name: "BentonSans-Light", size: 18)
-                connecterNameLabel.sizeToFit()
-                connecterNameLabel.frame = CGRect(x: (connecterProfilePicView.frame.maxX + halfCard.frame.maxX)/2 - connecterNameLabel.frame.width/2, y: connecterProfilePicView.frame.midY - connecterNameLabel.frame.height/2, width: connecterNameLabel.frame.width, height: connecterNameLabel.frame.height)
+                connecterNameLabel.font = UIFont(name: "BentonSans-Light", size: 20)
+                connecterNameLabel.adjustsFontSizeToFitWidth = true
+                connecterNameLabel.frame = CGRect(x: connecterProfilePicView.frame.maxX + 0.05*cardBackground.frame.width, y: 0, width: 0.875*cardBackground.frame.width - connecterProfilePicView.frame.maxX, height: connecterProfilePicView.frame.height)
+                connecterNameLabel.center.y = connecterProfilePicView.center.y
                 cardBackground.addSubview(connecterNameLabel)
             }
             
@@ -126,10 +128,12 @@ class AcceptIgnoreView: UIView {
                 reasonForConnectionLabel.textAlignment = .center
                 reasonForConnectionLabel.lineBreakMode = .byWordWrapping
                 reasonForConnectionLabel.numberOfLines = 0
-                reasonForConnectionLabel.preferredMaxLayoutWidth = 0.7*frame.width
-                let maxHeight : CGFloat = 10000
+                reasonForConnectionLabel.adjustsFontSizeToFitWidth = true
+                reasonForConnectionLabel.minimumScaleFactor = 0.5
+                let maxHeight : CGFloat = 0.984*cardBackground.frame.height - connecterProfilePicView.frame.maxY
                 let rect = reasonForConnectionLabel.attributedText?.boundingRect(with: CGSize(width: 0.7*frame.width, height: maxHeight), options: .usesLineFragmentOrigin, context: nil)
-                reasonForConnectionLabel.frame = CGRect(x: 0.1*cardBackground.frame.width, y: connecterProfilePicView.frame.maxY + 0.02*frame.height, width: 0.8*cardBackground.frame.width, height: rect!.size.height)
+                reasonForConnectionLabel.frame = CGRect(x: 0.1*cardBackground.frame.width, y: connecterProfilePicView.frame.maxY + 0.016*cardBackground.frame.height, width: 0.8*cardBackground.frame.width, height: rect!.size.height+1)
+                print("\(maxHeight), \(reasonForConnectionLabel.frame.height)")
                 cardBackground.addSubview(reasonForConnectionLabel)
             }
         }

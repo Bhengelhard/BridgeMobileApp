@@ -66,21 +66,23 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     }
                     let installation = PFInstallation.current()
                     if let noOfSingleMessages = object["no_of_single_messages"] as? Int {
-                        if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObject(with: object["no_of_single_messages_viewed"] as! Data)! as? [String:Int] {
-                            if noOfSingleMessagesViewed[PFUser.current()!.objectId!] == nil {
-                                noOfSingleMessagesViewed[PFUser.current()!.objectId!] = 0
-                            }
-                            
-                            installation.badge = installation.badge - (noOfSingleMessages - noOfSingleMessagesViewed[PFUser.current()!.objectId!]!)
-                            
-                            noOfSingleMessagesViewed[PFUser.current()!.objectId!] = noOfSingleMessages
-                            object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
-                            object.saveInBackground(block: { (success, error) in
-                                if error == nil && success {
-                                    installation.saveInBackground()
-                                    
+                        if let singleMessagesViewed = object["no_of_single_messages_viewed"] {
+                            if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObject(with: singleMessagesViewed as! Data)! as? [String:Int] {
+                                if noOfSingleMessagesViewed[PFUser.current()!.objectId!] == nil {
+                                    noOfSingleMessagesViewed[PFUser.current()!.objectId!] = 0
                                 }
-                            })
+                                
+                                installation.badge = installation.badge - (noOfSingleMessages - noOfSingleMessagesViewed[PFUser.current()!.objectId!]!)
+                                
+                                noOfSingleMessagesViewed[PFUser.current()!.objectId!] = noOfSingleMessages
+                                object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
+                                object.saveInBackground(block: { (success, error) in
+                                    if error == nil && success {
+                                        installation.saveInBackground()
+                                        
+                                    }
+                                })
+                            }
                         }
                     }
                     
@@ -488,9 +490,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             else {
                                 object["no_of_single_messages"] = 1
                             }
-                            if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObject(with: object["no_of_single_messages_viewed"] as! Data)! as? [String:Int] {
-                                noOfSingleMessagesViewed[PFUser.current()!.objectId!] = (object["no_of_single_messages"] as! Int)
-                                object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
+                            if let singleMessagesViewed = object["no_of_single_messages_viewed"] {
+                                if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObject(with: singleMessagesViewed as! Data)! as? [String:Int] {
+                                    noOfSingleMessagesViewed[PFUser.current()!.objectId!] = (object["no_of_single_messages"] as! Int)
+                                    object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
+                                }
                             }
                             object["last_single_message"] = sendingMessageText
                             object["lastSingleMessageAt"] = Date()
@@ -506,12 +510,14 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                                         // Skip sending a notification to a user who hasn't viewed the bridge notification yet.
                                         // But in order to mainatain sync with other users set no of meesages viewed by this user to 1
                                         if object["no_of_single_messages"] as! Int == 2 {
-                                            if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObject(with: object["no_of_single_messages_viewed"] as! Data)! as? [String:Int] {
-                                                if noOfSingleMessagesViewed[userId] == nil {
-                                                    noOfSingleMessagesViewed[userId] = 1
-                                                    object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
-                                                    object.saveInBackground()
-                                                    continue
+                                            if let singleMessagesViewed = object["no_of_single_messages_viewed"] {
+                                                if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObject(with: singleMessagesViewed as! Data)! as? [String:Int] {
+                                                    if noOfSingleMessagesViewed[userId] == nil {
+                                                        noOfSingleMessagesViewed[userId] = 1
+                                                        object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
+                                                        object.saveInBackground()
+                                                        continue
+                                                    }
                                                 }
                                             }
                                             
