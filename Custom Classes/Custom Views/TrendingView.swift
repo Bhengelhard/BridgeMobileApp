@@ -23,6 +23,7 @@ class TrendingView: UIView {
     
     //Parameters saved from MissionControlView
     var missionControlView: MissionControlView?
+    //var topView: UIView?
     var customKeyboard: CustomKeyboard?
     var trendingButton: UIButton?
     var dividingLine: UIView?
@@ -40,7 +41,7 @@ class TrendingView: UIView {
     }
 
     //Setting the trending Options - pass through the MissionControlView and the customKeyboard
-    func initialize(view: MissionControlView, keyboard: CustomKeyboard, button: UIButton, line: UIView) {
+    func initialize(view: MissionControlView, keyboard: CustomKeyboard, button: UIButton, line: UIView, topView: UIView) {
         //Setting global parameters
         missionControlView = view
         customKeyboard = keyboard
@@ -49,7 +50,7 @@ class TrendingView: UIView {
         
         self.frame.size = CGSize(width: DisplayUtility.screenWidth, height: 0.1574*DisplayUtility.screenHeight)
         self.isHidden = true
-        missionControlView?.addSubview(self)
+        topView.addSubview(self)
         
         trendingOption0.frame = CGRect(x: 0.02824*DisplayUtility.screenWidth, y: 0, width: 0.465*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
         trendingOption0.layer.borderWidth = 1.5

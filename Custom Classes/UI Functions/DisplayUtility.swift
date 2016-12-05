@@ -30,7 +30,6 @@ class DisplayUtility {
     static let color4 = UIColor(red: 237.0/255.0, green: 104.0/255.0, blue: 60.0/255.0, alpha: 1).cgColor
     static let color5 = UIColor(red: 233.0/255.0, green: 62.0/255.0, blue: 58.0/255.0, alpha: 1).cgColor
     
-    
     static func getGradient() -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [color1, color2, color3, color4, color5]
@@ -45,9 +44,9 @@ class DisplayUtility {
         button.setTitle(text, for: .normal)
         button.backgroundColor = .clear
         button.setTitleColor(.white, for: .normal)
-        button.setTitleColor(.white, for: .normal)
         let color = gradientColor(size: CGSize(width: button.frame.width, height: button.frame.height))
         button.setTitleColor(color, for: .highlighted)
+        button.setTitleColor(color, for: .selected)
         button.titleLabel?.textColor = .white
         button.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 18)
         button.layer.cornerRadius = 0.2*button.frame.height
@@ -62,7 +61,6 @@ class DisplayUtility {
         gradient.frame = button.bounds
         gradient.mask = shape
         button.layer.addSublayer(gradient)
-        
         button.addTarget(self, action: #selector(changeColor(_:)), for: .touchUpInside)
         
         return button
@@ -77,16 +75,12 @@ class DisplayUtility {
         UIGraphicsBeginImageContextWithOptions(size, false, 0);
         let context = UIGraphicsGetCurrentContext();
         let colorspace = CGColorSpaceCreateDeviceRGB();
-        
         let colors = [color1, color2, color3, color4, color5];
         let locations: [CGFloat] = [0.0, 0.25, 0.5, 0.75, 1.0]
         let gradient = CGGradient(colorsSpace: colorspace, colors: colors as CFArray, locations: locations);
         context!.drawLinearGradient(gradient!, start: CGPoint(x: 0, y: size.height/2), end: CGPoint(x: size.width, y: size.height/2), options: CGGradientDrawingOptions(rawValue: 0));
-        
         let image = UIGraphicsGetImageFromCurrentImageContext();
-        
         UIGraphicsEndImageContext();
-        
         return UIColor(patternImage: image!)
     }
     
@@ -97,7 +91,6 @@ class DisplayUtility {
         let displayNoMoreCardsLabel = UILabel()
         displayNoMoreCardsLabel.frame = labelFrame
         displayNoMoreCardsLabel.numberOfLines = 0
-        
         if businessButton.isEnabled == false {
             displayNoMoreCardsLabel.text = "You ran out of people to connect for business. Please check back tomorrow."
         } else if loveButton.isEnabled == false {
@@ -107,7 +100,6 @@ class DisplayUtility {
         } else {
             displayNoMoreCardsLabel.text = "You ran out of people to connect. Please check back tomorrow."
         }
-        
         displayNoMoreCardsLabel.font = UIFont(name: "BentonSans", size: 20)
         displayNoMoreCardsLabel.textAlignment = NSTextAlignment.center
         displayNoMoreCardsLabel.center.y = view.center.y

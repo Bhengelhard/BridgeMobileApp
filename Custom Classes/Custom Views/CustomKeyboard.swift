@@ -13,7 +13,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     
     var messageView = UIView()
     let messageTextView = UITextView()
-    let messageButton = UIButton()
+    var messageButton = UIButton()
     var type = String()
     var placeholderText = "Enter Text Here"
     var target = String()
@@ -63,21 +63,14 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         updateMessageHeights()
         
         //setting the button for sending/posting messages
-        messageButton.frame = CGRect(x: 0.75*messageView.frame.width, y: 0.1*messageView.frame.height, width: 0.2*messageView.frame.width, height: 0.8*messageView.frame.height)
-        messageButton.frame.size.height = messageTextView.frame.height
-        messageButton.frame.origin.y = messageTextView.frame.origin.y
-        messageButton.setTitle(buttonTitle, for: .normal)
-        messageButton.setTitleColor(DisplayUtility.necterYellow, for: .normal)
-        messageButton.setTitleColor(DisplayUtility.necterGray, for: .disabled)
-        messageButton.titleLabel?.textAlignment = NSTextAlignment.right
-        messageButton.titleLabel!.font = UIFont(name: "Verdana", size: 16)
-        messageButton.layer.borderWidth = 1
-        messageButton.layer.borderColor = UIColor.white.cgColor
-        messageButton.layer.cornerRadius = 7
+        let messageButtonFrame = CGRect(x: 0.75*messageView.frame.width, y: messageTextView.frame.origin.y, width: 0.2*messageView.frame.width, height: messageTextView.frame.height)
+        messageButton = DisplayUtility.gradientButton(text: buttonTitle, frame: messageButtonFrame)
         target = buttonTarget
         messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
         messageButton.isEnabled = false
         messageView.addSubview(messageButton)
+        messageButton.bringSubview(toFront: messageView)
+        
     }
     
     func resign() {
@@ -92,29 +85,23 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageView.removeFromSuperview()
     }
     
-    func updatePostType(updatedPostType: String){
+    func updateMessageEnablement(updatedPostType: String){
+        print("updatePostType")
         type = updatedPostType
             //setting the placeholder based on whether an option is selected
             if type != "All Types" {
-                //messageTextView.isUserInteractionEnabled = true
-                //messageTextView.isEditable = true
-                //if !messageTextView.isFirstResponder {
-                //    messageTextView.becomeFirstResponder()
-                //}
-                    //setting the placeholder
                 if messageTextView.textColor == UIColor.white && !messageTextView.text.isEmpty {
+                    print("setting enabled to true")
                     messageButton.isEnabled = true
+                    messageButton.isSelected = true
+                    
                 } else {
                     messageButton.isEnabled = false
+                    messageButton.isSelected = false
                 }
             } else {
-                //no filter is selected
-                //messageTextView.isUserInteractionEnabled = false
-                //if messageTextView.isFirstResponder {
-                 //   messageTextView.resignFirstResponder()
-                //}
-                //messageTextView.isEditable = false
                 messageButton.isEnabled = false
+                messageButton.isSelected = false
         }
     }
     
@@ -126,9 +113,11 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     }
     
     @objc func messageButtonTapped(_ sender: UIButton) {
+        print("messageButtonTapped")
         let dbSavingFunctions = DBSavingFunctions()
         if let messageText = messageTextView.text {
             if target == "postStatus" {
+                print("post button was clicked")
                 messageTextView.text = ""
                 updatePlaceholder()
                 /*if let bridgeVC = currentViewController as? BridgeViewController {
@@ -175,6 +164,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
             updateMessageHeights()
             messageButton.isEnabled = false
+            messageButton.isSelected = false
             print("set placeholder")
             
             //if messageTextView is empty, the circles should be deselected
@@ -191,7 +181,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             messageTextView.text = nil
             messageTextView.textColor = UIColor.white
             messageButton.isEnabled = true
-            print("set no placeholder")
+            messageButton.isSelected = true
         }
         
         return true
@@ -260,6 +250,10 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         updateMessageHeights()
         //need to retrieve the chracter limit from the page the user is on, if there is one and pass it through as a parameter for the characterLimit function
         characterLimit()
+        if let missionCV = currentView as? MissionControlView {
+            let type = missionCV.whichFilter()
+            updateMessageEnablement(updatedPostType: type)
+        }
     }
     
     func characterLimit() {
@@ -287,8 +281,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         //stops the growing of the messagesView and messagesTextView when the User reaches the max
         if messageViewFixedHeight < messageTextNewFrame.size.height + 8.5 {
             messageTextView.isScrollEnabled = true
-            //messageText.frame.size.height = previousMessageHeight
-            //toolbar.frame.size.height = previousToolbarHeight
         } else {
             
             messageTextView.frame = messageTextNewFrame
@@ -299,11 +291,11 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             let changeInMessageViewHeight = newMessageViewHeight - previousMessageViewHeight
             let messageViewFixedWidth = messageView.frame.size.width
             
-            //toolbar.sizeThatFits(CGSize(width: toolbarFixedWidth, height: toolbarFixedHeight))
             let messageViewNewSize = messageView.sizeThatFits(CGSize(width: messageViewFixedWidth, height: messageViewFixedHeight))
             var messageViewNewFrame = messageView.frame
             messageViewNewFrame.size = CGSize(width: max(messageViewNewSize.width, messageViewFixedWidth), height: min(messageTextNewFrame.size.height + 8.5, messageViewFixedHeight))
             messageViewNewFrame.origin.y = messageView.frame.origin.y - changeInMessageViewHeight
+            
             //if the toolbar has grown to the size where it is just below the navigation bar then enable the textView to scroll
             messageView.frame = messageViewNewFrame
             
@@ -311,39 +303,18 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             let previousMessagButtonY = messageButton.frame.origin.y
             messageButton.frame.origin.y = previousMessagButtonY + changeInMessageViewHeight
         }
-        
-        /*//If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
-        if updatedText.isEmpty {
-            //setting the placeholder
-            messageTextView.text = placeholderText
-            messageTextView.textColor = UIColor.lightGray
-            messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
-            messageButton.isEnabled = false
-        }
-            // else if the text view's placeholder is showing and the length of the replacement string is greater than 0, clear the text veiw and set the color to white to prepare for entry
-        else if messageTextView.textColor == UIColor.lightGray && !messageTextView.text.isEmpty && updatedText != placeholderText {
-            messageTextView.text = nil
-            messageTextView.textColor = UIColor.white
-            messageButton.isEnabled = true
-        }*/
     }
     
-    //Gesture Recognition for messageView to Pull down with Keyboard
+    /*//Gesture Recognition for messageView to Pull down with Keyboard
     func drag(gestureRecognizer: UIPanGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let tabTranslation = gestureRecognizer.translation(in: messageView)
             gestureRecognizer.view?.center = CGPoint(x: (gestureRecognizer.view?.center.x)!, y: max(0.85*DisplayUtility.screenWidth,(gestureRecognizer.view?.center.y)! + tabTranslation.y))
             gestureRecognizer.setTranslation(CGPoint.zero, in: messageView)
-            
-            // Set Bottom of View as Lower Limit for TabView Dragging
-            
-                // Move PostView and FiltersView with TabView when applicable
-            
-                // Move FiltersView with TabView when applicable
            
         } else if gestureRecognizer.state == .ended {
             
         }
-    }
+    }*/
     
 }

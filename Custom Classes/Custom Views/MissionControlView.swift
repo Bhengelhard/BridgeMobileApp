@@ -13,6 +13,9 @@ class MissionControlView: UIView{
     let displayUtility = DisplayUtility()
     let customKeyboard = CustomKeyboard()
     var currentView = UIView()
+    let upperHalfView = UIView()
+    let lowerHalfView = UIView()
+    var tapGestureRecognizer = UITapGestureRecognizer()
     
     //Filter Views
     var categoriesView = UIView()
@@ -60,14 +63,6 @@ class MissionControlView: UIView{
         //setting global variable for the view beneath the missionControlView
         currentView = view
         
-        //Adding Gesture recognizer for swiping up the mission control
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(drag(_:)))
-        self.addGestureRecognizer(panGestureRecognizer)
-        
-        //Adding Gesture recognizer for tapping the mission control to switch between positions
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(_:)))
-        self.addGestureRecognizer(tapGestureRecognizer)
-        
         self.frame = CGRect(x: 0, y: initialFrameY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         
         blackBackgroundView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
@@ -83,14 +78,32 @@ class MissionControlView: UIView{
         initializePostRequest()
         createKeyboard()
         
+        //Setting the topView
+        upperHalfView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - customKeyboard.messageView.frame.height)
+        upperHalfView.alpha = 0
+        currentView.addSubview(upperHalfView)
+        
+        //Adding Gesture recognizer for swiping up the mission control
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(drag(_:)))
+        self.addGestureRecognizer(panGestureRecognizer)
+        
+        //Adding Gesture recognizer for tapping the mission control to switch between positions
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(_:)))
+        upperHalfView.addGestureRecognizer(tapGestureRecognizer)
+        self.addGestureRecognizer(tapGestureRecognizer)
+        
+        lowerHalfView.frame = CGRect(x: 0, y: 0.6*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenHeight)
+        lowerHalfView.alpha = 0
+        currentView.insertSubview(lowerHalfView, aboveSubview: upperHalfView)
     }
     
     func createKeyboard() {
+        
         //Adding customKeyboard
-        customKeyboard.display(view: self, placeholder: "I am looking for...", buttonTitle: "post", buttonTarget: "postStatus")
+        customKeyboard.display(view: lowerHalfView, placeholder: "I am looking for...", buttonTitle: "post", buttonTarget: "postStatus")
         customKeyboard.maxNumCharacters = 80
         let type = whichFilter()
-        customKeyboard.updatePostType(updatedPostType: type)
+        customKeyboard.updateMessageEnablement(updatedPostType: type)
         customKeyboardHeight = customKeyboard.height()
         customKeyboard.messageView.frame.origin.y = postARequestView.frame.minY + self.frame.minY
         customKeyboard.messageView.alpha = 0
@@ -203,7 +216,7 @@ class MissionControlView: UIView{
         trendingButton.addTarget(self, action: #selector(trendingTapped(_:)), for: .touchUpInside)
         trendingButton.alpha = 0
         trendingButton.isEnabled = false
-        currentView.addSubview(trendingButton)
+        upperHalfView.addSubview(trendingButton)
         
         //Setting trending label
         let trendingLabel = UILabel()
@@ -231,7 +244,7 @@ class MissionControlView: UIView{
         trendingButton.addSubview(dividingLine)
         
         //Setting trending options
-        trendingOptionsView.initialize(view: self, keyboard: customKeyboard, button: trendingButton, line: dividingLine)
+        trendingOptionsView.initialize(view: self, keyboard: customKeyboard, button: trendingButton, line: dividingLine, topView: upperHalfView)
         
         //Setting Category Label
         categoryLabel.frame = CGRect(x: trendingLabel.frame.minX, y: self.frame.minY - 0.05179*self.frame.height, width: 0.4*self.frame.width, height: 0.04*self.frame.height)
@@ -239,7 +252,7 @@ class MissionControlView: UIView{
         categoryLabel.font = UIFont(name: "BentonSans-Light", size: 22.5)
         categoryLabel.textColor = UIColor.white
         categoryLabel.textAlignment = NSTextAlignment.left
-        blackBackgroundView.addSubview(categoryLabel)
+        upperHalfView.addSubview(categoryLabel)
     }
     
     @objc func trendingTapped (_ sender: UIButton) {
@@ -263,29 +276,30 @@ class MissionControlView: UIView{
     //updates the selection of the filters based on what was tapped
     func toggleFilters(type: String) {
         //updating which toolbar Button is selected
+        print("toggle Filters")
         if (type == "Business" && !businessButton.isSelected) {
             businessButton.isSelected = true
             loveButton.isSelected = false
             friendshipButton.isSelected = false
-            customKeyboard.updatePostType(updatedPostType: "Business")
+            customKeyboard.updateMessageEnablement(updatedPostType: "Business")
             trendingOptionsView.getTop6TrendingOptions(type: type)
         } else if (type == "Love" && !loveButton.isSelected) {
             loveButton.isSelected = true
             businessButton.isSelected = false
             friendshipButton.isSelected = false
-            customKeyboard.updatePostType(updatedPostType: "Love")
+            customKeyboard.updateMessageEnablement(updatedPostType: "Love")
             trendingOptionsView.getTop6TrendingOptions(type: type)
         } else if (type == "Friendship" && !friendshipButton.isSelected) {
             friendshipButton.isSelected = true
             businessButton.isSelected = false
             loveButton.isSelected = false
-            customKeyboard.updatePostType(updatedPostType: "Friendship")
+            customKeyboard.updateMessageEnablement(updatedPostType: "Friendship")
             trendingOptionsView.getTop6TrendingOptions(type: type)
         } else {
             businessButton.isSelected = false
             loveButton.isSelected = false
             friendshipButton.isSelected = false
-            customKeyboard.updatePostType(updatedPostType: "All Types")
+            customKeyboard.updateMessageEnablement(updatedPostType: "All Types")
             trendingOptionsView.getTop6TrendingOptions(type: "All Types")
         }
         
@@ -321,6 +335,7 @@ class MissionControlView: UIView{
         }
         //If MissionControlView is opened to postRequest, then close
         else {
+            print("closing now because of tap")
             close()
             if trendingOptionsView.isHidden == false {
                 print("tringing is hiding now")
@@ -356,6 +371,8 @@ class MissionControlView: UIView{
             trendingButton.alpha = backgroundAlpha
             categoryLabel.alpha = backgroundAlpha
             customKeyboard.messageView.alpha = backgroundAlpha
+            upperHalfView.alpha = backgroundAlpha
+            lowerHalfView.alpha = backgroundAlpha
             filterLabel.alpha = 1 - backgroundAlpha
             
             
@@ -449,6 +466,12 @@ class MissionControlView: UIView{
     func close() {
         position = 0
         trendingButton.isEnabled = false
+        
+        self.addGestureRecognizer(tapGestureRecognizer)
+        upperHalfView.removeGestureRecognizer(tapGestureRecognizer)
+        categoriesView.removeFromSuperview()
+        self.addSubview(categoriesView)
+        
         UIView.animate(withDuration: 0.4) {
             
             //reorienting the categories View with filters
@@ -481,6 +504,10 @@ class MissionControlView: UIView{
             self.filterLabel.alpha = 1
             self.categoryLabel.alpha = 0
             self.customKeyboard.messageView.alpha = 0
+            self.categoryLabel.alpha = 0
+            self.customKeyboard.messageView.alpha = 0
+            self.upperHalfView.alpha = 0
+            self.lowerHalfView.alpha = 0
             
             //reposition PostView for when next time it is called again
             self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
@@ -494,6 +521,12 @@ class MissionControlView: UIView{
         position = 1
         //create and remove objects
         trendingButton.isEnabled = false
+        
+        self.addGestureRecognizer(tapGestureRecognizer)
+        upperHalfView.removeGestureRecognizer(tapGestureRecognizer)
+        categoriesView.removeFromSuperview()
+        self.addSubview(categoriesView)
+        
         UIView.animate(withDuration: 0.4) {
             //reorienting the categories View with filters
             self.frame.origin.y = 0.8282*DisplayUtility.screenHeight
@@ -520,6 +553,8 @@ class MissionControlView: UIView{
             self.filterLabel.alpha = 1
             self.categoryLabel.alpha = 0
             self.customKeyboard.messageView.alpha = 0
+            self.upperHalfView.alpha = 0
+            self.lowerHalfView.alpha = 0
             
             //reposition PostView for when next time it is called again
             self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
@@ -532,6 +567,16 @@ class MissionControlView: UIView{
         position = 2
         trendingButton.isEnabled = true
         let distanceBetweenButtons = businessButton.center.x - loveButton.center.x
+        //Displaying the Keyboard
+        self.customKeyboard.messageTextView.becomeFirstResponder()
+        self.upperHalfView.frame.size.height = DisplayUtility.screenHeight - self.customKeyboard.keyboardHeight - self.customKeyboard.messageView.frame.height
+        self.lowerHalfView.frame.size.height = self.customKeyboard.keyboardHeight + self.customKeyboard.messageView.frame.height
+        self.lowerHalfView.frame.origin.y = DisplayUtility.screenHeight - self.lowerHalfView.frame.height
+        self.removeGestureRecognizer(tapGestureRecognizer)
+        upperHalfView.addGestureRecognizer(tapGestureRecognizer)
+        categoriesView.removeFromSuperview()
+        upperHalfView.addSubview(categoriesView)
+        
         UIView.animate(withDuration: 0.4) {
             self.postARequestView.alpha = 0
             self.frame.origin.y = 0
@@ -544,9 +589,6 @@ class MissionControlView: UIView{
             self.businessButton.center.x = self.categoriesView.center.x + distanceBetweenButtons
             self.friendshipButton.center.x = self.categoriesView.center.x - distanceBetweenButtons
             
-            //Displaying the Keyboard
-            self.customKeyboard.messageTextView.becomeFirstResponder()
-            
             //Adjusting Alphas of fading in/out components
             self.blackBackgroundView.alpha = 1
             self.trendingButton.alpha = 1
@@ -557,19 +599,19 @@ class MissionControlView: UIView{
             self.filterLabel.alpha = 0
             self.categoryLabel.alpha = 1
             self.customKeyboard.messageView.alpha = 1
+            self.upperHalfView.alpha = 1
+            self.lowerHalfView.alpha = 1
             
             self.frame.origin.y = 0
+            
+            self.customKeyboard.messageView.frame.origin.y = 0
         }
+        
+        print("_________")
+        print(customKeyboard.messageView.frame)
+        print(lowerHalfView.frame)
+        print(self.frame)
     }
-    
-    /*override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        for subview in subviews {
-            if !subview.isHidden && subview.alpha > 0 && subview.isUserInteractionEnabled && subview.point(inside: convert(point, to: subview), with: event) {
-                return true
-            }
-        }
-        return false
-    }*/
 }
 
 

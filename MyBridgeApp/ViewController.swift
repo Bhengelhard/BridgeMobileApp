@@ -366,7 +366,7 @@ class ViewController: UIViewController {
         label.numberOfLines = 0
         self.view.addSubview(label)
         
-        let appDescriptionsArray = ["Connect your friends with the people they are looking for", "Discover the sweetness of your community", "Be the (con)necter you wish to see in the world"]
+        let appDescriptionsArray = ["'nect your friends with the people they are looking for", "Discover the sweetness of your community", "Be the 'necter you wish to see in the world"]
         
         DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async { () -> Void in
             var i = 1

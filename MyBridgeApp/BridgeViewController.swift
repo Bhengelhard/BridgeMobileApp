@@ -185,33 +185,15 @@ class BridgeViewController: UIViewController {
     
     func displayRevisitButton() {
         print("displayRevisitButton")
-        let revisitButtonY = (displayNoMoreCardsLabel?.frame.origin.y)! + (displayNoMoreCardsLabel?.frame.height)!
-        let labelFrame: CGRect = CGRect(x: 0,y: revisitButtonY, width: 0.45*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.06)
-        revisitButton.frame = labelFrame
-        revisitButton.setTitle("Revisit Matches", for: .normal)
-        revisitButton.setTitleColor(UIColor.black, for: .normal)
-        revisitButton.setTitleColor(DisplayUtility.necterYellow, for: .highlighted)
-        revisitButton.titleLabel?.font = UIFont(name: "BentonSans", size: 20)
-        revisitButton.titleLabel?.textAlignment = NSTextAlignment.center
-        revisitButton.center.x = view.center.x
-        revisitButton.addTarget(self, action: #selector(revitalizeMyPairs(_:)), for: .touchUpInside)
-        
-        revisitButton.layer.borderWidth = 4
-        revisitButton.layer.borderColor = DisplayUtility.necterGray.cgColor
-        revisitButton.layer.cornerRadius = 7
-        revisitButton.clipsToBounds = true
-        
-        view.addSubview(revisitButton)
         
     }
     func displayNoMoreCards() {
+        //Display no more cards label
         let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.1)
         displayNoMoreCardsLabel = UILabel()
         displayNoMoreCardsLabel!.frame = labelFrame
         displayNoMoreCardsLabel!.numberOfLines = 0
-        
         let type = missionControlView.whichFilter()
-        
         if type == "Business" {
             displayNoMoreCardsLabel!.text = "You ran out of people to connect for business. Please check back tomorrow."
         } else if type == "Love" {
@@ -221,16 +203,30 @@ class BridgeViewController: UIViewController {
         } else {
             displayNoMoreCardsLabel!.text = "You ran out of people to connect. Please check back tomorrow."
         }
-        
         displayNoMoreCardsLabel!.font = UIFont(name: "BentonSans", size: 20)
         displayNoMoreCardsLabel!.textAlignment = NSTextAlignment.center
         displayNoMoreCardsLabel!.center.y = view.center.y - DisplayUtility.screenHeight*0.05
         displayNoMoreCardsLabel!.center.x = view.center.x
 
-        view.addSubview(displayNoMoreCardsLabel!)
+        view.insertSubview(displayNoMoreCardsLabel!, belowSubview: customNavigationBar)
         
-        displayRevisitButton()
+        //Display Revisit Button so user can run through their previously seen matches
+        let revisitButtonY = (displayNoMoreCardsLabel?.frame.origin.y)! + (displayNoMoreCardsLabel?.frame.height)!
+        let revisitButtonFrame: CGRect = CGRect(x: 0,y: revisitButtonY, width: 0.45*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.06)
+        revisitButton.frame = revisitButtonFrame
+        revisitButton.setTitle("Revisit Matches", for: .normal)
+        revisitButton.setTitleColor(UIColor.black, for: .normal)
+        revisitButton.setTitleColor(DisplayUtility.necterYellow, for: .highlighted)
+        revisitButton.titleLabel?.font = UIFont(name: "BentonSans", size: 20)
+        revisitButton.titleLabel?.textAlignment = NSTextAlignment.center
+        revisitButton.center.x = view.center.x
+        revisitButton.addTarget(self, action: #selector(revitalizeMyPairs(_:)), for: .touchUpInside)
+        revisitButton.layer.borderWidth = 4
+        revisitButton.layer.borderColor = DisplayUtility.necterGray.cgColor
+        revisitButton.layer.cornerRadius = 7
+        revisitButton.clipsToBounds = true
         
+        view.insertSubview(revisitButton, belowSubview: customNavigationBar)
     }
     /*func getUpperDeckCardFrame() -> CGRect {
         let upperDeckFrame : CGRect = CGRect(x: 0, y: 0, width: superDeckWidth, height: 0.5*superDeckHeight)
@@ -374,7 +370,7 @@ class BridgeViewController: UIViewController {
     func displayCards(){
         if let displayNoMoreCardsLabel = displayNoMoreCardsLabel {
             displayNoMoreCardsLabel.removeFromSuperview()
-            //displayNoMoreCardsLabel = nil
+            revisitButton.removeFromSuperview()
         }
         arrayOfCardsInDeck = [UIView]()
         arrayOfCardColors = [CGColor]()
@@ -492,7 +488,7 @@ class BridgeViewController: UIViewController {
             self.view.insertSubview(swipeCardView, belowSubview: aboveView)
         }
         else {
-            self.view.insertSubview(swipeCardView, belowSubview: self.customNavigationBar)
+            self.view.insertSubview(swipeCardView, belowSubview: missionControlView.blackBackgroundView)
         }
         arrayOfCardsInDeck.append(swipeCardView)
         arrayOfCardColors.append(swipeCardView.layer.borderColor!)
@@ -672,7 +668,7 @@ class BridgeViewController: UIViewController {
     func getBridgePairings(_ maxNoOfCards:Int, typeOfCards:String, callBack: ((_ bridgeType: String)->Void)?, bridgeType: String?){
         if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
             displayNoMoreCardsLabel.removeFromSuperview()
-            self.displayNoMoreCardsLabel = nil
+            revisitButton.removeFromSuperview()
         }
 
         let q = PFQuery(className: "_User")
@@ -817,7 +813,7 @@ class BridgeViewController: UIViewController {
                                     DispatchQueue.main.async(execute: {
                                         if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
                                             displayNoMoreCardsLabel.removeFromSuperview()
-                                            self.displayNoMoreCardsLabel = nil
+                                            self.revisitButton.removeFromSuperview()
                                         }
                                         let bridgeType = bridgeType1 ?? "Business"
                                         let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
