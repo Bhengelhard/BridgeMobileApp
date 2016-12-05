@@ -61,6 +61,7 @@ class AcceptIgnoreView: UIView {
         
         let cardBackground = UIView()
         cardBackground.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.85*frame.width, height: 0.97*frame.height - acceptButton.frame.maxY)
+        //cardBackground.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.8586*DisplayUtility.screenWidth, height: 0.5*(0.8178*DisplayUtility.screenHeight))
         cardBackground.backgroundColor = .black
         
         let halfCard = HalfSwipeCard()
@@ -74,12 +75,12 @@ class AcceptIgnoreView: UIView {
         let downloader = Downloader()
         let url = URL(string: newMatch.profilePicURL)!
         downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
-        let photoMaskPath = UIBezierPath(roundedRect: profilePicView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 0.08*profilePicView.frame.width, height: 0.1*profilePicView.frame.width))
+        let photoMaskPath = UIBezierPath(roundedRect: profilePicView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379/*0.08*profilePicView.frame.width*/, height: 13.379/*0.1*profilePicView.frame.width*/))
         let profilePicShape = CAShapeLayer()
         profilePicShape.path = photoMaskPath.cgPath
         profilePicView.layer.mask = profilePicShape
         
-        let cardMaskPath = UIBezierPath(roundedRect: cardBackground.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 0.08*profilePicView.frame.width, height: 0.1*profilePicView.frame.width))
+        let cardMaskPath = UIBezierPath(roundedRect: cardBackground.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379/*0.08*profilePicView.frame.width*/, height: 13.379/*0.1*profilePicView.frame.width*/))
         let cardShape = CAShapeLayer()
         cardShape.path = cardMaskPath.cgPath
         cardBackground.layer.mask = cardShape
@@ -96,6 +97,7 @@ class AcceptIgnoreView: UIView {
         halfCard.layer.mask = halfCardShape
         halfCard.clipsToBounds = true
         cardBackground.addSubview(halfCard)
+        
         
         if let connecterPicURL = newMatch.connecterPicURL {
             let connecterProfilePicView = UIImageView()

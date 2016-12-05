@@ -250,7 +250,11 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         updateMessageHeights()
         //need to retrieve the chracter limit from the page the user is on, if there is one and pass it through as a parameter for the characterLimit function
         characterLimit()
-        if let missionCV = currentView as? MissionControlView {
+        print("textViewDidChange")
+        print(currentView)
+        print(currentView.superview)
+        if let missionCV = currentView.superview as? MissionControlView {
+            print("got into Mission ControlView as the current view")
             let type = missionCV.whichFilter()
             updateMessageEnablement(updatedPostType: type)
         }

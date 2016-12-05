@@ -344,7 +344,6 @@ class ReasonForConnection: UIView {
         self.addSubview(selectedButtonLabel)
     }
     @objc func typeButtonTapped(_ sender: UIButton) {
-        
         //updating which toolbar Button is selected
         if (sender == businessButton && !sender.isSelected) {
             businessButton.isSelected = true

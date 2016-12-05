@@ -94,7 +94,7 @@ class MissionControlView: UIView{
         
         lowerHalfView.frame = CGRect(x: 0, y: 0.6*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenHeight)
         lowerHalfView.alpha = 0
-        currentView.insertSubview(lowerHalfView, aboveSubview: upperHalfView)
+        self.insertSubview(lowerHalfView, aboveSubview: upperHalfView)
     }
     
     func createKeyboard() {
@@ -379,6 +379,11 @@ class MissionControlView: UIView{
             let vel = gestureRecognizer.velocity(in: self)
             //User is dragging up
             if vel.y < 0 {
+                categoriesView.removeFromSuperview()
+                self.addSubview(categoriesView)
+                upperHalfView.removeFromSuperview()
+                currentView.addSubview(upperHalfView)
+                
                 wasDraggedUp += 1
                 if self.frame.minY < 0.94322*DisplayUtility.screenHeight && self.frame.minY > 0.40892*self.frame.height{
                     trendingButton.frame.origin.y += translation.y
@@ -394,6 +399,11 @@ class MissionControlView: UIView{
             }
                 //User is dragging down
             else if vel.y > 0 {
+                categoriesView.removeFromSuperview()
+                self.addSubview(categoriesView)
+                upperHalfView.removeFromSuperview()
+                currentView.addSubview(upperHalfView)
+                
                 //Adjust Category View on the way dragging Down
                 wasDraggedUp -= 1
                 if self.frame.minY < initialFrameY {
@@ -467,6 +477,9 @@ class MissionControlView: UIView{
         position = 0
         trendingButton.isEnabled = false
         
+        upperHalfView.removeFromSuperview()
+        currentView.addSubview(upperHalfView)
+        
         self.addGestureRecognizer(tapGestureRecognizer)
         upperHalfView.removeGestureRecognizer(tapGestureRecognizer)
         categoriesView.removeFromSuperview()
@@ -518,6 +531,10 @@ class MissionControlView: UIView{
     }
     //Animate display of Mission Control Filters (Position 1)
     func displayFilters(){
+        
+        upperHalfView.removeFromSuperview()
+        currentView.addSubview(upperHalfView)
+        
         position = 1
         //create and remove objects
         trendingButton.isEnabled = false
@@ -564,12 +581,15 @@ class MissionControlView: UIView{
     }
     //Animate display of Mission Control Filters (Position 2)
     func displayPostRequest(){
+        upperHalfView.removeFromSuperview()
+        self.insertSubview(upperHalfView, belowSubview: lowerHalfView)
+        
         position = 2
         trendingButton.isEnabled = true
         let distanceBetweenButtons = businessButton.center.x - loveButton.center.x
         //Displaying the Keyboard
         self.customKeyboard.messageTextView.becomeFirstResponder()
-        self.upperHalfView.frame.size.height = DisplayUtility.screenHeight - self.customKeyboard.keyboardHeight - self.customKeyboard.messageView.frame.height
+        //self.upperHalfView.frame.size.height = DisplayUtility.screenHeight - self.customKeyboard.keyboardHeight - self.customKeyboard.messageView.frame.height
         self.lowerHalfView.frame.size.height = self.customKeyboard.keyboardHeight + self.customKeyboard.messageView.frame.height
         self.lowerHalfView.frame.origin.y = DisplayUtility.screenHeight - self.lowerHalfView.frame.height
         self.removeGestureRecognizer(tapGestureRecognizer)
@@ -607,10 +627,6 @@ class MissionControlView: UIView{
             self.customKeyboard.messageView.frame.origin.y = 0
         }
         
-        print("_________")
-        print(customKeyboard.messageView.frame)
-        print(lowerHalfView.frame)
-        print(self.frame)
     }
 }
 
