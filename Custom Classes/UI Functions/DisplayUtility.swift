@@ -48,7 +48,8 @@ class DisplayUtility {
         button.setTitleColor(color, for: .highlighted)
         button.setTitleColor(color, for: .selected)
         button.titleLabel?.textColor = .white
-        button.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 18)
+        button.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 20)
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.layer.cornerRadius = 0.2*button.frame.height
         button.clipsToBounds = true
         

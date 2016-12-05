@@ -12,13 +12,13 @@ import Parse
 //Change to MessagesTableViewController so other can be MessageViewController
 func getWeekDay(_ num:Int)->String{
     switch num {
-    case 1: return "Sunday"
-    case 2: return "Monday"
-    case 3: return "Tuesday"
-    case 4: return "Wednesday"
-    case 5: return "Thursday"
-    case 6: return "Friday"
-    case 7: return "Saturday"
+    case 1: return "Sun."
+    case 2: return "Mon."
+    case 3: return "Tues."
+    case 4: return "Wed."
+    case 5: return "Thurs."
+    case 6: return "Fri."
+    case 7: return "Sat."
     default : return "A good day to die hard!"
     }
 }
@@ -424,25 +424,20 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         newMatchesView.filterBy(type: type)
         if type != "All Types" {
             //displaying noMessagesLabel when there are no messages in the filtered message type
-            noMessagesLabel.alpha = 1
             for i in 0 ..< messageType.count{
                 if messageType[messagePositionToMessageIdMapping[i]!]! == type {
                     filteredPositions.append(i)
-                    noMessagesLabel.alpha = 0
                 }
             }
-            if noMessagesLabel.alpha == 1 {
-                displayNoMessages()
-            }
         } else {
-            noMessagesLabel.alpha = 1
             for i in 0 ..< messageType.count{
                 filteredPositions.append(i)
-                noMessagesLabel.alpha = 0
             }
-            if noMessagesLabel.alpha == 1 {
-                displayNoMessages()
-            }
+        }
+        if filteredPositions.count == 0 {
+            displayNoMessages()
+        } else {
+            noMessagesLabel.isHidden = true
         }
         tableView.reloadData()
     }
@@ -484,7 +479,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         noMessagesLabel.frame = labelFrame
         noMessagesLabel.numberOfLines = 0
-        noMessagesLabel.alpha = 1
+        noMessagesLabel.isHidden = false
         
         let type = missionControlView.whichFilter()
         if type == "All Types" {
@@ -638,7 +633,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 if self.totalElements == 0 {
                     self.displayNoMessages()
                 } else {
-                    self.noMessagesLabel.alpha = 0
+                    self.noMessagesLabel.isHidden = true
                 }
             }
             else {
@@ -708,23 +703,28 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     let objectId = result.objectId
                     
+                    var currentUser_objectId = ""
+                    if let currentUser = PFUser.current() {
+                        currentUser_objectId = currentUser.objectId!
+                    }
+                    
                     var user = ""
                     var otherUser = ""
                     if let user1_objectId = result["user_objectId1"] {
-                        if user1_objectId as? String == PFUser.current()?.objectId {
+                        if (user1_objectId as! String) == currentUser_objectId {
                             user = "user1"
                             otherUser = "user2"
                         }
                     }
                     if let user2_objectId = result["user_objectId2"] {
-                        if user2_objectId as? String == PFUser.current()?.objectId {
+                        if (user2_objectId as! String) == currentUser_objectId {
                             user = "user2"
                             otherUser = "user1"
                         }
                     }
                     
                     //These force unwraps need to be removed
-                    if user != nil {
+                    if user != "" {
                         var userResponse = 0
                         if let UR = result["\(user)_response"] as? Int {
                             userResponse = UR
@@ -746,7 +746,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                             color = .black
                                         }
                                         if let status = result["\(otherUser)_bridge_status"] as? String {
-                                            let status = result["\(otherUser)_bridge_status"] as! String
                                             let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURLString, name: name, type: type, color: color, dot: dot, status: status)
                                             let connecterName = result["connecter_name"] as? String
                                             let connecterPicURL = result["connecter_profile_picture_url"] as? String
@@ -760,225 +759,224 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                             }
                         }
                     }
-                    }
                 }
+            }
                 
-            })
-        }
+        })
+    }
         
-        override func viewDidLayoutSubviews() {
-            tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
-        }
-        override func viewDidAppear(_ animated: Bool) {
+    override func viewDidLayoutSubviews() {
+        tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        
+    }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
+            if self.encounteredBefore[self.noOfElementsFetched] == nil {
+                self.encounteredBefore[self.noOfElementsFetched] = true
+                refresh()
+                pagingSpinner.startAnimating()
+            }
             
         }
-        override func didReceiveMemoryWarning() {
-            super.didReceiveMemoryWarning()
-            // Dispose of any resources that can be recreated.
+        else {
+            self.pagingSpinner.stopAnimating()
+        }
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
+            return filteredPositions.count
         }
         
-        func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-            if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
-                if self.encounteredBefore[self.noOfElementsFetched] == nil {
-                    self.encounteredBefore[self.noOfElementsFetched] = true
-                    refresh()
-                    pagingSpinner.startAnimating()
-                }
+        return messages.count
+        
+    }
+
+    // Data to be shown on an individual row
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
+        let cell = MessagesTableCell()
+        cell.setSeparator = true
+        
+        cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
+        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
+            var i = 0
+            messagePositionToMessageIdMapping = [Int:String]()
+            for index in filteredPositions {
+                messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
+                i += 1
+            }
+        }
+        if messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row] == nil || names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil{
+            cell.participants.text = ""
+            cell.messageSnapshot.text = ""
+            cell.messageTimestamp.text = ""
+            cell.backgroundColor = UIColor.white
+            return cell
+        }
+        
+        var profilePicsDict = profilePicURLs[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
+        for id in profilePicsDict.keys {
+            if id != PFUser.current()?.objectId {
+                let url = URL(string: profilePicsDict[id]!)!
+                let downloader = Downloader()
+                downloader.imageFromURL(URL: url, imageView: cell.profilePic, callBack: nil)
+                break
+            }
+        }
+        var stringOfNames = ""
+        var users = names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
+        users = users.filter { $0 != PFUser.current()?["name"] as! String }
+        
+        for i in 0 ..< users.count  {
+            var name = users[i]
+            if users.count > 2 && i < users.count - 2 {
+                var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
+                stringOfNames = stringOfNames + fullNameArr[0] + ", "
+                
+            } else if users.count >= 2 && i == users.count - 2 {
+                var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
+                stringOfNames = stringOfNames + fullNameArr[0] + " & "
                 
             }
             else {
-                self.pagingSpinner.stopAnimating()
+                if users.count > 1{
+                    name = name.characters.split{$0 == " "}.map(String.init)[0]
+                }
+                stringOfNames = stringOfNames + name
             }
         }
-        func numberOfSections(in tableView: UITableView) -> Int {
-            // #warning Incomplete implementation, return the number of sections
-            return 1
+        
+        cell.participants.text = stringOfNames
+        cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
+        
+        if messageViewed[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]! {
+            cell.notificationDot.isHidden = true
+        } else {
+            cell.notificationDot.isHidden = false
         }
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            // #warning Incomplete implementation, return the number of rows
-            if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
-                return filteredPositions.count
-            }
+        
+        switch messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!{
             
-            return messages.count
+        case "Business":
+            cell.color = DisplayUtility.businessBlue
+            break
+        case "Love":
+            cell.color = DisplayUtility.loveRed
+            break
+        case "Friendship":
+            cell.color = DisplayUtility.friendshipGreen
+            break
+        default: cell.participants.textColor = DisplayUtility.friendshipGreen
+        cell.arrow.textColor = DisplayUtility.friendshipGreen
             
         }
-    
-        // Data to be shown on an individual row
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
-            let cell = MessagesTableCell()
-            cell.setSeparator = true
-            
-            cell.cellHeight = DisplayUtility.screenHeight/6.0
-            cell.cellHeight = 0.15 * DisplayUtility.screenHeight
-            if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
-                var i = 0
-                messagePositionToMessageIdMapping = [Int:String]()
-                for index in filteredPositions {
-                    messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
-                    i += 1
-                }
-            }
-            if messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row] == nil || names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil || messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!] == nil{
-                cell.participants.text = ""
-                cell.messageSnapshot.text = ""
-                cell.messageTimestamp.text = ""
-                cell.backgroundColor = UIColor.white
-                return cell
-            }
-            
-            var profilePicsDict = profilePicURLs[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
-            for id in profilePicsDict.keys {
-                if id != PFUser.current()?.objectId {
-                    let url = URL(string: profilePicsDict[id]!)!
-                    let downloader = Downloader()
-                    downloader.imageFromURL(URL: url, imageView: cell.profilePic, callBack: nil)
-                    break
-                }
-            }
-            var stringOfNames = ""
-            var users = names[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
-            users = users.filter { $0 != PFUser.current()?["name"] as! String }
-            
-            for i in 0 ..< users.count  {
-                var name = users[i]
-                if users.count > 2 && i < users.count - 2 {
-                    var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                    stringOfNames = stringOfNames + fullNameArr[0] + ", "
-                    
-                } else if users.count >= 2 && i == users.count - 2 {
-                    var fullNameArr = name.characters.split{$0 == " "}.map(String.init)
-                    stringOfNames = stringOfNames + fullNameArr[0] + " & "
-                    
-                }
-                else {
-                    if users.count > 1{
-                        name = name.characters.split{$0 == " "}.map(String.init)[0]
-                    }
-                    stringOfNames = stringOfNames + name
-                }
-            }
-            
-            cell.participants.text = stringOfNames
-            cell.messageSnapshot.text = messages[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!
-            
-            if messageViewed[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]! {
-                cell.notificationDot.isHidden = true
-            } else {
-                cell.notificationDot.isHidden = false
-            }
-            
-            switch messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!{
-                
-            case "Business":
-                cell.color = DisplayUtility.businessBlue
-                break
-            case "Love":
-                cell.color = DisplayUtility.loveRed
-                break
-            case "Friendship":
-                cell.color = DisplayUtility.friendshipGreen
-                break
-            default: cell.participants.textColor = DisplayUtility.friendshipGreen
-            cell.arrow.textColor = DisplayUtility.friendshipGreen
-                
-            }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
+        let calendar = Calendar.current
+        let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
+        let components = (calendar as NSCalendar).components([ .day],
+                                                             from: date, to: Date(), options: NSCalendar.Options.wrapComponents)
+        if components.day! > 7 {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "EEE, dd MMM yyy hh:mm:ss +zzzz"
+            dateFormatter.dateFormat = "MM/dd"
+            cell.messageTimestamp.text = dateFormatter.string(from: date)
+        }
+        else if components.day! >= 1 {
             let calendar = Calendar.current
             let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
-            let components = (calendar as NSCalendar).components([ .day],
-                                                                 from: date, to: Date(), options: NSCalendar.Options.wrapComponents)
-            if components.day! > 7 {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "MM/dd"
-                cell.messageTimestamp.text = dateFormatter.string(from: date)
-            }
-            else if components.day! >= 2 {
-                let calendar = Calendar.current
-                let date = (messageTimestamps[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!]!)!
-                let components = (calendar as NSCalendar).components([.weekday],
-                                                                     from: date)
-                cell.messageTimestamp.text = String(getWeekDay(components.weekday!))
-            }
-            else if components.day! >= 1 {
-                cell.messageTimestamp.text = "Yesterday"
-            }
-            else {
-                cell.messageTimestamp.text = "Today"
-            }
-            if indexPath.row == filteredPositions.count - 1 {
-                toolbarTapped = false
-            }
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
-            return cell
-            
+            let components = (calendar as NSCalendar).components([.weekday],
+                                                                 from: date)
+            cell.messageTimestamp.text = String(getWeekDay(components.weekday!))
         }
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return DisplayUtility.screenHeight/6.0
+        /*
+        else if components.day! >= 1 {
+            cell.messageTimestamp.text = "Yesterday"
         }
-        // A row is selected
-        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let currentCell = tableView.cellForRow(at: indexPath)! as! MessagesTableCell
-            var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
-            if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
-                messagePositionToMessageIdMapping = [Int:String]()
-                var i = 0
-                for index in filteredPositions {
-                    messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
-                    i += 1
-                }
-            }
-            
-            if (currentCell.participants?.text)! != "" {
-                singleMessageTitle = (currentCell.participants?.text)!
-            } else {
-                //singleMessageTitle stays as "Conversation"
-            }
-            
-            singleMessageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!
-            messageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!
-            let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!]!
-            switch(necterTypeForMessage) {
-            case "Business":
-                necterTypeColor = DisplayUtility.businessBlue
-            case "Love":
-                necterTypeColor = DisplayUtility.loveRed
-            case "Friendship":
-                necterTypeColor = DisplayUtility.friendshipGreen
-            default:
-                necterTypeColor = DisplayUtility.necterGray
-            }
-            
+        */
+        else {
+            cell.messageTimestamp.text = "Today"
+        }
+        if indexPath.row == filteredPositions.count - 1 {
             toolbarTapped = false
-            let query: PFQuery = PFQuery(className: "Messages")
-            query.getObjectInBackground(withId: messageId) {
-                (messageObject: PFObject?, error: Error?) in
-                if error != nil {
-                    print(error)
-                }
-                else if let messageObject = messageObject {
-                    if let _ = messageObject["message_viewed"] {
-                        var whoViewed = messageObject["message_viewed"] as! [String]
-                        if !whoViewed.contains((PFUser.current()?.objectId)!) {
-                            whoViewed.append((PFUser.current()?.objectId)!)
-                            messageObject["message_viewed"] = whoViewed
-                            messageObject.saveInBackground()
-                            //print("1")
-                        }
-                    }
-                    else {
-                        messageObject["message_viewed"] = [ (PFUser.current()?.objectId)! ]
+        }
+        cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
+        return cell
+        
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return DisplayUtility.screenHeight/6.0
+    }
+    // A row is selected
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let currentCell = tableView.cellForRow(at: indexPath)! as! MessagesTableCell
+        var messagePositionToMessageIdMapping = self.messagePositionToMessageIdMapping
+        if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
+            messagePositionToMessageIdMapping = [Int:String]()
+            var i = 0
+            for index in filteredPositions {
+                messagePositionToMessageIdMapping[i] = self.messagePositionToMessageIdMapping[index]
+                i += 1
+            }
+        }
+        
+        if (currentCell.participants?.text)! != "" {
+            singleMessageTitle = (currentCell.participants?.text)!
+        } else {
+            //singleMessageTitle stays as "Conversation"
+        }
+        
+        singleMessageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!
+        messageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!
+        let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!]!
+        switch(necterTypeForMessage) {
+        case "Business":
+            necterTypeColor = DisplayUtility.businessBlue
+        case "Love":
+            necterTypeColor = DisplayUtility.loveRed
+        case "Friendship":
+            necterTypeColor = DisplayUtility.friendshipGreen
+        default:
+            necterTypeColor = DisplayUtility.necterGray
+        }
+        
+        toolbarTapped = false
+        let query: PFQuery = PFQuery(className: "Messages")
+        query.getObjectInBackground(withId: messageId) {
+            (messageObject: PFObject?, error: Error?) in
+            if error != nil {
+                print(error)
+            }
+            else if let messageObject = messageObject {
+                if let _ = messageObject["message_viewed"] {
+                    var whoViewed = messageObject["message_viewed"] as! [String]
+                    if !whoViewed.contains((PFUser.current()?.objectId)!) {
+                        whoViewed.append((PFUser.current()?.objectId)!)
+                        messageObject["message_viewed"] = whoViewed
                         messageObject.saveInBackground()
+                        //print("1")
                     }
+                }
+                else {
+                    messageObject["message_viewed"] = [ (PFUser.current()?.objectId)! ]
+                    messageObject.saveInBackground()
                 }
             }
-            segueToSingleMessage = true
-            performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
-            
-            
         }
+        segueToSingleMessage = true
+        performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
+    }
 }
 
 
