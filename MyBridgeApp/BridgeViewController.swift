@@ -56,6 +56,7 @@ class BridgeViewController: UIViewController {
     var wasLastSwipeInDeck = Bool()
     var shouldCheckInPair = Bool()
     var swipeCardView = UIView()
+    var postTapped = Bool()
     
     /*//toolbar buttons
     let toolbar = UIView()
@@ -201,9 +202,9 @@ class BridgeViewController: UIViewController {
         displayNoMoreCardsLabel.numberOfLines = 0
         let type = missionControlView.whichFilter()
         if type == "Business" {
-            displayNoMoreCardsLabel.text = "No active matches to 'nect for business. Please check back tomorrow."
+            displayNoMoreCardsLabel.text = "No active matches to 'nect for work. Please check back tomorrow."
         } else if type == "Love" {
-            displayNoMoreCardsLabel.text = "No active matches to 'nect for love. Please check back tomorrow."
+            displayNoMoreCardsLabel.text = "No active matches to 'nect for dating. Please check back tomorrow."
         } else if type == "Friendship" {
             displayNoMoreCardsLabel.text = "No active matches to 'nect for friendship. Please check back tomorrow."
         } else {
@@ -726,9 +727,10 @@ class BridgeViewController: UIViewController {
                         }
                     }
                 }
+            } else {
+                self.displayNoMoreCards()
             }
-
-        }
+            }
         }
     }
     func updateNoOfUnreadMessagesIcon(_ notification: Notification) {
@@ -792,11 +794,19 @@ class BridgeViewController: UIViewController {
         
         //Create Mission Control
         missionControlView.initialize(view: view, revisitLabel: displayNoMoreCardsLabel, revisitButton: revisitButton)
-        
     }
     override func viewDidLayoutSubviews() {
-
+        
     }
+    override func viewDidAppear(_ animated: Bool) {
+        print("postTapped = \(postTapped)")
+        if postTapped {
+            sleep(UInt32(0.2))
+            missionControlView.displayPostRequest()
+            postTapped = false
+        }
+    }
+    
     func isDragged(_ gesture: UIPanGestureRecognizer) {
 
         let translation = gesture.translation(in: self.view)
@@ -1049,15 +1059,19 @@ class BridgeViewController: UIViewController {
         switch(type){
         case "All Types":
             currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
+            displayNoMoreCardsLabel.text = "No active matches to 'nect. Please check back tomorrow."
             break
         case "Business":
             currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
+            displayNoMoreCardsLabel.text = "No active matches to 'nect for work. Please check back tomorrow."
             break
         case "Love":
             currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
+            displayNoMoreCardsLabel.text = "No active matches to 'nect for dating. Please check back tomorrow."
             break
         case "Friendship":
             currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
+            displayNoMoreCardsLabel.text = "No active matches to 'nect for friendship. Please check back tomorrow."
             break
         default:
             currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")

@@ -15,7 +15,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     let profilePictureView = UIImageView()
     @IBOutlet weak var name: UILabel!
     let rightBarButton = UIButton()
-    let bridgeStatus = UIButton()
+    var bridgeStatus = UIButton()
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -77,7 +77,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         //botNotificationView.removeFromSuperview()
         
     }
-    
+    //setting background color to off-white blue
+    func displayBackgroundView(){
+        let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
+        backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        view.addSubview(backgroundView)
+        view.sendSubview(toBack: backgroundView)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,7 +92,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         print("running getMainAppMetrics")
         let pfCloudFunctions = PFCloudFunctions()
         pfCloudFunctions.getMainAppMetrics(parameters: [:])*/
-
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         
@@ -153,25 +159,33 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         //profilePictureButton.addTarget(self, action: #selector(profilePictureTapped(_:)), forControlEvents: .TouchUpInside)
         
-        bridgeStatus.setTitle("Post Status", for: UIControlState())
+        /*bridgeStatus.setTitle("Post Request", for: UIControlState())
         bridgeStatus.titleLabel!.font = UIFont(name: "Verdana", size: 20)
         bridgeStatus.setTitleColor(DisplayUtility.necterYellow, for: UIControlState.highlighted)
         bridgeStatus.setTitleColor(UIColor.black, for: UIControlState())
         bridgeStatus.layer.cornerRadius = 7.0
         bridgeStatus.layer.borderWidth = 4.0
         bridgeStatus.layer.borderColor = DisplayUtility.necterYellow.cgColor
-        bridgeStatus.clipsToBounds = true
+        bridgeStatus.clipsToBounds = true*/
+        
+        let bridgeStatusFrame = CGRect(x: 0.275*DisplayUtility.screenWidth, y:0.465*DisplayUtility.screenHeight, width:0.45*DisplayUtility.screenWidth, height:0.06*DisplayUtility.screenHeight)
+        bridgeStatus = DisplayUtility.gradientButton(text: "Post Request", frame: bridgeStatusFrame)
         bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), for: .touchUpInside)
+        bridgeStatus.setTitleColor(UIColor.black, for: .normal)
         
         view.addSubview(bridgeStatus)
         view.addSubview(profilePictureView)
         tableView.tableFooterView = UIView()
         tableView.isScrollEnabled = false
         tableView.separatorInset = UIEdgeInsets.zero
+        //tableView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        
+        //displayBackgroundView()
+        
     }
     func statusTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "showBridgeViewFromProfilePage", sender: self)
         postTapped = true
+        performSegue(withIdentifier: "showBridgeViewFromProfilePage", sender: self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -186,8 +200,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         profilePictureView.contentMode = UIViewContentMode.scaleAspectFill
         profilePictureView.clipsToBounds = true
         name.frame = CGRect(x: 0.1*screenWidth, y:0.38*screenHeight, width:0.8*screenWidth, height:0.05*screenHeight)
-        bridgeStatus.frame = CGRect(x: 0, y:0.465*screenHeight, width:0.45*screenWidth, height:0.06*screenHeight)
-        bridgeStatus.center.x = self.view.center.x
         tableView.frame = CGRect(x: 0, y:0.55*screenHeight, width:screenWidth, height:0.435*screenHeight)
     }
     
@@ -197,11 +209,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Right"
-            if postTapped {
-                if let bridgeVC = vc as? BridgeViewController {
-                    bridgeVC.missionControlView.displayPostRequest()
-                }
-            }
+            let vc2 = vc as! BridgeViewController
+            vc2.postTapped = postTapped
         } else if mirror.subjectType == OptionsFromBotViewController.self {
             self.transitionManager.animationDirection = "Top"
             let vc2 = vc as! OptionsFromBotViewController

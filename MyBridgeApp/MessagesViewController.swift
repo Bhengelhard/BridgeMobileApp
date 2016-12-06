@@ -87,7 +87,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         NotificationCenter.default.removeObserver(self)
         if segueToSingleMessage {
-            //print(" prepareForSegue was Called")
+            print("prepareForSegue was Called")
             segueToSingleMessage = false
             let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
             singleMessageVC.transitioningDelegate = self.transitionManager
@@ -492,25 +492,24 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //noMessagesLabel.text = "No active connections for friendship or dating."
         } else if type == "Business" {
             //noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
-            noMessagesLabel.text = "No active connections for business."
+            noMessagesLabel.text = "No active connections for work. Be sweet and 'nect your friends to get the community buzzing!"
             print("business enabled = false")
         } else if type == "Love" {
             //noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
-            noMessagesLabel.text = "No active connections for love."
+            noMessagesLabel.text = "No active connections for dating. Be sweet and 'nect your friends to get the community buzzing!"
             print("love enabled = false")
         } else if type == "Friendship" {
-            noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
-            noMessagesLabel.text = "No active connections for friendship."
+            //noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
+            noMessagesLabel.text = "No active connections for friendship. Be sweet and 'nect your friends to get the community buzzing!"
         } else {
-            noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
+            noMessagesLabel.text = "You do not have any messages. Be sweet and 'nect your friends to get the community buzzing!"
         }
-        
-        noMessagesLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 16)
+        noMessagesLabel.font = UIFont(name: "BentonSans-Light", size: 20)
         noMessagesLabel.textAlignment = .center
         noMessagesLabel.center.x = view.center.x
         noMessagesLabel.center.y = view.center.y
-        noMessagesLabel.textColor = .red
-        
+        //noMessagesLabel.textColor = .red
+        noMessagesLabel.adjustsFontSizeToFitWidth = true
         
         /*
          noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
@@ -563,6 +562,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        NotificationCenter.default.removeObserver(self)
         
     }
+    func displayBackgroundView(){
+        let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
+        backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        view.addSubview(backgroundView)
+        view.sendSubview(toBack: backgroundView)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -582,36 +587,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         
-        /*
-<<<<<<< HEAD
-         var profilePics = [UIImage]()
-         var names = [String]()
-         
-         for _ in 0...9 {
-         let profilePic = UIImage(named: "Business_Icon_Blue")
-         profilePics.append(profilePic!)
-         names.append("Doug")
-         }
-         
-         
-         newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
-        
-        newMatchesView.setViewController(vc: self)
-        
-=======
-        var profilePics = [UIImage]()
-        var names = [String]()
-        
-        for _ in 0...9 {
-            let profilePic = UIImage(named: "Business_Icon_Blue")
-            profilePics.append(profilePic!)
-            names.append("Doug")
-        }
-        
-        
-        newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
-                
->>>>>>> wiredFrame*/
         loadNewMatches()
         
         tableView.tableHeaderView = newMatchesView
@@ -641,8 +616,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
-        tableView.delegate = self
-        tableView.dataSource = self
         searchBarContainer.addSubview(searchController.searchBar)
         searchBarContainer.frame = CGRect(x: 0, y: 0.1*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.08*DisplayUtility.screenHeight)
         view.addSubview(searchBarContainer)
@@ -654,9 +627,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         pagingSpinner.hidesWhenStopped = true
         tableView.tableFooterView = pagingSpinner
         tableView.separatorStyle = .none
+        tableView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         
         missionControlView.initialize(view: view, revisitLabel: noMessagesLabel, revisitButton: UIButton())
         displayFilterLabel(type: "All Types")
+        displayBackgroundView()
     }
     
     func displayFilterLabel(type : String) {
@@ -801,6 +776,23 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         return messages.count
         
+    }
+    
+    func transitionToMessageWithID(_ id: String, color: UIColor) {
+        print("transition to message was called with id \(id)")
+        
+        self.singleMessageId = id
+        self.necterTypeColor = color
+        self.segueToSingleMessage = true
+        self.performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
+ 
+        /*
+        for (messagePos, messageId) in messagePositionToMessageIdMapping {
+            if messageId == id {
+                tableView.delegate?.tableView!(tableView, didSelectRowAt: IndexPath(row: messagePos, section: 0))
+            }
+        }
+ */
     }
 
     // Data to be shown on an individual row

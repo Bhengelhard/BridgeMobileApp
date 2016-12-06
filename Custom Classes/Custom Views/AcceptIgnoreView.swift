@@ -12,7 +12,7 @@ import Parse
 class AcceptIgnoreView: UIView {
     
     var newMatch: NewMatch
-    var vc: UIViewController?
+    var vc: MessagesViewController?
     let exitButton = UIButton()
     var acceptButton = UIButton()
     var ignoreButton = UIButton()
@@ -48,25 +48,24 @@ class AcceptIgnoreView: UIView {
         line.backgroundColor = .white
         addSubview(line)
         
-        let acceptButtonFrame = CGRect(x: 0.2328*DisplayUtility.screenWidth, y: line.frame.maxY + 0.035*DisplayUtility.screenHeight, width: 0.237*DisplayUtility.screenWidth, height: 0.0593*DisplayUtility.screenHeight)
+        let acceptButtonFrame = CGRect(x: 0.2328*DisplayUtility.screenWidth, y: line.frame.maxY + 0.035*DisplayUtility.screenHeight, width: 0.225*DisplayUtility.screenWidth, height: 0.058*DisplayUtility.screenHeight)
         acceptButton = DisplayUtility.gradientButton(text: "accept", frame: acceptButtonFrame)
         addSubview(acceptButton)
         
-        let ignoreButtonFrame = CGRect(x: 0.5302*DisplayUtility.screenWidth, y: acceptButton.frame.minY, width: acceptButton.frame.width, height: acceptButton.frame.height)
+        let ignoreButtonFrame = CGRect(x: 0.5422*DisplayUtility.screenWidth, y: acceptButton.frame.minY, width: acceptButton.frame.width, height: acceptButton.frame.height)
         ignoreButton = DisplayUtility.gradientButton(text: "ignore", frame: ignoreButtonFrame)
         addSubview(ignoreButton)
         
         acceptButton.addTarget(self, action: #selector(accept(_:)), for: .touchUpInside)
         ignoreButton.addTarget(self, action: #selector(ignore(_:)), for: .touchUpInside)
         
-        let cardBackground = UIView()
-        cardBackground.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.85*frame.width, height: 0.97*frame.height - acceptButton.frame.maxY)
-        //cardBackground.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.8586*DisplayUtility.screenWidth, height: 0.5*(0.8178*DisplayUtility.screenHeight))
-        cardBackground.backgroundColor = .black
+        let scrollView = UIScrollView()
+        scrollView.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.85*frame.width, height: 0.97*frame.height - acceptButton.frame.maxY)
+        addSubview(scrollView)
         
         let halfCard = HalfSwipeCard()
         //halfCard.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.85*frame.width, height: 0.85*frame.width)
-        halfCard.frame = CGRect(x: 0, y: 0, width: cardBackground.frame.width, height: cardBackground.frame.width)
+        halfCard.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: scrollView.frame.width)
         
         let name = self.firstNameLastNameInitial(name: newMatch.name)
         
@@ -75,35 +74,29 @@ class AcceptIgnoreView: UIView {
         let downloader = Downloader()
         let url = URL(string: newMatch.profilePicURL)!
         downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
-        let photoMaskPath = UIBezierPath(roundedRect: profilePicView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379/*0.08*profilePicView.frame.width*/, height: 13.379/*0.1*profilePicView.frame.width*/))
+        let photoMaskPath = UIBezierPath(roundedRect: profilePicView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
         let profilePicShape = CAShapeLayer()
         profilePicShape.path = photoMaskPath.cgPath
         profilePicView.layer.mask = profilePicShape
         
-        let cardMaskPath = UIBezierPath(roundedRect: cardBackground.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379/*0.08*profilePicView.frame.width*/, height: 13.379/*0.1*profilePicView.frame.width*/))
-        let cardShape = CAShapeLayer()
-        cardShape.path = cardMaskPath.cgPath
-        cardBackground.layer.mask = cardShape
-        cardBackground.clipsToBounds = true
-        addSubview(cardBackground)
-        
         halfCard.layoutHalfCard(name: name, status: newMatch.status, photoView: profilePicView, connectionType: newMatch.type)
+        //addSubview(halfCard)
         
-        //applying rounded corners to the topHalf
-        //let cardMaskPath = UIBezierPath(roundedRect: halfCard.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
-        let halfCardShape = CAShapeLayer()
-        //halfCardShape.path = cardMaskPath.cgPath
-        halfCardShape.path = photoMaskPath.cgPath
-        halfCard.layer.mask = halfCardShape
-        halfCard.clipsToBounds = true
-        cardBackground.addSubview(halfCard)
+        let cardBackground = UIView()
+        cardBackground.frame = CGRect(x: halfCard.frame.minX, y: halfCard.frame.maxY, width: halfCard.frame.width, height: scrollView.frame.height - halfCard.frame.maxY)
+        cardBackground.backgroundColor = .black
+        //addSubview(cardBackground)
+        
+        scrollView.addSubview(halfCard)
+        scrollView.addSubview(cardBackground)
+        //scrollView.sizeToFit()
         
         
         if let connecterPicURL = newMatch.connecterPicURL {
             let connecterProfilePicView = UIImageView()
             let url = URL(string: connecterPicURL)!
             downloader.imageFromURL(URL: url, imageView: connecterProfilePicView, callBack: nil)
-            connecterProfilePicView.frame = CGRect(x: 0.075*cardBackground.frame.width, y: halfCard.frame.maxY + 0.02*frame.height, width: 0.168*frame.width, height: 0.168*frame.width)
+            connecterProfilePicView.frame = CGRect(x: 0.075*cardBackground.frame.width, y: 0.07*cardBackground.frame.height, width: 0.197*cardBackground.frame.width, height: 0.197*cardBackground.frame.width)
             connecterProfilePicView.layer.cornerRadius = connecterProfilePicView.frame.height/2
             connecterProfilePicView.layer.borderWidth = 1
             connecterProfilePicView.layer.borderColor = newMatch.color.cgColor
@@ -113,9 +106,9 @@ class AcceptIgnoreView: UIView {
             if let connecterName = newMatch.connecterName {
                 let connecterNameLabel = UILabel()
                 let name = self.firstNameLastNameInitial(name: connecterName)
-                connecterNameLabel.text = "Introduced by \(name)"
+                connecterNameLabel.text = "'nected by \(name)"
                 connecterNameLabel.textColor = .white
-                connecterNameLabel.font = UIFont(name: "BentonSans-Light", size: 20)
+                connecterNameLabel.font = UIFont(name: "BentonSans-Light", size: 30)
                 connecterNameLabel.adjustsFontSizeToFitWidth = true
                 connecterNameLabel.frame = CGRect(x: connecterProfilePicView.frame.maxX + 0.05*cardBackground.frame.width, y: 0, width: 0.875*cardBackground.frame.width - connecterProfilePicView.frame.maxX, height: connecterProfilePicView.frame.height)
                 connecterNameLabel.center.y = connecterProfilePicView.center.y
@@ -132,16 +125,30 @@ class AcceptIgnoreView: UIView {
                 reasonForConnectionLabel.numberOfLines = 0
                 reasonForConnectionLabel.adjustsFontSizeToFitWidth = true
                 reasonForConnectionLabel.minimumScaleFactor = 0.5
-                let maxHeight : CGFloat = 0.984*cardBackground.frame.height - connecterProfilePicView.frame.maxY
-                let rect = reasonForConnectionLabel.attributedText?.boundingRect(with: CGSize(width: 0.7*frame.width, height: maxHeight), options: .usesLineFragmentOrigin, context: nil)
-                reasonForConnectionLabel.frame = CGRect(x: 0.1*cardBackground.frame.width, y: connecterProfilePicView.frame.maxY + 0.016*cardBackground.frame.height, width: 0.8*cardBackground.frame.width, height: rect!.size.height+1)
-                print("\(maxHeight), \(reasonForConnectionLabel.frame.height)")
+                /*
+                let maxHeight : CGFloat = 0.99*cardBackground.frame.height - connecterProfilePicView.frame.maxY
+                let rect = reasonForConnectionLabel.attributedText?.boundingRect(with: CGSize(width: 0.9*cardBackground.frame.width, height: maxHeight), options: .usesLineFragmentOrigin, context: nil)
+                reasonForConnectionLabel.frame = CGRect(x: 0, y: connecterProfilePicView.frame.maxY + 0.06*cardBackground.frame.height, width: rect!.size.width, height: rect!.size.height+1)
+                */
+                reasonForConnectionLabel.frame = CGRect(x: 0, y: connecterProfilePicView.frame.maxY + 0.06*cardBackground.frame.height, width: 0.9*cardBackground.frame.width, height: 0)
+                reasonForConnectionLabel.sizeToFit()
+                //print("reason: \(reasonForConnectionLabel.frame.maxY)")
+                reasonForConnectionLabel.center.x = cardBackground.bounds.midX
                 cardBackground.addSubview(reasonForConnectionLabel)
+                cardBackground.frame = CGRect(x: cardBackground.frame.minX, y: cardBackground.frame.minY, width: cardBackground.frame.width, height: max(cardBackground.frame.height, reasonForConnectionLabel.frame.maxY + 10))
             }
         }
+        
+        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: cardBackground.frame.maxY)
+        //scrollView.clipsToBounds = true
+        
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.bounces = false
+        
+        //print ("screen: \(DisplayUtility.screenHeight), card: \(cardBackground.frame.maxY)/\(cardBackground.frame.height), scroll: \(scrollView.frame.minY)/\(scrollView.frame.maxY)/\(scrollView.frame.height)/\(scrollView.contentSize.height)")
     }
     
-    func firstNameLastNameInitial(name: String) -> String {
+    func firstNameLastNameInitial(name: String) -> String { // move to DisplayUtility
         let wordsInName = name.components(separatedBy: " ")
         let firstName: String
         if wordsInName.count > 0 {
@@ -160,12 +167,19 @@ class AcceptIgnoreView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setVC(vc: UIViewController) {
+    func setVC(vc: MessagesViewController) {
         self.vc = vc
+    }
+    
+    func phaseOut() {
+        self.alpha = 1
+        UIView.animate(withDuration: 0.4, animations: {
+            self.alpha = 0
+        })
     }
             
     func dismissView(_ sender: UIButton) {
-        self.removeFromSuperview()
+        self.phaseOut()
     }
     
     func accept(_ sender: UIButton) {
@@ -213,16 +227,17 @@ class AcceptIgnoreView: UIView {
                         message["user1_profile_picture_url"] = result["\(self.newMatch.user)_profile_picture_url"]
                         message["user2_profile_picture_url"] = result["\(otherUser)_profile_picture_url"]
                         message["message_viewed"] = [String]()
-                        message.saveInBackground()
+                        message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
+                            self.phaseOut()
+                            if let vc = self.vc {
+                                vc.viewDidLoad()
+                                if let messageId = message.objectId {
+                                    vc.transitionToMessageWithID(messageId, color: self.newMatch.color)
+                                }
+                            }
+                        })
                     }
-                    
                 }
-            }
-        })
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-            self.removeFromSuperview()
-            if let vc = self.vc {
-                vc.viewDidLoad()
             }
         })
     }
@@ -244,11 +259,9 @@ class AcceptIgnoreView: UIView {
                 
             }
         })
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-            self.removeFromSuperview()
-            if let vc = self.vc {
-                vc.viewDidLoad()
-            }
-        })
+        self.phaseOut()
+        if let vc = self.vc {
+            vc.loadNewMatches()
+        }
     }
 }

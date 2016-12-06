@@ -336,8 +336,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             sendButton.isEnabled = false
         }
-
-        
+    }
+    //setting background color to off-white blue
+    func displayBackgroundView(){
+        let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
+        backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        view.addSubview(backgroundView)
+        view.sendSubview(toBack: backgroundView)
     }
     //taking away the placeholder to begin editing the textView
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -698,6 +703,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         displayNavigationBar()
         
+        //let customKeyboard = CustomKeyboard()
+        //customKeyboard.display(view: view, placeholder: "Type a message...", buttonTitle: "Send", buttonTarget: "sendSingleMessage")
         displayToolbar()
         sendButton.isEnabled = false
 //        let tableViewIsDraggedGesture = UIPanGestureRecognizer(target: self, action: #selector(tableViewIsDragged(_:)))
@@ -717,7 +724,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         singleMessageTableView.register(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
         messageId = newMessageId
         updateMessages()
+        
+        displayBackgroundView()
     }
+    
     override func viewDidLayoutSubviews() {
         
         

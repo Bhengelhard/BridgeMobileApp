@@ -47,6 +47,7 @@ class TrendingView: UIView {
         customKeyboard = keyboard
         trendingButton = button
         dividingLine = line
+        dividingLine?.isHidden = false
         
         self.frame.size = CGSize(width: DisplayUtility.screenWidth, height: 0.1574*DisplayUtility.screenHeight)
         self.isHidden = true
@@ -207,7 +208,7 @@ class TrendingView: UIView {
             option3 = ["Hosting Shabbat", "I am hosting a shabbat meal and want to invite someone over I haven't met yet", DisplayUtility.friendshipGreen]
             option4 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
             option5 = ["Running Partner", "I am trying to find someone to run with me", DisplayUtility.friendshipGreen]
-            option6 = ["Shabbat Meal", "I am looking for a shabbat meal for this weekend and would to meet new people", DisplayUtility.friendshipGreen]
+            option6 = ["Shabbat Meal", "I am looking for a shabbat meal and would love to meet new people", DisplayUtility.friendshipGreen]
             //option4 = ["Drinking Buddy", "I just want to drink. Anyone else feel the same way?", DisplayUtility.friendshipGreen]
             //option5 = ["Beer Pong Partner", "I'm playing beer pong and need a partner. I could ask a friend, but someone new seems more fun", DisplayUtility.friendshipGreen]
         } else {
@@ -218,7 +219,7 @@ class TrendingView: UIView {
             //option4 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
             option4 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
             option5 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
-            option6 = ["Shabbat Meal", "I am looking for a shabbat meal for this weekend and would to meet new people", DisplayUtility.friendshipGreen]
+            option6 = ["Shabbat Meal", "I am looking for a shabbat meal for this weekend and would love to meet new people", DisplayUtility.friendshipGreen]
 
             //option6 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
         }

@@ -10,7 +10,7 @@ import UIKit
 
 class NewMatchesView: UIScrollView {
     
-    var vc: UIViewController?
+    var vc: MessagesViewController?
     let frameWithNoMatches: CGRect
     let frameWithMatches: CGRect
     var allNewMatches: [NewMatch]
@@ -26,6 +26,7 @@ class NewMatchesView: UIScrollView {
         line = UIView()
         gradientLayer = DisplayUtility.getGradient()
         super.init(frame: frameWithNoMatches)
+        contentSize = frame.size
         line.backgroundColor = .clear
         line.layer.insertSublayer(gradientLayer, at: 0)
 
@@ -33,7 +34,7 @@ class NewMatchesView: UIScrollView {
         addSubview(line)
     }
     
-    func setVC(vc: UIViewController) {
+    func setVC(vc: MessagesViewController) {
         self.vc = vc
     }
     
