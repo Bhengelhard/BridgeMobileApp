@@ -25,7 +25,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     let localData = LocalData()
     
-    let necterYellow = UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
+    //This variable allows MissionControlView to display opened after a segue
+    var postTapped = false
     
     func rightBarButtonTapped (_ sender: UIBarButtonItem){
         performSegue(withIdentifier: "showBridgeViewFromProfilePage", sender: self)
@@ -34,7 +35,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func displayNavigationBar(){
         let customNavigationBar = CustomNavigationBar()
         rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
-        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: nil, leftBarButtonSelectedIcon: nil, leftBarButton: nil, rightBarButtonIcon: "All_Types_Icon_Gray", rightBarButtonSelectedIcon: "Necter_Icon", rightBarButton: rightBarButton, title: "Profile")
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: nil, leftBarButtonSelectedIcon: nil, leftBarButton: nil, rightBarButtonIcon: "Right_Arrow", rightBarButtonSelectedIcon: "Right_Arrow", rightBarButton: rightBarButton, title: "Profile")
     }
     
     func displayMessageFromBot(_ notification: Notification) {
@@ -154,11 +155,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         bridgeStatus.setTitle("Post Status", for: UIControlState())
         bridgeStatus.titleLabel!.font = UIFont(name: "Verdana", size: 20)
-        bridgeStatus.setTitleColor(necterYellow, for: UIControlState.highlighted)
+        bridgeStatus.setTitleColor(DisplayUtility.necterYellow, for: UIControlState.highlighted)
         bridgeStatus.setTitleColor(UIColor.black, for: UIControlState())
         bridgeStatus.layer.cornerRadius = 7.0
         bridgeStatus.layer.borderWidth = 4.0
-        bridgeStatus.layer.borderColor = necterYellow.cgColor
+        bridgeStatus.layer.borderColor = DisplayUtility.necterYellow.cgColor
         bridgeStatus.clipsToBounds = true
         bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), for: .touchUpInside)
         
@@ -169,7 +170,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.separatorInset = UIEdgeInsets.zero
     }
     func statusTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "showNewStatusViewFromProfilePage", sender: self)
+        performSegue(withIdentifier: "showBridgeViewFromProfilePage", sender: self)
+        postTapped = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -195,6 +197,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Right"
+            if postTapped {
+                if let bridgeVC = vc as? BridgeViewController {
+                    bridgeVC.missionControlView.displayPostRequest()
+                }
+            }
         } else if mirror.subjectType == OptionsFromBotViewController.self {
             self.transitionManager.animationDirection = "Top"
             let vc2 = vc as! OptionsFromBotViewController

@@ -48,12 +48,16 @@ class CustomNavigationBar: UINavigationBar {
         if leftBarButtonIcon != nil {
             let leftBarButtonIconImage = UIImage(named: leftBarButtonIcon!)
             leftBarButton?.setImage(leftBarButtonIconImage, for: .normal)
-            if leftBarButtonSelectedIcon != nil {
-                let leftBarButtonSelectedIconImage = UIImage(named: leftBarButtonSelectedIcon!)
-                //leftBarButton?.setImage(leftBarButtonSelectedIconImage, for: .highlighted)
-                //leftBarButton?.setImage(leftBarButtonSelectedIconImage, for: .selected)
+//            if leftBarButtonSelectedIcon != nil {
+//                let leftBarButtonSelectedIconImage = UIImage(named: leftBarButtonSelectedIcon!)
+//                //leftBarButton?.setImage(leftBarButtonSelectedIconImage, for: .highlighted)
+//                //leftBarButton?.setImage(leftBarButtonSelectedIconImage, for: .selected)
+//            }
+            if leftBarButtonIcon == "Right_Arrow" || leftBarButtonIcon == "Left_Arrow" {
+                leftBarButton?.frame = CGRect(x: 0, y: 0, width: 0.0353*DisplayUtility.screenWidth, height: 0.0385*DisplayUtility.screenHeight)
+            } else {
+                leftBarButton?.frame = CGRect(x: 0, y: 0, width: 0.085*DisplayUtility.screenWidth, height: 0.085*DisplayUtility.screenWidth)
             }
-            leftBarButton?.frame = CGRect(x: 0, y: 0, width: 0.085*DisplayUtility.screenWidth, height: 0.085*DisplayUtility.screenWidth)
             leftBarButton?.contentMode = UIViewContentMode.scaleAspectFill
             leftBarButton?.clipsToBounds = true
             let leftBarButtonItem = UIBarButtonItem(customView: leftBarButton!)
@@ -62,12 +66,17 @@ class CustomNavigationBar: UINavigationBar {
         if rightBarButtonIcon != nil && rightBarButton != nil {
             let rightBarButtonIconImage = UIImage(named: rightBarButtonIcon!)
             rightBarButton?.setImage(rightBarButtonIconImage, for: .normal)
-            if rightBarButtonSelectedIcon != nil {
-                let rightBarButtonSelectedIconImage = UIImage(named: rightBarButtonSelectedIcon!)
-                //rightBarButton?.setImage(rightBarButtonSelectedIconImage, for: .highlighted)
-                //rightBarButton?.setImage(rightBarButtonSelectedIconImage, for: .selected)
+//            if rightBarButtonSelectedIcon != nil {
+//                let rightBarButtonSelectedIconImage = UIImage(named: rightBarButtonSelectedIcon!)
+//                //rightBarButton?.setImage(rightBarButtonSelectedIconImage, for: .highlighted)
+//                //rightBarButton?.setImage(rightBarButtonSelectedIconImage, for: .selected)
+//            }
+            if rightBarButtonIcon == "Right_Arrow" || rightBarButtonIcon == "Left_Arrow" {
+                rightBarButton?.frame = CGRect(x: 0, y: 0, width: 0.0353*DisplayUtility.screenWidth, height: 0.0385*DisplayUtility.screenHeight)
+            } else {
+                rightBarButton?.frame = CGRect(x: 0, y: 0, width: 0.085*DisplayUtility.screenWidth, height: 0.085*DisplayUtility.screenWidth)
             }
-            rightBarButton?.frame = CGRect(x: 0, y: 0, width: 0.085*DisplayUtility.screenWidth, height: 0.085*DisplayUtility.screenWidth)
+            
             rightBarButton?.contentMode = UIViewContentMode.scaleAspectFill
             rightBarButton?.clipsToBounds = true
             let rightBarButtonItem = UIBarButtonItem(customView: rightBarButton!)

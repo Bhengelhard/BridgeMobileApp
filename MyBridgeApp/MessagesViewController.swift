@@ -467,7 +467,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func displayNavigationBar(){
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
         let customNavigationBar = CustomNavigationBar()
-        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "All_Types_Icon_Gray", leftBarButtonSelectedIcon: "Necter_Icon", leftBarButton: leftBarButton, rightBarButtonIcon: nil, rightBarButtonSelectedIcon: nil, rightBarButton: nil, title: "Inbox")
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: nil, rightBarButtonSelectedIcon: nil, rightBarButton: nil, title: "Inbox")
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         performSegue(withIdentifier: "showBridgeFromMessages", sender: self)

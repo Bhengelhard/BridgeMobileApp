@@ -601,7 +601,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let customNavigationBar = CustomNavigationBar()
         rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
-        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Messages_Icon_Gray", leftBarButtonSelectedIcon: "Messages_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: "Leave_Conversation_Gray", rightBarButtonSelectedIcon: "Leave_Conversation_Yellow", rightBarButton: rightBarButton, title: singleMessageTitle)
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: "Leave_Conversation_Gray", rightBarButtonSelectedIcon: "Leave_Conversation_Yellow", rightBarButton: rightBarButton, title: singleMessageTitle)
     }
     func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
