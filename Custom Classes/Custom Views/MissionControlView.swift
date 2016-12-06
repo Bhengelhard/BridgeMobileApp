@@ -14,6 +14,8 @@ class MissionControlView: UIView{
     let displayUtility = DisplayUtility()
     let customKeyboard = CustomKeyboard()
     var currentView = UIView()
+    var currentRevisitButton = UIButton()
+    var currentRevisitLabel = UILabel()
     let upperHalfView = UIView()
     let lowerHalfView = UIView()
     var tapGestureRecognizer = UITapGestureRecognizer()
@@ -27,6 +29,7 @@ class MissionControlView: UIView{
     let friendshipButton = UIButton()
     let leftCategoriesArrow = UIImageView()
     let rightCategoriesArrow = UIImageView()
+    var changedRevisitAlpha = false
 
     
     //Post A Request View
@@ -65,9 +68,11 @@ class MissionControlView: UIView{
         fatalError("This is a fatal error message from CustomClasses/CustomViews/SwipeCard.swift")
     }
     
-    func initialize (view: UIView) {
+    func initialize (view: UIView, revisitLabel: UILabel, revisitButton: UIButton) {
         //setting global variable for the view beneath the missionControlView
         currentView = view
+        currentRevisitLabel = revisitLabel
+        currentRevisitButton = revisitButton
         
         self.frame = CGRect(x: 0, y: initialFrameY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         
@@ -496,6 +501,8 @@ class MissionControlView: UIView{
         
         position = 0
         trendingButton.isEnabled = false
+        trendingOptionsView.isHidden = true
+        dividingLine.isHidden = false
         
         upperHalfView.removeFromSuperview()
         currentView.addSubview(upperHalfView)
@@ -543,6 +550,10 @@ class MissionControlView: UIView{
             self.lowerHalfView.alpha = 0
             self.leftCategoriesArrow.alpha = 1
             self.rightCategoriesArrow.alpha = 1
+            if self.changedRevisitAlpha {
+                self.currentRevisitLabel.alpha = 1
+                self.currentRevisitButton.alpha = 1
+            }
             
             //reposition PostView for when next time it is called again
             self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
@@ -649,6 +660,13 @@ class MissionControlView: UIView{
             self.lowerHalfView.alpha = 1
             self.leftCategoriesArrow.alpha = 0
             self.rightCategoriesArrow.alpha = 0
+            
+            if self.currentRevisitLabel.alpha == 1 {
+                self.currentRevisitLabel.alpha = 0
+                self.currentRevisitButton.alpha = 0
+                self.changedRevisitAlpha = true
+            }
+            
             
             self.frame.origin.y = 0
             

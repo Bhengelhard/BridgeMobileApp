@@ -655,7 +655,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.tableFooterView = pagingSpinner
         tableView.separatorStyle = .none
         
-        missionControlView.initialize(view: view)
+        missionControlView.initialize(view: view, revisitLabel: noMessagesLabel, revisitButton: UIButton())
         displayFilterLabel(type: "All Types")
     }
     
