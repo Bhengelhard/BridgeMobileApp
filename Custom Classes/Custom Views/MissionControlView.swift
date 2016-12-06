@@ -25,6 +25,8 @@ class MissionControlView: UIView{
     let businessButton = UIButton()
     let loveButton = UIButton()
     let friendshipButton = UIButton()
+    let leftCategoriesArrow = UIImageView()
+    let rightCategoriesArrow = UIImageView()
 
     
     //Post A Request View
@@ -190,6 +192,7 @@ class MissionControlView: UIView{
         postARequestViewShape.path = maskPath.cgPath
         postARequestView.layer.mask = postARequestViewShape
         
+        //Adding Arrows to postARequestView
         leftArrow.frame = CGRect(x: 0.01481*postARequestView.frame.width, y: 0.1167*postARequestView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
         leftArrow.image = UIImage(named: "Up_Arrow")
         postARequestView.addSubview(leftArrow)
@@ -197,6 +200,15 @@ class MissionControlView: UIView{
         rightArrow.frame = CGRect(x: 0.94245*postARequestView.frame.width, y: 0.1167*postARequestView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
         rightArrow.image = UIImage(named: "Up_Arrow")
         postARequestView.addSubview(rightArrow)
+        
+        //Adding arrows to the categories View
+        leftCategoriesArrow.frame = CGRect(x: 0.01481*categoriesView.frame.width, y: 0.1167*categoriesView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
+        leftCategoriesArrow.image = UIImage(named: "Up_Arrow")
+        categoriesView.addSubview(leftCategoriesArrow)
+        
+        rightCategoriesArrow.frame = CGRect(x: 0.94245*categoriesView.frame.width, y: 0.1167*categoriesView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
+        rightCategoriesArrow.image = UIImage(named: "Up_Arrow")
+        categoriesView.addSubview(rightCategoriesArrow)
     }
     
     //Initialize Post Request Features, remove PostARequestView in fade to keyboard and AnimateBackground to black as objects move into position
@@ -529,6 +541,8 @@ class MissionControlView: UIView{
             self.customKeyboard.messageView.alpha = 0
             self.upperHalfView.alpha = 0
             self.lowerHalfView.alpha = 0
+            self.leftCategoriesArrow.alpha = 1
+            self.rightCategoriesArrow.alpha = 1
             
             //reposition PostView for when next time it is called again
             self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
@@ -580,6 +594,8 @@ class MissionControlView: UIView{
             self.customKeyboard.messageView.alpha = 0
             self.upperHalfView.alpha = 0
             self.lowerHalfView.alpha = 0
+            self.leftCategoriesArrow.alpha = 0
+            self.rightCategoriesArrow.alpha = 0
             
             //reposition PostView for when next time it is called again
             self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
@@ -631,6 +647,8 @@ class MissionControlView: UIView{
             self.customKeyboard.messageView.alpha = 1
             self.upperHalfView.alpha = 1
             self.lowerHalfView.alpha = 1
+            self.leftCategoriesArrow.alpha = 0
+            self.rightCategoriesArrow.alpha = 0
             
             self.frame.origin.y = 0
             
