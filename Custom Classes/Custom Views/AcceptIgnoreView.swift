@@ -243,6 +243,11 @@ class AcceptIgnoreView: UIView {
                                 }
                             }
                         })
+                    } else {
+                        self.phaseOut()
+                        if let vc = self.vc {
+                            vc.loadNewMatches()
+                        }
                     }
                 }
             }
