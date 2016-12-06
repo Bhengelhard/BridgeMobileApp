@@ -722,10 +722,26 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                         }
                                         if let status = result["\(otherUser)_bridge_status"] as? String {
                                             let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURLString, name: name, type: type, color: color, dot: dot, status: status)
+                                            let downloader = Downloader()
+                                            if let profilePicURL = URL(string: profilePicURLString) {
+                                                downloader.imageFromURL(URL: profilePicURL, callBack: { (image: UIImage) in
+                                                    newMatch.profilePic = image
+                                                    print ("profilePic set in callback")
+                                                })
+                                            }
+                                            let connecterObjectId = result["connecter_objectId"] as? String
                                             let connecterName = result["connecter_name"] as? String
-                                            let connecterPicURL = result["connecter_profile_picture_url"] as? String
+                                            let connecterPicURLString = result["connecter_profile_picture_url"] as? String
                                             let reasonForConnection = result["reason_for_connection"] as? String
-                                            newMatch.setConnecterInfo(name: connecterName, profilePicURL: connecterPicURL, reasonForConnection: reasonForConnection)
+                                            newMatch.setConnecterInfo(objectId: connecterObjectId, name: connecterName, profilePicURL: connecterPicURLString, reasonForConnection: reasonForConnection)
+                                            if let connecterPicURLString = connecterPicURLString {
+                                                if let connecterPicURL = URL(string: connecterPicURLString) {
+                                                    downloader.imageFromURL(URL: connecterPicURL, callBack: { (image: UIImage) in
+                                                        newMatch.connecterPic = image
+                                                        print ("connecterPic set in callback")
+                                                    })
+                                                }
+                                            }
                                             self.newMatchesView.addNewMatch(newMatch: newMatch)
                                             self.tableView.tableHeaderView = self.newMatchesView
                                         }

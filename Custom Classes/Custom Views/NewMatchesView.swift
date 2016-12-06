@@ -72,10 +72,15 @@ class NewMatchesView: UIScrollView {
         line.isHidden = false
         
         // add profile picture
-        let downloader = Downloader()
-        let profilePicView = UIImageView()
-        let url = URL(string: newMatch.profilePicURL)!
-        downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
+        var profilePicView = UIImageView()
+        if let profilePic = newMatch.profilePic {
+            print ("profile pic stored")
+            profilePicView = UIImageView(image: profilePic)
+        } else if let url = URL(string: newMatch.profilePicURL) {
+            print ("profile pic not stored; must download")
+            let downloader = Downloader()
+            downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
+        }
         profilePicView.frame = CGRect(x: CGFloat(position)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY, width: 0.168*frame.width, height: 0.168*frame.width)
         profilePicView.layer.cornerRadius = profilePicView.frame.height/2
         profilePicView.layer.borderWidth = 2

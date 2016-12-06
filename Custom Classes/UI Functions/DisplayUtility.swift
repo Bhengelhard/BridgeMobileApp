@@ -155,4 +155,33 @@ class DisplayUtility {
         view.frame.size.height = viewNewSize.height
     }
     
+    static func firstNameLastNameInitial(name: String) -> String {
+        let wordsInName = name.components(separatedBy: " ")
+        let firstName: String
+        if wordsInName.count > 0 {
+            firstName = wordsInName.first!
+        } else {
+            firstName = name
+        }
+        var firstNameLastNameInitial = firstName
+        if wordsInName.count > 1 {
+            firstNameLastNameInitial += " \(wordsInName.last!.characters.first!)."
+        }
+        return firstNameLastNameInitial
+    }
+    
+    /*
+    // WARNING: This function causes the app to crash
+    static func formatImage(_ image: UIImage) -> UIImage {
+        let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+        edgeDetectFilter.setValue(image, forKey: kCIInputImageKey)
+        edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+        edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+
+        let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+
+        return UIImage(cgImage: newCGImage!)
+    }
+    */
+    
 }

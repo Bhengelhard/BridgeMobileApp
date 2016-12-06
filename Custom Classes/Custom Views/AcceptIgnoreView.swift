@@ -29,20 +29,26 @@ class AcceptIgnoreView: UIView {
             self.alpha = 1
         })
         
-        exitButton.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.04*DisplayUtility.screenHeight, width: 0.0230*DisplayUtility.screenHeight, height: 0.0230*DisplayUtility.screenHeight)
+        //exitButton.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.04*DisplayUtility.screenHeight, width: 0.0230*DisplayUtility.screenHeight, height: 0.0230*DisplayUtility.screenHeight)
+        exitButton.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.04*DisplayUtility.screenHeight, width: 0.97*DisplayUtility.screenWidth, height: 0.043*DisplayUtility.screenHeight)
         exitButton.setTitle("X", for: .normal)
         exitButton.titleLabel?.textColor = .white
+        exitButton.titleLabel?.textAlignment = .left
+        exitButton.contentHorizontalAlignment = .left
+        exitButton.contentVerticalAlignment = .top
         exitButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 16)
         exitButton.addTarget(self, action: #selector(dismissView(_:)), for: .touchUpInside)
         addSubview(exitButton)
+        
         let newConnectionLabel = UILabel()
         newConnectionLabel.text = "You have one new connection!"
         newConnectionLabel.textColor = .white
         newConnectionLabel.textAlignment = .center
         newConnectionLabel.font = UIFont(name: "BentonSans-Light", size: 23.5)
         newConnectionLabel.adjustsFontSizeToFitWidth = true
-        newConnectionLabel.frame = CGRect(x: 0.05*frame.width, y: exitButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.9*frame.width, height: 0.0491*frame.height)
+        newConnectionLabel.frame = CGRect(x: 0.05*frame.width, y: 0.083*DisplayUtility.screenHeight, width: 0.9*frame.width, height: 0.0491*frame.height)
         addSubview(newConnectionLabel)
+        
         let line = UIView()
         line.frame = CGRect(x: 0.1*frame.width, y: newConnectionLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.8*frame.width, height: 1)
         line.backgroundColor = .white
@@ -67,13 +73,18 @@ class AcceptIgnoreView: UIView {
         //halfCard.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.85*frame.width, height: 0.85*frame.width)
         halfCard.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: scrollView.frame.width)
         
-        let name = self.firstNameLastNameInitial(name: newMatch.name)
+        let name = DisplayUtility.firstNameLastNameInitial(name: newMatch.name)
         
-        let profilePicView = UIImageView()
+        var profilePicView = UIImageView()
+        if let profilePic = newMatch.profilePic {
+            print ("profile pic stored")
+            profilePicView = UIImageView(image: profilePic)
+        } else if let url = URL(string: newMatch.profilePicURL) {
+            print ("profile pic not stored; must download")
+            let downloader = Downloader()
+            downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
+        }
         profilePicView.frame = halfCard.bounds
-        let downloader = Downloader()
-        let url = URL(string: newMatch.profilePicURL)!
-        downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
         let photoMaskPath = UIBezierPath(roundedRect: profilePicView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
         let profilePicShape = CAShapeLayer()
         profilePicShape.path = photoMaskPath.cgPath
@@ -91,21 +102,30 @@ class AcceptIgnoreView: UIView {
         scrollView.addSubview(cardBackground)
         //scrollView.sizeToFit()
         
-        
-        if let connecterPicURL = newMatch.connecterPicURL {
-            let connecterProfilePicView = UIImageView()
-            let url = URL(string: connecterPicURL)!
-            downloader.imageFromURL(URL: url, imageView: connecterProfilePicView, callBack: nil)
+        var connecterProfilePicView: UIImageView? = nil
+        if let connecterPic = newMatch.connecterPic {
+            print ("connecter pic stored")
+            connecterProfilePicView = UIImageView(image: connecterPic)
+        } else if let connecterPicURL = newMatch.connecterPicURL {
+            if let url = URL(string: connecterPicURL) {
+                print ("connecter pic not stored; must download")
+                connecterProfilePicView = UIImageView()
+                let downloader = Downloader()
+                downloader.imageFromURL(URL: url, imageView: connecterProfilePicView!, callBack: nil)
+            }
+        }
+        if let connecterProfilePicView = connecterProfilePicView {
             connecterProfilePicView.frame = CGRect(x: 0.075*cardBackground.frame.width, y: 0.07*cardBackground.frame.height, width: 0.197*cardBackground.frame.width, height: 0.197*cardBackground.frame.width)
             connecterProfilePicView.layer.cornerRadius = connecterProfilePicView.frame.height/2
             connecterProfilePicView.layer.borderWidth = 1
             connecterProfilePicView.layer.borderColor = newMatch.color.cgColor
             connecterProfilePicView.clipsToBounds = true
+            connecterProfilePicView.contentMode = UIViewContentMode.scaleAspectFill
             cardBackground.addSubview(connecterProfilePicView)
             
             if let connecterName = newMatch.connecterName {
                 let connecterNameLabel = UILabel()
-                let name = self.firstNameLastNameInitial(name: connecterName)
+                let name = DisplayUtility.firstNameLastNameInitial(name: connecterName)
                 connecterNameLabel.text = "'nected by \(name)"
                 connecterNameLabel.textColor = .white
                 connecterNameLabel.font = UIFont(name: "BentonSans-Light", size: 30)
@@ -146,21 +166,6 @@ class AcceptIgnoreView: UIView {
         scrollView.bounces = false
         
         //print ("screen: \(DisplayUtility.screenHeight), card: \(cardBackground.frame.maxY)/\(cardBackground.frame.height), scroll: \(scrollView.frame.minY)/\(scrollView.frame.maxY)/\(scrollView.frame.height)/\(scrollView.contentSize.height)")
-    }
-    
-    func firstNameLastNameInitial(name: String) -> String { // move to DisplayUtility
-        let wordsInName = name.components(separatedBy: " ")
-        let firstName: String
-        if wordsInName.count > 0 {
-            firstName = wordsInName.first!
-        } else {
-            firstName = name
-        }
-        var firstNameLastNameInitial = firstName
-        if wordsInName.count > 1 {
-            firstNameLastNameInitial += " \(wordsInName.last!.characters.first!)."
-        }
-        return firstNameLastNameInitial
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -227,6 +232,7 @@ class AcceptIgnoreView: UIView {
                         message["user1_profile_picture_url"] = result["\(self.newMatch.user)_profile_picture_url"]
                         message["user2_profile_picture_url"] = result["\(otherUser)_profile_picture_url"]
                         message["message_viewed"] = [String]()
+                        message["bridge_builder"] = result["connecter_objectId"]
                         message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
                             self.phaseOut()
                             if let vc = self.vc {
