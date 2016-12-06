@@ -143,6 +143,7 @@ class AcceptIgnoreView: UIView {
         //scrollView.clipsToBounds = true
         
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.bounces = false
         
         //print ("screen: \(DisplayUtility.screenHeight), card: \(cardBackground.frame.maxY)/\(cardBackground.frame.height), scroll: \(scrollView.frame.minY)/\(scrollView.frame.maxY)/\(scrollView.frame.height)/\(scrollView.contentSize.height)")
         
