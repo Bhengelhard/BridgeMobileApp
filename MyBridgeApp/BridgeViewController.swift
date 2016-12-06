@@ -1127,8 +1127,6 @@ class BridgeViewController: UIViewController {
     func connectionCanceled(swipeCardView: SwipeCard) {
         view.bringSubview(toFront: connectIcon)
         view.bringSubview(toFront: disconnectIcon)
-        //disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
-        //disconnectIcon.alpha = 0.0
         connectIcon.center.x = 1.6*DisplayUtility.screenWidth
         connectIcon.alpha = 0.0
         print("connectionCanceled")
