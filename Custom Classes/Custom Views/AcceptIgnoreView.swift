@@ -29,20 +29,26 @@ class AcceptIgnoreView: UIView {
             self.alpha = 1
         })
         
-        exitButton.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.04*DisplayUtility.screenHeight, width: 0.0230*DisplayUtility.screenHeight, height: 0.0230*DisplayUtility.screenHeight)
+        //exitButton.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.04*DisplayUtility.screenHeight, width: 0.0230*DisplayUtility.screenHeight, height: 0.0230*DisplayUtility.screenHeight)
+        exitButton.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.04*DisplayUtility.screenHeight, width: 0.97*DisplayUtility.screenWidth, height: 0.043*DisplayUtility.screenHeight)
         exitButton.setTitle("X", for: .normal)
         exitButton.titleLabel?.textColor = .white
+        exitButton.titleLabel?.textAlignment = .left
+        exitButton.contentHorizontalAlignment = .left
+        exitButton.contentVerticalAlignment = .top
         exitButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 16)
         exitButton.addTarget(self, action: #selector(dismissView(_:)), for: .touchUpInside)
         addSubview(exitButton)
+        
         let newConnectionLabel = UILabel()
         newConnectionLabel.text = "You have one new connection!"
         newConnectionLabel.textColor = .white
         newConnectionLabel.textAlignment = .center
         newConnectionLabel.font = UIFont(name: "BentonSans-Light", size: 23.5)
         newConnectionLabel.adjustsFontSizeToFitWidth = true
-        newConnectionLabel.frame = CGRect(x: 0.05*frame.width, y: exitButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.9*frame.width, height: 0.0491*frame.height)
+        newConnectionLabel.frame = CGRect(x: 0.05*frame.width, y: 0.083*DisplayUtility.screenHeight, width: 0.9*frame.width, height: 0.0491*frame.height)
         addSubview(newConnectionLabel)
+        
         let line = UIView()
         line.frame = CGRect(x: 0.1*frame.width, y: newConnectionLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.8*frame.width, height: 1)
         line.backgroundColor = .white
