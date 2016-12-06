@@ -200,8 +200,15 @@ class AcceptIgnoreView: UIView {
                 if results.count > 0 {
                     let result = results[0]
                     result["\(self.newMatch.user)_response"] = 1
-                    result.saveInBackground()
                     let otherUser = self.newMatch.user == "user1" ? "user2" : "user1"
+                    result.saveInBackground(block: { (succeeded: Bool, error: Error?) in
+                        if result["\(otherUser)_response"] as! Int != 1 {
+                            self.phaseOut()
+                            if let vc = self.vc {
+                                vc.loadNewMatches()
+                            }
+                        }
+                    })
                     if result["\(otherUser)_response"] as! Int == 1 {
                         print("creating message")
                         let message = PFObject(className: "Messages")
@@ -243,11 +250,6 @@ class AcceptIgnoreView: UIView {
                                 }
                             }
                         })
-                    } else {
-                        self.phaseOut()
-                        if let vc = self.vc {
-                            vc.loadNewMatches()
-                        }
                     }
                 }
             }
