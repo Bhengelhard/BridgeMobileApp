@@ -13,13 +13,16 @@ class NewMatch: NSObject {
     var user: String
     var objectId: String
     var profilePicURL: String
+    var profilePic: UIImage?
     var name: String
     var type: String
     var color: UIColor
     var dot: Bool
     var status: String
+    var connecterObjectId: String?
     var connecterName: String?
     var connecterPicURL: String?
+    var connecterPic: UIImage?
     var reasonForConnection: String?
     
     init(user: String, objectId: String, profilePicURL: String, name: String, type: String, color: UIColor, dot: Bool, status: String) {
@@ -33,7 +36,8 @@ class NewMatch: NSObject {
         self.status = status
     }
     
-    func setConnecterInfo(name: String?, profilePicURL: String?, reasonForConnection: String?) {
+    func setConnecterInfo(objectId: String?, name: String?, profilePicURL: String?, reasonForConnection: String?) {
+        self.connecterObjectId = objectId
         self.connecterName = name
         self.connecterPicURL = profilePicURL
         self.reasonForConnection = reasonForConnection

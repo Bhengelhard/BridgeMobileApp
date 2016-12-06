@@ -125,7 +125,7 @@ class HalfSwipeCard: UIView {
         
         let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
         nameLabel.center.y = connectionTypeIcon.center.y
-        nameLabel.text = firstNameLastNameInitial(name: name)
+        nameLabel.text = DisplayUtility.firstNameLastNameInitial(name: name)
         nameLabel.textColor = UIColor.white
         nameLabel.font = UIFont(name: "BentonSans-Bold", size: 22)
         nameLabel.textAlignment = NSTextAlignment.left
@@ -162,24 +162,6 @@ class HalfSwipeCard: UIView {
     
     func callbackToSetPhoto(_ image: UIImage) -> Void {
         photo = image
-    }
-    func firstNameLastNameInitial (name: String) -> String{
-        let wordsInName = name.components(separatedBy: " ")
-        if let firstName = wordsInName.first {
-            if let lastName = wordsInName.last {
-                if wordsInName.last != firstName {
-                    let lastNameInitial = lastName.characters.first!
-                    let firstNameLastNameInitial = "\(firstName) \(lastNameInitial)."
-                    
-                    return firstNameLastNameInitial
-                }
-            } else {
-                return firstName
-            }
-
-        }
-        
-        return name
     }
     
     /*func getCard(_ deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int, isUpperDeckCard: Bool) -> UIView {
