@@ -172,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
         } else {
-            //Segue to MessagesViewController -> this should be accept/ignor
+            //Segue to MessagesViewController -> this should be accept/ignore
             let vc: MessagesViewController = storyboard.instantiateViewController(withIdentifier: "MessagesViewController") as! MessagesViewController
             //vc.newMessageId = messageId!
             //        let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)

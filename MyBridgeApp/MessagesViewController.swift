@@ -87,7 +87,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         NotificationCenter.default.removeObserver(self)
         if segueToSingleMessage {
-            //print(" prepareForSegue was Called")
+            print("prepareForSegue was Called")
             segueToSingleMessage = false
             let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
             singleMessageVC.transitioningDelegate = self.transitionManager
@@ -582,36 +582,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         
-        /*
-<<<<<<< HEAD
-         var profilePics = [UIImage]()
-         var names = [String]()
-         
-         for _ in 0...9 {
-         let profilePic = UIImage(named: "Business_Icon_Blue")
-         profilePics.append(profilePic!)
-         names.append("Doug")
-         }
-         
-         
-         newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
-        
-        newMatchesView.setViewController(vc: self)
-        
-=======
-        var profilePics = [UIImage]()
-        var names = [String]()
-        
-        for _ in 0...9 {
-            let profilePic = UIImage(named: "Business_Icon_Blue")
-            profilePics.append(profilePic!)
-            names.append("Doug")
-        }
-        
-        
-        newMatchesView = NewMatchesView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight), profilePics: profilePics, names: names)
-                
->>>>>>> wiredFrame*/
         loadNewMatches()
         
         tableView.tableHeaderView = newMatchesView
@@ -641,8 +611,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
-        tableView.delegate = self
-        tableView.dataSource = self
         searchBarContainer.addSubview(searchController.searchBar)
         searchBarContainer.frame = CGRect(x: 0, y: 0.1*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.08*DisplayUtility.screenHeight)
         view.addSubview(searchBarContainer)
@@ -801,6 +769,23 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         return messages.count
         
+    }
+    
+    func transitionToMessageWithID(_ id: String, color: UIColor) {
+        print("transition to message was called with id \(id)")
+        
+        self.singleMessageId = id
+        self.necterTypeColor = color
+        self.segueToSingleMessage = true
+        self.performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
+ 
+        /*
+        for (messagePos, messageId) in messagePositionToMessageIdMapping {
+            if messageId == id {
+                tableView.delegate?.tableView!(tableView, didSelectRowAt: IndexPath(row: messagePos, section: 0))
+            }
+        }
+ */
     }
 
     // Data to be shown on an individual row
