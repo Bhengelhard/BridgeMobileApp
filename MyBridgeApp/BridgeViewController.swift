@@ -845,6 +845,14 @@ class BridgeViewController: UIViewController {
             self.connectIcon.alpha = 6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)-4
         }
         
+        /*//limiting y values of card movement
+        if swipeCardView.frame.minY < 0.05*DisplayUtility.screenHeight {
+            swipeCardView.frame.origin.y = 0.05*DisplayUtility.screenHeight
+        } else if swipeCardView.frame.maxY > DisplayUtility.screenHeight {
+            swipeCardView.frame.origin.y = DisplayUtility.screenHeight - swipeCardView.frame.height
+        }*/
+        
+        
         if gesture.state == UIGestureRecognizerState.ended {
             //User Swiped Left
             if swipeCardView.center.x < 0.25*DisplayUtility.screenWidth {
@@ -912,7 +920,8 @@ class BridgeViewController: UIViewController {
                     
                     self.localData.setFirstTimeSwipingRight(false)
                     self.localData.synchronize()
-                } else {
+                }
+                else {
                     UIView.animate(withDuration: 0.4, animations: {
                         self.swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
@@ -933,7 +942,20 @@ class BridgeViewController: UIViewController {
             }
             else {
                 //Put swipeCard back into place
-                UIView.animate(withDuration: 0.7, animations: {
+                //swipeCardView.UIViewAnimationOptionAllowUserInteraction
+                //UIViewAnimationOptions.allowAnimatedContent
+//                UIView.animate(withDuration: 0.7, animations: {
+//                    rotation = CGAffineTransform(rotationAngle: 0)
+//                    stretch = rotation.scaledBy(x: 1, y: 1)
+//                    self.swipeCardView.transform = stretch
+//                    self.swipeCardView.frame = self.swipeCardFrame
+//                    self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
+//                    self.disconnectIcon.alpha = 0.0
+//                    self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
+//                    self.connectIcon.alpha = 0.0
+//                })
+                
+                UIView.animate(withDuration: 0.7, delay: 0, options: .allowUserInteraction, animations: {
                     rotation = CGAffineTransform(rotationAngle: 0)
                     stretch = rotation.scaledBy(x: 1, y: 1)
                     self.swipeCardView.transform = stretch
@@ -942,8 +964,8 @@ class BridgeViewController: UIViewController {
                     self.disconnectIcon.alpha = 0.0
                     self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                     self.connectIcon.alpha = 0.0
+                }, completion: { (success) in
                 })
-                
             }
         }
     }
