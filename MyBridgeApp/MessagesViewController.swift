@@ -662,6 +662,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         print("loading new matches")
         newMatchesView = NewMatchesView()
         newMatchesView.setVC(vc: self)
+        self.tableView.tableHeaderView = self.newMatchesView
         
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("bridged", equalTo: true)
@@ -704,6 +705,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         if let UR = result["\(user)_response"] as? Int {
                             userResponse = UR
                         }
+                        print("\(objectId): \(userResponse)")
                         if userResponse != 1 {
                             if let profilePicURLString = result["\(otherUser)_profile_picture_url"] as? String {
                                 if let name = result["\(otherUser)_name"] as? String {
