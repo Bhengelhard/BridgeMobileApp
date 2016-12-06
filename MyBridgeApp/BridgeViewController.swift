@@ -846,7 +846,7 @@ class BridgeViewController: UIViewController {
         }
         
         if gesture.state == UIGestureRecognizerState.ended {
-            
+            //User Swiped Left
             if swipeCardView.center.x < 0.25*DisplayUtility.screenWidth {
                 let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
                 if isFirstTimeSwipedLeft {
@@ -882,7 +882,9 @@ class BridgeViewController: UIViewController {
                     removeCard = true
                     shouldCheckInPair = true
                 }
-            } else if swipeCardView.center.x > 0.75*DisplayUtility.screenWidth {
+            }
+            //User Swiped Right
+            else if swipeCardView.center.x > 0.75*DisplayUtility.screenWidth {
                 
                 let isFirstTimeSwipedRight : Bool = localData.getFirstTimeSwipingRight()!
                 if isFirstTimeSwipedRight{
@@ -899,7 +901,7 @@ class BridgeViewController: UIViewController {
                             self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                             self.connectIcon.alpha = 0.0
                             }, completion: { (success) in
-                                self.connectIcon.removeFromSuperview()
+                                //self.connectIcon.removeFromSuperview()
                                 self.bridged()
                         })
                         removeCard = false
@@ -916,7 +918,7 @@ class BridgeViewController: UIViewController {
                         self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.alpha = 0.0
                         }, completion: { (success) in
-                            self.connectIcon.removeFromSuperview()
+                            //self.connectIcon.removeFromSuperview()
                             self.bridged()
                     })
                     removeCard = false
@@ -955,15 +957,21 @@ class BridgeViewController: UIViewController {
         print("Count of array of Cards from bridged \(arrayOfCardsInDeck.count)")
     }
     func reasonForConnectionSent() {
-        missionControlView.close()
-        
+        //missionControlView.close()
+        //swipeCardView.frame.origin.x = DisplayUtility.screenWidth
+        //swipeCardView.removeFromSuperview()
+        //lastCardInStack = nil
+        //arrayOfCardsInDeck.remove(at: 0)
+        view.bringSubview(toFront: connectIcon)
+        view.bringSubview(toFront: disconnectIcon)
         swipeCardView.removeFromSuperview()
+        nextPair()
         print("Count of array of Cards from reason for Connection Sent \(arrayOfCardsInDeck.count)")
         let sendingNotificationView = SendingNotificationView()
         sendingNotificationView.initialize(view: view, sendingText: "Sending...", successText: "Success")
         view.addSubview(sendingNotificationView)
-        view.bringSubview(toFront: view)
-        nextPair()
+        view.bringSubview(toFront: sendingNotificationView)
+        
     }
     func nextPair(){
         print("nextPair called")
@@ -1117,16 +1125,19 @@ class BridgeViewController: UIViewController {
         PFUser.current()?.saveInBackground()
     }
     func connectionCanceled(swipeCardView: SwipeCard) {
+        view.bringSubview(toFront: connectIcon)
+        view.bringSubview(toFront: disconnectIcon)
+        //disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
+        //disconnectIcon.alpha = 0.0
+        connectIcon.center.x = 1.6*DisplayUtility.screenWidth
+        connectIcon.alpha = 0.0
+        print("connectionCanceled")
         //Put swipeCard back into place
         let rotation = CGAffineTransform(rotationAngle: 0)
         let stretch = rotation.scaledBy(x: 1, y: 1)
         UIView.animate(withDuration: 0.7, animations: {
             swipeCardView.transform = stretch
             swipeCardView.frame = swipeCardView.swipeCardFrame()
-            self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
-            self.disconnectIcon.alpha = 0.0
-            self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
-            self.connectIcon.alpha = 0.0
         })
     }
     
