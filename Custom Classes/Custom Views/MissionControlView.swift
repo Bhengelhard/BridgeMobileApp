@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class MissionControlView: UIView{
     
@@ -42,6 +43,9 @@ class MissionControlView: UIView{
     let trendingOptionsView = TrendingView()
     var trendingButton = UIButton()
     let dividingLine = UIView()
+    
+    //Setting Previous Filter to return to after post
+    var previousFilter = ""
     
     var wasDraggedUp = 0
     
@@ -100,7 +104,8 @@ class MissionControlView: UIView{
     func createKeyboard() {
         
         //Adding customKeyboard
-        customKeyboard.display(view: lowerHalfView, placeholder: "I am looking for...", buttonTitle: "post", buttonTarget: "postStatus")
+        let placeholder = retrieveStatusForType()
+        customKeyboard.display(view: lowerHalfView, placeholder: placeholder/*"I am looking for..."*/, buttonTitle: "post", buttonTarget: "postStatus")
         customKeyboard.maxNumCharacters = 80
         let type = whichFilter()
         customKeyboard.updateMessageEnablement(updatedPostType: type)
@@ -259,7 +264,6 @@ class MissionControlView: UIView{
         trendingOptionsView.frame.origin.y = dividingLine.center.y + trendingButton.frame.origin.y - trendingOptionsView.frame.height
         trendingOptionsView.trendingTapped()
         print(trendingOptionsView.frame)
-        print("trendingTapped")
     }
     
     //Filter Selectors
@@ -275,8 +279,10 @@ class MissionControlView: UIView{
     
     //updates the selection of the filters based on what was tapped
     func toggleFilters(type: String) {
+        //update status text based on toggledFilters
+        customKeyboard.messageTextView.text = retrieveStatusForType()
+        
         //updating which toolbar Button is selected
-        print("toggle Filters")
         if (type == "Business" && !businessButton.isSelected) {
             businessButton.isSelected = true
             loveButton.isSelected = false
@@ -306,6 +312,7 @@ class MissionControlView: UIView{
         //Filters tapped adjusts the swipeCards when in positions 1 and 2
         if position == 0 || position == 1 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
+            previousFilter = whichFilter()
         }
     }
     
@@ -335,10 +342,8 @@ class MissionControlView: UIView{
         }
         //If MissionControlView is opened to postRequest, then close
         else {
-            print("closing now because of tap")
             close()
             if trendingOptionsView.isHidden == false {
-                print("tringing is hiding now")
                 trendingOptionsView.trendingTapped()
             }
         }
@@ -457,7 +462,6 @@ class MissionControlView: UIView{
             if (wasDraggedUp < 5 && (position == 0 || position == 2)) || self.frame.origin.y > 0.9*DisplayUtility.screenHeight {
                 close()
                 if trendingOptionsView.isHidden == false {
-                    print("tringing is hiding now")
                     trendingOptionsView.trendingTapped()
                 }
             }
@@ -474,6 +478,10 @@ class MissionControlView: UIView{
     }
     //Animate closure of MissionControlView (Position 0)
     func close() {
+        
+        //returning to the selected filter type in case it was changed for the post
+        toggleFilters(type: previousFilter)
+        
         position = 0
         trendingButton.isEnabled = false
         
@@ -584,6 +592,8 @@ class MissionControlView: UIView{
         upperHalfView.removeFromSuperview()
         self.insertSubview(upperHalfView, belowSubview: lowerHalfView)
         
+        self.bringSubview(toFront: currentView)
+        
         position = 2
         trendingButton.isEnabled = true
         let distanceBetweenButtons = businessButton.center.x - loveButton.center.x
@@ -628,6 +638,83 @@ class MissionControlView: UIView{
         }
         
     }
+    
+    
+    //getting status from the currentUser's most recent status
+    func retrieveStatusForType() -> String {
+        var necterStatusForType = "I am looking for..."
+        let type = whichFilter()
+        let localData = LocalData()
+        if type == "Business" {
+            if let status = localData.getBusinessStatus() {
+                necterStatusForType = status
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Business")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    print("getting business objects")
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        localData.setBusinessStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+        } else if type == "Love" {
+            if let status = localData.getLoveStatus() {
+                necterStatusForType = status
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Love")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        localData.setLoveStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+        } else if type == "Friendship" {
+            if let status = localData.getFriendshipStatus() {
+                necterStatusForType = status
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Friendship")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        localData.setFriendshipStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+        }
+        /*if necterStatusForType != "I am looking for..." {
+            print("isFirstPost set to \(isFirstPost)")
+            isFirstPost = false
+        }*/
+        print(necterStatusForType)
+        return necterStatusForType
+    }
+
 }
 
 

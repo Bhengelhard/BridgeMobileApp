@@ -188,6 +188,7 @@ class BridgeViewController: UIViewController {
         
     }
     func displayNoMoreCards() {
+        print("displayNoMoreCards")
         //Display no more cards label
         let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.1)
         displayNoMoreCardsLabel = UILabel()
@@ -208,7 +209,9 @@ class BridgeViewController: UIViewController {
         displayNoMoreCardsLabel!.center.y = view.center.y - DisplayUtility.screenHeight*0.05
         displayNoMoreCardsLabel!.center.x = view.center.x
 
-        view.insertSubview(displayNoMoreCardsLabel!, belowSubview: customNavigationBar)
+        //view.insertSubview(displayNoMoreCardsLabel!, belowSubview: customNavigationBar)
+        view.addSubview(displayNoMoreCardsLabel!)
+        displayNoMoreCardsLabel?.sendSubview(toBack: view)
         
         //Display Revisit Button so user can run through their previously seen matches
         let revisitButtonY = (displayNoMoreCardsLabel?.frame.origin.y)! + (displayNoMoreCardsLabel?.frame.height)!
@@ -226,7 +229,8 @@ class BridgeViewController: UIViewController {
         revisitButton.layer.cornerRadius = 7
         revisitButton.clipsToBounds = true
         
-        view.insertSubview(revisitButton, belowSubview: customNavigationBar)
+        //view.insertSubview(revisitButton, belowSubview: customNavigationBar)
+        view.insertSubview(revisitButton, belowSubview: missionControlView)
     }
     /*func getUpperDeckCardFrame() -> CGRect {
         let upperDeckFrame : CGRect = CGRect(x: 0, y: 0, width: superDeckWidth, height: 0.5*superDeckHeight)
@@ -558,7 +562,7 @@ class BridgeViewController: UIViewController {
             rightBarButtonSelectedIcon = "Messages_Icon_Yellow"
         }
 
-        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Profile_Navbar_Icon", leftBarButtonSelectedIcon: "Profile_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: rightBarButtonIcon, rightBarButtonSelectedIcon: rightBarButtonSelectedIcon, rightBarButton: rightBarButton, title: "Necter_Navbar_Logo")
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Profile_Navbar_Icon", leftBarButtonSelectedIcon: "Profile_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: rightBarButtonIcon, rightBarButtonSelectedIcon: rightBarButtonSelectedIcon, rightBarButton: rightBarButton, title: "necter")
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)

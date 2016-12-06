@@ -538,9 +538,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 // push notification ends
                 
             } else {
-                
                 print(error)
-                
             }
         }
     }

@@ -80,18 +80,14 @@ class CustomNavigationBar: UINavigationBar {
         
         //setting the navBar title
         let navBarTitleView = UIView()
-        navBarTitleView.frame = CGRect(x: 0, y: 0, width: 0.3007*DisplayUtility.screenWidth, height: 0.0392*DisplayUtility.screenHeight)
-        let titleImageView = UIImageView()
-        if let title = title {
-            titleImageView.image = UIImage(named: title)
+        navBarTitleView.frame = CGRect(x: 0, y: 0, width: 0.5*DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
+        if let titleText = title {
+            let font = UIFont(name: "Verdana", size: 28)
+            let label = DisplayUtility.gradientLabel(text: titleText, frame: navBarTitleView.frame, font: font!)
+            navBarTitleView.addSubview(label)
         }
-        titleImageView.frame = CGRect(x: 0, y: 0, width: 0.3007*DisplayUtility.screenWidth, height: 0.0392*DisplayUtility.screenHeight)
-        titleImageView.contentMode = UIViewContentMode.scaleAspectFill
-        titleImageView.clipsToBounds = true
-        navBarTitleView.addSubview(titleImageView)
         navBar.topItem?.titleView = navBarTitleView
-        /*navBar.topItem?.title = "NECTER"
-        navBar.titleTextAttributes = [NSForegroundColorAttributeName: DisplayUtility.necterYellow, NSFontAttributeName: UIFont(name: "BentonSans-Light", size: 26)!]*/
+        
         view.addSubview(navBar)
         view.bringSubview(toFront: navBar)
     }

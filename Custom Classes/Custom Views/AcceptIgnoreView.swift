@@ -139,7 +139,6 @@ class AcceptIgnoreView: UIView {
                 cardBackground.addSubview(reasonForConnectionLabel)
             }
         }
-        
     }
     
     func firstNameLastNameInitial(name: String) -> String {

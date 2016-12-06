@@ -344,6 +344,7 @@ class ReasonForConnection: UIView {
         self.addSubview(selectedButtonLabel)
     }
     @objc func typeButtonTapped(_ sender: UIButton) {
+        
         //updating which toolbar Button is selected
         if (sender == businessButton && !sender.isSelected) {
             businessButton.isSelected = true
@@ -395,7 +396,7 @@ class ReasonForConnection: UIView {
         
         customKeyboard.display(view: self, placeholder: "Why should they 'nect?", buttonTitle: "send", buttonTarget: "bridgeUsers")
         //customKeyboard.messageTextView.returnKeyType = UIReturnKeyType.done
-        customKeyboard.getCurrentViewController(vc: currentViewController)
+        customKeyboard.getCurrentViewController(vc: currentViewController as! UIViewController)
         customKeyboard.resign()
         //let type = whichFilter()
         //customKeyboard.updatePostType(updatedPostType: type)
