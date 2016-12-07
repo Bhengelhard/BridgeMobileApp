@@ -585,6 +585,7 @@ class BridgeViewController: UIViewController {
                             }
                             
                         }
+                        query.addDescendingOrder("score")
                         query.limit = maxNoOfCards
                         query.findObjectsInBackground (block: { (results, error) -> Void in
                             var noOfResults = 0
