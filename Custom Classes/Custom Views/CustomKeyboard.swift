@@ -166,6 +166,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         if target == "bridgeUsers" && (text == "\n") {
             textView.resignFirstResponder()
             updatedText = updatedText.trimmingCharacters(in: .newlines)
+        } else if target == "postStatus" && text == "\n" {
+            updatedText = updatedText.trimmingCharacters(in: .newlines)
         }
         
         //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
