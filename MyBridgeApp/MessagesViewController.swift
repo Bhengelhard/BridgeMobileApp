@@ -526,7 +526,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func displayNavigationBar(){
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
         let customNavigationBar = CustomNavigationBar()
-        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "All_Types_Icon_Gray", leftBarButtonSelectedIcon: "Necter_Icon", leftBarButton: leftBarButton, rightBarButtonIcon: nil, rightBarButtonSelectedIcon: nil, rightBarButton: nil, title: "Inbox")
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: nil, rightBarButtonSelectedIcon: nil, rightBarButton: nil, title: "Inbox")
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         performSegue(withIdentifier: "showBridgeFromMessages", sender: self)
@@ -551,25 +551,24 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             //noMessagesLabel.text = "No active connections for friendship or dating."
         } else if type == "Business" {
             //noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
-            noMessagesLabel.text = "No active connections for business."
+            noMessagesLabel.text = "No active connections for work. Be sweet and 'nect your friends to get the community buzzing!"
             print("business enabled = false")
         } else if type == "Love" {
             //noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
-            noMessagesLabel.text = "No active connections for love."
+            noMessagesLabel.text = "No active connections for dating. Be sweet and 'nect your friends to get the community buzzing!"
             print("love enabled = false")
         } else if type == "Friendship" {
-            noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
-            noMessagesLabel.text = "No active connections for friendship."
+            //noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
+            noMessagesLabel.text = "No active connections for friendship. Be sweet and 'nect your friends to get the community buzzing!"
         } else {
-            noMessagesLabel.text = "You do not have any messages. Connect your friends to start a conversation."
+            noMessagesLabel.text = "You do not have any messages. Be sweet and 'nect your friends to get the community buzzing!"
         }
-        
-        noMessagesLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 16)
+        noMessagesLabel.font = UIFont(name: "BentonSans-Light", size: 20)
         noMessagesLabel.textAlignment = .center
         noMessagesLabel.center.x = view.center.x
         noMessagesLabel.center.y = view.center.y
-        noMessagesLabel.textColor = .red
-        
+        //noMessagesLabel.textColor = .red
+        noMessagesLabel.adjustsFontSizeToFitWidth = true
         
         /*
          noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
@@ -621,6 +620,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        
 //        NotificationCenter.default.removeObserver(self)
         
+    }
+    func displayBackgroundView(){
+        let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
+        backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        view.addSubview(backgroundView)
+        view.sendSubview(toBack: backgroundView)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -683,9 +688,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         pagingSpinner.hidesWhenStopped = true
         tableView.tableFooterView = pagingSpinner
         tableView.separatorStyle = .none
+        tableView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         
-        missionControlView.initialize(view: view)
+        missionControlView.initialize(view: view, revisitLabel: noMessagesLabel, revisitButton: UIButton())
         displayFilterLabel(type: "All Types")
+        displayBackgroundView()
     }
     
     func displayFilterLabel(type : String) {

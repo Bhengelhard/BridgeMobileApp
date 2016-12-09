@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import Parse
 
 class MissionControlView: UIView{
     
     let displayUtility = DisplayUtility()
     let customKeyboard = CustomKeyboard()
     var currentView = UIView()
+    var currentRevisitButton = UIButton()
+    var currentRevisitLabel = UILabel()
     let upperHalfView = UIView()
     let lowerHalfView = UIView()
     var tapGestureRecognizer = UITapGestureRecognizer()
@@ -24,6 +27,9 @@ class MissionControlView: UIView{
     let businessButton = UIButton()
     let loveButton = UIButton()
     let friendshipButton = UIButton()
+    let leftCategoriesArrow = UIImageView()
+    let rightCategoriesArrow = UIImageView()
+    var changedRevisitAlpha = false
 
     
     //Post A Request View
@@ -43,6 +49,9 @@ class MissionControlView: UIView{
     var trendingButton = UIButton()
     let dividingLine = UIView()
     
+    //Setting Previous Filter to return to after post
+    var previousFilter = ""
+    
     var wasDraggedUp = 0
     
     let initialFrameY = 0.94322*DisplayUtility.screenHeight
@@ -59,9 +68,11 @@ class MissionControlView: UIView{
         fatalError("This is a fatal error message from CustomClasses/CustomViews/SwipeCard.swift")
     }
     
-    func initialize (view: UIView) {
+    func initialize (view: UIView, revisitLabel: UILabel, revisitButton: UIButton) {
         //setting global variable for the view beneath the missionControlView
         currentView = view
+        currentRevisitLabel = revisitLabel
+        currentRevisitButton = revisitButton
         
         self.frame = CGRect(x: 0, y: initialFrameY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         
@@ -185,6 +196,7 @@ class MissionControlView: UIView{
         postARequestViewShape.path = maskPath.cgPath
         postARequestView.layer.mask = postARequestViewShape
         
+        //Adding Arrows to postARequestView
         leftArrow.frame = CGRect(x: 0.01481*postARequestView.frame.width, y: 0.1167*postARequestView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
         leftArrow.image = UIImage(named: "Up_Arrow")
         postARequestView.addSubview(leftArrow)
@@ -192,6 +204,15 @@ class MissionControlView: UIView{
         rightArrow.frame = CGRect(x: 0.94245*postARequestView.frame.width, y: 0.1167*postARequestView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
         rightArrow.image = UIImage(named: "Up_Arrow")
         postARequestView.addSubview(rightArrow)
+        
+        //Adding arrows to the categories View
+        leftCategoriesArrow.frame = CGRect(x: 0.01481*categoriesView.frame.width, y: 0.1167*categoriesView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
+        leftCategoriesArrow.image = UIImage(named: "Up_Arrow")
+        categoriesView.addSubview(leftCategoriesArrow)
+        
+        rightCategoriesArrow.frame = CGRect(x: 0.94245*categoriesView.frame.width, y: 0.1167*categoriesView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
+        rightCategoriesArrow.image = UIImage(named: "Up_Arrow")
+        categoriesView.addSubview(rightCategoriesArrow)
     }
     
     //Initialize Post Request Features, remove PostARequestView in fade to keyboard and AnimateBackground to black as objects move into position
@@ -259,7 +280,6 @@ class MissionControlView: UIView{
         trendingOptionsView.frame.origin.y = dividingLine.center.y + trendingButton.frame.origin.y - trendingOptionsView.frame.height
         trendingOptionsView.trendingTapped()
         print(trendingOptionsView.frame)
-        print("trendingTapped")
     }
     
     //Filter Selectors
@@ -275,8 +295,10 @@ class MissionControlView: UIView{
     
     //updates the selection of the filters based on what was tapped
     func toggleFilters(type: String) {
+        //update status text based on toggledFilters
+        //customKeyboard.messageTextView.text = retrieveStatusForType()
+        
         //updating which toolbar Button is selected
-        print("toggle Filters")
         if (type == "Business" && !businessButton.isSelected) {
             businessButton.isSelected = true
             loveButton.isSelected = false
@@ -306,6 +328,7 @@ class MissionControlView: UIView{
         //Filters tapped adjusts the swipeCards when in positions 1 and 2
         if position == 0 || position == 1 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
+            previousFilter = type
         }
     }
     
@@ -335,10 +358,8 @@ class MissionControlView: UIView{
         }
         //If MissionControlView is opened to postRequest, then close
         else {
-            print("closing now because of tap")
             close()
             if trendingOptionsView.isHidden == false {
-                print("tringing is hiding now")
                 trendingOptionsView.trendingTapped()
             }
         }
@@ -457,7 +478,6 @@ class MissionControlView: UIView{
             if (wasDraggedUp < 5 && (position == 0 || position == 2)) || self.frame.origin.y > 0.9*DisplayUtility.screenHeight {
                 close()
                 if trendingOptionsView.isHidden == false {
-                    print("tringing is hiding now")
                     trendingOptionsView.trendingTapped()
                 }
             }
@@ -474,8 +494,14 @@ class MissionControlView: UIView{
     }
     //Animate closure of MissionControlView (Position 0)
     func close() {
+        
+        //returning to the selected filter type in case it was changed for the post
+        toggleFilters(type: previousFilter)
+        
         position = 0
         trendingButton.isEnabled = false
+        trendingOptionsView.isHidden = true
+        dividingLine.isHidden = false
         
         upperHalfView.removeFromSuperview()
         currentView.addSubview(upperHalfView)
@@ -521,6 +547,12 @@ class MissionControlView: UIView{
             self.customKeyboard.messageView.alpha = 0
             self.upperHalfView.alpha = 0
             self.lowerHalfView.alpha = 0
+            self.leftCategoriesArrow.alpha = 1
+            self.rightCategoriesArrow.alpha = 1
+            if self.changedRevisitAlpha {
+                self.currentRevisitLabel.alpha = 1
+                self.currentRevisitButton.alpha = 1
+            }
             
             //reposition PostView for when next time it is called again
             self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
@@ -572,6 +604,8 @@ class MissionControlView: UIView{
             self.customKeyboard.messageView.alpha = 0
             self.upperHalfView.alpha = 0
             self.lowerHalfView.alpha = 0
+            self.leftCategoriesArrow.alpha = 0
+            self.rightCategoriesArrow.alpha = 0
             
             //reposition PostView for when next time it is called again
             self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
@@ -583,6 +617,8 @@ class MissionControlView: UIView{
     func displayPostRequest(){
         upperHalfView.removeFromSuperview()
         self.insertSubview(upperHalfView, belowSubview: lowerHalfView)
+        
+        self.bringSubview(toFront: currentView)
         
         position = 2
         trendingButton.isEnabled = true
@@ -621,6 +657,15 @@ class MissionControlView: UIView{
             self.customKeyboard.messageView.alpha = 1
             self.upperHalfView.alpha = 1
             self.lowerHalfView.alpha = 1
+            self.leftCategoriesArrow.alpha = 0
+            self.rightCategoriesArrow.alpha = 0
+            
+            if self.currentRevisitLabel.alpha == 1 {
+                self.currentRevisitLabel.alpha = 0
+                self.currentRevisitButton.alpha = 0
+                self.changedRevisitAlpha = true
+            }
+            
             
             self.frame.origin.y = 0
             
@@ -628,6 +673,7 @@ class MissionControlView: UIView{
         }
         
     }
+
 }
 
 

@@ -41,6 +41,7 @@ class MessagesTableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.layoutMargins = .zero
         
+        contentView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         cellWidth = cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
         participants = UILabel(frame: CGRect.zero)
@@ -60,6 +61,7 @@ class MessagesTableCell: UITableViewCell {
         messageSnapshot.textContainer.lineBreakMode = NSLineBreakMode.byTruncatingTail
         messageSnapshot.isUserInteractionEnabled = false
         messageSnapshot.contentInset = UIEdgeInsetsMake(-7.0,0.0,0,0.0)
+        messageSnapshot.backgroundColor = UIColor.clear
         
         arrow = UILabel(frame:CGRect.zero)
         arrow.font = UIFont(name: "Mishafi Regular", size: 30)

@@ -136,27 +136,22 @@ class HalfSwipeCard: UIView {
         self.addSubview(nameLabel)
         
         if status != "" {
+            //Setting StatusTextView with transparent background (not text) and height of status text
             let statusTextView = UITextView(frame: CGRect(x: 0, y: connectionTypeIcon.frame.origin.y + connectionTypeIcon.frame.height, width: self.frame.width, height: 0.08*self.frame.height)) // this height needs to change based on text input
+            print("statusTextView Height - \(statusTextView.frame.height)")
             let displayUtility = DisplayUtility()
-            statusTextView.backgroundColor = UIColor.black
-            statusTextView.layer.opacity = 0.6
-            statusTextView.text = "This is the status"//status
+            statusTextView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
+            //statusTextView.layer.opacity = 0.6
             statusTextView.textContainer.maximumNumberOfLines = 2
             statusTextView.font = UIFont(name: "BentonSans-Light", size: 15)
             statusTextView.textColor = UIColor.white
             statusTextView.textAlignment = NSTextAlignment.center
             statusTextView.textContainerInset = UIEdgeInsetsMake(4, 12, 4, 12)
             statusTextView.isUserInteractionEnabled = false
+            statusTextView.text = status
             displayUtility.setViewHeightFromContent(view: statusTextView)
-            statusTextView.text = ""
+            print("statusTextView Height - \(statusTextView.frame.height)")
             self.addSubview(statusTextView)
-            
-            let statusLabel = UILabel(frame: statusTextView.frame)
-            statusLabel.text = status
-            statusLabel.textColor = UIColor.white
-            statusLabel.font = UIFont(name: "BentonSans-Light", size: 15)
-            statusLabel.textAlignment = NSTextAlignment.center
-            self.addSubview(statusLabel)
         }
     }
     

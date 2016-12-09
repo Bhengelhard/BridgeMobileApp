@@ -447,25 +447,18 @@ class LocalStorageUtility{
         // Need to be worked upon after we get permission
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name"])
         graphRequest?.start{ (connection, result, error) -> Void in
-            print(" graph request")
-            print("connection \(connection)")
             if error != nil {
                 print(error)
-                print("got error")
-                
             } else if let result = result as? [String: AnyObject]{
-                print("got result")
                 let userId = result["id"]! as! String
                 let accessToken = FBSDKAccessToken.current().tokenString
                 
                 let facebookProfilePictureUrl = "https://graph.facebook.com/\(userId)/albums?access_token=\(accessToken)"
                 if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
-                    print(fbpicUrl)
                     if let data = try? Data(contentsOf: fbpicUrl) {
                         var error: NSError?
                         do{
                             var albumsDictionary: NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                            print(albumsDictionary["data"]!)
                         }
                         catch{
                             print(error)
@@ -540,7 +533,6 @@ class LocalStorageUtility{
                                 if let profilePictureFile = PFUser.current()?["profile_picture"] as? PFFile {
                                     let url = profilePictureFile.url
                                     PFUser.current()?["profile_picture_url"] = url
-                                    print("url is \(url)")
                                 }
                             } else if error != nil {
                                 print(error ?? "error")
@@ -627,7 +619,6 @@ class LocalStorageUtility{
                                         if let name = item["name"] as? String {
                                             if let id = item["id"] as? String {
                                                 
-                                                //print("\(name)'s id is \(id)")
                                                 friendsArrayFbId.append(id)
                                                 let query = PFQuery(className:"_User")
                                                 query.whereKey("fb_id", equalTo:id)
@@ -703,6 +694,7 @@ class LocalStorageUtility{
         }
     }
     func updateBridgePairingsTable(){
+        print("got into updateBridgePairingsTable")
         // The user will have a default city at co-ordinates (-122,37). Mind you, the city is set during Logging In from Facebook. cIgAr - 08/22
         if let friendList = PFUser.current()?["friend_list"] as? [String] {
             var latitude:CLLocationDegrees = -122.0312186
@@ -727,16 +719,20 @@ class LocalStorageUtility{
                     print("Problem with the data received from geocoder")
                 }
                 }
+                print("Got just before save in background")
                 PFUser.current()?.saveInBackground{
                 (success, error) -> Void in
+                    
+                    print("SavedInBackground")
                 // Perform the bridgePairings table update irresepctive of the save being a success or failure - cIgAr 08/22
                     PFCloud.callFunction(inBackground: "updateBridgePairingsTable", withParameters: ["friendList":friendList], block: { (response: Any?, error: Error?) in
                         if error == nil {
                             if let response = response as? String {
                                 print(response)
+                                print("Got the response of updateBridgePairingsTable")
                             }
                         } else {
-                            print(error)
+                            print(error ?? "There was an error in updating the BridgePariings Table")
                         }
                     })
 
@@ -819,10 +815,8 @@ class LocalStorageUtility{
                         if let ob = result["user2_name"] {
                             name2 = ob as? String
                         }
-                        print("name2 - \(name2)")
                         var location1:[Double]? = nil
                         var location2:[Double]? = nil
-                        print(result["user_locations"])
                         
                         if let ob = result["user_locations"] as? [AnyObject]{
                             if let x = ob[0] as? PFGeoPoint{
@@ -831,9 +825,7 @@ class LocalStorageUtility{
                             if let x = ob[1] as? PFGeoPoint{
                                 location2 = [x.latitude,x.longitude]
                             }
-                            print("location1-\(location1),location2- \(location2)")
                         }
-                        print("location1 - \(location2)")
                         var profilePicture1:Data? = nil
                         var profilePicture2:Data? = nil
                         var profilePictureFile1:String? = nil
@@ -903,7 +895,6 @@ class LocalStorageUtility{
                         user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2, savedProfilePicture: nil)
                         let userInfoPair = UserInfoPair(user1: user1, user2: user2)
                         pairings.append(userInfoPair)
-                        print("userId1, userId2 - \(userId1),\(userId2)")
                         
                     }
                     let localData = LocalData()

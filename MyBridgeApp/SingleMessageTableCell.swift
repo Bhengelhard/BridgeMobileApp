@@ -53,7 +53,7 @@ class SingleMessageTableCell: UITableViewCell {
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor.clear
+        backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)//UIColor.clear
         selectionStyle = .none
         background = UIView(frame: CGRect.zero)
         background.alpha = 0.6
@@ -78,6 +78,7 @@ class SingleMessageTableCell: UITableViewCell {
         senderNameLabel.textColor = necterGray
         senderNameLabel.font = UIFont(name: "Verdana", size: 12)
         senderNameLabel.isUserInteractionEnabled = false
+        senderNameLabel.backgroundColor = UIColor.clear
         
         timestampLabel = UILabel(frame: CGRect.zero)
         timestampLabel.textAlignment = .center

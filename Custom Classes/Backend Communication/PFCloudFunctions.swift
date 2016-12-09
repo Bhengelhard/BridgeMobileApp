@@ -12,6 +12,20 @@ import Parse
 
 class PFCloudFunctions {
     
+    //updating the bridgePairings Table to include the current user upon signUp
+    func updateBridgePairingsTable(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "updateBridgePairingsTable", withParameters: parameters, block: {
+            (response: Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                } else {
+                    
+                }
+            }
+        })
+    }
+    
     //running app metrics scraper
     func getMainAppMetrics(parameters: [AnyHashable: Any]?) {
         PFCloud.callFunction(inBackground: "getMainAppMetrics", withParameters: parameters, block: {

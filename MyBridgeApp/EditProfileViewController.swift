@@ -191,7 +191,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     func displayNavigationBar(){
         let customNavigationBar = CustomNavigationBar()
         rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
-        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: nil, leftBarButtonSelectedIcon: nil, leftBarButton: nil, rightBarButtonIcon: "Profile_Icon_Gray", rightBarButtonSelectedIcon: "Profile_Icon_Yellow", rightBarButton: rightBarButton, title: "Edit Profile")
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: nil, leftBarButtonSelectedIcon: nil, leftBarButton: nil, rightBarButtonIcon: "Right_Arrow", rightBarButtonSelectedIcon: "Right_Arrow", rightBarButton: rightBarButton, title: "Edit Profile")
     }
     
     func displayProfilePictureButton() {
@@ -447,32 +447,32 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     func businessSwitchTapped(_ sender: UISwitch) {
         if businessSwitch.isOn{
             businessLabel.textColor = businessBlue
-            businessIcon.image = UIImage(named: "Business_Icon_Blue")
+            businessIcon.image = UIImage(named: "Selected_Business_Icon")
         }
         else{
             businessLabel.textColor = UIColor.gray
-            businessIcon.image = UIImage(named: "Business_Icon_Gray")
+            businessIcon.image = UIImage(named: "Selected_Business_Icon")
         }
     }
     func loveSwitchTapped(_ sender: UISwitch) {
         if loveSwitch.isOn{
             loveLabel.textColor = loveRed
-            loveIcon.image = UIImage(named: "Love_Icon_Red")
+            loveIcon.image = UIImage(named: "Selected_Love_Icon")
         }
         else{
             
             loveLabel.textColor = UIColor.gray
-            loveIcon.image = UIImage(named: "Love_Icon_Gray")
+            loveIcon.image = UIImage(named: "Selected_Love_Icon")
         }
     }
     func friendshipSwitchTapped(_ sender: UISwitch) {
         if friendshipSwitch.isOn{
             friendshipLabel.textColor = friendshipGreen
-            friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
+            friendshipIcon.image = UIImage(named: "Selected_Friendship_Icon")
         }
         else{
             friendshipLabel.textColor = UIColor.gray
-            friendshipIcon.image = UIImage(named: "Friendship_Icon_Gray")
+            friendshipIcon.image = UIImage(named: "Selected_Friendship_Icon")
         }
     }
 
@@ -505,8 +505,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         friendshipSwitch.center.y = friendshipLabel.center.y
         
         //setting the texts of the labels
-        businessLabel.text = "Business"
-        loveLabel.text = "Love"
+        businessLabel.text = "Work"
+        loveLabel.text = "Dating"
         friendshipLabel.text = "Friendship"
         
         //adding Targets for actions to take place when the switches are clicked
@@ -526,10 +526,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         businessSwitch.onTintColor = businessBlue
         if businessSwitch.isOn {
             businessLabel.textColor = businessBlue
-            businessIcon.image = UIImage(named: "Business_Icon_Blue")
+            businessIcon.image = UIImage(named: "Selected_Business_Icon")
         } else {
             businessLabel.textColor = UIColor.gray
-            businessIcon.image = UIImage(named: "Business_Icon_Gray")
+            businessIcon.image = UIImage(named: "Selected_Friendship_Icon")
         }
         //Setting whether the user is interested in love
         if let loveInterest = PFUser.current()?["interested_in_love"] as? Bool {
@@ -542,11 +542,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         loveSwitch.onTintColor = loveRed
         if loveSwitch.isOn{
             loveLabel.textColor = loveRed
-            loveIcon.image = UIImage(named: "Love_Icon_Red")
+            loveIcon.image = UIImage(named: "Selected_Love_Icon")
         }
         else{
             loveLabel.textColor = UIColor.gray
-            loveIcon.image = UIImage(named: "Love_Icon_Gray")
+            loveIcon.image = UIImage(named: "Selected_Love_Icon")
         }
         //Setting whether the user is interested in friendship
         if let friendshipInterest = PFUser.current()?["interested_in_friendship"] as? Bool {
@@ -559,11 +559,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         friendshipSwitch.onTintColor = friendshipGreen
         if friendshipSwitch.isOn{
             friendshipLabel.textColor = friendshipGreen
-            friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
+            friendshipIcon.image = UIImage(named: "Selected_Friendship_Icon")
         }
         else{
             friendshipLabel.textColor = UIColor.gray
-            friendshipIcon.image = UIImage(named: "Friendship_Icon_Gray")
+            friendshipIcon.image = UIImage(named: "Selected_Friendship_Icon")
         }
         
         view.addSubview(businessIcon)

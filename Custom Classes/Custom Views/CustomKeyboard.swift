@@ -88,20 +88,32 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     func updateMessageEnablement(updatedPostType: String){
         print("updatePostType")
         type = updatedPostType
-            //setting the placeholder based on whether an option is selected
-            if type != "All Types" {
-                if messageTextView.textColor == UIColor.white && !messageTextView.text.isEmpty {
-                    print("setting enabled to true")
-                    messageButton.isEnabled = true
-                    messageButton.isSelected = true
-                    
-                } else {
-                    messageButton.isEnabled = false
-                    messageButton.isSelected = false
-                }
+        //setting the placeholder based on whether an option is selected
+        if type != "All Types" {
+            if messageTextView.textColor == UIColor.white && !messageTextView.text.isEmpty {
+                print("setting enabled to true")
+                messageButton.isEnabled = true
+                messageButton.isSelected = true
+                
+            } else if messageTextView.textColor == UIColor.lightGray && target == "postStatus" {
+                messageButton.isEnabled = false
+                messageButton.isSelected = false
+                setRequestForType(filterType: updatedPostType)
+                updateMessageHeights()
             } else {
                 messageButton.isEnabled = false
                 messageButton.isSelected = false
+            }
+        } else {
+            if messageTextView.textColor == UIColor.lightGray && target == "postStatus" {
+                messageButton.isEnabled = false
+                messageButton.isSelected = false
+                setRequestForType(filterType: updatedPostType)
+            } else {
+                messageButton.isEnabled = false
+                messageButton.isSelected = false
+            }
+
         }
     }
     
@@ -154,6 +166,8 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         if target == "bridgeUsers" && (text == "\n") {
             textView.resignFirstResponder()
             updatedText = updatedText.trimmingCharacters(in: .newlines)
+        } else if target == "postStatus" && text == "\n" {
+            updatedText = updatedText.trimmingCharacters(in: .newlines)
         }
         
         //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
@@ -189,7 +203,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     }
     
     
-    func updatePlaceholder() -> Bool {
+    func updatePlaceholder() {
         //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
         if messageTextView.text.isEmpty {
             //setting the placeholder
@@ -198,6 +212,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.beginningOfDocument, to: messageTextView.beginningOfDocument)
             updateMessageHeights()
             messageButton.isEnabled = false
+            messageButton.isSelected = false
             print("set placeholder")
             
             //if messageTextView is empty, the circles should be deselected
@@ -205,19 +220,15 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 let reasonForConnectionView = currentView as! ReasonForConnection
                 reasonForConnectionView.deselectCircles()
             }
-            
-            
-            return false
         }
             // else if the text view's placeholder is showing and the length of the replacement string is greater than 0, clear the text veiw and set the color to white to prepare for entry
         else if messageTextView.textColor == UIColor.lightGray && !messageTextView.text.isEmpty && messageTextView.text != placeholderText {
             messageTextView.textColor = UIColor.white
             messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.endOfDocument, to: messageTextView.endOfDocument)
             messageButton.isEnabled = true
+            messageButton.isSelected = true
             print("set no placeholder")
         }
-        
-        return true
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
@@ -320,5 +331,91 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             
         }
     }*/
+    
+    //getting status from the currentUser's most recent status
+    func setRequestForType(filterType: String) {
+        var necterStatusForType = "I am looking for..."
+        let type = filterType
+        print("type - \(type)")
+        let localData = LocalData()
+        if type == "Business" {
+            if let status = localData.getBusinessStatus() {
+                necterStatusForType = status
+                messageTextView.text = "Current Request: \(necterStatusForType)"
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Business")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    print("getting business objects")
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        messageTextView.text = "Current Request: \(necterStatusForType)"
+                        localData.setBusinessStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+            updateMessageHeights()
+        } else if type == "Love" {
+            if let status = localData.getLoveStatus() {
+                necterStatusForType = status
+                messageTextView.text = "Current Request: \(necterStatusForType)"
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Love")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        messageTextView.text = "Current Request: \(necterStatusForType)"
+                        localData.setLoveStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+            updateMessageHeights()
+        } else if type == "Friendship" {
+            if let status = localData.getFriendshipStatus() {
+                necterStatusForType = status
+                messageTextView.text = "Current Request: \(necterStatusForType)"
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Friendship")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        messageTextView.text = "Current Request: \(necterStatusForType)"
+                        localData.setFriendshipStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+            updateMessageHeights()
+        } else {
+            messageTextView.text = nil
+            updatePlaceholder()
+        }
+        /*if necterStatusForType != "I am looking for..." {
+         print("isFirstPost set to \(isFirstPost)")
+         isFirstPost = false
+         }*/
+    }
     
 }

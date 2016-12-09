@@ -336,8 +336,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             sendButton.isEnabled = false
         }
-
-        
+    }
+    //setting background color to off-white blue
+    func displayBackgroundView(){
+        let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
+        backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        view.addSubview(backgroundView)
+        view.sendSubview(toBack: backgroundView)
     }
     //taking away the placeholder to begin editing the textView
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -538,9 +543,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 // push notification ends
                 
             } else {
-                
                 print(error)
-                
             }
         }
     }
@@ -603,7 +606,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let customNavigationBar = CustomNavigationBar()
         rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
-        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Messages_Icon_Gray", leftBarButtonSelectedIcon: "Messages_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: "Leave_Conversation_Gray", rightBarButtonSelectedIcon: "Leave_Conversation_Yellow", rightBarButton: rightBarButton, title: singleMessageTitle)
+        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: "Leave_Conversation_Gray", rightBarButtonSelectedIcon: "Leave_Conversation_Yellow", rightBarButton: rightBarButton, title: singleMessageTitle)
     }
     func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
@@ -700,6 +703,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         displayNavigationBar()
         
+        //let customKeyboard = CustomKeyboard()
+        //customKeyboard.display(view: view, placeholder: "Type a message...", buttonTitle: "Send", buttonTarget: "sendSingleMessage")
         displayToolbar()
         sendButton.isEnabled = false
 //        let tableViewIsDraggedGesture = UIPanGestureRecognizer(target: self, action: #selector(tableViewIsDragged(_:)))
@@ -719,7 +724,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         singleMessageTableView.register(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
         messageId = newMessageId
         updateMessages()
+        
+        displayBackgroundView()
     }
+    
     override func viewDidLayoutSubviews() {
         
         

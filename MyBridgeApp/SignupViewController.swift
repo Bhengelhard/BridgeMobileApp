@@ -186,7 +186,14 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             PFUser.current()?["interested_in_friendship"] = friendshipSwitch.isOn
             PFUser.current()?.saveInBackground(block: { (success, error) in
                 if success {
-                    LocalStorageUtility().updateBridgePairingsTable()
+                    
+                    //This was used up until 12/6/2016 to add the currentUser to the BridgePairings table, but wasn't working
+                    //let localStorageUtility = LocalStorageUtility()
+                    //localStorageUtility.updateBridgePairingsTable()
+                    
+                    //Adds the current User to the bridgePairings table with the people they have potential to match with
+                    let pfCloudFunctions = PFCloudFunctions()
+                    pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
                 }
             })
         }
@@ -206,32 +213,32 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     @IBAction func businessSwitchTapped(_ sender: AnyObject) {
         if businessSwitch.isOn{
             businessLabel.textColor = businessBlue
-            businessIcon.image = UIImage(named: "Business_Icon_Blue")
+            businessIcon.image = UIImage(named: "Selected_Business_Icon")
         }
         else{
             businessLabel.textColor = UIColor.gray
-            businessIcon.image = UIImage(named: "Business_Icon_Gray")
+            businessIcon.image = UIImage(named: "Selected_Business_Icon")
         }
     }
     @IBAction func loveSwitchTapped(_ sender: AnyObject) {
         if loveSwitch.isOn{
             loveLabel.textColor = loveRed
-            loveIcon.image = UIImage(named: "Love_Icon_Red")
+            loveIcon.image = UIImage(named: "Selected_Love_Icon")
         }
         else{
           
             loveLabel.textColor = UIColor.gray
-            loveIcon.image = UIImage(named: "Love_Icon_Gray")
+            loveIcon.image = UIImage(named: "Selected_Love_Icon")
         }
     }
     @IBAction func friendshipSwitchTapped(_ sender: AnyObject) {
         if friendshipSwitch.isOn{
             friendshipLabel.textColor = friendshipGreen
-            friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
+            friendshipIcon.image = UIImage(named: "Selected_Friendship_Icon")
         }
         else{
             friendshipLabel.textColor = UIColor.gray
-            friendshipIcon.image = UIImage(named: "Friendship_Icon_Gray")
+            friendshipIcon.image = UIImage(named: "Selected_Friendship_Icon")
         }
     }
 
@@ -274,8 +281,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
 
     func displayInterests() {
         
-        businessLabel.text = "Business"
-        loveLabel.text = "Love"
+        businessLabel.text = "Work"
+        loveLabel.text = "Dating"
         friendshipLabel.text = "Friendship"
         interestedLabel.text = "I am interested in being connected for:"
         
@@ -417,9 +424,9 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         businessLabel.textColor = businessBlue
         loveLabel.textColor = loveRed
         friendshipLabel.textColor = friendshipGreen
-        businessIcon.image = UIImage(named: "Business_Icon_Blue")
-        loveIcon.image = UIImage(named: "Love_Icon_Red")
-        friendshipIcon.image = UIImage(named: "Friendship_Icon_Green")
+        businessIcon.image = UIImage(named: "Selected_Business_Icon")
+        loveIcon.image = UIImage(named: "Selected_Love_Icon")
+        friendshipIcon.image = UIImage(named: "Selected_Friendship_Icon")
         
         
         

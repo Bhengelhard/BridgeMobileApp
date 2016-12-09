@@ -30,7 +30,6 @@
                     </view>
                     <connections>
                         <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromEditProfileView" id="0Mi-wm-mTu"/>
-                        <segue destination="nwH-9I-MyI" kind="show" identifier="showOptionsViewFromEditProfileView" id="Wvz-xk-nsb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WkR-Vg-7sb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -133,7 +132,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="96"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="geX-aI-Dai" id="1GK-eo-elS">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JL8-0O-hzJ">
@@ -173,7 +172,7 @@
                                 <items>
                                     <barButtonItem style="plain" id="Nsk-BZ-NOi">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ujX-q0-o8d">
-                                            <rect key="frame" x="16" y="2.5" width="27" height="39"/>
+                                            <rect key="frame" x="16" y="3" width="27" height="39"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" title="Button" image="camera_icon_small.jpg"/>
                                             <connections>
@@ -242,82 +241,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kin-se-qVy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2613.5" y="-1803.5"/>
-        </scene>
-        <!--Terms of Service-->
-        <scene sceneID="D1a-a4-6wI">
-            <objects>
-                <viewController title="Terms of Service" id="g3I-ul-dfk" customClass="TermsOfServiceViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="iNi-jo-dTZ"/>
-                        <viewControllerLayoutGuide type="bottom" id="pkg-4j-UMo"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Nxv-Vi-jbi">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qOg-Ir-KMK">
-                                <rect key="frame" x="20" y="140" width="335" height="387"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="335" id="aNl-M0-J1F"/>
-                                    <constraint firstAttribute="height" constant="387" id="uCp-ou-Jk0"/>
-                                </constraints>
-                                <string key="text">This application is meant for testing purposes only. All terms of service will be provided upon download of the official app in the apple app store</string>
-                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="qOg-Ir-KMK" firstAttribute="centerX" secondItem="Nxv-Vi-jbi" secondAttribute="centerX" id="0oT-3K-GT2"/>
-                            <constraint firstItem="qOg-Ir-KMK" firstAttribute="centerY" secondItem="Nxv-Vi-jbi" secondAttribute="centerY" id="0wx-aL-LuL"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromTermsOfService" id="5HO-NE-nlq"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="grC-iE-gXb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="147.5" y="846.5"/>
-        </scene>
-        <!--Privacy Policy-->
-        <scene sceneID="Jd0-79-wsk">
-            <objects>
-                <viewController title="Privacy Policy" id="1eW-4E-pO3" customClass="PrivacyPolicyViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="9rg-0f-hlq"/>
-                        <viewControllerLayoutGuide type="bottom" id="3T5-1k-i75"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Q5Q-nG-bxV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G1F-ii-ddf">
-                                <rect key="frame" x="20" y="237" width="335" height="193"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="335" id="EKo-qh-4Ip"/>
-                                    <constraint firstAttribute="height" constant="193" id="Pbd-DO-zxv"/>
-                                </constraints>
-                                <string key="text">This application is meant for testing purposes only. All privacy policies will be provided upon download of the official app in the apple app store</string>
-                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="G1F-ii-ddf" firstAttribute="centerX" secondItem="Q5Q-nG-bxV" secondAttribute="centerX" id="5VU-zK-Eqz"/>
-                            <constraint firstItem="G1F-ii-ddf" firstAttribute="centerY" secondItem="Q5Q-nG-bxV" secondAttribute="centerY" id="OSI-IH-luT"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromPrivacyPolicy" id="gX1-3V-0va"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vvX-TW-QcA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="570.5" y="846.5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -418,55 +341,6 @@
             </objects>
             <point key="canvasLocation" x="1707.5" y="-1104.5"/>
         </scene>
-        <!--Options From Bot View Controller-->
-        <scene sceneID="doL-75-kLW">
-            <objects>
-                <viewController id="nwH-9I-MyI" customClass="OptionsFromBotViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="QST-a2-fwf"/>
-                        <viewControllerLayoutGuide type="bottom" id="rvM-My-gJG"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="xwJ-oV-AJ5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <connections>
-                        <segue destination="P6Q-JZ-W57" kind="show" identifier="showNewStatusFromOptionsView" id="zMO-kw-Ku9"/>
-                        <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromOptionsView" id="TvH-ve-6hX"/>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromOptionsView" id="WdR-zr-3Hq"/>
-                        <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesViewfromOptionsView" id="tAM-Qe-S00"/>
-                        <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileViewFromOptionsView" id="754-bi-Idl"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fcM-Rn-gGP" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1671.5" y="66.5"/>
-        </scene>
-        <!--New Bridge Status-->
-        <scene sceneID="6dS-e7-LSj">
-            <objects>
-                <viewController title="New Bridge Status" id="P6Q-JZ-W57" customClass="NewBridgeStatusViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cAW-U6-60g"/>
-                        <viewControllerLayoutGuide type="bottom" id="F8U-Nj-mg2"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="tCt-ab-eGr">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <connections>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromStatus" id="Z7c-Ws-k9O"/>
-                        <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromNewStatusView" id="Zct-T5-yb8"/>
-                        <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesViewfromStatus" id="RFd-6z-IK0"/>
-                        <segue destination="nwH-9I-MyI" kind="show" identifier="showOptionsViewFromNewStatus" id="lb2-8V-Hs1"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4S1-vj-COi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1671.5" y="915.5"/>
-        </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
             <objects>
@@ -483,12 +357,13 @@
                                 <rect key="frame" x="0.0" y="291" width="375" height="376"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="FGX-TP-Wxn" customClass="ProfileTableViewCell" customModule="MyBridgeApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FGX-TP-Wxn" id="Czd-tc-gSD">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
@@ -521,11 +396,8 @@
                     <connections>
                         <outlet property="name" destination="5HU-Ir-Pg6" id="eu0-cS-voQ"/>
                         <outlet property="tableView" destination="3js-dl-1M1" id="8nQ-Fb-kdF"/>
-                        <segue destination="1eW-4E-pO3" kind="show" identifier="showPrivacyPolicy" id="LOf-E3-b3C"/>
-                        <segue destination="g3I-ul-dfk" kind="show" identifier="showTermsofService" id="pbm-rN-Dzp"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginView" id="cy1-Ds-r2Z"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewFromProfilePage" id="ORi-q2-txU"/>
-                        <segue destination="nwH-9I-MyI" kind="show" identifier="showNewStatusViewFromProfilePage" id="4OI-Nx-18t"/>
                         <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileViewFromProfilePage" id="0EB-Fw-YUx"/>
                     </connections>
                 </viewController>
@@ -551,7 +423,7 @@
                         <segue destination="ABc-Ef-uKn" kind="show" identifier="showSingleMessage" id="B19-eu-GHC"/>
                         <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromBridgeView" id="1Bx-ML-R6e"/>
                         <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesPageFromBridgeView" id="OnA-y9-bUb"/>
-                        <segue destination="nwH-9I-MyI" kind="show" identifier="showNewStatusViewController" id="szG-GP-VfO"/>
+                        <segue destination="Aqq-nv-Cxw" kind="show" identifier="showMyProfileFromBridgePage" id="WWN-20-fau"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HbE-ka-aov" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -584,7 +456,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T5a-4r-w51" id="e1H-5M-cRe">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -601,12 +473,32 @@
                         <outlet property="tableView" destination="WJ6-Xw-l9y" id="S9M-4M-vhe"/>
                         <segue destination="ABc-Ef-uKn" kind="show" identifier="showSingleMessageFromMessages" id="0Jc-ZY-MLe"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromMessages" id="wYg-RW-AbN"/>
-                        <segue destination="nwH-9I-MyI" kind="show" identifier="showNewStatusViewControllerFromMessages" id="CNh-Pt-C4t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZO4-tV-uGJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1950" y="-171"/>
+        </scene>
+        <!--My Profile View Controller-->
+        <scene sceneID="wdK-f8-iS4">
+            <objects>
+                <viewController title="My Profile View Controller" id="Aqq-nv-Cxw" customClass="MyProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="KeZ-PD-abv"/>
+                        <viewControllerLayoutGuide type="bottom" id="3KW-PS-nYP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="PDB-Dc-khn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromMyProfile" id="hOb-8o-wNe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SZz-Ig-dI4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="495" y="590"/>
         </scene>
         <!--Single Message View Controller-->
         <scene sceneID="57B-UR-Tv1">
@@ -660,13 +552,11 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="0Jc-ZY-MLe"/>
-        <segue reference="fLD-mo-7R5"/>
-        <segue reference="wYg-RW-AbN"/>
-        <segue reference="CNh-Pt-C4t"/>
-        <segue reference="1Bx-ML-R6e"/>
-        <segue reference="cy1-Ds-r2Z"/>
-        <segue reference="0EB-Fw-YUx"/>
         <segue reference="NMz-iK-zUZ"/>
+        <segue reference="1Bx-ML-R6e"/>
+        <segue reference="hOb-8o-wNe"/>
+        <segue reference="OnA-y9-bUb"/>
+        <segue reference="B19-eu-GHC"/>
+        <segue reference="cy1-Ds-r2Z"/>
     </inferredMetricsTieBreakers>
 </document>

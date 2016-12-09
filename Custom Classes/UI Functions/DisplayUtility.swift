@@ -38,6 +38,18 @@ class DisplayUtility {
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         return gradientLayer
     }
+    static func gradientLabel(text: String, frame: CGRect, font: UIFont) -> UILabel {
+        let label = UILabel(frame: frame)
+        label.text = text
+        let color = gradientColor(size: CGSize(width: label.frame.width, height: label.frame.height))
+        label.textColor = color
+        label.font = font
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = NSTextAlignment.center
+        
+        return label
+    }
+    
     
     static func gradientButton(text: String, frame: CGRect) -> UIButton {
         let button = UIButton(frame: frame)
