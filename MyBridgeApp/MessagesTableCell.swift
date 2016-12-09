@@ -91,7 +91,9 @@ class MessagesTableCell: UITableViewCell {
         
         profilePic.frame = CGRect(x: 0.0708*cellWidth!, y: 0.5*cellHeight!-0.168*cellWidth!/2, width: 0.168*cellWidth!, height: 0.168*cellWidth!)
         profilePic.layer.cornerRadius = profilePic.frame.height/2
-        profilePic.layer.borderColor = color.cgColor
+        if let color = self.color {
+            profilePic.layer.borderColor = color.cgColor
+        }
         
         //setting line to begin with text and go to end of frame
         participants.frame = CGRect(x: profilePic.frame.maxX + 0.02*cellWidth!, y: profilePic.frame.minY, width: 0.2682*cellWidth!, height: 0.25*cellHeight!)

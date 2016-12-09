@@ -268,14 +268,15 @@ class AcceptIgnoreView: UIView {
                 if results.count > 0 {
                     let result = results[0]
                     result["\(self.newMatch.user)_response"] = 2
-                    result.saveInBackground()
+                    result.saveInBackground(block: { (succeeded: Bool, error: Error?) in
+                        self.phaseOut()
+                        if let vc = self.vc {
+                            vc.loadNewMatches()
+                        }
+                    })
                 }
                 
             }
         })
-        self.phaseOut()
-        if let vc = self.vc {
-            vc.loadNewMatches()
-        }
     }
 }

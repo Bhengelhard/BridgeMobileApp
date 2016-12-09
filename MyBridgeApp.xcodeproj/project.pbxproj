@@ -48,6 +48,7 @@
 		81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */; };
 		9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9026A0671DDF83F1007CE4D9 /* NewMatch.swift */; };
 		9081C1001DEDE0EB00603393 /* AcceptIgnoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */; };
+		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
 		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
 		CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */; };
 		CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829461CAA26D900DC86C9 /* ViewController.swift */; };
@@ -123,6 +124,7 @@
 		81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
 		9026A0671DDF83F1007CE4D9 /* NewMatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatch.swift; path = "Custom Classes/Data Storage/NewMatch.swift"; sourceTree = "<group>"; };
 		9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
+		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB5829461CAA26D900DC86C9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MyBridgeApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -185,6 +187,7 @@
 				3030C0BA1DD54E470077F7AC /* Users.swift */,
 				3030C0BC1DD54E4D0077F7AC /* Users+CoreDataProperties.swift */,
 				9026A0671DDF83F1007CE4D9 /* NewMatch.swift */,
+				90C931021DF9BAEE00D25740 /* FilterInfo.swift */,
 			);
 			name = "Data Storage";
 			sourceTree = "<group>";
@@ -441,6 +444,7 @@
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */,
 				E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */,
+				90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
 				307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */,

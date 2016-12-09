@@ -54,8 +54,13 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     //new matches
     var newMatchesView = NewMatchesView()
     
+    //filter info
+    var currentFilter = "All Types"
+    var filterInfo = [String: FilterInfo]()
+    
     //message information
     let noMessagesLabel = UILabel()
+    
     var names = [String : [String]]()
     var profilePicURLs = [String : [String: String]]()
     var messages = [String : String]()
@@ -285,14 +290,21 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
      }
      */
     
+    
     // refresh() fetches the data from Parse
     func refresh() {
         //self.refresher.endRefreshing()
         
+        let currentFilterInfo = self.filterInfo[self.currentFilter]!
+        
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
+        if currentFilter != "All Types" {
+            query.whereKey("message_type", equalTo: currentFilter)
+        }
         query.order(byDescending: "lastSingleMessageAt")
-        query.skip = noOfElementsFetched
+        //query.skip = noOfElementsFetched
+        query.skip = currentFilterInfo.noOfElementsFetched
         query.limit = noOfElementsPerRefresher
         query.cachePolicy = .networkElseCache
         query.findObjectsInBackground(block: { (results, error) -> Void in
@@ -302,11 +314,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             else if let results = results {
                 self.noOfElementsFetched += results.count
+                currentFilterInfo.fetch(results.count)
                 //print("self.noOfElementsFetched \(self.noOfElementsFetched)")
                 for i in 0..<results.count{
                     
                     let result = results[i]
-                    self.messagePositionToMessageIdMapping[self.noOfElementsProcessed] = result.objectId!
+                    //self.messagePositionToMessageIdMapping[self.noOfElementsProcessed] = result.objectId!
+                    currentFilterInfo.messagePositionToMessageIdMapping[currentFilterInfo.noOfElementsProcessed] = result.objectId!
+                    currentFilterInfo.process()
                     self.noOfElementsProcessed += 1
                     if let _ = result["message_type"] {
                         self.messageType[result.objectId!] = (result["message_type"] as! (String))
@@ -318,22 +333,20 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         self.messageTimestamps[result.objectId!] =  (result["lastSingleMessageAt"] as! (Date))
                     }
                     else {
-                        self.messageTimestamps[result.objectId!] = Date()
+                        let date = Date()
+                        self.messageTimestamps[result.objectId!] = date
                     }
                     if let _ = result["message_viewed"] {
                         let whoViewed = result["message_viewed"] as! ([String])
                         if whoViewed.contains((PFUser.current()?.objectId)!) {
                             self.messageViewed[result.objectId!] = (true)
-                            //print("1")
                         }
                         else {
                             self.messageViewed[result.objectId!] = (false)
-                            //print("2")
                         }
                     }
                     else {
                         self.messageViewed[result.objectId!]=(false)
-                        //print("3")
                     }
                     if let _ = result["last_single_message"] {
                         self.messages[result.objectId!] = (result["last_single_message"] as! (String))
@@ -349,6 +362,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                     }
                     self.names[result.objectId!] = (names_per_message)
+                    
                     self.profilePicURLs[result.objectId!] = [String: String]()
                     if let user1PhotoURL = result["user1_profile_picture_url"] {
                         self.profilePicURLs[result.objectId!]?[result["user1_objectId"] as! String] = user1PhotoURL as! String
@@ -359,13 +373,18 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     }
                 }
             }
+            self.messagePositionToMessageIdMapping = currentFilterInfo.messagePositionToMessageIdMapping
+            self.noOfElementsProcessed = currentFilterInfo.noOfElementsProcessed
+            self.noOfElementsFetched = currentFilterInfo.noOfElementsFetched
+            self.totalElements = currentFilterInfo.totalElements
+            
             self.tableView.reloadData()
         })
     }
     // helper function for updateSearchResultsForSearchController
     func filterContentForSearchText(_ searchText:String, scope: String = "All"){
         filteredPositions = [Int]()
-        for i in 0 ..< names.count  {
+        for i in 0 ..< messagePositionToMessageIdMapping.count  {
             var flag = true
             for individualNames in names[messagePositionToMessageIdMapping[i]!]!{
                 if individualNames.lowercased().contains(searchText.lowercased()){
@@ -387,13 +406,20 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         filterContentForSearchText(searchController.searchBar.text!)
     }
     func reloadMessageTable(_ notification: Notification) {
-        print("Listened at reloadMessageTable" )
+        print("Listened at reloadMessageTable")
+        
+        initializeFilterInfo()
+        
         names = [String : [String]]()
         messages = [String : String]()
         messageType = [String : String]()
         messageViewed = [String : Bool]()
         messageTimestamps = [String : Date?]()
         messagePositionToMessageIdMapping = [Int:String]()
+        
+        refresh()
+        
+        /*
         
         filteredPositions = [Int]()
         toolbarTapped = false
@@ -405,7 +431,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         query.order(byDescending: "lastSingleMessageAt")
         query.limit = 1000
         query.cachePolicy = .networkElseCache
-        query.countObjectsInBackground{
+        query.countObjectsInBackground {
             (count: Int32, error: Error?) in
             if error == nil {
                 self.totalElements = Int(count)
@@ -415,13 +441,42 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 print(" not alive")
             }
         }
+         */
     }
+    
+    func initializeFilterInfo() {
+        for type in ["All Types", "Business", "Love", "Friendship"] {
+            filterInfo[type] = FilterInfo(type: type)
+            
+            let query: PFQuery = PFQuery(className: "Messages")
+            query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
+            if type != "All Types" {
+                query.whereKey("message_type", equalTo: type)
+            }
+            query.order(byDescending: "lastSingleMessageAt")
+            query.limit = 1000
+            query.cachePolicy = .networkElseCache
+            query.countObjectsInBackground{
+                (count: Int32, error: Error?) in
+                if error == nil {
+                    self.filterInfo[type]?.setTotalElements(Int(count))
+                }
+                else {
+                    print(" not alive")
+                }
+            }
+        }
+    }
+    
     func filtersTapped(_ notification: Notification) {
         let type = missionControlView.whichFilter()
-        toolbarTapped = true
+        currentFilter = type
+
+        //toolbarTapped = true
         filteredPositions = [Int]()
         displayFilterLabel(type: type)
-        newMatchesView.filterBy(type: type)
+        
+        /*
         if type != "All Types" {
             //displaying noMessagesLabel when there are no messages in the filtered message type
             for i in 0 ..< messageType.count{
@@ -439,7 +494,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             noMessagesLabel.isHidden = true
         }
-        tableView.reloadData()
+         */
+        refresh()
+        self.tableView.tableHeaderView = nil
+        newMatchesView.filterBy(type: type)
+        self.tableView.tableHeaderView = newMatchesView
     }
     
     
@@ -571,6 +630,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
         
         //view.addSubview(tableView)
+        
+        initializeFilterInfo()
         
         filterLabel.frame = CGRect(x: 0, y: 0.18*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
         filterLabel.font = UIFont(name: "BentonSans", size: 18)
@@ -763,7 +824,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
+        let currentFilterInfo = self.filterInfo[self.currentFilter]!
+        
+        //if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
+        if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < currentFilterInfo.totalElements) ) {
             if self.encounteredBefore[self.noOfElementsFetched] == nil {
                 self.encounteredBefore[self.noOfElementsFetched] = true
                 refresh()
@@ -785,7 +849,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             return filteredPositions.count
         }
         
-        return messages.count
+        let currentFilterInfo = self.filterInfo[self.currentFilter]!
+        return currentFilterInfo.messagePositionToMessageIdMapping.count
+        
+        //return messages.count
         
     }
     
@@ -881,8 +948,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         case "Friendship":
             cell.color = DisplayUtility.friendshipGreen
             break
-        default: cell.participants.textColor = DisplayUtility.friendshipGreen
-        cell.arrow.textColor = DisplayUtility.friendshipGreen
+        default: cell.color = DisplayUtility.friendshipGreen
             
         }
         let dateFormatter = DateFormatter()
