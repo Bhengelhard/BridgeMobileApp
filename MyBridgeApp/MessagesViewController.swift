@@ -633,7 +633,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         initializeFilterInfo()
         
-        filterLabel.frame = CGRect(x: 0, y: 0.18*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
+        filterLabel.frame = CGRect(x: 0, y: searchBarContainer.frame.maxY, width: DisplayUtility.screenWidth, height: 0.06*DisplayUtility.screenHeight)
         filterLabel.font = UIFont(name: "BentonSans", size: 18)
         filterLabel.textAlignment = .center
         //view.addSubview(filterLabel)
