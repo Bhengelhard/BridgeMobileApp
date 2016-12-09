@@ -13,28 +13,29 @@ import Parse
 
 class CustomNavigationBar: UINavigationBar {
     
-    let navBar = UINavigationBar()
+    //let navBar = UINavigationBar()
     let navItem = UINavigationItem()
     var classRightBarButton = UIButton()
     
     func createCustomNavigationBar (view: UIView, leftBarButtonIcon: String?, leftBarButtonSelectedIcon: String?, leftBarButton: UIButton?, rightBarButtonIcon: String?, rightBarButtonSelectedIcon: String?, rightBarButton: UIButton?, title: String?){
-        navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.105*DisplayUtility.screenHeight)
-        navBar.barStyle = .black
-        UIStatusBarStyle.lightContent
-        navBar.isTranslucent = true
+        self.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.105*DisplayUtility.screenHeight)
+        self.barStyle = .black
+        //self.barStyle = UIBarStyle.
+        //self.UIStatusBarStyle.lightContent
+        self.isTranslucent = true
         //navBar.barTintColor = DisplayUtility.necterGray
         
         //let displayUtility = DisplayUtility()
         //navBar = displayUtility.setBlurredView(viewToBlur: navBar as UIView) as! UINavigationBar
-        navBar.backgroundColor = DisplayUtility.necterGray
-        view.addSubview(navBar)
+        self.backgroundColor = DisplayUtility.necterGray
+        //view.addSubview(self)
         
         /*let maskPath = UIBezierPath(roundedRect: navBar.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10.0, height: 10.0))
         let navBarShape = CAShapeLayer()
         navBarShape.path = maskPath.cgPath
         navBar.layer.mask = navBarShape*/
         
-        let shadowView = UIView(frame: navBar.frame)
+        let shadowView = UIView(frame: self.frame)
         shadowView.backgroundColor = UIColor.white
         shadowView.layer.borderWidth = 0
         shadowView.layer.masksToBounds = false
@@ -84,7 +85,7 @@ class CustomNavigationBar: UINavigationBar {
             
             classRightBarButton = rightBarButton!
         }
-        navBar.setItems([navItem], animated: false)
+        self.setItems([navItem], animated: false)
         
         
         //setting the navBar title
@@ -95,10 +96,10 @@ class CustomNavigationBar: UINavigationBar {
             let label = DisplayUtility.gradientLabel(text: titleText, frame: navBarTitleView.frame, font: font!)
             navBarTitleView.addSubview(label)
         }
-        navBar.topItem?.titleView = navBarTitleView
+        self.topItem?.titleView = navBarTitleView
         
-        view.addSubview(navBar)
-        view.bringSubview(toFront: navBar)
+        view.addSubview(self)
+        view.bringSubview(toFront: self)
     }
     
     
@@ -111,7 +112,7 @@ class CustomNavigationBar: UINavigationBar {
             //classRightBarButton.setImage(UIImage(named: newSelectedIcon!), for: .selected)
         //}
         navItem.rightBarButtonItem = UIBarButtonItem(customView: self.classRightBarButton)
-        navBar.setItems([self.navItem], animated: false)
+        self.setItems([self.navItem], animated: false)
 
     }
 

@@ -32,6 +32,7 @@
 		304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */; };
 		304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */; };
 		3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059ABF11DEC72FB0010A81B /* TrendingView.swift */; };
+		3059ABF41DFB04AC0010A81B /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059ABF31DFB04AC0010A81B /* MyProfileViewController.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -104,6 +105,7 @@
 		304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendingNotificationView.swift; path = "Custom Classes/Custom Views/SendingNotificationView.swift"; sourceTree = "<group>"; };
 		304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircleView.swift; path = "Custom Classes/Custom Views/CircleView.swift"; sourceTree = "<group>"; };
 		3059ABF11DEC72FB0010A81B /* TrendingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrendingView.swift; path = "Custom Classes/Custom Views/TrendingView.swift"; sourceTree = "<group>"; };
+		3059ABF31DFB04AC0010A81B /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController.swift; path = MyBridgeApp/MyProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -284,6 +286,7 @@
 				E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */,
 				E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */,
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
+				3059ABF31DFB04AC0010A81B /* MyProfileViewController.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
 				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
 				E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */,
@@ -436,6 +439,7 @@
 				30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */,
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */,
+				3059ABF41DFB04AC0010A81B /* MyProfileViewController.swift in Sources */,
 				3030C0BD1DD54E4D0077F7AC /* Users+CoreDataProperties.swift in Sources */,
 				3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,

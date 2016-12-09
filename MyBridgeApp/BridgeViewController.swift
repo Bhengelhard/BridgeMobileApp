@@ -58,18 +58,6 @@ class BridgeViewController: UIViewController {
     var swipeCardView = UIView()
     var postTapped = Bool()
     
-    /*//toolbar buttons
-    let toolbar = UIView()
-    let allTypesButton = UIButton()
-    let allTypesLabel = UILabel()
-    let businessButton = UIButton()
-    let businessLabel = UILabel()
-    let loveButton = UIButton()
-    let loveLabel = UILabel()
-    let friendshipButton = UIButton()
-    let friendshipLabel = UILabel()
-    let postStatusButton = UIButton()*/
-    
     //navigation bar creation
     var badgeCount = Int()
     let leftBarButton = UIButton()
@@ -435,108 +423,16 @@ class BridgeViewController: UIViewController {
         customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Profile_Navbar_Icon", leftBarButtonSelectedIcon: "Profile_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: rightBarButtonIcon, rightBarButtonSelectedIcon: rightBarButtonSelectedIcon, rightBarButton: rightBarButton, title: "necter")
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
-        performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
+        //performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
+        //let myProfileVC = MyProfileViewController()
+        performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
+        //self.present(myProfileVC, animated: true, completion: nil)
         leftBarButton.isSelected = true
     }
     func rightBarButtonTapped (_ sender: UIBarButtonItem){
         performSegue(withIdentifier: "showMessagesPageFromBridgeView", sender: self)
         rightBarButton.isSelected = true
     }
-    /*func displayToolBar(){
-        toolbar.frame = CGRect(x: 0, y: 0.9*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
-        toolbar.backgroundColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1.0)
-        
-        //creating buttons to be added to the toolbar and evenly spaced across
-        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Gray"), for: UIControlState())
-        allTypesButton.setImage(UIImage(named: "All_Types_Icon_Colors"), for: .disabled)
-        allTypesButton.frame = CGRect(x: 0.07083*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-        allTypesButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-        allTypesButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        allTypesButton.tag = 0
-        
-        //coloring allTypesText three different colors
-        let allTypesText = "All Types" as NSString
-        let allTypesAttributedText = NSMutableAttributedString(string: allTypesText as String, attributes: [NSFontAttributeName: UIFont.init(name: "BentonSans", size: 11)!])
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.businessBlue , range: allTypesText.range(of: "All"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.loveRed , range: allTypesText.range(of: "Ty"))
-        allTypesAttributedText.addAttribute(NSForegroundColorAttributeName, value: DisplayUtility.friendshipGreen , range: allTypesText.range(of: "pes"))
-        
-        //setting allTypesText
-        allTypesLabel.attributedText = allTypesAttributedText
-        allTypesLabel.textAlignment =  NSTextAlignment.center
-        allTypesLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-        allTypesLabel.center.x = allTypesButton.center.x
-        
-        
-        businessButton.setImage(UIImage(named: "Business_Icon_Gray"), for: UIControlState())
-        businessButton.setImage(UIImage(named:  "Business_Icon_Blue"), for: .disabled)
-        businessButton.frame = CGRect(x: 0.24166*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-        businessButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-        businessButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        businessButton.tag = 1
-        
-        businessLabel.text = "Business"
-        businessLabel.textColor = DisplayUtility.necterGray
-        businessLabel.font = UIFont(name: "BentonSans", size: 11)
-        businessLabel.textAlignment =  NSTextAlignment.center
-        businessLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-        businessLabel.center.x = businessButton.center.x
-        
-        loveButton.setImage(UIImage(named: "Love_Icon_Gray"), for: UIControlState())
-        loveButton.setImage(UIImage(named: "Love_Icon_Red"), for: .disabled)
-        loveButton.frame = CGRect(x: 0.65832*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
-        loveButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-        loveButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        loveButton.tag = 2
-        
-        loveLabel.text = "Love"
-        loveLabel.font = UIFont(name: "BentonSans", size: 11)
-        loveLabel.textColor = DisplayUtility.necterGray
-        loveLabel.textAlignment =  NSTextAlignment.center
-        loveLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-        loveLabel.center.x = loveButton.center.x
-        
-        friendshipButton.setImage(UIImage(named: "Friendship_Icon_Gray"), for: UIControlState())
-        friendshipButton.setImage(UIImage(named:  "Friendship_Icon_Green"), for: .disabled)
-        friendshipButton.frame = CGRect(x: 0.82915*DisplayUtility.screenWidth, y: 0, width: 0.1*DisplayUtility.screenWidth, height: 0.1150*DisplayUtility.screenWidth)
-        friendshipButton.center.y = toolbar.center.y - 0.005*DisplayUtility.screenHeight
-        friendshipButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-        friendshipButton.tag = 3
-        
-        friendshipLabel.text = "Friendship"
-        friendshipLabel.font = UIFont(name: "BentonSans", size: 11)
-        friendshipLabel.textColor = DisplayUtility.necterGray
-        friendshipLabel.textAlignment =  NSTextAlignment.center
-        friendshipLabel.frame = CGRect(x: 0, y: 0.975*DisplayUtility.screenHeight, width: 0.2*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight)
-        friendshipLabel.center.x = friendshipButton.center.x
-        
-        
-        postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*DisplayUtility.screenWidth, height: 0.175*DisplayUtility.screenWidth)
-        postStatusButton.backgroundColor = DisplayUtility.necterYellow
-        postStatusButton.showsTouchWhenHighlighted = true
-        postStatusButton.layer.borderWidth = 2.0
-        postStatusButton.layer.borderColor = UIColor.white.cgColor
-        postStatusButton.layer.cornerRadius = postStatusButton.frame.size.width/2.0
-        postStatusButton.clipsToBounds = true
-        postStatusButton.center.y = toolbar.center.y - 0.25*0.175*DisplayUtility.screenWidth
-        postStatusButton.center.x = view.center.x
-        postStatusButton.setTitle("+", for: UIControlState())
-        postStatusButton.setTitleColor(UIColor.white, for: UIControlState())
-        postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
-        postStatusButton.addTarget(self, action: #selector(postStatusTapped), for: .touchUpInside)
-        
-        
-        view.addSubview(toolbar)
-        view.addSubview(allTypesButton)
-        view.addSubview(allTypesLabel)
-        view.addSubview(businessButton)
-        view.addSubview(businessLabel)
-        view.addSubview(loveButton)
-        view.addSubview(loveLabel)
-        view.addSubview(friendshipButton)
-        view.addSubview(friendshipLabel)
-        view.addSubview(postStatusButton)
-    }*/
     
     // downloads  bridge pairings of different types depending upon the typeOfCards
     func getBridgePairings(_ maxNoOfCards:Int, typeOfCards:String, callBack: ((_ bridgeType: String)->Void)?, bridgeType: String?){
@@ -943,19 +839,6 @@ class BridgeViewController: UIViewController {
             }
             else {
                 //Put swipeCard back into place
-                //swipeCardView.UIViewAnimationOptionAllowUserInteraction
-                //UIViewAnimationOptions.allowAnimatedContent
-//                UIView.animate(withDuration: 0.7, animations: {
-//                    rotation = CGAffineTransform(rotationAngle: 0)
-//                    stretch = rotation.scaledBy(x: 1, y: 1)
-//                    self.swipeCardView.transform = stretch
-//                    self.swipeCardView.frame = self.swipeCardFrame
-//                    self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
-//                    self.disconnectIcon.alpha = 0.0
-//                    self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
-//                    self.connectIcon.alpha = 0.0
-//                })
-                
                 UIView.animate(withDuration: 0.7, delay: 0, options: .allowUserInteraction, animations: {
                     rotation = CGAffineTransform(rotationAngle: 0)
                     stretch = rotation.scaledBy(x: 1, y: 1)
@@ -1186,6 +1069,8 @@ class BridgeViewController: UIViewController {
                 vc2.seguedFrom = "BridgeViewController"
             } else if mirror.subjectType == MessagesViewController.self {
                 self.transitionManager.animationDirection = "Right"
+            } else if mirror.subjectType == MyProfileViewController.self {
+                self.transitionManager.animationDirection = "Left"
             }
             vc.transitioningDelegate = self.transitionManager
             
