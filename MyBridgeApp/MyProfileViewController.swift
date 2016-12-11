@@ -14,6 +14,7 @@ class MyProfileViewController: UIViewController {
     var rightBarButton = UIButton()
     let transitionManager = TransitionManager()
     let customNavigationBar = CustomNavigationBar()
+    let scrollView = UIScrollView()
     let necterInfo = UIView()
     let profilePicture1 = UIImageView()
     let personalInfo = UILabel()
@@ -24,8 +25,12 @@ class MyProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
         displayNavigationBar()
+        scrollView.frame = CGRect(x: 0, y: customNavigationBar.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - customNavigationBar.frame.maxY)
+        scrollView.backgroundColor = .black
+        view.addSubview(scrollView)
         displayProfilePictures()
-        displayNecterInformation()
+        let editButton = createEditButton()
+        displayNecterInformation(button: editButton)
         displayLine(y: necterInfo.frame.maxY)
         displayPersonalInformation()
         displayLine(y: personalInfo.frame.maxY)
@@ -38,21 +43,21 @@ class MyProfileViewController: UIViewController {
     
     //Displaying the profile pictures view on the profile
     func displayProfilePictures() {
-        profilePicture1.frame = CGRect(x: 0, y: customNavigationBar.frame.maxY, width: DisplayUtility.screenWidth, height: 0.5622*DisplayUtility.screenHeight)
+        profilePicture1.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.5622*DisplayUtility.screenHeight)
         if let data = localData.getMainProfilePicture() {
             profilePicture1.image = UIImage(data: data)
         } else {
             //set image for when the user has not yet set their profile picture
         }
         
-        view.addSubview(profilePicture1)
+        scrollView.addSubview(profilePicture1)
         
     }
     func displayNavigationBar() {
         rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
         customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: nil, leftBarButtonSelectedIcon: nil, leftBarButton: nil, rightBarButtonIcon: "Right_Arrow", rightBarButtonSelectedIcon: "Right_Arrow", rightBarButton: rightBarButton, title: "Profile")
     }
-    func displayNecterInformation() {
+    func displayNecterInformation(button: UIButton) {
         necterInfo.frame = CGRect(x: 0, y: profilePicture1.frame.maxY, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
         let user = PFUser.current()!
         let nameLabel = UILabel()
@@ -62,21 +67,27 @@ class MyProfileViewController: UIViewController {
         nameLabel.textColor = .white
         nameLabel.textAlignment = .left
         nameLabel.font = UIFont(name: "BentonSans-Bold", size: 28)
-        nameLabel.frame = CGRect(x: 0.01927*necterInfo.frame.width, y: 0.1*necterInfo.frame.height, width: 0.8*necterInfo.frame.width, height: 0.60*necterInfo.frame.height)
+        nameLabel.frame = CGRect(x: 0.01927*necterInfo.frame.width, y: 0.17*necterInfo.frame.height, width: 0.8*necterInfo.frame.width, height: 0.60*necterInfo.frame.height)
         nameLabel.sizeToFit()
         necterInfo.addSubview(nameLabel)
+        
+        button.frame = CGRect(x: 0.98073*necterInfo.frame.width - button.frame.width, y: nameLabel.frame.minY, width: button.frame.width, height: button.frame.height)
+        necterInfo.addSubview(button)
+        
         let numNectedLabel = UILabel()
         if let nected = user["built_bridges"] as? [String] {
             numNectedLabel.text = "\(nected.count) CONNECTIONS 'NECTED"
+        } else {
+            numNectedLabel.text = "0 CONNECTIONS 'NECTED"
         }
         numNectedLabel.textColor = .white
         numNectedLabel.textAlignment = .left
         numNectedLabel.font = UIFont(name: "BentonSans-Light", size: 15.5)
-        numNectedLabel.frame = CGRect(x: nameLabel.frame.minX, y: nameLabel.frame.maxY + 0.05*necterInfo.frame.height, width: necterInfo.frame.width, height: 0.25*necterInfo.frame.height)
+        numNectedLabel.frame = CGRect(x: nameLabel.frame.minX, y: nameLabel.frame.maxY + 0.05*necterInfo.frame.height, width: necterInfo.frame.width, height: 0.95*necterInfo.frame.height - nameLabel.frame.maxY)
         numNectedLabel.sizeToFit()
         necterInfo.addSubview(numNectedLabel)
         
-        view.addSubview(necterInfo)
+        scrollView.addSubview(necterInfo)
     }
     func displayPersonalInformation() {
         personalInfo.textAlignment = .left
@@ -103,15 +114,20 @@ class MyProfileViewController: UIViewController {
         }
         personalInfo.text = "\(line1)\n\(line2)\n\(line3)"
         personalInfo.frame = CGRect(x: 0.03754*DisplayUtility.screenWidth, y: necterInfo.frame.maxY, width: 0.76861*DisplayUtility.screenWidth, height: 0.12616*DisplayUtility.screenHeight)
-        view.addSubview(personalInfo)
+        scrollView.addSubview(personalInfo)
     }
-    
+    func createEditButton() -> UIButton {
+        let frame = CGRect(x: 0, y: 0, width: 0.18233*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
+        let editButton = DisplayUtility.gradientButton(text: "edit", frame: frame)
+        editButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
+        return editButton
+    }
     func displayLine(y: CGFloat) {
         let line = UIView()
         line.backgroundColor = .white
         line.frame = CGRect(x: 0, y: y, width: 0.74704*DisplayUtility.screenWidth, height: 1)
         line.center.x = DisplayUtility.screenWidth / 2
-        view.addSubview(line)
+        scrollView.addSubview(line)
     }
     
     func rightBarButtonTapped(_ sender: UIButton) {
@@ -119,6 +135,10 @@ class MyProfileViewController: UIViewController {
         //self.present(bridgeVC, animated: true, completion: nil)
         performSegue(withIdentifier: "showBridgePageFromMyProfile", sender: self)
 
+    }
+    
+    func editButtonTapped(_ sender: UIButton) {
+        print("edit button tapped")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
