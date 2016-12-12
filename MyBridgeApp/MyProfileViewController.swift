@@ -45,7 +45,18 @@ class MyProfileViewController: UIViewController {
     func displayProfilePictures() {
         profilePicture1.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.5622*DisplayUtility.screenHeight)
         if let data = localData.getMainProfilePicture() {
-            profilePicture1.image = UIImage(data: data)
+            let beginImage = CIImage(data: data)
+            let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+            edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+            edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+            edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+            
+            //edgeDetectFilter.setValue(CIImage(image: edgeDetectFilter.outputImage!), forKey: kCIInputImageKey)
+            let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+            
+            profilePicture1.image = UIImage(cgImage: newCGImage!)
+
+            //profilePicture1.image = UIImage(data: data)
         } else {
             //set image for when the user has not yet set their profile picture
         }

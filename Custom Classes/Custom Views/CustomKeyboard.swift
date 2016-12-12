@@ -58,7 +58,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         messageTextView.isScrollEnabled = false
         messageTextView.keyboardDismissMode = .interactive
         messageView.addSubview(messageTextView)
-        
+    
         //This changes the size of the messageTextView and message view (and below the messageButton) to the size needed to fit the placeholder text.
         updateMessageHeights()
         
