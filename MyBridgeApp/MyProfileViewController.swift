@@ -18,7 +18,11 @@ class MyProfileViewController: UIViewController {
     let necterInfo = UIView()
     let profilePicture1 = UIImageView()
     let personalInfo = UILabel()
+    let businessReqView = UIView()
+    let loveReqView = UIView()
+    let friendshipReqView = UIView()
     let localData = LocalData()
+    let user = PFUser.current()!
 
 
     override func viewDidLoad() {
@@ -34,6 +38,7 @@ class MyProfileViewController: UIViewController {
         displayLine(y: necterInfo.frame.maxY)
         displayPersonalInformation()
         displayLine(y: personalInfo.frame.maxY)
+        displayCurrentRequest(type: "Business", y: personalInfo.frame.maxY)
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,7 +64,6 @@ class MyProfileViewController: UIViewController {
     }
     func displayNecterInformation(button: UIButton) {
         necterInfo.frame = CGRect(x: 0, y: profilePicture1.frame.maxY, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
-        let user = PFUser.current()!
         let nameLabel = UILabel()
         if let name = user["name"] as? String {
             nameLabel.text = DisplayUtility.firstNameLastNameInitial(name: name)
@@ -94,7 +98,6 @@ class MyProfileViewController: UIViewController {
         personalInfo.textColor = .white
         personalInfo.numberOfLines = 3
         personalInfo.font = UIFont(name: "BentonSans-Light", size: 18)
-        let user = PFUser.current()!
         var line1 = ""
         if let age = user["age"] as? Int {
             line1 = "\(age)"
@@ -121,6 +124,25 @@ class MyProfileViewController: UIViewController {
         let editButton = DisplayUtility.gradientButton(text: "edit", frame: frame)
         editButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
         return editButton
+    }
+    func displayCurrentRequest(type: String, y: CGFloat) {
+        var reqView = UIView()
+        var color = String()
+        switch type {
+        case "Business":
+            reqView = businessReqView
+            color = "Blue"
+        case "Love":
+            reqView = loveReqView
+            color = "Red"
+        case "Friendship":
+            reqView = friendshipReqView
+            color = "Green"
+        default:
+            return
+        }
+        let icon = UIImageView()
+        icon.image = UIImage(named: "\(type)_Icon_\(color)")
     }
     func displayLine(y: CGFloat) {
         let line = UIView()
