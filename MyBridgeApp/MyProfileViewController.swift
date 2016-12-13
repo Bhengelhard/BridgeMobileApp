@@ -19,26 +19,40 @@ class MyProfileViewController: UIViewController {
     let profilePicture1 = UIImageView()
     let personalInfo = UILabel()
     let localData = LocalData()
+    let currentRequests = UIView()
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
         displayNavigationBar()
+        
         scrollView.frame = CGRect(x: 0, y: customNavigationBar.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - customNavigationBar.frame.maxY)
         scrollView.backgroundColor = .black
         view.addSubview(scrollView)
         displayProfilePictures()
+        
         let editButton = createEditButton()
         displayNecterInformation(button: editButton)
         displayLine(y: necterInfo.frame.maxY)
+        
         displayPersonalInformation()
-        displayLine(y: personalInfo.frame.maxY)
+        if personalInfo.frame.height != 0 {
+            displayLine(y: personalInfo.frame.maxY)
+        }
+        
+        //Displaying the user's current requests
+        displayCurrentRequests()
+        displayLine(y: currentRequests.frame.maxY)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func displayCurrentRequests() {
+        
     }
     
     //Displaying the profile pictures view on the profile
@@ -106,25 +120,58 @@ class MyProfileViewController: UIViewController {
         personalInfo.numberOfLines = 3
         personalInfo.font = UIFont(name: "BentonSans-Light", size: 18)
         let user = PFUser.current()!
+        var allLines = ""
         var line1 = ""
+        var numLines = 0
         if let age = user["age"] as? Int {
             line1 = "\(age)"
             if let city = user["city"] as? String {
                 line1 = "\(line1), \(city)"
+                allLines.append(line1)
+                numLines += 1
             }
         } else if let city = user["city"] as? String {
             line1 = city
+            allLines.append(line1)
+            numLines += 1
         }
         var line2 = ""
         if let school = user["school"] as? String {
             line2 = school
+            if allLines != "" {
+                allLines.append("\n")
+                allLines.append(line2)
+                numLines += 1
+            } else {
+                allLines.append(line2)
+                numLines += 1
+            }
         }
         var line3 = ""
         if let employer = user["employer"] as? String {
             line3 = "Works for \(employer)"
+            if allLines != "" {
+                allLines.append("\n")
+                allLines.append(line3)
+                numLines += 1
+            } else {
+                allLines.append(line3)
+                numLines += 1
+            }
         }
-        personalInfo.text = "\(line1)\n\(line2)\n\(line3)"
-        personalInfo.frame = CGRect(x: 0.03754*DisplayUtility.screenWidth, y: necterInfo.frame.maxY, width: 0.76861*DisplayUtility.screenWidth, height: 0.12616*DisplayUtility.screenHeight)
+        
+        personalInfo.text = allLines//"\(line1)\n\(line2)\n\(line3)"
+        print(numLines)
+        var personalInfoHeight:CGFloat = 0.00
+        if numLines == 1 {
+            personalInfoHeight = 0.06*DisplayUtility.screenHeight
+        } else if numLines == 2 {
+            personalInfoHeight = 0.1*DisplayUtility.screenHeight
+        } else if numLines == 3 {
+            personalInfoHeight = 0.12616*DisplayUtility.screenHeight
+        }
+
+        personalInfo.frame = CGRect(x: 0.03754*DisplayUtility.screenWidth, y: necterInfo.frame.maxY, width: 0.76861*DisplayUtility.screenWidth, height: personalInfoHeight)//0.12616*DisplayUtility.screenHeight)
         scrollView.addSubview(personalInfo)
     }
     func createEditButton() -> UIButton {

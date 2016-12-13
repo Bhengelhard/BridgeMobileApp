@@ -354,22 +354,21 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if (indexPath as NSIndexPath).row == 1 {
             
             //opens user's email application with email ready to be sent to necter email -> commented out and replaced with link to survey
-            //let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
-            //let encodedParams = "subject=\(subject)"
-            //let email = "blake@necter.social"
-            //let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
-            let surveyURL = "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR"
-            let url = URL(string: "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR")
+            let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
+            let encodedParams = "subject=\(subject)"
+            let email = "blake@necter.social"
+            let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
+            //let surveyURL = "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR"
+            //let url = URL(string: "https://upenn.co1.qualtrics.com/SE/?SID=SV_9Lj1NBkAbagCcwR")
             
-            if UIApplication.shared.canOpenURL(url!) {
+            if UIApplication.shared.canOpenURL(url! as URL) {
                 
-                UIApplication.shared.openURL(url!)
+                UIApplication.shared.openURL(url! as URL)
                 
             }
             
             tableView.deselectRow(at: indexPath, animated: true)
 
-            
         } else if (indexPath as NSIndexPath).row == 2 {
             
             let url = URL(string: "https://necter.social/termsofservice")

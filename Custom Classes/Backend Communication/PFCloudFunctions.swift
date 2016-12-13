@@ -149,4 +149,27 @@ class PFCloudFunctions {
             }
         })
     }
+    
+    func updateUserTableToHaveURLS(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "updateUserTableToHaveURLS", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print("updateUserTableToHaveURLS")
+                    print(response)
+                }
+            }
+        })
+    }
+    func updateBridgePairingsTableToHaveURLS(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "updateBridgePairingsTableToHaveURLS", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print("updateBridgePairingsTableToHaveURLS")
+                    print(response)
+                }
+            }
+        })
+    }
 }

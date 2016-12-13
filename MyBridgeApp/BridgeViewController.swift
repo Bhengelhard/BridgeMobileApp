@@ -423,9 +423,9 @@ class BridgeViewController: UIViewController {
         customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Profile_Navbar_Icon", leftBarButtonSelectedIcon: "Profile_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: rightBarButtonIcon, rightBarButtonSelectedIcon: rightBarButtonSelectedIcon, rightBarButton: rightBarButton, title: "necter")
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
-        //performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
+        performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
         //let myProfileVC = MyProfileViewController()
-        performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
+        //performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
         //self.present(myProfileVC, animated: true, completion: nil)
         leftBarButton.isSelected = true
     }

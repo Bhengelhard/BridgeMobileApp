@@ -20,6 +20,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     var maxNumCharacters = Int.max
     var currentView = UIView()
     var currentViewController = UIViewController()
+    var downloader = Downloader()
     
     var updatedText = String()
     
@@ -94,11 +95,10 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 print("setting enabled to true")
                 messageButton.isEnabled = true
                 messageButton.isSelected = true
-                
             } else if messageTextView.textColor == UIColor.lightGray && target == "postStatus" {
                 messageButton.isEnabled = false
                 messageButton.isSelected = false
-                setRequestForType(filterType: updatedPostType)
+                downloader.setRequestForType(filterType: updatedPostType, file: self)
                 updateMessageHeights()
             } else {
                 messageButton.isEnabled = false
@@ -108,7 +108,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             if messageTextView.textColor == UIColor.lightGray && target == "postStatus" {
                 messageButton.isEnabled = false
                 messageButton.isSelected = false
-                setRequestForType(filterType: updatedPostType)
+                downloader.setRequestForType(filterType: updatedPostType, file: self)
             } else {
                 messageButton.isEnabled = false
                 messageButton.isSelected = false
@@ -333,89 +333,89 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     }*/
     
     //getting status from the currentUser's most recent status
-    func setRequestForType(filterType: String) {
-        var necterStatusForType = "I am looking for..."
-        let type = filterType
-        print("type - \(type)")
-        let localData = LocalData()
-        if type == "Business" {
-            if let status = localData.getBusinessStatus() {
-                necterStatusForType = status
-                messageTextView.text = "Current Request: \(necterStatusForType)"
-            } else {
-                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
-                let query: PFQuery = PFQuery(className: "BridgeStatus")
-                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
-                query.whereKey("bridge_type", equalTo: "Business")
-                query.order(byDescending: "createdAt")
-                query.limit = 1
-                do {
-                    print("getting business objects")
-                    let objects = try query.findObjects()
-                    for object in objects {
-                        necterStatusForType = object["bridge_status"] as! String
-                        messageTextView.text = "Current Request: \(necterStatusForType)"
-                        localData.setBusinessStatus(necterStatusForType)
-                    }
-                } catch {
-                    print("Error in catch getting status")
-                }
-            }
-            updateMessageHeights()
-        } else if type == "Love" {
-            if let status = localData.getLoveStatus() {
-                necterStatusForType = status
-                messageTextView.text = "Current Request: \(necterStatusForType)"
-            } else {
-                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
-                let query: PFQuery = PFQuery(className: "BridgeStatus")
-                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
-                query.whereKey("bridge_type", equalTo: "Love")
-                query.order(byDescending: "createdAt")
-                query.limit = 1
-                do {
-                    let objects = try query.findObjects()
-                    for object in objects {
-                        necterStatusForType = object["bridge_status"] as! String
-                        messageTextView.text = "Current Request: \(necterStatusForType)"
-                        localData.setLoveStatus(necterStatusForType)
-                    }
-                } catch {
-                    print("Error in catch getting status")
-                }
-            }
-            updateMessageHeights()
-        } else if type == "Friendship" {
-            if let status = localData.getFriendshipStatus() {
-                necterStatusForType = status
-                messageTextView.text = "Current Request: \(necterStatusForType)"
-            } else {
-                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
-                let query: PFQuery = PFQuery(className: "BridgeStatus")
-                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
-                query.whereKey("bridge_type", equalTo: "Friendship")
-                query.order(byDescending: "createdAt")
-                query.limit = 1
-                do {
-                    let objects = try query.findObjects()
-                    for object in objects {
-                        necterStatusForType = object["bridge_status"] as! String
-                        messageTextView.text = "Current Request: \(necterStatusForType)"
-                        localData.setFriendshipStatus(necterStatusForType)
-                    }
-                } catch {
-                    print("Error in catch getting status")
-                }
-            }
-            updateMessageHeights()
-        } else {
-            messageTextView.text = nil
-            updatePlaceholder()
-        }
-        /*if necterStatusForType != "I am looking for..." {
-         print("isFirstPost set to \(isFirstPost)")
-         isFirstPost = false
-         }*/
-    }
+//    func setRequestForType(filterType: String) {
+//        var necterStatusForType = "I am looking for..."
+//        let type = filterType
+//        print("type - \(type)")
+//        let localData = LocalData()
+//        if type == "Business" {
+//            if let status = localData.getBusinessStatus() {
+//                necterStatusForType = status
+//                messageTextView.text = "Current Request: \(necterStatusForType)"
+//            } else {
+//                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+//                let query: PFQuery = PFQuery(className: "BridgeStatus")
+//                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+//                query.whereKey("bridge_type", equalTo: "Business")
+//                query.order(byDescending: "createdAt")
+//                query.limit = 1
+//                do {
+//                    print("getting business objects")
+//                    let objects = try query.findObjects()
+//                    for object in objects {
+//                        necterStatusForType = object["bridge_status"] as! String
+//                        messageTextView.text = "Current Request: \(necterStatusForType)"
+//                        localData.setBusinessStatus(necterStatusForType)
+//                    }
+//                } catch {
+//                    print("Error in catch getting status")
+//                }
+//            }
+//            updateMessageHeights()
+//        } else if type == "Love" {
+//            if let status = localData.getLoveStatus() {
+//                necterStatusForType = status
+//                messageTextView.text = "Current Request: \(necterStatusForType)"
+//            } else {
+//                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+//                let query: PFQuery = PFQuery(className: "BridgeStatus")
+//                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+//                query.whereKey("bridge_type", equalTo: "Love")
+//                query.order(byDescending: "createdAt")
+//                query.limit = 1
+//                do {
+//                    let objects = try query.findObjects()
+//                    for object in objects {
+//                        necterStatusForType = object["bridge_status"] as! String
+//                        messageTextView.text = "Current Request: \(necterStatusForType)"
+//                        localData.setLoveStatus(necterStatusForType)
+//                    }
+//                } catch {
+//                    print("Error in catch getting status")
+//                }
+//            }
+//            updateMessageHeights()
+//        } else if type == "Friendship" {
+//            if let status = localData.getFriendshipStatus() {
+//                necterStatusForType = status
+//                messageTextView.text = "Current Request: \(necterStatusForType)"
+//            } else {
+//                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+//                let query: PFQuery = PFQuery(className: "BridgeStatus")
+//                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+//                query.whereKey("bridge_type", equalTo: "Friendship")
+//                query.order(byDescending: "createdAt")
+//                query.limit = 1
+//                do {
+//                    let objects = try query.findObjects()
+//                    for object in objects {
+//                        necterStatusForType = object["bridge_status"] as! String
+//                        messageTextView.text = "Current Request: \(necterStatusForType)"
+//                        localData.setFriendshipStatus(necterStatusForType)
+//                    }
+//                } catch {
+//                    print("Error in catch getting status")
+//                }
+//            }
+//            updateMessageHeights()
+//        } else {
+//            messageTextView.text = nil
+//            updatePlaceholder()
+//        }
+//        /*if necterStatusForType != "I am looking for..." {
+//         print("isFirstPost set to \(isFirstPost)")
+//         isFirstPost = false
+//         }*/
+//    }
     
 }

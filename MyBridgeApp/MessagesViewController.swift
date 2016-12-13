@@ -724,7 +724,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         newMatchesView = NewMatchesView()
         newMatchesView.setVC(vc: self)
         self.tableView.tableHeaderView = self.newMatchesView
-        
+        print("loadNew Matches function")
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("bridged", equalTo: true)
         query.limit = 10000
@@ -734,10 +734,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 print("refresh findObjectsInBackgroundWithBlock error - \(error)")
             }
             else if let results = results {
+                print("Got results in query")
+                print(results.count)
                 for i in 0..<results.count{
                     
                     let result = results[i]
-                    
+                    print("Got specific result in query")
                     let objectId = result.objectId
                     
                     var currentUser_objectId = ""
@@ -762,6 +764,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     //These force unwraps need to be removed
                     if user != "" {
+                        print("got the user")
                         var userResponse = 0
                         if let UR = result["\(user)_response"] as? Int {
                             userResponse = UR
