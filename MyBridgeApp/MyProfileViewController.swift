@@ -18,27 +18,27 @@ class MyProfileViewController: UIViewController {
     let necterInfo = UIView()
     let profilePicture1 = UIImageView()
     let personalInfo = UILabel()
-    let businessReqView = UIView()
-    let loveReqView = UIView()
-    let friendshipReqView = UIView()
+    let currentRequests = UIView()
     let localData = LocalData()
     let user = PFUser.current()!
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
         displayNavigationBar()
+        
         scrollView.frame = CGRect(x: 0, y: customNavigationBar.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - customNavigationBar.frame.maxY)
         scrollView.backgroundColor = .black
         view.addSubview(scrollView)
         displayProfilePictures()
+        
         let editButton = createEditButton()
         displayNecterInformation(button: editButton)
         displayLine(y: necterInfo.frame.maxY)
+        
         displayPersonalInformation()
-        displayLine(y: personalInfo.frame.maxY)
-        displayCurrentRequest(type: "Business", y: personalInfo.frame.maxY)
+        displayCurrentRequests()
+        displayLine(y: currentRequests.frame.maxY)
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,7 +50,18 @@ class MyProfileViewController: UIViewController {
     func displayProfilePictures() {
         profilePicture1.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.5622*DisplayUtility.screenHeight)
         if let data = localData.getMainProfilePicture() {
-            profilePicture1.image = UIImage(data: data)
+            let beginImage = CIImage(data: data)
+            let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+            edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+            edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+            edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+            
+            //edgeDetectFilter.setValue(CIImage(image: edgeDetectFilter.outputImage!), forKey: kCIInputImageKey)
+            let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+            
+            profilePicture1.image = UIImage(cgImage: newCGImage!)
+
+            //profilePicture1.image = UIImage(data: data)
         } else {
             //set image for when the user has not yet set their profile picture
         }
@@ -98,25 +109,58 @@ class MyProfileViewController: UIViewController {
         personalInfo.textColor = .white
         personalInfo.numberOfLines = 3
         personalInfo.font = UIFont(name: "BentonSans-Light", size: 18)
+        var allLines = ""
         var line1 = ""
+        var numLines = 0
         if let age = user["age"] as? Int {
             line1 = "\(age)"
             if let city = user["city"] as? String {
                 line1 = "\(line1), \(city)"
+                allLines.append(line1)
+                numLines += 1
             }
         } else if let city = user["city"] as? String {
             line1 = city
+            allLines.append(line1)
+            numLines += 1
         }
         var line2 = ""
         if let school = user["school"] as? String {
             line2 = school
+            if allLines != "" {
+                allLines.append("\n")
+                allLines.append(line2)
+                numLines += 1
+            } else {
+                allLines.append(line2)
+                numLines += 1
+            }
         }
         var line3 = ""
         if let employer = user["employer"] as? String {
             line3 = "Works for \(employer)"
+            if allLines != "" {
+                allLines.append("\n")
+                allLines.append(line3)
+                numLines += 1
+            } else {
+                allLines.append(line3)
+                numLines += 1
+            }
         }
-        personalInfo.text = "\(line1)\n\(line2)\n\(line3)"
-        personalInfo.frame = CGRect(x: 0.03754*DisplayUtility.screenWidth, y: necterInfo.frame.maxY, width: 0.76861*DisplayUtility.screenWidth, height: 0.12616*DisplayUtility.screenHeight)
+        
+        personalInfo.text = allLines//"\(line1)\n\(line2)\n\(line3)"
+        print(numLines)
+        var personalInfoHeight:CGFloat = 0.00
+        if numLines == 1 {
+            personalInfoHeight = 0.06*DisplayUtility.screenHeight
+        } else if numLines == 2 {
+            personalInfoHeight = 0.1*DisplayUtility.screenHeight
+        } else if numLines == 3 {
+            personalInfoHeight = 0.12616*DisplayUtility.screenHeight
+        }
+
+        personalInfo.frame = CGRect(x: 0.03754*DisplayUtility.screenWidth, y: necterInfo.frame.maxY, width: 0.76861*DisplayUtility.screenWidth, height: personalInfoHeight)//0.12616*DisplayUtility.screenHeight)
         scrollView.addSubview(personalInfo)
     }
     func createEditButton() -> UIButton {
@@ -125,7 +169,7 @@ class MyProfileViewController: UIViewController {
         editButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
         return editButton
     }
-    func displayCurrentRequest(type: String, y: CGFloat) {
+    func getCurrentRequest(type: String, frame: CGRect) -> UIView {
         var reqView = UIView()
         var color = String()
         switch type {
@@ -143,6 +187,15 @@ class MyProfileViewController: UIViewController {
         }
         let icon = UIImageView()
         icon.image = UIImage(named: "\(type)_Icon_\(color)")
+    }
+    func displayCurrentRequests() {
+        var y = personalInfo.frame.maxY
+        for type in ["Business", "Love", "Freindship"] {
+            let frame = CGRect(x: 0, y: y, width: DisplayUtility.screenWidth, height: 0.08*DisplayUtility.screenHeight)
+            let currentRequest = getCurrentRequest(type, frame)
+            currentRequests.addSubview(currentRequest)
+        }
+        currentRequests.sizeToFit()
     }
     func displayLine(y: CGFloat) {
         let line = UIView()

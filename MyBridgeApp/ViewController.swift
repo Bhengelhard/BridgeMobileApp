@@ -149,6 +149,25 @@ class ViewController: UIViewController {
                                     PFUser.current()?["age"] = age
                                 }
                                 
+                                //Getting user friends from facebook and then updating the friend_list
+                                if let friends = result["friends"]! as? NSDictionary {
+                                    let friendsData : NSArray = friends.object(forKey: "data") as! NSArray
+                                    var fbFriendIds = [String]()
+                                    for friend in friendsData {
+                                        let valueDict : NSDictionary = friend as! NSDictionary
+                                        fbFriendIds.append(valueDict.object(forKey: "id") as! String)
+                                    }
+                                    PFUser.current()?["fb_friends"] = fbFriendIds
+                                    PFUser.current()?.saveInBackground(block: { (success, error) in
+                                        if error != nil {
+                                            print(error)
+                                        } else {
+                                            self.updateFriendList()
+                                        }
+                                    })
+                                }
+
+                                
                                 PFUser.current()?["distance_interest"] = 100
                                 PFUser.current()?["new_message_push_notifications"] = true
                                 localData.setNewMessagesPushNotifications(true)
@@ -397,7 +416,7 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+
     }
     
     override func didReceiveMemoryWarning() {

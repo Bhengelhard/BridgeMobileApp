@@ -102,6 +102,10 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //let pfCloudFunctions = PFCloudFunctions()
+        //pfCloudFunctions.updateUserTableToHaveURLS(parameters: [:])
+        //pfCloudFunctions.updateBridgePairingsTableToHaveURLS(parameters: [:])
+        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -114,7 +118,8 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
         PFUser.current()?.fetchInBackground(block: { (object, error) in
             let localData = LocalData()
-            
+            //Updating the user's friends
+            self.updateUser()
             if (localData.getUsername() != nil) && ((PFUser.current()!.objectId) != nil){ //remember to change this back to username
                 LocalStorageUtility().getUserFriends()
                 //LocalStorageUtility().getMainProfilePicture()

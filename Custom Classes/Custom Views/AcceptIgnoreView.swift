@@ -240,6 +240,7 @@ class AcceptIgnoreView: UIView {
                         message["user2_profile_picture_url"] = result["\(otherUser)_profile_picture_url"]
                         message["message_viewed"] = [String]()
                         message["bridge_builder"] = result["connecter_objectId"]
+                        message["message_type"] = self.newMatch.type
                         message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
                             self.phaseOut()
                             if let vc = self.vc {

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Parse
 
 class Downloader {
     class func load(_ URL: Foundation.URL, imageView:UIImageView, bridgePairingObjectId: String?, isUpperDeckCard: Bool) {
@@ -207,6 +208,116 @@ class Downloader {
         }
         task.resume()
         
+    }
+    
+    
+    //getting status from the currentUser's most recent status
+    func setRequestForType(filterType: String, file: NSObject) {
+        var necterStatusForType = "I am looking for..."
+        let type = filterType
+        print("type - \(type)")
+        let localData = LocalData()
+        if type == "Business" {
+            if let status = localData.getBusinessStatus() {
+                necterStatusForType = status
+                if let customKeyboard = file as? CustomKeyboard {
+                    customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
+                }
+                
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Business")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    print("getting business objects")
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        if let customKeyboard = file as? CustomKeyboard {
+                            customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
+                        }
+                        localData.setBusinessStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+            if let customKeyboard = file as? CustomKeyboard {
+                customKeyboard.updateMessageHeights()
+            }
+            
+        } else if type == "Love" {
+            if let status = localData.getLoveStatus() {
+                necterStatusForType = status
+                if let customKeyboard = file as? CustomKeyboard {
+                    customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
+                }
+                
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Love")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        if let customKeyboard = file as? CustomKeyboard {
+                            customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
+                        }
+                        localData.setLoveStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+            if let customKeyboard = file as? CustomKeyboard {
+                customKeyboard.updateMessageHeights()
+            } else if type == "Friendship" {
+                if let status = localData.getFriendshipStatus() {
+                    necterStatusForType = status
+                    if let customKeyboard = file as? CustomKeyboard {
+                        customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
+                    }
+                }
+            } else {
+                //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
+                let query: PFQuery = PFQuery(className: "BridgeStatus")
+                query.whereKey("userId", equalTo: (PFUser.current()?.objectId)!)
+                query.whereKey("bridge_type", equalTo: "Friendship")
+                query.order(byDescending: "createdAt")
+                query.limit = 1
+                do {
+                    let objects = try query.findObjects()
+                    for object in objects {
+                        necterStatusForType = object["bridge_status"] as! String
+                        if let customKeyboard = file as? CustomKeyboard {
+                            customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
+                        }
+                        localData.setFriendshipStatus(necterStatusForType)
+                    }
+                } catch {
+                    print("Error in catch getting status")
+                }
+            }
+            if let customKeyboard = file as? CustomKeyboard {
+                customKeyboard.updateMessageHeights()
+            }
+        } else {
+            if let customKeyboard = file as? CustomKeyboard {
+                customKeyboard.messageTextView.text = nil
+                customKeyboard.updatePlaceholder()
+            }
+        }
+        /*if necterStatusForType != "I am looking for..." {
+         print("isFirstPost set to \(isFirstPost)")
+         isFirstPost = false
+         }*/
     }
 
     
