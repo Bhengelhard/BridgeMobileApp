@@ -172,10 +172,6 @@ class BridgeViewController: UIViewController {
         }
     }
     
-    func displayRevisitButton() {
-        print("displayRevisitButton")
-        
-    }
     func displayNoMoreCards() {
         displayNoMoreCardsLabel.alpha = 1
         revisitButton.alpha = 1
@@ -183,7 +179,6 @@ class BridgeViewController: UIViewController {
     }
     
     func initializeNoMoreCards() {
-        print("displayNoMoreCards")
         //Display no more cards label
         let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.8*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.1)
         displayNoMoreCardsLabel.frame = labelFrame
@@ -538,7 +533,6 @@ class BridgeViewController: UIViewController {
                                     if let ob = result["bridge_type"] {
                                         bridgeType1 =  ob as? String
                                          bridgeType2 =  ob as? String
-                                        print("This is the bridgeType1 - \(bridgeType1)")
                                     }
                                     
                                     var objectId1:String? = nil
@@ -565,11 +559,12 @@ class BridgeViewController: UIViewController {
                                     }
                                     var profilePictureFile1:String? = nil
                                     var profilePictureFile2:String? = nil
-                                    if let ob = result["user1_profile_picture"] as? PFFile {
-                                        profilePictureFile1 = ob.url
+                                    if let ob = result["user1_profile_picture_url"] as? String {
+                                        print("ob")
+                                        profilePictureFile1 = ob
                                     }
-                                    if let ob = result["user2_profile_picture"] as? PFFile {
-                                        profilePictureFile2 = ob.url
+                                    if let ob = result["user2_profile_picture_url"] as? String {
+                                        profilePictureFile2 = ob
                                     }
                                     result.saveInBackground()
                                     user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1, savedProfilePicture: nil)
@@ -618,7 +613,6 @@ class BridgeViewController: UIViewController {
                         })
                         
                         i += 1
-                        print("i is \(i)")
                         if i > 3 || typeOfCards != "EachOfAllType"{
                             getMorePairings = false
                         }
@@ -631,7 +625,6 @@ class BridgeViewController: UIViewController {
         }
     }
     func updateNoOfUnreadMessagesIcon(_ notification: Notification) {
-        print("updateNoOfUnreadMessagesIcon called")
         let aps = (notification as NSNotification).userInfo!["aps"] as? NSDictionary
         badgeCount = (aps!["badge"] as? Int)!
         DispatchQueue.main.async(execute: {
@@ -671,7 +664,6 @@ class BridgeViewController: UIViewController {
         let bridgePairings = localData.getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
             getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
-            print("getting bridge Pairings")
         }
         else {
             displayCards()
@@ -696,7 +688,6 @@ class BridgeViewController: UIViewController {
         
     }
     override func viewDidAppear(_ animated: Bool) {
-        print("postTapped = \(postTapped)")
         if postTapped {
             sleep(UInt32(0.2))
             missionControlView.displayPostRequest()
@@ -860,7 +851,6 @@ class BridgeViewController: UIViewController {
             reasonForConnectionView.sendSwipeCard(swipeCardView: swipeCard)
             view.addSubview(reasonForConnectionView)
         }
-        print("Count of array of Cards from bridged \(arrayOfCardsInDeck.count)")
     }
     func reasonForConnectionSent() {
         //missionControlView.close()
@@ -872,7 +862,6 @@ class BridgeViewController: UIViewController {
         view.bringSubview(toFront: disconnectIcon)
         swipeCardView.removeFromSuperview()
         nextPair()
-        print("Count of array of Cards from reason for Connection Sent \(arrayOfCardsInDeck.count)")
         let sendingNotificationView = SendingNotificationView()
         sendingNotificationView.initialize(view: view, sendingText: "Sending...", successText: "Success")
         view.addSubview(sendingNotificationView)
@@ -880,7 +869,6 @@ class BridgeViewController: UIViewController {
         
     }
     func nextPair(){
-        print("nextPair called")
         // Remove the pair only from bridgePairings in LocalData but not from arrayOfCards. That would be taken care of in callbackForNextPair. cIgAr - 08/25/16
         
         let bridgePairings = localData.getPairings()
@@ -895,13 +883,8 @@ class BridgeViewController: UIViewController {
                 
             }
             var objectId = String()
-            print("This is x \(x)")
-            print("right before nil and count check")
             if bridgePairings != nil && bridgePairings.count > 0  {
-                print("got into nil/count check")
                 objectId = (bridgePairings[x].user1?.objectId)!
-                print("set objectId")
-                
                 //If current user has swiped left then turn checked out to false
                 if shouldCheckInPair {
                     let query = PFQuery(className:"BridgePairings")
@@ -923,19 +906,15 @@ class BridgeViewController: UIViewController {
             localData.setPairings(bridgePairings)
             localData.synchronize()
             
-            print("Synchronized and about to call back")
             getBridgePairings(1, typeOfCards: bridgeType, callBack: callbackForNextPair, bridgeType:bridgeType)
         }
     }
     func callbackForNextPair(_ bridgeType:String) -> Void {
-        print("got to callbackfornextpair")
-        print("count of bridgepairings from callBack - \(arrayOfCardsInDeck.count)")
         if arrayOfCardsInDeck.count > 0 {
             arrayOfCardsInDeck.remove(at: 0)
             arrayOfCardColors.remove(at: 0)
             if arrayOfCardsInDeck.count > 0 {
                 arrayOfCardsInDeck[0].isUserInteractionEnabled = true
-                print("isUserInteractionEnabled")
             }
             else {
                 lastCardInStack = nil
@@ -944,7 +923,6 @@ class BridgeViewController: UIViewController {
                 if currentTypeOfCardsOnDisplay == typesOfCard.all {
                     let pairings = localData.getPairings()
                     if pairings != nil && pairings?.count > 0 {
-                        print("bridgePairingAlreadyStored set to true " + String(describing: pairings?.count))
                         bridgePairingAlreadyStored = true
                     }
                 }
@@ -1014,7 +992,6 @@ class BridgeViewController: UIViewController {
     }
     //after response from revitalize pairs, run this code
     func revitalizeMyPairsHelper(_ notification: Notification) {
-        print("revitalize pairs from PFCloudFunctions works")
         activityIndicator.stopAnimating()
         activityIndicator.removeFromSuperview()
         //displayNoMoreCardsLabel.removeFromSuperview()
@@ -1024,7 +1001,6 @@ class BridgeViewController: UIViewController {
             revisitButton.alpha = 0
         }
         let message = (notification as NSNotification).userInfo!["message"] as? String
-        print(message)
         NotificationCenter.default.removeObserver(self)
         self.getBridgePairings(2, typeOfCards: self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay), callBack:nil, bridgeType:nil)
         PFUser.current()?.incrementKey("revitalized_pairs_count")
@@ -1035,7 +1011,6 @@ class BridgeViewController: UIViewController {
         view.bringSubview(toFront: disconnectIcon)
         connectIcon.center.x = 1.6*DisplayUtility.screenWidth
         connectIcon.alpha = 0.0
-        print("connectionCanceled")
         //Put swipeCard back into place
         let rotation = CGAffineTransform(rotationAngle: 0)
         let stretch = rotation.scaledBy(x: 1, y: 1)

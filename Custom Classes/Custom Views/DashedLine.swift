@@ -31,9 +31,7 @@ class DashedLine: UIView {
     
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        print("got to draw")
-        
+    override func draw(_ rect: CGRect) {        
         // Context is the object used for drawing
         let context = UIGraphicsGetCurrentContext()
         context?.setLineWidth(1.5)

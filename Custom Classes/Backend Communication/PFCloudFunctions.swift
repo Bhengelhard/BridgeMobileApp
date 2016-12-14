@@ -172,4 +172,27 @@ class PFCloudFunctions {
             }
         })
     }
+    func addProfilePicturesBackForUser2(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "addProfilePicturesBackForUser2", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print("addProfilePicturesBackForUser2")
+                    print(response)
+                }
+            }
+        })
+    }
+    func addProfilePicturesBackForUser1(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "addProfilePicturesBackForUser1", withParameters: [:], block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print("addProfilePicturesBackForUser1")
+                    print(response)
+                }
+            }
+        })
+    }
+
 }

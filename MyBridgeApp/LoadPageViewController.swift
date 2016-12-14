@@ -32,8 +32,6 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
         graphRequest?.start { (connection, result, error) -> Void in
-            print("connection \(connection)")
-            
             if error != nil {
                 print(error)
             } else if let result = result as? [String:AnyObject]{
@@ -97,14 +95,16 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
         //print("\(geoPoint?.latitude),\(geoPoint?.longitude)")
         NotificationCenter.default.post(name: Notification.Name(rawValue: "storeUserLocationOnParse"), object: nil, userInfo:  ["geoPoint":geoPoint!])
         }
-        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //let pfCloudFunctions = PFCloudFunctions()
+        let pfCloudFunctions = PFCloudFunctions()
         //pfCloudFunctions.updateUserTableToHaveURLS(parameters: [:])
         //pfCloudFunctions.updateBridgePairingsTableToHaveURLS(parameters: [:])
+        //pfCloudFunctions.addProfilePicturesBackForUser1(parameters: [:])
+        pfCloudFunctions.addProfilePicturesBackForUser2(parameters: [:])
+
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest

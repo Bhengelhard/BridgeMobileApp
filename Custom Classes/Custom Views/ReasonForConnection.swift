@@ -595,6 +595,9 @@ class ReasonForConnection: UIView {
             suggestion2Circle.highlightedImage = UIImage(named: "Selected_Business_Circle")
             suggestion3Circle.image = UIImage(named: "Unselected_Business_Circle")
             suggestion3Circle.highlightedImage = UIImage(named: "Selected_Business_Circle")
+            
+            //Updating type for when customKeyboard message is sent
+            customKeyboard.type = "Business"
         } else if loveButton.isSelected {
             suggestion1Label.text = loveSuggestions[0]
             suggestion2Label.text = loveSuggestions[1]
@@ -607,6 +610,9 @@ class ReasonForConnection: UIView {
             suggestion2Circle.highlightedImage = UIImage(named: "Selected_Love_Circle")
             suggestion3Circle.image = UIImage(named: "Unselected_Love_Circle")
             suggestion3Circle.highlightedImage = UIImage(named: "Selected_Love_Circle")
+            
+            //Updating type for when customKeyboard message is sent
+            customKeyboard.type = "Love"
         } else if friendshipButton.isSelected {
             suggestion1Label.text = friendshipSuggestions[0]
             suggestion2Label.text = friendshipSuggestions[1]
@@ -619,6 +625,9 @@ class ReasonForConnection: UIView {
             suggestion2Circle.highlightedImage = UIImage(named: "Selected_Friendship_Circle")
             suggestion3Circle.image = UIImage(named: "Unselected_Friendship_Circle")
             suggestion3Circle.highlightedImage = UIImage(named: "Selected_Friendship_Circle")
+            
+            //Updating type for when customKeyboard message is sent
+            customKeyboard.type = "Friendship"
         }
     }
     

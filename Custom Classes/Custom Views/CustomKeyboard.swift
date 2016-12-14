@@ -28,8 +28,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     var keyboardHeight = CGFloat()
     
     func display (view: UIView, placeholder: String, buttonTitle: String, buttonTarget: String){
-        print("Called Display CUSTOM KEYBOARD")
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
@@ -87,12 +85,10 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     }
     
     func updateMessageEnablement(updatedPostType: String){
-        print("updatePostType")
         type = updatedPostType
         //setting the placeholder based on whether an option is selected
         if type != "All Types" {
             if messageTextView.textColor == UIColor.white && !messageTextView.text.isEmpty {
-                print("setting enabled to true")
                 messageButton.isEnabled = true
                 messageButton.isSelected = true
             } else if messageTextView.textColor == UIColor.lightGray && target == "postStatus" {
@@ -125,32 +121,33 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
     }
     
     @objc func messageButtonTapped(_ sender: UIButton) {
-        print("messageButtonTapped")
         let dbSavingFunctions = DBSavingFunctions()
         if let messageText = messageTextView.text {
             if target == "postStatus" {
-                print("post button was clicked")
                 messageTextView.text = ""
                 updatePlaceholder()
-                /*if let bridgeVC = currentViewController as? BridgeViewController {
-                } else if let messagesVC = currentViewController as? MessagesViewController {
-                }*/
                 if let missionControlView = currentView as? MissionControlView {
                     missionControlView.close()
-                    print("missioncontrol view is the current View")
                 }
                 dbSavingFunctions.postStatus(messageText: messageText, type: type)
 
             } else if target == "sendMessage" {
                 dbSavingFunctions.sendMessage(messageText: messageText)
             } else if target == "bridgeUsers" {
-                //Update CheckedOut and Bridged to true, set user1_response and user2_response to zero, and add connecter_name, connecter_objectId, connecter_profile_picture_url, reason_for_connection, predicted_bridge_type, bridge_type  to the BridgePairings table as the current user's information, selected button, and messageTextView.text
+                print("type - \(type)")
                 dbSavingFunctions.bridgeUsers(messageText: messageText, type: type)
-                
+                print("got to the type type tyep type _______________________")
                 //Dismiss the Reason For Connections View
                 currentView.removeFromSuperview()
                 if let bridgeVC = currentViewController as? BridgeViewController {
+                    
+                    
                     bridgeVC.reasonForConnectionSent()
+                    
+                    
+                    //Update CheckedOut and Bridged to true, set user1_response and user2_response to zero, and add connecter_name, connecter_objectId, connecter_profile_picture_url, reason_for_connection, connected_with_bridge_type, bridge_type  to the BridgePairings table as the current user's information, selected button, and messageTextView.text
+                    //type = bridgeVC.missionControlView.whichFilter()
+                    
                 }
             }
         }
@@ -163,10 +160,11 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         updatedText = currentText.replacingCharacters(in: range, with: text)
 
         //On the Reason For Connection Page -> return button closes the keyboard instead of adding lines.
-        if target == "bridgeUsers" && (text == "\n") {
-            textView.resignFirstResponder()
-            updatedText = updatedText.trimmingCharacters(in: .newlines)
-        } else if target == "postStatus" && text == "\n" {
+//        if target == "bridgeUsers" && (text == "\n") {
+//            //textView.resignFirstResponder()
+//            //updatedText = updatedText.trimmingCharacters(in: .newlines)
+//        } else 
+        if target == "postStatus" && text == "\n" {
             updatedText = updatedText.trimmingCharacters(in: .newlines)
         }
         
@@ -179,7 +177,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             updateMessageHeights()
             messageButton.isEnabled = false
             messageButton.isSelected = false
-            print("set placeholder")
             
             //if messageTextView is empty, the circles should be deselected
             if target == "bridgeUsers" {
@@ -213,7 +210,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             updateMessageHeights()
             messageButton.isEnabled = false
             messageButton.isSelected = false
-            print("set placeholder")
             
             //if messageTextView is empty, the circles should be deselected
             if target == "bridgeUsers" {
@@ -227,7 +223,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             messageTextView.selectedTextRange = messageTextView.textRange(from: messageTextView.endOfDocument, to: messageTextView.endOfDocument)
             messageButton.isEnabled = true
             messageButton.isSelected = true
-            print("set no placeholder")
         }
     }
     
@@ -243,14 +238,12 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
             messageView.frame.origin.y = DisplayUtility.screenHeight - keyboardHeight - messageView.frame.height
-            print("keyboard will show")
         }
         
     }
     func keyboardWillHide(_ notification: Notification) {
         if (((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             messageView.frame.origin.y = DisplayUtility.screenHeight - messageView.frame.height
-            print("keyboard will hide")
         } else {
             
         }
@@ -261,11 +254,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         updateMessageHeights()
         //need to retrieve the chracter limit from the page the user is on, if there is one and pass it through as a parameter for the characterLimit function
         characterLimit()
-        print("textViewDidChange")
-        print(currentView)
-        print(currentView.superview)
         if let missionCV = currentView.superview as? MissionControlView {
-            print("got into Mission ControlView as the current view")
             let type = missionCV.whichFilter()
             updateMessageEnablement(updatedPostType: type)
         }

@@ -92,7 +92,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         NotificationCenter.default.removeObserver(self)
         if segueToSingleMessage {
-            print("prepareForSegue was Called")
             segueToSingleMessage = false
             let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
             singleMessageVC.transitioningDelegate = self.transitionManager
@@ -720,11 +719,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func loadNewMatches() {
-        print("loading new matches")
         newMatchesView = NewMatchesView()
         newMatchesView.setVC(vc: self)
         self.tableView.tableHeaderView = self.newMatchesView
-        print("loadNew Matches function")
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("bridged", equalTo: true)
         query.limit = 10000
@@ -734,12 +731,9 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 print("refresh findObjectsInBackgroundWithBlock error - \(error)")
             }
             else if let results = results {
-                print("Got results in query")
                 print(results.count)
                 for i in 0..<results.count{
-                    
                     let result = results[i]
-                    print("Got specific result in query")
                     let objectId = result.objectId
                     
                     var currentUser_objectId = ""
@@ -764,17 +758,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     //These force unwraps need to be removed
                     if user != "" {
-                        print("got the user")
                         var userResponse = 0
                         if let UR = result["\(user)_response"] as? Int {
                             userResponse = UR
                         }
-                        print("\(objectId): \(userResponse)")
                         if userResponse != 1 {
                             if let profilePicURLString = result["\(otherUser)_profile_picture_url"] as? String {
                                 if let name = result["\(otherUser)_name"] as? String {
                                     let dot = (userResponse == 0)
-                                    if let type = result["bridge_type"] as? String {
+                                    if let type = result["connected_bridge_type"] as? String {
                                         var color: UIColor
                                         switch type {
                                         case "Business":
@@ -867,8 +859,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func transitionToMessageWithID(_ id: String, color: UIColor) {
-        print("transition to message was called with id \(id)")
-        
         self.singleMessageId = id
         self.necterTypeColor = color
         self.segueToSingleMessage = true
@@ -1035,7 +1025,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         query.getObjectInBackground(withId: messageId) {
             (messageObject: PFObject?, error: Error?) in
             if error != nil {
-                print(error)
+                print(error ?? "message tapped and querying with error")
             }
             else if let messageObject = messageObject {
                 if let _ = messageObject["message_viewed"] {
@@ -1044,12 +1034,13 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         whoViewed.append((PFUser.current()?.objectId)!)
                         messageObject["message_viewed"] = whoViewed
                         messageObject.saveInBackground()
-                        //print("1")
+                        print("message_viewed save")
                     }
                 }
                 else {
-                    messageObject["message_viewed"] = [ (PFUser.current()?.objectId)! ]
+                    messageObject["message_viewed"] = [(PFUser.current()?.objectId)!]
                     messageObject.saveInBackground()
+                    print("message_viewed saved for single person")
                 }
             }
         }

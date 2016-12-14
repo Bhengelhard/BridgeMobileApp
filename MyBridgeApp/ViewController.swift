@@ -126,7 +126,6 @@ class ViewController: UIViewController {
                                     //PFUser.current()?["love_name"] = name
                                     //PFUser.current()?["friendship_name"] = name
                                 }
-                                
                                 if let email = result["email"] {
                                     PFUser.current()?["email"] = email
                                 }
@@ -179,7 +178,7 @@ class ViewController: UIViewController {
                                 PFUser.current()?["interested_in_love"] = true
                                 PFUser.current()?["interested_in_friendship"] = true
                                 PFUser.current()?["ran_out_of_pairs"] = 0
-
+                                
                                 PFUser.current()?.saveInBackground()
                                
                                 //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
@@ -187,7 +186,6 @@ class ViewController: UIViewController {
                                 localData.synchronize()
                                 
                                 PFUser.current()?.saveInBackground(block: { (success, error) in
-                                    
                                     if success == true {
                                         self.activityIndicator.stopAnimating()
                                         UIApplication.shared.endIgnoringInteractionEvents()
@@ -195,14 +193,8 @@ class ViewController: UIViewController {
                                     } else {
                                         print(error ?? "error")
                                     }
-                                    
                                 })
-
-                                
-                                
                             }
-                            
-                            
                         }
                         
                     } else {

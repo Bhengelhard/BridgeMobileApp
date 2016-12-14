@@ -53,8 +53,7 @@ class DBSavingFunctions {
                     result["connecter_name"] = PFUser.current()?["name"]
                     result["connecter_profile_picture_url"] = PFUser.current()?["profile_picture_url"]
                     result["reason_for_connection"] = messageText
-                    result["predicted_bridge_type"] = result["bridge_type"]
-                    result["bridge_type"] = type
+                    result["connected_bridge_type"] = type
                     result["user1_response"] = 0
                     result["user2_response"] = 0
                     result.saveInBackground()
