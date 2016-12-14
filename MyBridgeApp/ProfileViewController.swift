@@ -169,7 +169,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         bridgeStatus.clipsToBounds = true*/
         
         let bridgeStatusFrame = CGRect(x: 0.275*DisplayUtility.screenWidth, y:0.465*DisplayUtility.screenHeight, width:0.45*DisplayUtility.screenWidth, height:0.06*DisplayUtility.screenHeight)
-        bridgeStatus = DisplayUtility.gradientButton(text: "Post Request", frame: bridgeStatusFrame)
+        bridgeStatus = DisplayUtility.gradientButton(text: "Post Request", frame: bridgeStatusFrame, fontSize: 20)
         bridgeStatus.addTarget(self, action: #selector(statusTapped(_:)), for: .touchUpInside)
         bridgeStatus.setTitleColor(UIColor.black, for: .normal)
         

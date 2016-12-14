@@ -212,7 +212,7 @@ class BridgeViewController: UIViewController {
         //Display Revisit Button so user can run through their previously seen matches
         let revisitButtonY = displayNoMoreCardsLabel.frame.maxY + 0.02*DisplayUtility.screenHeight
         let revisitButtonFrame: CGRect = CGRect(x: 0.25*DisplayUtility.screenWidth, y: revisitButtonY, width: 0.5*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.06)
-        revisitButton = DisplayUtility.gradientButton(text: "Revisit Matches", frame: revisitButtonFrame)
+        revisitButton = DisplayUtility.gradientButton(text: "Revisit Matches", frame: revisitButtonFrame, fontSize: 20)
         revisitButton.setTitleColor(UIColor.black, for: .normal)
         revisitButton.addTarget(self, action: #selector(revitalizeMyPairs(_:)), for: .touchUpInside)
         revisitButton.alpha = 0
@@ -423,9 +423,9 @@ class BridgeViewController: UIViewController {
         customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Profile_Navbar_Icon", leftBarButtonSelectedIcon: "Profile_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: rightBarButtonIcon, rightBarButtonSelectedIcon: rightBarButtonSelectedIcon, rightBarButton: rightBarButton, title: "necter")
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
-        performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
+        //performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
         //let myProfileVC = MyProfileViewController()
-        //performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
+        performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
         //self.present(myProfileVC, animated: true, completion: nil)
         leftBarButton.isSelected = true
     }

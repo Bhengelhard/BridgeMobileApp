@@ -19,17 +19,22 @@ class MyProfileViewController: UIViewController {
     let profilePicture1 = UIImageView()
     let personalInfo = UILabel()
     let currentRequests = UIView()
+    let bottomOfProfileButtons = UIView()
     let localData = LocalData()
-    let user = PFUser.current()!
+    var user = PFUser.current()!
 
     override func viewDidLoad() {
+        user = PFUser.current()!
+        print ("my profile did load")
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
         displayNavigationBar()
         
         scrollView.frame = CGRect(x: 0, y: customNavigationBar.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - customNavigationBar.frame.maxY)
         scrollView.backgroundColor = .black
+        scrollView.bounces = false
         view.addSubview(scrollView)
+        
         displayProfilePictures()
         
         let editButton = createEditButton()
@@ -37,8 +42,15 @@ class MyProfileViewController: UIViewController {
         displayLine(y: necterInfo.frame.maxY)
         
         displayPersonalInformation()
+        displayLine(y: personalInfo.frame.maxY)
+        
         displayCurrentRequests()
         displayLine(y: currentRequests.frame.maxY)
+        
+        displayBottomOfProfileButtons()
+        
+        scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: bottomOfProfileButtons.frame.maxY)
+        print ("scrollView frame height: \(scrollView.frame.height) and content height: \(scrollView.contentSize.height)")
     }
 
     override func didReceiveMemoryWarning() {
@@ -110,15 +122,15 @@ class MyProfileViewController: UIViewController {
         personalInfo.numberOfLines = 3
         personalInfo.font = UIFont(name: "BentonSans-Light", size: 18)
         var allLines = ""
-        var line1 = ""
         var numLines = 0
+        var line1 = ""
         if let age = user["age"] as? Int {
             line1 = "\(age)"
             if let city = user["city"] as? String {
                 line1 = "\(line1), \(city)"
-                allLines.append(line1)
-                numLines += 1
             }
+            allLines.append(line1)
+            numLines += 1
         } else if let city = user["city"] as? String {
             line1 = city
             allLines.append(line1)
@@ -129,24 +141,18 @@ class MyProfileViewController: UIViewController {
             line2 = school
             if allLines != "" {
                 allLines.append("\n")
-                allLines.append(line2)
-                numLines += 1
-            } else {
-                allLines.append(line2)
-                numLines += 1
             }
+            allLines.append(line2)
+            numLines += 1
         }
         var line3 = ""
         if let employer = user["employer"] as? String {
             line3 = "Works for \(employer)"
             if allLines != "" {
                 allLines.append("\n")
-                allLines.append(line3)
-                numLines += 1
-            } else {
-                allLines.append(line3)
-                numLines += 1
             }
+            allLines.append(line3)
+            numLines += 1
         }
         
         personalInfo.text = allLines//"\(line1)\n\(line2)\n\(line3)"
@@ -165,37 +171,108 @@ class MyProfileViewController: UIViewController {
     }
     func createEditButton() -> UIButton {
         let frame = CGRect(x: 0, y: 0, width: 0.18233*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
-        let editButton = DisplayUtility.gradientButton(text: "edit", frame: frame)
+        let editButton = DisplayUtility.gradientButton(text: "edit", frame: frame, fontSize: 17)
         editButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
         return editButton
     }
     func getCurrentRequest(type: String, frame: CGRect) -> UIView {
-        var reqView = UIView()
-        var color = String()
-        switch type {
-        case "Business":
-            reqView = businessReqView
-            color = "Blue"
-        case "Love":
-            reqView = loveReqView
-            color = "Red"
-        case "Friendship":
-            reqView = friendshipReqView
-            color = "Green"
-        default:
-            return
-        }
+        let reqView = UIView(frame: frame)
+        
         let icon = UIImageView()
-        icon.image = UIImage(named: "\(type)_Icon_\(color)")
+        icon.image = UIImage(named: "\(type)_Card_Icon")
+        icon.frame = CGRect(x: 0.02501*DisplayUtility.screenWidth, y: 0, width: 0.11596*DisplayUtility.screenWidth, height: 0.11596*DisplayUtility.screenWidth)
+        reqView.addSubview(icon)
+        
+        let status = UILabel()
+        status.frame = CGRect(x: icon.frame.maxX + 0.0379*DisplayUtility.screenWidth, y: icon.frame.minY, width: 0.9121*DisplayUtility.screenWidth - icon.frame.maxX, height: 0.8*icon.frame.height)
+        status.textAlignment = .left
+        status.textColor = .white
+        status.numberOfLines = 0
+        status.font = UIFont(name: "BentonSans-Light", size: 17)
+        status.adjustsFontSizeToFitWidth = true
+        status.minimumScaleFactor = 0.75
+        
+        if let objectId = user.objectId {
+            let query = PFQuery(className: "BridgeStatus")
+            query.whereKey("userId", equalTo: objectId)
+            query.whereKey("bridge_type", equalTo: type)
+            query.order(byDescending: "updatedAt")
+            query.limit = 1
+            query.findObjectsInBackground(block: { (results, error) in
+                if let error = error {
+                    print("status findObjectsInBackgroundWithBlock error - \(error)")
+                }
+                else if let results = results {
+                    if results.count > 0 {
+                        let result = results[0]
+                        if let bridgeStatus = result["bridge_status"] as? String {
+                            status.text = bridgeStatus
+                        }
+                    }
+                }
+            })
+        }
+        
+        reqView.addSubview(status)
+        
+        return reqView
     }
     func displayCurrentRequests() {
-        var y = personalInfo.frame.maxY
-        for type in ["Business", "Love", "Freindship"] {
-            let frame = CGRect(x: 0, y: y, width: DisplayUtility.screenWidth, height: 0.08*DisplayUtility.screenHeight)
-            let currentRequest = getCurrentRequest(type, frame)
+        var y: CGFloat = 0.02*DisplayUtility.screenHeight
+        for type in ["Business", "Love", "Friendship"] {
+            let frame = CGRect(x: 0, y: y, width: DisplayUtility.screenWidth, height: 0.11596*DisplayUtility.screenWidth + 0.0075*DisplayUtility.screenHeight)
+            let currentRequest = getCurrentRequest(type: type, frame: frame)
+            y = currentRequest.frame.maxY
             currentRequests.addSubview(currentRequest)
         }
-        currentRequests.sizeToFit()
+        currentRequests.frame = CGRect(x: 0, y: personalInfo.frame.maxY, width: DisplayUtility.screenWidth, height: y)
+        scrollView.addSubview(currentRequests)
+    }
+    func displayBottomOfProfileButtons() {
+        
+        let feedbackFrame = CGRect(x: 0.08*DisplayUtility.screenWidth, y: 0.03*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
+        let feedbackButton = DisplayUtility.gradientButton(text: "give feedback", frame: feedbackFrame, fontSize: 18.5)
+        bottomOfProfileButtons.addSubview(feedbackButton)
+        
+        let termsFrame = CGRect(x: DisplayUtility.screenWidth - feedbackFrame.maxX, y: feedbackFrame.minY, width: feedbackFrame.width, height: feedbackFrame.height)
+        let termsButton = DisplayUtility.gradientButton(text: "terms of service", frame: termsFrame, fontSize: 18.5)
+        bottomOfProfileButtons.addSubview(termsButton)
+        
+        let shareFrame = CGRect(x: feedbackFrame.minX, y: feedbackFrame.maxY + 0.021*DisplayUtility.screenHeight, width: feedbackFrame.width, height: feedbackFrame.height)
+        let shareButton = DisplayUtility.gradientButton(text: "share necter", frame: shareFrame, fontSize: 18.5)
+        bottomOfProfileButtons.addSubview(shareButton)
+        
+        let privacyFrame = CGRect(x: termsFrame.minX, y: shareFrame.minY, width: feedbackFrame.width, height: feedbackFrame.height)
+        let privacyButton = DisplayUtility.gradientButton(text: "privacy policy", frame: privacyFrame, fontSize: 18.5)
+        bottomOfProfileButtons.addSubview(privacyButton)
+        
+        let logoutFrame = CGRect(x: feedbackFrame.minX, y: shareFrame.maxY + 0.021*DisplayUtility.screenHeight, width: feedbackFrame.width, height: feedbackFrame.height)
+        let logoutButton = DisplayUtility.gradientButton(text: "logout", frame: logoutFrame, fontSize: 18.5)
+        bottomOfProfileButtons.addSubview(logoutButton)
+        
+        let deleteFrame = CGRect(x: termsFrame.minX, y: logoutFrame.minY, width: feedbackFrame.width, height: feedbackFrame.height)
+        let deleteButton = greyButton(text: "delete account", frame: deleteFrame, fontSize: 18.5)
+        bottomOfProfileButtons.addSubview(deleteButton)
+        
+        bottomOfProfileButtons.frame = CGRect(x: 0, y: currentRequests.frame.maxY, width: DisplayUtility.screenWidth, height: logoutFrame.maxY + 0.021*DisplayUtility.screenHeight)
+        scrollView.addSubview(bottomOfProfileButtons)
+    }
+    func greyButton(text: String, frame: CGRect, fontSize: CGFloat) -> UIButton {
+        let button = UIButton(frame: frame)
+        button.setTitle(text, for: .normal)
+        button.backgroundColor = .clear
+        let color = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
+        button.setTitleColor(color, for: .normal)
+        button.setTitleColor(color, for: .highlighted)
+        button.setTitleColor(color, for: .selected)
+        button.titleLabel?.font = UIFont(name: "BentonSans-Light", size: fontSize)
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.layer.cornerRadius = 0.2*button.frame.height
+        button.layer.borderColor = color.cgColor
+        button.layer.borderWidth = 1.5
+        button.clipsToBounds = true
+        
+        return button
     }
     func displayLine(y: CGFloat) {
         let line = UIView()
