@@ -858,12 +858,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
-    func transitionToMessageWithID(_ id: String, color: UIColor) {
+    func transitionToMessageWithID(_ id: String, color: UIColor, title: String) {
         self.singleMessageId = id
         self.necterTypeColor = color
         self.segueToSingleMessage = true
+        self.singleMessageTitle = title
         self.performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
- 
         /*
         for (messagePos, messageId) in messagePositionToMessageIdMapping {
             if messageId == id {

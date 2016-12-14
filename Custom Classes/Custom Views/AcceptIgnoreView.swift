@@ -245,7 +245,8 @@ class AcceptIgnoreView: UIView {
                         message["user1_objectId"] = (message["ids_in_message"] as! [String])[0]
                         message["user2_objectId"] = (message["ids_in_message"] as! [String])[1]
                         message["user1_name"] = result["\(self.newMatch.user)_name"]
-                        message["user2_name"] = result["\(otherUser)_name"]
+                        let otherUserName = result["\(otherUser)_name"]
+                        message["user2_name"] = otherUserName
                         message["user1_profile_picture_url"] = result["\(self.newMatch.user)_profile_picture_url"]
                         message["user2_profile_picture_url"] = result["\(otherUser)_profile_picture_url"]
                         message["message_viewed"] = [String]()
@@ -257,7 +258,12 @@ class AcceptIgnoreView: UIView {
                             if let vc = self.vc {
                                 vc.viewDidLoad()
                                 if let messageId = message.objectId {
-                                    vc.transitionToMessageWithID(messageId, color: self.newMatch.color)
+                                    if let name = otherUserName as? String {
+                                        vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
+                                    } else {
+                                        vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: "Conversation")
+                                    }
+                                    
                                 }
                             }
                         })
