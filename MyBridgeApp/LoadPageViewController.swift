@@ -99,13 +99,7 @@ class LoadPageViewController: UIViewController, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let pfCloudFunctions = PFCloudFunctions()
-        //pfCloudFunctions.updateUserTableToHaveURLS(parameters: [:])
-        //pfCloudFunctions.updateBridgePairingsTableToHaveURLS(parameters: [:])
-        //pfCloudFunctions.addProfilePicturesBackForUser1(parameters: [:])
-        pfCloudFunctions.addProfilePicturesBackForUser2(parameters: [:])
 
-        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()

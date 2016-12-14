@@ -649,6 +649,10 @@ class BridgeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //This is setting the badge number to 0 when the user opens the app and needs to be fixed so the actual badge is set
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
         //Creating Notifications
         //Listener for Post Status Notification
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
