@@ -1033,8 +1033,13 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     if !whoViewed.contains((PFUser.current()?.objectId)!) {
                         whoViewed.append((PFUser.current()?.objectId)!)
                         messageObject["message_viewed"] = whoViewed
-                        messageObject.saveInBackground()
-                        print("message_viewed save")
+                        messageObject.saveInBackground(block: { (success, error) in
+                            if success {
+                                print("message_viewed save")
+                            } else if error != nil {
+                                print(error)
+                            }
+                        })
                     }
                 }
                 else {

@@ -188,6 +188,10 @@ class AcceptIgnoreView: UIView {
     }
     
     func accept(_ sender: UIButton) {
+        //setting buttons to false so user cannot click them during transition
+        exitButton.isEnabled = false
+        ignoreButton.isEnabled = false
+        acceptButton.isEnabled = false
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("objectId", equalTo: newMatch.objectId)
         query.limit = 1
@@ -211,6 +215,11 @@ class AcceptIgnoreView: UIView {
                     if result["\(otherUser)_response"] as! Int == 1 {
                         print("creating message")
                         let message = PFObject(className: "Messages")
+                        let acl = PFACL()
+                        acl.getPublicReadAccess = true
+                        acl.getPublicWriteAccess = true
+                        message.acl = acl
+
                         message["names_in_message"] = [
                             result["\(self.newMatch.user)_name"],
                             result["\(otherUser)_name"]
@@ -232,6 +241,7 @@ class AcceptIgnoreView: UIView {
                             result["\(self.newMatch.user)_profile_picture_url"],
                             result["\(otherUser)_profile_picture_url"]
                         ]
+                        message["lastSingleMessageAt"] = Date()
                         message["user1_objectId"] = (message["ids_in_message"] as! [String])[0]
                         message["user2_objectId"] = (message["ids_in_message"] as! [String])[1]
                         message["user1_name"] = result["\(self.newMatch.user)_name"]
@@ -241,6 +251,7 @@ class AcceptIgnoreView: UIView {
                         message["message_viewed"] = [String]()
                         message["bridge_builder"] = result["connecter_objectId"]
                         message["message_type"] = self.newMatch.type
+                        message["message_viewed"] = [PFUser.current()?.objectId]
                         message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
                             self.phaseOut()
                             if let vc = self.vc {
