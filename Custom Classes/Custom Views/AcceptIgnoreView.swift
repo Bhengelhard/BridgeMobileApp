@@ -249,8 +249,10 @@ class AcceptIgnoreView: UIView {
                             result["\(otherUser)_profile_picture_url"]
                         ]
                         message["lastSingleMessageAt"] = Date()
-                        message["user1_objectId"] = (message["ids_in_message"] as! [String])[0]
-                        message["user2_objectId"] = (message["ids_in_message"] as! [String])[1]
+                        let userObjectId1 = (message["ids_in_message"] as! [String])[0]
+                        message["user1_objectId"] = userObjectId1
+                        let userObjectId2 = (message["ids_in_message"] as! [String])[1]
+                        message["user2_objectId"] = userObjectId2
                         message["user1_name"] = result["\(self.newMatch.user)_name"]
                         let otherUserName = result["\(otherUser)_name"]
                         message["user2_name"] = otherUserName
@@ -261,22 +263,30 @@ class AcceptIgnoreView: UIView {
                         message["message_type"] = self.newMatch.type
                         message["message_viewed"] = [PFUser.current()?.objectId]
                         message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
-                            self.phaseOut()
-                            if let vc = self.vc {
-                                vc.viewDidLoad()
-                                if let messageId = message.objectId {
-                                    if let name = otherUserName as? String {
-                                        vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
-                                    } else {
-                                        vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: "Conversation")
+                            if error != nil {
+                                print(error)
+                            } else if succeeded {
+                                //Adding users to eachothers FriendLists
+                                let pfCloudFunctions = PFCloudFunctions()
+                                pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
+                                print("pfCloud Functions ran")
+                                
+                                //Close current View with fade
+                                self.phaseOut()
+                                
+                                //Reload MessagesVC and transition to single message
+                                if let vc = self.vc {
+                                    vc.viewDidLoad()
+                                    if let messageId = message.objectId {
+                                        if let name = otherUserName as? String {
+                                            vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
+                                        } else {
+                                            vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: "Conversation")
+                                        }
                                     }
                                 }
                             }
                             
-                            //Adding users to eachothers FriendLists
-                            let pfCloudFunctions = PFCloudFunctions()
-                            pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: [:])
-                            print("pfCloud Functions ran")
                         })
                     }
                 }
