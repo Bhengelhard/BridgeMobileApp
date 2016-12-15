@@ -54,7 +54,7 @@ class MissionControlView: UIView{
     
     var wasDraggedUp = 0
     
-    let initialFrameY = 0.94322*DisplayUtility.screenHeight
+    let initialFrameY = 0.9177*DisplayUtility.screenHeight
     
     override init (frame: CGRect) {
         super.init(frame: frame)
@@ -127,21 +127,23 @@ class MissionControlView: UIView{
         categoriesView.frame.size = CGSize(width: 0.9651*DisplayUtility.screenWidth, height: 0.10626*DisplayUtility.screenHeight)
         categoriesView.center.x = currentView.center.x
         categoriesView.frame.origin.y = 0
-        categoriesView.layer.cornerRadius = 5.5
+        categoriesView.layer.cornerRadius = 11
         categoriesView.layer.masksToBounds = true
         categoriesView.backgroundColor = DisplayUtility.necterGray
         self.addSubview(categoriesView)
         
+        let displayedHeightOfCategoriesView = self.frame.height - self.initialFrameY
+        
         //adding filterButtons placement
-        businessButton.frame = CGRect(x: 0.37932*DisplayUtility.screenWidth, y: 0, width: 0.13271*DisplayUtility.screenWidth, height: 0.13271*DisplayUtility.screenWidth)
-        businessButton.center.y = 0.5*categoriesView.frame.height
+        businessButton.frame = CGRect(x: 0.39451*categoriesView.frame.width, y: 0, width: 0.11814*categoriesView.frame.width, height: 0.11814*categoriesView.frame.width)
+        businessButton.center.y = 0.5*displayedHeightOfCategoriesView
         
         loveButton.frame.size = businessButton.frame.size
-        loveButton.frame.origin.x = 0.5474*DisplayUtility.screenWidth
+        loveButton.frame.origin.x = 0.59585*categoriesView.frame.width
         loveButton.center.y = businessButton.center.y
         
         friendshipButton.frame.size = businessButton.frame.size
-        friendshipButton.frame.origin.x = 0.7195*DisplayUtility.screenWidth
+        friendshipButton.frame.origin.x = 0.792933*categoriesView.frame.width
         friendshipButton.center.y = businessButton.center.y
         
         //adding the filterButtons targets and images
@@ -169,48 +171,22 @@ class MissionControlView: UIView{
         categoriesView.addSubview(friendshipButton)
         
         //Creating Filter label
-        filterLabel.frame = CGRect(x: categoriesView.frame.origin.x + 0.11469*categoriesView.frame.width, y: 0, width: 0.4*self.frame.width, height: 0.04*self.frame.height)
-        filterLabel.center.y = categoriesView.center.y
+        filterLabel.frame = CGRect(x: 0.11469*categoriesView.frame.width, y: 0, width: 0.4*categoriesView.frame.width, height: 0.4*categoriesView.frame.height)
+        filterLabel.center.y = businessButton.center.y + 0.035*categoriesView.frame.height//categoriesView.center.y
         filterLabel.text = "FILTER"
         filterLabel.font = UIFont(name: "BentonSans-Light", size: 19)
         filterLabel.textColor = UIColor.lightText
         filterLabel.textAlignment = NSTextAlignment.left
+        filterLabel.baselineAdjustment = .alignCenters
         //Adding subview to self so label can transition off of the categories view
         categoriesView.addSubview(filterLabel)
         
-        postARequestView.frame = CGRect(x: 0, y: categoriesView.frame.height + 0.01295*self.frame.height, width: categoriesView.frame.width, height: 0.05259*self.frame.height)
-        postARequestView.center.x = currentView.center.x
-        postARequestView.backgroundColor = DisplayUtility.necterGray
-        self.addSubview(postARequestView)
-        
-        postARequestLabel.frame.size = CGSize(width: 0.7*postARequestView.frame.width, height: 0.05259*self.frame.height)
-        postARequestLabel.center = CGPoint(x: postARequestView.center.x, y: 0.5*postARequestView.frame.height)
-        postARequestLabel.text = "POST A REQUEST"
-        postARequestLabel.textColor = UIColor.white
-        postARequestLabel.textAlignment = NSTextAlignment.center
-        postARequestLabel.font = UIFont(name: "BentonSans-Light", size: 19)
-        postARequestView.addSubview(postARequestLabel)
-        
-        let maskPath = UIBezierPath(roundedRect: categoriesView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5.5, height: 5.5))
-        let postARequestViewShape = CAShapeLayer()
-        postARequestViewShape.path = maskPath.cgPath
-        postARequestView.layer.mask = postARequestViewShape
-        
-        //Adding Arrows to postARequestView
-        leftArrow.frame = CGRect(x: 0.01481*postARequestView.frame.width, y: 0.1167*postARequestView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
-        leftArrow.image = UIImage(named: "Up_Arrow")
-        postARequestView.addSubview(leftArrow)
-       
-        rightArrow.frame = CGRect(x: 0.94245*postARequestView.frame.width, y: 0.1167*postARequestView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
-        rightArrow.image = UIImage(named: "Up_Arrow")
-        postARequestView.addSubview(rightArrow)
-        
         //Adding arrows to the categories View
-        leftCategoriesArrow.frame = CGRect(x: 0.01481*categoriesView.frame.width, y: 0.1167*categoriesView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
+        leftCategoriesArrow.frame = CGRect(x: 0.01481*categoriesView.frame.width, y: 0.1167*categoriesView.frame.height, width: 0.04*categoriesView.frame.width, height: 0.33189*displayedHeightOfCategoriesView)
         leftCategoriesArrow.image = UIImage(named: "Up_Arrow")
         categoriesView.addSubview(leftCategoriesArrow)
         
-        rightCategoriesArrow.frame = CGRect(x: 0.94245*categoriesView.frame.width, y: 0.1167*categoriesView.frame.height, width: 0.04*postARequestView.frame.width, height: 0.5621*postARequestView.frame.height)
+        rightCategoriesArrow.frame = CGRect(x: 0.94245*categoriesView.frame.width, y: 0.1167*categoriesView.frame.height, width: 0.04*categoriesView.frame.width, height: 0.33189*displayedHeightOfCategoriesView)
         rightCategoriesArrow.image = UIImage(named: "Up_Arrow")
         categoriesView.addSubview(rightCategoriesArrow)
     }
@@ -296,7 +272,6 @@ class MissionControlView: UIView{
     func toggleFilters(type: String) {
         //update status text based on toggledFilters
         //customKeyboard.messageTextView.text = retrieveStatusForType()
-        
         //updating which toolbar Button is selected
         if (type == "Business" && !businessButton.isSelected) {
             businessButton.isSelected = true
@@ -325,7 +300,7 @@ class MissionControlView: UIView{
         }
         
         //Filters tapped adjusts the swipeCards when in positions 1 and 2
-        if position == 0 || position == 1 {
+        if position == 0 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
             previousFilter = type
         }
@@ -348,13 +323,13 @@ class MissionControlView: UIView{
     func tap(_ gestureRecognizer: UITapGestureRecognizer) {
         //If MissionControlView is closed, then open to filters
         if position == 0 {
-            displayFilters()
-        }
-        //If MissionControlView is opened to filters, then open to postRequest
-        else if position == 1 {
             displayPostRequest()
-
         }
+//        //If MissionControlView is opened to filters, then open to postRequest
+//        else if position == 1 {
+//            displayPostRequest()
+//
+//        }
         //If MissionControlView is opened to postRequest, then close
         else {
             close()
@@ -439,6 +414,11 @@ class MissionControlView: UIView{
                     businessButton.frame.origin.x += 1
                     friendshipButton.frame.origin.x += 1
                 }
+                if loveButton.center.y > categoriesView.center.y {
+                    loveButton.center.y -= 1
+                    businessButton.center.y += 1
+                    friendshipButton.center.y += 1
+                }
             }
             
             //Adjust Category View when dragging past CategoriesView's y placement in the postView
@@ -474,15 +454,11 @@ class MissionControlView: UIView{
         //Adjusting Positions upon end of swiping of the Mission Control View
         else if gestureRecognizer.state == .ended {
             // Close Mission Control
-            if (wasDraggedUp < 5 && (position == 0 || position == 2)) || self.frame.origin.y > 0.9*DisplayUtility.screenHeight {
+            if (wasDraggedUp < 5 || self.frame.origin.y > 0.9*DisplayUtility.screenHeight) {
                 close()
                 if trendingOptionsView.isHidden == false {
                     trendingOptionsView.trendingTapped()
                 }
-            }
-            //Display Filters View
-            else if (position == 0 && self.frame.origin.y > 0.75*DisplayUtility.screenHeight) || (position == 1 && self.frame.origin.y > 0.75*DisplayUtility.screenHeight){
-                displayFilters()
             }
             //Display Post View
             else {
@@ -493,9 +469,11 @@ class MissionControlView: UIView{
     }
     //Animate closure of MissionControlView (Position 0)
     func close() {
-        
         //returning to the selected filter type in case it was changed for the post
-        toggleFilters(type: previousFilter)
+        if position != 0 {
+            toggleFilters(type: previousFilter)
+        }
+        
         
         position = 0
         trendingButton.isEnabled = false
@@ -511,13 +489,16 @@ class MissionControlView: UIView{
         self.addSubview(categoriesView)
         
         UIView.animate(withDuration: 0.4) {
-            
             //reorienting the categories View with filters
             self.frame.origin.y = self.initialFrameY
+            let displayedHeightOfCategoriesView = self.frame.height - self.initialFrameY
             self.categoriesView.frame.origin.y = 0
-            self.businessButton.frame.origin.x = 0.37932*DisplayUtility.screenWidth
-            self.loveButton.frame.origin.x = 0.5474*DisplayUtility.screenWidth
-            self.friendshipButton.frame.origin.x = 0.7195*DisplayUtility.screenWidth
+            self.businessButton.frame.origin.x = 0.39451*self.categoriesView.frame.width
+            self.businessButton.center.y = 0.5*displayedHeightOfCategoriesView
+            self.loveButton.frame.origin.x = 0.59585*self.categoriesView.frame.width
+            self.loveButton.center.y = 0.5*displayedHeightOfCategoriesView
+            self.friendshipButton.frame.origin.x = 0.792933*self.categoriesView.frame.width
+            self.friendshipButton.center.y = 0.5*displayedHeightOfCategoriesView
             
             //reposition postARequestView
             self.postARequestView.frame.origin.y = self.categoriesView.frame.height + 0.01295*self.frame.height
@@ -532,7 +513,6 @@ class MissionControlView: UIView{
             self.customKeyboard.messageTextView.resignFirstResponder()
             self.customKeyboard.messageView.frame.origin.y = self.postARequestView.frame.minY + self.frame.minY
 
-            
             //Adjusting Alphas of fading in/out components
             self.blackBackgroundView.alpha = 0
             self.requestLabel.alpha = 0
@@ -546,8 +526,6 @@ class MissionControlView: UIView{
             self.customKeyboard.messageView.alpha = 0
             self.upperHalfView.alpha = 0
             self.lowerHalfView.alpha = 0
-            self.leftCategoriesArrow.alpha = 1
-            self.rightCategoriesArrow.alpha = 1
             if self.changedRevisitAlpha {
                 self.currentRevisitLabel.alpha = 1
                 self.currentRevisitButton.alpha = 1
@@ -560,71 +538,17 @@ class MissionControlView: UIView{
             
         }
     }
-    //Animate display of Mission Control Filters (Position 1)
-    func displayFilters(){
-        
-        upperHalfView.removeFromSuperview()
-        currentView.addSubview(upperHalfView)
-        
-        position = 1
-        //create and remove objects
-        trendingButton.isEnabled = false
-        
-        self.addGestureRecognizer(tapGestureRecognizer)
-        upperHalfView.removeGestureRecognizer(tapGestureRecognizer)
-        categoriesView.removeFromSuperview()
-        self.addSubview(categoriesView)
-        
-        UIView.animate(withDuration: 0.4) {
-            //reorienting the categories View with filters
-            self.frame.origin.y = 0.8282*DisplayUtility.screenHeight
-            self.categoriesView.frame.origin.y = 0
-            self.businessButton.frame.origin.x = 0.37932*DisplayUtility.screenWidth
-            self.loveButton.frame.origin.x = 0.5474*DisplayUtility.screenWidth
-            self.friendshipButton.frame.origin.x = 0.7195*DisplayUtility.screenWidth
-            
-            //reposition postARequestView
-            self.postARequestView.frame.origin.y = self.categoriesView.frame.height + 0.01295*self.frame.height
-            self.postARequestView.frame.size.width = self.categoriesView.frame.width
-            self.postARequestView.center.x = self.center.x
-            let maskPath = UIBezierPath(roundedRect: self.postARequestView.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5.5, height: 5.5))
-            let postARequestViewShape = CAShapeLayer()
-            postARequestViewShape.path = maskPath.cgPath
-            self.postARequestView.layer.mask = postARequestViewShape
-            
-            //Adjusting Alphas of fading in/out components
-            self.blackBackgroundView.alpha = 0
-            self.requestLabel.alpha = 0
-            self.arrow.alpha = 0
-            self.trendingButton.alpha = 0
-            self.postARequestView.alpha = 1
-            self.filterLabel.alpha = 1
-            self.categoryLabel.alpha = 0
-            self.customKeyboard.messageView.alpha = 0
-            self.upperHalfView.alpha = 0
-            self.lowerHalfView.alpha = 0
-            self.leftCategoriesArrow.alpha = 0
-            self.rightCategoriesArrow.alpha = 0
-            
-            //reposition PostView for when next time it is called again
-            self.requestLabel.frame.origin.y = self.frame.minY - 0.35924*self.frame.height
-            self.trendingButton.frame.origin.y = self.frame.minY - 0.12772*self.frame.height
-            self.categoryLabel.frame.origin.y = self.frame.minY - 0.05179*self.frame.height
-        }
-    }
+    
     //Animate display of Mission Control Filters (Position 2)
     func displayPostRequest(){
         upperHalfView.removeFromSuperview()
         self.insertSubview(upperHalfView, belowSubview: lowerHalfView)
-        
         self.bringSubview(toFront: currentView)
-        
         position = 2
         trendingButton.isEnabled = true
         let distanceBetweenButtons = businessButton.center.x - loveButton.center.x
         //Displaying the Keyboard
         self.customKeyboard.messageTextView.becomeFirstResponder()
-        //self.upperHalfView.frame.size.height = DisplayUtility.screenHeight - self.customKeyboard.keyboardHeight - self.customKeyboard.messageView.frame.height
         self.lowerHalfView.frame.size.height = self.customKeyboard.keyboardHeight + self.customKeyboard.messageView.frame.height
         self.lowerHalfView.frame.origin.y = DisplayUtility.screenHeight - self.lowerHalfView.frame.height
         self.removeGestureRecognizer(tapGestureRecognizer)
@@ -637,12 +561,15 @@ class MissionControlView: UIView{
             self.frame.origin.y = 0
             self.categoriesView.frame.origin.y = 0.40892*DisplayUtility.screenHeight
             self.categoryLabel.frame.origin.y = 0.35713*self.frame.height
-            //self.customKeyboard.messageView.frame.origin.y = self.frame.height - self.customKeyboard.keyboardHeight - self.customKeyboard.messageView.frame.height
+            self.customKeyboard.messageView.frame.origin.y = 0
             
             //Adjusting the Buttons on the Categories View
             self.loveButton.center.x = self.categoriesView.center.x
+            self.loveButton.center.y = 0.5*self.categoriesView.frame.height
             self.businessButton.center.x = self.categoriesView.center.x + distanceBetweenButtons
+            self.businessButton.center.y = 0.5*self.categoriesView.frame.height
             self.friendshipButton.center.x = self.categoriesView.center.x - distanceBetweenButtons
+            self.friendshipButton.center.y = 0.5*self.categoriesView.frame.height
             
             //Adjusting Alphas of fading in/out components
             self.blackBackgroundView.alpha = 1
@@ -664,11 +591,6 @@ class MissionControlView: UIView{
                 self.currentRevisitButton.alpha = 0
                 self.changedRevisitAlpha = true
             }
-            
-            
-            self.frame.origin.y = 0
-            
-            self.customKeyboard.messageView.frame.origin.y = 0
         }
         
     }

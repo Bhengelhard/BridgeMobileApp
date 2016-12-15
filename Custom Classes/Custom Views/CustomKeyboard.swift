@@ -134,9 +134,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
             } else if target == "sendMessage" {
                 dbSavingFunctions.sendMessage(messageText: messageText)
             } else if target == "bridgeUsers" {
-                print("type - \(type)")
                 dbSavingFunctions.bridgeUsers(messageText: messageText, type: type)
-                print("got to the type type tyep type _______________________")
                 //Dismiss the Reason For Connections View
                 currentView.removeFromSuperview()
                 if let bridgeVC = currentViewController as? BridgeViewController {

@@ -92,7 +92,8 @@ class SwipeCard: UIView {
     }
 
     func swipeCardFrame () -> CGRect {
-        return CGRect(x: 0.071*DisplayUtility.screenWidth, y: 0.1178*DisplayUtility.screenHeight, width: 0.8586*DisplayUtility.screenWidth, height: 0.8178*DisplayUtility.screenHeight)
+        return CGRect(x: 0.071*DisplayUtility.screenWidth, y: 0.115*DisplayUtility.screenHeight, width: 0.97*0.8586*DisplayUtility.screenWidth, height: 0.97*0.8178*DisplayUtility.screenHeight)
+        /*CGRect(x: 0.071*DisplayUtility.screenWidth, y: 0.1178*DisplayUtility.screenHeight, width: 0.8586*DisplayUtility.screenWidth, height: 0.8178*DisplayUtility.screenHeight)*/
     }
     
     /*

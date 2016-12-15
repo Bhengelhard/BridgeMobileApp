@@ -151,11 +151,8 @@ class TrendingView: UIView {
     }
     
     func trendingOptionTapped(_ sender: UIButton) {
-        print("trendingOptionTapped")
-        
         //Adding the corresponding text to the CustomKeyboard.messageTextView
         if let trendingOptionText = top6Options[sender.tag]?[1] as? String {
-            print(trendingOptionText)
             customKeyboard?.messageTextView.text = trendingOptionText
             customKeyboard?.updatePlaceholder()
             customKeyboard?.updateMessageHeights()

@@ -194,5 +194,15 @@ class PFCloudFunctions {
             }
         })
     }
-
+    func changeBridgePairingsOnInterestedInUpdateForUser(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "changeBridgePairingsOnInterestedInUpdateForUser", withParameters: parameters, block: {
+            (response:Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print("changeBridgePairingsOnInterestedInUpdateForUser")
+                    print(response)
+                }
+            }
+        })
+    }
 }

@@ -192,8 +192,8 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
                     //localStorageUtility.updateBridgePairingsTable()
                     
                     //Adds the current User to the bridgePairings table with the people they have potential to match with
-                    //let pfCloudFunctions = PFCloudFunctions()
-                    //pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                    let pfCloudFunctions = PFCloudFunctions()
+                    pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
                 }
             })
         }

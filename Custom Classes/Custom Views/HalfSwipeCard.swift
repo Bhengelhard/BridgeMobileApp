@@ -138,7 +138,6 @@ class HalfSwipeCard: UIView {
         if status != "" {
             //Setting StatusTextView with transparent background (not text) and height of status text
             let statusTextView = UITextView(frame: CGRect(x: 0, y: connectionTypeIcon.frame.origin.y + connectionTypeIcon.frame.height, width: self.frame.width, height: 0.08*self.frame.height)) // this height needs to change based on text input
-            print("statusTextView Height - \(statusTextView.frame.height)")
             let displayUtility = DisplayUtility()
             statusTextView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
             //statusTextView.layer.opacity = 0.6
@@ -150,7 +149,6 @@ class HalfSwipeCard: UIView {
             statusTextView.isUserInteractionEnabled = false
             statusTextView.text = status
             displayUtility.setViewHeightFromContent(view: statusTextView)
-            print("statusTextView Height - \(statusTextView.frame.height)")
             self.addSubview(statusTextView)
         }
     }

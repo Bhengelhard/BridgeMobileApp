@@ -130,18 +130,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadTheThread"), object: nil)
         NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadTheMessageTable"), object: nil)
         NotificationCenter.default.post(name: Notification.Name(rawValue: "updateBridgePage"), object: nil, userInfo: userInfo)
-        //        if userInfo.objectForKey("badge") {
-        //            let badgeNumber: Int = userInfo.objectForKey("badge").integerValue
-        //            application.applicationIconBadgeNumber = badgeNumber
-        //        }
-        
-        //        if let _ = userInfo["badge"] as? Int {
-        //            let badgeNumber = (userInfo["badge"] as! Int)
-        //            print("badgeNumber - \(badgeNumber)")
-        //            application.applicationIconBadgeNumber = badgeNumber
-        //        }
-        
-        print("userInfo - \(userInfo)")
         
         //Segueing to Appropriate View
         let messageId = userInfo["messageId"] as? String
@@ -150,56 +138,59 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //Segue to SingleMessageViewController
             let vc: SingleMessageViewController = storyboard.instantiateViewController(withIdentifier: "SingleMessageViewController") as! SingleMessageViewController
             vc.newMessageId = messageId!
-            
-            //        print("top navController - \(navController.topViewController)")
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = vc
-                //            navController.viewControllers.removeAll()
-                //            navController.pushViewController(vc, animated: true)
             }else if application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Background")
             }else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
                 let aps = userInfo["aps"] as? NSDictionary
-                let badge = aps!["badge"] as? Int
                 let installation = PFInstallation.current()
-                installation.badge = badge ?? 1
+                if let badge = aps!["badge"] as? Int {
+                    if badge > 3 {
+                        installation.badge = 3
+                    } else {
+                        installation.badge = badge
+                    }
+                } else {
+                    installation.badge = 1
+                }
                 installation.saveInBackground()
             }
             else{
                 print("None")
             }
-            
         } else {
             //Segue to MessagesViewController -> this should be accept/ignore
             let vc: MessagesViewController = storyboard.instantiateViewController(withIdentifier: "MessagesViewController") as! MessagesViewController
-            //vc.newMessageId = messageId!
-            //        let navController: UINavigationController = (self.window!.rootViewController as! UINavigationController)
-            //  
-            
-            //        print("top navController - \(navController.topViewController)")
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = vc
-                //            navController.viewControllers.removeAll()
-                //            navController.pushViewController(vc, animated: true)
             }else if application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Background")
             }else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
                 let aps = userInfo["aps"] as? NSDictionary
-                let badge = aps!["badge"] as? Int
                 let installation = PFInstallation.current()
-                installation.badge = badge ?? 1
+                if let badge = aps!["badge"] as? Int {
+                    if badge > 3 {
+                        installation.badge = 3
+                    } else {
+                        installation.badge = badge
+                    }
+                } else {
+                    installation.badge = 1
+                }
                 installation.saveInBackground()
             }
             else{
                 print("None")
             }
-
         }
         
+        
+
         
         
         

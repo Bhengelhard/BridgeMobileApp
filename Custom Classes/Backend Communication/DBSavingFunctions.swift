@@ -135,8 +135,20 @@ class DBSavingFunctions {
         print("sendMessage")
     }
 
-    
-    
+    //decrease the badgeCount by 1
+    static func decrementBadge() {
+        let currentBadgeCount = UIApplication.shared.applicationIconBadgeNumber
+        var newBadgeCount = currentBadgeCount - 1
+        //making sure badge count doesn't go below 0
+        if newBadgeCount < 0 {
+            newBadgeCount = 0
+        }
+        UIApplication.shared.applicationIconBadgeNumber = newBadgeCount
+        let installation = PFInstallation.current()
+        installation.badge = newBadgeCount
+        installation.saveInBackground()
+        print("installation badge should have changed")
+    }
     
     //Creating a message
     /*let bridgePairings = localData.getPairings()

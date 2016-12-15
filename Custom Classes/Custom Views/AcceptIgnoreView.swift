@@ -192,6 +192,8 @@ class AcceptIgnoreView: UIView {
         exitButton.isEnabled = false
         ignoreButton.isEnabled = false
         acceptButton.isEnabled = false
+        
+        //Saving user's decision to accept
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("objectId", equalTo: newMatch.objectId)
         query.limit = 1
@@ -202,6 +204,16 @@ class AcceptIgnoreView: UIView {
             else if let results = results {
                 if results.count > 0 {
                     let result = results[0]
+                    
+                    //decrease the badgeCount by 1
+                    if let currentUserResponse = result["\(self.newMatch.user)_response"] as? Int {
+                        if currentUserResponse == 0 {
+                            DBSavingFunctions.decrementBadge()
+                        }
+                    } else {
+                        DBSavingFunctions.decrementBadge()
+                    }
+                    
                     result["\(self.newMatch.user)_response"] = 1
                     let otherUser = self.newMatch.user == "user1" ? "user2" : "user1"
                     result.saveInBackground(block: { (succeeded: Bool, error: Error?) in
@@ -284,6 +296,15 @@ class AcceptIgnoreView: UIView {
             else if let results = results {
                 if results.count > 0 {
                     let result = results[0]
+                    //decrease the badgeCount by 1
+                    if let currentUserResponse = result["\(self.newMatch.user)_response"] as? Int {
+                        if currentUserResponse == 0 {
+                            DBSavingFunctions.decrementBadge()
+                        }
+                    } else {
+                        DBSavingFunctions.decrementBadge()
+                    }
+                    
                     result["\(self.newMatch.user)_response"] = 2
                     result.saveInBackground(block: { (succeeded: Bool, error: Error?) in
                         self.phaseOut()

@@ -827,15 +827,12 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let currentFilterInfo = self.filterInfo[self.currentFilter]!
-        
-        //if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < totalElements) ) {
         if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < currentFilterInfo.totalElements) ) {
             if self.encounteredBefore[self.noOfElementsFetched] == nil {
                 self.encounteredBefore[self.noOfElementsFetched] = true
                 refresh()
                 pagingSpinner.startAnimating()
             }
-            
         }
         else {
             self.pagingSpinner.stopAnimating()
@@ -850,12 +847,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
             return filteredPositions.count
         }
-        
         let currentFilterInfo = self.filterInfo[self.currentFilter]!
         return currentFilterInfo.messagePositionToMessageIdMapping.count
-        
-        //return messages.count
-        
     }
     
     func transitionToMessageWithID(_ id: String, color: UIColor, title: String) {
@@ -864,13 +857,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         self.segueToSingleMessage = true
         self.singleMessageTitle = title
         self.performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
-        /*
-        for (messagePos, messageId) in messagePositionToMessageIdMapping {
-            if messageId == id {
-                tableView.delegate?.tableView!(tableView, didSelectRowAt: IndexPath(row: messagePos, section: 0))
-            }
-        }
- */
     }
 
     // Data to be shown on an individual row
@@ -969,11 +955,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                                                  from: date)
             cell.messageTimestamp.text = String(getWeekDay(components.weekday!))
         }
-        /*
-        else if components.day! >= 1 {
-            cell.messageTimestamp.text = "Yesterday"
-        }
-        */
         else {
             cell.messageTimestamp.text = "Today"
         }
@@ -982,7 +963,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0);
         return cell
-        
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return DisplayUtility.screenHeight/6.0
@@ -1005,7 +985,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             //singleMessageTitle stays as "Conversation"
         }
-        
         singleMessageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!
         messageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!
         let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!]!
@@ -1019,7 +998,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             necterTypeColor = DisplayUtility.necterGray
         }
-        
         toolbarTapped = false
         let query: PFQuery = PFQuery(className: "Messages")
         query.getObjectInBackground(withId: messageId) {
@@ -1035,17 +1013,23 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         messageObject["message_viewed"] = whoViewed
                         messageObject.saveInBackground(block: { (success, error) in
                             if success {
-                                print("message_viewed save")
+                                
                             } else if error != nil {
                                 print(error)
                             }
                         })
+                        
+                        //decrease the badgeCount by 1
+                        DBSavingFunctions.decrementBadge()
                     }
                 }
                 else {
                     messageObject["message_viewed"] = [(PFUser.current()?.objectId)!]
                     messageObject.saveInBackground()
                     print("message_viewed saved for single person")
+                    
+                    //decrease the badgeCount by 1
+                    DBSavingFunctions.decrementBadge()
                 }
             }
         }
