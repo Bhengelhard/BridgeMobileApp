@@ -244,10 +244,6 @@ class Downloader {
                     print("Error in catch getting status")
                 }
             }
-            if let customKeyboard = file as? CustomKeyboard {
-                customKeyboard.updateMessageHeights()
-            }
-            
         } else if type == "Love" {
             if let status = localData.getLoveStatus() {
                 necterStatusForType = status
@@ -275,15 +271,13 @@ class Downloader {
                     print("Error in catch getting status")
                 }
             }
-            if let customKeyboard = file as? CustomKeyboard {
-                customKeyboard.updateMessageHeights()
-            } else if type == "Friendship" {
-                if let status = localData.getFriendshipStatus() {
-                    necterStatusForType = status
-                    if let customKeyboard = file as? CustomKeyboard {
-                        customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
-                    }
+        } else if type == "Friendship" {
+            if let status = localData.getFriendshipStatus() {
+                necterStatusForType = status
+                if let customKeyboard = file as? CustomKeyboard {
+                    customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
                 }
+                
             } else {
                 //query for current user in userId, limit to 1, and find most recently posted "Business" bridge_type
                 let query: PFQuery = PFQuery(className: "BridgeStatus")
@@ -298,20 +292,21 @@ class Downloader {
                         if let customKeyboard = file as? CustomKeyboard {
                             customKeyboard.messageTextView.text = "Current Request: \(necterStatusForType)"
                         }
-                        localData.setFriendshipStatus(necterStatusForType)
+                        localData.setLoveStatus(necterStatusForType)
                     }
                 } catch {
                     print("Error in catch getting status")
                 }
             }
-            if let customKeyboard = file as? CustomKeyboard {
-                customKeyboard.updateMessageHeights()
-            }
+            
         } else {
             if let customKeyboard = file as? CustomKeyboard {
                 customKeyboard.messageTextView.text = nil
                 customKeyboard.updatePlaceholder()
             }
+        }
+        if let customKeyboard = file as? CustomKeyboard {
+            customKeyboard.updateMessageHeights()
         }
         /*if necterStatusForType != "I am looking for..." {
          print("isFirstPost set to \(isFirstPost)")

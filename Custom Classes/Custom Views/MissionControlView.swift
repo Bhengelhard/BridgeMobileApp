@@ -270,14 +270,9 @@ class MissionControlView: UIView{
     
     //updates the selection of the filters based on what was tapped
     func toggleFilters(type: String) {
-        //Filters tapped adjusts the swipeCards when in positions 1 and 2
-        if position == 0 {
-            previousFilter = type
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
-        }
+        
         
         //update status text based on toggledFilters
-        //customKeyboard.messageTextView.text = retrieveStatusForType()
         //updating which toolbar Button is selected
         if (type == "Business" && !businessButton.isSelected) {
             businessButton.isSelected = true
@@ -304,6 +299,12 @@ class MissionControlView: UIView{
             customKeyboard.updateMessageEnablement(updatedPostType: "All Types")
             trendingOptionsView.getTop6TrendingOptions(type: "All Types")
         }
+        
+        //Filters tapped adjusts the swipeCards when in position 0
+        if position == 0 {
+            previousFilter = type
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
+        }
     }
     
     //Returns the category/filters button that is currently selected
@@ -325,11 +326,6 @@ class MissionControlView: UIView{
         if position == 0 {
             displayPostRequest()
         }
-//        //If MissionControlView is opened to filters, then open to postRequest
-//        else if position == 1 {
-//            displayPostRequest()
-//
-//        }
         //If MissionControlView is opened to postRequest, then close
         else {
             close()
