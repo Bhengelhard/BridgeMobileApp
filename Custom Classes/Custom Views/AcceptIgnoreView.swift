@@ -210,6 +210,7 @@ class AcceptIgnoreView: UIView {
                         DBSavingFunctions.decrementBadge()
                     }
                     
+                    //setting currentUser's response to 1 after acceptance
                     result["\(self.newMatch.user)_response"] = 1
                     let otherUser = self.newMatch.user == "user1" ? "user2" : "user1"
                     result.saveInBackground(block: { (succeeded: Bool, error: Error?) in
@@ -220,6 +221,8 @@ class AcceptIgnoreView: UIView {
                             }
                         }
                     })
+                    
+                    //checking if other user has already accepted
                     if result["\(otherUser)_response"] as! Int == 1 {
                         let message = PFObject(className: "Messages")
                         let acl = PFACL()
@@ -287,6 +290,16 @@ class AcceptIgnoreView: UIView {
                             }
                             
                         })
+                    }
+                    //If the other user has not yet accepted
+                    else {
+                        if let currentView = self.vc?.view {
+                            let sendingNotificationView = SendingNotificationView()
+                            sendingNotificationView.initialize(view: currentView, sendingText: "Accepting...", successText: "Accepted")
+                            currentView.addSubview(sendingNotificationView)
+                            currentView.bringSubview(toFront: sendingNotificationView)
+                        }
+                        
                     }
                 }
             }

@@ -13,6 +13,7 @@ class CircleView: UIView {
     var circleLayer: CAShapeLayer!
     var currentView = UIView()
     var label = UILabel()
+    var successText = "Success!"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -79,7 +80,7 @@ class CircleView: UIView {
     }
     
     func successfullySent(_ sender: CABasicAnimation) {
-        label.text = "Success!"
+        label.text = successText
         
         let checkMark = UIImageView()
         checkMark.frame = CGRect(x: 0.2*self.frame.width, y: 0.2*self.frame.height, width: 0.6*self.frame.width, height: 0.6*self.frame.width)
@@ -95,9 +96,12 @@ class CircleView: UIView {
         }) { (success) in
             self.currentView.removeFromSuperview()
         }
-        
-        
     }
+    func setSuccessText(text: String) {
+        successText = text
+    }
+    
+    
     
     
     /*

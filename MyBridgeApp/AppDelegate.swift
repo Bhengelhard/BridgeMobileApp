@@ -191,13 +191,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        
-
-        
-        
-        
-        
-        
         //PFPush.handlePush(userInfo)
         if application.applicationState == UIApplicationState.inactive {
             PFAnalytics.trackAppOpened(withRemoteNotificationPayload: userInfo)

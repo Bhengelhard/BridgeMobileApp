@@ -859,11 +859,6 @@ class BridgeViewController: UIViewController {
         }
     }
     func reasonForConnectionSent() {
-        //missionControlView.close()
-        //swipeCardView.frame.origin.x = DisplayUtility.screenWidth
-        //swipeCardView.removeFromSuperview()
-        //lastCardInStack = nil
-        //arrayOfCardsInDeck.remove(at: 0)
         view.bringSubview(toFront: connectIcon)
         view.bringSubview(toFront: disconnectIcon)
         swipeCardView.removeFromSuperview()

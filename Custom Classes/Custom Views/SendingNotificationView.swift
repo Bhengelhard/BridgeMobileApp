@@ -40,17 +40,19 @@ class SendingNotificationView: UIView {
         notificationLabel.textAlignment = NSTextAlignment.center
         self.addSubview(notificationLabel)
         
-        addCircleView()
+        addCircleView(text: successText)
+        
     }
     
     //add animated circle
-    func addCircleView() {
+    func addCircleView(text: String) {
         //let diceRoll = CGFloat(Int(arc4random_uniform(7))*50)
         let circleWidth = 0.4*self.frame.width
         let circleHeight = circleWidth
         
         // Create a new CircleView
         let circleView = CircleView(frame: CGRect(x: 0.5*(self.frame.width - circleWidth), y:  0.1*self.frame.height, width: circleWidth, height: circleHeight))
+        circleView.setSuccessText(text: text)
         self.addSubview(circleView)
         
         // Animate the drawing of the circle over the course of 1 second

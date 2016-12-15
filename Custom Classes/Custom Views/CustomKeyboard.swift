@@ -137,15 +137,9 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
                 dbSavingFunctions.bridgeUsers(messageText: messageText, type: type)
                 //Dismiss the Reason For Connections View
                 currentView.removeFromSuperview()
+                //Update CheckedOut and Bridged to true, set user1_response and user2_response to zero, and add connecter_name, connecter_objectId, connecter_profile_picture_url, reason_for_connection, connected_with_bridge_type, bridge_type  to the BridgePairings table as the current user's information, selected button, and messageTextView.text  
                 if let bridgeVC = currentViewController as? BridgeViewController {
-                    
-                    
                     bridgeVC.reasonForConnectionSent()
-                    
-                    
-                    //Update CheckedOut and Bridged to true, set user1_response and user2_response to zero, and add connecter_name, connecter_objectId, connecter_profile_picture_url, reason_for_connection, connected_with_bridge_type, bridge_type  to the BridgePairings table as the current user's information, selected button, and messageTextView.text
-                    //type = bridgeVC.missionControlView.whichFilter()
-                    
                 }
             }
         }
