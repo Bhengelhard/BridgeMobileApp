@@ -48,14 +48,12 @@ class LocalData {
     
     func setLoveStatus(_ loveStatus:String){
         self.loveStatus = loveStatus
-        print("setting loveStatus from local data file")
     }
     func getLoveStatus()-> String?{
         let userDefaults = UserDefaults.standard
         if let _ = userDefaults.object(forKey: "userInfo"){
             let decoded  = userDefaults.object(forKey: "userInfo") as! Data
             let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
-            print("getting loveStatus from local data file")
             return userInfo.loveStatus
         }
         else{
@@ -64,14 +62,12 @@ class LocalData {
     }
     func setFriendshipStatus(_ friendshipStatus:String){
         self.friendshipStatus = friendshipStatus
-        print("setting business status from local data file")
     }
     func getFriendshipStatus()-> String?{
         let userDefaults = UserDefaults.standard
         if let _ = userDefaults.object(forKey: "userInfo"){
             let decoded  = userDefaults.object(forKey: "userInfo") as! Data
             let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
-            print("getting business status from local data file")
             return userInfo.friendshipStatus
         }
         else{
@@ -80,14 +76,12 @@ class LocalData {
     }
     func setBusinessStatus(_ businessStatus:String){
         self.businessStatus = businessStatus
-        print("setting business status from local data file")
     }
     func getBusinessStatus()-> String?{
         let userDefaults = UserDefaults.standard
         if let _ = userDefaults.object(forKey: "userInfo"){
             let decoded  = userDefaults.object(forKey: "userInfo") as! Data
             let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
-            print("getting business status from local data file")
             return userInfo.businessStatus
         }
         else{
@@ -285,7 +279,6 @@ class LocalData {
     
     
     func synchronize(){
-        //print("Setting mainProfilePicture to \(mainProfilePicture)")
         let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: userInfo)

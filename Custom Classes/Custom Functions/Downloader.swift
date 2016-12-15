@@ -215,7 +215,6 @@ class Downloader {
     func setRequestForType(filterType: String, file: NSObject) {
         var necterStatusForType = "I am looking for..."
         let type = filterType
-        print("type - \(type)")
         let localData = LocalData()
         if type == "Business" {
             if let status = localData.getBusinessStatus() {

@@ -561,7 +561,6 @@ class BridgeViewController: UIViewController {
                                     var profilePictureFile1:String? = nil
                                     var profilePictureFile2:String? = nil
                                     if let ob = result["user1_profile_picture_url"] as? String {
-                                        print("ob")
                                         profilePictureFile1 = ob
                                     }
                                     if let ob = result["user2_profile_picture_url"] as? String {

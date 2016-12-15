@@ -270,6 +270,12 @@ class MissionControlView: UIView{
     
     //updates the selection of the filters based on what was tapped
     func toggleFilters(type: String) {
+        //Filters tapped adjusts the swipeCards when in positions 1 and 2
+        if position == 0 {
+            previousFilter = type
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
+        }
+        
         //update status text based on toggledFilters
         //customKeyboard.messageTextView.text = retrieveStatusForType()
         //updating which toolbar Button is selected
@@ -297,12 +303,6 @@ class MissionControlView: UIView{
             friendshipButton.isSelected = false
             customKeyboard.updateMessageEnablement(updatedPostType: "All Types")
             trendingOptionsView.getTop6TrendingOptions(type: "All Types")
-        }
-        
-        //Filters tapped adjusts the swipeCards when in positions 1 and 2
-        if position == 0 {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
-            previousFilter = type
         }
     }
     
@@ -470,10 +470,12 @@ class MissionControlView: UIView{
     //Animate closure of MissionControlView (Position 0)
     func close() {
         //returning to the selected filter type in case it was changed for the post
-        if position != 0 {
-            toggleFilters(type: previousFilter)
+        let type = whichFilter()
+        if position != 0 && previousFilter != type {
+            print("calling toggle Filters below")
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "filtersTapped"), object: nil)
+            previousFilter = type
         }
-        
         
         position = 0
         trendingButton.isEnabled = false
