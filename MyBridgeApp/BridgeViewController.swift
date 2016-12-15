@@ -425,7 +425,9 @@ class BridgeViewController: UIViewController {
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         //performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
         //let myProfileVC = MyProfileViewController()
-        performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
+        
+        present(TutorialsViewController(), animated: false, completion: nil)
+        //performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
         //self.present(myProfileVC, animated: true, completion: nil)
         leftBarButton.isSelected = true
     }

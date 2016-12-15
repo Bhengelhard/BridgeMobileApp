@@ -1,0 +1,107 @@
+//
+//  PostTutorialViewController.swift
+//  MyBridgeApp
+//
+//  Created by Douglas Dolitsky on 12/14/16.
+//  Copyright © 2016 Parse. All rights reserved.
+//
+
+import UIKit
+
+class SingleTutorialViewController: UIViewController {
+    
+    let titleLabel: UILabel
+    let explanationLabel: UILabel
+    
+    init(titleLabel: UILabel, explanationLabel: UILabel) {
+        self.titleLabel = titleLabel
+        self.explanationLabel = explanationLabel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    convenience init() {
+        let (titleLabel, explanationLabel) = SingleTutorialViewController.nectLabels()
+        self.init(titleLabel: titleLabel, explanationLabel: explanationLabel)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let phone = UIImageView()
+        phone.image = UIImage(named: "Tutorial_Phone")
+        phone.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 1.09*DisplayUtility.screenHeight)
+        view.addSubview(phone)
+        
+        let boundary = UIImageView()
+        boundary.image = UIImage(named: "Tutorial_VideoBoundary")
+        boundary.frame = CGRect(x: 0, y: 0.18823*DisplayUtility.screenHeight, width: 0.7139*DisplayUtility.screenWidth, height: 0.77616*DisplayUtility.screenHeight)
+        boundary.center.x = DisplayUtility.screenWidth / 2
+        view.addSubview(boundary)
+        
+        view.addSubview(titleLabel)
+        view.addSubview(explanationLabel)
+    }
+    
+    static func postLabels() -> (UILabel, UILabel) {
+        let titleLabel = UILabel()
+        titleLabel.frame = CGRect(x: 0.10512*DisplayUtility.screenWidth, y: 0.09382*DisplayUtility.screenHeight, width: 0.0, height: 0.0)
+        titleLabel.text = "post."
+        titleLabel.font = UIFont(name: "BentonSans-Light", size: 26)
+        titleLabel.textColor = .black
+        titleLabel.sizeToFit()
+        
+        let explanationLabel = UILabel()
+        explanationLabel.frame = CGRect(x: 0.33255*DisplayUtility.screenWidth, y: 0.08219*DisplayUtility.screenHeight, width: 0.57*DisplayUtility.screenWidth, height: 0.05606*DisplayUtility.screenHeight)
+        explanationLabel.numberOfLines = 2
+        explanationLabel.text = "Post a request for your\nfriends to better 'nect you."
+        explanationLabel.font = UIFont(name: "BentonSans-Light", size: 18)
+        explanationLabel.textAlignment = .center
+        explanationLabel.textColor = .black
+        
+        return (titleLabel, explanationLabel)
+    }
+    
+    static func nectLabels() -> (UILabel, UILabel) {
+        let titleLabel = UILabel()
+        titleLabel.frame = CGRect(x: 0.08281*DisplayUtility.screenWidth, y: 0.09382*DisplayUtility.screenHeight, width: 0.0, height: 0.0)
+        titleLabel.text = "'nect."
+        titleLabel.font = UIFont(name: "BentonSans-Light", size: 26)
+        titleLabel.textColor = .black
+        titleLabel.sizeToFit()
+        
+        let explanationLabel = UILabel()
+        explanationLabel.frame = CGRect(x: 0.35397*DisplayUtility.screenWidth, y: 0.08219*DisplayUtility.screenHeight, width: 0.53*DisplayUtility.screenWidth, height: 0.05606*DisplayUtility.screenHeight)
+        explanationLabel.numberOfLines = 2
+        explanationLabel.text = "Swipe right to introduce.\nSwipe left to see more."
+        explanationLabel.font = UIFont(name: "BentonSans-Light", size: 18)
+        explanationLabel.textAlignment = .center
+        explanationLabel.textColor = .black
+        
+        return (titleLabel, explanationLabel)
+    }
+    
+    static func chatLabels() -> (UILabel, UILabel) {
+        let titleLabel = UILabel()
+        titleLabel.frame = CGRect(x: 0.10512*DisplayUtility.screenWidth, y: 0.09382*DisplayUtility.screenHeight, width: 0.0, height: 0.0)
+        titleLabel.text = "chat."
+        titleLabel.font = UIFont(name: "BentonSans-Light", size: 26)
+        titleLabel.textColor = .black
+        titleLabel.sizeToFit()
+        
+        let explanationLabel = UILabel()
+        explanationLabel.frame = CGRect(x: 0.32928*DisplayUtility.screenWidth, y: 0.08219*DisplayUtility.screenHeight, width: 0.58*DisplayUtility.screenWidth, height: 0.05606*DisplayUtility.screenHeight)
+        explanationLabel.numberOfLines = 2
+        explanationLabel.text = "Get to know the poeple\nyou've been introduced to."
+        explanationLabel.font = UIFont(name: "BentonSans-Light", size: 18)
+        explanationLabel.textAlignment = .center
+        explanationLabel.textColor = .black
+        
+        return (titleLabel, explanationLabel)
+    }
+
+}

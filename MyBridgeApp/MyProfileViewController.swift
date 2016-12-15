@@ -24,7 +24,6 @@ class MyProfileViewController: UIViewController {
     var user = PFUser.current()!
 
     override func viewDidLoad() {
-        user = PFUser.current()!
         print ("my profile did load")
         super.viewDidLoad()
         view.backgroundColor = UIColor.black
@@ -102,16 +101,28 @@ class MyProfileViewController: UIViewController {
         necterInfo.addSubview(button)
         
         let numNectedLabel = UILabel()
-        if let nected = user["built_bridges"] as? [String] {
-            numNectedLabel.text = "\(nected.count) CONNECTIONS 'NECTED"
-        } else {
-            numNectedLabel.text = "0 CONNECTIONS 'NECTED"
+        if let objectId = user.objectId {
+            let query = PFQuery(className: "BridgePairings")
+            query.whereKey("connecter_objectId", equalTo: objectId)
+            query.whereKey("user1_response", equalTo: 1)
+            query.whereKey("user2_response", equalTo: 1)
+            query.limit = 1000
+            query.findObjectsInBackground(block: { (results, error) in
+                print("numNected query executing...")
+                if let error = error {
+                    print("numNected findObjectsInBackgroundWithBlock error - \(error)")
+                }
+                else if let results = results {
+                    numNectedLabel.text = "\(results.count) CONNECTIONS 'NECTED"
+                    numNectedLabel.sizeToFit()
+                }
+            })
         }
+        
         numNectedLabel.textColor = .white
         numNectedLabel.textAlignment = .left
         numNectedLabel.font = UIFont(name: "BentonSans-Light", size: 15.5)
         numNectedLabel.frame = CGRect(x: nameLabel.frame.minX, y: nameLabel.frame.maxY + 0.05*necterInfo.frame.height, width: necterInfo.frame.width, height: 0.95*necterInfo.frame.height - nameLabel.frame.maxY)
-        numNectedLabel.sizeToFit()
         necterInfo.addSubview(numNectedLabel)
         
         scrollView.addSubview(necterInfo)
@@ -291,6 +302,7 @@ class MyProfileViewController: UIViewController {
     
     func editButtonTapped(_ sender: UIButton) {
         print("edit button tapped")
+        //present(EditProfileViewController(), animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

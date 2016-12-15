@@ -48,6 +48,8 @@
 		81BA817B1A49E0E500E65899 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */; };
 		81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */; };
 		9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9026A0671DDF83F1007CE4D9 /* NewMatch.swift */; };
+		903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CD1E01E75E0021D81A /* TutorialsViewController.swift */; };
+		903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */; };
 		9081C1001DEDE0EB00603393 /* AcceptIgnoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */; };
 		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
 		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
@@ -125,6 +127,8 @@
 		81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
 		9026A0671DDF83F1007CE4D9 /* NewMatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatch.swift; path = "Custom Classes/Data Storage/NewMatch.swift"; sourceTree = "<group>"; };
+		903811CD1E01E75E0021D81A /* TutorialsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialsViewController.swift; path = MyBridgeApp/TutorialsViewController.swift; sourceTree = SOURCE_ROOT; };
+		903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTutorialViewController.swift; path = MyBridgeApp/SingleTutorialViewController.swift; sourceTree = SOURCE_ROOT; };
 		9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
@@ -289,11 +293,11 @@
 				E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */,
 				E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */,
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
+				E9D6DF0E1D7880B700138A1F /* EditProfileViewController.swift */,
 				3059ABF31DFB04AC0010A81B /* MyProfileViewController.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
 				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
 				E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */,
-				E9D6DF0E1D7880B700138A1F /* EditProfileViewController.swift */,
 				CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */,
 				1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */,
 				E9D6DF101D7880C400138A1F /* MessagesTableCell.swift */,
@@ -305,6 +309,8 @@
 				E9D6DF531D78836900138A1F /* TermsOfServiceViewController.swift */,
 				E9D6DF121D7880CC00138A1F /* PrivacyPolicyViewController.swift */,
 				CBEFCD761CEDED9600695B15 /* Main.storyboard */,
+				903811CD1E01E75E0021D81A /* TutorialsViewController.swift */,
+				903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */,
 			);
 			name = MyBridgeApp;
 			path = ParseStarterProject;
@@ -463,6 +469,7 @@
 				304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */,
 				E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */,
 				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
+				903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */,
 				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,
 				3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */,
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
@@ -482,6 +489,7 @@
 				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
 				3030C0CE1DD54E8F0077F7AC /* Downloader.swift in Sources */,
+				903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */,
 				E9D6DF4E1D78835800138A1F /* SignupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
