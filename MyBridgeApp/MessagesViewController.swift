@@ -416,8 +416,10 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         messageTimestamps = [String : Date?]()
         messagePositionToMessageIdMapping = [Int:String]()
         
+        //Updating the Messages Table upon Push Notification
         refresh()
-        
+        //Updated the new matchesView upon Push Notification
+        loadNewMatches()
         /*
         
         filteredPositions = [Int]()

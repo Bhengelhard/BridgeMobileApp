@@ -77,10 +77,8 @@ class AcceptIgnoreView: UIView {
         
         var profilePicView = UIImageView()
         if let profilePic = newMatch.profilePic {
-            print ("profile pic stored")
             profilePicView = UIImageView(image: profilePic)
         } else if let url = URL(string: newMatch.profilePicURL) {
-            print ("profile pic not stored; must download")
             let downloader = Downloader()
             downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
         }
@@ -104,11 +102,9 @@ class AcceptIgnoreView: UIView {
         
         var connecterProfilePicView: UIImageView? = nil
         if let connecterPic = newMatch.connecterPic {
-            print ("connecter pic stored")
             connecterProfilePicView = UIImageView(image: connecterPic)
         } else if let connecterPicURL = newMatch.connecterPicURL {
             if let url = URL(string: connecterPicURL) {
-                print ("connecter pic not stored; must download")
                 connecterProfilePicView = UIImageView()
                 let downloader = Downloader()
                 downloader.imageFromURL(URL: url, imageView: connecterProfilePicView!, callBack: nil)
@@ -225,7 +221,6 @@ class AcceptIgnoreView: UIView {
                         }
                     })
                     if result["\(otherUser)_response"] as! Int == 1 {
-                        print("creating message")
                         let message = PFObject(className: "Messages")
                         let acl = PFACL()
                         acl.getPublicReadAccess = true
@@ -275,9 +270,13 @@ class AcceptIgnoreView: UIView {
                                     } else {
                                         vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: "Conversation")
                                     }
-                                    
                                 }
                             }
+                            
+                            //Adding users to eachothers FriendLists
+                            let pfCloudFunctions = PFCloudFunctions()
+                            pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: [:])
+                            print("pfCloud Functions ran")
                         })
                     }
                 }

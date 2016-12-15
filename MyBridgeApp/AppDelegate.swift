@@ -148,6 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let aps = userInfo["aps"] as? NSDictionary
                 let installation = PFInstallation.current()
                 if let badge = aps!["badge"] as? Int {
+                    //Badge is maxed out at 3 so user doesn't get overwhelmed
                     if badge > 3 {
                         installation.badge = 3
                     } else {
@@ -174,6 +175,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let aps = userInfo["aps"] as? NSDictionary
                 let installation = PFInstallation.current()
                 if let badge = aps!["badge"] as? Int {
+                    //Badge is maxed out at 3 so user doesn't get overwhelmed
                     if badge > 3 {
                         installation.badge = 3
                     } else {
