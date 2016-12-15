@@ -269,7 +269,6 @@ class AcceptIgnoreView: UIView {
                                 //Adding users to eachothers FriendLists
                                 let pfCloudFunctions = PFCloudFunctions()
                                 pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
-                                print("pfCloud Functions ran")
                                 
                                 //Close current View with fade
                                 self.phaseOut()

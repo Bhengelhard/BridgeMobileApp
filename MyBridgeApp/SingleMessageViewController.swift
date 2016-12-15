@@ -553,7 +553,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         leftBarButton.isSelected = true
     }
     func rightBarButtonTapped (_ sender: UIBarButtonItem){
-        let alert = UIAlertController(title: "Leaving the Conversation", message: "Are you sure you want to leave this conversation? You will not be able to return.", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Unmatch?", message: "Are you sure you want to unmatch \(singleMessageTitle)? You will leave this conversation and no longer be able to introduce each other.", preferredStyle: UIAlertControllerStyle.alert)
         //Create the actions
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
             self.rightBarButton.isSelected = false
@@ -564,6 +564,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             self.isNotification = true
             self.sendMessageAndNotification()
             
+            
             //take currentUser out of the current ids_in_message
             let messageQuery = PFQuery(className: "Messages")
             messageQuery.getObjectInBackground(withId: self.messageId, block: { (object, error) in
@@ -571,6 +572,43 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     print(error)
                 } else {
                     let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
+                    if let userObjectId1 = CurrentIdsInMessage[0] as? String{
+                        if let userObjectId2 = CurrentIdsInMessage[1] as? String{
+                            //removing User's from eachother's friend_lists
+                            let pfCloudFunctions = PFCloudFunctions()
+                            pfCloudFunctions.removeUsersFromEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
+                            print("removeUsersFromEachothersFriendLists was called")
+                            
+                            //Delete any bridgePairings downloaded to phone that have the user removed from my friendlist
+                            //Finding the OtherUser's objectId
+                            var otherUserId = userObjectId1
+                            if userObjectId1 == PFUser.current()?.objectId {
+                                otherUserId = userObjectId2
+                            }
+                            print("otherUserId = \(otherUserId)")
+                            //Getting the pairings currently saved on the phone and checking if any contain the other user
+                            let localData = LocalData()
+                            let bridgePairings = localData.getPairings()
+                            var updatedParings = [UserInfoPair]()
+                            if let pairings = bridgePairings {
+                                for pair in pairings {
+                                    if let user1Id = pair.user1?.userId {
+                                        if let user2Id = pair.user2?.userId {
+                                            if user1Id != otherUserId && user2Id != otherUserId {
+                                                updatedParings.append(pair)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            localData.setPairings(updatedParings)
+                            localData.synchronize()
+                            
+                            //Send push notification that deletes any bridgePairings downloaded to phone that have the CurrentUser
+                        }
+                    }
+                    
+                    
                     let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
                     var updatedIdsInMessage = [String]()
                     var updatedNamesInMessage = [String]()

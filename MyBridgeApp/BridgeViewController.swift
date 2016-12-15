@@ -345,8 +345,9 @@ class BridgeViewController: UIViewController {
             self.view.insertSubview(swipeCardView, belowSubview: aboveView)
         }
         else {
-            self.view.insertSubview(swipeCardView, belowSubview: missionControlView.blackBackgroundView)
+            self.view.insertSubview(swipeCardView, belowSubview: connectIcon)
         }
+        //Making sure disconnect and connect Icons are at the front of the view
         arrayOfCardsInDeck.append(swipeCardView)
         arrayOfCardColors.append(swipeCardView.layer.borderColor!)
         return swipeCardView
@@ -668,6 +669,8 @@ class BridgeViewController: UIViewController {
         let bridgePairings = localData.getPairings()
         if (bridgePairings == nil || bridgePairings?.count < 1) {
             getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+        } else if bridgePairings?.count < 2  {
+            getBridgePairings(1,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
         }
         else {
             displayCards()
@@ -682,7 +685,7 @@ class BridgeViewController: UIViewController {
         disconnectIcon.alpha = 0.0
         view.addSubview(disconnectIcon)
         disconnectIcon.bringSubview(toFront: view)
-        
+
         wasLastSwipeInDeck = false
         
         //Create Mission Control

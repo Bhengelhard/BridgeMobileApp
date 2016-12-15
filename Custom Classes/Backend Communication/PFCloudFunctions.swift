@@ -59,8 +59,20 @@ class PFCloudFunctions {
         })
     }
     
+    //This function adds the users to eachother's friend lists
     func addIntroducedUsersToEachothersFriendLists(parameters: [AnyHashable: Any]?) {
         PFCloud.callFunction(inBackground: "addIntroducedUsersToEachothersFriendLists", withParameters: parameters, block: { (response: Any?, error: Error?) in
+            if error == nil {
+                if let response = response as? String {
+                    print(response)
+                }
+            }
+        })
+    }
+    
+    //This function removes the users from eachother's friend lists
+    func removeUsersFromEachothersFriendLists(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "removeUsersFromEachothersFriendLists", withParameters: parameters, block: { (response: Any?, error: Error?) in
             if error == nil {
                 if let response = response as? String {
                     print(response)
