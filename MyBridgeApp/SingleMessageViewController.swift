@@ -596,6 +596,16 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                                         if let user2Id = pair.user2?.userId {
                                             if user1Id != otherUserId && user2Id != otherUserId {
                                                 updatedParings.append(pair)
+                                            } else {
+                                                if let objectId = pair.user1?.objectId {
+                                                    let query = PFQuery(className:"BridgePairings")
+                                                    query.getObjectInBackground(withId: objectId, block: { (result, error) -> Void in
+                                                        if let result = result {
+                                                            result["checked_out"] = false
+                                                            result.saveInBackground()
+                                                        }
+                                                    })
+                                                }
                                             }
                                         }
                                     }

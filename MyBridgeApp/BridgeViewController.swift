@@ -678,13 +678,13 @@ class BridgeViewController: UIViewController {
         
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.alpha = 0.0
-        view.addSubview(connectIcon)
-        connectIcon.bringSubview(toFront: view)
+        view.insertSubview(connectIcon, belowSubview: missionControlView.blackBackgroundView)
+        //connectIcon.bringSubview(toFront: view)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
         disconnectIcon.alpha = 0.0
-        view.addSubview(disconnectIcon)
-        disconnectIcon.bringSubview(toFront: view)
+        view.insertSubview(disconnectIcon, belowSubview: missionControlView.blackBackgroundView)
+        //disconnectIcon.bringSubview(toFront: view)
 
         wasLastSwipeInDeck = false
         
