@@ -12,17 +12,20 @@ class SingleTutorialViewController: UIViewController {
     
     let titleLabel: UILabel
     let explanationLabel: UILabel
+    let videoURL: String
+    let video = UIWebView()
     
-    init(titleLabel: UILabel, explanationLabel: UILabel) {
+    init(titleLabel: UILabel, explanationLabel: UILabel, videoURL: String) {
         self.titleLabel = titleLabel
         self.explanationLabel = explanationLabel
+        self.videoURL = videoURL
         
         super.init(nibName: nil, bundle: nil)
     }
     
     convenience init() {
         let (titleLabel, explanationLabel) = SingleTutorialViewController.nectLabels()
-        self.init(titleLabel: titleLabel, explanationLabel: explanationLabel)
+        self.init(titleLabel: titleLabel, explanationLabel: explanationLabel, videoURL: "")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -45,6 +48,12 @@ class SingleTutorialViewController: UIViewController {
         
         view.addSubview(titleLabel)
         view.addSubview(explanationLabel)
+        
+        video.frame = boundary.frame
+        if let url = URL(string: videoURL) {
+            video.loadRequest(URLRequest(url: url))
+            view.addSubview(video)
+        }
     }
     
     static func postLabels() -> (UILabel, UILabel) {
@@ -57,11 +66,13 @@ class SingleTutorialViewController: UIViewController {
         
         let explanationLabel = UILabel()
         explanationLabel.frame = CGRect(x: 0.33255*DisplayUtility.screenWidth, y: 0.08219*DisplayUtility.screenHeight, width: 0.57*DisplayUtility.screenWidth, height: 0.05606*DisplayUtility.screenHeight)
+        explanationLabel.center.y = titleLabel.center.y
         explanationLabel.numberOfLines = 2
         explanationLabel.text = "Post a request for your\nfriends to better 'nect you."
         explanationLabel.font = UIFont(name: "BentonSans-Light", size: 18)
         explanationLabel.textAlignment = .center
         explanationLabel.textColor = .black
+        explanationLabel.adjustsFontSizeToFitWidth = true
         
         return (titleLabel, explanationLabel)
     }
@@ -76,11 +87,13 @@ class SingleTutorialViewController: UIViewController {
         
         let explanationLabel = UILabel()
         explanationLabel.frame = CGRect(x: 0.35397*DisplayUtility.screenWidth, y: 0.08219*DisplayUtility.screenHeight, width: 0.53*DisplayUtility.screenWidth, height: 0.05606*DisplayUtility.screenHeight)
+        explanationLabel.center.y = titleLabel.center.y
         explanationLabel.numberOfLines = 2
         explanationLabel.text = "Swipe right to introduce.\nSwipe left to see more."
         explanationLabel.font = UIFont(name: "BentonSans-Light", size: 18)
         explanationLabel.textAlignment = .center
         explanationLabel.textColor = .black
+        explanationLabel.adjustsFontSizeToFitWidth = true
         
         return (titleLabel, explanationLabel)
     }
@@ -95,11 +108,13 @@ class SingleTutorialViewController: UIViewController {
         
         let explanationLabel = UILabel()
         explanationLabel.frame = CGRect(x: 0.32928*DisplayUtility.screenWidth, y: 0.08219*DisplayUtility.screenHeight, width: 0.58*DisplayUtility.screenWidth, height: 0.05606*DisplayUtility.screenHeight)
+        explanationLabel.center.y = titleLabel.center.y
         explanationLabel.numberOfLines = 2
         explanationLabel.text = "Get to know the poeple\nyou've been introduced to."
         explanationLabel.font = UIFont(name: "BentonSans-Light", size: 18)
         explanationLabel.textAlignment = .center
         explanationLabel.textColor = .black
+        explanationLabel.adjustsFontSizeToFitWidth = true
         
         return (titleLabel, explanationLabel)
     }
