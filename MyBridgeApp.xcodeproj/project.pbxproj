@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */; };
 		1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D71D09E32B0030B6D0 /* DataController.swift */; };
+		301B1C511E036A0100D507B8 /* AccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 301B1C501E036A0100D507B8 /* AccessViewController.swift */; };
 		3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B01DD54E3F0077F7AC /* LocalData.swift */; };
 		3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */; };
 		3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B21DD54E3F0077F7AC /* PairInfo.swift */; };
@@ -83,6 +84,7 @@
 /* Begin PBXFileReference section */
 		1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageContent.swift; path = MyBridgeApp/MessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BF692D71D09E32B0030B6D0 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = MyBridgeApp/DataController.swift; sourceTree = SOURCE_ROOT; };
+		301B1C501E036A0100D507B8 /* AccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccessViewController.swift; path = MyBridgeApp/AccessViewController.swift; sourceTree = SOURCE_ROOT; };
 		3030C0B01DD54E3F0077F7AC /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalData.swift; path = "Custom Classes/Data Storage/LocalData.swift"; sourceTree = "<group>"; };
 		3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalStorageUtility.swift; path = "Custom Classes/Data Storage/LocalStorageUtility.swift"; sourceTree = "<group>"; };
 		3030C0B21DD54E3F0077F7AC /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PairInfo.swift; path = "Custom Classes/Data Storage/PairInfo.swift"; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 			children = (
 				305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */,
 				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
+				301B1C501E036A0100D507B8 /* AccessViewController.swift */,
 				CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */,
 				CB5829461CAA26D900DC86C9 /* ViewController.swift */,
 				E9D6DF4D1D78835800138A1F /* SignupViewController.swift */,
@@ -451,6 +454,7 @@
 				90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
+				301B1C511E036A0100D507B8 /* AccessViewController.swift in Sources */,
 				307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */,
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
 				304FEBE11DE3918E00B3A8A7 /* DashedLine.swift in Sources */,

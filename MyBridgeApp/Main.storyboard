@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VvB-sH-Hxl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wEy-zC-w02">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -35,6 +35,28 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WkR-Vg-7sb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1023.5" y="66.5"/>
+        </scene>
+        <!--Access View Controller-->
+        <scene sceneID="Eb5-Xh-Gkr">
+            <objects>
+                <viewController id="wEy-zC-w02" customClass="AccessViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="L6G-QM-1h6"/>
+                        <viewControllerLayoutGuide type="bottom" id="zAC-NB-nAG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hhO-KO-cx4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="cMo-Jt-lEF" kind="show" id="CmX-LE-XNn"/>
+                        <segue destination="nIP-ev-yX8" kind="show" id="qw9-uB-ThK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VkP-Jr-Agi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-390" y="-977"/>
         </scene>
         <!--Load Page View Controller-->
         <scene sceneID="biW-fj-MnX">
@@ -339,7 +361,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Av-h3-KLN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1707.5" y="-1104.5"/>
+            <point key="canvasLocation" x="2071" y="-1048"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
@@ -494,6 +516,7 @@
                     </view>
                     <connections>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromMyProfile" id="hOb-8o-wNe"/>
+                        <segue destination="wEy-zC-w02" kind="show" id="umE-DJ-uxQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZz-Ig-dI4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -552,11 +575,11 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NMz-iK-zUZ"/>
-        <segue reference="1Bx-ML-R6e"/>
-        <segue reference="hOb-8o-wNe"/>
-        <segue reference="OnA-y9-bUb"/>
         <segue reference="B19-eu-GHC"/>
-        <segue reference="cy1-Ds-r2Z"/>
+        <segue reference="CmX-LE-XNn"/>
+        <segue reference="qw9-uB-ThK"/>
+        <segue reference="1Bx-ML-R6e"/>
+        <segue reference="OnA-y9-bUb"/>
+        <segue reference="HGT-Vo-Kl8"/>
     </inferredMetricsTieBreakers>
 </document>

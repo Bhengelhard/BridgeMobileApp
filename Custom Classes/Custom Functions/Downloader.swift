@@ -207,7 +207,6 @@ class Downloader {
             }
         }
         task.resume()
-        
     }
     
     
