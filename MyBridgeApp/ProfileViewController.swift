@@ -396,7 +396,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else {
             
             PFUser.logOut()
-            performSegue(withIdentifier: "showLoginView", sender: self)
+            performSegue(withIdentifier: "showAccessViewController", sender: self)
             
         }
         

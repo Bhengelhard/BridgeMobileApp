@@ -152,10 +152,6 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         updatedText = currentText.replacingCharacters(in: range, with: text)
 
         //On the Reason For Connection Page -> return button closes the keyboard instead of adding lines.
-//        if target == "bridgeUsers" && (text == "\n") {
-//            //textView.resignFirstResponder()
-//            //updatedText = updatedText.trimmingCharacters(in: .newlines)
-//        } else 
         if target == "postStatus" && text == "\n" {
             updatedText = updatedText.trimmingCharacters(in: .newlines)
         }

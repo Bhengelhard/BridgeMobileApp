@@ -14,11 +14,12 @@ import FBSDKLoginKit
 import CoreData
 import CoreLocation
 
-class AccessViewController: UIViewController, CLLocationManagerDelegate {
+class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextViewDelegate {
     
     //User Interface
     let backgroundView = UIImageView()
     let accessTextView = UITextView()
+    var updatedText = ""
     
     //Loading App
     let transitionManager = TransitionManager()
@@ -102,41 +103,41 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate {
     func authenticateUser() {
         PFUser.current()?.fetchInBackground(block: { (object, error) in
             let localData = LocalData()
+            let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
             //Updating the user's friends
             self.updateUser()
             if (localData.getUsername() != nil) && ((PFUser.current()!.objectId) != nil){ //remember to change this back to username
                 LocalStorageUtility().getUserFriends()
                 //LocalStorageUtility().getMainProfilePicture()
-                let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
+                
                 
                 //User has SignedUp before
-                if hasSignedUp == true {
-                    print("hasSignedUP")
-                    //self.performSegue(withIdentifier: "showBridgeFromAccess", sender: self)
+                if hasSignedUp {
+                    self.performSegue(withIdentifier: "showBridgeViewController", sender: self)
                 } else {
-                    print("hasNotSignedUP")
-                    //self.performSegue(withIdentifier: "showSignUpFromAccess", sender: self)
+                    self.performSegue(withIdentifier: "showSignUp", sender: self)
                 }
-                
             }
             else{
                 print("User is not signed In")
-                self.displayAccessTextView()
+                if hasSignedUp {
+                    self.displayLoginWithFacebook()
+                } else {
+                    self.displayAccessTextView()
+                }
+                
             }
         })
     }
     
     func displayAccessTextView() {
-        accessTextView.frame = CGRect(x: 0, y: 0.85*DisplayUtility.screenHeight, width: 0.6*DisplayUtility.screenWidth, height: 0.06822*DisplayUtility.screenHeight)
+        accessTextView.frame = CGRect(x: 0, y: 0.8748*DisplayUtility.screenHeight, width: 0.6*DisplayUtility.screenWidth, height: 0.06822*DisplayUtility.screenHeight)
         accessTextView.center.x = view.center.x
-        //Center Text Vertically in Text View
-        var topCorrect = (accessTextView.bounds.size.height - accessTextView.contentSize.height * accessTextView.zoomScale) / 2
-        topCorrect = topCorrect < 0.0 ? 0.0 : topCorrect;
-        accessTextView.contentInset.top = topCorrect
+        DisplayUtility.centerTextVerticallyInTextView(textView: accessTextView)
         accessTextView.text = "enter community code"
         accessTextView.textAlignment = NSTextAlignment.center
         let accessTVGradientColor = DisplayUtility.gradientColor(size: accessTextView.frame.size)
-        accessTextView.textColor = accessTVGradientColor
+        accessTextView.textColor = UIColor.white
         accessTextView.font = UIFont(name: "BentonSans-Light", size: 20.5)
         accessTextView.backgroundColor = DisplayUtility.necterGray
         accessTextView.layer.borderWidth = 1.9
@@ -145,7 +146,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate {
         accessTextView.isScrollEnabled = false
         accessTextView.isEditable = false
         accessTextView.keyboardAppearance = .dark
-        accessTextView.returnKeyType = .next
+        accessTextView.returnKeyType = UIReturnKeyType.join
         accessTextView.autocorrectionType = .no
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(accessTextViewTapped(_:)))
         accessTextView.addGestureRecognizer(tapGestureRecognizer)
@@ -158,8 +159,48 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate {
         accessTextView.isUserInteractionEnabled = true
         accessTextView.isEditable = true
         accessTextView.becomeFirstResponder()
-        accessTextView.text = ""
-        accessTextView.textColor = UIColor.white
+        accessTextView.textColor = UIColor.lightGray
+        accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
+        //DisplayUtility.centerTextVerticallyInTextView(accessTextView)
+    }
+    
+    func displayLoginWithFacebook() {
+        let fbLoginButton = UIButton()
+        fbLoginButton.frame = CGRect(x: 0, y: 0.8748*DisplayUtility.screenHeight, width: 0.57292*DisplayUtility.screenWidth, height: 0.06822*DisplayUtility.screenHeight)
+        fbLoginButton.center.x = view.center.x
+        fbLoginButton.setImage(#imageLiteral(resourceName: "FB_Login_Button"), for: .normal)
+        fbLoginButton.showsTouchWhenHighlighted = false
+        fbLoginButton.addTarget(self, action: #selector(fbLoginTapped(_:)), for: .touchUpInside)
+        view.addSubview(fbLoginButton)
+        
+        let noPostingLabel = UILabel(frame: CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.93*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight))
+        //label.center = CGPointMake(160, 284)
+        noPostingLabel.textAlignment = NSTextAlignment.center
+        noPostingLabel.text = "No need to get sour! We never post to Facebook."
+        noPostingLabel.font = UIFont(name: "BentonSans", size: 14)
+        noPostingLabel.textColor = UIColor.darkGray
+        noPostingLabel.numberOfLines = 1
+        noPostingLabel.alpha = 0
+        view.addSubview(noPostingLabel)
+        
+        //Close the keybaord
+        accessTextView.resignFirstResponder()
+        
+        UIView.animate(withDuration: 0.2) {
+            self.accessTextView.alpha = 1
+            fbLoginButton.alpha = 1
+            noPostingLabel.alpha = 1
+            self.backgroundView.image = #imageLiteral(resourceName: "Access_Background")
+        }
+        
+        accessTextView.removeFromSuperview()
+        
+       
+    }
+    
+    func fbLoginTapped (_ sender: UIButton) {
+        let facebookFunctions = FacebookFunctions()
+        facebookFunctions.loginWithFacebook(vc: self)
     }
     
     func keyboardWillShow(_ notification: Notification) {
@@ -171,22 +212,87 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate {
                 self.accessTextView.center.x = self.view.center.x
                 self.backgroundView.image = #imageLiteral(resourceName: "Access_Background_With_White")
             }
+            //let expandedAccessTextViewSize = CGSize(width: 0.9339*DisplayUtility.screenWidth, height: accessTextView.frame.height)
             let gradientColor = DisplayUtility.gradientColor(size: self.accessTextView.frame.size)
             self.accessTextView.textColor = gradientColor
-            //set placement of the text
+            self.accessTextView.layer.borderColor = gradientColor.cgColor
+            //self.accessTextView.textAlignment = NSTextAlignment.left
         }
         
     }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        //On Click of Join, check access code
+        if text == "\n" {
+            if (accessTextView.text.lowercased() == "shabbat") {
+                displayLoginWithFacebook()
+            } else {
+                accessTextView.text = "incorrect community code"
+                accessTextView.textColor = UIColor.lightGray
+                accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
+            }
+            return false
+        }
+        
+        
+        //Combine the textView text and the replacement text to create the updated text string
+        let currentText:NSString = textView.text as NSString
+        updatedText = currentText.replacingCharacters(in: range, with: text)
+        
+        //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
+        if updatedText.isEmpty {
+            //setting the placeholder
+            accessTextView.text = "enter community code"
+            accessTextView.textColor = UIColor.lightGray
+            accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
+            return false
+        }
+            // else if the text view's placeholder is showing and the length of the replacement string is greater than 0, clear the text veiw and set the color to white to prepare for entry
+        else if accessTextView.textColor == UIColor.lightGray && !updatedText.isEmpty && updatedText != "enter community code" && text != "\n"{
+            accessTextView.text = nil
+            accessTextView.textColor = UIColor.white
+        }
+        
+        return true
+        
+    }
+    
+    //Keeping the selection at the beginning when the placeholder is set
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if accessTextView.window != nil {
+            if textView.textColor == UIColor.lightGray {
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            }
+        }
+    }
 
+    func storeUserLocationOnParse(_ notification: Notification) {
+        print("storeUserLocationOnParse - \((notification as NSNotification).userInfo)")
+        let geoPoint = (notification as NSNotification).userInfo!["geoPoint"] as? PFGeoPoint
+        if let geoPoint = geoPoint {
+            self.geoPoint = geoPoint
+            print(geoPoint)
+        } else {
+            //self.geoPoint = PFGeoPoint.init(latitude: 0.0, longitude: 0.0)
+            print("initialize PFGeoPoint at 0,0")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //Creating observer for when the keyboard shows
+        //Setting the delegate
+        accessTextView.delegate = self
+        
+        //Creating observer for when thekeyboard shows
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 
         //Displaying the backgroundView
         backgroundView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         backgroundView.image = #imageLiteral(resourceName: "Access_Background")
         view.addSubview(backgroundView)
+        
+        //Listen for a notification from LoadPageViewController when it has got the user's location. cIgaR 08/18/16
+        NotificationCenter.default.addObserver(self, selector: #selector(self.storeUserLocationOnParse), name: NSNotification.Name(rawValue: "storeUserLocationOnParse"), object: nil)
         
         //Updating the location of the user and asking for access if the app has not asked yet
         locationManager.delegate = self
@@ -195,6 +301,10 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
 
+        
+        /*let localData = LocalData()
+        localData.setHasSignedUp(false)
+        localData.synchronize()*/
         //Check if the current user has signed in to decide what to display
         authenticateUser()
         

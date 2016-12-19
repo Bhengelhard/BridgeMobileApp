@@ -353,7 +353,8 @@ class BridgeViewController: UIViewController {
         return swipeCardView
     }
     
-    func hasNotification() -> Bool{
+    func checkForNotification(){
+        print("checkForNotification")
         self.badgeCount = 0
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
@@ -361,6 +362,7 @@ class BridgeViewController: UIViewController {
         query.findObjectsInBackground(block: { (results, error) -> Void in
             if error == nil {
                 if let results = results {
+                    print("got results of checkForNotification")
                     for i in 0..<results.count{
                         let result = results[i]
                         if let _ = result["message_viewed"] {
@@ -370,36 +372,33 @@ class BridgeViewController: UIViewController {
                             }
                             else {
                                 self.badgeCount += 1//current user did not view the message
+                                print("badge count incrementing")
                                 break
                             }
                         }
                         else {
                             self.badgeCount += 1//current user did not view the message
+                            print("badge count incrementing 2")
+
                             break
                         }
-                        
                     }
-                    /*DispatchQueue.main.async(execute: {
-                     if self.badgeCount > 0 {
-                        rightBarButtonIcon = "Messages_Icon_Gray_Notification"
-                        rightBarButtonSelectedIcon = "Messages_Icon_Yellow_Notification"
-                     } else {
-                     self.updateRightBarButton(newIcon: newIcon, newSelectedIcon: newSelectedIcon)
-                     }
-                     })*/
-                    
+                    if self.badgeCount > 0 {
+                        print("badgeCount is greater than 0")
+                        DispatchQueue.main.async(execute: {
+                            self.customNavigationBar.updateRightBarButton(newIcon: "Inbox_Navbar_Icon_Notification", newSelectedIcon: "Inbox_Navbar_Icon_Notification")
+                        })
+                    }
                 }
             }
         })
-        
-        if badgeCount == 0 {
-            //User does not have any notifications
-            return false
-        } else {
-            //User has notifications
-            return true
-        }
-        
+//        if badgeCount == 0 {
+//            //User does not have any notifications
+//            return false
+//        } else {
+//            //User has notifications
+//            return true
+//        }
     }
     func displayNavigationBar(){
         rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
@@ -408,15 +407,19 @@ class BridgeViewController: UIViewController {
         var rightBarButtonIcon = ""
         var rightBarButtonSelectedIcon = ""
         
-        if !hasNotification() {
+        //if !hasNotification() {
             rightBarButtonIcon = "Inbox_Navbar_Icon"
-            rightBarButtonSelectedIcon = "Messages_Icon_Yellow_Notification"
-        } else {
-            rightBarButtonIcon = "Inbox_Navbar_Icon"
-            rightBarButtonSelectedIcon = "Messages_Icon_Yellow"
-        }
+            rightBarButtonSelectedIcon = "Inbox_Navbar_Icon"
+           // print("Does not have notification")
+//        } else {
+//            print("Has Notification")
+//            rightBarButtonIcon = "Inbox_Navbar_Icon_Notification"
+//            rightBarButtonSelectedIcon = "Inbox_Navbar_Icon_Notification"
+//        }
 
         customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Profile_Navbar_Icon", leftBarButtonSelectedIcon: "Profile_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: rightBarButtonIcon, rightBarButtonSelectedIcon: rightBarButtonSelectedIcon, rightBarButton: rightBarButton, title: "necter")
+        checkForNotification()
+        
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
@@ -624,13 +627,14 @@ class BridgeViewController: UIViewController {
             }
         }
     }
-    func updateNoOfUnreadMessagesIcon(_ notification: Notification) {
+    func updateBridgePage(_ notification: Notification) {
+        print("updateNoOfUnreadMessagesIcon")
         let aps = (notification as NSNotification).userInfo!["aps"] as? NSDictionary
         badgeCount = (aps!["badge"] as? Int)!
         DispatchQueue.main.async(execute: {
             
             if self.badgeCount > 0 {
-                self.customNavigationBar.updateRightBarButton(newIcon: "Messages_Icon_Gray_Notification", newSelectedIcon: "Messages_Icon_Yellow_Notification")
+                self.customNavigationBar.updateRightBarButton(newIcon: "Inbox_Navbar_Icon_Notification", newSelectedIcon: "Inbox_Navbar_Icon_Notification")
             }
         })
     }
@@ -657,7 +661,7 @@ class BridgeViewController: UIViewController {
         //Listener for Post Status Notification
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
         //Listener for updating messages Icon with notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updateNoOfUnreadMessagesIcon), name: NSNotification.Name(rawValue: "updateNoOfUnreadMessagesIcon"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateBridgePage), name: NSNotification.Name(rawValue: "updateBridgePage"), object: nil)
         //Lister for updating filter from Mission Control being tapped
         NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
         displayBackgroundView()

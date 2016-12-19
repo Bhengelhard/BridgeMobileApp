@@ -50,8 +50,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="cMo-Jt-lEF" kind="show" id="CmX-LE-XNn"/>
-                        <segue destination="nIP-ev-yX8" kind="show" id="qw9-uB-ThK"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" id="CmX-LE-XNn"/>
+                        <segue destination="nIP-ev-yX8" kind="show" identifier="showSignUp" id="qw9-uB-ThK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VkP-Jr-Agi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -421,6 +421,7 @@
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginView" id="cy1-Ds-r2Z"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewFromProfilePage" id="ORi-q2-txU"/>
                         <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileViewFromProfilePage" id="0EB-Fw-YUx"/>
+                        <segue destination="wEy-zC-w02" kind="show" identifier="showAccessViewController" id="Ngn-5p-WNA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSk-yp-EIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -516,7 +517,7 @@
                     </view>
                     <connections>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromMyProfile" id="hOb-8o-wNe"/>
-                        <segue destination="wEy-zC-w02" kind="show" id="umE-DJ-uxQ"/>
+                        <segue destination="wEy-zC-w02" kind="show" identifier="showAccessViewController" id="umE-DJ-uxQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZz-Ig-dI4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -575,11 +576,12 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="B19-eu-GHC"/>
-        <segue reference="CmX-LE-XNn"/>
         <segue reference="qw9-uB-ThK"/>
+        <segue reference="Ngn-5p-WNA"/>
         <segue reference="1Bx-ML-R6e"/>
+        <segue reference="ORi-q2-txU"/>
         <segue reference="OnA-y9-bUb"/>
-        <segue reference="HGT-Vo-Kl8"/>
+        <segue reference="B19-eu-GHC"/>
+        <segue reference="cy1-Ds-r2Z"/>
     </inferredMetricsTieBreakers>
 </document>

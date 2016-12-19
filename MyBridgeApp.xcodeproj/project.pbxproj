@@ -10,6 +10,7 @@
 		1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */; };
 		1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF692D71D09E32B0030B6D0 /* DataController.swift */; };
 		301B1C511E036A0100D507B8 /* AccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 301B1C501E036A0100D507B8 /* AccessViewController.swift */; };
+		301B1C551E04473A00D507B8 /* FacebookFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 301B1C541E04473A00D507B8 /* FacebookFunctions.swift */; };
 		3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B01DD54E3F0077F7AC /* LocalData.swift */; };
 		3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */; };
 		3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B21DD54E3F0077F7AC /* PairInfo.swift */; };
@@ -85,6 +86,7 @@
 		1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageContent.swift; path = MyBridgeApp/MessageContent.swift; sourceTree = SOURCE_ROOT; };
 		1BF692D71D09E32B0030B6D0 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = MyBridgeApp/DataController.swift; sourceTree = SOURCE_ROOT; };
 		301B1C501E036A0100D507B8 /* AccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccessViewController.swift; path = MyBridgeApp/AccessViewController.swift; sourceTree = SOURCE_ROOT; };
+		301B1C541E04473A00D507B8 /* FacebookFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FacebookFunctions.swift; path = "Custom Classes/Backend Communication/FacebookFunctions.swift"; sourceTree = "<group>"; };
 		3030C0B01DD54E3F0077F7AC /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalData.swift; path = "Custom Classes/Data Storage/LocalData.swift"; sourceTree = "<group>"; };
 		3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalStorageUtility.swift; path = "Custom Classes/Data Storage/LocalStorageUtility.swift"; sourceTree = "<group>"; };
 		3030C0B21DD54E3F0077F7AC /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PairInfo.swift; path = "Custom Classes/Data Storage/PairInfo.swift"; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 		3030C0AD1DD54D310077F7AC /* Backend Communication */ = {
 			isa = PBXGroup;
 			children = (
+				301B1C541E04473A00D507B8 /* FacebookFunctions.swift */,
 				304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */,
 				304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */,
 			);
@@ -473,6 +476,7 @@
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,
+				301B1C551E04473A00D507B8 /* FacebookFunctions.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */,
 				E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */,

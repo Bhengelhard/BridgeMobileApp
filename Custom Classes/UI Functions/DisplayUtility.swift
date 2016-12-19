@@ -85,16 +85,22 @@ class DisplayUtility {
     }
     
     static func gradientColor(size: CGSize) -> UIColor {
-        UIGraphicsBeginImageContextWithOptions(size, false, 0);
-        let context = UIGraphicsGetCurrentContext();
-        let colorspace = CGColorSpaceCreateDeviceRGB();
-        let colors = [color1, color2, color3, color4, color5];
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        let colorspace = CGColorSpaceCreateDeviceRGB()
+        let colors = [color1, color2, color3, color4, color5]
         let locations: [CGFloat] = [0.0, 0.25, 0.5, 0.75, 1.0]
-        let gradient = CGGradient(colorsSpace: colorspace, colors: colors as CFArray, locations: locations);
-        context!.drawLinearGradient(gradient!, start: CGPoint(x: 0, y: size.height/2), end: CGPoint(x: size.width, y: size.height/2), options: CGGradientDrawingOptions(rawValue: 0));
-        let image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        return UIColor(patternImage: image!)
+        if let gradient = CGGradient(colorsSpace: colorspace, colors: colors as CFArray, locations: locations) {
+            if let context = UIGraphicsGetCurrentContext() {
+                context.drawLinearGradient(gradient, start: CGPoint(x: 0, y: size.height/2), end: CGPoint(x: size.width, y: size.height/2), options: CGGradientDrawingOptions(rawValue: 0))
+            }
+        }
+        UIGraphicsEndImageContext()
+        if let image = UIGraphicsGetImageFromCurrentImageContext() {
+            return UIColor(patternImage: image)
+        } else {
+            return DisplayUtility.necterYellow
+        }
+        
     }
     
     //This is a helper function for the BridgeViewController to display a message when there are no more cards to display
@@ -168,6 +174,13 @@ class DisplayUtility {
             firstNameLastNameInitial += " \(wordsInName.last!.characters.first!)."
         }
         return firstNameLastNameInitial
+    }
+    
+    //Center Text Vertically in Text View
+    static func centerTextVerticallyInTextView(textView: UITextView) {
+        var topCorrect = (textView.bounds.size.height - textView.contentSize.height) / 2
+        //topCorrect = topCorrect < 0.0 ? 0.0 : topCorrect;
+        textView.contentInset.top = topCorrect
     }
     
     /*
