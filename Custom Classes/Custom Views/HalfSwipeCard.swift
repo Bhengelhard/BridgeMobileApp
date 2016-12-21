@@ -115,9 +115,9 @@ class HalfSwipeCard: UIView {
         let typeImageName = "\(connectionType)_Card_Icon"
         connectionTypeIcon.image = UIImage(named: typeImageName)
         connectionTypeIcon.layer.shadowOpacity = 0.5
-        connectionTypeIcon.layer.shadowRadius = 0.5
+        connectionTypeIcon.layer.shadowRadius = 1
         connectionTypeIcon.layer.shadowColor = UIColor.black.cgColor
-        connectionTypeIcon.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
+        connectionTypeIcon.layer.shadowOffset = CGSize(width: 1, height: 1)
         self.addSubview(connectionTypeIcon)
         
         let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
