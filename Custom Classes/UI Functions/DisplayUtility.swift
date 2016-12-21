@@ -94,10 +94,11 @@ class DisplayUtility {
                 context.drawLinearGradient(gradient, start: CGPoint(x: 0, y: size.height/2), end: CGPoint(x: size.width, y: size.height/2), options: CGGradientDrawingOptions(rawValue: 0))
             }
         }
-        UIGraphicsEndImageContext()
         if let image = UIGraphicsGetImageFromCurrentImageContext() {
+            UIGraphicsEndImageContext()
             return UIColor(patternImage: image)
         } else {
+            UIGraphicsEndImageContext()
             return DisplayUtility.necterYellow
         }
         

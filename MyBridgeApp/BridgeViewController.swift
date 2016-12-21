@@ -57,6 +57,7 @@ class BridgeViewController: UIViewController {
     var shouldCheckInPair = Bool()
     var swipeCardView = UIView()
     var postTapped = Bool()
+    var darkLayer = UIView()
     
     //navigation bar creation
     var badgeCount = Int()
@@ -333,18 +334,31 @@ class BridgeViewController: UIViewController {
             connectionType = "All Types"
         }
         let swipeCardView = SwipeCard()
-        swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
-        swipeCardFrame = swipeCardView.frame
+        
         
         //superDeckView.backgroundColor = UIColor.white.withAlphaComponent(1.0)
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
         swipeCardView.addGestureRecognizer(gesture)
         swipeCardView.isUserInteractionEnabled = true
         if let aboveView = aboveView {
+            
+            swipeCardView.frame.size = CGSize(width: 0.95*aboveView.frame.width, height: 0.95*aboveView.frame.height)
+            swipeCardView.center = aboveView.center
+            swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+            
             swipeCardView.isUserInteractionEnabled = false
             self.view.insertSubview(swipeCardView, belowSubview: aboveView)
+            
+            darkLayer.frame = CGRect(x: 0, y: 0, width: swipeCardView.frame.width, height: swipeCardView.frame.height)
+            darkLayer.layer.cornerRadius = swipeCardView.layer.cornerRadius
+            darkLayer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+            swipeCardView.addSubview(darkLayer)
         }
         else {
+            swipeCardView.frame = swipeCardView.swipeCardFrame()
+            swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+            swipeCardFrame = swipeCardView.frame
+            
             self.view.insertSubview(swipeCardView, belowSubview: connectIcon)
         }
         //Making sure disconnect and connect Icons are at the front of the view
@@ -354,7 +368,6 @@ class BridgeViewController: UIViewController {
     }
     
     func checkForNotification(){
-        print("checkForNotification")
         self.badgeCount = 0
         let query: PFQuery = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
@@ -362,7 +375,6 @@ class BridgeViewController: UIViewController {
         query.findObjectsInBackground(block: { (results, error) -> Void in
             if error == nil {
                 if let results = results {
-                    print("got results of checkForNotification")
                     for i in 0..<results.count{
                         let result = results[i]
                         if let _ = result["message_viewed"] {
@@ -718,12 +730,33 @@ class BridgeViewController: UIViewController {
         var removeCard = false
         var showReasonForConnection = false
         
-        
+        //Displaying and Removing the connect and disconnect icons
         let disconnectIconX = max(min((-1.5*(swipeCardView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
         let connectIconX = max(min(((-2.0/3.0)*(swipeCardView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
         
+        //Changing second card in stack with Swipe
+        if arrayOfCardsInDeck.count > 1 {
+            let savedCenter = swipeCardView.center
+            print("percentage of page \(abs(swipeCardView.center.x - view.center.x)/DisplayUtility.screenWidth)")
+            arrayOfCardsInDeck[1].frame.size.width = 0.1*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)*(swipeCardFrame.width) + 0.95*swipeCardFrame.width
+            arrayOfCardsInDeck[1].frame.size.height = 0.1*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)*(swipeCardFrame.height) + 0.95*swipeCardFrame.height
+            
+            print("width = \(arrayOfCardsInDeck[1].frame.size.width)")
+            print("height = \(arrayOfCardsInDeck[1].frame.size.height)")
+            swipeCardView.center = savedCenter
+                
+            let darkLayerAlpha = min(max(((-4.0/5.0)*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)) + 0.4, 0), 0.5)
+            darkLayer.alpha = darkLayerAlpha
+            darkLayer.backgroundColor = UIColor.black
+        }
         
-
+        //Limiting Y axis of swipe
+        if swipeCardView.center.y > swipeCardFrame.origin.y + 0.5*swipeCardFrame.height  {
+            swipeCardView.center.y = swipeCardFrame.origin.y + 0.5*swipeCardFrame.height
+        } else if swipeCardView.center.y < swipeCardFrame.origin.y + 0.5*swipeCardFrame.height  {
+            swipeCardView.center.y = swipeCardFrame.origin.y + 0.5*swipeCardFrame.height
+        }
+        
         //animating connect and disconnect icons when card is positioned from 0.4% of DisplayUtility.screenWidth to 0.25% of DisplayUtility.screenWidth
         if swipeCardView.center.x < 0.4*DisplayUtility.screenWidth{
             //fading in with swipe left from 0.4% of DisplayUtility.screenWidth to 0.25% of screen width
@@ -1012,6 +1045,7 @@ class BridgeViewController: UIViewController {
         PFUser.current()?.saveInBackground()
     }
     func connectionCanceled(swipeCardView: SwipeCard) {
+        print("connection Canceled called")
         view.bringSubview(toFront: connectIcon)
         view.bringSubview(toFront: disconnectIcon)
         connectIcon.center.x = 1.6*DisplayUtility.screenWidth

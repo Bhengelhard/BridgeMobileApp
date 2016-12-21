@@ -279,7 +279,6 @@ class ReasonForConnection: UIView {
         /*UIView.animate(withDuration: 0.4, animations: {
             self.alpha = 0
         })*/
-        print("got to cancelButtonTapped")
         self.removeFromSuperview()
         //bring back last card into place
         if let bridgeVC = currentViewController as? BridgeViewController {

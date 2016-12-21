@@ -115,7 +115,8 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                 if hasSignedUp {
                     self.performSegue(withIdentifier: "showBridgeViewController", sender: self)
                 } else {
-                    self.performSegue(withIdentifier: "showSignUp", sender: self)
+                    //self.performSegue(withIdentifier: "showSignUp", sender: self)
+                    self.displayAccessTextView()
                 }
             }
             else{
@@ -302,9 +303,9 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         locationManager.startUpdatingLocation()
 
         
-        /*let localData = LocalData()
-        localData.setHasSignedUp(false)
-        localData.synchronize()*/
+//        let localData = LocalData()
+//        localData.setHasSignedUp(false)
+//        localData.synchronize()
         //Check if the current user has signed in to decide what to display
         authenticateUser()
         

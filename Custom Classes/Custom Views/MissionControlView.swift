@@ -112,7 +112,7 @@ class MissionControlView: UIView{
         
         //Adding customKeyboard
         customKeyboard.display(view: lowerHalfView, placeholder: "I am looking for...", buttonTitle: "post", buttonTarget: "postStatus")
-        customKeyboard.maxNumCharacters = 80
+        customKeyboard.maxNumCharacters = 64
         let type = whichFilter()
         customKeyboard.updateMessageEnablement(updatedPostType: type)
         customKeyboardHeight = customKeyboard.height()
@@ -171,10 +171,10 @@ class MissionControlView: UIView{
         categoriesView.addSubview(friendshipButton)
         
         //Creating Filter label
-        filterLabel.frame = CGRect(x: 0.11469*categoriesView.frame.width, y: 0, width: 0.4*categoriesView.frame.width, height: 0.4*categoriesView.frame.height)
+        filterLabel.frame = CGRect(x: 0.0852*categoriesView.frame.width, y: 0, width: 0.4*categoriesView.frame.width, height: 0.4*categoriesView.frame.height)
         filterLabel.center.y = businessButton.center.y + 0.035*categoriesView.frame.height//categoriesView.center.y
         filterLabel.text = "FILTER"
-        filterLabel.font = UIFont(name: "BentonSans-Light", size: 19)
+        filterLabel.font = UIFont(name: "BentonSans-Light", size: 16)
         filterLabel.textColor = UIColor.lightText
         filterLabel.textAlignment = NSTextAlignment.left
         filterLabel.baselineAdjustment = .alignCenters

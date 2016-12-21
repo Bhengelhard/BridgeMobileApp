@@ -10,12 +10,7 @@
 import UIKit
 
 class HalfSwipeCard: UIView {
-    //var name:String?
-    //var location:String?
-    //var status:String?
     var photo: UIImage?
-    //var locationCoordinates:[Double]?
-    //var connectionType:String?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -112,15 +107,17 @@ class HalfSwipeCard: UIView {
         layoutHalfCard(name: name, status: status, photoView: photoView, connectionType: connectionType)
 
     }
-
     
     func layoutHalfCard(name: String, status: String, photoView: UIImageView, connectionType: String) {
-        //downloader.imageFromURL(URL: URL(string: photoURL)!, imageView: photoView)
         self.addSubview(photoView)
         
-        let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.width, y: 0.68*self.frame.height, width: 0.056*DisplayUtility.screenHeight, height: 0.056*DisplayUtility.screenHeight))
+        let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.width, y: 0.68*self.frame.height, width: 0.081862*self.frame.width, height: 0.081862*self.frame.width))
         let typeImageName = "\(connectionType)_Card_Icon"
         connectionTypeIcon.image = UIImage(named: typeImageName)
+        connectionTypeIcon.layer.shadowOpacity = 0.5
+        connectionTypeIcon.layer.shadowRadius = 0.5
+        connectionTypeIcon.layer.shadowColor = UIColor.black.cgColor
+        connectionTypeIcon.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
         self.addSubview(connectionTypeIcon)
         
         let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
@@ -140,12 +137,11 @@ class HalfSwipeCard: UIView {
             let statusTextView = UITextView(frame: CGRect(x: 0, y: connectionTypeIcon.frame.origin.y + connectionTypeIcon.frame.height, width: self.frame.width, height: 0.08*self.frame.height)) // this height needs to change based on text input
             let displayUtility = DisplayUtility()
             statusTextView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
-            //statusTextView.layer.opacity = 0.6
             statusTextView.textContainer.maximumNumberOfLines = 2
             statusTextView.font = UIFont(name: "BentonSans-Light", size: 15)
             statusTextView.textColor = UIColor.white
             statusTextView.textAlignment = NSTextAlignment.center
-            statusTextView.textContainerInset = UIEdgeInsetsMake(4, 12, 4, 12)
+            statusTextView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4)
             statusTextView.isUserInteractionEnabled = false
             statusTextView.text = status
             displayUtility.setViewHeightFromContent(view: statusTextView)
@@ -156,39 +152,4 @@ class HalfSwipeCard: UIView {
     func callbackToSetPhoto(_ image: UIImage) -> Void {
         photo = image
     }
-    
-    /*func getCard(_ deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int, isUpperDeckCard: Bool) -> UIView {
-        
-     
-        let locationCoordinates = locationCoordinates ?? [-122.0,37.0]
-        
-        let locationLabel = UILabel(frame: locationFrame)
-        locationLabel.tag = tag
-        if location == "" {
-            setCityName(locationLabel, locationCoordinates: locationCoordinates, pairing:pairing)
-        }
-     
-     
-        
-        let card = UIView(frame:deckFrame)
-        
-        card.addSubview(photoView)
-        card.addSubview(nameLabel)
-        card.addSubview(locationLabel)
-        card.addSubview(statusLabel)
-        
-        return card
-        
-    }*/
-    
-    
-
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-
 }

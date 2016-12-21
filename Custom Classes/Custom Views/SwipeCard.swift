@@ -32,7 +32,6 @@ class SwipeCard: UIView {
     }
     
     func initialize(user1PhotoURL: String!, user1Name: String, user1Status: String, user1City: String?, user2PhotoURL: String!, user2Name: String, user2Status: String, user2City: String?, connectionType: String) {
-        self.frame = swipeCardFrame()
         self.layer.cornerRadius = 13.379
 
         cardsPredictedType = connectionType

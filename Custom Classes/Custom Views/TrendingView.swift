@@ -186,7 +186,7 @@ class TrendingView: UIView {
         var option6 = [Any]()
         
         if type == "Business" {
-            option1 = ["Study Group", "I'm looking for some people to study with for one of my classes", DisplayUtility.businessBlue]
+            option1 = ["Study Partner", "I'm looking for someone to study with", DisplayUtility.businessBlue]
             option2 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
             option3 = ["Investor", "I am raising money for a venture I am working on", DisplayUtility.businessBlue]
             option4 = ["Investment", "I am looking to invest in something game-changing", DisplayUtility.businessBlue]
@@ -202,21 +202,21 @@ class TrendingView: UIView {
         } else if type == "Friendship" {
             option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
             option2 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
-            option3 = ["Hosting Shabbat", "I am hosting a shabbat meal and want to invite someone over I haven't met yet", DisplayUtility.friendshipGreen]
+            option3 = ["Hosting Shabbat", "I am hosting a shabbat meal. Send someone my way!", DisplayUtility.friendshipGreen]
             option4 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
             option5 = ["Running Partner", "I am trying to find someone to run with me", DisplayUtility.friendshipGreen]
-            option6 = ["Shabbat Meal", "I am looking for a shabbat meal and would love to meet new people", DisplayUtility.friendshipGreen]
+            option6 = ["Shabbat Meal", "I am looking for a shabbat meal. Know anyone hosting?", DisplayUtility.friendshipGreen]
             //option4 = ["Drinking Buddy", "I just want to drink. Anyone else feel the same way?", DisplayUtility.friendshipGreen]
             //option5 = ["Beer Pong Partner", "I'm playing beer pong and need a partner. I could ask a friend, but someone new seems more fun", DisplayUtility.friendshipGreen]
         } else {
             option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
             option2 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
-            option3 = ["Hosting Shabbat", "I am hosting a shabbat meal and want to invite someone over I haven't met yet", DisplayUtility.friendshipGreen]
+            option3 = ["Hosting Shabbat", "I am hosting a shabbat meal. Send someone my way!", DisplayUtility.friendshipGreen]
             //option3 = ["Date Night", "I'm looking for someone to go to a date night with me", DisplayUtility.loveRed]
             //option4 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
             option4 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
             option5 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
-            option6 = ["Shabbat Meal", "I am looking for a shabbat meal for this weekend and would love to meet new people", DisplayUtility.friendshipGreen]
+            option6 = ["Shabbat Meal", "I am looking for a shabbat meal. Know anyone hosting?", DisplayUtility.friendshipGreen]
 
             //option6 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
         }
