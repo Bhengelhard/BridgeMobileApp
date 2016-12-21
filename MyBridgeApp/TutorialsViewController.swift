@@ -29,13 +29,13 @@ class TutorialsViewController: UIPageViewController, UIPageViewControllerDataSou
         tutorialsDelegate = self
         
         let (postTitleLabel, postExplLabel) = SingleTutorialViewController.postLabels()
-        let postVC = SingleTutorialViewController(titleLabel: postTitleLabel, explanationLabel: postExplLabel, videoURL: "")
+        let postVC = SingleTutorialViewController(titleLabel: postTitleLabel, explanationLabel: postExplLabel, videoFilename: "PostGray", videoExtension: "mp4")
         vcs.append(postVC)
         let (nectTitleLabel, nectExplLabel) = SingleTutorialViewController.nectLabels()
-        let nectVC = SingleTutorialViewController(titleLabel: nectTitleLabel, explanationLabel: nectExplLabel, videoURL: "")
+        let nectVC = SingleTutorialViewController(titleLabel: nectTitleLabel, explanationLabel: nectExplLabel, videoFilename: "ConnectGray", videoExtension: "mp4")
         vcs.append(nectVC)
         let (chatTitleLabel, chatExplLabel) = SingleTutorialViewController.chatLabels()
-        let chatVC = SingleTutorialViewController(titleLabel: chatTitleLabel, explanationLabel: chatExplLabel, videoURL: "")
+        let chatVC = SingleTutorialViewController(titleLabel: chatTitleLabel, explanationLabel: chatExplLabel, videoFilename: "AcceptChat", videoExtension: "mp4")
         vcs.append(chatVC)
         setViewControllers([vcs[0]], direction: .forward, animated: true, completion: nil)
         
@@ -43,7 +43,6 @@ class TutorialsViewController: UIPageViewController, UIPageViewControllerDataSou
         pageControl.center.x = DisplayUtility.screenWidth / 2
         pageControl.numberOfPages = vcs.count
         tutorialsDelegate?.tutorialsViewController(self, didUpdatePageCount: vcs.count)
-        //pageControl.pageIndicatorTintColor = .lightGray
         pageControl.pageIndicatorTintColor = .clear
         pageControl.currentPageIndicatorTintColor = .lightGray
         

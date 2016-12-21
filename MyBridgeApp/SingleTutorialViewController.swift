@@ -7,25 +7,31 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class SingleTutorialViewController: UIViewController {
     
+    let boundary = UIImageView()
     let titleLabel: UILabel
     let explanationLabel: UILabel
-    let videoURL: String
-    let video = UIWebView()
+    //let videoURL: String
+    let videoFilename: String
+    let videoExtension: String
+    //let video = UIWebView()
+    var moviePlayer = MPMoviePlayerController()
     
-    init(titleLabel: UILabel, explanationLabel: UILabel, videoURL: String) {
+    init(titleLabel: UILabel, explanationLabel: UILabel, videoFilename: String, videoExtension: String) {
         self.titleLabel = titleLabel
         self.explanationLabel = explanationLabel
-        self.videoURL = videoURL
+        self.videoFilename = videoFilename
+        self.videoExtension = videoExtension
         
         super.init(nibName: nil, bundle: nil)
     }
     
     convenience init() {
         let (titleLabel, explanationLabel) = SingleTutorialViewController.nectLabels()
-        self.init(titleLabel: titleLabel, explanationLabel: explanationLabel, videoURL: "")
+        self.init(titleLabel: titleLabel, explanationLabel: explanationLabel, videoFilename: "", videoExtension: "")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -40,7 +46,12 @@ class SingleTutorialViewController: UIViewController {
         phone.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 1.09*DisplayUtility.screenHeight)
         view.addSubview(phone)
         
-        let boundary = UIImageView()
+        let whiteView = UIView()
+        whiteView.backgroundColor = .white
+        whiteView.frame = CGRect(x: 0, y: 0, width: phone.frame.width, height: 0.1444*phone.frame.height)
+        phone.addSubview(whiteView)
+        
+        //let boundary = UIImageView()
         boundary.image = UIImage(named: "Tutorial_VideoBoundary")
         boundary.frame = CGRect(x: 0, y: 0.18823*DisplayUtility.screenHeight, width: 0.7139*DisplayUtility.screenWidth, height: 0.77616*DisplayUtility.screenHeight)
         boundary.center.x = DisplayUtility.screenWidth / 2
@@ -49,10 +60,30 @@ class SingleTutorialViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(explanationLabel)
         
-        video.frame = boundary.frame
-        if let url = URL(string: videoURL) {
-            video.loadRequest(URLRequest(url: url))
-            view.addSubview(video)
+        /*
+        video.frame = CGRect(x: boundary.frame.minX+1, y: boundary.frame.minY+1, width: boundary.frame.width-2, height: boundary.frame.height-2)
+        //video.scalesPageToFit = true
+        video.scrollView.isScrollEnabled = false
+        */
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let path = Bundle.main.path(forResource: videoFilename, ofType: videoExtension) {
+            let url = NSURL.fileURL(withPath: path)
+            moviePlayer = MPMoviePlayerController(contentURL: url)
+            moviePlayer.view.frame = CGRect(x: boundary.frame.minX+1, y: boundary.frame.minY+1, width: boundary.frame.width-2, height: boundary.frame.height-2)
+            moviePlayer.scalingMode = MPMovieScalingMode.fill
+            moviePlayer.isFullscreen = false
+            moviePlayer.controlStyle = MPMovieControlStyle.default
+            moviePlayer.controlStyle = .default
+            moviePlayer.movieSourceType = MPMovieSourceType.file
+            moviePlayer.play()
+            DispatchQueue.main.async {
+                self.view.addSubview(self.moviePlayer.view)
+            }
         }
     }
     

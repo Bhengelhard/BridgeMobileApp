@@ -52,6 +52,9 @@
 		903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */; };
 		9081C1001DEDE0EB00603393 /* AcceptIgnoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */; };
 		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
+		90CA09A31E0AA01A00330646 /* PostGray.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A21E0AA01A00330646 /* PostGray.mp4 */; };
+		90CA09A51E0AA0DD00330646 /* ConnectGray.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A41E0AA0DD00330646 /* ConnectGray.mp4 */; };
+		90CA09A71E0AA1FF00330646 /* AcceptChat.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A61E0AA1FF00330646 /* AcceptChat.mp4 */; };
 		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
 		CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */; };
 		CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829461CAA26D900DC86C9 /* ViewController.swift */; };
@@ -131,6 +134,9 @@
 		903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTutorialViewController.swift; path = MyBridgeApp/SingleTutorialViewController.swift; sourceTree = SOURCE_ROOT; };
 		9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
+		90CA09A21E0AA01A00330646 /* PostGray.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = PostGray.mp4; path = ../../../../../Movies/PostGray.mp4; sourceTree = "<group>"; };
+		90CA09A41E0AA0DD00330646 /* ConnectGray.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = ConnectGray.mp4; path = ../../../../../Movies/ConnectGray.mp4; sourceTree = "<group>"; };
+		90CA09A61E0AA1FF00330646 /* AcceptChat.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = AcceptChat.mp4; path = ../../../../../Movies/AcceptChat.mp4; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB5829461CAA26D900DC86C9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MyBridgeApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -249,6 +255,9 @@
 		814C3AC51B69877600E307BB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				90CA09A61E0AA1FF00330646 /* AcceptChat.mp4 */,
+				90CA09A41E0AA0DD00330646 /* ConnectGray.mp4 */,
+				90CA09A21E0AA01A00330646 /* PostGray.mp4 */,
 				30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */,
 				30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */,
 				E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */,
@@ -420,7 +429,10 @@
 			files = (
 				CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */,
 				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
+				90CA09A51E0AA0DD00330646 /* ConnectGray.mp4 in Resources */,
 				30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */,
+				90CA09A31E0AA01A00330646 /* PostGray.mp4 in Resources */,
+				90CA09A71E0AA1FF00330646 /* AcceptChat.mp4 in Resources */,
 				30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */,
 				30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */,
 			);
