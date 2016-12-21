@@ -28,9 +28,9 @@ class CustomNavigationBar: UIView {
             //leftBarButton?.setImage(leftBarButtonIconImage, for: .normal)
             if leftBarButtonIcon == "Right_Arrow" || leftBarButtonIcon == "Left_Arrow" {
                 leftImageView.frame = CGRect(x: 0.02525*DisplayUtility.screenWidth, y: 0.05*DisplayUtility.screenHeight, width: 0.0532*DisplayUtility.screenWidth, height: 0.02181*DisplayUtility.screenHeight)
-                leftBarButton?.frame = CGRect(x: 0.02525*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
+                leftBarButton?.frame = CGRect(x: 0.02525*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.15*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
             } else {
-                leftBarButton?.frame = CGRect(x: 0.02525*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+                leftBarButton?.frame = CGRect(x: 0.02525*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.15*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
                 leftImageView.frame = CGRect(x: 0.02525*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
             }
             leftBarButton?.contentMode = UIViewContentMode.scaleAspectFill
@@ -46,12 +46,12 @@ class CustomNavigationBar: UIView {
 //            rightBarButton?.setImage(rightBarButtonIconImage, for: .normal)
             if rightBarButtonIcon == "Right_Arrow" || rightBarButtonIcon == "Left_Arrow" {
                 rightImageView.frame = CGRect(x: 0.92155*DisplayUtility.screenWidth, y: 0.05*DisplayUtility.screenHeight, width: 0.0532*DisplayUtility.screenWidth, height: 0.02181*DisplayUtility.screenHeight)
-                rightBarButton?.frame = CGRect(x: 0.87475*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+                rightBarButton?.frame = CGRect(x: 0.87475*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.15*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
             } else if rightBarButtonIcon == "Leave_Conversation_Gray"{
                 rightImageView.frame = CGRect(x: 0.92155*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.0532*DisplayUtility.screenWidth, height: 0.0532*DisplayUtility.screenWidth)
-                rightBarButton?.frame = CGRect(x: 0.87475*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+                rightBarButton?.frame = CGRect(x: 0.87475*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.15*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
             } else {
-                rightBarButton?.frame = CGRect(x: 0.87475*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+                rightBarButton?.frame = CGRect(x: 0.87475*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.15*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
                 rightImageView.frame = CGRect(x: 0.87475*DisplayUtility.screenWidth, y: 0.04633*DisplayUtility.screenHeight, width: 0.1*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
             }
             rightBarButton?.contentMode = UIViewContentMode.scaleAspectFill
@@ -65,7 +65,7 @@ class CustomNavigationBar: UIView {
         if let titleText = title {
             if titleText == "necter" {
                 //Adding the title as a gradient text
-                let font = UIFont(name: "Verdana", size: 48)
+                let font = UIFont(name: "Verdana", size: 40)
                 let titleFrame = CGRect(x: 0, y: 0.04633*DisplayUtility.screenHeight, width: 0.5*DisplayUtility.screenWidth, height: 0.105*DisplayUtility.screenWidth)
                 let label = DisplayUtility.gradientLabel(text: titleText, frame: titleFrame, font: font!)
                 label.center.x = view.center.x

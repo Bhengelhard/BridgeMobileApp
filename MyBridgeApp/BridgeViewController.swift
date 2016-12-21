@@ -890,7 +890,6 @@ class BridgeViewController: UIViewController {
                 }
             }
             if removeCard{
-                
                 swipeCardView.removeFromSuperview()
             } else if showReasonForConnection {
                 
@@ -1072,6 +1071,7 @@ class BridgeViewController: UIViewController {
         print("connection Canceled called")
         view.bringSubview(toFront: connectIcon)
         view.bringSubview(toFront: disconnectIcon)
+        swipeCardView.alpha = 1
         connectIcon.center.x = 1.6*DisplayUtility.screenWidth
         connectIcon.alpha = 0.0
         //Put swipeCard back into place
@@ -1079,7 +1079,7 @@ class BridgeViewController: UIViewController {
         let stretch = rotation.scaledBy(x: 1, y: 1)
         UIView.animate(withDuration: 0.7, animations: {
             swipeCardView.transform = stretch
-            swipeCardView.frame = swipeCardView.swipeCardFrame()
+            swipeCardView.frame = self.swipeCardFrame
         })
     }
     
