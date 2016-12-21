@@ -58,6 +58,7 @@ class BridgeViewController: UIViewController {
     var swipeCardView = UIView()
     var postTapped = Bool()
     var darkLayer = UIView()
+    var secondSwipeCard = SwipeCard()
     
     //navigation bar creation
     var badgeCount = Int()
@@ -341,11 +342,10 @@ class BridgeViewController: UIViewController {
         swipeCardView.addGestureRecognizer(gesture)
         swipeCardView.isUserInteractionEnabled = true
         if let aboveView = aboveView {
-            
-            swipeCardView.frame.size = CGSize(width: 0.95*aboveView.frame.width, height: 0.95*aboveView.frame.height)
+            swipeCardView.frame.size = CGSize(width: /*0.95**/aboveView.frame.width, height: /*0.95**/aboveView.frame.height)
             swipeCardView.center = aboveView.center
-            swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
             
+            swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
             swipeCardView.isUserInteractionEnabled = false
             self.view.insertSubview(swipeCardView, belowSubview: aboveView)
             
@@ -353,9 +353,17 @@ class BridgeViewController: UIViewController {
             darkLayer.layer.cornerRadius = swipeCardView.layer.cornerRadius
             darkLayer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
             swipeCardView.addSubview(darkLayer)
+            
+            if secondSwipeCard.tag == 0 {
+                print("setting second swipe card tag to 1")
+                secondSwipeCard = swipeCardView
+                secondSwipeCard.tag = 1
+            }
+            
         }
         else {
             swipeCardView.frame = swipeCardView.swipeCardFrame()
+            swipeCardView.center.x = view.center.x
             swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
             swipeCardFrame = swipeCardView.frame
             
@@ -666,6 +674,8 @@ class BridgeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        secondSwipeCard.tag = 0
+        
         //This is setting the badge number to 0 when the user opens the app and needs to be fixed so the actual badge is set
         //UIApplication.shared.applicationIconBadgeNumber = 0
         
@@ -734,17 +744,31 @@ class BridgeViewController: UIViewController {
         let disconnectIconX = max(min((-1.5*(swipeCardView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
         let connectIconX = max(min(((-2.0/3.0)*(swipeCardView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
         
+        print("before second swipe card")
         //Changing second card in stack with Swipe
-        if arrayOfCardsInDeck.count > 1 {
-            let savedCenter = swipeCardView.center
-            print("percentage of page \(abs(swipeCardView.center.x - view.center.x)/DisplayUtility.screenWidth)")
-            arrayOfCardsInDeck[1].frame.size.width = 0.1*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)*(swipeCardFrame.width) + 0.95*swipeCardFrame.width
-            arrayOfCardsInDeck[1].frame.size.height = 0.1*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)*(swipeCardFrame.height) + 0.95*swipeCardFrame.height
+        if secondSwipeCard.tag != 0 {
+            print("have a second swipe card")
+//            let savedCenter = swipeCardView.center
+//            print("percentage of page \(abs(swipeCardView.center.x - view.center.x)/DisplayUtility.screenWidth)")
+//            if secondSwipeCard.frame.width < swipeCardFrame.width {
+//                secondSwipeCard.frame.size.width += abs(translation.x)
+//                
+//            }
+//            if secondSwipeCard.frame.height < swipeCardFrame.height {
+//                secondSwipeCard.frame.size.height += abs(translation.x)
+//                secondSwipeCard.frame.origin.y -= abs(translation.x)
+//            }
+//            
+//            secondSwipeCard.frame.size.width = 0.1*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)*(swipeCardFrame.width) + 0.95*swipeCardFrame.width
+//            secondSwipeCard.frame.size.height =  0.1*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)*(swipeCardFrame.height) + 0.95*swipeCardFrame.height
+//            secondSwipeCard.topHalf.frame = CGRect(x: 0, y: 0, width: secondSwipeCard.frame.width, height: 0.5*secondSwipeCard.frame.height)
+//            secondSwipeCard.bottomHalf.frame = CGRect(x: 0, y: 0.5*secondSwipeCard.frame.height, width: secondSwipeCard.frame.width, height: 0.5*secondSwipeCard.frame.height)
+//            print("width = \(secondSwipeCard.frame.size.width)")
+//            print("height = \(secondSwipeCard.frame.size.height)")
+//            swipeCardView.center = savedCenter
             
-            print("width = \(arrayOfCardsInDeck[1].frame.size.width)")
-            print("height = \(arrayOfCardsInDeck[1].frame.size.height)")
-            swipeCardView.center = savedCenter
-                
+            //secondSwipeCard.frame = swipeCardFrame
+            
             let darkLayerAlpha = min(max(((-4.0/5.0)*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)) + 0.4, 0), 0.5)
             darkLayer.alpha = darkLayerAlpha
             darkLayer.backgroundColor = UIColor.black
