@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wEy-zC-w02">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wEy-zC-w02">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -50,8 +50,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" id="CmX-LE-XNn"/>
-                        <segue destination="nIP-ev-yX8" kind="show" identifier="showSignUp" id="qw9-uB-ThK"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" animates="NO" id="CmX-LE-XNn"/>
+                        <segue destination="nIP-ev-yX8" kind="show" identifier="showSignUp" animates="NO" id="qw9-uB-ThK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VkP-Jr-Agi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -576,12 +576,12 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qw9-uB-ThK"/>
+        <segue reference="B19-eu-GHC"/>
+        <segue reference="CmX-LE-XNn"/>
         <segue reference="Ngn-5p-WNA"/>
         <segue reference="1Bx-ML-R6e"/>
-        <segue reference="ORi-q2-txU"/>
-        <segue reference="OnA-y9-bUb"/>
-        <segue reference="B19-eu-GHC"/>
         <segue reference="cy1-Ds-r2Z"/>
+        <segue reference="qw9-uB-ThK"/>
+        <segue reference="OnA-y9-bUb"/>
     </inferredMetricsTieBreakers>
 </document>
