@@ -57,7 +57,7 @@ class BridgeViewController: UIViewController {
     var shouldCheckInPair = Bool()
     var swipeCardView = UIView()
     var postTapped = Bool()
-    var darkLayer = UIView()
+    //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
     
     //navigation bar creation
@@ -342,23 +342,28 @@ class BridgeViewController: UIViewController {
         swipeCardView.addGestureRecognizer(gesture)
         swipeCardView.isUserInteractionEnabled = true
         if let aboveView = aboveView {
-            swipeCardView.frame.size = CGSize(width: /*0.95**/aboveView.frame.width, height: /*0.95**/aboveView.frame.height)
-            swipeCardView.center = aboveView.center
-            
-            swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
-            swipeCardView.isUserInteractionEnabled = false
-            self.view.insertSubview(swipeCardView, belowSubview: aboveView)
-            
-            darkLayer.frame = CGRect(x: 0, y: 0, width: swipeCardView.frame.width, height: swipeCardView.frame.height)
-            darkLayer.layer.cornerRadius = swipeCardView.layer.cornerRadius
-            darkLayer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-            swipeCardView.addSubview(darkLayer)
             
             if secondSwipeCard.tag == 0 {
                 print("setting second swipe card tag to 1")
                 secondSwipeCard = swipeCardView
                 secondSwipeCard.tag = 1
             }
+            
+            //Enhancement Needed: Second Card should start at 95% size and grow with swipe of first card in deck.
+            //Second card should also have dark layer that fades away with swipe of first card in deck.
+            swipeCardView.frame.size = CGSize(width: /*0.95**/swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
+            swipeCardView.center = aboveView.center
+            
+            swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+            swipeCardView.isUserInteractionEnabled = false
+            self.view.insertSubview(swipeCardView, belowSubview: aboveView)
+            
+//            darkLayer.frame = swipeCardView.frame//CGRect(x: 0, y: 0, width: swipeCardView.frame.width, height: swipeCardView.frame.height)
+//            darkLayer.layer.cornerRadius = swipeCardView.layer.cornerRadius
+//            darkLayer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+//            view.insertSubview(darkLayer, aboveSubview: secondSwipeCard)
+            
+            
             
         }
         else {
@@ -744,10 +749,15 @@ class BridgeViewController: UIViewController {
         let disconnectIconX = max(min((-1.5*(swipeCardView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
         let connectIconX = max(min(((-2.0/3.0)*(swipeCardView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
         
-        print("before second swipe card")
         //Changing second card in stack with Swipe
-        if secondSwipeCard.tag != 0 {
-            print("have a second swipe card")
+//        if secondSwipeCard.tag != 0 {
+//            let darkLayerAlpha = min(max(((-4.0/5.0)*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)) + 0.4, 0), 0.5)
+//            darkLayer.alpha = darkLayerAlpha
+//            
+//        }
+        
+//        if secondSwipeCard.tag != 0 {
+//            print("have a second swipe card")
 //            let savedCenter = swipeCardView.center
 //            print("percentage of page \(abs(swipeCardView.center.x - view.center.x)/DisplayUtility.screenWidth)")
 //            if secondSwipeCard.frame.width < swipeCardFrame.width {
@@ -766,13 +776,10 @@ class BridgeViewController: UIViewController {
 //            print("width = \(secondSwipeCard.frame.size.width)")
 //            print("height = \(secondSwipeCard.frame.size.height)")
 //            swipeCardView.center = savedCenter
-            
-            //secondSwipeCard.frame = swipeCardFrame
-            
-            let darkLayerAlpha = min(max(((-4.0/5.0)*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)) + 0.4, 0), 0.5)
-            darkLayer.alpha = darkLayerAlpha
-            darkLayer.backgroundColor = UIColor.black
-        }
+//            
+//            secondSwipeCard.frame = swipeCardFrame
+//            
+//            //        }
         
         //Limiting Y axis of swipe
         if swipeCardView.center.y > swipeCardFrame.origin.y + 0.5*swipeCardFrame.height  {
@@ -891,6 +898,17 @@ class BridgeViewController: UIViewController {
             }
             if removeCard{
                 swipeCardView.removeFromSuperview()
+            
+//                darkLayer.removeFromSuperview()
+//                
+//                //Set new secondSwipeCard and send darkLayer to front of secondSwipeCard
+//                if arrayOfCardsInDeck.count > 1 {
+//                    print("second swipe card is reset")
+//                    secondSwipeCard = arrayOfCardsInDeck[1] as! SwipeCard
+//                    darkLayer.backgroundColor = UIColor.blue
+//                    view.insertSubview(darkLayer, belowSubview: arrayOfCardsInDeck[0])
+//                }
+                
             } else if showReasonForConnection {
                 
             }
@@ -972,6 +990,8 @@ class BridgeViewController: UIViewController {
     }
     func callbackForNextPair(_ bridgeType:String) -> Void {
         if arrayOfCardsInDeck.count > 0 {
+            
+            //Enhancement Needed: This process should happen upon swipe left instead of after the callback
             arrayOfCardsInDeck.remove(at: 0)
             arrayOfCardColors.remove(at: 0)
             if arrayOfCardsInDeck.count > 0 {

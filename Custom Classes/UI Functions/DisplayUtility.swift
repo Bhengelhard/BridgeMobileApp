@@ -90,17 +90,25 @@ class DisplayUtility {
         let colors = [color1, color2, color3, color4, color5]
         let locations: [CGFloat] = [0.0, 0.25, 0.5, 0.75, 1.0]
         if let gradient = CGGradient(colorsSpace: colorspace, colors: colors as CFArray, locations: locations) {
+            print("got gradient")
             if let context = UIGraphicsGetCurrentContext() {
+                print("got context")
                 context.drawLinearGradient(gradient, start: CGPoint(x: 0, y: size.height/2), end: CGPoint(x: size.width, y: size.height/2), options: CGGradientDrawingOptions(rawValue: 0))
+                if let image = UIGraphicsGetImageFromCurrentImageContext() {
+                    print("got image")
+                    UIGraphicsEndImageContext()
+                    return UIColor(patternImage: image)
+                } else {
+                    UIGraphicsEndImageContext()
+                    return DisplayUtility.necterYellow
+                }
+            } else {
+                return DisplayUtility.necterYellow
             }
-        }
-        if let image = UIGraphicsGetImageFromCurrentImageContext() {
-            UIGraphicsEndImageContext()
-            return UIColor(patternImage: image)
         } else {
-            UIGraphicsEndImageContext()
             return DisplayUtility.necterYellow
         }
+        
         
     }
     

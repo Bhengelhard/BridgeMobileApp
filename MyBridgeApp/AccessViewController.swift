@@ -167,18 +167,23 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     
     func displayLoginWithFacebook() {
         let fbLoginButton = UIButton()
-        fbLoginButton.frame = CGRect(x: 0, y: 0.8748*DisplayUtility.screenHeight, width: 0.57292*DisplayUtility.screenWidth, height: 0.06822*DisplayUtility.screenHeight)
+        fbLoginButton.frame = CGRect(x: 0, y: 0.8748*DisplayUtility.screenHeight, width: 0.54125*DisplayUtility.screenWidth, height: 0.04093*DisplayUtility.screenHeight)
         fbLoginButton.center.x = view.center.x
-        fbLoginButton.setImage(#imageLiteral(resourceName: "FB_Login_Button"), for: .normal)
-        fbLoginButton.showsTouchWhenHighlighted = false
+        fbLoginButton.setTitle("LOGIN WITH FACEBOOK", for: .normal)
+        fbLoginButton.setTitleColor(UIColor.white, for: .normal)
+        fbLoginButton.setTitleColor(DisplayUtility.gradientColor(size: (fbLoginButton.titleLabel?.frame.size)!), for: .highlighted)
+        fbLoginButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 12)
+        fbLoginButton.backgroundColor = UIColor(red: 66.0/255.0, green: 103.0/255.0, blue: 178.0/255.0, alpha: 1)
+        fbLoginButton.layer.cornerRadius = 8
+        //fbLoginButton.showsTouchWhenHighlighted = false
         fbLoginButton.addTarget(self, action: #selector(fbLoginTapped(_:)), for: .touchUpInside)
         view.addSubview(fbLoginButton)
         
-        let noPostingLabel = UILabel(frame: CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.93*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight))
-        //label.center = CGPointMake(160, 284)
+        let noPostingLabel = UILabel(frame: CGRect(x: 0, y: 0.93*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight))
+        noPostingLabel.center.x = view.center.x
         noPostingLabel.textAlignment = NSTextAlignment.center
         noPostingLabel.text = "No need to get sour! We never post to Facebook."
-        noPostingLabel.font = UIFont(name: "BentonSans", size: 14)
+        noPostingLabel.font = UIFont(name: "BentonSans-Light", size: 12)
         noPostingLabel.textColor = UIColor.darkGray
         noPostingLabel.numberOfLines = 1
         noPostingLabel.alpha = 0
@@ -213,11 +218,9 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                 self.accessTextView.center.x = self.view.center.x
                 self.backgroundView.image = #imageLiteral(resourceName: "Access_Background_With_White")
             }
-            //let expandedAccessTextViewSize = CGSize(width: 0.9339*DisplayUtility.screenWidth, height: accessTextView.frame.height)
             let gradientColor = DisplayUtility.gradientColor(size: self.accessTextView.frame.size)
             self.accessTextView.textColor = gradientColor
             self.accessTextView.layer.borderColor = gradientColor.cgColor
-            //self.accessTextView.textAlignment = NSTextAlignment.left
         }
         
     }
@@ -302,10 +305,6 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
 
-        
-//        let localData = LocalData()
-//        localData.setHasSignedUp(false)
-//        localData.synchronize()
         //Check if the current user has signed in to decide what to display
         authenticateUser()
         
