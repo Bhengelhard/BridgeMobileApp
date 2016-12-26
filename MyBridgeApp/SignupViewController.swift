@@ -207,7 +207,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         localData.setHasSignedUp(true)
         localData.synchronize()
         
-        performSegue(withIdentifier: "showBridgePageFromSignUpView", sender: self)
+        performSegue(withIdentifier: "showTutorial", sender: self)
     }
     // Switches tapped
     @IBAction func businessSwitchTapped(_ sender: AnyObject) {

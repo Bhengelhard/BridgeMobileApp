@@ -95,7 +95,7 @@ class CustomNavigationBar: UIView {
     
     func updateRightBarButton(newIcon: String, newSelectedIcon: String?) {
         print("updating right bar button icon")
-        classRightBarButton.setImage(UIImage(named: newIcon), for: UIControlState())
+        rightImageView.image = UIImage(named: newIcon)
     }
 
 }

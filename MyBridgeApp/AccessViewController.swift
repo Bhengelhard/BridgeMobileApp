@@ -228,7 +228,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         //On Click of Join, check access code
         if text == "\n" {
-            if (accessTextView.text.lowercased() == "shabbat") {
+            if (accessTextView.text.lowercased() == "shabbat" || accessTextView.text.lowercased() == "necter community") {
                 displayLoginWithFacebook()
             } else {
                 accessTextView.text = "incorrect community code"

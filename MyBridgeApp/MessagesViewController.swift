@@ -1015,7 +1015,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                         messageObject["message_viewed"] = whoViewed
                         messageObject.saveInBackground(block: { (success, error) in
                             if success {
-                                
+                                print("current user saved to the message")
                             } else if error != nil {
                                 print(error)
                             }

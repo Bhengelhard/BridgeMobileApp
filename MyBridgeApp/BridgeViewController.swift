@@ -209,7 +209,7 @@ class BridgeViewController: UIViewController {
         //Display Revisit Button so user can run through their previously seen matches
         let revisitButtonY = displayNoMoreCardsLabel.frame.maxY + 0.02*DisplayUtility.screenHeight
         let revisitButtonFrame: CGRect = CGRect(x: 0.25*DisplayUtility.screenWidth, y: revisitButtonY, width: 0.5*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.06)
-        revisitButton = DisplayUtility.gradientButton(text: "Revisit Matches", frame: revisitButtonFrame)
+        revisitButton = DisplayUtility.gradientButton(text: "Revisit Matches", frame: revisitButtonFrame, fontSize: 20)
         revisitButton.setTitleColor(UIColor.black, for: .normal)
         revisitButton.addTarget(self, action: #selector(revitalizeMyPairs(_:)), for: .touchUpInside)
         revisitButton.alpha = 0
@@ -449,6 +449,8 @@ class BridgeViewController: UIViewController {
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
         //let myProfileVC = MyProfileViewController()
+        
+        //present(TutorialsViewController(), animated: false, completion: nil)
         //performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
         //self.present(myProfileVC, animated: true, completion: nil)
         leftBarButton.isSelected = true
