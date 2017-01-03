@@ -155,6 +155,17 @@ class DisplayUtility {
         view.frame.size.height = viewNewSize.height
     }
     
+    static func firstName(name: String) -> String {
+        let wordsInName = name.components(separatedBy: " ")
+        let firstName: String
+        if wordsInName.count > 0 {
+            firstName = wordsInName.first!
+        } else {
+            firstName = name
+        }
+        return firstName
+    }
+    
     static func firstNameLastNameInitial(name: String) -> String {
         let wordsInName = name.components(separatedBy: " ")
         let firstName: String

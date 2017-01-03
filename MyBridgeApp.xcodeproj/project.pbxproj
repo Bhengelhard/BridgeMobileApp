@@ -32,7 +32,7 @@
 		304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */; };
 		304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */; };
 		3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059ABF11DEC72FB0010A81B /* TrendingView.swift */; };
-		3059ABF41DFB04AC0010A81B /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059ABF31DFB04AC0010A81B /* MyProfileViewController.swift */; };
+		3059ABF41DFB04AC0010A81B /* MyProfileViewController_Old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059ABF31DFB04AC0010A81B /* MyProfileViewController_Old.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -50,11 +50,13 @@
 		9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9026A0671DDF83F1007CE4D9 /* NewMatch.swift */; };
 		903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CD1E01E75E0021D81A /* TutorialsViewController.swift */; };
 		903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */; };
-		9081C1001DEDE0EB00603393 /* AcceptIgnoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */; };
 		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
 		90CA09A31E0AA01A00330646 /* PostGray.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A21E0AA01A00330646 /* PostGray.mp4 */; };
 		90CA09A51E0AA0DD00330646 /* ConnectGray.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A41E0AA0DD00330646 /* ConnectGray.mp4 */; };
 		90CA09A71E0AA1FF00330646 /* AcceptChat.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A61E0AA1FF00330646 /* AcceptChat.mp4 */; };
+		90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */; };
+		90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AA1E0B080100330646 /* HexagonView.swift */; };
+		90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */; };
 		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
 		CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */; };
 		CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829461CAA26D900DC86C9 /* ViewController.swift */; };
@@ -111,7 +113,7 @@
 		304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendingNotificationView.swift; path = "Custom Classes/Custom Views/SendingNotificationView.swift"; sourceTree = "<group>"; };
 		304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircleView.swift; path = "Custom Classes/Custom Views/CircleView.swift"; sourceTree = "<group>"; };
 		3059ABF11DEC72FB0010A81B /* TrendingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrendingView.swift; path = "Custom Classes/Custom Views/TrendingView.swift"; sourceTree = "<group>"; };
-		3059ABF31DFB04AC0010A81B /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController.swift; path = MyBridgeApp/MyProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		3059ABF31DFB04AC0010A81B /* MyProfileViewController_Old.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController_Old.swift; path = MyBridgeApp/MyProfileViewController_Old.swift; sourceTree = SOURCE_ROOT; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -132,11 +134,13 @@
 		9026A0671DDF83F1007CE4D9 /* NewMatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatch.swift; path = "Custom Classes/Data Storage/NewMatch.swift"; sourceTree = "<group>"; };
 		903811CD1E01E75E0021D81A /* TutorialsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialsViewController.swift; path = MyBridgeApp/TutorialsViewController.swift; sourceTree = SOURCE_ROOT; };
 		903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTutorialViewController.swift; path = MyBridgeApp/SingleTutorialViewController.swift; sourceTree = SOURCE_ROOT; };
-		9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
 		90CA09A21E0AA01A00330646 /* PostGray.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = PostGray.mp4; path = ../../../../../Movies/PostGray.mp4; sourceTree = "<group>"; };
 		90CA09A41E0AA0DD00330646 /* ConnectGray.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = ConnectGray.mp4; path = ../../../../../Movies/ConnectGray.mp4; sourceTree = "<group>"; };
 		90CA09A61E0AA1FF00330646 /* AcceptChat.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = AcceptChat.mp4; path = ../../../../../Movies/AcceptChat.mp4; sourceTree = "<group>"; };
+		90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController.swift; path = MyBridgeApp/MyProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		90CA09AA1E0B080100330646 /* HexagonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexagonView.swift; path = "Custom Classes/Custom Views/HexagonView.swift"; sourceTree = "<group>"; };
+		90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB5829461CAA26D900DC86C9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MyBridgeApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -219,7 +223,8 @@
 				30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */,
 				304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */,
 				30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */,
-				9081C0FF1DEDE0EB00603393 /* AcceptIgnoreView.swift */,
+				90CA09AA1E0B080100330646 /* HexagonView.swift */,
+				90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -303,7 +308,7 @@
 				E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */,
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
 				E9D6DF0E1D7880B700138A1F /* EditProfileViewController.swift */,
-				3059ABF31DFB04AC0010A81B /* MyProfileViewController.swift */,
+				3059ABF31DFB04AC0010A81B /* MyProfileViewController_Old.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
 				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
 				E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */,
@@ -320,6 +325,7 @@
 				CBEFCD761CEDED9600695B15 /* Main.storyboard */,
 				903811CD1E01E75E0021D81A /* TutorialsViewController.swift */,
 				903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */,
+				90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */,
 			);
 			name = MyBridgeApp;
 			path = ParseStarterProject;
@@ -447,7 +453,6 @@
 			files = (
 				9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */,
 				E9D6DF131D7880CC00138A1F /* PrivacyPolicyViewController.swift in Sources */,
-				9081C1001DEDE0EB00603393 /* AcceptIgnoreView.swift in Sources */,
 				E9D6DF511D78836200138A1F /* SingleMessageContent.swift in Sources */,
 				3030C0B81DD54E3F0077F7AC /* UserInfo.swift in Sources */,
 				304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */,
@@ -460,7 +465,7 @@
 				30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */,
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */,
-				3059ABF41DFB04AC0010A81B /* MyProfileViewController.swift in Sources */,
+				3059ABF41DFB04AC0010A81B /* MyProfileViewController_Old.swift in Sources */,
 				3030C0BD1DD54E4D0077F7AC /* Users+CoreDataProperties.swift in Sources */,
 				3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
@@ -483,9 +488,12 @@
 				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
 				903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */,
 				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,
+				90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */,
 				3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */,
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
+				90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */,
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
+				90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */,
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,

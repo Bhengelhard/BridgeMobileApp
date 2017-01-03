@@ -426,9 +426,11 @@ class BridgeViewController: UIViewController {
         //performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
         //let myProfileVC = MyProfileViewController()
         
-        present(TutorialsViewController(), animated: false, completion: nil)
+        //present(TutorialsViewController(), animated: false, completion: nil)
+        present(MyProfileViewController(), animated: true, completion: nil)
         //performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
         //self.present(myProfileVC, animated: true, completion: nil)
+        
         leftBarButton.isSelected = true
     }
     func rightBarButtonTapped (_ sender: UIBarButtonItem){
@@ -1065,6 +1067,8 @@ class BridgeViewController: UIViewController {
             let mirror = Mirror(reflecting: vc)
             if mirror.subjectType == ProfileViewController.self {
                 self.transitionManager.animationDirection = "Left"
+            } else if mirror.subjectType == MyProfileViewController.self {
+                self.transitionManager.animationDirection = "left"
             } else if mirror.subjectType == OptionsFromBotViewController.self {
                 self.transitionManager.animationDirection = "Top"
                 let vc2 = vc as! OptionsFromBotViewController

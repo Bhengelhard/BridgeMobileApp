@@ -8,6 +8,7 @@
 
 import UIKit
 import MediaPlayer
+import AVKit
 
 class SingleTutorialViewController: UIViewController {
     
@@ -71,6 +72,15 @@ class SingleTutorialViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        /*
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch _ {
+            print("error with audi session")
+        }
+         */
+        
         if let path = Bundle.main.path(forResource: videoFilename, ofType: videoExtension) {
             let url = NSURL.fileURL(withPath: path)
             moviePlayer = MPMoviePlayerController(contentURL: url)
@@ -78,7 +88,6 @@ class SingleTutorialViewController: UIViewController {
             moviePlayer.scalingMode = MPMovieScalingMode.fill
             moviePlayer.isFullscreen = false
             moviePlayer.controlStyle = MPMovieControlStyle.default
-            moviePlayer.controlStyle = .default
             moviePlayer.movieSourceType = MPMovieSourceType.file
             moviePlayer.play()
             DispatchQueue.main.async {
