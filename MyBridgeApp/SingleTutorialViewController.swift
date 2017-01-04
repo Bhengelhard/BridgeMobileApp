@@ -17,21 +17,23 @@ class SingleTutorialViewController: UIViewController {
     //let videoURL: String
     let videoFilename: String
     let videoExtension: String
+    let endTutorialButton: UIButton
     //let video = UIWebView()
     var moviePlayer = MPMoviePlayerController()
     
-    init(titleLabel: UILabel, explanationLabel: UILabel, videoFilename: String, videoExtension: String) {
+    init(titleLabel: UILabel, explanationLabel: UILabel, endTutorialButton: UIButton, videoFilename: String, videoExtension: String) {
         self.titleLabel = titleLabel
         self.explanationLabel = explanationLabel
         self.videoFilename = videoFilename
         self.videoExtension = videoExtension
+        self.endTutorialButton = endTutorialButton
         
         super.init(nibName: nil, bundle: nil)
     }
     
     convenience init() {
         let (titleLabel, explanationLabel) = SingleTutorialViewController.nectLabels()
-        self.init(titleLabel: titleLabel, explanationLabel: explanationLabel, videoFilename: "", videoExtension: "")
+        self.init(titleLabel: titleLabel, explanationLabel: explanationLabel, endTutorialButton: UIButton(), videoFilename: "", videoExtension: "")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -59,6 +61,7 @@ class SingleTutorialViewController: UIViewController {
         
         view.addSubview(titleLabel)
         view.addSubview(explanationLabel)
+        view.addSubview(endTutorialButton)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -123,7 +126,7 @@ class SingleTutorialViewController: UIViewController {
         return (titleLabel, explanationLabel)
     }
     
-    static func chatLabels() -> (UILabel, UILabel) {
+    static func chatLabels() -> (UILabel, UILabel, UIButton) {
         let titleLabel = UILabel()
         titleLabel.frame = CGRect(x: 0.10512*DisplayUtility.screenWidth, y: 0.09382*DisplayUtility.screenHeight, width: 0.0, height: 0.0)
         titleLabel.text = "chat."
@@ -140,9 +143,17 @@ class SingleTutorialViewController: UIViewController {
         explanationLabel.textAlignment = .center
         explanationLabel.textColor = .black
         explanationLabel.adjustsFontSizeToFitWidth = true
-                
-        return (titleLabel, explanationLabel)
+        
+        let endTutorialButtonFrame = CGRect(x: 0.65*DisplayUtility.screenWidth, y: 0.0325*DisplayUtility.screenHeight, width: 0.3*DisplayUtility.screenWidth, height: 0.04093*DisplayUtility.screenHeight)
+        let endTutorialButton = DisplayUtility.gradientButton(text: "BEGIN 'NECTING", frame: endTutorialButtonFrame, fontSize: 12)
+        endTutorialButton.layer.cornerRadius = 8
+        endTutorialButton.setTitleColor(UIColor.black, for: .normal)
+        endTutorialButton.layer.borderColor = DisplayUtility.gradientColor(size: endTutorialButton.frame.size).cgColor
+        endTutorialButton.layer.borderWidth = 2
+        
+        return (titleLabel, explanationLabel, endTutorialButton)
     }
+    
     
     //This button is for the user to click on the completion of the tutorial
     static func tutorialComplete() -> (UIButton) {

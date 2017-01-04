@@ -28,7 +28,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
     let friendshipSwitch = UISwitch()
     let loveSwitch = UISwitch()
     let interestedLabel = UILabel()
-    let beginConnectingButton = UIButton()
+    var beginConnectingButton = UIButton()
     let updateLaterLabel = UILabel()
     let businessIcon = UIImageView()
     let loveIcon = UIImageView()
@@ -204,7 +204,6 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             localData.setMainProfilePicture(imageData)
         }
         localData.setUsername(editableName)
-        localData.setHasSignedUp(true)
         localData.synchronize()
         
         performSegue(withIdentifier: "showTutorial", sender: self)
@@ -370,6 +369,10 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         view.addGestureRecognizer(outsideTapGesture)
         
         displayProfilePictureButton()
+        
+        let beginConnectingButtonFrame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
+        beginConnectingButton = DisplayUtility.gradientButton(text: "View Tutorial", frame: beginConnectingButtonFrame, fontSize: 20)
+        
     
         if mainTitle.text == noNameText {
             beginConnectingButton.layer.borderColor = UIColor.lightGray.cgColor
@@ -377,19 +380,17 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             beginConnectingButton.isEnabled = false
         }
         
-        beginConnectingButton.setTitle("Begin Connecting", for: UIControlState())
-        beginConnectingButton.titleLabel!.font = UIFont(name: "BentonSans", size: 20)
-        beginConnectingButton.layer.cornerRadius = 7.0
-        beginConnectingButton.layer.borderWidth = 4.0
-        beginConnectingButton.clipsToBounds = true
+        
         beginConnectingButton.setTitleColor(UIColor.black, for: UIControlState())
+        
+        let gradientColor = DisplayUtility.gradientColor(size: beginConnectingButton.frame.size)
         beginConnectingButton.addTarget(self, action: #selector(beginConnectingTapped(_:)), for: .touchUpInside)
         if editableName == "" || editableName == noNameText {
             beginConnectingButton.layer.borderColor = UIColor.lightGray.cgColor
             beginConnectingButton.isEnabled = false
         } else {
-            beginConnectingButton.layer.borderColor = necterYellow.cgColor
-            beginConnectingButton.setTitleColor(necterYellow, for: .highlighted)
+            beginConnectingButton.layer.borderColor = gradientColor.cgColor
+            beginConnectingButton.setTitleColor(gradientColor, for: .highlighted)
         }
         
         //label below beginConnecting Button
@@ -459,7 +460,6 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             friendshipLabel.center.y = friendshipIcon.center.y
             friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             friendshipSwitch.center.y = friendshipLabel.center.y
-            beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
             updateLaterLabel.frame = CGRect(x: 0.05*screenWidth, y: 0.925*screenHeight, width: 0.9*screenWidth, height: 0.05*screenHeight)
             
         } else {
@@ -490,7 +490,6 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
             friendshipLabel.center.y = friendshipIcon.center.y
             friendshipSwitch.frame = CGRect(x: 0.7*screenWidth, y: 0, width: 0, height: 0)
             friendshipSwitch.center.y = friendshipLabel.center.y
-            beginConnectingButton.frame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
             updateLaterLabel.frame = CGRect(x: 0.05*screenWidth, y: 0.925*screenHeight, width: 0.9*screenWidth, height: 0.05*screenHeight)
             
         }

@@ -592,10 +592,10 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="udx-ZE-STT"/>
         <segue reference="Ngn-5p-WNA"/>
         <segue reference="1Bx-ML-R6e"/>
-        <segue reference="CmX-LE-XNn"/>
-        <segue reference="B19-eu-GHC"/>
         <segue reference="OnA-y9-bUb"/>
+        <segue reference="B19-eu-GHC"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -29,14 +29,15 @@ class TutorialsViewController: UIPageViewController, UIPageViewControllerDataSou
         tutorialsDelegate = self
                 
         let (postTitleLabel, postExplLabel) = SingleTutorialViewController.postLabels()
-        let postVC = SingleTutorialViewController(titleLabel: postTitleLabel, explanationLabel: postExplLabel, videoFilename: "PostGray", videoExtension: "mp4")
+        let postVC = SingleTutorialViewController(titleLabel: postTitleLabel, explanationLabel: postExplLabel, endTutorialButton: UIButton(), videoFilename: "PostGray", videoExtension: "mp4")
         vcs.append(postVC)
         let (nectTitleLabel, nectExplLabel) = SingleTutorialViewController.nectLabels()
-        let nectVC = SingleTutorialViewController(titleLabel: nectTitleLabel, explanationLabel: nectExplLabel, videoFilename: "ConnectGray", videoExtension: "mp4")
+        let nectVC = SingleTutorialViewController(titleLabel: nectTitleLabel, explanationLabel: nectExplLabel, endTutorialButton: UIButton(), videoFilename: "ConnectGray", videoExtension: "mp4")
         vcs.append(nectVC)
-        let (chatTitleLabel, chatExplLabel) = SingleTutorialViewController.chatLabels()
-        let chatVC = SingleTutorialViewController(titleLabel: chatTitleLabel, explanationLabel: chatExplLabel, videoFilename: "AcceptChat", videoExtension: "mp4")
+        let (chatTitleLabel, chatExplLabel, chatButton) = SingleTutorialViewController.chatLabels()
+        let chatVC = SingleTutorialViewController(titleLabel: chatTitleLabel, explanationLabel: chatExplLabel, endTutorialButton: chatButton, videoFilename: "AcceptChat", videoExtension: "mp4")
         vcs.append(chatVC)
+        chatButton.addTarget(self, action: #selector(endTutorialButtonTapped(_:)), for: .touchUpInside)
         setViewControllers([vcs[0]], direction: .forward, animated: true, completion: nil)
         
         pageControl.frame = CGRect(x: 0, y: 0.04138*DisplayUtility.screenHeight, width: 0, height: 0.00976*DisplayUtility.screenHeight)
@@ -47,6 +48,15 @@ class TutorialsViewController: UIPageViewController, UIPageViewControllerDataSou
         pageControl.currentPageIndicatorTintColor = .lightGray
         
         view.addSubview(pageControl)
+    }
+    
+    @objc func endTutorialButtonTapped(_ sender: UIButton) {
+        print("endTutorialButtonTapped")
+        let localData = LocalData()
+        localData.setHasSignedUp(true)
+        localData.synchronize()
+
+        performSegue(withIdentifier: "showBridgePage", sender: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -163,6 +163,17 @@ class FacebookFunctions {
                                 PFUser.current()?["interested_in_friendship"] = true
                                 PFUser.current()?["ran_out_of_pairs"] = 0
                                 
+                                //Adding access code to current user field access_codes to identify which communities the user has joined
+                                if let accessVC = vc as? AccessViewController {
+                                    if let accessCodes = PFUser.current()?["access_codes"] as? [String] {
+                                        if !accessCodes.contains(accessVC.accessCode) {
+                                            var mutableAccessCodes = accessCodes
+                                            PFUser.current()?["access_codes"] = mutableAccessCodes.append(accessVC.accessCode)
+                                        }
+                                    } else {
+                                        PFUser.current()?["access_codes"] = [accessVC.accessCode]
+                                    }
+                                }
                                 PFUser.current()?.saveInBackground()
                                 
                                 //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
@@ -196,6 +207,22 @@ class FacebookFunctions {
                             print("user is not new but we are getting his picture")
                             LocalStorageUtility().getMainProfilePictureFromParse()
                         }
+                        
+//                        //Adding access code to current user field access_codes to identify which communities the user has joined
+//                        if let accessVC = vc as? AccessViewController {
+//                            if !accessVC.accessCode.isEmpty {
+//                                if let accessCodes = PFUser.current()?["access_codes"] as? [String] {
+//                                    if !accessCodes.contains(accessVC.accessCode) {
+//                                        var mutableAccessCodes = accessCodes
+//                                        PFUser.current()?["access_codes"] = mutableAccessCodes.append(accessVC.accessCode)
+//                                    }
+//                                } else {
+//                                    PFUser.current()?["access_codes"] = [accessVC.accessCode]
+//                                }
+//                                PFUser.current()?.saveInBackground()
+//                            }
+//                        }
+                        
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.5 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: { () -> Void in
                             //stop the spinner animation and reactivate the interaction with user
                             //self.activityIndicator.stopAnimating()

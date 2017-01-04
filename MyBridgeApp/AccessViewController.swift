@@ -26,6 +26,8 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     var locationManager = CLLocationManager()
     var geoPoint:PFGeoPoint?
     
+    var accessCode = ""
+    
     //User Interactions
     var tapGestureRecognizer = UITapGestureRecognizer()
 
@@ -104,6 +106,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         PFUser.current()?.fetchInBackground(block: { (object, error) in
             let localData = LocalData()
             let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
+            
             //Updating the user's friends
             self.updateUser()
             if (localData.getUsername() != nil) && ((PFUser.current()!.objectId) != nil){ //remember to change this back to username
@@ -115,7 +118,6 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                 if hasSignedUp {
                     self.performSegue(withIdentifier: "showBridgeViewController", sender: self)
                 } else {
-                    //self.performSegue(withIdentifier: "showSignUp", sender: self)
                     self.displayAccessTextView()
                 }
             }
@@ -200,8 +202,6 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         }
         
         accessTextView.removeFromSuperview()
-        
-       
     }
     
     func fbLoginTapped (_ sender: UIButton) {
@@ -228,7 +228,13 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         //On Click of Join, check access code
         if text == "\n" {
-            if (accessTextView.text.lowercased() == "shabbat" || accessTextView.text.lowercased() == "necter community") {
+            if accessTextView.text.lowercased() == "shabbat" {
+                accessCode = "shabbat"
+                
+                displayLoginWithFacebook()
+            } else if accessTextView.text.lowercased() == "necter community" {
+                accessCode = "necter community"
+                
                 displayLoginWithFacebook()
             } else {
                 accessTextView.text = "incorrect community code"
@@ -315,13 +321,13 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination
-        let mirror = Mirror(reflecting: vc)
-        if mirror.subjectType == ViewController.self {
-            let vc2 = vc as! ViewController
-            vc2.geoPoint = self.geoPoint
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        let vc = segue.destination
+//        let mirror = Mirror(reflecting: vc)
+//        if mirror.subjectType == ViewController.self {
+//            let vc2 = vc as! ViewController
+//            vc2.geoPoint = self.geoPoint
+//        }
+//    }
 
 }
