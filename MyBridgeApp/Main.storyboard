@@ -610,6 +610,10 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="VuP-4s-60A" firstAttribute="centerY" secondItem="0Z4-Lo-Wvg" secondAttribute="centerY" id="faZ-3X-3aQ"/>
+                            <constraint firstItem="VuP-4s-60A" firstAttribute="centerX" secondItem="0Z4-Lo-Wvg" secondAttribute="centerX" id="ymY-TW-xxt"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="scrollView" destination="Sos-l8-UsS" id="vHT-Tq-ivR"/>
