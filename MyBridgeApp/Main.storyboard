@@ -585,6 +585,33 @@
             </objects>
             <point key="canvasLocation" x="2500" y="711"/>
         </scene>
+        <!--New Message-->
+        <scene sceneID="gKt-8o-neo">
+            <objects>
+                <viewController title="New Message" id="cqv-jo-UDQ" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hqw-OH-IRc"/>
+                        <viewControllerLayoutGuide type="bottom" id="MV8-Qh-iIx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0Z4-Lo-Wvg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sos-l8-UsS">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <connections>
+                        <outlet property="scrollView" destination="Sos-l8-UsS" id="vHT-Tq-ivR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YPd-jH-yJP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3511" y="-1742"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Load Page Option A Scaled to Iphone 6.png" width="200" height="360"/>
