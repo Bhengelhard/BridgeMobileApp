@@ -727,6 +727,7 @@ class BridgeViewController: UIViewController {
         
     }
     override func viewDidAppear(_ animated: Bool) {
+		PFCloudFunctions().updateApplicationBadge()
         if postTapped {
             sleep(UInt32(0.2))
             missionControlView.displayPostRequest()

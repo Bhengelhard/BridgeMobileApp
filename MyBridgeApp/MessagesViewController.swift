@@ -820,7 +820,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
     }
     override func viewDidAppear(_ animated: Bool) {
-        
+        PFCloudFunctions().updateApplicationBadge()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
