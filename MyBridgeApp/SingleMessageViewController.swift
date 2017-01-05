@@ -870,6 +870,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = SingleMessageTableCell()
+		// FIXME: next line crashes sometimes due to the unwrapping
         let messageContent = objectIDToMessageContentArrayMapping[singleMessagePositionToObjectIDMapping[(indexPath as NSIndexPath).row]!]!
         let singleMessageContent = SingleMessageContent(messageContent: messageContent)
         cell.singleMessageContent = singleMessageContent
