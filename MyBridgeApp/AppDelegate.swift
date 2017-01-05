@@ -145,19 +145,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("UIApplicationState.Background")
             }else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
-                let aps = userInfo["aps"] as? NSDictionary
-                let installation = PFInstallation.current()
-                if let badge = aps!["badge"] as? Int {
-                    //Badge is maxed out at 3 so user doesn't get overwhelmed
-                    if badge > 3 {
-                        installation.badge = 3
-                    } else {
-                        installation.badge = badge
-                    }
-                } else {
-                    installation.badge = 1
-                }
-                installation.saveInBackground()
             }
             else{
                 print("None")
@@ -172,19 +159,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("UIApplicationState.Background")
             }else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
-                let aps = userInfo["aps"] as? NSDictionary
-                let installation = PFInstallation.current()
-                if let badge = aps!["badge"] as? Int {
-                    //Badge is maxed out at 3 so user doesn't get overwhelmed
-                    if badge > 3 {
-                        installation.badge = 3
-                    } else {
-                        installation.badge = badge
-                    }
-                } else {
-                    installation.badge = 1
-                }
-                installation.saveInBackground()
             }
             else{
                 print("None")
