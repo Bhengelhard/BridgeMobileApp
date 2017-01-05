@@ -143,7 +143,6 @@ class DBSavingFunctions {
         if newBadgeCount < 0 {
             newBadgeCount = 0
         }
-        UIApplication.shared.applicationIconBadgeNumber = newBadgeCount
         let installation = PFInstallation.current()
         installation.badge = newBadgeCount
         installation.saveInBackground()
