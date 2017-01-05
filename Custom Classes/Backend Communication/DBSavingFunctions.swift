@@ -137,6 +137,8 @@ class DBSavingFunctions {
 
     //decrease the badgeCount by 1
     static func decrementBadge() {
+		PFCloudFunctions().updateApplicationBadge();
+
         let currentBadgeCount = UIApplication.shared.applicationIconBadgeNumber
         var newBadgeCount = currentBadgeCount - 1
         //making sure badge count doesn't go below 0
