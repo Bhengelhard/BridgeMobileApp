@@ -727,6 +727,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         let query: PFQuery = PFQuery(className: "BridgePairings")
         query.whereKey("bridged", equalTo: true)
         query.limit = 10000
+        query.whereKey("user_objectIds", contains: PFUser.current()?.objectId)
         query.findObjectsInBackground(block: { (results, error) -> Void in
             
             if let error = error {
@@ -734,8 +735,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             else if let results = results {
                 print(results.count)
-                for i in 0..<results.count{
-                    let result = results[i]
+                for result in results {
                     let objectId = result.objectId
                     
                     var currentUser_objectId = ""
