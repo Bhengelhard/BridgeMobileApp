@@ -48,12 +48,12 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     let transitionManager = TransitionManager()
     
    
+    /// Updates Messages.message_viewed with the objectId of the current user
     func updateNoOfPushNotificationsOnBadge(){
         let messageQuery = PFQuery(className: "Messages")
         messageQuery.getObjectInBackground(withId: messageId, block: { (object, error) in
             if error == nil {
                 if let object = object {
-                    // update the no of messages viewed in a Thread by the current user - Start
                     if var ob = object["message_viewed"] as? [String] {
                         if !ob.contains((PFUser.current()?.objectId)!) {
                             ob.append((PFUser.current()?.objectId)!)
@@ -64,30 +64,8 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     else {
                         object["message_viewed"] = [(PFUser.current()?.objectId)!]
                     }
-                    let installation = PFInstallation.current()
-                    if let noOfSingleMessages = object["no_of_single_messages"] as? Int {
-                        if let singleMessagesViewed = object["no_of_single_messages_viewed"] {
-                            if var noOfSingleMessagesViewed = NSKeyedUnarchiver.unarchiveObject(with: singleMessagesViewed as! Data)! as? [String:Int] {
-                                if noOfSingleMessagesViewed[PFUser.current()!.objectId!] == nil {
-                                    noOfSingleMessagesViewed[PFUser.current()!.objectId!] = 0
-                                }
-                                
-                                installation.badge = installation.badge - (noOfSingleMessages - noOfSingleMessagesViewed[PFUser.current()!.objectId!]!)
-                                
-                                noOfSingleMessagesViewed[PFUser.current()!.objectId!] = noOfSingleMessages
-                                object["no_of_single_messages_viewed"] = NSKeyedArchiver.archivedData(withRootObject: noOfSingleMessagesViewed)
-                                object.saveInBackground(block: { (success, error) in
-                                    if error == nil && success {
-                                        installation.saveInBackground()
-                                        
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    
-                    
-                    // update the no of messages viewed in a Thread by the current user - End
+
+					object.saveInBackground()
                 }
             }
         })
