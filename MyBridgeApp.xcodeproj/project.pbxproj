@@ -632,7 +632,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Beta;
+				PRODUCT_BUNDLE_IDENTIFIER = social.necter;
 				PRODUCT_NAME = MyBridgeApp;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -661,7 +661,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Bridge.Beta;
+				PRODUCT_BUNDLE_IDENTIFIER = social.necter;
 				PRODUCT_NAME = MyBridgeApp;
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
