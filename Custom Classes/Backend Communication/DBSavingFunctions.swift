@@ -34,8 +34,8 @@ class DBSavingFunctions {
             
             //Push Notification Messages
             let pfCloudFunctions = PFCloudFunctions()
-            let notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + bridgePairings[x].user2!.bridgeType!
-            let notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + bridgePairings[x].user2!.bridgeType!
+            let notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + type
+            let notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + type
             //Users being connected
             let userObjectId1 = bridgePairings[x].user1!.userId!
             let userObjectId2 = bridgePairings[x].user2!.userId!
