@@ -42,6 +42,8 @@
 		30877DB41E0C63E400025EB4 /* ConnectGray.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 30877DB11E0C63E400025EB4 /* ConnectGray.mp4 */; };
 		30877DB51E0C63E400025EB4 /* PostGray.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 30877DB21E0C63E400025EB4 /* PostGray.mp4 */; };
 		30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */; };
+		30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */; };
+		30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */; };
 		30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */; };
 		30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */; };
 		30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */; };
@@ -124,6 +126,8 @@
 		30877DB11E0C63E400025EB4 /* ConnectGray.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = ConnectGray.mp4; path = Movies/ConnectGray.mp4; sourceTree = "<group>"; };
 		30877DB21E0C63E400025EB4 /* PostGray.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = PostGray.mp4; path = Movies/PostGray.mp4; sourceTree = "<group>"; };
 		30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesView.swift; path = "Custom Classes/Custom Views/NewMatchesView.swift"; sourceTree = "<group>"; };
+		30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptedConnectionNotification.swift; path = "Custom Classes/Custom Views/AcceptedConnectionNotification.swift"; sourceTree = "<group>"; };
+		30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBRetrievingFunctions.swift; path = "Custom Classes/Backend Communication/DBRetrievingFunctions.swift"; sourceTree = "<group>"; };
 		30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HalfSwipeCard.swift; path = "Custom Classes/Custom Views/HalfSwipeCard.swift"; sourceTree = "<group>"; };
 		30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
@@ -216,6 +220,7 @@
 				3030C0BE1DD54E5E0077F7AC /* CustomKeyboard.swift */,
 				3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */,
 				3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */,
+				30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */,
 				3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */,
 				3059ABF11DEC72FB0010A81B /* TrendingView.swift */,
 				3030C0D41DD550240077F7AC /* SwipeCard.swift */,
@@ -234,6 +239,7 @@
 				301B1C541E04473A00D507B8 /* FacebookFunctions.swift */,
 				304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */,
 				304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */,
+				30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */,
 			);
 			name = "Backend Communication";
 			sourceTree = "<group>";
@@ -410,6 +416,7 @@
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 7Y7JRS85QB;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -503,6 +510,7 @@
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
 				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,
+				30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */,
 				301B1C551E04473A00D507B8 /* FacebookFunctions.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */,
@@ -516,6 +524,7 @@
 				3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */,
 				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
+				30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */,
 				3030C0CE1DD54E8F0077F7AC /* Downloader.swift in Sources */,
 				903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */,
 				E9D6DF4E1D78835800138A1F /* SignupViewController.swift in Sources */,
@@ -621,7 +630,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyBridgeApp/MyBridgeApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7Y7JRS85QB;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -635,6 +644,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = social.necter;
 				PRODUCT_NAME = MyBridgeApp;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;

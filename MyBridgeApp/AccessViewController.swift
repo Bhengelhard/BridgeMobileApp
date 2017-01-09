@@ -310,7 +310,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
-
+        
         //Check if the current user has signed in to decide what to display
         authenticateUser()
         
