@@ -30,6 +30,7 @@ class MyProfileViewController: UIViewController {
     var businessStatus: String?
     var loveStatus: String?
     var friendshipStatus: String?
+    let friendsAndNectsView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,17 +99,59 @@ class MyProfileViewController: UIViewController {
             let hexWidth = 0.38154*DisplayUtility.screenWidth
             let hexHeight = hexWidth * sqrt(3) / 2
             
+            let downloader = Downloader()
+            
             topHexView.frame = CGRect(x: 0, y: userSettingsButton.frame.maxY + 0.033*DisplayUtility.screenHeight, width: hexWidth, height: hexHeight)
             topHexView.center.x = DisplayUtility.screenWidth / 2
+            if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+                downloader.imageFromURL(URL: url, callBack: { (image) in
+                    if let newImage = self.fitImageToView(viewSize: self.topHexView.frame.size, image: image) {
+                        self.topHexView.hexBackgroundColor = UIColor(patternImage: newImage)
+                    } else {
+                        self.topHexView.hexBackgroundColor = UIColor(patternImage: image)
+                    }
+                    self.topHexView.setNeedsDisplay()
+                })
+            }
             scrollView.addSubview(topHexView)
             
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
+            if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+                downloader.imageFromURL(URL: url, callBack: { (image) in
+                    if let newImage = self.fitImageToView(viewSize: self.leftHexView.frame.size, image: image) {
+                        self.leftHexView.hexBackgroundColor = UIColor(patternImage: newImage)
+                    } else {
+                        self.leftHexView.hexBackgroundColor = UIColor(patternImage: image)
+                    }
+                    self.leftHexView.setNeedsDisplay()
+                })
+            }
             scrollView.addSubview(leftHexView)
             
             rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
+            if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+                downloader.imageFromURL(URL: url, callBack: { (image) in
+                    if let newImage = self.fitImageToView(viewSize: self.rightHexView.frame.size, image: image) {
+                        self.rightHexView.hexBackgroundColor = UIColor(patternImage: newImage)
+                    } else {
+                        self.rightHexView.hexBackgroundColor = UIColor(patternImage: image)
+                    }
+                    self.rightHexView.setNeedsDisplay()
+                })
+            }
             scrollView.addSubview(rightHexView)
             
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
+            if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+                downloader.imageFromURL(URL: url, callBack: { (image) in
+                    if let newImage = self.fitImageToView(viewSize: self.bottomHexView.frame.size, image: image) {
+                        self.bottomHexView.hexBackgroundColor = UIColor(patternImage: newImage)
+                    } else {
+                        self.bottomHexView.hexBackgroundColor = UIColor(patternImage: image)
+                    }
+                    self.bottomHexView.setNeedsDisplay()
+                })
+            }
             scrollView.addSubview(bottomHexView)
             
             numNectedLastWeekLabel.textColor = .black
@@ -171,9 +214,55 @@ class MyProfileViewController: UIViewController {
             statusLabel.center.x = DisplayUtility.screenWidth / 2
             scrollView.addSubview(statusLabel)
             
+            scrollView.addSubview(friendsAndNectsView)
+            
+            /*
+            let myFriendsButton = UIButton()
+            myFriendsButton.setTitle("MY FRIENDS", for: .normal)
+            myFriendsButton.setTitleColor(.black, for: .normal)
+            myFriendsButton.titleLabel?.textAlignment = .center
+            myFriendsButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 12)
+            myFriendsButton.sizeToFit()
+            myFriendsButton.frame = CGRect(x: 0.20*DisplayUtility.screenWidth, y: 0, width: myFriendsButton.frame.width, height: myFriendsButton.frame.height)
+            friendsAndNectsView.addSubview(myFriendsButton)
+            
+            let myNectsButton = UIButton()
+            myNectsButton.setTitle("MY 'NECTS", for: .normal)
+            myNectsButton.setTitleColor(.gray, for: .normal)
+            myNectsButton.titleLabel?.textAlignment = .center
+            myNectsButton.titleLabel?.font = myFriendsButton.titleLabel?.font
+            myNectsButton.sizeToFit()
+            myNectsButton.frame = CGRect(x: 0, y: myFriendsButton.frame.minY, width: myNectsButton.frame.width, height: myNectsButton.frame.height)
+            myNectsButton.center.x = DisplayUtility.screenWidth - myFriendsButton.center.x
+            friendsAndNectsView.addSubview(myNectsButton)
+            
+            let myFriendsSerachController = UISearchController(searchResultsController: nil)
+            myFriendsSerachController.searchResultsUpdater = self
+            myFriendsSerachController.dimsBackgroundDuringPresentation = false
+            
+            
+            let myFriendsSearchBar = UISearchBar()
+            myFriendsSearchBar.frame = CGRect(x:0, y: myFriendsButton.frame.maxY + 0.01*DisplayUtility.screenHeight, width: 0.92089*DisplayUtility.screenWidth, height: 0.04029*DisplayUtility.screenHeight)
+            myFriendsSearchBar.center.x = DisplayUtility.screenWidth / 2
+            myFriendsSearchBar.showsCancelButton = false
+            myFriendsSearchBar.layer.cornerRadius = 10
+            friendsAndNectsView.addSubview(myFriendsSearchBar)
+            
+            friendsAndNectsView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: myFriendsSearchBar.frame.maxY)
+                */
+ 
             layoutBottomBasedOnStatus()
         }
         
+    }
+    
+    func fitImageToView(viewSize: CGSize, image: UIImage) -> UIImage? {
+        var resultImage: UIImage?
+        UIGraphicsBeginImageContext(viewSize)
+        image.draw(in: CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height))
+        resultImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return resultImage;
     }
     
     func goBack(_ sender: UIButton) {
@@ -262,7 +351,11 @@ class MyProfileViewController: UIViewController {
     }
     
     func layoutBottomBasedOnStatus() {
-        self.scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(DisplayUtility.screenHeight, statusLabel.frame.maxY + 0.02*DisplayUtility.screenHeight))
+        friendsAndNectsView.frame = CGRect(x: 0, y: statusLabel.frame.maxY + 0.04*DisplayUtility.screenHeight, width: friendsAndNectsView.frame.width, height: friendsAndNectsView.frame.height)
+        
+        print(friendsAndNectsView.frame)
+        
+        scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(DisplayUtility.screenHeight, friendsAndNectsView.frame.maxY + 0.02*DisplayUtility.screenHeight))
     }
 
 }
