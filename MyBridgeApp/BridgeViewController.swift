@@ -825,7 +825,8 @@ class BridgeViewController: UIViewController {
         }*/
         
         
-        if gesture.state == UIGestureRecognizerState.ended {
+		if gesture.state == .ended
+		{
             //User Swiped Left
             if swipeCardView.center.x < 0.25*DisplayUtility.screenWidth {
                 let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
@@ -906,6 +907,7 @@ class BridgeViewController: UIViewController {
                     showReasonForConnection = true
                 }
             }
+
             if removeCard{
                 swipeCardView.removeFromSuperview()
             
@@ -922,19 +924,25 @@ class BridgeViewController: UIViewController {
             } else if showReasonForConnection {
                 
             }
-            else {
-                //Put swipeCard back into place
-                UIView.animate(withDuration: 0.7, delay: 0, options: .allowUserInteraction, animations: {
-                    rotation = CGAffineTransform(rotationAngle: 0)
-                    stretch = rotation.scaledBy(x: 1, y: 1)
-                    self.swipeCardView.transform = stretch
-                    self.swipeCardView.frame = self.swipeCardFrame
-                    self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
-                    self.disconnectIcon.alpha = 0.0
-                    self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
-                    self.connectIcon.alpha = 0.0
-                }, completion: { (success) in
-                })
+			else
+			{
+                // Put swipeCard back into place
+                UIView.animate( withDuration: 0.7, 
+                                delay: 0, 
+                                options: .allowUserInteraction, 
+                                animations:
+					{
+						rotation = CGAffineTransform(rotationAngle: 0)
+						stretch = rotation.scaledBy(x: 1, y: 1)
+						self.swipeCardView.transform = stretch
+						self.swipeCardView.frame = self.swipeCardFrame
+						self.disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
+						self.disconnectIcon.alpha = 0.0
+						self.connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
+						self.connectIcon.alpha = 0.0
+					}, 
+                               completion: { (success) in }
+				)
             }
         }
     }
