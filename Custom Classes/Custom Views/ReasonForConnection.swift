@@ -76,12 +76,6 @@ class ReasonForConnection: UIView {
         currentViewController = vc
         
         displayNavBar()
-        
-        /*let dashedLine = DashedLine()
-        dashedLine.backgroundColor = UIColor.white
-        dashedLine.frame = CGRect(x: 100, y: 100, width: 100, height: 3)
-        self.addSubview(dashedLine)*/
-        
     }
     
     func sendSwipeCard(swipeCardView: SwipeCard) {
@@ -106,7 +100,6 @@ class ReasonForConnection: UIView {
         let localData = LocalData()
         if let pairings:[UserInfoPair] = localData.getPairings() {
             for pair in pairings {
-                //print(pair.user1?.savedProfilePicture)
                     if let data = pair.user1?.savedProfilePicture {
                         //applying filter to make the white text more legible
                         let beginImage = CIImage(data: data as Data)
@@ -134,7 +127,6 @@ class ReasonForConnection: UIView {
                             }
                     }
                 }
-                //print(pair.user2?.savedProfilePicture)
                 if let data = pair.user2?.savedProfilePicture {
                         //applying filter to make the white text more legible
                         let beginImage = CIImage(data: data as Data)
@@ -198,24 +190,6 @@ class ReasonForConnection: UIView {
         displayCustomKeyboard()
         
         displayDashedLines()
-        /*let dashedLine = UIView()
-        let  path = UIBezierPath()
-        
-        let p1 = CGPoint(x: user1Photo.frame.maxX, y: user1Photo.frame.midY)
-        path.move(to: p1)
-        
-        let  p2 = CGPoint(x: user2Photo.frame.minX, y: user2Photo.frame.midY)
-        path.addLine(to: p2)
-    
-        let  dashes: [ CGFloat ] = [ 16.0, 32.0 ]
-        path.setLineDash(dashes, count: dashes.count, phase: 0.0)
-        
-        path.lineWidth = 8.0
-        path.lineCapStyle = .butt
-        UIColor.magenta.set()
-        path.stroke()
-        dashedLine.layer.accessibilityPath = path
-        self.addSubview(dashedLine)*/
     }
     
     func displayDashedLines(){
@@ -258,13 +232,11 @@ class ReasonForConnection: UIView {
         self.addSubview(cancelButton)
         
         let cancelIcon = UIImageView()
-        //cancelIcon.frame = CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.05*DisplayUtility.screenHeight, width: 0.0328*DisplayUtility.screenWidth, height: 0.0206*DisplayUtility.screenHeight)
         cancelIcon.frame = CGRect(x: 0.0204*DisplayUtility.screenWidth, y: 0.0433*DisplayUtility.screenHeight, width: 0.0328*DisplayUtility.screenWidth, height: 0.0206*DisplayUtility.screenHeight)
         cancelIcon.image = #imageLiteral(resourceName: "X_Icon")
         self.addSubview(cancelIcon)
         
         let title = UILabel()
-        //title.frame = CGRect(x: 0, y: 0.08*DisplayUtility.screenHeight, width: 0.8606*DisplayUtility.screenWidth, height: 0.0382*DisplayUtility.screenHeight)
         title.frame = CGRect(x: 0, y: 0.08*DisplayUtility.screenHeight, width: 0.8606*DisplayUtility.screenWidth, height: 0.0382*DisplayUtility.screenHeight)
         title.center.x = self.center.x
         title.text = "Sweet! You're almost there."
@@ -276,25 +248,19 @@ class ReasonForConnection: UIView {
     }
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
-        /*UIView.animate(withDuration: 0.4, animations: {
+        self.alpha = 1
+        UIView.animate(withDuration: 0.4, animations: {
             self.alpha = 0
-        })*/
-        self.removeFromSuperview()
+        }) { (success) in
+            self.removeFromSuperview()
+        }
+        
         //bring back last card into place
         if let bridgeVC = currentViewController as? BridgeViewController {
             bridgeVC.connectionCanceled(swipeCardView: swipeCard)
         }
         
     }
-    
-    func displayUserPhotos() {
-       
-        //user1Photo.layer.borderWidth = 1
-        //user1Photo.layer.borderColor = UIColor.white.cgColor
-        
-        
-    }
-    
     func displayButtons() {
         loveButton.frame = CGRect(x: 0, y: 0.3635*DisplayUtility.screenHeight, width: 0.1956*DisplayUtility.screenWidth, height: 0.1956*DisplayUtility.screenWidth)
         loveButton.center.x = self.center.x
@@ -397,15 +363,7 @@ class ReasonForConnection: UIView {
         //customKeyboard.messageTextView.returnKeyType = UIReturnKeyType.done
         customKeyboard.getCurrentViewController(vc: currentViewController as! UIViewController)
         customKeyboard.resign()
-        //let type = whichFilter()
-        //customKeyboard.updatePostType(updatedPostType: type)
-        //customKeyboardHeight = customKeyboard.height()
-        //postBackgroundView.frame.size.height = customKeyboardHeight
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(resignKeyboard(_:)))
-        
-        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
-        //tap.cancelsTouchesInView = false
-        
         self.addGestureRecognizer(tap)
 
     }
@@ -495,15 +453,11 @@ class ReasonForConnection: UIView {
         suggestion3Circle.frame = CGRect(x: 0.8852*DisplayUtility.screenWidth, y: 0, width: 0.0754*DisplayUtility.screenWidth, height: 0.0754*DisplayUtility.screenWidth)
         suggestion3Circle.center.y = suggestion3Button.center.y
         self.addSubview(suggestion3Circle)
-        
-        //Creating Arrays of suggested reasons to connect
     }
     
     //Algorithm to decide which suggested reasons to display
     func decideSuggestedReasons() {
         //Displays first suggested reason specific to if the two users are in the same city
-        
-        
         if (user1City != "" && user2City != "" && user1City == user2City) {
             businessSuggestions.append("You two are in the same city and are both great at what you do.")
             businessSuggestions.append("You both work to make the world a better place.")
@@ -537,31 +491,25 @@ class ReasonForConnection: UIView {
             suggestion1Circle.isHighlighted = true
             suggestion2Circle.isHighlighted = false
             suggestion3Circle.isHighlighted = false
-            //customKeyboard.messageTextView.text = suggestion1Label.text
             labelChosen = suggestion1Label.text!
             customKeyboard.messageTextView.becomeFirstResponder()
-            //customKeyboard.messageTextView.selectedTextRange =  customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
         } else if sender.tag == 2 && !suggestion2Circle.isHighlighted{
             print("suggestion2Button")
             suggestion1Circle.isHighlighted = false
             suggestion2Circle.isHighlighted = true
             suggestion3Circle.isHighlighted = false
-            //customKeyboard.messageTextView.text = suggestion2Label.text
             labelChosen = suggestion2Label.text!
             customKeyboard.messageTextView.becomeFirstResponder()
             let printLine = customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
             print("printing \(printLine)")
-            //customKeyboard.messageTextView.selectedTextRange = customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
             customKeyboard.messageTextView.selectedRange = NSMakeRange(customKeyboard.messageTextView.text.characters.count, 0)
         } else if sender.tag == 3 && !suggestion3Circle.isHighlighted {
             print("suggestion3Button")
             suggestion1Circle.isHighlighted = false
             suggestion2Circle.isHighlighted = false
             suggestion3Circle.isHighlighted = true
-            //customKeyboard.messageTextView.text = suggestion3Label.text
             labelChosen = suggestion3Label.text!
             customKeyboard.messageTextView.becomeFirstResponder()
-            //customKeyboard.messageTextView.selectedTextRange =  customKeyboard.messageTextView.textRange(from:  customKeyboard.messageTextView.endOfDocument, to:  customKeyboard.messageTextView.endOfDocument)
             customKeyboard.messageTextView.selectedRange = NSMakeRange(customKeyboard.messageTextView.text.characters.count, 0)
 
         } else {

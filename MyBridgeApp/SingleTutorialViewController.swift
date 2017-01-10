@@ -145,12 +145,10 @@ class SingleTutorialViewController: UIViewController {
         explanationLabel.adjustsFontSizeToFitWidth = true
         
         let endTutorialButtonFrame = CGRect(x: 0.65*DisplayUtility.screenWidth, y: 0.0325*DisplayUtility.screenHeight, width: 0.3*DisplayUtility.screenWidth, height: 0.04093*DisplayUtility.screenHeight)
-        let endTutorialButton = DisplayUtility.gradientButton(text: "BEGIN 'NECTING", frame: endTutorialButtonFrame, fontSize: 12)
+        let endTutorialButton = DisplayUtility.gradientButton(text: "BEGIN 'NECTING", frame: endTutorialButtonFrame, fontSize: 11)
         endTutorialButton.layer.cornerRadius = 8
         endTutorialButton.setTitleColor(UIColor.black, for: .normal)
         endTutorialButton.layer.borderColor = DisplayUtility.gradientColor(size: endTutorialButton.frame.size).cgColor
-        endTutorialButton.layer.borderWidth = 2
-        
         return (titleLabel, explanationLabel, endTutorialButton)
     }
     

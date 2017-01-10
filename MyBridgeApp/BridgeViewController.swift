@@ -678,6 +678,7 @@ class BridgeViewController: UIViewController {
         backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         view.addSubview(backgroundView)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -722,6 +723,12 @@ class BridgeViewController: UIViewController {
         
         //Create Mission Control
         missionControlView.initialize(view: view, revisitLabel: displayNoMoreCardsLabel, revisitButton: revisitButton)
+        
+        //Check for AcceptedConnectionNotification
+        let dbRetrievingFunctions = DBRetrievingFunctions()
+        dbRetrievingFunctions.queryForAcceptedConnectionNotifications(view: view)
+        //Set Notification for PushNotification Listener
+        
     }
     override func viewDidLayoutSubviews() {
         
