@@ -311,6 +311,10 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
         
+        let localData = LocalData()
+        localData.setHasSignedUp(false)
+        localData.synchronize()
+        
         //Check if the current user has signed in to decide what to display
         authenticateUser()
         

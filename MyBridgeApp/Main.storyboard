@@ -136,7 +136,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JL8-0O-hzJ">
-                                                    <rect key="frame" x="8" y="37.5" width="42" height="20.5"/>
+                                                    <rect key="frame" x="8" y="37" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -355,12 +355,33 @@
                     </view>
                     <connections>
                         <outlet property="nameTextField" destination="LLM-vU-zqu" id="vqf-jX-js1"/>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromSignUpView" id="O6c-jV-xV8"/>
+                        <segue destination="ys0-RR-3wC" kind="show" identifier="showTutorial" id="oXV-mI-XnG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Av-h3-KLN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2066" y="-1093"/>
+        </scene>
+        <!--Tutorials View Controller-->
+        <scene sceneID="Ich-Kh-Dja">
+            <objects>
+                <viewController id="ys0-RR-3wC" customClass="TutorialsViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="II1-QR-3Oi"/>
+                        <viewControllerLayoutGuide type="bottom" id="dJo-jf-BzS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nzd-eW-29u">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePage" id="239-SF-Dwj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Okr-SA-oLZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2944" y="-1106"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
@@ -575,12 +596,12 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="B19-eu-GHC"/>
-        <segue reference="hOb-8o-wNe"/>
         <segue reference="Bbg-DZ-59t"/>
         <segue reference="xcR-H7-wok"/>
         <segue reference="0Mi-wm-mTu"/>
+        <segue reference="239-SF-Dwj"/>
         <segue reference="OnA-y9-bUb"/>
+        <segue reference="B19-eu-GHC"/>
         <segue reference="HGT-Vo-Kl8"/>
     </inferredMetricsTieBreakers>
 </document>
