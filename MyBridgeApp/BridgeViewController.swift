@@ -56,7 +56,7 @@ class BridgeViewController: UIViewController {
     var wasLastSwipeInDeck = Bool()
     var shouldCheckInPair = Bool()
     var swipeCardView = UIView()
-    var postTapped = Bool()
+    //var postTapped = Bool()
     
     //navigation bar creation
     var badgeCount = Int()
@@ -427,8 +427,8 @@ class BridgeViewController: UIViewController {
         //let myProfileVC = MyProfileViewController()
         
         //present(TutorialsViewController(), animated: false, completion: nil)
-        present(MyProfileViewController(), animated: true, completion: nil)
-        //performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
+        //present(MyProfileViewController(), animated: true, completion: nil)
+        performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
         //self.present(myProfileVC, animated: true, completion: nil)
         
         leftBarButton.isSelected = true
@@ -700,12 +700,12 @@ class BridgeViewController: UIViewController {
         
     }
     override func viewDidAppear(_ animated: Bool) {
-        print("postTapped = \(postTapped)")
-        if postTapped {
+        //print("postTapped = \(postTapped)")
+        /*if postTapped {
             sleep(UInt32(0.2))
             missionControlView.displayPostRequest()
             postTapped = false
-        }
+        }*/
     }
     
     func isDragged(_ gesture: UIPanGestureRecognizer) {
@@ -1068,15 +1068,13 @@ class BridgeViewController: UIViewController {
             if mirror.subjectType == ProfileViewController.self {
                 self.transitionManager.animationDirection = "Left"
             } else if mirror.subjectType == MyProfileViewController.self {
-                self.transitionManager.animationDirection = "left"
+                self.transitionManager.animationDirection = "Left"
             } else if mirror.subjectType == OptionsFromBotViewController.self {
                 self.transitionManager.animationDirection = "Top"
                 let vc2 = vc as! OptionsFromBotViewController
                 vc2.seguedFrom = "BridgeViewController"
             } else if mirror.subjectType == MessagesViewController.self {
                 self.transitionManager.animationDirection = "Right"
-            } else if mirror.subjectType == MyProfileViewController.self {
-                self.transitionManager.animationDirection = "Left"
             }
             vc.transitioningDelegate = self.transitionManager
             

@@ -51,9 +51,6 @@
 		903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CD1E01E75E0021D81A /* TutorialsViewController.swift */; };
 		903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */; };
 		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
-		90CA09A31E0AA01A00330646 /* PostGray.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A21E0AA01A00330646 /* PostGray.mp4 */; };
-		90CA09A51E0AA0DD00330646 /* ConnectGray.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A41E0AA0DD00330646 /* ConnectGray.mp4 */; };
-		90CA09A71E0AA1FF00330646 /* AcceptChat.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90CA09A61E0AA1FF00330646 /* AcceptChat.mp4 */; };
 		90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */; };
 		90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AA1E0B080100330646 /* HexagonView.swift */; };
 		90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */; };
@@ -135,9 +132,6 @@
 		903811CD1E01E75E0021D81A /* TutorialsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialsViewController.swift; path = MyBridgeApp/TutorialsViewController.swift; sourceTree = SOURCE_ROOT; };
 		903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTutorialViewController.swift; path = MyBridgeApp/SingleTutorialViewController.swift; sourceTree = SOURCE_ROOT; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
-		90CA09A21E0AA01A00330646 /* PostGray.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = PostGray.mp4; path = ../../../../../Movies/PostGray.mp4; sourceTree = "<group>"; };
-		90CA09A41E0AA0DD00330646 /* ConnectGray.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = ConnectGray.mp4; path = ../../../../../Movies/ConnectGray.mp4; sourceTree = "<group>"; };
-		90CA09A61E0AA1FF00330646 /* AcceptChat.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = AcceptChat.mp4; path = ../../../../../Movies/AcceptChat.mp4; sourceTree = "<group>"; };
 		90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController.swift; path = MyBridgeApp/MyProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		90CA09AA1E0B080100330646 /* HexagonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexagonView.swift; path = "Custom Classes/Custom Views/HexagonView.swift"; sourceTree = "<group>"; };
 		90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
@@ -260,9 +254,6 @@
 		814C3AC51B69877600E307BB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				90CA09A61E0AA1FF00330646 /* AcceptChat.mp4 */,
-				90CA09A41E0AA0DD00330646 /* ConnectGray.mp4 */,
-				90CA09A21E0AA01A00330646 /* PostGray.mp4 */,
 				30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */,
 				30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */,
 				E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */,
@@ -306,6 +297,7 @@
 				E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */,
 				E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */,
 				E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */,
+				90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */,
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
 				E9D6DF0E1D7880B700138A1F /* EditProfileViewController.swift */,
 				3059ABF31DFB04AC0010A81B /* MyProfileViewController_Old.swift */,
@@ -325,7 +317,6 @@
 				CBEFCD761CEDED9600695B15 /* Main.storyboard */,
 				903811CD1E01E75E0021D81A /* TutorialsViewController.swift */,
 				903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */,
-				90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */,
 			);
 			name = MyBridgeApp;
 			path = ParseStarterProject;
@@ -435,10 +426,7 @@
 			files = (
 				CBEFCD771CEDED9600695B15 /* Main.storyboard in Resources */,
 				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
-				90CA09A51E0AA0DD00330646 /* ConnectGray.mp4 in Resources */,
 				30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */,
-				90CA09A31E0AA01A00330646 /* PostGray.mp4 in Resources */,
-				90CA09A71E0AA1FF00330646 /* AcceptChat.mp4 in Resources */,
 				30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */,
 				30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */,
 			);

@@ -30,10 +30,11 @@ class MyProfileViewController: UIViewController {
     let loveButton = UIButton()
     let friendshipButton = UIButton()
     let statusLabel = UILabel()
-    var businessStatus: String?
-    var loveStatus: String?
-    var friendshipStatus: String?
+    var businessStatus = "You have not yet posted a request for work"
+    var loveStatus = "You have not yet posted a request for dating"
+    var friendshipStatus = "You have not yet posted a request for friendship"
     let friendsAndNectsView = UIView()
+    let transitionManager = TransitionManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,18 +76,20 @@ class MyProfileViewController: UIViewController {
                 query.whereKey("user2_response", equalTo: 1)
                 query.whereKey("accepted_notification_viewed", equalTo: true)
                 query.limit = 1000
-                query.findObjectsInBackground(block: { (results, error) in
+                query.countObjectsInBackground(block: { (count, error) in
                     print("numNected query executing...")
                     if let error = error {
                         print("numNected findObjectsInBackgroundWithBlock error - \(error)")
                     }
-                    else if let results = results {
-                        self.numNectedLabel.text = "\(results.count) CONNECTIONS 'NECTED"
+                    else {
+                        let numNected = Int(count)
+                        self.numNectedLabel.text = "\(numNected) CONNECTIONS 'NECTED"
                         self.numNectedLabel.sizeToFit()
                         self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
                         self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
                         self.view.addSubview(self.numNectedLabel)
                     }
+
                 })
             }
             
@@ -105,6 +108,7 @@ class MyProfileViewController: UIViewController {
             
             editProfileButton.setImage(UIImage(named: "EditProfile_Button"), for: .normal)
             editProfileButton.frame = CGRect(x: 0.61753*DisplayUtility.screenWidth, y: userSettingsButton.frame.minY, width: upperButtonsWidth, height: upperButtonsHeight)
+            editProfileButton.addTarget(self, action: #selector(editProfileButtonTapped(_:)), for: .touchUpInside)
             scrollView.addSubview(editProfileButton)
             
             let hexWidth = 0.38154*DisplayUtility.screenWidth
@@ -112,63 +116,55 @@ class MyProfileViewController: UIViewController {
             
             let downloader = Downloader()
             
+            //setting frame and image for topHexView
             topHexView.frame = CGRect(x: 0, y: userSettingsButton.frame.maxY + 0.033*DisplayUtility.screenHeight, width: hexWidth, height: hexHeight)
             topHexView.center.x = DisplayUtility.screenWidth / 2
-            if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+            if let data = localData.getMainProfilePicture() {
+                if let image = UIImage(data: data) {
+                    setImageToHexagon(image: image, hexView: topHexView)
+                }
+            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
                 downloader.imageFromURL(URL: url, callBack: { (image) in
-                    if let newImage = self.fitImageToView(viewSize: self.topHexView.frame.size, image: image) {
-                        self.topHexView.hexBackgroundColor = UIColor(patternImage: newImage)
-                    } else {
-                        self.topHexView.hexBackgroundColor = UIColor(patternImage: image)
-                    }
-                    DispatchQueue.main.async {
-                        self.topHexView.setNeedsDisplay()
-                    }
+                    self.setImageToHexagon(image: image, hexView: self.topHexView)
                 })
             }
             scrollView.addSubview(topHexView)
             
+            //setting frame and image for leftHexView
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+            if let data = localData.getMainProfilePicture() {
+                if let image = UIImage(data: data) {
+                    setImageToHexagon(image: image, hexView: leftHexView)
+                }
+            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
                 downloader.imageFromURL(URL: url, callBack: { (image) in
-                    if let newImage = self.fitImageToView(viewSize: self.leftHexView.frame.size, image: image) {
-                        self.leftHexView.hexBackgroundColor = UIColor(patternImage: newImage)
-                    } else {
-                        self.leftHexView.hexBackgroundColor = UIColor(patternImage: image)
-                    }
-                    DispatchQueue.main.async {
-                        self.leftHexView.setNeedsDisplay()
-                    }
+                    self.setImageToHexagon(image: image, hexView: self.leftHexView)
                 })
             }
             scrollView.addSubview(leftHexView)
             
+            //setting frame and image for rightHexView
             rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+            if let data = localData.getMainProfilePicture() {
+                if let image = UIImage(data: data) {
+                    setImageToHexagon(image: image, hexView: rightHexView)
+                }
+            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
                 downloader.imageFromURL(URL: url, callBack: { (image) in
-                    if let newImage = self.fitImageToView(viewSize: self.rightHexView.frame.size, image: image) {
-                        self.rightHexView.hexBackgroundColor = UIColor(patternImage: newImage)
-                    } else {
-                        self.rightHexView.hexBackgroundColor = UIColor(patternImage: image)
-                    }
-                    DispatchQueue.main.async {
-                        self.rightHexView.setNeedsDisplay()
-                    }
+                    self.setImageToHexagon(image: image, hexView: self.rightHexView)
                 })
             }
             scrollView.addSubview(rightHexView)
             
+            //setting frame and image for bottomHexView
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
-            if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+            if let data = localData.getMainProfilePicture() {
+                if let image = UIImage(data: data) {
+                    setImageToHexagon(image: image, hexView: bottomHexView)
+                }
+            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
                 downloader.imageFromURL(URL: url, callBack: { (image) in
-                    if let newImage = self.fitImageToView(viewSize: self.bottomHexView.frame.size, image: image) {
-                        self.bottomHexView.hexBackgroundColor = UIColor(patternImage: newImage)
-                    } else {
-                        self.bottomHexView.hexBackgroundColor = UIColor(patternImage: image)
-                    }
-                    DispatchQueue.main.async {
-                        self.bottomHexView.setNeedsDisplay()
-                    }
+                    self.setImageToHexagon(image: image, hexView: self.bottomHexView)
                 })
             }
             scrollView.addSubview(bottomHexView)
@@ -188,18 +184,19 @@ class MyProfileViewController: UIViewController {
                 let dateOneWeekAgo = Date.init(timeIntervalSinceNow: -1.0 * secondsPerWeek)
                 query.whereKey("updatedAt", greaterThanOrEqualTo: dateOneWeekAgo) // filter on past week
                 query.limit = 1000
-                query.findObjectsInBackground(block: { (results, error) in
+                query.countObjectsInBackground(block: { (count, error) in
                     print("numNected query executing...")
                     if let error = error {
                         print("numNected findObjectsInBackgroundWithBlock error - \(error)")
                     }
-                    else if let results = results {
-                        if results.count == 0 {
+                    else {
+                        let numNected = Int(count)
+                        if numNected == 0 {
                             self.numNectedLastWeekLabel.text = "You've 'nected 0 new connections\nin the past week."
-                        } else if results.count == 1 {
+                        } else if numNected == 1 {
                             self.numNectedLastWeekLabel.text = "You've 'nected 1 new connection\nin the past week. Sweet!"
                         } else {
-                            self.numNectedLastWeekLabel.text = "You've 'nected \(results.count) new connections\nin the past week. Sweet!"
+                            self.numNectedLastWeekLabel.text = "You've 'nected \(numNected) new connections\nin the past week. Sweet!"
                         }
                         self.numNectedLastWeekLabel.sizeToFit()
                         self.numNectedLastWeekLabel.frame = CGRect(x: 0, y: self.numNectedLastWeekLabel.frame.minY, width: self.numNectedLastWeekLabel.frame.width, height: self.numNectedLastWeekLabel.frame.height)
@@ -284,6 +281,16 @@ class MyProfileViewController: UIViewController {
         
     }
     
+    func setImageToHexagon(image: UIImage, hexView: HexagonView) {
+        if let newImage = self.fitImageToView(viewSize: hexView.frame.size, image: image) {
+            hexView.hexBackgroundColor = UIColor(patternImage: newImage)
+        } else {
+            hexView.hexBackgroundColor = UIColor(patternImage: image)
+        }
+        DispatchQueue.main.async {
+            hexView.setNeedsDisplay()
+        }
+    }
     func fitImageToView(viewSize: CGSize, image: UIImage) -> UIImage? {
         var resultImage: UIImage?
         UIGraphicsBeginImageContext(viewSize)
@@ -293,49 +300,69 @@ class MyProfileViewController: UIViewController {
         return resultImage;
     }
     
+    //Send user to the editProfileViewController so they can edit their profile
+    func editProfileButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "showEditProfileFromMyProfile", sender: self)
+    }
+    
+    //Send user back to the bridgeViewController
     func goBack(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "showBridgePageFromMyProfile", sender: self)
     }
     
     func statusTypeButtonSelected(_ sender: UIButton) {
         grayOutButtons()
         var type = ""
+        var statusSet = false
+
         if sender == businessButton {
+            if let bridgeStatus = localData.getBusinessStatus() {
+                statusSet = true
+                self.businessStatus = bridgeStatus
+            }
             businessButton.setImage(UIImage(named: "MyProfile_Selected_Work"), for: .normal)
             type = "Business"
-            if let status = businessStatus {
-                statusLabel.text = status
-                statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-                statusLabel.sizeToFit()
-                statusLabel.center.x = DisplayUtility.screenWidth / 2
-                layoutBottomBasedOnStatus()
-                return
-            }
+            statusLabel.text = businessStatus
+            statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+            statusLabel.sizeToFit()
+            statusLabel.center.x = DisplayUtility.screenWidth / 2
+            layoutBottomBasedOnStatus()
         } else if sender == loveButton {
+            if let bridgeStatus = localData.getLoveStatus() {
+                statusSet = true
+                self.loveStatus = bridgeStatus
+            }
             loveButton.setImage(UIImage(named: "MyProfile_Selected_Dating"), for: .normal)
             type = "Love"
-            if let status = loveStatus {
-                statusLabel.text = status
-                statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-                statusLabel.sizeToFit()
-                statusLabel.center.x = DisplayUtility.screenWidth / 2
-                layoutBottomBasedOnStatus()
-                return
-            }
+            statusLabel.text = loveStatus
+            statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+            statusLabel.sizeToFit()
+            statusLabel.center.x = DisplayUtility.screenWidth / 2
+            layoutBottomBasedOnStatus()
         } else {
+            if let bridgeStatus = localData.getFriendshipStatus() {
+                statusSet = true
+                self.friendshipStatus = bridgeStatus
+            }
             friendshipButton.setImage(UIImage(named: "MyProfile_Selected_Friends"), for: .normal)
             type = "Friendship"
-            if let status = friendshipStatus {
-                statusLabel.text = status
-                statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-                statusLabel.sizeToFit()
-                statusLabel.center.x = DisplayUtility.screenWidth / 2
-                layoutBottomBasedOnStatus()
-                return
-            }
+            statusLabel.text = friendshipStatus
+            statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+            statusLabel.sizeToFit()
+            statusLabel.center.x = DisplayUtility.screenWidth / 2
+            layoutBottomBasedOnStatus()
         }
         
-        if let user = PFUser.current() {
+        self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+        
+        //Get currentUser's most recent request (a.k.a bridge_status in DB) for selected connection type
+        if statusSet {
+        //Request already retrived forselected type from local data
+            self.statusLabel.sizeToFit()
+            self.statusLabel.center.x = DisplayUtility.screenWidth / 2
+        }
+        //Setting request for selected type from Database when local data is not available
+        else if let user = PFUser.current() {
             if let objectId = user.objectId {
                 let query = PFQuery(className: "BridgeStatus")
                 query.whereKey("userId", equalTo: objectId)
@@ -362,14 +389,17 @@ class MyProfileViewController: UIViewController {
                                 } else if type == "Friendship" {
                                     self.friendshipStatus = bridgeStatus
                                 }
-                                
-                                self.layoutBottomBasedOnStatus()
                             }
                         }
                     }
                 })
             }
         }
+        
+        
+        
+        
+        self.layoutBottomBasedOnStatus()
     }
     
     func grayOutButtons() {
@@ -384,6 +414,19 @@ class MyProfileViewController: UIViewController {
         print(friendsAndNectsView.frame)
         
         scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(DisplayUtility.screenHeight, friendsAndNectsView.frame.maxY + 0.02*DisplayUtility.screenHeight))
+    }
+    
+    //Setting segue transition information and preparation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == BridgeViewController.self {
+            self.transitionManager.animationDirection = "Right"
+        }
+        else if mirror.subjectType == EditProfileViewController.self {
+            self.transitionManager.animationDirection = "Left"
+        }
+        vc.transitioningDelegate = self.transitionManager
     }
 
 }

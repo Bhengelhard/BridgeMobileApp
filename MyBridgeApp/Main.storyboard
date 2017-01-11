@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VvB-sH-Hxl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VvB-sH-Hxl">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -30,11 +30,12 @@
                     </view>
                     <connections>
                         <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromEditProfileView" id="0Mi-wm-mTu"/>
+                        <segue destination="Aqq-nv-Cxw" kind="show" identifier="showMyProfileFromEditProfile" id="OJT-W0-yW4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WkR-Vg-7sb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1023.5" y="66.5"/>
+            <point key="canvasLocation" x="-1044" y="-194"/>
         </scene>
         <!--Load Page View Controller-->
         <scene sceneID="biW-fj-MnX">
@@ -136,7 +137,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JL8-0O-hzJ">
-                                                    <rect key="frame" x="8" y="37.5" width="42" height="20.5"/>
+                                                    <rect key="frame" x="8" y="37" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -403,7 +404,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSk-yp-EIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="234.5" y="-181.5"/>
+            <point key="canvasLocation" x="-374" y="-195"/>
         </scene>
         <!--Bridge-->
         <scene sceneID="zUx-7Q-hEN">
@@ -494,11 +495,12 @@
                     </view>
                     <connections>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromMyProfile" id="hOb-8o-wNe"/>
+                        <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileFromMyProfile" id="0TL-JL-HJm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZz-Ig-dI4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="495" y="590"/>
+            <point key="canvasLocation" x="78" y="698"/>
         </scene>
         <!--Single Message View Controller-->
         <scene sceneID="57B-UR-Tv1">
@@ -552,11 +554,13 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NMz-iK-zUZ"/>
-        <segue reference="1Bx-ML-R6e"/>
-        <segue reference="hOb-8o-wNe"/>
-        <segue reference="OnA-y9-bUb"/>
         <segue reference="B19-eu-GHC"/>
+        <segue reference="hOb-8o-wNe"/>
+        <segue reference="OJT-W0-yW4"/>
+        <segue reference="0TL-JL-HJm"/>
+        <segue reference="0Mi-wm-mTu"/>
         <segue reference="cy1-Ds-r2Z"/>
+        <segue reference="OnA-y9-bUb"/>
+        <segue reference="NMz-iK-zUZ"/>
     </inferredMetricsTieBreakers>
 </document>
