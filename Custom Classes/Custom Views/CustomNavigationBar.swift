@@ -78,13 +78,27 @@ class CustomNavigationBar: UIView {
 //                imageView.center.x = view.center.x
 //                imageView.image = #imageLiteral(resourceName: "Necter_Navbar_Logo")
 //                view.addSubview(imageView)
-            } else {
-                //Adding the title as a gradient text
-                let font = UIFont(name: "Verdana", size: 28)
+            } else if titleText == "Inbox" {
+                let font = UIFont(name: "BentonSans-Light", size: 24)
                 let titleFrame = CGRect(x: 0, y: 0.04633*DisplayUtility.screenHeight, width: 0.5*DisplayUtility.screenWidth, height: 0.04*DisplayUtility.screenHeight)
-                let label = DisplayUtility.gradientLabel(text: titleText, frame: titleFrame, font: font!)
-                label.center.x = view.center.x
+                let label = UILabel(frame: titleFrame)
+                label.text = titleText
+                label.textColor = UIColor.black
+                label.font = font
+                label.adjustsFontSizeToFitWidth = true
                 label.textAlignment = NSTextAlignment.center
+                label.center.x = view.center.x
+                view.addSubview(label)
+            } else {
+                let font = UIFont(name: "BentonSans-Light", size: 21)
+                let titleFrame = CGRect(x: 0, y: 0.04633*DisplayUtility.screenHeight, width: 0.5*DisplayUtility.screenWidth, height: 0.04*DisplayUtility.screenHeight)
+                let label = UILabel(frame: titleFrame)
+                label.text = titleText
+                label.textColor = UIColor.black
+                label.font = font
+                label.adjustsFontSizeToFitWidth = true
+                label.textAlignment = NSTextAlignment.center
+                label.center.x = view.center.x
                 view.addSubview(label)
             }
         }

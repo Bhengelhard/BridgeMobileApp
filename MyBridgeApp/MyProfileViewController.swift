@@ -49,7 +49,7 @@ class MyProfileViewController: UIViewController {
         if let user = PFUser.current() {
             
             //Creating viewed backArrow icon
-            let backArrowIcon = UIImageView(frame: CGRect(x: 0.90015*DisplayUtility.screenWidth, y: 0.04969*DisplayUtility.screenHeight, width: 0.0533*DisplayUtility.screenWidth, height: 0.02181*DisplayUtility.screenHeight))
+            let backArrowIcon = UIImageView(frame: CGRect(x: 0.90015*DisplayUtility.screenWidth, y: 0.06*DisplayUtility.screenHeight, width: 0.0533*DisplayUtility.screenWidth, height: 0.02181*DisplayUtility.screenHeight))
             backArrowIcon.image = UIImage(named: "Dark_Arrow")
             view.addSubview(backArrowIcon)
             
@@ -60,6 +60,7 @@ class MyProfileViewController: UIViewController {
             backArrow.addTarget(self, action: #selector(goBack(_:)), for: .touchUpInside)
             view.addSubview(backArrow)
             
+            
             welcomeLabel.textColor = .black
             welcomeLabel.textAlignment = .center
             welcomeLabel.font = UIFont(name: "BentonSans-Light", size: 21)
@@ -67,7 +68,7 @@ class MyProfileViewController: UIViewController {
                 let firstName = DisplayUtility.firstName(name: name)
                 welcomeLabel.text = "Welcome back, \(firstName)."
                 welcomeLabel.sizeToFit()
-                welcomeLabel.frame = CGRect(x: 0, y: backArrow.frame.minY + 0.00265*DisplayUtility.screenHeight, width: welcomeLabel.frame.width, height: welcomeLabel.frame.height)
+                welcomeLabel.frame = CGRect(x: 0, y: 0.1*DisplayUtility.screenHeight, width: welcomeLabel.frame.width, height: welcomeLabel.frame.height)
                 welcomeLabel.center.x = DisplayUtility.screenWidth / 2
                 view.addSubview(welcomeLabel)
             }
@@ -141,15 +142,20 @@ class MyProfileViewController: UIViewController {
             //setting frame and image for topHexView
             topHexView.frame = CGRect(x: 0, y: userSettingsButton.frame.maxY + 0.033*DisplayUtility.screenHeight, width: hexWidth, height: hexHeight)
             topHexView.center.x = DisplayUtility.screenWidth / 2
-            if let data = localData.getMainProfilePicture() {
-                if let image = UIImage(data: data) {
-                    setImageToHexagon(image: image, hexView: topHexView)
-                }
-            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-                downloader.imageFromURL(URL: url, callBack: { (image) in
-                    self.setImageToHexagon(image: image, hexView: self.topHexView)
-                })
-            }
+            
+            //Setting static profile images for tech Demo
+            let image1 = #imageLiteral(resourceName: "ProfPic2.jpg")
+            setImageToHexagon(image: image1, hexView: topHexView)
+            
+//            if let data = localData.getMainProfilePicture() {
+//                if let image = UIImage(data: data) {
+//                    setImageToHexagon(image: image, hexView: topHexView)
+//                }
+//            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+//                downloader.imageFromURL(URL: url, callBack: { (image) in
+//                    self.setImageToHexagon(image: image, hexView: self.topHexView)
+//                })
+//            }
             scrollView.addSubview(topHexView)
             
             //setting frame and image for leftHexView
@@ -162,7 +168,7 @@ class MyProfileViewController: UIViewController {
                 downloader.imageFromURL(URL: url, callBack: { (image) in
                     self.setImageToHexagon(image: image, hexView: self.leftHexView)
                     //Saviong mainProfilePicture to device if it has not already been saved
-                    if let data = UIImagePNGRepresentation(image) {
+                    if let data = UIImageJPEGRepresentation(image, 1.0){
                         self.localData.setMainProfilePicture(data)
                     }
                 })
@@ -171,28 +177,35 @@ class MyProfileViewController: UIViewController {
             
             //setting frame and image for rightHexView
             rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            if let data = localData.getMainProfilePicture() {
-                if let image = UIImage(data: data) {
-                    setImageToHexagon(image: image, hexView: rightHexView)
-                }
-            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-                downloader.imageFromURL(URL: url, callBack: { (image) in
-                    self.setImageToHexagon(image: image, hexView: self.rightHexView)
-                })
-            }
+            //Setting static profile images for tech Demo
+            let image2 = #imageLiteral(resourceName: "profpic3.jpg")
+            setImageToHexagon(image: image2, hexView: rightHexView)
+            
+//            if let data = localData.getMainProfilePicture() {
+//                if let image = UIImage(data: data) {
+//                    setImageToHexagon(image: image, hexView: rightHexView)
+//                }
+//            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+//                downloader.imageFromURL(URL: url, callBack: { (image) in
+//                    self.setImageToHexagon(image: image, hexView: self.rightHexView)
+//                })
+//            }
             scrollView.addSubview(rightHexView)
             
             //setting frame and image for bottomHexView
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
-            if let data = localData.getMainProfilePicture() {
-                if let image = UIImage(data: data) {
-                    setImageToHexagon(image: image, hexView: bottomHexView)
-                }
-            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-                downloader.imageFromURL(URL: url, callBack: { (image) in
-                    self.setImageToHexagon(image: image, hexView: self.bottomHexView)
-                })
-            }
+            //Setting static profile images for tech Demo
+            let image3 = #imageLiteral(resourceName: "profPic4.jpg")
+            setImageToHexagon(image: image3, hexView: bottomHexView)
+//            if let data = localData.getMainProfilePicture() {
+//                if let image = UIImage(data: data) {
+//                    setImageToHexagon(image: image, hexView: bottomHexView)
+//                }
+//            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+//                downloader.imageFromURL(URL: url, callBack: { (image) in
+//                    self.setImageToHexagon(image: image, hexView: self.bottomHexView)
+//                })
+//            }
             scrollView.addSubview(bottomHexView)
             
             numNectedLastWeekLabel.textColor = .black
