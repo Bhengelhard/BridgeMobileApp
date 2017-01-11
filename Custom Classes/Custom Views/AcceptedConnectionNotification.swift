@@ -287,7 +287,7 @@ class AcceptedConnectionNotification: UIView {
         
         //User's Connected Information
         let infoLabel = UILabel()
-        infoLabel.frame.size = CGSize(width: 0.64025*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
+        infoLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
         infoLabel.center.x = self.center.x
         infoLabel.frame.origin.y = 0.65442*DisplayUtility.screenHeight
         infoLabel.text = "\(user1FirstName) and \(user2FirstName) accepted your connection!"
