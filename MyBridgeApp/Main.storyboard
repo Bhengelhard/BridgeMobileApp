@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wEy-zC-w02">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Qv3-Na-w7J">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -30,54 +30,12 @@
                     </view>
                     <connections>
                         <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromEditProfileView" id="0Mi-wm-mTu"/>
+                        <segue destination="Aqq-nv-Cxw" kind="show" identifier="showMyProfileFromEditProfile" id="Bbg-DZ-59t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WkR-Vg-7sb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1023.5" y="66.5"/>
-        </scene>
-        <!--Access View Controller-->
-        <scene sceneID="Eb5-Xh-Gkr">
-            <objects>
-                <viewController id="wEy-zC-w02" customClass="AccessViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="L6G-QM-1h6"/>
-                        <viewControllerLayoutGuide type="bottom" id="zAC-NB-nAG"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="hhO-KO-cx4">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" animates="NO" id="CmX-LE-XNn"/>
-                        <segue destination="nIP-ev-yX8" kind="show" identifier="showSignUp" animates="NO" id="qw9-uB-ThK"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VkP-Jr-Agi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1354" y="-1105"/>
-        </scene>
-        <!--Tutorials View Controller-->
-        <scene sceneID="qXA-gh-Zgb">
-            <objects>
-                <viewController id="gmV-1X-5ze" customClass="TutorialsViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="abW-Ar-CPC"/>
-                        <viewControllerLayoutGuide type="bottom" id="FDK-fz-EIl"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="WAN-9m-qN0">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePage" id="udx-ZE-STT"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="puE-uh-rQ7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2697" y="-958"/>
         </scene>
         <!--Load Page View Controller-->
         <scene sceneID="biW-fj-MnX">
@@ -129,11 +87,12 @@
                         <outlet property="appDescription" destination="CWD-hN-Kj8" id="b7w-U9-gYb"/>
                         <outlet property="appName" destination="Smv-xO-RG3" id="wPU-x5-w7P"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginFromLoadPage" animates="NO" id="HGT-Vo-Kl8"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromLoadPage" id="Lus-h1-21q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="622-Vr-V33" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="468" y="-1614"/>
+            <point key="canvasLocation" x="-362" y="-1200"/>
         </scene>
         <!--New Message-->
         <scene sceneID="GLA-rq-wj8">
@@ -173,7 +132,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="96"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="geX-aI-Dai" id="1GK-eo-elS">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JL8-0O-hzJ">
@@ -213,7 +172,7 @@
                                 <items>
                                     <barButtonItem style="plain" id="Nsk-BZ-NOi">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ujX-q0-o8d">
-                                            <rect key="frame" x="16" y="2.5" width="27" height="39"/>
+                                            <rect key="frame" x="16" y="3" width="27" height="39"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" title="Button" image="camera_icon_small.jpg"/>
                                             <connections>
@@ -333,11 +292,34 @@
                     <connections>
                         <outlet property="appName" destination="G8m-25-j3c" id="NKv-o8-SXm"/>
                         <outlet property="fbLoginButton" destination="anP-2u-xN8" id="xF6-Mt-qlx"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" id="7Zw-u1-iEd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1166" y="-1614"/>
+            <point key="canvasLocation" x="297" y="-1200"/>
+        </scene>
+        <!--Access View Controller-->
+        <scene sceneID="SgD-tP-9oW">
+            <objects>
+                <viewController id="Qv3-Na-w7J" customClass="AccessViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HNo-fJ-WZG"/>
+                        <viewControllerLayoutGuide type="bottom" id="lAO-fO-gnn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uAm-xl-vqL">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="nIP-ev-yX8" kind="show" identifier="showSignUp" id="ox5-al-Zda"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" id="cC3-sR-uFf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mcU-Go-Vjy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1182" y="-1093"/>
         </scene>
         <!--Sign Up-->
         <scene sceneID="BLG-uK-Zav">
@@ -373,12 +355,12 @@
                     </view>
                     <connections>
                         <outlet property="nameTextField" destination="LLM-vU-zqu" id="vqf-jX-js1"/>
-                        <segue destination="gmV-1X-5ze" kind="show" identifier="showTutorial" id="dfd-fw-84S"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromSignUpView" id="O6c-jV-xV8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Av-h3-KLN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1860" y="-958"/>
+            <point key="canvasLocation" x="2066" y="-1093"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
@@ -402,7 +384,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FGX-TP-Wxn" id="Czd-tc-gSD">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
@@ -435,9 +417,9 @@
                     <connections>
                         <outlet property="name" destination="5HU-Ir-Pg6" id="eu0-cS-voQ"/>
                         <outlet property="tableView" destination="3js-dl-1M1" id="8nQ-Fb-kdF"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginView" id="cy1-Ds-r2Z"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewFromProfilePage" id="ORi-q2-txU"/>
                         <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileViewFromProfilePage" id="0EB-Fw-YUx"/>
-                        <segue destination="wEy-zC-w02" kind="show" identifier="showAccessViewController" id="Ngn-5p-WNA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSk-yp-EIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -533,7 +515,8 @@
                     </view>
                     <connections>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromMyProfile" id="hOb-8o-wNe"/>
-                        <segue destination="wEy-zC-w02" kind="show" identifier="showAccessViewController" id="umE-DJ-uxQ"/>
+                        <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileFromMyProfile" id="xcR-H7-wok"/>
+                        <segue destination="Qv3-Na-w7J" kind="show" identifier="showAccess" id="JHn-8T-jHu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZz-Ig-dI4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -585,43 +568,6 @@
             </objects>
             <point key="canvasLocation" x="2500" y="711"/>
         </scene>
-        <!--New Message-->
-        <scene sceneID="gKt-8o-neo">
-            <objects>
-                <viewController title="New Message" id="cqv-jo-UDQ" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="hqw-OH-IRc"/>
-                        <viewControllerLayoutGuide type="bottom" id="MV8-Qh-iIx"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="0Z4-Lo-Wvg">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sos-l8-UsS">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </scrollView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VuP-4s-60A">
-                                <rect key="frame" x="166.5" y="323" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="VuP-4s-60A" firstAttribute="centerY" secondItem="0Z4-Lo-Wvg" secondAttribute="centerY" id="faZ-3X-3aQ"/>
-                            <constraint firstItem="VuP-4s-60A" firstAttribute="centerX" secondItem="0Z4-Lo-Wvg" secondAttribute="centerX" id="ymY-TW-xxt"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="scrollView" destination="Sos-l8-UsS" id="vHT-Tq-ivR"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YPd-jH-yJP" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3511" y="-1742"/>
-        </scene>
     </scenes>
     <resources>
         <image name="Load Page Option A Scaled to Iphone 6.png" width="200" height="360"/>
@@ -629,10 +575,12 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="udx-ZE-STT"/>
-        <segue reference="Ngn-5p-WNA"/>
-        <segue reference="1Bx-ML-R6e"/>
-        <segue reference="OnA-y9-bUb"/>
         <segue reference="B19-eu-GHC"/>
+        <segue reference="hOb-8o-wNe"/>
+        <segue reference="Bbg-DZ-59t"/>
+        <segue reference="xcR-H7-wok"/>
+        <segue reference="0Mi-wm-mTu"/>
+        <segue reference="OnA-y9-bUb"/>
+        <segue reference="HGT-Vo-Kl8"/>
     </inferredMetricsTieBreakers>
 </document>

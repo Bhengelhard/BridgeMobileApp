@@ -181,11 +181,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
     }
     
     func rightBarButtonTapped (_ sender: UIBarButtonItem){
-        if tempSeguedFrom == "OptionsFromBotViewController" {
-            performSegue(withIdentifier: "showOptionsViewFromEditProfileView", sender: self)
-        } else {
-            performSegue(withIdentifier: "showProfilePageFromEditProfileView", sender: self)
-        }
+//        if tempSeguedFrom == "OptionsFromBotViewController" {
+//            performSegue(withIdentifier: "showOptionsViewFromEditProfileView", sender: self)
+//        } else {
+//            performSegue(withIdentifier: "showProfilePageFromEditProfileView", sender: self)
+//        }
+        performSegue(withIdentifier: "showMyProfileFromEditProfile", sender: self)
         rightBarButton.isSelected = true
     }
     func displayNavigationBar(){
@@ -436,11 +437,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
         }
         
         localData.synchronize()
-        if tempSeguedFrom == "OptionsFromBotViewController" {
-            performSegue(withIdentifier: "showOptionsViewFromEditProfileView", sender: self)
-        } else {
-            performSegue(withIdentifier: "showProfilePageFromEditProfileView", sender: self)
-        }
+//        if tempSeguedFrom == "OptionsFromBotViewController" {
+//            performSegue(withIdentifier: "showOptionsViewFromEditProfileView", sender: self)
+//        } else {
+//            performSegue(withIdentifier: "showProfilePageFromEditProfileView", sender: self)
+//        }
+        performSegue(withIdentifier: "showMyProfileFromEditProfile", sender: self)
     }
     
     // Switches tapped
@@ -637,6 +639,9 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIImageP
             self.transitionManager.animationDirection = "Right"
             let vc2 = vc as! OptionsFromBotViewController
             vc2.seguedFrom = seguedFrom
+        }
+        else if mirror.subjectType == MyProfileViewController.self {
+            self.transitionManager.animationDirection = "Right"
         }
         vc.transitioningDelegate = self.transitionManager
     }
