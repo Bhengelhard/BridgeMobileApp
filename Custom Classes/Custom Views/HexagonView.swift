@@ -36,4 +36,32 @@ class HexagonView: UIView {
         ctx?.fillPath()
     }
     
+    func setBackgroundColor(color: UIColor) {
+        hexBackgroundColor = color
+        DispatchQueue.main.async {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    func setBackgroundImage(image: UIImage) {
+        if let newImage = fitImageToView(image: image) {
+            hexBackgroundColor = UIColor(patternImage: newImage)
+        } else {
+            hexBackgroundColor = UIColor(patternImage: image)
+        }
+        DispatchQueue.main.async {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    func fitImageToView(image: UIImage) -> UIImage? {
+        let viewSize = CGSize(width: frame.width, height: frame.width)
+        var resultImage: UIImage?
+        UIGraphicsBeginImageContext(viewSize)
+        image.draw(in: CGRect(x: (viewSize.width - frame.width)/2, y: (viewSize.height-frame.height)/2, width: viewSize.width, height: viewSize.height))
+        resultImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return resultImage;
+    }
+    
 }

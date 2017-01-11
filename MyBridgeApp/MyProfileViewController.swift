@@ -41,7 +41,6 @@ class MyProfileViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        scrollView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         view.addSubview(scrollView)
         
         scrollView.backgroundColor = .clear
@@ -145,7 +144,8 @@ class MyProfileViewController: UIViewController {
             
             //Setting static profile images for tech Demo
             let image1 = #imageLiteral(resourceName: "ProfPic2.jpg")
-            setImageToHexagon(image: image1, hexView: topHexView)
+            //setImageToHexagon(image: image1, hexView: topHexView)
+            topHexView.setBackgroundImage(image: image1)
             
 //            if let data = localData.getMainProfilePicture() {
 //                if let image = UIImage(data: data) {
@@ -166,7 +166,8 @@ class MyProfileViewController: UIViewController {
                 }
             } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
                 downloader.imageFromURL(URL: url, callBack: { (image) in
-                    self.setImageToHexagon(image: image, hexView: self.leftHexView)
+                    //self.setImageToHexagon(image: image, hexView: self.leftHexView)
+                    self.leftHexView.setBackgroundImage(image: image)
                     //Saviong mainProfilePicture to device if it has not already been saved
                     if let data = UIImageJPEGRepresentation(image, 1.0){
                         self.localData.setMainProfilePicture(data)
@@ -179,7 +180,8 @@ class MyProfileViewController: UIViewController {
             rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
             //Setting static profile images for tech Demo
             let image2 = #imageLiteral(resourceName: "profpic3.jpg")
-            setImageToHexagon(image: image2, hexView: rightHexView)
+            //setImageToHexagon(image: image2, hexView: rightHexView)
+            rightHexView.setBackgroundImage(image: image2)
             
 //            if let data = localData.getMainProfilePicture() {
 //                if let image = UIImage(data: data) {
@@ -196,7 +198,8 @@ class MyProfileViewController: UIViewController {
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
             //Setting static profile images for tech Demo
             let image3 = #imageLiteral(resourceName: "profPic4.jpg")
-            setImageToHexagon(image: image3, hexView: bottomHexView)
+            //setImageToHexagon(image: image3, hexView: bottomHexView)
+            bottomHexView.setBackgroundImage(image: image3)
 //            if let data = localData.getMainProfilePicture() {
 //                if let image = UIImage(data: data) {
 //                    setImageToHexagon(image: image, hexView: bottomHexView)
@@ -331,6 +334,7 @@ class MyProfileViewController: UIViewController {
         }
     }
     func fitImageToView(viewSize: CGSize, image: UIImage) -> UIImage? {
+        //TODO: Keep image proportions constant
         var resultImage: UIImage?
         UIGraphicsBeginImageContext(viewSize)
         image.draw(in: CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height))
@@ -348,7 +352,8 @@ class MyProfileViewController: UIViewController {
     
     //Send user to the editProfileViewController so they can edit their profile
     func editProfileButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "showEditProfileFromMyProfile", sender: self)
+        //performSegue(withIdentifier: "showEditProfileFromMyProfile", sender: self)
+        present(EditProfileViewController(), animated: false, completion: nil)
     }
     
     //Send user back to the bridgeViewController
@@ -360,6 +365,8 @@ class MyProfileViewController: UIViewController {
         grayOutButtons()
         var type = ""
         var statusSet = false
+        
+        // TODO: Turn off buttons if same one selected
 
         if sender == businessButton {
             if let bridgeStatus = localData.getBusinessStatus() {
