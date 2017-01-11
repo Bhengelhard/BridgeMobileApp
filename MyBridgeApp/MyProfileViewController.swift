@@ -6,10 +6,13 @@
 //  Copyright © 2016 Parse. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import Parse
 
 class MyProfileViewController: UIViewController {
+    
+    let localData = LocalData()
     
     let scrollView = UIScrollView()
     
@@ -35,28 +38,30 @@ class MyProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
+        
         scrollView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         view.addSubview(scrollView)
         
-        scrollView.backgroundColor = .white
+        scrollView.backgroundColor = .clear
                 
         if let user = PFUser.current() {
             
             backArrow.setImage(UIImage(named: "Dark_Arrow"), for: .normal)
             backArrow.frame = CGRect(x: 0.90015*DisplayUtility.screenWidth, y: 0.04969*DisplayUtility.screenHeight, width: 0.0533*DisplayUtility.screenWidth, height: 0.02181*DisplayUtility.screenHeight)
             backArrow.addTarget(self, action: #selector(goBack(_:)), for: .touchUpInside)
-            scrollView.addSubview(backArrow)
+            view.addSubview(backArrow)
             
             welcomeLabel.textColor = .black
             welcomeLabel.textAlignment = .center
             welcomeLabel.font = UIFont(name: "BentonSans-Light", size: 21)
-            if let name = user["name"] as? String {
+            if let name = localData.getUsername() {
                 let firstName = DisplayUtility.firstName(name: name)
                 welcomeLabel.text = "Welcome back, \(firstName)."
                 welcomeLabel.sizeToFit()
                 welcomeLabel.frame = CGRect(x: 0, y: backArrow.frame.minY + 0.00265*DisplayUtility.screenHeight, width: welcomeLabel.frame.width, height: welcomeLabel.frame.height)
                 welcomeLabel.center.x = DisplayUtility.screenWidth / 2
-                scrollView.addSubview(welcomeLabel)
+                view.addSubview(welcomeLabel)
             }
             
             numNectedLabel.textColor = .gray
@@ -68,6 +73,7 @@ class MyProfileViewController: UIViewController {
                 query.whereKey("connecter_objectId", equalTo: objectId)
                 query.whereKey("user1_response", equalTo: 1)
                 query.whereKey("user2_response", equalTo: 1)
+                query.whereKey("accepted_notification_viewed", equalTo: true)
                 query.limit = 1000
                 query.findObjectsInBackground(block: { (results, error) in
                     print("numNected query executing...")
@@ -79,16 +85,21 @@ class MyProfileViewController: UIViewController {
                         self.numNectedLabel.sizeToFit()
                         self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
                         self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
-                        self.scrollView.addSubview(self.numNectedLabel)
+                        self.view.addSubview(self.numNectedLabel)
                     }
                 })
             }
+            
+            scrollView.frame = CGRect(x: 0, y: welcomeLabel.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.955*DisplayUtility.screenHeight - welcomeLabel.frame.maxY)
+            view.addSubview(scrollView)
+            
+            scrollView.backgroundColor = .clear
             
             let upperButtonsWidth = 0.34666*DisplayUtility.screenWidth
             let upperButtonsHeight = 0.2063*upperButtonsWidth
             
             userSettingsButton.setImage(UIImage(named: "UserSettings_Button"), for: .normal)
-            userSettingsButton.frame = CGRect(x: 0.0383*DisplayUtility.screenWidth, y: welcomeLabel.frame.maxY + 0.045*DisplayUtility.screenHeight, width: upperButtonsWidth, height: upperButtonsHeight)
+            userSettingsButton.frame = CGRect(x: 0.0383*DisplayUtility.screenWidth, y: 0, width: upperButtonsWidth, height: upperButtonsHeight)
             print(userSettingsButton.frame.height / userSettingsButton.frame.width)
             scrollView.addSubview(userSettingsButton)
             
@@ -110,7 +121,9 @@ class MyProfileViewController: UIViewController {
                     } else {
                         self.topHexView.hexBackgroundColor = UIColor(patternImage: image)
                     }
-                    self.topHexView.setNeedsDisplay()
+                    DispatchQueue.main.async {
+                        self.topHexView.setNeedsDisplay()
+                    }
                 })
             }
             scrollView.addSubview(topHexView)
@@ -123,7 +136,9 @@ class MyProfileViewController: UIViewController {
                     } else {
                         self.leftHexView.hexBackgroundColor = UIColor(patternImage: image)
                     }
-                    self.leftHexView.setNeedsDisplay()
+                    DispatchQueue.main.async {
+                        self.leftHexView.setNeedsDisplay()
+                    }
                 })
             }
             scrollView.addSubview(leftHexView)
@@ -136,7 +151,9 @@ class MyProfileViewController: UIViewController {
                     } else {
                         self.rightHexView.hexBackgroundColor = UIColor(patternImage: image)
                     }
-                    self.rightHexView.setNeedsDisplay()
+                    DispatchQueue.main.async {
+                        self.rightHexView.setNeedsDisplay()
+                    }
                 })
             }
             scrollView.addSubview(rightHexView)
@@ -149,7 +166,9 @@ class MyProfileViewController: UIViewController {
                     } else {
                         self.bottomHexView.hexBackgroundColor = UIColor(patternImage: image)
                     }
-                    self.bottomHexView.setNeedsDisplay()
+                    DispatchQueue.main.async {
+                        self.bottomHexView.setNeedsDisplay()
+                    }
                 })
             }
             scrollView.addSubview(bottomHexView)
@@ -164,7 +183,10 @@ class MyProfileViewController: UIViewController {
                 query.whereKey("connecter_objectId", equalTo: objectId)
                 query.whereKey("user1_response", equalTo: 1)
                 query.whereKey("user2_response", equalTo: 1)
-                //query.whereKey("", greaterThan: ) // filter on past week
+                query.whereKey("accepted_notification_viewed", equalTo: true)
+                let secondsPerWeek = 60*60*24*7.0
+                let dateOneWeekAgo = Date.init(timeIntervalSinceNow: -1.0 * secondsPerWeek)
+                query.whereKey("updatedAt", greaterThanOrEqualTo: dateOneWeekAgo) // filter on past week
                 query.limit = 1000
                 query.findObjectsInBackground(block: { (results, error) in
                     print("numNected query executing...")
@@ -172,7 +194,13 @@ class MyProfileViewController: UIViewController {
                         print("numNected findObjectsInBackgroundWithBlock error - \(error)")
                     }
                     else if let results = results {
-                        self.numNectedLastWeekLabel.text = "You've 'nected \(results.count) new connections\nin the past week. Sweet!"
+                        if results.count == 0 {
+                            self.numNectedLastWeekLabel.text = "You've 'nected 0 new connections\nin the past week."
+                        } else if results.count == 1 {
+                            self.numNectedLastWeekLabel.text = "You've 'nected 1 new connection\nin the past week. Sweet!"
+                        } else {
+                            self.numNectedLastWeekLabel.text = "You've 'nected \(results.count) new connections\nin the past week. Sweet!"
+                        }
                         self.numNectedLastWeekLabel.sizeToFit()
                         self.numNectedLastWeekLabel.frame = CGRect(x: 0, y: self.numNectedLastWeekLabel.frame.minY, width: self.numNectedLastWeekLabel.frame.width, height: self.numNectedLastWeekLabel.frame.height)
                         self.numNectedLastWeekLabel.center.x = DisplayUtility.screenWidth / 2
@@ -273,7 +301,7 @@ class MyProfileViewController: UIViewController {
         grayOutButtons()
         var type = ""
         if sender == businessButton {
-            businessButton.backgroundColor = DisplayUtility.businessBlue
+            businessButton.setImage(UIImage(named: "MyProfile_Selected_Work"), for: .normal)
             type = "Business"
             if let status = businessStatus {
                 statusLabel.text = status
@@ -284,7 +312,7 @@ class MyProfileViewController: UIViewController {
                 return
             }
         } else if sender == loveButton {
-            loveButton.backgroundColor = DisplayUtility.loveRed
+            loveButton.setImage(UIImage(named: "MyProfile_Selected_Dating"), for: .normal)
             type = "Love"
             if let status = loveStatus {
                 statusLabel.text = status
@@ -295,7 +323,7 @@ class MyProfileViewController: UIViewController {
                 return
             }
         } else {
-            friendshipButton.backgroundColor = DisplayUtility.friendshipGreen
+            friendshipButton.setImage(UIImage(named: "MyProfile_Selected_Friends"), for: .normal)
             type = "Friendship"
             if let status = friendshipStatus {
                 statusLabel.text = status
@@ -345,9 +373,9 @@ class MyProfileViewController: UIViewController {
     }
     
     func grayOutButtons() {
-        businessButton.backgroundColor = DisplayUtility.necterGray
-        loveButton.backgroundColor = DisplayUtility.necterGray
-        friendshipButton.backgroundColor = DisplayUtility.necterGray
+        businessButton.setImage(UIImage(named: "MyProfile_Unselected_Work"), for: .normal)
+        loveButton.setImage(UIImage(named: "MyProfile_Unselected_Dating"), for: .normal)
+        friendshipButton.setImage(UIImage(named: "MyProfile_Unselected_Friends"), for: .normal)
     }
     
     func layoutBottomBasedOnStatus() {
