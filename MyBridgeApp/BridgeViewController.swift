@@ -57,6 +57,7 @@ class BridgeViewController: UIViewController {
     var shouldCheckInPair = Bool()
     var swipeCardView = UIView()
 
+    var postTapped = Bool()
     //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
     //var postTapped = Bool()
