@@ -922,9 +922,9 @@ class BridgeViewController: UIViewController {
                 }
             }
 
-            if removeCard{
-                swipeCardView.removeFromSuperview()
-            
+			if removeCard
+			{
+				swipeCardView.removeFromSuperview()
 //                darkLayer.removeFromSuperview()
 //                
 //                //Set new secondSwipeCard and send darkLayer to front of secondSwipeCard
