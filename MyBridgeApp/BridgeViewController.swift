@@ -60,7 +60,6 @@ class BridgeViewController: UIViewController {
     //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
 
-    
     //navigation bar creation
     var badgeCount = Int()
     let leftBarButton = UIButton()
