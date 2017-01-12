@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "filename" : "Black_X.png",
+      "filename" : "SETTINGS_SelectedBubble.png",
       "scale" : "1x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "Black_X@2x.png",
+      "filename" : "SETTINGS_SelectedBubble@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "Black_X@3x.png",
+      "filename" : "SETTINGS_SelectedBubble@3x.png",
       "scale" : "3x"
     }
   ],
