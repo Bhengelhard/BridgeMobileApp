@@ -351,6 +351,8 @@ class BridgeViewController: UIViewController {
         swipeCardView.isUserInteractionEnabled = true
         if let aboveView = aboveView
 		{
+			secondSwipeCard = swipeCardView
+
             //Second card should also have dark layer that fades away with swipe of first card in deck.
             swipeCardView.frame.size = CGSize(width: /*0.95**/swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
             swipeCardView.center = aboveView.center
