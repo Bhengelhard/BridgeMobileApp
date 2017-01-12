@@ -16,6 +16,8 @@ class DashedLine: UIView {
         }
     }
     
+    var color : CGColor = UIColor.white.cgColor
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -34,8 +36,9 @@ class DashedLine: UIView {
     override func draw(_ rect: CGRect) {        
         // Context is the object used for drawing
         let context = UIGraphicsGetCurrentContext()
+
         context?.setLineWidth(1.5)
-        context?.setStrokeColor(UIColor.white.cgColor)
+        context?.setStrokeColor(color)
         
         //Create a path
         context?.move(to: coordinates[0])

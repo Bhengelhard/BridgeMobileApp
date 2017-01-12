@@ -238,12 +238,13 @@ class AcceptedConnectionNotification: UIView {
         leftMessageButton.frame.size = messageButtonSize
         leftMessageButton.center.x = user1ProfilePicture.frame.midX
         leftMessageButton.frame.origin.y = messageButtonOriginY
-        leftMessageButton.setTitle("Message", for: .normal)
+        leftMessageButton.setTitle("MESSAGE", for: .normal)
         leftMessageButton.setTitleColor(UIColor.lightGray, for: .normal)
         leftMessageButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 15)
         leftMessageButton.layer.borderColor = UIColor.lightGray.cgColor
         leftMessageButton.layer.borderWidth = 1
         leftMessageButton.layer.cornerRadius = 8.5
+        DisplayUtility.centerTextVerticallyInButton(button: leftMessageButton)
         leftMessageButton.addTarget(self, action: #selector(leftMessageButtonTapped(_:)), for: .touchUpInside)
         self.addSubview(leftMessageButton)
         
@@ -252,12 +253,13 @@ class AcceptedConnectionNotification: UIView {
         rightMessageButton.frame.size = messageButtonSize
         rightMessageButton.center.x = user2ProfilePicture.center.x
         rightMessageButton.frame.origin.y = messageButtonOriginY
-        rightMessageButton.setTitle("Message", for: .normal)
+        rightMessageButton.setTitle("MESSAGE", for: .normal)
         rightMessageButton.setTitleColor(UIColor.lightGray, for: .normal)
         rightMessageButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 15)
         rightMessageButton.layer.borderColor = UIColor.lightGray.cgColor
         rightMessageButton.layer.borderWidth = 1
-        rightMessageButton.layer.cornerRadius = 7
+        rightMessageButton.layer.cornerRadius = 8.5
+        DisplayUtility.centerTextVerticallyInButton(button: rightMessageButton)
         rightMessageButton.addTarget(self, action: #selector(rightMessageButtonTapped(_:)), for: .touchUpInside)
         self.addSubview(rightMessageButton)
         
@@ -270,6 +272,8 @@ class AcceptedConnectionNotification: UIView {
         let leftDashedLine = DashedLine()
         leftDashedLine.frame = self.bounds
         leftDashedLine.backgroundColor = UIColor.clear
+        leftDashedLine.color = UIColor.lightGray.cgColor
+        //leftDashedLine.updateColor(color: UIColor.lightGray)
         leftDashedLine.coordinates = [CGPoint(x: user1ProfilePicture.center.x, y: user1ProfilePicture.frame.maxY), CGPoint(x: leftMessageButton.center.x, y: leftMessageButton.frame.minY)]
         self.insertSubview(leftDashedLine, at: 1)
         
@@ -277,6 +281,8 @@ class AcceptedConnectionNotification: UIView {
         let rightDashedLine = DashedLine()
         rightDashedLine.frame = self.bounds
         rightDashedLine.backgroundColor = UIColor.clear
+        rightDashedLine.color = UIColor.lightGray.cgColor
+        //rightDashedLine.updateColor(color: UIColor.lightGray)
         rightDashedLine.coordinates = [CGPoint(x: user2ProfilePicture.center.x, y: user2ProfilePicture.frame.maxY), CGPoint(x: rightMessageButton.center.x, y: rightMessageButton.frame.minY)]
         self.insertSubview(rightDashedLine, at: 1)
         
@@ -299,15 +305,18 @@ class AcceptedConnectionNotification: UIView {
         
         //Exit Button
         let exitButton = UIButton()
-        let exitButtonDiameter = 0.05*DisplayUtility.screenHeight
-        exitButton.frame.origin.y = infoLabel.frame.maxY + 0.1*DisplayUtility.screenHeight
+        let exitButtonDiameter = 0.0734*DisplayUtility.screenHeight
+        exitButton.frame.origin.y = 0.77156*DisplayUtility.screenHeight
         exitButton.frame.size = CGSize(width: exitButtonDiameter, height: exitButtonDiameter)
         exitButton.center.x = self.center.x
-        exitButton.setTitleColor(UIColor.white, for: .normal)
-        exitButton.setTitle("X", for: .normal)
-        exitButton.layer.borderWidth = 1
-        exitButton.layer.borderColor = UIColor.white.cgColor
-        exitButton.layer.cornerRadius = exitButtonDiameter/2
+        exitButton.setImage(#imageLiteral(resourceName: "Exit_Notification_Icon"), for: .normal)
+//        exitButton.setTitleColor(UIColor.white, for: .normal)
+//        exitButton.setTitle("X", for: .normal)
+//        exitButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 20)
+//        exitButton.layer.borderWidth = 1
+//        exitButton.layer.borderColor = UIColor.white.cgColor
+//        exitButton.layer.cornerRadius = exitButtonDiameter/2
+        //DisplayUtility.centerTextVerticallyInButton(button: exitButton)
         exitButton.addTarget(self, action: #selector(exitButtonTapped(_:)), for: .touchUpInside)
         self.addSubview(exitButton)
     }
