@@ -349,11 +349,11 @@ class BridgeViewController: UIViewController {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
         swipeCardView.addGestureRecognizer(gesture)
         swipeCardView.isUserInteractionEnabled = true
-        if let aboveView = aboveView {
+        if let aboveView = aboveView
+		{
             //Second card should also have dark layer that fades away with swipe of first card in deck.
             swipeCardView.frame.size = CGSize(width: /*0.95**/swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
             swipeCardView.center = aboveView.center
-            
             swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
             swipeCardView.isUserInteractionEnabled = false
             self.view.insertSubview(swipeCardView, belowSubview: aboveView)
