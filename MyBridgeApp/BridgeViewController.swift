@@ -350,14 +350,6 @@ class BridgeViewController: UIViewController {
         swipeCardView.addGestureRecognizer(gesture)
         swipeCardView.isUserInteractionEnabled = true
         if let aboveView = aboveView {
-            
-            if secondSwipeCard.tag == 0 {
-                print("setting second swipe card tag to 1")
-                secondSwipeCard = swipeCardView
-                secondSwipeCard.tag = 1
-            }
-            
-            //Enhancement Needed: Second Card should start at 95% size and grow with swipe of first card in deck.
             //Second card should also have dark layer that fades away with swipe of first card in deck.
             swipeCardView.frame.size = CGSize(width: /*0.95**/swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
             swipeCardView.center = aboveView.center
