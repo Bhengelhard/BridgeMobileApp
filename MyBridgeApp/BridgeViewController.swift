@@ -236,6 +236,7 @@ class BridgeViewController: UIViewController {
         arrayOfCardsInDeck = [UIView]()
         arrayOfCardColors = [CGColor]()
         var j = 0
+		// FIXME: Missing/invalid data causes crashes
         let bridgePairings = localData.getPairings()
         if let bridgePairings = bridgePairings {
             var aboveView:UIView? = nil
@@ -310,8 +311,14 @@ class BridgeViewController: UIViewController {
                 if let mainProfilePicture = pairing.user2?.mainProfilePicture {
                     photoFile2 = mainProfilePicture
                 }
-                let color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
-                
+
+				var color = typesOfColor.business
+
+				if pairing.user1?.bridgeType != nil
+				{
+					color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
+				}
+
                 aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photoFile1,locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photoFile2,locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
                 lastCardInStack = aboveView!
             }
