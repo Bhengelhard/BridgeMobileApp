@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6D27018414F2321AD7092500DB890C11D45C4478",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "6D27018414F2321AD7092500DB890C11D45C4478" : 9223372036854775807,
+    "133DCFA189FB00A5F0012174217E0C6EF3C4672B" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C568314A-2FFD-4C8A-9DC2-3753B64B5DAF",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "6D27018414F2321AD7092500DB890C11D45C4478" : "BridgeMobileApp\/",
+    "133DCFA189FB00A5F0012174217E0C6EF3C4672B" : "mybridgeapp\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MyBridgeApp",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MyBridgeApp.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/git.heroku.com\/mybridgeapp.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "133DCFA189FB00A5F0012174217E0C6EF3C4672B"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Bhengelhard\/BridgeMobileApp.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6D27018414F2321AD7092500DB890C11D45C4478"
+    }
+  ]
+}

@@ -346,8 +346,9 @@ class MyProfileViewController: UIViewController {
     //Send user to the userSettingsViewController so they can update their settings
     //For now this is logging the user out and sending them to the access page
     func userSettingsButtonTapped(_ sender: UIButton) {
-        PFUser.logOut()
-        performSegue(withIdentifier: "showAccess", sender: self)
+//        PFUser.logOut()
+//        performSegue(withIdentifier: "showAccess", sender: self)
+        performSegue(withIdentifier: "showUserSettings", sender: self)
     }
     
     //Send user to the editProfileViewController so they can edit their profile

@@ -45,6 +45,7 @@
 		30A726F61E26989E0070B620 /* profPic4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F31E26989E0070B620 /* profPic4.jpg */; };
 		30A726F71E26989E0070B620 /* profpic3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F41E26989E0070B620 /* profpic3.jpg */; };
 		30A726F81E26989E0070B620 /* ProfPic2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F51E26989E0070B620 /* ProfPic2.jpg */; };
+		30A726FC1E27D9160070B620 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */; };
 		30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */; };
 		30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */; };
 		30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */; };
@@ -135,6 +136,7 @@
 		30A726F31E26989E0070B620 /* profPic4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profPic4.jpg; sourceTree = "<group>"; };
 		30A726F41E26989E0070B620 /* profpic3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profpic3.jpg; sourceTree = "<group>"; };
 		30A726F51E26989E0070B620 /* ProfPic2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ProfPic2.jpg; sourceTree = "<group>"; };
+		30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSettingsViewController.swift; path = MyBridgeApp/UserSettingsViewController.swift; sourceTree = SOURCE_ROOT; };
 		30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesView.swift; path = "Custom Classes/Custom Views/NewMatchesView.swift"; sourceTree = "<group>"; };
 		30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptedConnectionNotification.swift; path = "Custom Classes/Custom Views/AcceptedConnectionNotification.swift"; sourceTree = "<group>"; };
 		30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBRetrievingFunctions.swift; path = "Custom Classes/Backend Communication/DBRetrievingFunctions.swift"; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
 				E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */,
 				E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */,
+				30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */,
 				E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */,
 				E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */,
 				E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */,
@@ -515,6 +518,7 @@
 				307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */,
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
 				304FEBE11DE3918E00B3A8A7 /* DashedLine.swift in Sources */,
+				30A726FC1E27D9160070B620 /* UserSettingsViewController.swift in Sources */,
 				30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
 				304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */,
