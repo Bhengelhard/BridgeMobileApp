@@ -373,6 +373,8 @@ class BridgeViewController: UIViewController {
             swipeCardFrame = swipeCardView.frame
             
             self.view.insertSubview(swipeCardView, belowSubview: connectIcon)
+
+			swipeCardView.overlay.removeFromSuperlayer()
         }
         //Making sure disconnect and connect Icons are at the front of the view
         arrayOfCardsInDeck.append(swipeCardView)
@@ -865,6 +867,16 @@ class BridgeViewController: UIViewController {
 			                                               y: max(maxFrame.origin.y + differential.height, maxFrame.origin.y)), 
 			                               size: CGSize(width: min(abs(maxFrame.width - (inset.width * 2)), maxFrame.width), 
 			                                            height: min(abs(maxFrame.height - (inset.height * 2)), maxFrame.height)))
+
+			let overlayMultiplier = CGFloat(secondSwipeCard.defaultOverlayOpacity)
+			var overlayPercent: CGFloat = 2.0 * (direction / screenMiddleX) - overlayMultiplier
+
+			if overlayPercent < 0
+			{
+				overlayPercent = abs(overlayPercent)
+
+				secondSwipeCard.overlay.opacity = Float(overlayPercent)
+			}
 		}
 
 		if gesture.state == .ended
@@ -957,6 +969,7 @@ class BridgeViewController: UIViewController {
 				if arrayOfCardsInDeck.count > 1
 				{
 					swipeCardView = arrayOfCardsInDeck[0]
+					swipeCardView.overlay.removeFromSuperlayer()
 					secondSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
 				}
 
@@ -1070,6 +1083,7 @@ class BridgeViewController: UIViewController {
             if arrayOfCardsInDeck.count > 0 {
                 arrayOfCardsInDeck[0].isUserInteractionEnabled = true
 				swipeCardView = arrayOfCardsInDeck[0]
+				swipeCardView.overlay.removeFromSuperlayer()
 				secondSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
             }
             else {
