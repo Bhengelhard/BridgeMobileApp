@@ -46,7 +46,7 @@ class BridgeViewController: UIViewController {
     var currentTypeOfCardsOnDisplay = typesOfCard.all
     var lastCardInStack:UIView? = nil // used by getB() to add a card below this
     var displayNoMoreCardsLabel = UILabel()
-    var arrayOfCardsInDeck = [UIView]()
+    var arrayOfCardsInDeck = [SwipeCard]()
     var arrayOfCardColors = [CGColor]()
     var segueToSingleMessage = false
     var messageId = ""
@@ -233,7 +233,7 @@ class BridgeViewController: UIViewController {
             displayNoMoreCardsLabel.alpha = 0
             revisitButton.alpha = 0
         }
-        arrayOfCardsInDeck = [UIView]()
+        arrayOfCardsInDeck = [SwipeCard]()
         arrayOfCardColors = [CGColor]()
         var j = 0
 		// FIXME: Missing/invalid data causes crashes
@@ -962,7 +962,7 @@ class BridgeViewController: UIViewController {
     }
 
     func bridged(){
-        if let swipeCard = arrayOfCardsInDeck.first as? SwipeCard{
+        if let swipeCard = arrayOfCardsInDeck.first{
             let reasonForConnectionView = ReasonForConnection()
             reasonForConnectionView.initialize(vc: self)
             reasonForConnectionView.sendSwipeCard(swipeCardView: swipeCard)
