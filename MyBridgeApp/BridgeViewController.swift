@@ -756,6 +756,19 @@ class BridgeViewController: UIViewController {
         }*/
     }
 
+	func smallestSwipeCardFrame () -> CGRect
+	{
+		let max = swipeCardView.swipeCardFrame()
+		let percent: CGFloat = 5 / 100
+		let inset = CGSize(width: max.width * percent, 
+		                   height: max.height * percent)
+
+		return CGRect(x: max.origin.x + inset.width, 
+		              y: max.origin.y + inset.height, 
+		              width: max.width - (inset.width * 2), 
+		              height: max.height - (inset.height * 2))
+	}
+
     func isDragged(_ gesture: UIPanGestureRecognizer)
 	{
         let translation = gesture.translation(in: self.view)
