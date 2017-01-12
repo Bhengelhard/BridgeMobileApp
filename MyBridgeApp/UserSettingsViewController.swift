@@ -27,11 +27,12 @@ class UserSettingsViewController: UIViewController {
     let femaleGenderButton = UIButton()
     let otherGenderCheckmarkIcon = UIImageView()
     let otherGenderButton = UIButton()
+    let otherGenderTextField = UITextField()
 
     //Initializing Interested In global objects
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = UIColor.white
         initializeUI()
         
     }
@@ -124,13 +125,14 @@ class UserSettingsViewController: UIViewController {
     //Left Bar Button Target
     func cancelButtonTapped(_ sender: UIButton) {
         print("cancelButtonTapped")
-        performSegue(withIdentifier: "showMyProfile", sender: self)
+        //performSegue(withIdentifier: "showMyProfile", sender: self)
+        dismiss(animated: true, completion: nil)
     }
     
     //Right Bar Button Target
     func saveButtonTapped(_ sender: UIButton) {
         print("saveButtonTapped and not yet saving")
-        performSegue(withIdentifier: "showMyProfile", sender: self)
+        dismiss(animated: true, completion: nil)
     }
 
     //Initialize My Gender
@@ -160,27 +162,21 @@ class UserSettingsViewController: UIViewController {
         let otherFrameOrigin = CGPoint(x: 0.1496*DisplayUtility.screenWidth, y: 0.32346*DisplayUtility.screenHeight)
         setUpGenderClickableSpace(button: otherGenderButton, checkmarkIcon: otherGenderCheckmarkIcon, origin: otherFrameOrigin, text: "OTHER:")
         otherGenderButton.addTarget(self, action: #selector(otherButtonTapped(_:)), for: .touchUpInside)
-        let otherGenderTextField = UITextField()
-        otherGenderTextField.frame = CGRect(x: 0.43757*DisplayUtility.screenWidth, y: 0, width: 0.4*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
-        otherGenderTextField.center.y = otherGenderCheckmarkIcon.center.y
-        otherGenderTextField.layer.masksToBounds = false
-        otherGenderTextField.layer.backgroundColor = UIColor.white.cgColor
-        otherGenderTextField.layer.borderColor = UIColor.gray.cgColor
-        otherGenderTextField.layer.shadowColor = UIColor.black.cgColor
-        otherGenderTextField.layer.borderWidth = 0.0
-        otherGenderTextField.layer.cornerRadius = 5
-        otherGenderTextField.layer.shadowRadius = 2.0
-        otherGenderTextField.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
         
-        otherGenderTextField.layer.opacity = 1
-
-//        textField.layer.masksToBounds = false
-//        textField.layer.shadowRadius = 2.0
-//        textField.layer.shadowColor = UIColor.blackColor().CGColor
-//        textField.layer.shadowOffset = CGSizeMake(1.0, 1.0)
-//        textField.layer.shadowOpacity = 1.0
-//        textField.layer.shadowRadius = 1.0
+        otherGenderTextField.frame = CGRect(x: otherGenderButton.frame.maxX + 0.025*DisplayUtility.screenWidth, y: 0, width: 0.4*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        otherGenderTextField.center.y = otherGenderCheckmarkIcon.center.y
+        otherGenderTextField.textAlignment = NSTextAlignment.left
+        otherGenderTextField.font = optionTextFont
+        otherGenderTextField.isUserInteractionEnabled = false
         view.addSubview(otherGenderTextField)
+        
+        let otherGenderBottomLine = UIView()
+        otherGenderBottomLine.frame.origin.y = otherGenderTextField.frame.maxY
+        otherGenderBottomLine.frame.origin.x = otherGenderTextField.frame.minX
+        otherGenderBottomLine.frame.size.width = otherGenderTextField.frame.width
+        otherGenderBottomLine.frame.size.height = 1
+        otherGenderBottomLine.backgroundColor = UIColor.black
+        view.addSubview(otherGenderBottomLine)
     }
     
     //Initialize Interested In
@@ -225,6 +221,7 @@ class UserSettingsViewController: UIViewController {
             //Set other checkmark Icon and Button to unselected
             otherGenderCheckmarkIcon.image = unselectedCheckmark
             otherGenderButton.isSelected = false
+            otherGenderTextField.isUserInteractionEnabled = false
         }
     }
     
@@ -242,15 +239,17 @@ class UserSettingsViewController: UIViewController {
             //Set other checkmark Icon and Button to unselected
             otherGenderCheckmarkIcon.image = unselectedCheckmark
             otherGenderButton.isSelected = false
+            otherGenderTextField.isUserInteractionEnabled = false
         }
     }
     
     //Other Button Target - Changing Gender Radio Button to Other Selected
     func otherButtonTapped(_ sender: UIButton) {
-        if !femaleGenderButton.isSelected {
+        if !otherGenderButton.isSelected {
             //Set other Checkmark Icon and Button to selected
             otherGenderCheckmarkIcon.image = selectedCheckmark
             otherGenderButton.isSelected = true
+            otherGenderTextField.isUserInteractionEnabled = true
             
             //Set male checkmark Icon and Button to unselected
             maleGenderCheckmarkIcon.image = unselectedCheckmark

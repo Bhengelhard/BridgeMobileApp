@@ -67,7 +67,7 @@ class MyProfileViewController: UIViewController {
                 let firstName = DisplayUtility.firstName(name: name)
                 welcomeLabel.text = "Welcome back, \(firstName)."
                 welcomeLabel.sizeToFit()
-                welcomeLabel.frame = CGRect(x: 0, y: 0.1*DisplayUtility.screenHeight, width: welcomeLabel.frame.width, height: welcomeLabel.frame.height)
+                welcomeLabel.frame = CGRect(x: 0, y: 0.07969*DisplayUtility.screenHeight, width: welcomeLabel.frame.width, height: welcomeLabel.frame.height)
                 welcomeLabel.center.x = DisplayUtility.screenWidth / 2
                 view.addSubview(welcomeLabel)
             }
@@ -348,7 +348,8 @@ class MyProfileViewController: UIViewController {
     func userSettingsButtonTapped(_ sender: UIButton) {
 //        PFUser.logOut()
 //        performSegue(withIdentifier: "showAccess", sender: self)
-        performSegue(withIdentifier: "showUserSettings", sender: self)
+        //performSegue(withIdentifier: "showUserSettings", sender: self)
+        present(UserSettingsViewController(), animated: true, completion: nil)
     }
     
     //Send user to the editProfileViewController so they can edit their profile
