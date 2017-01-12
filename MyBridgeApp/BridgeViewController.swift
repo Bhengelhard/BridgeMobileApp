@@ -59,7 +59,6 @@ class BridgeViewController: UIViewController {
     var postTapped = Bool()
     //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
-    //var postTapped = Bool()
 
     
     //navigation bar creation
