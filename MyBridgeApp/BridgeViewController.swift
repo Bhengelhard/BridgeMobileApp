@@ -46,7 +46,7 @@ class BridgeViewController: UIViewController {
     var currentTypeOfCardsOnDisplay = typesOfCard.all
     var lastCardInStack:UIView? = nil // used by getB() to add a card below this
     var displayNoMoreCardsLabel = UILabel()
-    var arrayOfCardsInDeck = [UIView]()
+    var arrayOfCardsInDeck = [SwipeCard]()
     var arrayOfCardColors = [CGColor]()
     var segueToSingleMessage = false
     var messageId = ""
@@ -55,13 +55,12 @@ class BridgeViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var wasLastSwipeInDeck = Bool()
     var shouldCheckInPair = Bool()
-    var swipeCardView = UIView()
-
+	var swipeCardView: SwipeCard = SwipeCard()
+    var postTapped = Bool()
     //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
-    //var postTapped = Bool()
+	let secondSwipeCardShrinkPercentage = 0.98
 
-    
     //navigation bar creation
     var badgeCount = Int()
     let leftBarButton = UIButton()
@@ -233,9 +232,10 @@ class BridgeViewController: UIViewController {
             displayNoMoreCardsLabel.alpha = 0
             revisitButton.alpha = 0
         }
-        arrayOfCardsInDeck = [UIView]()
+        arrayOfCardsInDeck = [SwipeCard]()
         arrayOfCardColors = [CGColor]()
         var j = 0
+		// FIXME: Missing/invalid data causes crashes
         let bridgePairings = localData.getPairings()
         if let bridgePairings = bridgePairings {
             var aboveView:UIView? = nil
@@ -310,8 +310,14 @@ class BridgeViewController: UIViewController {
                 if let mainProfilePicture = pairing.user2?.mainProfilePicture {
                     photoFile2 = mainProfilePicture
                 }
-                let color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
-                
+
+				var color = typesOfColor.business
+
+				if pairing.user1?.bridgeType != nil
+				{
+					color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
+				}
+
                 aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photoFile1,locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photoFile2,locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
                 lastCardInStack = aboveView!
             }
@@ -337,27 +343,22 @@ class BridgeViewController: UIViewController {
             connectionType = "All Types"
         }
         let swipeCardView = SwipeCard()
-        
-        
+
         //superDeckView.backgroundColor = UIColor.white.withAlphaComponent(1.0)
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
         swipeCardView.addGestureRecognizer(gesture)
         swipeCardView.isUserInteractionEnabled = true
-        if let aboveView = aboveView {
-            
-            if secondSwipeCard.tag == 0 {
-                print("setting second swipe card tag to 1")
-                secondSwipeCard = swipeCardView
-                secondSwipeCard.tag = 1
-            }
-            
-            //Enhancement Needed: Second Card should start at 95% size and grow with swipe of first card in deck.
+        if let aboveView = aboveView
+		{
+			secondSwipeCard = swipeCardView
+
             //Second card should also have dark layer that fades away with swipe of first card in deck.
             swipeCardView.frame.size = CGSize(width: /*0.95**/swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
             swipeCardView.center = aboveView.center
-            
             swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
             swipeCardView.isUserInteractionEnabled = false
+			swipeCardView.frame = smallestSwipeCardFrame()
+			swipeCardView.center.x = view.center.x
             self.view.insertSubview(swipeCardView, belowSubview: aboveView)
             
 //            darkLayer.frame = swipeCardView.frame//CGRect(x: 0, y: 0, width: swipeCardView.frame.width, height: swipeCardView.frame.height)
@@ -375,10 +376,13 @@ class BridgeViewController: UIViewController {
             swipeCardFrame = swipeCardView.frame
             
             self.view.insertSubview(swipeCardView, belowSubview: connectIcon)
+
+			swipeCardView.overlay.removeFromSuperlayer()
         }
         //Making sure disconnect and connect Icons are at the front of the view
         arrayOfCardsInDeck.append(swipeCardView)
         arrayOfCardColors.append(swipeCardView.layer.borderColor!)
+
         return swipeCardView
     }
     
@@ -749,11 +753,24 @@ class BridgeViewController: UIViewController {
             postTapped = false
         }*/
     }
-    
-    func isDragged(_ gesture: UIPanGestureRecognizer) {
 
+	func smallestSwipeCardFrame () -> CGRect
+	{
+		let maxFrame = swipeCardView.swipeCardFrame()
+		let percent = CGFloat(secondSwipeCardShrinkPercentage)
+		let inset = CGSize(width: maxFrame.size.width * percent, 
+		                   height: maxFrame.size.height * percent)
+
+		return CGRect(x: maxFrame.origin.x + inset.width, 
+		              y: maxFrame.origin.y + inset.height, 
+		              width: maxFrame.size.width - (inset.width * 2), 
+		              height: maxFrame.size.height - (inset.height * 2))
+	}
+
+    func isDragged(_ gesture: UIPanGestureRecognizer)
+	{
         let translation = gesture.translation(in: self.view)
-        swipeCardView = gesture.view!
+        swipeCardView = gesture.view as! SwipeCard
         swipeCardView.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
         let xFromCenter = swipeCardView.center.x - self.view.bounds.width / 2
         let scale = min(CGFloat(1.0), 1)
@@ -762,11 +779,11 @@ class BridgeViewController: UIViewController {
         swipeCardView.transform = stretch
         var removeCard = false
         var showReasonForConnection = false
-        
+
         //Displaying and Removing the connect and disconnect icons
         let disconnectIconX = max(min((-1.5*(swipeCardView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
         let connectIconX = max(min(((-2.0/3.0)*(swipeCardView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
-        
+
         //Changing second card in stack with Swipe
 //        if secondSwipeCard.tag != 0 {
 //            let darkLayerAlpha = min(max(((-4.0/5.0)*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)) + 0.4, 0), 0.5)
@@ -831,9 +848,44 @@ class BridgeViewController: UIViewController {
         } else if swipeCardView.frame.maxY > DisplayUtility.screenHeight {
             swipeCardView.frame.origin.y = DisplayUtility.screenHeight - swipeCardView.frame.height
         }*/
-        
-        
-        if gesture.state == UIGestureRecognizerState.ended {
+
+		if gesture.state == .began
+		{
+			secondSwipeCard.frame = smallestSwipeCardFrame()
+			secondSwipeCard.center.x = view.center.x
+		}
+
+		if gesture.state == .changed
+		{
+			let multiplier = CGFloat(secondSwipeCardShrinkPercentage)
+			let cardCenterX = swipeCardView.center.x
+			let screenMiddleX = DisplayUtility.screenWidth / 2
+			let direction: CGFloat = cardCenterX <= screenMiddleX ? screenMiddleX - cardCenterX : cardCenterX - screenMiddleX
+			let percent: CGFloat = min(max(0.05 * (direction / screenMiddleX) + multiplier, multiplier), 1.0)
+			let maxFrame = swipeCardView.swipeCardFrame()
+			let inset = CGSize(width: maxFrame.width * percent, 
+			                   height: maxFrame.height * percent)
+			let differential = CGSize(width: maxFrame.size.width - inset.width, 
+			                          height: maxFrame.size.height - inset.height)
+
+			secondSwipeCard.frame = CGRect(origin: CGPoint(x: max(maxFrame.origin.x + differential.width, maxFrame.origin.x), 
+			                                               y: max(maxFrame.origin.y + differential.height, maxFrame.origin.y)), 
+			                               size: CGSize(width: min(abs(maxFrame.width - (inset.width * 2)), maxFrame.width), 
+			                                            height: min(abs(maxFrame.height - (inset.height * 2)), maxFrame.height)))
+
+			let overlayMultiplier = CGFloat(secondSwipeCard.defaultOverlayOpacity)
+			var overlayPercent: CGFloat = 2.0 * (direction / screenMiddleX) - overlayMultiplier
+
+			if overlayPercent < 0
+			{
+				overlayPercent = abs(overlayPercent)
+
+				secondSwipeCard.overlay.opacity = Float(overlayPercent)
+			}
+		}
+
+		if gesture.state == .ended
+		{
             //User Swiped Left
             if swipeCardView.center.x < 0.25*DisplayUtility.screenWidth {
                 let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
@@ -914,9 +966,18 @@ class BridgeViewController: UIViewController {
                     showReasonForConnection = true
                 }
             }
-            if removeCard{
-                swipeCardView.removeFromSuperview()
-            
+
+			if removeCard
+			{
+				swipeCardView.removeFromSuperview()
+
+				if arrayOfCardsInDeck.count > 1
+				{
+					swipeCardView = arrayOfCardsInDeck[0]
+					swipeCardView.overlay.removeFromSuperlayer()
+					secondSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
+				}
+
 //                darkLayer.removeFromSuperview()
 //                
 //                //Set new secondSwipeCard and send darkLayer to front of secondSwipeCard
@@ -930,24 +991,34 @@ class BridgeViewController: UIViewController {
             } else if showReasonForConnection {
                 
             }
-            else {
-                //Put swipeCard back into place
-                UIView.animate(withDuration: 0.7, delay: 0, options: .allowUserInteraction, animations: {
-                    rotation = CGAffineTransform(rotationAngle: 0)
-                    stretch = rotation.scaledBy(x: 1, y: 1)
-                    self.swipeCardView.transform = stretch
-                    self.swipeCardView.frame = self.swipeCardFrame
-                    self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
-                    self.disconnectIcon.alpha = 0.0
-                    self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
-                    self.connectIcon.alpha = 0.0
-                }, completion: { (success) in
-                })
+			else
+			{
+				// Reset the cards
+				self.disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
+				self.disconnectIcon.alpha = 0.0
+				self.connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
+				self.connectIcon.alpha = 0.0
+
+                UIView.animate( withDuration: 0.7, 
+                                delay: 0, 
+                                options: .allowUserInteraction, 
+                                animations:
+					{
+						rotation = CGAffineTransform(rotationAngle: 0)
+						stretch = rotation.scaledBy(x: 1, y: 1)
+						self.swipeCardView.transform = stretch
+						self.swipeCardView.frame = self.swipeCardFrame
+						self.secondSwipeCard.frame = self.smallestSwipeCardFrame()
+						self.secondSwipeCard.center.x = self.view.center.x
+					}, 
+                                completion: nil
+				)
             }
         }
     }
+
     func bridged(){
-        if let swipeCard = arrayOfCardsInDeck.first as? SwipeCard{
+        if let swipeCard = arrayOfCardsInDeck.first{
             let reasonForConnectionView = ReasonForConnection()
             reasonForConnectionView.initialize(vc: self)
             reasonForConnectionView.sendSwipeCard(swipeCardView: swipeCard)
@@ -1014,6 +1085,9 @@ class BridgeViewController: UIViewController {
             arrayOfCardColors.remove(at: 0)
             if arrayOfCardsInDeck.count > 0 {
                 arrayOfCardsInDeck[0].isUserInteractionEnabled = true
+				swipeCardView = arrayOfCardsInDeck[0]
+				swipeCardView.overlay.removeFromSuperlayer()
+				secondSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
             }
             else {
                 lastCardInStack = nil
@@ -1118,6 +1192,7 @@ class BridgeViewController: UIViewController {
         UIView.animate(withDuration: 0.7, animations: {
             swipeCardView.transform = stretch
             swipeCardView.frame = self.swipeCardFrame
+			self.secondSwipeCard.frame = self.swipeCardView.frame
         })
     }
     
@@ -1158,178 +1233,3 @@ class BridgeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 }
-
-
-
-/*func getUpperDeckCardFrame() -> CGRect {
- let upperDeckFrame : CGRect = CGRect(x: 0, y: 0, width: superDeckWidth, height: 0.5*superDeckHeight)
- return upperDeckFrame
- }
- func getLowerDeckCardFrame() -> CGRect {
- let lowerDeckFrame : CGRect = CGRect(x: 0, y: 0.5*superDeckHeight, width: superDeckWidth, height: 0.5*superDeckHeight)
- return lowerDeckFrame
- }
- func getUpperDeckCard(_ name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing: UserInfoPair) -> UIView{
- let frame = getUpperDeckCardFrame()
- return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag: 0, isUpperDeckCard: true)
- 
- }
- func getLowerDeckCard(_ name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing: UserInfoPair) -> UIView{
- let frame = getLowerDeckCardFrame()
- return getCard(frame, name: name, location: location, status: status, photo: photo, cardColor: cardColor, locationCoordinates:locationCoordinates, pairing: pairing, tag:1, isUpperDeckCard: false)
- }
- func getCard(_ deckFrame:CGRect, name:String?, location:String?, status:String?, photo:String?, cardColor:typesOfColor?, locationCoordinates:[Double]?, pairing:UserInfoPair, tag:Int, isUpperDeckCard: Bool) -> UIView {
- 
- let locationFrame = CGRect(x: 0.05*cardWidth,y: 0.18*cardHeight,width: 0.8*cardWidth,height: 0.075*cardHeight)
- let statusFrame = CGRect(x: 0.05*cardWidth,y: 0.65*cardHeight,width: 0.9*cardWidth,height: 0.3*cardHeight)
- let photoFrame = CGRect(x: 0, y: 0, width: superDeckWidth, height: 0.5*superDeckHeight)
- 
- let nameLabel = UILabel()
- nameLabel.text = name
- nameLabel.textAlignment = NSTextAlignment.left
- nameLabel.textColor = UIColor.white
- nameLabel.font = UIFont(name: "Verdana", size: 20)
- //let adjustedNameSize = nameLabel.sizeThatFits(CGSize(width: 0.8*cardWidth, height: 0.12*cardHeight))
- var nameFrame = CGRect(x: 0.05*cardWidth,y: 0.05*cardHeight,width: 0.8*cardWidth,height: 0.12*cardHeight)
- //nameFrame.size = adjustedNameSize
- //nameFrame.size.height = 0.12*cardHeight
- nameLabel.frame = nameFrame
- nameLabel.layer.cornerRadius = 2
- nameLabel.clipsToBounds = true
- 
- nameLabel.layer.shadowOpacity = 0.5
- nameLabel.layer.shadowRadius = 0.5
- nameLabel.layer.shadowColor = UIColor.black.cgColor
- nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
- let locationCoordinates = locationCoordinates ?? [-122.0,37.0]
- 
- let locationLabel = UILabel(frame: locationFrame)
- locationLabel.tag = tag
- if location == "" {
- setCityName(locationLabel, locationCoordinates: locationCoordinates, pairing:pairing)
- }
- locationLabel.text = location
- locationLabel.textAlignment = NSTextAlignment.left
- locationLabel.textColor = UIColor.white
- locationLabel.font = UIFont(name: "Verdana", size: 14)
- locationLabel.layer.shadowOpacity = 0.5
- locationLabel.layer.shadowRadius = 0.5
- locationLabel.layer.shadowColor = UIColor.black.cgColor
- locationLabel.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
- 
- var statusText = ""
- 
- if let status = status {
- if status != "" {
- statusText = "\"\(status)\""
- }
- 
- }
- let statusLabel = UILabel(frame: statusFrame)
- statusLabel.text = statusText
- statusLabel.textColor = UIColor.white
- statusLabel.font = UIFont(name: "Verdana", size: 14)
- statusLabel.textAlignment = NSTextAlignment.center
- statusLabel.numberOfLines = 0
- statusLabel.layer.shadowOpacity = 0.5
- statusLabel.layer.shadowRadius = 0.5
- statusLabel.layer.shadowColor = UIColor.black.cgColor
- statusLabel.layer.shadowOffset = CGSize(width: 0.0, height: -0.5)
- 
- //card's profile pictures are retrieved if they are already saved to the phone using mapping to the associated bridgePairing objectId and the position of the card (i.e. either upperDeckCard or not)
- let photoView = UIImageView(frame: photoFrame)
- 
- if isUpperDeckCard {
- if let data = pairing.user1?.savedProfilePicture {
- //applying filter to make the white text more legible
- let beginImage = CIImage(data: data as Data)
- let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
- edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
- edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
- edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
- 
- let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
- 
- let newImage = UIImage(cgImage: newCGImage!)
- photoView.image = newImage
- photoView.contentMode = UIViewContentMode.scaleAspectFill
- photoView.clipsToBounds = true
- }
- else {
- if let photo = photo{
- if let URL = URL(string: photo) {
- Downloader.load(URL, imageView: photoView, bridgePairingObjectId: pairing.user1?.objectId, isUpperDeckCard: isUpperDeckCard)
- }
- }
- }
- }
- else {
- if let data = pairing.user2?.savedProfilePicture {
- //applying filter to make the white text more legible
- let beginImage = CIImage(data: data as Data)
- let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
- edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
- edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
- edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
- 
- let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
- 
- let newImage = UIImage(cgImage: newCGImage!)
- photoView.image = newImage
- photoView.contentMode = UIViewContentMode.scaleAspectFill
- photoView.clipsToBounds = true
- }
- else {
- if let photo = photo{
- if let URL = URL(string: photo) {
- Downloader.load(URL, imageView: photoView, bridgePairingObjectId: pairing.user2?.objectId, isUpperDeckCard: isUpperDeckCard)
- }
- }
- }
- 
- }
- 
- let card = UIView(frame:deckFrame)
- 
- card.addSubview(photoView)
- card.addSubview(nameLabel)
- card.addSubview(locationLabel)
- card.addSubview(statusLabel)
- 
- return card
- 
- }*/
-
-
-/*let botNotificationView = UIView()
- botNotificationView.frame = CGRect(x: 0, y: -0.12*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
- let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
- let blurEffectView = UIVisualEffectView(effect: blurEffect)
- blurEffectView.frame = botNotificationView.bounds
- 
- let messageLabel = UILabel(frame: CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.01*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight))
- messageLabel.text = (notification as NSNotification).userInfo!["message"] as? String ?? "No Message Came Up"
- messageLabel.textColor = UIColor.darkGray
- messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
- messageLabel.numberOfLines = 0
- messageLabel.textAlignment = NSTextAlignment.center
- 
- botNotificationView.addSubview(messageLabel)
- botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
- view.addSubview(botNotificationView)
- view.bringSubview(toFront: botNotificationView)
- 
- UIView.animate(withDuration: 0.7, animations: {
- botNotificationView.frame.origin.y = 0
- })
- 
- let _ = CustomTimer(interval: 4) {i -> Bool in
- UIView.animate(withDuration: 0.7, animations: {
- botNotificationView.frame.origin.y = -0.12*DisplayUtility.screenHeight
- })
- return i < 1
- }
- 
- 
- NotificationCenter.default.removeObserver(self)*/
-

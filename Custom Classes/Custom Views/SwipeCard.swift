@@ -17,10 +17,13 @@ class SwipeCard: UIView {
     var cardsPredictedType: String?
     let topHalf = HalfSwipeCard()
     let bottomHalf = HalfSwipeCard()
+	var overlay = CALayer()
+	let defaultOverlayOpacity: Float = 0.75
     
     override init (frame: CGRect) {
         super.init(frame: frame)
-        
+
+		self.clipsToBounds = true
     }
     
     convenience init () {
@@ -55,7 +58,7 @@ class SwipeCard: UIView {
         let bottomHalfShape = CAShapeLayer()
         bottomHalfShape.path = maskPath2.cgPath
         bottomHalf.layer.mask = bottomHalfShape
-        
+
         self.addSubview(topHalf)
         self.addSubview(bottomHalf)
         
@@ -85,9 +88,13 @@ class SwipeCard: UIView {
         if let city = user2City {
             cardsUser2City = city
         }
-        
-        
-        
+
+		overlay.frame = self.layer.frame
+		overlay.frame.origin = CGPoint(x: 0, y: 0)
+		overlay.backgroundColor = UIColor.black.cgColor
+		overlay.opacity = defaultOverlayOpacity
+
+		layer.insertSublayer(overlay, at: UInt32.max)
     }
 
     func swipeCardFrame () -> CGRect {
