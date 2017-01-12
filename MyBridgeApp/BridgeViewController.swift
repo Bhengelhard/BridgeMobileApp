@@ -55,8 +55,7 @@ class BridgeViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var wasLastSwipeInDeck = Bool()
     var shouldCheckInPair = Bool()
-    var swipeCardView = UIView()
-
+	var swipeCardView: SwipeCard = SwipeCard()
     var postTapped = Bool()
     //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
@@ -754,7 +753,7 @@ class BridgeViewController: UIViewController {
     func isDragged(_ gesture: UIPanGestureRecognizer) {
 
         let translation = gesture.translation(in: self.view)
-        swipeCardView = gesture.view!
+        swipeCardView = gesture.view as! SwipeCard
         swipeCardView.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
         let xFromCenter = swipeCardView.center.x - self.view.bounds.width / 2
         let scale = min(CGFloat(1.0), 1)
