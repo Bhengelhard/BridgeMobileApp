@@ -14,6 +14,40 @@ class DBSavingFunctions {
     
     let localData = LocalData()
     
+    //Calculate numConnectionsNected with query and then save to device
+    func updateNumConnectionsNected() -> Int {
+        var numNected = 0
+        
+        if let user = PFUser.current() {
+            if let objectId = user.objectId {
+                let query = PFQuery(className: "BridgePairings")
+                query.whereKey("connecter_objectId", equalTo: objectId)
+                query.whereKey("user1_response", equalTo: 1)
+                query.whereKey("user2_response", equalTo: 1)
+                query.whereKey("accepted_notification_viewed", equalTo: true)
+                query.limit = 1000
+                query.countObjectsInBackground(block: { (count, error) in
+                    print("numNected query executing...")
+                    if let error = error {
+                        print("numNected findObjectsInBackgroundWithBlock error - \(error)")
+                    }
+                    else {
+                        numNected = Int(count)
+                        
+                        self.localData.setNumConnectionsNected(numNected)
+                        self.localData.synchronize()
+                        
+                    }
+                    
+                })
+            }
+        } else {
+            
+        }
+        
+        return numNected
+    }
+    
     // Connect two users in the app so they can accept/ignore the introduction
     func bridgeUsers(messageText: String, type: String) {
         print("Bridge Users")

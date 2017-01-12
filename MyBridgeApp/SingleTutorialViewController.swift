@@ -8,6 +8,7 @@
 
 import UIKit
 import MediaPlayer
+import AVKit
 
 class SingleTutorialViewController: UIViewController {
     
@@ -67,13 +68,23 @@ class SingleTutorialViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        /*
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch _ {
+            print("error with audi session")
+        }
+         */
+        
         if let path = Bundle.main.path(forResource: videoFilename, ofType: videoExtension) {
             let url = NSURL.fileURL(withPath: path)
             moviePlayer = MPMoviePlayerController(contentURL: url)
             moviePlayer.view.frame = CGRect(x: boundary.frame.minX+1, y: boundary.frame.minY+1, width: boundary.frame.width-2, height: boundary.frame.height-2)
             moviePlayer.scalingMode = MPMovieScalingMode.fill
             moviePlayer.isFullscreen = false
-            moviePlayer.controlStyle = MPMovieControlStyle.none
+            //moviePlayer.controlStyle = MPMovieControlStyle.none
+            moviePlayer.controlStyle = MPMovieControlStyle.default
             moviePlayer.movieSourceType = MPMovieSourceType.file
             moviePlayer.repeatMode = .one
             moviePlayer.play()

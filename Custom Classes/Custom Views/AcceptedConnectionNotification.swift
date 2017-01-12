@@ -98,11 +98,19 @@ class AcceptedConnectionNotification: UIView {
                         if error != nil {
                             print(error ?? "Error: accepted_notification_viewed not saved after exitButtonTapped")
                         } else if success == success {
+                            //increment numConnectionsNected in localData
+                            let localData = LocalData()
+                            if let numNected = localData.getNumConnectionsNected() {
+                                localData.setNumConnectionsNected(numNected + 1)
+                            }
+                            
                             //Check for another AcceptedConnectionNotification
                             let dbRetrievingFunctions = DBRetrievingFunctions()
                             if let view = self.superview {
                                 dbRetrievingFunctions.queryForAcceptedConnectionNotifications(view: view)
                             }
+                            
+                            
                         }
                     })
                 }
@@ -164,46 +172,43 @@ class AcceptedConnectionNotification: UIView {
         displayUtility.setBlurredView(viewToBlur: self)
         
         //Accepted Connection Notification Title
-        let title = UILabel()
-        let titleOriginY = 0.1*DisplayUtility.screenHeight
+        let title = UIImageView()
+        let titleOriginY = 0.12744*DisplayUtility.screenHeight
         let titleHeight = 0.1*DisplayUtility.screenHeight
-        title.frame = CGRect(x: 0, y: titleOriginY, width: DisplayUtility.screenWidth, height: titleHeight)
+        let titleWidth = 0.82198*DisplayUtility.screenWidth
+        title.frame = CGRect(x: 0, y: titleOriginY, width: titleWidth, height: titleHeight)
+        title.image = #imageLiteral(resourceName: "Sweet_Nect_In_Notification")
         title.center.x = self.center.x
-        title.text = "Sweet 'nect!"
-        title.textAlignment = NSTextAlignment.center
-        title.textColor = UIColor.white
-        title.font = UIFont(name: "BentonSans-Bold", size: 26)
         self.addSubview(title)
         
         //Number of Connections Nected increase is displayed and when clicked shows the current User's total number of connections nected
-        let connectionsNectedOriginY = titleOriginY + 0.05*DisplayUtility.screenHeight
-        let connectionsNectedHeight = 0.1*DisplayUtility.screenHeight
+        let connectionsNectedOriginY = 0.24513*DisplayUtility.screenHeight
+        let connectionsNectedHeight = 0.02*DisplayUtility.screenHeight
         connectionsNected.frame = CGRect(x: 0, y: connectionsNectedOriginY, width: DisplayUtility.screenWidth, height: connectionsNectedHeight)
         connectionsNected.setTitle("+1 CONNECTIONS NECTED", for: .normal)
         connectionsNected.setTitleColor(DisplayUtility.gradientColor(size: connectionsNected.frame.size), for: .normal)
-        connectionsNected.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
+        connectionsNected.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 15.5)
         connectionsNected.addTarget(self, action: #selector(connectionsNectedTapped(_:)), for: .touchUpInside)
         self.addSubview(connectionsNected)
         
         //Setting the profile pictures
-        let profilePictureDiameter = 0.3123*DisplayUtility.screenWidth
-        let profilePictureOriginY = connectionsNectedOriginY + 0.075*DisplayUtility.screenHeight
+        let profilePictureDiameter = 0.36311*DisplayUtility.screenWidth
+        let profilePictureOriginY = 0.30343*DisplayUtility.screenHeight
+        let profilePictureBorderWidth : CGFloat = 1.5
         //User1 Profile Picture
-        user1ProfilePicture.frame = CGRect(x: 0.0744*DisplayUtility.screenWidth, y: profilePictureOriginY, width: profilePictureDiameter, height: profilePictureDiameter)
-        //user1ProfilePicture.setImage(#imageLiteral(resourceName: "Profile_Navbar_Icon"), for: .normal)
+        user1ProfilePicture.frame = CGRect(x: 0.09383*DisplayUtility.screenWidth, y: profilePictureOriginY, width: profilePictureDiameter, height: profilePictureDiameter)
         user1ProfilePicture.layer.borderColor = DisplayUtility.gradientColor(size: user1ProfilePicture.frame.size).cgColor
-        user1ProfilePicture.layer.borderWidth = 1
+        user1ProfilePicture.layer.borderWidth = profilePictureBorderWidth
         user1ProfilePicture.layer.cornerRadius = profilePictureDiameter/2
         user1ProfilePicture.layer.masksToBounds = true
         user1ProfilePicture.addTarget(self, action: #selector(user1ProfilePictureTapped(_:)), for: .touchUpInside)
         self.addSubview(user1ProfilePicture)
         
         //User2 Profile Picture
-        let user2ProfilePictureOriginX = 0.6017*DisplayUtility.screenWidth
+        let user2ProfilePictureOriginX = 0.51885*DisplayUtility.screenWidth
         user2ProfilePicture.frame = CGRect(x: user2ProfilePictureOriginX, y: profilePictureOriginY, width: profilePictureDiameter, height: profilePictureDiameter)
-        //user2ProfilePicture.setImage(#imageLiteral(resourceName: "Profile_Navbar_Icon"), for: .normal)
         user2ProfilePicture.layer.borderColor = DisplayUtility.gradientColor(size: user1ProfilePicture.frame.size).cgColor
-        user2ProfilePicture.layer.borderWidth = 1
+        user2ProfilePicture.layer.borderWidth = profilePictureBorderWidth
         user2ProfilePicture.layer.cornerRadius = profilePictureDiameter/2
         user2ProfilePicture.layer.masksToBounds = true
         user2ProfilePicture.addTarget(self, action: #selector(user2ProfilePictureTapped(_:)), for: .touchUpInside)
@@ -220,24 +225,26 @@ class AcceptedConnectionNotification: UIView {
         let connectingLine = UIView()
         connectingLine.center.y = user1ProfilePicture.center.y
         connectingLine.frame.origin.x = user1ProfilePicture.frame.maxX
-        connectingLine.frame.size.height = 1
+        connectingLine.frame.size.height = profilePictureBorderWidth
         connectingLine.frame.size.width = user2ProfilePicture.frame.minX - user1ProfilePicture.frame.maxX
         connectingLine.backgroundColor = DisplayUtility.gradientColor(size: connectingLine.frame.size)
         self.addSubview(connectingLine)
         
         //Setting Message Buttons
-        let messageButtonSize = CGSize(width: 0.3*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
-        let messageButtonOriginY = user1ProfilePicture.frame.maxY + 0.05*DisplayUtility.screenHeight
+        let messageButtonSize = CGSize(width: 0.3466*DisplayUtility.screenWidth, height: 0.04029*DisplayUtility.screenHeight)
+        let messageButtonOriginY = 0.57091*DisplayUtility.screenHeight
         //Message User 1 Button
         let leftMessageButton = UIButton()
         leftMessageButton.frame.size = messageButtonSize
         leftMessageButton.center.x = user1ProfilePicture.frame.midX
         leftMessageButton.frame.origin.y = messageButtonOriginY
-        leftMessageButton.setTitle("Message", for: .normal)
+        leftMessageButton.setTitle("MESSAGE", for: .normal)
         leftMessageButton.setTitleColor(UIColor.lightGray, for: .normal)
+        leftMessageButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 15)
         leftMessageButton.layer.borderColor = UIColor.lightGray.cgColor
         leftMessageButton.layer.borderWidth = 1
-        leftMessageButton.layer.cornerRadius = 10
+        leftMessageButton.layer.cornerRadius = 8.5
+        DisplayUtility.centerTextVerticallyInButton(button: leftMessageButton)
         leftMessageButton.addTarget(self, action: #selector(leftMessageButtonTapped(_:)), for: .touchUpInside)
         self.addSubview(leftMessageButton)
         
@@ -246,11 +253,13 @@ class AcceptedConnectionNotification: UIView {
         rightMessageButton.frame.size = messageButtonSize
         rightMessageButton.center.x = user2ProfilePicture.center.x
         rightMessageButton.frame.origin.y = messageButtonOriginY
-        rightMessageButton.setTitle("Message", for: .normal)
+        rightMessageButton.setTitle("MESSAGE", for: .normal)
         rightMessageButton.setTitleColor(UIColor.lightGray, for: .normal)
+        rightMessageButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 15)
         rightMessageButton.layer.borderColor = UIColor.lightGray.cgColor
         rightMessageButton.layer.borderWidth = 1
-        rightMessageButton.layer.cornerRadius = 7
+        rightMessageButton.layer.cornerRadius = 8.5
+        DisplayUtility.centerTextVerticallyInButton(button: rightMessageButton)
         rightMessageButton.addTarget(self, action: #selector(rightMessageButtonTapped(_:)), for: .touchUpInside)
         self.addSubview(rightMessageButton)
         
@@ -263,14 +272,17 @@ class AcceptedConnectionNotification: UIView {
         let leftDashedLine = DashedLine()
         leftDashedLine.frame = self.bounds
         leftDashedLine.backgroundColor = UIColor.clear
+        leftDashedLine.color = UIColor.lightGray.cgColor
+        //leftDashedLine.updateColor(color: UIColor.lightGray)
         leftDashedLine.coordinates = [CGPoint(x: user1ProfilePicture.center.x, y: user1ProfilePicture.frame.maxY), CGPoint(x: leftMessageButton.center.x, y: leftMessageButton.frame.minY)]
         self.insertSubview(leftDashedLine, at: 1)
-        
         
         //Right Dashed Line
         let rightDashedLine = DashedLine()
         rightDashedLine.frame = self.bounds
         rightDashedLine.backgroundColor = UIColor.clear
+        rightDashedLine.color = UIColor.lightGray.cgColor
+        //rightDashedLine.updateColor(color: UIColor.lightGray)
         rightDashedLine.coordinates = [CGPoint(x: user2ProfilePicture.center.x, y: user2ProfilePicture.frame.maxY), CGPoint(x: rightMessageButton.center.x, y: rightMessageButton.frame.minY)]
         self.insertSubview(rightDashedLine, at: 1)
         
@@ -281,27 +293,30 @@ class AcceptedConnectionNotification: UIView {
         
         //User's Connected Information
         let infoLabel = UILabel()
-        infoLabel.frame.size = CGSize(width: DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        infoLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
         infoLabel.center.x = self.center.x
-        infoLabel.frame.origin.y = leftMessageButton.frame.maxY + 0.1*DisplayUtility.screenHeight
+        infoLabel.frame.origin.y = 0.65442*DisplayUtility.screenHeight
         infoLabel.text = "\(user1FirstName) and \(user2FirstName) accepted your connection!"
         infoLabel.textAlignment = NSTextAlignment.center
         infoLabel.textColor = UIColor.white
-        infoLabel.font = UIFont(name: "BentonSans-Light", size: 14)
+        infoLabel.font = UIFont(name: "BentonSans-Light", size: 20)
         infoLabel.numberOfLines = 2
         self.addSubview(infoLabel)
         
         //Exit Button
         let exitButton = UIButton()
-        let exitButtonDiameter = 0.05*DisplayUtility.screenHeight
-        exitButton.frame.origin.y = infoLabel.frame.maxY + 0.1*DisplayUtility.screenHeight
+        let exitButtonDiameter = 0.0734*DisplayUtility.screenHeight
+        exitButton.frame.origin.y = 0.77156*DisplayUtility.screenHeight
         exitButton.frame.size = CGSize(width: exitButtonDiameter, height: exitButtonDiameter)
         exitButton.center.x = self.center.x
-        exitButton.setTitleColor(UIColor.white, for: .normal)
-        exitButton.setTitle("X", for: .normal)
-        exitButton.layer.borderWidth = 1
-        exitButton.layer.borderColor = UIColor.white.cgColor
-        exitButton.layer.cornerRadius = exitButtonDiameter/2
+        exitButton.setImage(#imageLiteral(resourceName: "Exit_Notification_Icon"), for: .normal)
+//        exitButton.setTitleColor(UIColor.white, for: .normal)
+//        exitButton.setTitle("X", for: .normal)
+//        exitButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 20)
+//        exitButton.layer.borderWidth = 1
+//        exitButton.layer.borderColor = UIColor.white.cgColor
+//        exitButton.layer.cornerRadius = exitButtonDiameter/2
+        //DisplayUtility.centerTextVerticallyInButton(button: exitButton)
         exitButton.addTarget(self, action: #selector(exitButtonTapped(_:)), for: .touchUpInside)
         self.addSubview(exitButton)
     }

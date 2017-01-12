@@ -23,6 +23,7 @@ class LocalData {
     var businessStatus:String? = nil
     var loveStatus:String? = nil
     var friendshipStatus:String? = nil
+    var numConnectionsNected:Int? = nil
     
     init(){
         let userDefaults = UserDefaults.standard
@@ -42,10 +43,28 @@ class LocalData {
                 businessStatus = (userInfo as! UserInfo).businessStatus
                 loveStatus = (userInfo as! UserInfo).loveStatus
                 friendshipStatus = (userInfo as! UserInfo).friendshipStatus
+                numConnectionsNected = (userInfo as! UserInfo).numConnectionsNected
             }
         }
     }
     
+    //Saving number of connections the currentUser has connected to the user's device
+    func setNumConnectionsNected(_ numConnectionsNected: Int) {
+        self.numConnectionsNected = numConnectionsNected
+    }
+    func getNumConnectionsNected() -> Int? {
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "userInfo"){
+            let decoded  = userDefaults.object(forKey: "userInfo") as! Data
+            let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
+            return userInfo.numConnectionsNected
+        }
+        else{
+            return nil
+        }
+    }
+    
+    //Saving user's current Status (a.k.a. requests) to the device
     func setLoveStatus(_ loveStatus:String){
         self.loveStatus = loveStatus
     }
@@ -60,6 +79,7 @@ class LocalData {
             return nil
         }
     }
+    
     func setFriendshipStatus(_ friendshipStatus:String){
         self.friendshipStatus = friendshipStatus
     }
@@ -74,6 +94,7 @@ class LocalData {
             return nil
         }
     }
+    
     func setBusinessStatus(_ businessStatus:String){
         self.businessStatus = businessStatus
     }
@@ -279,7 +300,7 @@ class LocalData {
     
     
     func synchronize(){
-        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus)
+        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus, numConnectionsNected: numConnectionsNected)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: userInfo)
         userDefaults.set(encodedData, forKey: "userInfo")
