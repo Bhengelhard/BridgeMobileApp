@@ -344,8 +344,7 @@ class BridgeViewController: UIViewController {
             connectionType = "All Types"
         }
         let swipeCardView = SwipeCard()
-        
-        
+
         //superDeckView.backgroundColor = UIColor.white.withAlphaComponent(1.0)
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
         swipeCardView.addGestureRecognizer(gesture)
@@ -769,11 +768,11 @@ class BridgeViewController: UIViewController {
         swipeCardView.transform = stretch
         var removeCard = false
         var showReasonForConnection = false
-        
+
         //Displaying and Removing the connect and disconnect icons
         let disconnectIconX = max(min((-1.5*(swipeCardView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
         let connectIconX = max(min(((-2.0/3.0)*(swipeCardView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
-        
+
         //Changing second card in stack with Swipe
 //        if secondSwipeCard.tag != 0 {
 //            let darkLayerAlpha = min(max(((-4.0/5.0)*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)) + 0.4, 0), 0.5)
@@ -961,6 +960,7 @@ class BridgeViewController: UIViewController {
             }
         }
     }
+
     func bridged(){
         if let swipeCard = arrayOfCardsInDeck.first as? SwipeCard{
             let reasonForConnectionView = ReasonForConnection()
