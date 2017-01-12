@@ -755,9 +755,9 @@ class BridgeViewController: UIViewController {
             postTapped = false
         }*/
     }
-    
-    func isDragged(_ gesture: UIPanGestureRecognizer) {
 
+    func isDragged(_ gesture: UIPanGestureRecognizer)
+	{
         let translation = gesture.translation(in: self.view)
         swipeCardView = gesture.view as! SwipeCard
         swipeCardView.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
