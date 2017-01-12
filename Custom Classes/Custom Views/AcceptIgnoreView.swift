@@ -55,11 +55,11 @@ class AcceptIgnoreView: UIView {
         addSubview(line)
         
         let acceptButtonFrame = CGRect(x: 0.2328*DisplayUtility.screenWidth, y: line.frame.maxY + 0.035*DisplayUtility.screenHeight, width: 0.225*DisplayUtility.screenWidth, height: 0.058*DisplayUtility.screenHeight)
-        acceptButton = DisplayUtility.gradientButton(text: "accept", frame: acceptButtonFrame, fontSize: 20)
+        acceptButton = DisplayUtility.gradientButton(frame: acceptButtonFrame, text: "accept", textColor: UIColor.white, fontSize: 20)
         addSubview(acceptButton)
         
         let ignoreButtonFrame = CGRect(x: 0.5422*DisplayUtility.screenWidth, y: acceptButton.frame.minY, width: acceptButton.frame.width, height: acceptButton.frame.height)
-        ignoreButton = DisplayUtility.gradientButton(text: "ignore", frame: ignoreButtonFrame, fontSize: 20)
+        ignoreButton = DisplayUtility.gradientButton(frame: ignoreButtonFrame, text: "ignore", textColor: UIColor.white, fontSize: 20)
         addSubview(ignoreButton)
         
         acceptButton.addTarget(self, action: #selector(accept(_:)), for: .touchUpInside)

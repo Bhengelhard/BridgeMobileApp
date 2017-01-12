@@ -63,7 +63,7 @@ class CustomKeyboard: NSObject, UITextViewDelegate {
         
         //setting the button for sending/posting messages
         let messageButtonFrame = CGRect(x: 0.75*messageView.frame.width, y: messageTextView.frame.origin.y, width: 0.2*messageView.frame.width, height: messageTextView.frame.height)
-        messageButton = DisplayUtility.gradientButton(text: buttonTitle, frame: messageButtonFrame, fontSize: 20)
+        messageButton = DisplayUtility.gradientButton(frame: messageButtonFrame,text: buttonTitle, textColor: UIColor.white, fontSize: 20)
         target = buttonTarget
         messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
         messageButton.isEnabled = false

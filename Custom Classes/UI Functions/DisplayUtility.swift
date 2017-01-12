@@ -51,11 +51,11 @@ class DisplayUtility {
     }
     
     
-    static func gradientButton(text: String, frame: CGRect, fontSize: CGFloat) -> UIButton {
+    static func gradientButton(frame: CGRect, text: String, textColor: UIColor, fontSize: CGFloat) -> UIButton {
         let button = UIButton(frame: frame)
         button.setTitle(text, for: .normal)
         button.backgroundColor = .clear
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(textColor, for: .normal)
         let color = gradientColor(size: CGSize(width: button.frame.width, height: button.frame.height))
         button.setTitleColor(color, for: .highlighted)
         button.setTitleColor(color, for: .selected)
