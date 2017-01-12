@@ -850,8 +850,31 @@ class BridgeViewController: UIViewController {
         } else if swipeCardView.frame.maxY > DisplayUtility.screenHeight {
             swipeCardView.frame.origin.y = DisplayUtility.screenHeight - swipeCardView.frame.height
         }*/
-        
-        
+
+		if gesture.state == .began
+		{
+			secondSwipeCard.frame = smallestSwipeCardFrame()
+		}
+
+		if gesture.state == .changed
+		{
+			let multiplier: CGFloat = 0.98
+			let cardCenterX = swipeCardView.center.x
+			let screenMiddleX = DisplayUtility.screenWidth / 2
+			let direction: CGFloat = cardCenterX <= screenMiddleX ? screenMiddleX - cardCenterX : cardCenterX - screenMiddleX
+			let percent: CGFloat = min(max(0.05 * (direction / screenMiddleX) + multiplier, multiplier), 1.0)
+			let maxFrame = swipeCardView.swipeCardFrame()
+			let inset = CGSize(width: maxFrame.width * percent, 
+			                   height: maxFrame.height * percent)
+			let differential = CGSize(width: maxFrame.size.width - inset.width, 
+			                          height: maxFrame.size.height - inset.height)
+
+			secondSwipeCard.frame = CGRect(origin: CGPoint(x: max(maxFrame.origin.x + differential.width, maxFrame.origin.x), 
+			                                               y: max(maxFrame.origin.y + differential.height, maxFrame.origin.y)), 
+			                               size: CGSize(width: min(abs(maxFrame.width - (inset.width * 2)), maxFrame.width), 
+			                                            height: min(abs(maxFrame.height - (inset.height * 2)), maxFrame.height)))
+		}
+
 		if gesture.state == .ended
 		{
             //User Swiped Left
@@ -938,6 +961,13 @@ class BridgeViewController: UIViewController {
 			if removeCard
 			{
 				swipeCardView.removeFromSuperview()
+
+				if arrayOfCardsInDeck.count > 1
+				{
+					swipeCardView = arrayOfCardsInDeck[0]
+					secondSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
+				}
+
 //                darkLayer.removeFromSuperview()
 //                
 //                //Set new secondSwipeCard and send darkLayer to front of secondSwipeCard
@@ -967,8 +997,13 @@ class BridgeViewController: UIViewController {
 						self.disconnectIcon.alpha = 0.0
 						self.connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
 						self.connectIcon.alpha = 0.0
+						self.secondSwipeCard.frame = self.smallestSwipeCardFrame()
 					}, 
-                               completion: { (success) in }
+                               completion: 
+					{ (success) in
+						// Reset the secondSwipeCard to its non-motion state
+						self.secondSwipeCard.frame = self.swipeCardView.frame
+					}
 				)
             }
         }
@@ -1042,6 +1077,8 @@ class BridgeViewController: UIViewController {
             arrayOfCardColors.remove(at: 0)
             if arrayOfCardsInDeck.count > 0 {
                 arrayOfCardsInDeck[0].isUserInteractionEnabled = true
+				swipeCardView = arrayOfCardsInDeck[0]
+				secondSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
             }
             else {
                 lastCardInStack = nil
@@ -1146,6 +1183,7 @@ class BridgeViewController: UIViewController {
         UIView.animate(withDuration: 0.7, animations: {
             swipeCardView.transform = stretch
             swipeCardView.frame = self.swipeCardFrame
+			self.secondSwipeCard.frame = self.swipeCardView.frame
         })
     }
     
