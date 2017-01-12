@@ -59,6 +59,7 @@ class BridgeViewController: UIViewController {
     var postTapped = Bool()
     //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
+	let secondSwipeCardShrinkPercentage = 0.98
 
     //navigation bar creation
     var badgeCount = Int()
@@ -356,6 +357,8 @@ class BridgeViewController: UIViewController {
             swipeCardView.center = aboveView.center
             swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
             swipeCardView.isUserInteractionEnabled = false
+			swipeCardView.frame = smallestSwipeCardFrame()
+			swipeCardView.center.x = view.center.x
             self.view.insertSubview(swipeCardView, belowSubview: aboveView)
             
 //            darkLayer.frame = swipeCardView.frame//CGRect(x: 0, y: 0, width: swipeCardView.frame.width, height: swipeCardView.frame.height)
@@ -379,6 +382,7 @@ class BridgeViewController: UIViewController {
         //Making sure disconnect and connect Icons are at the front of the view
         arrayOfCardsInDeck.append(swipeCardView)
         arrayOfCardColors.append(swipeCardView.layer.borderColor!)
+
         return swipeCardView
     }
     
@@ -752,15 +756,15 @@ class BridgeViewController: UIViewController {
 
 	func smallestSwipeCardFrame () -> CGRect
 	{
-		let max = swipeCardView.swipeCardFrame()
-		let percent: CGFloat = 5 / 100
-		let inset = CGSize(width: max.width * percent, 
-		                   height: max.height * percent)
+		let maxFrame = swipeCardView.swipeCardFrame()
+		let percent = CGFloat(secondSwipeCardShrinkPercentage)
+		let inset = CGSize(width: maxFrame.size.width * percent, 
+		                   height: maxFrame.size.height * percent)
 
-		return CGRect(x: max.origin.x + inset.width, 
-		              y: max.origin.y + inset.height, 
-		              width: max.width - (inset.width * 2), 
-		              height: max.height - (inset.height * 2))
+		return CGRect(x: maxFrame.origin.x + inset.width, 
+		              y: maxFrame.origin.y + inset.height, 
+		              width: maxFrame.size.width - (inset.width * 2), 
+		              height: maxFrame.size.height - (inset.height * 2))
 	}
 
     func isDragged(_ gesture: UIPanGestureRecognizer)
@@ -848,11 +852,12 @@ class BridgeViewController: UIViewController {
 		if gesture.state == .began
 		{
 			secondSwipeCard.frame = smallestSwipeCardFrame()
+			secondSwipeCard.center.x = view.center.x
 		}
 
 		if gesture.state == .changed
 		{
-			let multiplier: CGFloat = 0.98
+			let multiplier = CGFloat(secondSwipeCardShrinkPercentage)
 			let cardCenterX = swipeCardView.center.x
 			let screenMiddleX = DisplayUtility.screenWidth / 2
 			let direction: CGFloat = cardCenterX <= screenMiddleX ? screenMiddleX - cardCenterX : cardCenterX - screenMiddleX
@@ -988,7 +993,12 @@ class BridgeViewController: UIViewController {
             }
 			else
 			{
-                // Put swipeCard back into place
+				// Reset the cards
+				self.disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
+				self.disconnectIcon.alpha = 0.0
+				self.connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
+				self.connectIcon.alpha = 0.0
+
                 UIView.animate( withDuration: 0.7, 
                                 delay: 0, 
                                 options: .allowUserInteraction, 
@@ -998,17 +1008,10 @@ class BridgeViewController: UIViewController {
 						stretch = rotation.scaledBy(x: 1, y: 1)
 						self.swipeCardView.transform = stretch
 						self.swipeCardView.frame = self.swipeCardFrame
-						self.disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
-						self.disconnectIcon.alpha = 0.0
-						self.connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
-						self.connectIcon.alpha = 0.0
 						self.secondSwipeCard.frame = self.smallestSwipeCardFrame()
+						self.secondSwipeCard.center.x = self.view.center.x
 					}, 
-                               completion: 
-					{ (success) in
-						// Reset the secondSwipeCard to its non-motion state
-						self.secondSwipeCard.frame = self.swipeCardView.frame
-					}
+                                completion: nil
 				)
             }
         }
