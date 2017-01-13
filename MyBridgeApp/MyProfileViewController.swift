@@ -350,6 +350,7 @@ class MyProfileViewController: UIViewController {
 //        PFUser.logOut()
 //        performSegue(withIdentifier: "showAccess", sender: self)
         performSegue(withIdentifier: "showUserSettings", sender: self)
+        //present(UserSettingsViewController(), animated: true, completion: nil)
     }
     
     //Send user to the editProfileViewController so they can edit their profile
@@ -477,18 +478,17 @@ class MyProfileViewController: UIViewController {
     
     //Setting segue transition information and preparation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Right"
-            vc.transitioningDelegate = self.transitionManager
         }
         else if mirror.subjectType == EditProfileViewController.self {
             self.transitionManager.animationDirection = "Left"
-            vc.transitioningDelegate = self.transitionManager
+        } else if mirror.subjectType == UserSettingsViewController.self {
+            self.transitionManager.animationDirection = "Top"
         }
-        
+        vc.transitioningDelegate = self.transitionManager
     }
 
 }

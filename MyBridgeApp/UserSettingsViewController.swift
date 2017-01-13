@@ -12,7 +12,7 @@ import Parse
 class UserSettingsViewController: UIViewController {
     
     let localData = LocalData()
-    let optionTitleFont = UIFont(name: "BentonSans-Light", size: 12)
+    let transitionManager = TransitionManager()
     
     //CheckMarkIcons
     let selectedCheckmark = #imageLiteral(resourceName: "Selected_Gray_Circle")
@@ -180,7 +180,7 @@ class UserSettingsViewController: UIViewController {
         
         //Button Constraints
         let gradientButtonWidth = 0.34666*DisplayUtility.screenWidth
-        let gradientButtonsHeight = 0.2063*gradientButtonWidth
+        let gradientButtonsHeight = 0.04048*DisplayUtility.screenHeight
         //Column X Origin Values
         let leftColumnOriginX = 0.09824*DisplayUtility.screenWidth
         let rightColumnOriginX = 0.5409*DisplayUtility.screenWidth
@@ -261,6 +261,8 @@ class UserSettingsViewController: UIViewController {
     //----Functions to create Repeated objects----
     //Creating Title Texts for MY GENDER, INTERESTED IN, and MY NECTER
     func setUpTitleText(originY: CGFloat, text: String) {
+        let optionTitleFont = UIFont(name: "BentonSans-Light", size: 12)
+
         let title = UILabel()
         title.frame = CGRect(x: 0, y: originY, width: 0.5*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
         title.center.x = view.center.x
@@ -310,8 +312,8 @@ class UserSettingsViewController: UIViewController {
     //Left Bar Button Target
     func cancelButtonTapped(_ sender: UIButton) {
         print("cancelButtonTapped")
-        dismiss(animated: true, completion: nil)
-        //performSegue(withIdentifier: "showMyProfile", sender: self)
+        //dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "showMyProfile", sender: self)
     }
     
     //Right Bar Button Target
@@ -409,7 +411,7 @@ class UserSettingsViewController: UIViewController {
                 }
                 
             }
-            else if title == "TERMS OF SERVICE" {
+            else if title == "TERMS OF USE" {
                 let url = URL(string: "https://necter.social/termsofservice")
                 if UIApplication.shared.canOpenURL(url!) {
                     UIApplication.shared.openURL(url!)
@@ -429,6 +431,7 @@ class UserSettingsViewController: UIViewController {
             else if title == "LOGOUT" {
                 PFUser.logOut()
                 performSegue(withIdentifier: "showAccessViewController", sender: self)
+                //present(AccessViewController(), animated: true, completion: nil)
             }
             else if title == "DELETE PROFILE" {
                 print("delete profile")
@@ -441,15 +444,16 @@ class UserSettingsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    //Setting segue transition information and preparation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == MyProfileViewController.self {
+            self.transitionManager.animationDirection = "Bottom"
+        } else if mirror.subjectType == AccessViewController.self {
+            self.transitionManager.animationDirection = "Top"
+        }
+        vc.transitioningDelegate = self.transitionManager
     }
-    */
 
 }
