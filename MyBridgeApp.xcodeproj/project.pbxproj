@@ -45,8 +45,8 @@
 		30A726F71E26989E0070B620 /* profpic3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F41E26989E0070B620 /* profpic3.jpg */; };
 		30A726F81E26989E0070B620 /* ProfPic2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F51E26989E0070B620 /* ProfPic2.jpg */; };
 		30A726FC1E27D9160070B620 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */; };
-		30A727021E29391D0070B620 /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727011E29391D0070B620 /* MessageComposer.swift */; };
 		30A727041E293A9A0070B620 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727031E293A9A0070B620 /* MessagesViewController.swift */; };
+		30A727061E29540F0070B620 /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727051E29540F0070B620 /* MessageComposer.swift */; };
 		30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */; };
 		30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */; };
 		30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */; };
@@ -136,8 +136,8 @@
 		30A726F41E26989E0070B620 /* profpic3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profpic3.jpg; sourceTree = "<group>"; };
 		30A726F51E26989E0070B620 /* ProfPic2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ProfPic2.jpg; sourceTree = "<group>"; };
 		30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSettingsViewController.swift; path = MyBridgeApp/UserSettingsViewController.swift; sourceTree = SOURCE_ROOT; };
-		30A727011E29391D0070B620 /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageComposer.swift; path = MyBridgeApp/MessageComposer.swift; sourceTree = SOURCE_ROOT; };
 		30A727031E293A9A0070B620 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MyBridgeApp/MessagesViewController.swift; sourceTree = SOURCE_ROOT; };
+		30A727051E29540F0070B620 /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageComposer.swift; path = "Custom Classes/Custom Views/MessageComposer.swift"; sourceTree = "<group>"; };
 		30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesView.swift; path = "Custom Classes/Custom Views/NewMatchesView.swift"; sourceTree = "<group>"; };
 		30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptedConnectionNotification.swift; path = "Custom Classes/Custom Views/AcceptedConnectionNotification.swift"; sourceTree = "<group>"; };
 		30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBRetrievingFunctions.swift; path = "Custom Classes/Backend Communication/DBRetrievingFunctions.swift"; sourceTree = "<group>"; };
@@ -235,6 +235,7 @@
 				3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */,
 				3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */,
 				30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */,
+				30A727051E29540F0070B620 /* MessageComposer.swift */,
 				3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */,
 				3059ABF11DEC72FB0010A81B /* TrendingView.swift */,
 				3030C0D41DD550240077F7AC /* SwipeCard.swift */,
@@ -359,7 +360,6 @@
 				E9D6DF121D7880CC00138A1F /* PrivacyPolicyViewController.swift */,
 				903811CD1E01E75E0021D81A /* TutorialsViewController.swift */,
 				903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */,
-				30A727011E29391D0070B620 /* MessageComposer.swift */,
 				30A726F11E2683850070B620 /* Main.storyboard */,
 			);
 			name = MyBridgeApp;
@@ -494,7 +494,6 @@
 				E9D6DF131D7880CC00138A1F /* PrivacyPolicyViewController.swift in Sources */,
 				E9D6DF511D78836200138A1F /* SingleMessageContent.swift in Sources */,
 				3030C0B81DD54E3F0077F7AC /* UserInfo.swift in Sources */,
-				30A727021E29391D0070B620 /* MessageComposer.swift in Sources */,
 				304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */,
 				3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */,
 				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
@@ -512,6 +511,7 @@
 				3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */,
 				E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */,
 				90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */,
+				30A727061E29540F0070B620 /* MessageComposer.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
 				301B1C511E036A0100D507B8 /* AccessViewController.swift in Sources */,

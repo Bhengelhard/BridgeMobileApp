@@ -523,13 +523,12 @@ class UserSettingsViewController: UIViewController {
     
     //My Necter Buttons Target
     func myNecterButtonTapped(_ sender: UIButton) {
-        sender.isSelected = false
-        sender.isHighlighted = false
-        
         if let title = sender.currentTitle {
+            
+            sender.setTitleColor(UIColor.black, for: .normal)
+            
             //open user's email application with email ready to be sent to necter email -> commented out and replaced with link to survey
             if title == "GIVE FEEDBACK" {
-                
                 let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
                 let encodedParams = "subject=\(subject)"
                 let email = "blake@necter.social"
@@ -537,13 +536,20 @@ class UserSettingsViewController: UIViewController {
                 
                 if UIApplication.shared.canOpenURL(url! as URL) {
                     UIApplication.shared.openURL(url! as URL)
+                } else {
+                    // Let the user know if his/her device isn't able to send Emails
+                    let errorAlert = UIAlertView(title: "Cannot Send Email", message: "Your device is not able to send emails.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
                 }
-                
             }
             else if title == "TERMS OF USE" {
                 let url = URL(string: "https://necter.social/termsofservice")
                 if UIApplication.shared.canOpenURL(url!) {
                     UIApplication.shared.openURL(url!)
+                } else {
+                    // Let the user know if his/her device isn't able to access the URL
+                    let errorAlert = UIAlertView(title: "Cannot Access URL", message: "Your device is not able to access https://necter.social/termsofservice.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
                 }
                 
             }
@@ -552,7 +558,6 @@ class UserSettingsViewController: UIViewController {
                 if (messageComposer.canSendText()) {
                     // Obtain a configured MFMessageComposeViewController
                     let messageComposeVC = messageComposer.configuredMessageComposeViewController()
-                    
                     // Present the configured MFMessageComposeViewController instance
                     // Note that the dismissal of the VC will be handled by the messageComposer instance,
                     // since it implements the appropriate delegate call-back
@@ -567,6 +572,10 @@ class UserSettingsViewController: UIViewController {
                 let url = URL(string: "https://necter.social/privacypolicy")
                 if UIApplication.shared.canOpenURL(url!) {
                     UIApplication.shared.openURL(url!)
+                } else {
+                    // Let the user know if his/her device isn't able to access the URL
+                    let errorAlert = UIAlertView(title: "Cannot Access URL", message: "Your device is not able to access https://necter.social/privacypolicy.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
                 }
 
             }
@@ -579,6 +588,7 @@ class UserSettingsViewController: UIViewController {
                 print("delete profile")
             }
         }
+
     }
     
     override func didReceiveMemoryWarning() {
