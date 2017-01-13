@@ -20,6 +20,10 @@ class UserSettingsViewController: UIViewController {
     let selectedCheckmark = #imageLiteral(resourceName: "Selected_Gray_Circle")
     let unselectedCheckmark = #imageLiteral(resourceName: "Unselected_Gray_Circle")
     
+    //Initial User Settings
+    var initialGender: String?
+    var initialInterestedIn: String?
+    
     //Initializing Gender global objects
     let maleGenderCheckmarkIcon = UIImageView()
     let maleGenderButton = UIButton()
@@ -67,6 +71,7 @@ class UserSettingsViewController: UIViewController {
         if let interestedIn = localData.getInterestedIn() {
             updateInterestedIn(interestedIn: interestedIn.lowercased())
             interestedInSaved = true
+            initialInterestedIn = interestedIn
         }
         
         //Getting myGender from local Data
@@ -74,6 +79,7 @@ class UserSettingsViewController: UIViewController {
         if let myGender = localData.getMyGender() {
             updateMyGender(myGender: myGender.lowercased())
             myGenderSaved = true
+            initialGender = myGender
         }
         
         //Getting interestedInLove from local Data
@@ -104,7 +110,7 @@ class UserSettingsViewController: UIViewController {
                                             self.updateInterestedIn(interestedIn: interestedIn)
                                         })
                                         self.localData.setInterestedIn(interestedIn)
-                                        
+                                        self.initialInterestedIn = interestedIn
                                     }
                                     interestedInSaved = true
                                 }
@@ -117,6 +123,7 @@ class UserSettingsViewController: UIViewController {
                                             self.updateMyGender(myGender: myGender)
                                         })
                                         self.localData.setMyGender(myGender)
+                                        self.initialGender = myGender
                                     }
                                 }
                                 
@@ -146,6 +153,7 @@ class UserSettingsViewController: UIViewController {
         }
     }
     
+    //----Updating Settings based on data retrieved----
     //Updating the settings to the specified data for myGender
     func updateMyGender(myGender: String) {
         if myGender.lowercased() == "male" {
@@ -235,6 +243,29 @@ class UserSettingsViewController: UIViewController {
             femaleInterestedInCheckmarkIcon.image = unselectedCheckmark
             femaleInterestedInButton.isSelected = false
         }
+    }
+    
+    //Display white overlay over Interested and disable buttons when user is not interested in love
+    func displayInterestedInDisabled() {
+        //Label to explain why interested is disabled
+        let explanationLabel = UILabel()
+        explanationLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        explanationLabel.frame.origin.y = maleInterestedInCheckmarkIcon.frame.maxY + 0.01*DisplayUtility.screenHeight
+        explanationLabel.center.x = view.center.x
+        explanationLabel.text = "Interest in dating is disabled. Edit profile to update."
+        explanationLabel.font = UIFont(name: "BentonSans-Light", size: 12)
+        explanationLabel.textAlignment = NSTextAlignment.center
+        explanationLabel.numberOfLines = 2
+        view.addSubview(explanationLabel)
+        
+        //White overlay
+        let disabledView = UIView()
+        let viewOriginY = interestedInTitleOriginY
+        let height = explanationLabel.frame.maxY - interestedInTitleOriginY
+        disabledView.frame = CGRect(x: 0, y: viewOriginY, width: DisplayUtility.screenWidth, height: height)
+        disabledView.backgroundColor = UIColor.white
+        disabledView.layer.opacity = 0.85
+        view.addSubview(disabledView)
     }
     
     //----Initialization Functions----
@@ -354,29 +385,6 @@ class UserSettingsViewController: UIViewController {
         let femaleFrameOrigin = CGPoint(x: 0.5689*DisplayUtility.screenWidth, y: 0.49063*DisplayUtility.screenHeight)
         setUpSelectableOption(button: femaleInterestedInButton, checkmarkIcon: femaleInterestedInCheckmarkIcon, origin: femaleFrameOrigin, text: "FEMALE")
         femaleInterestedInButton.addTarget(self, action: #selector(interestedInButtonTapped(_:)), for: .touchUpInside)
-    }
-    
-    //Display white overlay over Interested and disable buttons when user is not interested in love
-    func displayInterestedInDisabled() {
-        //Label to explain why interested is disabled
-        let explanationLabel = UILabel()
-        explanationLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
-        explanationLabel.frame.origin.y = maleInterestedInCheckmarkIcon.frame.maxY + 0.01*DisplayUtility.screenHeight
-        explanationLabel.center.x = view.center.x
-        explanationLabel.text = "Interest in dating is disabled. Edit profile to update."
-        explanationLabel.font = UIFont(name: "BentonSans-Light", size: 12)
-        explanationLabel.textAlignment = NSTextAlignment.center
-        explanationLabel.numberOfLines = 2
-        view.addSubview(explanationLabel)
-        
-        //White overlay
-        let disabledView = UIView()
-        let viewOriginY = interestedInTitleOriginY
-        let height = explanationLabel.frame.maxY - interestedInTitleOriginY
-        disabledView.frame = CGRect(x: 0, y: viewOriginY, width: DisplayUtility.screenWidth, height: height)
-        disabledView.backgroundColor = UIColor.white
-        disabledView.layer.opacity = 0.85
-        view.addSubview(disabledView)
     }
     
     //Initialize My Necter Buttons
@@ -524,13 +532,51 @@ class UserSettingsViewController: UIViewController {
     
     //Right Bar Button Target
     func saveButtonTapped(_ sender: UIButton) {
-        print("saveButtonTapped and not yet saving")
+        //Finding which fields were changed
+        let selectedGender = whichMyGenderSelected()
+        let selectedInterestedIn = whichInterestedInSelected()
+        
+        let pfCloudFunctions = PFCloudFunctions()
+        
+        //Saving updated Gender
+        if initialGender != nil {
+            if initialGender != selectedGender {
+                //Saving updated Gender to device
+                localData.setMyGender(selectedGender.lowercased())
+                
+                //Saving updated Gender to database
+                if let user = PFUser.current() {
+                    user["gender"] = selectedGender.lowercased()
+                    user.saveInBackground()
+                    
+                    pfCloudFunctions.changeBridgePairingsOnStatusUpdate(parameters: [:])
+                }
+            }
+        }
+
+        //Saving updated Interested In
+        if initialInterestedIn != nil {
+            if initialInterestedIn != selectedInterestedIn {
+                //Saving updated Interested In to device
+                localData.setInterestedIn(selectedInterestedIn.lowercased())
+                
+                //Saving updated Interested In to database
+                if let user = PFUser.current() {
+                    user["interested_in"] = selectedGender.lowercased()
+                    user.saveInBackground()
+                    
+                    pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                }
+            }
+        }
+        
+
+        
         performSegue(withIdentifier: "showMyProfile", sender: self)
     }
     
     //My Gender Button Target - Changing My Gender Radio Button to Selected Button
     func myGenderButtonTapped(_ sender: UIButton) {
-        
         //Updating MaleGenderButton to new selection
         if sender == maleGenderButton && !sender.isSelected {
             updateMyGender(myGender: "male")
@@ -635,6 +681,31 @@ class UserSettingsViewController: UIViewController {
             }
         }
 
+    }
+    
+    //----Checking which buttons are selected----
+    //Checking which gender is selected
+    func whichMyGenderSelected() -> String {
+        if maleGenderButton.isSelected {
+            return "male"
+        } else if femaleInterestedInButton.isSelected {
+            return "female"
+        } else if otherGenderButton.isSelected {
+            return "other"
+        } else {
+            return "none selected"
+        }
+    }
+    
+    //Checking with interested in button is selected
+    func whichInterestedInSelected() -> String {
+        if maleInterestedInButton.isSelected {
+            return "male"
+        } else if femaleInterestedInButton.isSelected {
+            return "female"
+        } else {
+            return "none selected"
+        }
     }
     
     override func didReceiveMemoryWarning() {
