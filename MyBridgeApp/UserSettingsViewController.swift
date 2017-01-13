@@ -34,14 +34,13 @@ class UserSettingsViewController: UIViewController {
     let maleInterestedInButton = UIButton()
     let femaleInterestedInCheckmarkIcon = UIImageView()
     let femaleInterestedInButton = UIButton()
+    //Setting InterestedInTitleOriginY as global variable to retrieve when setting disabledInterestedInView and interestedInTitle parameters
+    let interestedInTitleOriginY = 0.43766*DisplayUtility.screenHeight
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //Setting Background Color
         view.backgroundColor = UIColor.white
-        
-        //Getting User's Settings for Gender and InterestedIn Values
-        getUserSettings()
         
         //Initialize Navigation Bar
         displayNavigationBar()
@@ -55,6 +54,8 @@ class UserSettingsViewController: UIViewController {
         //Display My Necter
         displayMyNecterButtons()
         
+        //Getting User's Settings for Gender and InterestedIn Values
+        getUserSettings()
         
     }
     
@@ -75,8 +76,17 @@ class UserSettingsViewController: UIViewController {
             myGenderSaved = true
         }
         
+        //Getting interestedInLove from local Data
+        var interestedInLoveSaved = false
+        if let interestedInLove = localData.getInterestedInLove() {
+            if !interestedInLove {
+                displayInterestedInDisabled()
+            }
+            interestedInLoveSaved = true
+        }
+        
         //Getting myGender or interestedIn from Database if one of them has not yet been saved to the device
-        if !myGenderSaved || !interestedInSaved {
+        if !myGenderSaved || !interestedInSaved || !interestedInLoveSaved {
             if let user = PFUser.current() {
                 if let userObjectId = user.objectId {
                     let query = PFQuery(className: "_User")
@@ -107,6 +117,19 @@ class UserSettingsViewController: UIViewController {
                                             self.updateMyGender(myGender: myGender)
                                         })
                                         self.localData.setMyGender(myGender)
+                                    }
+                                }
+                                
+                                //Retrieving interestedInLove from Database when it is not yet saved to device
+                                if !interestedInLoveSaved {
+                                    //Retrieving interestedInLove from Databaseand myGender
+                                    if let interestedInLove = result["interested_in_love"] as? Bool {
+                                        if !interestedInLove {
+                                            DispatchQueue.main.async(execute: {
+                                                self.displayInterestedInDisabled()
+                                            })
+                                        }
+                                        self.localData.setInterestedInLove(interestedInLove)
                                     }
                                 }
                                 
@@ -319,7 +342,7 @@ class UserSettingsViewController: UIViewController {
     //Initialize Interested In
     func displayInterestedIn() {
         //Initializing INTERESTED IN title
-        setUpTitleText(originY: 0.43766*DisplayUtility.screenHeight, text: "INTERESTED IN")
+        setUpTitleText(originY: interestedInTitleOriginY, text: "INTERESTED IN")
         
         //Initializing Options to select
         //Initializing Male interested in label, checkmark, and button
@@ -331,6 +354,29 @@ class UserSettingsViewController: UIViewController {
         let femaleFrameOrigin = CGPoint(x: 0.5689*DisplayUtility.screenWidth, y: 0.49063*DisplayUtility.screenHeight)
         setUpSelectableOption(button: femaleInterestedInButton, checkmarkIcon: femaleInterestedInCheckmarkIcon, origin: femaleFrameOrigin, text: "FEMALE")
         femaleInterestedInButton.addTarget(self, action: #selector(interestedInButtonTapped(_:)), for: .touchUpInside)
+    }
+    
+    //Display white overlay over Interested and disable buttons when user is not interested in love
+    func displayInterestedInDisabled() {
+        //Label to explain why interested is disabled
+        let explanationLabel = UILabel()
+        explanationLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        explanationLabel.frame.origin.y = maleInterestedInCheckmarkIcon.frame.maxY + 0.01*DisplayUtility.screenHeight
+        explanationLabel.center.x = view.center.x
+        explanationLabel.text = "Interest in dating is disabled. Edit profile to update."
+        explanationLabel.font = UIFont(name: "BentonSans-Light", size: 12)
+        explanationLabel.textAlignment = NSTextAlignment.center
+        explanationLabel.numberOfLines = 2
+        view.addSubview(explanationLabel)
+        
+        //White overlay
+        let disabledView = UIView()
+        let viewOriginY = interestedInTitleOriginY
+        let height = explanationLabel.frame.maxY - interestedInTitleOriginY
+        disabledView.frame = CGRect(x: 0, y: viewOriginY, width: DisplayUtility.screenWidth, height: height)
+        disabledView.backgroundColor = UIColor.white
+        disabledView.layer.opacity = 0.85
+        view.addSubview(disabledView)
     }
     
     //Initialize My Necter Buttons

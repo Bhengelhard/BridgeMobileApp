@@ -24,9 +24,10 @@ class UserInfo:NSObject, NSCoding  {
     var friendshipStatus:String? = nil
     var numConnectionsNected:Int? = nil
     var myGender:String? = nil
+    var interestedInLove:Bool? = nil
     
     init( username:String?, friendlist: [String]?, mainProfilePicture: Data? ,pairings:[UserInfoPair]?,
-          interestedIn: String?, profilePictureFromFb:Bool?, newMessagesPushNotifications:Bool?, newBridgesPushNotifications:Bool?, firstTimeSwipingRight:Bool?, firstTimeSwipingLeft:Bool?, hasSignedUp:Bool?, businessStatus:String?, loveStatus: String?, friendshipStatus: String?, numConnectionsNected: Int?, myGender: String?) {
+          interestedIn: String?, profilePictureFromFb:Bool?, newMessagesPushNotifications:Bool?, newBridgesPushNotifications:Bool?, firstTimeSwipingRight:Bool?, firstTimeSwipingLeft:Bool?, hasSignedUp:Bool?, businessStatus:String?, loveStatus: String?, friendshipStatus: String?, numConnectionsNected: Int?, myGender: String?, interestedInLove: Bool?) {
         self.username = username
         self.friendlist = friendlist
         self.mainProfilePicture = mainProfilePicture
@@ -43,7 +44,7 @@ class UserInfo:NSObject, NSCoding  {
         self.friendshipStatus = friendshipStatus
         self.numConnectionsNected = numConnectionsNected
         self.myGender = myGender
-        self.interestedIn = interestedIn
+        self.interestedInLove = interestedInLove
     }
     
     required convenience init(coder aDecoder: NSCoder) {
@@ -63,8 +64,9 @@ class UserInfo:NSObject, NSCoding  {
         let friendshipStatus = aDecoder.decodeObject(forKey: "friendshipStatus") as! String?
         let numConnectionsNected = aDecoder.decodeObject(forKey: "numConnectionsNected") as! Int?
         let myGender = aDecoder.decodeObject(forKey: "myGender") as! String?
+        let interestedInLove = aDecoder.decodeObject(forKey: "interestedInLove") as! Bool?
         
-        self.init(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings: pairings, interestedIn: interestedIn, profilePictureFromFb: profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus, numConnectionsNected: numConnectionsNected, myGender: myGender)
+        self.init(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings: pairings, interestedIn: interestedIn, profilePictureFromFb: profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus, numConnectionsNected: numConnectionsNected, myGender: myGender, interestedInLove: interestedInLove)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -84,6 +86,7 @@ class UserInfo:NSObject, NSCoding  {
         aCoder.encode(friendshipStatus, forKey: "friendshipStatus")
         aCoder.encode(numConnectionsNected, forKey: "numConnectionsNected")
         aCoder.encode(myGender, forKey: "myGender")
+        aCoder.encode(interestedInLove, forKey: "interestedInLove")
     }
     
 }
