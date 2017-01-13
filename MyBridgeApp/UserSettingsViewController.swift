@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class UserSettingsViewController: UIViewController {
     
@@ -47,10 +48,8 @@ class UserSettingsViewController: UIViewController {
         //Display Interested In
         displayInterestedIn()
         
-        //Display My Necter buttons
+        //Display My Necter
         displayMyNecterButtons()
-        
-        //Display logout, delete profile, and website
         
     }
     
@@ -153,7 +152,7 @@ class UserSettingsViewController: UIViewController {
         otherGenderBottomLine.frame.origin.x = otherGenderTextField.frame.minX
         otherGenderBottomLine.frame.size.width = otherGenderTextField.frame.width
         otherGenderBottomLine.frame.size.height = 1
-        otherGenderBottomLine.backgroundColor = UIColor.black
+        otherGenderBottomLine.backgroundColor = UIColor.gray
         view.addSubview(otherGenderBottomLine)
     }
     
@@ -180,7 +179,8 @@ class UserSettingsViewController: UIViewController {
         setUpTitleText(originY: 0.6093*DisplayUtility.screenHeight, text: "MY NECTER")
         
         //Button Constraints
-        let gradientButtonSize = CGSize(width: 0.3*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
+        let gradientButtonWidth = 0.34666*DisplayUtility.screenWidth
+        let gradientButtonsHeight = 0.2063*gradientButtonWidth
         //Column X Origin Values
         let leftColumnOriginX = 0.09824*DisplayUtility.screenWidth
         let rightColumnOriginX = 0.5409*DisplayUtility.screenWidth
@@ -188,23 +188,74 @@ class UserSettingsViewController: UIViewController {
         let firstRowOriginY = 0.66004*DisplayUtility.screenHeight
         let secondRowOriginY = 0.71327*DisplayUtility.screenHeight
         let thirdRowOriginY = 0.82271*DisplayUtility.screenHeight
+        //Gradient button font size
+        let fontSize : CGFloat = 12
+        
         
         //Initializing Give Feedback Button in the first row of the left column
-        let giveFeedbackFrame = CGRect(x: leftColumnOriginX, y: firstRowOriginY, width:gradientButtonSize.width , height: gradientButtonSize.height)
-        let giveFeedbackButton = DisplayUtility.gradientButton(frame: giveFeedbackFrame, text: "GIVE FEEDBACK", textColor: UIColor.black, fontSize: 15.5)
+        let giveFeedbackFrame = CGRect(x: leftColumnOriginX, y: firstRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let giveFeedbackButton = DisplayUtility.gradientButton(frame: giveFeedbackFrame, text: "GIVE FEEDBACK", textColor: UIColor.black, fontSize: fontSize)
+        giveFeedbackButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
         view.addSubview(giveFeedbackButton)
         
         //Initializing Terms of Use Button
+        let termsOfUseFrame = CGRect(x: rightColumnOriginX, y: firstRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let termsOfUseButton = DisplayUtility.gradientButton(frame: termsOfUseFrame, text: "TERMS OF USE", textColor: UIColor.black, fontSize: fontSize)
+        termsOfUseButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(termsOfUseButton)
         
         //Initializing Share Necter Button
+        let shareNecterFrame = CGRect(x: leftColumnOriginX, y: secondRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let shareNecterButton = DisplayUtility.gradientButton(frame: shareNecterFrame, text: "SHARE NECTER", textColor: UIColor.black, fontSize: fontSize)
+        shareNecterButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(shareNecterButton)
         
         //Initializing Privacy Policy Button
+        let privacyPolicyFrame = CGRect(x: rightColumnOriginX, y: secondRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let privacyPolicyButton = DisplayUtility.gradientButton(frame: privacyPolicyFrame, text: "PRIVACY POLICY", textColor: UIColor.black, fontSize: fontSize)
+        privacyPolicyButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(privacyPolicyButton)
         
         //Initializing Divider
+        let divider = UIView()
+        divider.frame.size = CGSize(width: termsOfUseFrame.maxX - giveFeedbackFrame.minX, height: 1)
+        divider.frame.origin.y = 0.79198*DisplayUtility.screenHeight
+        divider.center.x = view.center.x
+        divider.backgroundColor = UIColor.gray
+        view.addSubview(divider)
         
         //Initializing Logout Button
+        let logoutFrame = CGRect(x: leftColumnOriginX, y: thirdRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let logoutButton = DisplayUtility.gradientButton(frame: logoutFrame, text: "LOGOUT", textColor: UIColor.black, fontSize: fontSize)
+        logoutButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(logoutButton)
         
         //Initializing Delete Profile Button
+        let deleteProfileFrame = CGRect(x: rightColumnOriginX, y: thirdRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let deleteProfileButton = UIButton()
+        deleteProfileButton.frame = deleteProfileFrame
+        deleteProfileButton.setTitle("DELETE PROFILE", for: .normal)
+        deleteProfileButton.setTitleColor(UIColor.gray, for: .normal)
+        deleteProfileButton.setTitleColor(UIColor.red, for: .highlighted)
+        deleteProfileButton.setTitleColor(UIColor.red, for: .selected)
+        deleteProfileButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: fontSize)
+        deleteProfileButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        deleteProfileButton.layer.cornerRadius = 0.2*deleteProfileButton.frame.height
+        deleteProfileButton.layer.borderColor = UIColor.gray.cgColor
+        deleteProfileButton.layer.borderWidth = 1
+        deleteProfileButton.clipsToBounds = true
+        deleteProfileButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(deleteProfileButton)
+        
+        //Initializing website label
+        let websiteLabel = UILabel()
+        websiteLabel.frame.origin.y = 0.94*DisplayUtility.screenHeight
+        websiteLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        websiteLabel.center.x = view.center.x
+        websiteLabel.text = "WWW.NECTER.SOCIAL"
+        websiteLabel.textAlignment = NSTextAlignment.center
+        websiteLabel.font = UIFont(name: "BentonSans-Light", size: 12)
+        view.addSubview(websiteLabel)
     }
     
     //----Functions to create Repeated objects----
@@ -259,8 +310,8 @@ class UserSettingsViewController: UIViewController {
     //Left Bar Button Target
     func cancelButtonTapped(_ sender: UIButton) {
         print("cancelButtonTapped")
-        //performSegue(withIdentifier: "showMyProfile", sender: self)
         dismiss(animated: true, completion: nil)
+        //performSegue(withIdentifier: "showMyProfile", sender: self)
     }
     
     //Right Bar Button Target
@@ -277,7 +328,7 @@ class UserSettingsViewController: UIViewController {
             //Set male Checkmark Icon and Button to selected
             maleGenderCheckmarkIcon.image = selectedCheckmark
             maleGenderButton.isSelected = true
-        } else if maleGenderButton.isSelected{
+        } else if sender != maleGenderButton && maleGenderButton.isSelected{
             //Set male checkmark Icon and Button to unselected
             maleGenderCheckmarkIcon.image = unselectedCheckmark
             maleGenderButton.isSelected = false
@@ -288,7 +339,7 @@ class UserSettingsViewController: UIViewController {
             //Set female Checkmark Icon and Button to selected
             femaleGenderCheckmarkIcon.image = selectedCheckmark
             femaleGenderButton.isSelected = true
-        } else if femaleGenderButton.isSelected{
+        } else if sender != femaleGenderButton && femaleGenderButton.isSelected{
             //Set female checkmark Icon and Button to unselected
             femaleGenderCheckmarkIcon.image = unselectedCheckmark
             femaleGenderButton.isSelected = false
@@ -301,7 +352,7 @@ class UserSettingsViewController: UIViewController {
             otherGenderButton.isSelected = true
             otherGenderTextField.isUserInteractionEnabled = true
             otherGenderTextField.becomeFirstResponder()
-        } else if otherGenderButton.isSelected{
+        } else if sender != otherGenderButton && otherGenderButton.isSelected{
             //Set other checkmark Icon and Button to unselected
             otherGenderCheckmarkIcon.image = unselectedCheckmark
             otherGenderButton.isSelected = false
@@ -311,15 +362,20 @@ class UserSettingsViewController: UIViewController {
     
     //Male Interested Button Target - Changing Interested In Radion Button to Male Selected
     func interestedInButtonTapped(_ sender: UIButton) {
+        //Closing Keyboard if it is open
+        if otherGenderTextField.isFirstResponder {
+            otherGenderTextField.resignFirstResponder()
+        }
+        
         //Updating male InterestedIn to new selection
-        if sender == maleGenderButton && !sender.isSelected {
+        if sender == maleInterestedInButton && !sender.isSelected {
             //Set male Checkmark Icon and Button to selected
-            maleGenderCheckmarkIcon.image = selectedCheckmark
-            maleGenderButton.isSelected = true
-        } else if maleGenderButton.isSelected{
+            maleInterestedInCheckmarkIcon.image = selectedCheckmark
+            maleInterestedInButton.isSelected = true
+        } else if sender != maleInterestedInButton && maleInterestedInButton.isSelected{
             //Set male checkmark Icon and Button to unselected
-            maleGenderCheckmarkIcon.image = unselectedCheckmark
-            maleGenderButton.isSelected = false
+            maleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            maleInterestedInButton.isSelected = false
         }
         
         //Updating female InterestedIn to new selection
@@ -327,10 +383,56 @@ class UserSettingsViewController: UIViewController {
             //Set female Checkmark Icon and Button to selected
             femaleInterestedInCheckmarkIcon.image = selectedCheckmark
             femaleInterestedInButton.isSelected = true
-        } else if femaleInterestedInButton.isSelected{
+        } else if sender != femaleInterestedInButton && femaleInterestedInButton.isSelected{
             //Set female checkmark Icon and Button to unselected
             femaleInterestedInCheckmarkIcon.image = unselectedCheckmark
             femaleInterestedInButton.isSelected = false
+        }
+    }
+    
+    //My Necter Buttons Target
+    func myNecterButtonTapped(_ sender: UIButton) {
+        sender.isSelected = false
+        sender.isHighlighted = false
+        
+        if let title = sender.currentTitle {
+            //open user's email application with email ready to be sent to necter email -> commented out and replaced with link to survey
+            if title == "GIVE FEEDBACK" {
+                
+                let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
+                let encodedParams = "subject=\(subject)"
+                let email = "blake@necter.social"
+                let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
+                
+                if UIApplication.shared.canOpenURL(url! as URL) {
+                    UIApplication.shared.openURL(url! as URL)
+                }
+                
+            }
+            else if title == "TERMS OF SERVICE" {
+                let url = URL(string: "https://necter.social/termsofservice")
+                if UIApplication.shared.canOpenURL(url!) {
+                    UIApplication.shared.openURL(url!)
+                }
+                
+            }
+            else if title == "SHARE NECTER" {
+                
+            }
+            else if title == "PRIVACY POLICY" {
+                let url = URL(string: "https://necter.social/privacypolicy")
+                if UIApplication.shared.canOpenURL(url!) {
+                    UIApplication.shared.openURL(url!)
+                }
+
+            }
+            else if title == "LOGOUT" {
+                PFUser.logOut()
+                performSegue(withIdentifier: "showAccessViewController", sender: self)
+            }
+            else if title == "DELETE PROFILE" {
+                print("delete profile")
+            }
         }
     }
     

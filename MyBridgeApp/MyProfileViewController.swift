@@ -123,6 +123,7 @@ class MyProfileViewController: UIViewController {
             
             userSettingsButton.setImage(UIImage(named: "UserSettings_Button"), for: .normal)
             userSettingsButton.frame = CGRect(x: 0.0383*DisplayUtility.screenWidth, y: 0, width: upperButtonsWidth, height: upperButtonsHeight)
+            userSettingsButton.adjustsImageWhenHighlighted = false
             userSettingsButton.addTarget(self, action: #selector(userSettingsButtonTapped(_:)), for: .touchUpInside)
             print(userSettingsButton.frame.height / userSettingsButton.frame.width)
             scrollView.addSubview(userSettingsButton)
@@ -348,8 +349,7 @@ class MyProfileViewController: UIViewController {
     func userSettingsButtonTapped(_ sender: UIButton) {
 //        PFUser.logOut()
 //        performSegue(withIdentifier: "showAccess", sender: self)
-        //performSegue(withIdentifier: "showUserSettings", sender: self)
-        present(UserSettingsViewController(), animated: true, completion: nil)
+        performSegue(withIdentifier: "showUserSettings", sender: self)
     }
     
     //Send user to the editProfileViewController so they can edit their profile
@@ -477,15 +477,18 @@ class MyProfileViewController: UIViewController {
     
     //Setting segue transition information and preparation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Right"
+            vc.transitioningDelegate = self.transitionManager
         }
         else if mirror.subjectType == EditProfileViewController.self {
             self.transitionManager.animationDirection = "Left"
+            vc.transitioningDelegate = self.transitionManager
         }
-        vc.transitioningDelegate = self.transitionManager
+        
     }
 
 }
