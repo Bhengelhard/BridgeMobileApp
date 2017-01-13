@@ -8,11 +8,13 @@
 
 import UIKit
 import Parse
+import MessageUI
 
 class UserSettingsViewController: UIViewController {
     
     let localData = LocalData()
     let transitionManager = TransitionManager()
+    let messageComposer = MessageComposer()
     
     //CheckMarkIcons
     let selectedCheckmark = #imageLiteral(resourceName: "Selected_Gray_Circle")
@@ -33,11 +35,13 @@ class UserSettingsViewController: UIViewController {
     let femaleInterestedInCheckmarkIcon = UIImageView()
     let femaleInterestedInButton = UIButton()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         //Setting Background Color
         view.backgroundColor = UIColor.white
+        
+        //Getting User's Settings for Gender and InterestedIn Values
+        getUserSettings()
         
         //Initialize Navigation Bar
         displayNavigationBar()
@@ -51,8 +55,164 @@ class UserSettingsViewController: UIViewController {
         //Display My Necter
         displayMyNecterButtons()
         
+        
     }
     
+    //----Data Retrieval Functions----
+    //Getting User's Settings from local Data if it is saved and if not checking _User table in DB and then saving to device
+    func getUserSettings() {
+        //Getting Interested In from local Data
+        var interestedInSaved = false
+        if let interestedIn = localData.getInterestedIn() {
+            updateInterestedIn(interestedIn: interestedIn.lowercased())
+            interestedInSaved = true
+        }
+        
+        //Getting myGender from local Data
+        var myGenderSaved = false
+        if let myGender = localData.getMyGender() {
+            updateMyGender(myGender: myGender.lowercased())
+            myGenderSaved = true
+        }
+        
+        //Getting myGender or interestedIn from Database if one of them has not yet been saved to the device
+        if !myGenderSaved || !interestedInSaved {
+            if let user = PFUser.current() {
+                if let userObjectId = user.objectId {
+                    let query = PFQuery(className: "_User")
+                    query.getObjectInBackground(withId: userObjectId, block: { (result, error) in
+                        if error != nil {
+                            print(error ?? "Found error in UserSettingsViewController getUserSettings when retrieving interestedIn")
+                        } else {
+                            if let result = result {
+                                //Retriving Settings from Database
+                                //Retrieving interestedIn from Database when it is not yet saved to device
+                                if !interestedInSaved {
+                                    if let interestedIn = result["interested_in"] as? String {
+                                        //Setting UI to reflected retrieved settings for myGender and interestedIn
+                                        DispatchQueue.main.async(execute: {
+                                            self.updateInterestedIn(interestedIn: interestedIn)
+                                        })
+                                        self.localData.setInterestedIn(interestedIn)
+                                        
+                                    }
+                                    interestedInSaved = true
+                                }
+                                
+                                //Retrieving interestedIn from Database when it is not yet saved to device
+                                if !myGenderSaved {
+                                    //Retrieving myGender from Databaseand myGender
+                                    if let myGender = result["gender"] as? String {
+                                        DispatchQueue.main.async(execute: {
+                                            self.updateMyGender(myGender: myGender)
+                                        })
+                                        self.localData.setMyGender(myGender)
+                                    }
+                                }
+                                
+                                //Synchronizing Saved Data
+                                self.localData.synchronize()
+                                
+                            } else {
+                                print("Found error in result from UserSettingsViewController getUserSettings when retrieving interestedIn")
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    }
+    
+    //Updating the settings to the specified data for myGender
+    func updateMyGender(myGender: String) {
+        if myGender.lowercased() == "male" {
+            //Set male myGender Checkmark Icon and Button to selected
+            maleGenderCheckmarkIcon.image = selectedCheckmark
+            maleGenderButton.isSelected = true
+            
+            //Set female myGender Checkmark Icon and button to unselected
+            femaleGenderCheckmarkIcon.image = unselectedCheckmark
+            femaleGenderButton.isSelected = false
+            
+            //Set Other myGender Checkmark Icon and button to unselected
+            otherGenderCheckmarkIcon.image = unselectedCheckmark
+            otherGenderButton.isSelected = false
+            otherGenderTextField.isUserInteractionEnabled = false
+
+        } else if myGender.lowercased() == "female" {
+            //Set female myGender Checkmark Icon and button to selected
+            femaleGenderCheckmarkIcon.image = selectedCheckmark
+            femaleGenderButton.isSelected = true
+            
+            //Set male myGender Checkmark Icon and Button to unselected
+            maleGenderCheckmarkIcon.image = unselectedCheckmark
+            maleGenderButton.isSelected = false
+            
+            //Set Other myGender Checkmark Icon and button to unselected
+            otherGenderCheckmarkIcon.image = unselectedCheckmark
+            otherGenderButton.isSelected = false
+            otherGenderTextField.isUserInteractionEnabled = false
+            
+        } else if myGender.lowercased() == "other" {
+            //Set Other myGender Checkmark Icon and button to selected
+            otherGenderCheckmarkIcon.image = selectedCheckmark
+            otherGenderButton.isSelected = true
+            otherGenderTextField.isUserInteractionEnabled = true
+            otherGenderTextField.becomeFirstResponder()
+            
+            //Set male myGender Checkmark Icon and Button to unselected
+            maleGenderCheckmarkIcon.image = unselectedCheckmark
+            maleGenderButton.isSelected = false
+            
+            //Set female myGender Checkmark Icon and button to unselected
+            femaleGenderCheckmarkIcon.image = unselectedCheckmark
+            femaleGenderButton.isSelected = false
+            
+        } else {
+            //The user should never have no settings set up, but if there is an error, then all the objects will set to unselected
+            //Set Other myGender Checkmark Icon and button to unselected
+            otherGenderCheckmarkIcon.image = unselectedCheckmark
+            otherGenderButton.isSelected = false
+            otherGenderTextField.isUserInteractionEnabled = false
+            
+            //Set male myGender Checkmark Icon and Button to unselected
+            maleGenderCheckmarkIcon.image = unselectedCheckmark
+            maleGenderButton.isSelected = false
+            
+            //Set female myGender Checkmark Icon and button to unselected
+            femaleGenderCheckmarkIcon.image = unselectedCheckmark
+            femaleGenderButton.isSelected = false
+        }
+    }
+    
+    //Updating the settings to the specified data for interestedIn
+    func updateInterestedIn(interestedIn: String) {
+        if interestedIn.lowercased() == "male" {
+            //Set male Interested In Checkmark Icon and Button to selected
+            maleInterestedInCheckmarkIcon.image = selectedCheckmark
+            maleInterestedInButton.isSelected = true
+            
+            //Set female Interested In Checkmark Icon and button to unselected
+            femaleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            femaleInterestedInButton.isSelected = false
+        } else if interestedIn.lowercased() == "female" {
+            //Set female Checkmark Icon and Button to selected
+            femaleInterestedInCheckmarkIcon.image = selectedCheckmark
+            femaleInterestedInButton.isSelected = true
+            
+            //Set male checkmark Icon and Button to unselected
+            maleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            maleInterestedInButton.isSelected = false
+        } else {
+            //Set male checkmark Icon and Button to unselected
+            maleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            maleInterestedInButton.isSelected = false
+            
+            //Set female checkmark Icon and Button to unselected
+            femaleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            femaleInterestedInButton.isSelected = false
+        }
+    }
     
     //----Initialization Functions----
     //Initializing the navigation Bar
@@ -277,7 +437,7 @@ class UserSettingsViewController: UIViewController {
         let optionCircleDiameter = 0.05*DisplayUtility.screenHeight
         checkmarkIcon.frame.origin = origin
         checkmarkIcon.frame.size = CGSize(width: optionCircleDiameter, height: optionCircleDiameter)
-        checkmarkIcon.image = unselectedCheckmark
+        //checkmarkIcon.image = unselectedCheckmark
         view.addSubview(checkmarkIcon)
         
         let optionLabelSize = CGSize(width: 0.2*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
@@ -302,7 +462,7 @@ class UserSettingsViewController: UIViewController {
             otherGenderTextField.center.y = otherGenderCheckmarkIcon.center.y
             otherGenderTextField.textAlignment = NSTextAlignment.left
             otherGenderTextField.font = optionTextFont
-            otherGenderTextField.isUserInteractionEnabled = false
+            //otherGenderTextField.isUserInteractionEnabled = false
             view.addSubview(otherGenderTextField)
         }
     }
@@ -319,7 +479,7 @@ class UserSettingsViewController: UIViewController {
     //Right Bar Button Target
     func saveButtonTapped(_ sender: UIButton) {
         print("saveButtonTapped and not yet saving")
-        dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "showMyProfile", sender: self)
     }
     
     //My Gender Button Target - Changing My Gender Radio Button to Selected Button
@@ -327,38 +487,20 @@ class UserSettingsViewController: UIViewController {
         
         //Updating MaleGenderButton to new selection
         if sender == maleGenderButton && !sender.isSelected {
-            //Set male Checkmark Icon and Button to selected
-            maleGenderCheckmarkIcon.image = selectedCheckmark
-            maleGenderButton.isSelected = true
-        } else if sender != maleGenderButton && maleGenderButton.isSelected{
-            //Set male checkmark Icon and Button to unselected
-            maleGenderCheckmarkIcon.image = unselectedCheckmark
-            maleGenderButton.isSelected = false
+            updateMyGender(myGender: "male")
         }
-        
         //Updating FemaleGenderButton to new selection
-        if sender == femaleGenderButton && !sender.isSelected {
-            //Set female Checkmark Icon and Button to selected
-            femaleGenderCheckmarkIcon.image = selectedCheckmark
-            femaleGenderButton.isSelected = true
-        } else if sender != femaleGenderButton && femaleGenderButton.isSelected{
-            //Set female checkmark Icon and Button to unselected
-            femaleGenderCheckmarkIcon.image = unselectedCheckmark
-            femaleGenderButton.isSelected = false
+        else if sender == femaleGenderButton && !sender.isSelected {
+            updateMyGender(myGender: "female")
         }
-        
         //Updating OtherGenderButton to new selection
-        if sender == otherGenderButton && !sender.isSelected {
-            //Set other checkmark Icon and Button to unselected
-            otherGenderCheckmarkIcon.image = selectedCheckmark
-            otherGenderButton.isSelected = true
-            otherGenderTextField.isUserInteractionEnabled = true
-            otherGenderTextField.becomeFirstResponder()
-        } else if sender != otherGenderButton && otherGenderButton.isSelected{
-            //Set other checkmark Icon and Button to unselected
-            otherGenderCheckmarkIcon.image = unselectedCheckmark
-            otherGenderButton.isSelected = false
-            otherGenderTextField.isUserInteractionEnabled = false
+        else if sender == otherGenderButton && !sender.isSelected {
+            updateMyGender(myGender: "other")
+        }
+        //The user should never have no settings set up, but if there is an error, then all the objects will set to unselected
+        else {
+            updateMyGender(myGender: "nothing set")
+            print("no gender is set")
         }
     }
     
@@ -371,24 +513,11 @@ class UserSettingsViewController: UIViewController {
         
         //Updating male InterestedIn to new selection
         if sender == maleInterestedInButton && !sender.isSelected {
-            //Set male Checkmark Icon and Button to selected
-            maleInterestedInCheckmarkIcon.image = selectedCheckmark
-            maleInterestedInButton.isSelected = true
-        } else if sender != maleInterestedInButton && maleInterestedInButton.isSelected{
-            //Set male checkmark Icon and Button to unselected
-            maleInterestedInCheckmarkIcon.image = unselectedCheckmark
-            maleInterestedInButton.isSelected = false
+            updateInterestedIn(interestedIn: "male")
         }
-        
         //Updating female InterestedIn to new selection
-        if sender == femaleInterestedInButton && !sender.isSelected {
-            //Set female Checkmark Icon and Button to selected
-            femaleInterestedInCheckmarkIcon.image = selectedCheckmark
-            femaleInterestedInButton.isSelected = true
-        } else if sender != femaleInterestedInButton && femaleInterestedInButton.isSelected{
-            //Set female checkmark Icon and Button to unselected
-            femaleInterestedInCheckmarkIcon.image = unselectedCheckmark
-            femaleInterestedInButton.isSelected = false
+        else if sender == femaleInterestedInButton && !sender.isSelected {
+            updateInterestedIn(interestedIn: "female")
         }
     }
     
@@ -419,7 +548,20 @@ class UserSettingsViewController: UIViewController {
                 
             }
             else if title == "SHARE NECTER" {
-                
+                // Make sure the device can send text messages
+                if (messageComposer.canSendText()) {
+                    // Obtain a configured MFMessageComposeViewController
+                    let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+                    
+                    // Present the configured MFMessageComposeViewController instance
+                    // Note that the dismissal of the VC will be handled by the messageComposer instance,
+                    // since it implements the appropriate delegate call-back
+                    present(messageComposeVC, animated: true, completion: nil)
+                } else {
+                    // Let the user know if his/her device isn't able to send text messages
+                    let errorAlert = UIAlertView(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
+                }
             }
             else if title == "PRIVACY POLICY" {
                 let url = URL(string: "https://necter.social/privacypolicy")

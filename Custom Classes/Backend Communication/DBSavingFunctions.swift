@@ -14,6 +14,25 @@ class DBSavingFunctions {
     
     let localData = LocalData()
     
+    //Saving Data related to the user sharing the app to their friends
+    func sharedNecter(recipients: [String]?) {
+        if let user = PFUser.current() {
+            //Increments the number of times the user has shared necter
+            user.incrementKey("num_shared_necter")
+            
+            //Saves the recipients the user shared the app to in shared_to field in _User table
+            if let recipients = recipients {
+                if let currentSharedTo = user["shared_to"] as? [String] {
+                    let newSharedTo = currentSharedTo + recipients
+                    user["shared_to"] = newSharedTo
+                } else {
+                    user["shared_to"] = recipients
+                }
+            }
+            user.saveInBackground()
+        }
+    }
+    
     //Calculate numConnectionsNected with query and then save to device
     func updateNumConnectionsNected() -> Int {
         var numNected = 0

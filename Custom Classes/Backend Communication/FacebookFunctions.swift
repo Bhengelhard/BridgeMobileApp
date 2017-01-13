@@ -80,7 +80,7 @@ class FacebookFunctions {
                                 print("got result")
                                 var hasInterestedIn = false
                                 if let interested_in = result["interested_in"] {
-                                    localData.setInterestedIN(interested_in as! String)
+                                    localData.setInterestedIn(interested_in as! String)
                                     PFUser.current()?["interested_in"] = interested_in
                                     hasInterestedIn = true
                                 }

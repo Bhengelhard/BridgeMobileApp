@@ -24,6 +24,7 @@ class LocalData {
     var loveStatus:String? = nil
     var friendshipStatus:String? = nil
     var numConnectionsNected:Int? = nil
+    var myGender:String? = nil
     
     init(){
         let userDefaults = UserDefaults.standard
@@ -44,9 +45,28 @@ class LocalData {
                 loveStatus = (userInfo as! UserInfo).loveStatus
                 friendshipStatus = (userInfo as! UserInfo).friendshipStatus
                 numConnectionsNected = (userInfo as! UserInfo).numConnectionsNected
+                myGender = (userInfo as! UserInfo).myGender
+                interestedIn = (userInfo as! UserInfo).interestedIn
             }
         }
     }
+    
+    //Saving the currentUser's gender
+    func setMyGender(_ myGender: String) {
+        self.myGender = myGender
+    }
+    func getMyGender() -> String? {
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "userInfo"){
+            let decoded  = userDefaults.object(forKey: "userInfo") as! Data
+            let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
+            return userInfo.myGender
+        }
+        else{
+            return nil
+        }
+    }
+
     
     //Saving number of connections the currentUser has connected to the user's device
     func setNumConnectionsNected(_ numConnectionsNected: Int) {
@@ -171,11 +191,11 @@ class LocalData {
         }
     }
     
-    
-    func setInterestedIN(_ interestedIn:String){
+    //Saving the gender the currentUser's is Interested In
+    func setInterestedIn(_ interestedIn:String){
         self.interestedIn = interestedIn
     }
-    func getInterestedIN()-> String?{
+    func getInterestedIn()-> String?{
         let userDefaults = UserDefaults.standard
         if let _ = userDefaults.object(forKey: "userInfo"){
         let decoded  = userDefaults.object(forKey: "userInfo") as! Data
@@ -297,10 +317,9 @@ class LocalData {
         }
     }
     
-    
-    
+    //This function saves the local data to the device
     func synchronize(){
-        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus, numConnectionsNected: numConnectionsNected)
+        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeSwipingRight: firstTimeSwipingRight, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus, numConnectionsNected: numConnectionsNected, myGender: myGender)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: userInfo)
         userDefaults.set(encodedData, forKey: "userInfo")
