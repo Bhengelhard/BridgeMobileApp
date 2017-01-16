@@ -195,9 +195,14 @@ class DisplayUtility {
     
     //Center Text Vertically in Text View
     static func centerTextVerticallyInTextView(textView: UITextView) {
-        var topCorrect = (textView.bounds.size.height - textView.contentSize.height) / 2
+        let topCorrect = (textView.bounds.size.height - textView.contentSize.height) / 2
         //topCorrect = topCorrect < 0.0 ? 0.0 : topCorrect;
         textView.contentInset.top = topCorrect
+    }
+    
+    //Top-Align Text Vertically in Text View
+    static func topAlignTextVerticallyInTextView(textView: UITextView) {
+        textView.contentInset.top = 0
     }
     
     /*
