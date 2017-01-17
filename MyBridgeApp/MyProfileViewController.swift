@@ -38,9 +38,8 @@ class MyProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         //Setting Background Color
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = .white
         
         view.addSubview(scrollView)
         
@@ -163,11 +162,10 @@ class MyProfileViewController: UIViewController {
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
             if let data = localData.getMainProfilePicture() {
                 if let image = UIImage(data: data) {
-                    setImageToHexagon(image: image, hexView: leftHexView)
+                    self.leftHexView.setBackgroundImage(image: image)
                 }
             } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
                 downloader.imageFromURL(URL: url, callBack: { (image) in
-                    //self.setImageToHexagon(image: image, hexView: self.leftHexView)
                     self.leftHexView.setBackgroundImage(image: image)
                     //Saviong mainProfilePicture to device if it has not already been saved
                     if let data = UIImageJPEGRepresentation(image, 1.0){
@@ -181,7 +179,6 @@ class MyProfileViewController: UIViewController {
             rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
             //Setting static profile images for tech Demo
             let image2 = #imageLiteral(resourceName: "profpic3.jpg")
-            //setImageToHexagon(image: image2, hexView: rightHexView)
             rightHexView.setBackgroundImage(image: image2)
             
 //            if let data = localData.getMainProfilePicture() {
@@ -200,7 +197,6 @@ class MyProfileViewController: UIViewController {
             
             //Setting static profile images for tech Demo
             let image3 = #imageLiteral(resourceName: "profPic4.jpg")
-            //setImageToHexagon(image: image3, hexView: bottomHexView)
             bottomHexView.setBackgroundImage(image: image3)
 //            if let data = localData.getMainProfilePicture() {
 //                if let image = UIImage(data: data) {
@@ -255,18 +251,15 @@ class MyProfileViewController: UIViewController {
             
             grayOutButtons()
             
-            //businessButton.backgroundColor = DisplayUtility.businessBlue
             businessButton.frame = CGRect(x: 0.17716*DisplayUtility.screenWidth, y: bottomHexView.frame.maxY + 0.16*DisplayUtility.screenHeight, width: statusButtonWidth, height: statusButtonHeight)
             businessButton.addTarget(self, action: #selector(statusTypeButtonSelected(_:)), for: .touchUpInside)
             scrollView.addSubview(businessButton)
             
-            //loveButton.backgroundColor = DisplayUtility.loveRed
             loveButton.frame = CGRect(x: 0, y: businessButton.frame.minY, width: statusButtonWidth, height: statusButtonHeight)
             loveButton.center.x = DisplayUtility.screenWidth / 2
             loveButton.addTarget(self, action: #selector(statusTypeButtonSelected(_:)), for: .touchUpInside)
             scrollView.addSubview(loveButton)
             
-            //friendshipButton.backgroundColor = DisplayUtility.friendshipGreen
             friendshipButton.frame = CGRect(x: DisplayUtility.screenWidth - businessButton.frame.maxX, y: businessButton.frame.minY, width: statusButtonWidth, height: statusButtonHeight)
             friendshipButton.addTarget(self, action: #selector(statusTypeButtonSelected(_:)), for: .touchUpInside)
             scrollView.addSubview(friendshipButton)
@@ -325,26 +318,6 @@ class MyProfileViewController: UIViewController {
         
     }
     
-    func setImageToHexagon(image: UIImage, hexView: HexagonView) {
-        if let newImage = self.fitImageToView(viewSize: hexView.frame.size, image: image) {
-            hexView.hexBackgroundColor = UIColor(patternImage: newImage)
-        } else {
-            hexView.hexBackgroundColor = UIColor(patternImage: image)
-        }
-        DispatchQueue.main.async {
-            hexView.setNeedsDisplay()
-        }
-    }
-    func fitImageToView(viewSize: CGSize, image: UIImage) -> UIImage? {
-        //TODO: Keep image proportions constant
-        var resultImage: UIImage?
-        UIGraphicsBeginImageContext(viewSize)
-        image.draw(in: CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height))
-        resultImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        return resultImage;
-    }
-    
     //Send user to the userSettingsViewController so they can update their settings
     //For now this is logging the user out and sending them to the access page
     func userSettingsButtonTapped(_ sender: UIButton) {
@@ -371,13 +344,14 @@ class MyProfileViewController: UIViewController {
         var statusSet = false
         
         // TODO: Turn off buttons if same one selected
+        // "You have not yet created a request for ('work', 'dating', 'friendship')"
 
         if sender == businessButton {
             if let bridgeStatus = localData.getBusinessStatus() {
                 statusSet = true
                 self.businessStatus = bridgeStatus
             }
-            businessButton.setImage(UIImage(named: "MyProfile_Selected_Work"), for: .normal)
+            businessButton.setImage(UIImage(named: "Profile_Selected_Work_Icon"), for: .normal)
             type = "Business"
             statusLabel.text = businessStatus
             statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
@@ -389,7 +363,7 @@ class MyProfileViewController: UIViewController {
                 statusSet = true
                 self.loveStatus = bridgeStatus
             }
-            loveButton.setImage(UIImage(named: "MyProfile_Selected_Dating"), for: .normal)
+            loveButton.setImage(UIImage(named: "Profile_Selected_Dating_Icon"), for: .normal)
             type = "Love"
             statusLabel.text = loveStatus
             statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
@@ -401,7 +375,7 @@ class MyProfileViewController: UIViewController {
                 statusSet = true
                 self.friendshipStatus = bridgeStatus
             }
-            friendshipButton.setImage(UIImage(named: "MyProfile_Selected_Friends"), for: .normal)
+            friendshipButton.setImage(UIImage(named: "Profile_Selected_Friends_Icon"), for: .normal)
             type = "Friendship"
             statusLabel.text = friendshipStatus
             statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
@@ -475,9 +449,9 @@ class MyProfileViewController: UIViewController {
     }
     
     func grayOutButtons() {
-        businessButton.setImage(UIImage(named: "MyProfile_Unselected_Work"), for: .normal)
-        loveButton.setImage(UIImage(named: "MyProfile_Unselected_Dating"), for: .normal)
-        friendshipButton.setImage(UIImage(named: "MyProfile_Unselected_Friends"), for: .normal)
+        businessButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
+        loveButton.setImage(UIImage(named: "Profile_Unselected_Dating_Icon"), for: .normal)
+        friendshipButton.setImage(UIImage(named: "Profile_Unselected_Friends_Icon"), for: .normal)
     }
     
     func layoutBottomBasedOnStatus() {

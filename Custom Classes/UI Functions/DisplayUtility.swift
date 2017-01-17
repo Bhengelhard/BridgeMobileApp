@@ -200,13 +200,18 @@ class DisplayUtility {
         textView.contentInset.top = topCorrect
     }
     
+
     //Center Text Vertically in Button
     static func centerTextVerticallyInButton(button: UIButton) {
         if let titleLabel = button.titleLabel {
             let topCorrect = (button.bounds.height - titleLabel.intrinsicContentSize.height) / 2
             button.titleEdgeInsets.top = topCorrect
         }
-        
+    }
+
+    //Top-Align Text Vertically in Text View
+    static func topAlignTextVerticallyInTextView(textView: UITextView) {
+        textView.contentInset.top = 0
     }
     
     /*
