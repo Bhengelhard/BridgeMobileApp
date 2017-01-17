@@ -541,9 +541,6 @@ class UserSettingsViewController: UIViewController {
         //Saving updated Gender
         if initialGender != nil {
             if initialGender != selectedGender {
-                //Saving updated Gender to device
-                localData.setMyGender(selectedGender.lowercased())
-                
                 //Saving updated Gender to database
                 if let user = PFUser.current() {
                     user["gender"] = selectedGender.lowercased()
@@ -551,6 +548,12 @@ class UserSettingsViewController: UIViewController {
                         if error != nil {
                             print(error ?? "UserSettingsViewController: Got error saving user from updated Gender")
                         } else if success {
+                            //Saving to device
+                            let localData = LocalData()
+                            localData.setMyGender(selectedGender.lowercased())
+                            localData.synchronize()
+                            
+                            //Changing bridge pairings in Database via Server-Side function
                             pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
 
                         } else {
@@ -565,20 +568,22 @@ class UserSettingsViewController: UIViewController {
         //Saving updated Interested In
         if initialInterestedIn != nil {
             if initialInterestedIn != selectedInterestedIn {
-                //Saving updated Interested In to device
-                localData.setInterestedIn(selectedInterestedIn.lowercased())
-                
                 //Saving updated Interested In to database
                 if let user = PFUser.current() {
-                    user["interested_in"] = selectedGender.lowercased()
+                    user["interested_in"] = selectedInterestedIn.lowercased()
                     user.saveInBackground(block: { (success, error) in
                         if error != nil {
                             print(error ?? "UserSettingsViewController: Got error saving user from updated InterestedIn")
                         } else if success {
-                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                            //Saving to device
+                            let localData = LocalData()
+                            localData.setInterestedIn(selectedInterestedIn.lowercased())
+                            localData.synchronize()
                             
+                            //Changing bridge pairings in Database via Server-Side function
+                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
                         } else {
-                            print("UserSettingsViewController: Got error saving user from updated Gender")
+                            print("UserSettingsViewController: Got error saving user from updated InterestedIn")
                         }
                     })
                 }
@@ -591,15 +596,15 @@ class UserSettingsViewController: UIViewController {
     //My Gender Button Target - Changing My Gender Radio Button to Selected Button
     func myGenderButtonTapped(_ sender: UIButton) {
         //Updating MaleGenderButton to new selection
-        if sender == maleGenderButton && !sender.isSelected {
+        if sender == maleGenderButton {
             updateMyGender(myGender: "male")
         }
         //Updating FemaleGenderButton to new selection
-        else if sender == femaleGenderButton && !sender.isSelected {
+        else if sender == femaleGenderButton {
             updateMyGender(myGender: "female")
         }
         //Updating OtherGenderButton to new selection
-        else if sender == otherGenderButton && !sender.isSelected {
+        else if sender == otherGenderButton {
             updateMyGender(myGender: "other")
         }
         //The user should never have no settings set up, but if there is an error, then all the objects will set to unselected
@@ -617,12 +622,14 @@ class UserSettingsViewController: UIViewController {
         }
         
         //Updating male InterestedIn to new selection
-        if sender == maleInterestedInButton && !sender.isSelected {
+        if sender == maleInterestedInButton {
             updateInterestedIn(interestedIn: "male")
         }
         //Updating female InterestedIn to new selection
-        else if sender == femaleInterestedInButton && !sender.isSelected {
+        else if sender == femaleInterestedInButton {
             updateInterestedIn(interestedIn: "female")
+        } else {
+            updateInterestedIn(interestedIn: "nothing set")
         }
     }
     
@@ -701,7 +708,7 @@ class UserSettingsViewController: UIViewController {
     func whichMyGenderSelected() -> String {
         if maleGenderButton.isSelected {
             return "male"
-        } else if femaleInterestedInButton.isSelected {
+        } else if femaleGenderButton.isSelected {
             return "female"
         } else if otherGenderButton.isSelected {
             return "other"
