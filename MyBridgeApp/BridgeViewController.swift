@@ -210,8 +210,7 @@ class BridgeViewController: UIViewController {
         //Display Revisit Button so user can run through their previously seen matches
         let revisitButtonY = displayNoMoreCardsLabel.frame.maxY + 0.02*DisplayUtility.screenHeight
         let revisitButtonFrame: CGRect = CGRect(x: 0.25*DisplayUtility.screenWidth, y: revisitButtonY, width: 0.5*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.06)
-        revisitButton = DisplayUtility.gradientButton(text: "Revisit Matches", frame: revisitButtonFrame, fontSize: 20)
-        revisitButton.setTitleColor(UIColor.black, for: .normal)
+        revisitButton = DisplayUtility.gradientButton(frame: revisitButtonFrame, text: "Revisit Matches", textColor: UIColor.black, fontSize: 20)
         revisitButton.addTarget(self, action: #selector(revitalizeMyPairs(_:)), for: .touchUpInside)
         revisitButton.alpha = 0
         revisitButton.isEnabled = false
@@ -684,7 +683,7 @@ class BridgeViewController: UIViewController {
     }
     func displayBackgroundView(){
         let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
-        backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        backgroundView.backgroundColor = .white//UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         view.addSubview(backgroundView)
     }
     

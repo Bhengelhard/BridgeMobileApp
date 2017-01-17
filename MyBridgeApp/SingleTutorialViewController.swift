@@ -156,9 +156,8 @@ class SingleTutorialViewController: UIViewController {
         explanationLabel.adjustsFontSizeToFitWidth = true
         
         let endTutorialButtonFrame = CGRect(x: 0.65*DisplayUtility.screenWidth, y: 0.0325*DisplayUtility.screenHeight, width: 0.3*DisplayUtility.screenWidth, height: 0.04093*DisplayUtility.screenHeight)
-        let endTutorialButton = DisplayUtility.gradientButton(text: "BEGIN 'NECTING", frame: endTutorialButtonFrame, fontSize: 11)
+        let endTutorialButton = DisplayUtility.gradientButton(frame: endTutorialButtonFrame, text: "BEGIN 'NECTING", textColor: UIColor.black, fontSize: 11)
         endTutorialButton.layer.cornerRadius = 8
-        endTutorialButton.setTitleColor(UIColor.black, for: .normal)
         endTutorialButton.layer.borderColor = DisplayUtility.gradientColor(size: endTutorialButton.frame.size).cgColor
         return (titleLabel, explanationLabel, endTutorialButton)
     }
@@ -168,7 +167,7 @@ class SingleTutorialViewController: UIViewController {
     static func tutorialComplete() -> (UIButton) {
         var tutorialCompletedButton = UIButton()
         let tutorialCompletedButtonFrame = CGRect(x: 0.4*DisplayUtility.screenWidth, y: 0.05, width: 0.54125*DisplayUtility.screenWidth, height: 0.04093*DisplayUtility.screenHeight)
-        tutorialCompletedButton = DisplayUtility.gradientButton(text: "I'M READY", frame: tutorialCompletedButtonFrame, fontSize: 12)
+        tutorialCompletedButton = DisplayUtility.gradientButton(frame: tutorialCompletedButtonFrame, text: "I'M READY", textColor: UIColor.black, fontSize: 12)
         tutorialCompletedButton.layer.cornerRadius = 8
         
         return tutorialCompletedButton

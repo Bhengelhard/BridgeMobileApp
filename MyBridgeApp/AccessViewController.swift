@@ -290,6 +290,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //Setting the delegate
         accessTextView.delegate = self
         

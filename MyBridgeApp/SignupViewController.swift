@@ -371,8 +371,7 @@ class SignupViewController:UIViewController, UITextFieldDelegate, UIImagePickerC
         displayProfilePictureButton()
         
         let beginConnectingButtonFrame = CGRect(x:0.16*screenWidth, y:0.85*screenHeight, width:0.68*screenWidth, height:0.075*screenHeight)
-        beginConnectingButton = DisplayUtility.gradientButton(text: "View Tutorial", frame: beginConnectingButtonFrame, fontSize: 20)
-        
+        beginConnectingButton = DisplayUtility.gradientButton(frame: beginConnectingButtonFrame, text: "View Tutorial", textColor: UIColor.black, fontSize: 20)
     
         if mainTitle.text == noNameText {
             beginConnectingButton.layer.borderColor = UIColor.lightGray.cgColor

@@ -34,7 +34,6 @@
 		304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */; };
 		304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */; };
 		3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059ABF11DEC72FB0010A81B /* TrendingView.swift */; };
-		3059ABF41DFB04AC0010A81B /* MyProfileViewController_Old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059ABF31DFB04AC0010A81B /* MyProfileViewController_Old.swift */; };
 		307A7F5A1D46619300858F96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F591D46619300858F96 /* ProfileViewController.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
@@ -46,6 +45,8 @@
 		30A726F71E26989E0070B620 /* profpic3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F41E26989E0070B620 /* profpic3.jpg */; };
 		30A726F81E26989E0070B620 /* ProfPic2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F51E26989E0070B620 /* ProfPic2.jpg */; };
 		30A726FC1E27D9160070B620 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */; };
+		30A727041E293A9A0070B620 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727031E293A9A0070B620 /* MessagesViewController.swift */; };
+		30A727061E29540F0070B620 /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727051E29540F0070B620 /* MessageComposer.swift */; };
 		30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */; };
 		30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */; };
 		30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */; };
@@ -72,7 +73,6 @@
 		CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829461CAA26D900DC86C9 /* ViewController.swift */; };
 		CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */; };
 		CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */; };
-		CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */; };
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
 		E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */; };
 		E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */; };
@@ -124,7 +124,6 @@
 		304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendingNotificationView.swift; path = "Custom Classes/Custom Views/SendingNotificationView.swift"; sourceTree = "<group>"; };
 		304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircleView.swift; path = "Custom Classes/Custom Views/CircleView.swift"; sourceTree = "<group>"; };
 		3059ABF11DEC72FB0010A81B /* TrendingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrendingView.swift; path = "Custom Classes/Custom Views/TrendingView.swift"; sourceTree = "<group>"; };
-		3059ABF31DFB04AC0010A81B /* MyProfileViewController_Old.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController_Old.swift; path = MyBridgeApp/MyProfileViewController_Old.swift; sourceTree = SOURCE_ROOT; };
 		305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyBridgeApp.entitlements; path = MyBridgeApp/MyBridgeApp.entitlements; sourceTree = SOURCE_ROOT; };
 		307A7F591D46619300858F96 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = MyBridgeApp/ProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -137,6 +136,8 @@
 		30A726F41E26989E0070B620 /* profpic3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profpic3.jpg; sourceTree = "<group>"; };
 		30A726F51E26989E0070B620 /* ProfPic2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ProfPic2.jpg; sourceTree = "<group>"; };
 		30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSettingsViewController.swift; path = MyBridgeApp/UserSettingsViewController.swift; sourceTree = SOURCE_ROOT; };
+		30A727031E293A9A0070B620 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MyBridgeApp/MessagesViewController.swift; sourceTree = SOURCE_ROOT; };
+		30A727051E29540F0070B620 /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageComposer.swift; path = "Custom Classes/Custom Views/MessageComposer.swift"; sourceTree = "<group>"; };
 		30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesView.swift; path = "Custom Classes/Custom Views/NewMatchesView.swift"; sourceTree = "<group>"; };
 		30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptedConnectionNotification.swift; path = "Custom Classes/Custom Views/AcceptedConnectionNotification.swift"; sourceTree = "<group>"; };
 		30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBRetrievingFunctions.swift; path = "Custom Classes/Backend Communication/DBRetrievingFunctions.swift"; sourceTree = "<group>"; };
@@ -165,7 +166,6 @@
 		CB5829461CAA26D900DC86C9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MyBridgeApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleMessageViewController.swift; path = MyBridgeApp/SingleMessageViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadPageViewController.swift; path = MyBridgeApp/LoadPageViewController.swift; sourceTree = SOURCE_ROOT; };
-		CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MyBridgeApp/MessagesViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = MyBridgeApp/StatusTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalProfileViewController.swift; path = MyBridgeApp/ExternalProfileViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -235,6 +235,7 @@
 				3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */,
 				3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */,
 				30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */,
+				30A727051E29540F0070B620 /* MessageComposer.swift */,
 				3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */,
 				3059ABF11DEC72FB0010A81B /* TrendingView.swift */,
 				3030C0D41DD550240077F7AC /* SwipeCard.swift */,
@@ -344,11 +345,10 @@
 				90512CF11E26A8D900D293BD /* EditProfileViewController.swift */,
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
 				E9D6DF0E1D7880B700138A1F /* EditProfileViewController_Old.swift */,
-				3059ABF31DFB04AC0010A81B /* MyProfileViewController_Old.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
 				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
 				E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */,
-				CB9C20EF1CAC887800C03FF2 /* MessagesViewController.swift */,
+				30A727031E293A9A0070B620 /* MessagesViewController.swift */,
 				1BB6AE301D5D24A800EC2E1B /* MessageContent.swift */,
 				E9D6DF101D7880C400138A1F /* MessagesTableCell.swift */,
 				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
@@ -505,13 +505,13 @@
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				90512CF21E26A8D900D293BD /* EditProfileViewController.swift in Sources */,
 				E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */,
-				3059ABF41DFB04AC0010A81B /* MyProfileViewController_Old.swift in Sources */,
 				3030C0BD1DD54E4D0077F7AC /* Users+CoreDataProperties.swift in Sources */,
 				3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */,
 				E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */,
 				90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */,
+				30A727061E29540F0070B620 /* MessageComposer.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,
 				301B1C511E036A0100D507B8 /* AccessViewController.swift in Sources */,
@@ -532,6 +532,7 @@
 				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,
 				90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */,
 				3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */,
+				30A727041E293A9A0070B620 /* MessagesViewController.swift in Sources */,
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
 				90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */,
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
@@ -548,7 +549,6 @@
 				3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */,
 				3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */,
 				30E2AF781DDA2AB70023AA95 /* ReasonForConnection.swift in Sources */,
-				CB9C20F01CAC887800C03FF2 /* MessagesViewController.swift in Sources */,
 				3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */,
 				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,

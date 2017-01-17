@@ -620,14 +620,15 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
 //        
 //        
 //        NotificationCenter.default.removeObserver(self)
-        
     }
+    
     func displayBackgroundView(){
         let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
-        backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        backgroundView.backgroundColor = .white//UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         view.addSubview(backgroundView)
         view.sendSubview(toBack: backgroundView)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -689,7 +690,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         pagingSpinner.hidesWhenStopped = true
         tableView.tableFooterView = pagingSpinner
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        tableView.backgroundColor = .white//UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         
         missionControlView.initialize(view: view, revisitLabel: noMessagesLabel, revisitButton: UIButton())
         displayFilterLabel(type: "All Types")
@@ -987,57 +988,63 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             //singleMessageTitle stays as "Conversation"
         }
-        singleMessageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row]!
-        messageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!
-        let necterTypeForMessage = messageType[messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row ]!]!
-        switch(necterTypeForMessage) {
-        case "Business":
-            necterTypeColor = DisplayUtility.businessBlue
-        case "Love":
-            necterTypeColor = DisplayUtility.loveRed
-        case "Friendship":
-            necterTypeColor = DisplayUtility.friendshipGreen
-        default:
-            necterTypeColor = DisplayUtility.necterGray
-        }
-        toolbarTapped = false
-        let query: PFQuery = PFQuery(className: "Messages")
-        query.getObjectInBackground(withId: messageId) {
-            (messageObject: PFObject?, error: Error?) in
-            if error != nil {
-                print(error ?? "message tapped and querying with error")
+        if let messageId = messagePositionToMessageIdMapping[(indexPath as NSIndexPath).row] {
+            singleMessageId = messageId
+            if let necterTypeForMessage = messageType[messageId] {
+                switch(necterTypeForMessage) {
+                case "Business":
+                    necterTypeColor = DisplayUtility.businessBlue
+                case "Love":
+                    necterTypeColor = DisplayUtility.loveRed
+                case "Friendship":
+                    necterTypeColor = DisplayUtility.friendshipGreen
+                default:
+                    necterTypeColor = DisplayUtility.necterGray
+                }
             }
-            else if let messageObject = messageObject {
-                if let _ = messageObject["message_viewed"] {
-                    var whoViewed = messageObject["message_viewed"] as! [String]
-                    if !whoViewed.contains((PFUser.current()?.objectId)!) {
-                        whoViewed.append((PFUser.current()?.objectId)!)
-                        messageObject["message_viewed"] = whoViewed
-                        messageObject.saveInBackground(block: { (success, error) in
-                            if success {
-                                print("current user saved to the message")
-                            } else if error != nil {
-                                print(error)
-                            }
-                        })
+            toolbarTapped = false
+            let query: PFQuery = PFQuery(className: "Messages")
+            query.getObjectInBackground(withId: messageId) {
+                (messageObject: PFObject?, error: Error?) in
+                if error != nil {
+                    print(error ?? "message tapped and querying with error")
+                }
+                else if let messageObject = messageObject {
+                    if let _ = messageObject["message_viewed"] {
+                        var whoViewed = messageObject["message_viewed"] as! [String]
+                        if !whoViewed.contains((PFUser.current()?.objectId)!) {
+                            whoViewed.append((PFUser.current()?.objectId)!)
+                            messageObject["message_viewed"] = whoViewed
+                            messageObject.saveInBackground(block: { (success, error) in
+                                if success {
+                                    print("current user saved to the message")
+                                } else if error != nil {
+                                    print(error)
+                                }
+                            })
+                            
+                            //decrease the badgeCount by 1
+                            DBSavingFunctions.decrementBadge()
+                        }
+                    }
+                    else {
+                        messageObject["message_viewed"] = [(PFUser.current()?.objectId)!]
+                        messageObject.saveInBackground()
+                        print("message_viewed saved for single person")
                         
                         //decrease the badgeCount by 1
                         DBSavingFunctions.decrementBadge()
                     }
                 }
-                else {
-                    messageObject["message_viewed"] = [(PFUser.current()?.objectId)!]
-                    messageObject.saveInBackground()
-                    print("message_viewed saved for single person")
-                    
-                    //decrease the badgeCount by 1
-                    DBSavingFunctions.decrementBadge()
-                }
             }
+            segueToSingleMessage = true
+            performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
+        } else {
+            print("Show popup for internet not working properly")
         }
-        segueToSingleMessage = true
-        performSegue(withIdentifier: "showSingleMessageFromMessages", sender: self)
+
     }
+        
 }
 
 

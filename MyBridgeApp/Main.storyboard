@@ -35,7 +35,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WkR-Vg-7sb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1023.5" y="66.5"/>
+            <point key="canvasLocation" x="-1108" y="-171"/>
         </scene>
         <!--Load Page View Controller-->
         <scene sceneID="biW-fj-MnX">
@@ -535,12 +535,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="Aqq-nv-Cxw" kind="show" identifier="showMyProfile" id="cjh-Cg-YYX"/>
+                        <segue destination="Aqq-nv-Cxw" kind="showDetail" identifier="showMyProfile" action="showViewController:sender:" id="cjh-Cg-YYX"/>
+                        <segue destination="Qv3-Na-w7J" kind="show" identifier="showAccessViewController" id="Bdu-f2-69i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="roL-XG-ohh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-734" y="861"/>
+            <point key="canvasLocation" x="-1353" y="644"/>
         </scene>
         <!--My Profile View Controller-->
         <scene sceneID="wdK-f8-iS4">
@@ -556,10 +557,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromMyProfile" id="hOb-8o-wNe"/>
                         <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileFromMyProfile" id="xcR-H7-wok"/>
                         <segue destination="Qv3-Na-w7J" kind="show" identifier="showAccess" id="JHn-8T-jHu"/>
                         <segue destination="8Sz-9C-tbu" kind="show" identifier="showUserSettings" id="yF8-IA-ZqD"/>
+                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgePageFromMyProfile" id="EM2-6z-RDo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZz-Ig-dI4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -618,9 +619,10 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="JHn-8T-jHu"/>
         <segue reference="cjh-Cg-YYX"/>
         <segue reference="xcR-H7-wok"/>
-        <segue reference="hOb-8o-wNe"/>
+        <segue reference="EM2-6z-RDo"/>
         <segue reference="0Mi-wm-mTu"/>
         <segue reference="OnA-y9-bUb"/>
         <segue reference="B19-eu-GHC"/>

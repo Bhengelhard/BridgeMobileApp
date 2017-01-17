@@ -39,7 +39,8 @@ class MyProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        //Setting Background Color
+        view.backgroundColor = UIColor.white
         
         view.addSubview(scrollView)
         
@@ -67,7 +68,7 @@ class MyProfileViewController: UIViewController {
                 let firstName = DisplayUtility.firstName(name: name)
                 welcomeLabel.text = "Welcome back, \(firstName)."
                 welcomeLabel.sizeToFit()
-                welcomeLabel.frame = CGRect(x: 0, y: 0.1*DisplayUtility.screenHeight, width: welcomeLabel.frame.width, height: welcomeLabel.frame.height)
+                welcomeLabel.frame = CGRect(x: 0, y: 0.07969*DisplayUtility.screenHeight, width: welcomeLabel.frame.width, height: welcomeLabel.frame.height)
                 welcomeLabel.center.x = DisplayUtility.screenWidth / 2
                 view.addSubview(welcomeLabel)
             }
@@ -123,6 +124,7 @@ class MyProfileViewController: UIViewController {
             
             userSettingsButton.setImage(UIImage(named: "UserSettings_Button"), for: .normal)
             userSettingsButton.frame = CGRect(x: 0.0383*DisplayUtility.screenWidth, y: 0, width: upperButtonsWidth, height: upperButtonsHeight)
+            userSettingsButton.adjustsImageWhenHighlighted = false
             userSettingsButton.addTarget(self, action: #selector(userSettingsButtonTapped(_:)), for: .touchUpInside)
             print(userSettingsButton.frame.height / userSettingsButton.frame.width)
             scrollView.addSubview(userSettingsButton)
@@ -349,6 +351,7 @@ class MyProfileViewController: UIViewController {
 //        PFUser.logOut()
 //        performSegue(withIdentifier: "showAccess", sender: self)
         performSegue(withIdentifier: "showUserSettings", sender: self)
+        //present(UserSettingsViewController(), animated: true, completion: nil)
     }
     
     //Send user to the editProfileViewController so they can edit their profile
@@ -483,6 +486,8 @@ class MyProfileViewController: UIViewController {
         }
         else if mirror.subjectType == EditProfileViewController.self {
             self.transitionManager.animationDirection = "Left"
+        } else if mirror.subjectType == UserSettingsViewController.self {
+            self.transitionManager.animationDirection = "Top"
         }
         vc.transitioningDelegate = self.transitionManager
     }

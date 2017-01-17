@@ -7,18 +7,22 @@
 //
 
 import UIKit
+import Parse
+import MessageUI
 
 class UserSettingsViewController: UIViewController {
     
     let localData = LocalData()
-    let optionTitleFont = UIFont(name: "BentonSans-Light", size: 12)
-    let optionTextFont = UIFont(name: "BentonSans-Light", size: 16)
-    let optionCircleDiameter = 0.05*DisplayUtility.screenHeight
-    let optionLabelSize = CGSize(width: 0.2*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+    let transitionManager = TransitionManager()
+    let messageComposer = MessageComposer()
     
     //CheckMarkIcons
     let selectedCheckmark = #imageLiteral(resourceName: "Selected_Gray_Circle")
     let unselectedCheckmark = #imageLiteral(resourceName: "Unselected_Gray_Circle")
+    
+    //Initial User Settings
+    var initialGender: String?
+    var initialInterestedIn: String?
     
     //Initializing Gender global objects
     let maleGenderCheckmarkIcon = UIImageView()
@@ -27,16 +31,21 @@ class UserSettingsViewController: UIViewController {
     let femaleGenderButton = UIButton()
     let otherGenderCheckmarkIcon = UIImageView()
     let otherGenderButton = UIButton()
+    let otherGenderTextField = UITextField()
 
     //Initializing Interested In global objects
+    let maleInterestedInCheckmarkIcon = UIImageView()
+    let maleInterestedInButton = UIButton()
+    let femaleInterestedInCheckmarkIcon = UIImageView()
+    let femaleInterestedInButton = UIButton()
+    //Setting InterestedInTitleOriginY as global variable to retrieve when setting disabledInterestedInView and interestedInTitle parameters
+    let interestedInTitleOriginY = 0.43766*DisplayUtility.screenHeight
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Setting Background Color
+        view.backgroundColor = UIColor.white
         
-        initializeUI()
-        
-    }
-    
-    func initializeUI () {
         //Initialize Navigation Bar
         displayNavigationBar()
         
@@ -46,12 +55,220 @@ class UserSettingsViewController: UIViewController {
         //Display Interested In
         displayInterestedIn()
         
-        //Display My Necter buttons
+        //Display My Necter
+        displayMyNecterButtons()
         
-        //Display logout, delete profile, and website
-
+        //Getting User's Settings for Gender and InterestedIn Values
+        getUserSettings()
+        
     }
     
+    //----Data Retrieval Functions----
+    //Getting User's Settings from local Data if it is saved and if not checking _User table in DB and then saving to device
+    func getUserSettings() {
+        //Getting Interested In from local Data
+        var interestedInSaved = false
+        if let interestedIn = localData.getInterestedIn() {
+            updateInterestedIn(interestedIn: interestedIn.lowercased())
+            interestedInSaved = true
+            initialInterestedIn = interestedIn
+        }
+        
+        //Getting myGender from local Data
+        var myGenderSaved = false
+        if let myGender = localData.getMyGender() {
+            updateMyGender(myGender: myGender.lowercased())
+            myGenderSaved = true
+            initialGender = myGender
+        }
+        
+        //Getting interestedInLove from local Data
+        var interestedInLoveSaved = false
+        if let interestedInLove = localData.getInterestedInLove() {
+            if !interestedInLove {
+                displayInterestedInDisabled()
+            }
+            interestedInLoveSaved = true
+        }
+        
+        //Getting myGender or interestedIn from Database if one of them has not yet been saved to the device
+        if !myGenderSaved || !interestedInSaved || !interestedInLoveSaved {
+            if let user = PFUser.current() {
+                if let userObjectId = user.objectId {
+                    let query = PFQuery(className: "_User")
+                    query.getObjectInBackground(withId: userObjectId, block: { (result, error) in
+                        if error != nil {
+                            print(error ?? "Found error in UserSettingsViewController getUserSettings when retrieving interestedIn")
+                        } else {
+                            if let result = result {
+                                //Retriving Settings from Database
+                                //Retrieving interestedIn from Database when it is not yet saved to device
+                                if !interestedInSaved {
+                                    if let interestedIn = result["interested_in"] as? String {
+                                        //Setting UI to reflected retrieved settings for myGender and interestedIn
+                                        DispatchQueue.main.async(execute: {
+                                            self.updateInterestedIn(interestedIn: interestedIn)
+                                        })
+                                        self.localData.setInterestedIn(interestedIn)
+                                        self.initialInterestedIn = interestedIn
+                                    }
+                                    interestedInSaved = true
+                                }
+                                
+                                //Retrieving interestedIn from Database when it is not yet saved to device
+                                if !myGenderSaved {
+                                    //Retrieving myGender from Databaseand myGender
+                                    if let myGender = result["gender"] as? String {
+                                        DispatchQueue.main.async(execute: {
+                                            self.updateMyGender(myGender: myGender)
+                                        })
+                                        self.localData.setMyGender(myGender)
+                                        self.initialGender = myGender
+                                    }
+                                }
+                                
+                                //Retrieving interestedInLove from Database when it is not yet saved to device
+                                if !interestedInLoveSaved {
+                                    //Retrieving interestedInLove from Databaseand myGender
+                                    if let interestedInLove = result["interested_in_love"] as? Bool {
+                                        if !interestedInLove {
+                                            DispatchQueue.main.async(execute: {
+                                                self.displayInterestedInDisabled()
+                                            })
+                                        }
+                                        self.localData.setInterestedInLove(interestedInLove)
+                                    }
+                                }
+                                
+                                //Synchronizing Saved Data
+                                self.localData.synchronize()
+                                
+                            } else {
+                                print("Found error in result from UserSettingsViewController getUserSettings when retrieving interestedIn")
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    }
+    
+    //----Updating Settings based on data retrieved----
+    //Updating the settings to the specified data for myGender
+    func updateMyGender(myGender: String) {
+        if myGender.lowercased() == "male" {
+            //Set male myGender Checkmark Icon and Button to selected
+            maleGenderCheckmarkIcon.image = selectedCheckmark
+            maleGenderButton.isSelected = true
+            
+            //Set female myGender Checkmark Icon and button to unselected
+            femaleGenderCheckmarkIcon.image = unselectedCheckmark
+            femaleGenderButton.isSelected = false
+            
+            //Set Other myGender Checkmark Icon and button to unselected
+            otherGenderCheckmarkIcon.image = unselectedCheckmark
+            otherGenderButton.isSelected = false
+            otherGenderTextField.isUserInteractionEnabled = false
+
+        } else if myGender.lowercased() == "female" {
+            //Set female myGender Checkmark Icon and button to selected
+            femaleGenderCheckmarkIcon.image = selectedCheckmark
+            femaleGenderButton.isSelected = true
+            
+            //Set male myGender Checkmark Icon and Button to unselected
+            maleGenderCheckmarkIcon.image = unselectedCheckmark
+            maleGenderButton.isSelected = false
+            
+            //Set Other myGender Checkmark Icon and button to unselected
+            otherGenderCheckmarkIcon.image = unselectedCheckmark
+            otherGenderButton.isSelected = false
+            otherGenderTextField.isUserInteractionEnabled = false
+            
+        } else if myGender.lowercased() == "other" {
+            //Set Other myGender Checkmark Icon and button to selected
+            otherGenderCheckmarkIcon.image = selectedCheckmark
+            otherGenderButton.isSelected = true
+            otherGenderTextField.isUserInteractionEnabled = true
+            otherGenderTextField.becomeFirstResponder()
+            
+            //Set male myGender Checkmark Icon and Button to unselected
+            maleGenderCheckmarkIcon.image = unselectedCheckmark
+            maleGenderButton.isSelected = false
+            
+            //Set female myGender Checkmark Icon and button to unselected
+            femaleGenderCheckmarkIcon.image = unselectedCheckmark
+            femaleGenderButton.isSelected = false
+            
+        } else {
+            //The user should never have no settings set up, but if there is an error, then all the objects will set to unselected
+            //Set Other myGender Checkmark Icon and button to unselected
+            otherGenderCheckmarkIcon.image = unselectedCheckmark
+            otherGenderButton.isSelected = false
+            otherGenderTextField.isUserInteractionEnabled = false
+            
+            //Set male myGender Checkmark Icon and Button to unselected
+            maleGenderCheckmarkIcon.image = unselectedCheckmark
+            maleGenderButton.isSelected = false
+            
+            //Set female myGender Checkmark Icon and button to unselected
+            femaleGenderCheckmarkIcon.image = unselectedCheckmark
+            femaleGenderButton.isSelected = false
+        }
+    }
+    
+    //Updating the settings to the specified data for interestedIn
+    func updateInterestedIn(interestedIn: String) {
+        if interestedIn.lowercased() == "male" {
+            //Set male Interested In Checkmark Icon and Button to selected
+            maleInterestedInCheckmarkIcon.image = selectedCheckmark
+            maleInterestedInButton.isSelected = true
+            
+            //Set female Interested In Checkmark Icon and button to unselected
+            femaleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            femaleInterestedInButton.isSelected = false
+        } else if interestedIn.lowercased() == "female" {
+            //Set female Checkmark Icon and Button to selected
+            femaleInterestedInCheckmarkIcon.image = selectedCheckmark
+            femaleInterestedInButton.isSelected = true
+            
+            //Set male checkmark Icon and Button to unselected
+            maleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            maleInterestedInButton.isSelected = false
+        } else {
+            //Set male checkmark Icon and Button to unselected
+            maleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            maleInterestedInButton.isSelected = false
+            
+            //Set female checkmark Icon and Button to unselected
+            femaleInterestedInCheckmarkIcon.image = unselectedCheckmark
+            femaleInterestedInButton.isSelected = false
+        }
+    }
+    
+    //Display white overlay over Interested and disable buttons when user is not interested in love
+    func displayInterestedInDisabled() {
+        //Label to explain why interested is disabled
+        let explanationLabel = UILabel()
+        explanationLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        explanationLabel.frame.origin.y = maleInterestedInCheckmarkIcon.frame.maxY + 0.01*DisplayUtility.screenHeight
+        explanationLabel.center.x = view.center.x
+        explanationLabel.text = "Interest in dating is disabled. Edit profile to update."
+        explanationLabel.font = UIFont(name: "BentonSans-Light", size: 12)
+        explanationLabel.textAlignment = NSTextAlignment.center
+        explanationLabel.numberOfLines = 2
+        view.addSubview(explanationLabel)
+        
+        //White overlay
+        let disabledView = UIView()
+        let viewOriginY = interestedInTitleOriginY
+        let height = explanationLabel.frame.maxY - interestedInTitleOriginY
+        disabledView.frame = CGRect(x: 0, y: viewOriginY, width: DisplayUtility.screenWidth, height: height)
+        disabledView.backgroundColor = UIColor.white
+        disabledView.layer.opacity = 0.85
+        view.addSubview(disabledView)
+    }
+    
+    //----Initialization Functions----
     //Initializing the navigation Bar
     func displayNavigationBar() {
         //Initializing left bar button item
@@ -120,81 +337,165 @@ class UserSettingsViewController: UIViewController {
         }
         view.addSubview(header)
     }
-    
-    //Left Bar Button Target
-    func cancelButtonTapped(_ sender: UIButton) {
-        print("cancelButtonTapped")
-        performSegue(withIdentifier: "showMyProfile", sender: self)
-    }
-    
-    //Right Bar Button Target
-    func saveButtonTapped(_ sender: UIButton) {
-        print("saveButtonTapped and not yet saving")
-        performSegue(withIdentifier: "showMyProfile", sender: self)
-    }
 
     //Initialize My Gender
     func displayMyGender() {
         //Initializing MY GENDER title
-        let title = UILabel()
-        title.frame = CGRect(x: 0, y: 0.20778*DisplayUtility.screenHeight, width: 0.5*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
-        title.center.x = view.center.x
-        title.text = "MY GENDER"
-        title.textAlignment = NSTextAlignment.center
-        title.font = optionTitleFont
-        view.addSubview(title)
+        setUpTitleText(originY: 0.20778*DisplayUtility.screenHeight, text: "MY GENDER")
         
         //Finding User's Gender
         
-        //Initializing Male Gender label, checkmark and button
+        //Initializing options to select
+        //Initializing Male Gender label, checkmark, and button
         let maleFrameOrigin = CGPoint(x: 0.1496*DisplayUtility.screenWidth, y: 0.25787*DisplayUtility.screenHeight)
-        setUpGenderClickableSpace(button: maleGenderButton, checkmarkIcon: maleGenderCheckmarkIcon, origin: maleFrameOrigin, text: "MALE")
-        maleGenderButton.addTarget(self, action: #selector(maleButtonTapped(_:)), for: .touchUpInside)
+        setUpSelectableOption(button: maleGenderButton, checkmarkIcon: maleGenderCheckmarkIcon, origin: maleFrameOrigin, text: "MALE")
+        maleGenderButton.addTarget(self, action: #selector(myGenderButtonTapped(_:)), for: .touchUpInside)
         
         //Initializing Female Gender label, checkmark, and button
         let femaleFrameOrigin = CGPoint(x: 0.5689*DisplayUtility.screenWidth, y: 0.25787*DisplayUtility.screenHeight)
-        setUpGenderClickableSpace(button: femaleGenderButton, checkmarkIcon: femaleGenderCheckmarkIcon, origin: femaleFrameOrigin, text: "FEMALE")
-        femaleGenderButton.addTarget(self, action: #selector(femaleButtonTapped(_:)), for: .touchUpInside)
+        setUpSelectableOption(button: femaleGenderButton, checkmarkIcon: femaleGenderCheckmarkIcon, origin: femaleFrameOrigin, text: "FEMALE")
+        femaleGenderButton.addTarget(self, action: #selector(myGenderButtonTapped(_:)), for: .touchUpInside)
         
         //Initializing Female Gender label, checkmark, and button
         let otherFrameOrigin = CGPoint(x: 0.1496*DisplayUtility.screenWidth, y: 0.32346*DisplayUtility.screenHeight)
-        setUpGenderClickableSpace(button: otherGenderButton, checkmarkIcon: otherGenderCheckmarkIcon, origin: otherFrameOrigin, text: "OTHER:")
-        otherGenderButton.addTarget(self, action: #selector(otherButtonTapped(_:)), for: .touchUpInside)
-        let otherGenderTextField = UITextField()
-        otherGenderTextField.frame = CGRect(x: 0.43757*DisplayUtility.screenWidth, y: 0, width: 0.4*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
-        otherGenderTextField.center.y = otherGenderCheckmarkIcon.center.y
-        otherGenderTextField.layer.masksToBounds = false
-        otherGenderTextField.layer.backgroundColor = UIColor.white.cgColor
-        otherGenderTextField.layer.borderColor = UIColor.gray.cgColor
-        otherGenderTextField.layer.shadowColor = UIColor.black.cgColor
-        otherGenderTextField.layer.borderWidth = 0.0
-        otherGenderTextField.layer.cornerRadius = 5
-        otherGenderTextField.layer.shadowRadius = 2.0
-        otherGenderTextField.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        setUpSelectableOption(button: otherGenderButton, checkmarkIcon: otherGenderCheckmarkIcon, origin: otherFrameOrigin, text: "OTHER:")
+        otherGenderButton.addTarget(self, action: #selector(myGenderButtonTapped(_:)), for: .touchUpInside)
         
-        otherGenderTextField.layer.opacity = 1
-
-//        textField.layer.masksToBounds = false
-//        textField.layer.shadowRadius = 2.0
-//        textField.layer.shadowColor = UIColor.blackColor().CGColor
-//        textField.layer.shadowOffset = CGSizeMake(1.0, 1.0)
-//        textField.layer.shadowOpacity = 1.0
-//        textField.layer.shadowRadius = 1.0
-        view.addSubview(otherGenderTextField)
+        let otherGenderBottomLine = UIView()
+        otherGenderBottomLine.frame.origin.y = otherGenderTextField.frame.maxY
+        otherGenderBottomLine.frame.origin.x = otherGenderTextField.frame.minX
+        otherGenderBottomLine.frame.size.width = otherGenderTextField.frame.width
+        otherGenderBottomLine.frame.size.height = 1
+        otherGenderBottomLine.backgroundColor = UIColor.gray
+        view.addSubview(otherGenderBottomLine)
     }
     
     //Initialize Interested In
     func displayInterestedIn() {
+        //Initializing INTERESTED IN title
+        setUpTitleText(originY: interestedInTitleOriginY, text: "INTERESTED IN")
         
+        //Initializing Options to select
+        //Initializing Male interested in label, checkmark, and button
+        let maleFrameOrigin = CGPoint(x: 0.1496*DisplayUtility.screenWidth, y: 0.49063*DisplayUtility.screenHeight)
+        setUpSelectableOption(button: maleInterestedInButton, checkmarkIcon: maleInterestedInCheckmarkIcon, origin: maleFrameOrigin, text: "MALE")
+        maleInterestedInButton.addTarget(self, action: #selector(interestedInButtonTapped(_:)), for: .touchUpInside)
         
+        //Initializing Female interested in label, checkmark, and button
+        let femaleFrameOrigin = CGPoint(x: 0.5689*DisplayUtility.screenWidth, y: 0.49063*DisplayUtility.screenHeight)
+        setUpSelectableOption(button: femaleInterestedInButton, checkmarkIcon: femaleInterestedInCheckmarkIcon, origin: femaleFrameOrigin, text: "FEMALE")
+        femaleInterestedInButton.addTarget(self, action: #selector(interestedInButtonTapped(_:)), for: .touchUpInside)
     }
     
-    func setUpGenderClickableSpace(button: UIButton, checkmarkIcon: UIImageView, origin: CGPoint, text: String) {
+    //Initialize My Necter Buttons
+    func displayMyNecterButtons() {
+        //Initializing MY NECTER title
+        setUpTitleText(originY: 0.6093*DisplayUtility.screenHeight, text: "MY NECTER")
+        
+        //Button Constraints
+        let gradientButtonWidth = 0.34666*DisplayUtility.screenWidth
+        let gradientButtonsHeight = 0.04048*DisplayUtility.screenHeight
+        //Column X Origin Values
+        let leftColumnOriginX = 0.09824*DisplayUtility.screenWidth
+        let rightColumnOriginX = 0.5409*DisplayUtility.screenWidth
+        //Row Origin Values
+        let firstRowOriginY = 0.66004*DisplayUtility.screenHeight
+        let secondRowOriginY = 0.71327*DisplayUtility.screenHeight
+        let thirdRowOriginY = 0.82271*DisplayUtility.screenHeight
+        //Gradient button font size
+        let fontSize : CGFloat = 12
+        
+        
+        //Initializing Give Feedback Button in the first row of the left column
+        let giveFeedbackFrame = CGRect(x: leftColumnOriginX, y: firstRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let giveFeedbackButton = DisplayUtility.gradientButton(frame: giveFeedbackFrame, text: "GIVE FEEDBACK", textColor: UIColor.black, fontSize: fontSize)
+        giveFeedbackButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(giveFeedbackButton)
+        
+        //Initializing Terms of Use Button
+        let termsOfUseFrame = CGRect(x: rightColumnOriginX, y: firstRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let termsOfUseButton = DisplayUtility.gradientButton(frame: termsOfUseFrame, text: "TERMS OF USE", textColor: UIColor.black, fontSize: fontSize)
+        termsOfUseButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(termsOfUseButton)
+        
+        //Initializing Share Necter Button
+        let shareNecterFrame = CGRect(x: leftColumnOriginX, y: secondRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let shareNecterButton = DisplayUtility.gradientButton(frame: shareNecterFrame, text: "SHARE NECTER", textColor: UIColor.black, fontSize: fontSize)
+        shareNecterButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(shareNecterButton)
+        
+        //Initializing Privacy Policy Button
+        let privacyPolicyFrame = CGRect(x: rightColumnOriginX, y: secondRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let privacyPolicyButton = DisplayUtility.gradientButton(frame: privacyPolicyFrame, text: "PRIVACY POLICY", textColor: UIColor.black, fontSize: fontSize)
+        privacyPolicyButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(privacyPolicyButton)
+        
+        //Initializing Divider
+        let divider = UIView()
+        divider.frame.size = CGSize(width: termsOfUseFrame.maxX - giveFeedbackFrame.minX, height: 1)
+        divider.frame.origin.y = 0.79198*DisplayUtility.screenHeight
+        divider.center.x = view.center.x
+        divider.backgroundColor = UIColor.gray
+        view.addSubview(divider)
+        
+        //Initializing Logout Button
+        let logoutFrame = CGRect(x: leftColumnOriginX, y: thirdRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let logoutButton = DisplayUtility.gradientButton(frame: logoutFrame, text: "LOGOUT", textColor: UIColor.black, fontSize: fontSize)
+        logoutButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(logoutButton)
+        
+        //Initializing Delete Profile Button
+        let deleteProfileFrame = CGRect(x: rightColumnOriginX, y: thirdRowOriginY, width:gradientButtonWidth , height: gradientButtonsHeight)
+        let deleteProfileButton = UIButton()
+        deleteProfileButton.frame = deleteProfileFrame
+        deleteProfileButton.setTitle("DELETE PROFILE", for: .normal)
+        deleteProfileButton.setTitleColor(UIColor.gray, for: .normal)
+        deleteProfileButton.setTitleColor(UIColor.red, for: .highlighted)
+        deleteProfileButton.setTitleColor(UIColor.red, for: .selected)
+        deleteProfileButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: fontSize)
+        deleteProfileButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        deleteProfileButton.layer.cornerRadius = 0.2*deleteProfileButton.frame.height
+        deleteProfileButton.layer.borderColor = UIColor.gray.cgColor
+        deleteProfileButton.layer.borderWidth = 1
+        deleteProfileButton.clipsToBounds = true
+        deleteProfileButton.addTarget(self, action: #selector(myNecterButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(deleteProfileButton)
+        
+        //Initializing website label
+        let websiteLabel = UILabel()
+        websiteLabel.frame.origin.y = 0.94*DisplayUtility.screenHeight
+        websiteLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        websiteLabel.center.x = view.center.x
+        websiteLabel.text = "WWW.NECTER.SOCIAL"
+        websiteLabel.textAlignment = NSTextAlignment.center
+        websiteLabel.font = UIFont(name: "BentonSans-Light", size: 12)
+        view.addSubview(websiteLabel)
+    }
+    
+    //----Functions to create Repeated objects----
+    //Creating Title Texts for MY GENDER, INTERESTED IN, and MY NECTER
+    func setUpTitleText(originY: CGFloat, text: String) {
+        let optionTitleFont = UIFont(name: "BentonSans-Light", size: 12)
+
+        let title = UILabel()
+        title.frame = CGRect(x: 0, y: originY, width: 0.5*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        title.center.x = view.center.x
+        title.text = text
+        title.textAlignment = NSTextAlignment.center
+        title.font = optionTitleFont
+        view.addSubview(title)
+    }
+    
+    //Creating RadioButtons with text next to them
+    func setUpSelectableOption(button: UIButton, checkmarkIcon: UIImageView, origin: CGPoint, text: String) {
+        let optionCircleDiameter = 0.05*DisplayUtility.screenHeight
         checkmarkIcon.frame.origin = origin
         checkmarkIcon.frame.size = CGSize(width: optionCircleDiameter, height: optionCircleDiameter)
-        checkmarkIcon.image = unselectedCheckmark
+        //checkmarkIcon.image = unselectedCheckmark
         view.addSubview(checkmarkIcon)
         
+        let optionLabelSize = CGSize(width: 0.2*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+        let optionTextFont = UIFont(name: "BentonSans-Light", size: 16)
         let genderLabel = UILabel()
         genderLabel.frame.origin.x = checkmarkIcon.frame.maxX + 0.025*DisplayUtility.screenWidth
         genderLabel.frame.size = optionLabelSize
@@ -209,74 +510,232 @@ class UserSettingsViewController: UIViewController {
         button.frame.size.height = checkmarkIcon.frame.height
         button.frame.size.width = genderLabel.frame.maxX - checkmarkIcon.frame.minX
         view.addSubview(button)
-    }
-    
-    //Male Button Target - Changing Gender Radio Button to Male Selected
-    func maleButtonTapped(_ sender: UIButton) {
-        if !maleGenderButton.isSelected {
-            //Set male Checkmark Icon and Button to selected
-            maleGenderCheckmarkIcon.image = selectedCheckmark
-            maleGenderButton.isSelected = true
-            
-            //Set female checkmark Icon and Button to unselected
-            femaleGenderCheckmarkIcon.image = unselectedCheckmark
-            femaleGenderButton.isSelected = false
-            
-            //Set other checkmark Icon and Button to unselected
-            otherGenderCheckmarkIcon.image = unselectedCheckmark
-            otherGenderButton.isSelected = false
+        
+        if text == "OTHER:" {
+            otherGenderTextField.frame = CGRect(x: otherGenderButton.frame.maxX + 0.025*DisplayUtility.screenWidth, y: 0, width: 0.4*DisplayUtility.screenWidth, height: 0.05*DisplayUtility.screenHeight)
+            otherGenderTextField.center.y = otherGenderCheckmarkIcon.center.y
+            otherGenderTextField.textAlignment = NSTextAlignment.left
+            otherGenderTextField.font = optionTextFont
+            //otherGenderTextField.isUserInteractionEnabled = false
+            view.addSubview(otherGenderTextField)
         }
     }
     
-    //Female Button Target - Changing Gender Radio Button to Female Selected
-    func femaleButtonTapped(_ sender: UIButton) {
-        if !femaleGenderButton.isSelected {
-            //Set female Checkmark Icon and Button to selected
-            femaleGenderCheckmarkIcon.image = selectedCheckmark
-            femaleGenderButton.isSelected = true
-            
-            //Set male checkmark Icon and Button to unselected
-            maleGenderCheckmarkIcon.image = unselectedCheckmark
-            maleGenderButton.isSelected = false
-            
-            //Set other checkmark Icon and Button to unselected
-            otherGenderCheckmarkIcon.image = unselectedCheckmark
-            otherGenderButton.isSelected = false
+    
+    //----Targets----
+    //Left Bar Button Target
+    func cancelButtonTapped(_ sender: UIButton) {
+        print("cancelButtonTapped")
+        //dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "showMyProfile", sender: self)
+    }
+    
+    //Right Bar Button Target
+    func saveButtonTapped(_ sender: UIButton) {
+        //Finding which fields were changed
+        let selectedGender = whichMyGenderSelected()
+        let selectedInterestedIn = whichInterestedInSelected()
+        
+        let pfCloudFunctions = PFCloudFunctions()
+        
+        //Saving updated Gender
+        if initialGender != nil {
+            if initialGender != selectedGender {
+                //Saving updated Gender to device
+                localData.setMyGender(selectedGender.lowercased())
+                
+                //Saving updated Gender to database
+                if let user = PFUser.current() {
+                    user["gender"] = selectedGender.lowercased()
+                    user.saveInBackground(block: { (success, error) in
+                        if error != nil {
+                            print(error ?? "UserSettingsViewController: Got error saving user from updated Gender")
+                        } else if success {
+                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+
+                        } else {
+                            print("UserSettingsViewController: Got error saving user from updated Gender")
+
+                        }
+                    })
+                }
+            }
+        }
+
+        //Saving updated Interested In
+        if initialInterestedIn != nil {
+            if initialInterestedIn != selectedInterestedIn {
+                //Saving updated Interested In to device
+                localData.setInterestedIn(selectedInterestedIn.lowercased())
+                
+                //Saving updated Interested In to database
+                if let user = PFUser.current() {
+                    user["interested_in"] = selectedGender.lowercased()
+                    user.saveInBackground(block: { (success, error) in
+                        if error != nil {
+                            print(error ?? "UserSettingsViewController: Got error saving user from updated InterestedIn")
+                        } else if success {
+                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                            
+                        } else {
+                            print("UserSettingsViewController: Got error saving user from updated Gender")
+                        }
+                    })
+                }
+            }
+        }
+        //Return to MyProfileViewController
+        performSegue(withIdentifier: "showMyProfile", sender: self)
+    }
+    
+    //My Gender Button Target - Changing My Gender Radio Button to Selected Button
+    func myGenderButtonTapped(_ sender: UIButton) {
+        //Updating MaleGenderButton to new selection
+        if sender == maleGenderButton && !sender.isSelected {
+            updateMyGender(myGender: "male")
+        }
+        //Updating FemaleGenderButton to new selection
+        else if sender == femaleGenderButton && !sender.isSelected {
+            updateMyGender(myGender: "female")
+        }
+        //Updating OtherGenderButton to new selection
+        else if sender == otherGenderButton && !sender.isSelected {
+            updateMyGender(myGender: "other")
+        }
+        //The user should never have no settings set up, but if there is an error, then all the objects will set to unselected
+        else {
+            updateMyGender(myGender: "nothing set")
+            print("no gender is set")
         }
     }
     
-    //Other Button Target - Changing Gender Radio Button to Other Selected
-    func otherButtonTapped(_ sender: UIButton) {
-        if !femaleGenderButton.isSelected {
-            //Set other Checkmark Icon and Button to selected
-            otherGenderCheckmarkIcon.image = selectedCheckmark
-            otherGenderButton.isSelected = true
-            
-            //Set male checkmark Icon and Button to unselected
-            maleGenderCheckmarkIcon.image = unselectedCheckmark
-            maleGenderButton.isSelected = false
-            
-            //Set female checkmark Icon and Button to unselected
-            femaleGenderCheckmarkIcon.image = unselectedCheckmark
-            femaleGenderButton.isSelected = false
+    //Male Interested Button Target - Changing Interested In Radion Button to Male Selected
+    func interestedInButtonTapped(_ sender: UIButton) {
+        //Closing Keyboard if it is open
+        if otherGenderTextField.isFirstResponder {
+            otherGenderTextField.resignFirstResponder()
+        }
+        
+        //Updating male InterestedIn to new selection
+        if sender == maleInterestedInButton && !sender.isSelected {
+            updateInterestedIn(interestedIn: "male")
+        }
+        //Updating female InterestedIn to new selection
+        else if sender == femaleInterestedInButton && !sender.isSelected {
+            updateInterestedIn(interestedIn: "female")
         }
     }
     
+    //My Necter Buttons Target
+    func myNecterButtonTapped(_ sender: UIButton) {
+        if let title = sender.currentTitle {
+            
+            sender.setTitleColor(UIColor.black, for: .normal)
+            
+            //open user's email application with email ready to be sent to necter email -> commented out and replaced with link to survey
+            if title == "GIVE FEEDBACK" {
+                let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
+                let encodedParams = "subject=\(subject)"
+                let email = "blake@necter.social"
+                let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
+                
+                if UIApplication.shared.canOpenURL(url! as URL) {
+                    UIApplication.shared.openURL(url! as URL)
+                } else {
+                    // Let the user know if his/her device isn't able to send Emails
+                    let errorAlert = UIAlertView(title: "Cannot Send Email", message: "Your device is not able to send emails.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
+                }
+            }
+            else if title == "TERMS OF USE" {
+                let url = URL(string: "https://necter.social/termsofservice")
+                if UIApplication.shared.canOpenURL(url!) {
+                    UIApplication.shared.openURL(url!)
+                } else {
+                    // Let the user know if his/her device isn't able to access the URL
+                    let errorAlert = UIAlertView(title: "Cannot Access URL", message: "Your device is not able to access https://necter.social/termsofservice.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
+                }
+                
+            }
+            else if title == "SHARE NECTER" {
+                // Make sure the device can send text messages
+                if (messageComposer.canSendText()) {
+                    // Obtain a configured MFMessageComposeViewController
+                    let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+                    // Present the configured MFMessageComposeViewController instance
+                    // Note that the dismissal of the VC will be handled by the messageComposer instance,
+                    // since it implements the appropriate delegate call-back
+                    present(messageComposeVC, animated: true, completion: nil)
+                } else {
+                    // Let the user know if his/her device isn't able to send text messages
+                    let errorAlert = UIAlertView(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
+                }
+            }
+            else if title == "PRIVACY POLICY" {
+                let url = URL(string: "https://necter.social/privacypolicy")
+                if UIApplication.shared.canOpenURL(url!) {
+                    UIApplication.shared.openURL(url!)
+                } else {
+                    // Let the user know if his/her device isn't able to access the URL
+                    let errorAlert = UIAlertView(title: "Cannot Access URL", message: "Your device is not able to access https://necter.social/privacypolicy.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
+                }
+
+            }
+            else if title == "LOGOUT" {
+                PFUser.logOut()
+                performSegue(withIdentifier: "showAccessViewController", sender: self)
+                //present(AccessViewController(), animated: true, completion: nil)
+            }
+            else if title == "DELETE PROFILE" {
+                print("delete profile")
+            }
+        }
+
+    }
+    
+    //----Checking which buttons are selected----
+    //Checking which gender is selected
+    func whichMyGenderSelected() -> String {
+        if maleGenderButton.isSelected {
+            return "male"
+        } else if femaleInterestedInButton.isSelected {
+            return "female"
+        } else if otherGenderButton.isSelected {
+            return "other"
+        } else {
+            return "none selected"
+        }
+    }
+    
+    //Checking with interested in button is selected
+    func whichInterestedInSelected() -> String {
+        if maleInterestedInButton.isSelected {
+            return "male"
+        } else if femaleInterestedInButton.isSelected {
+            return "female"
+        } else {
+            return "none selected"
+        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    //Setting segue transition information and preparation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == MyProfileViewController.self {
+            self.transitionManager.animationDirection = "Bottom"
+        } else if mirror.subjectType == AccessViewController.self {
+            self.transitionManager.animationDirection = "Top"
+        }
+        vc.transitioningDelegate = self.transitionManager
     }
-    */
 
 }
