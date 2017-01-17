@@ -411,6 +411,8 @@ class MyProfileViewController: UIViewController {
         }
         
         self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+        self.statusLabel.sizeToFit()
+        self.statusLabel.center.x = DisplayUtility.screenWidth / 2
         
         //Get currentUser's most recent request (a.k.a bridge_status in DB) for selected connection type
         if statusSet {
@@ -434,23 +436,32 @@ class MyProfileViewController: UIViewController {
                         if results.count > 0 {
                             let result = results[0]
                             if let bridgeStatus = result["bridge_status"] as? String {
-                                self.statusLabel.text = bridgeStatus
-                                self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-                                self.statusLabel.sizeToFit()
-                                self.statusLabel.center.x = DisplayUtility.screenWidth / 2
-                                
-                                if type == "Business" {
-                                    self.businessStatus = bridgeStatus
-                                    self.localData.setBusinessStatus(bridgeStatus)
-                                } else if type == "Love" {
-                                    self.loveStatus = bridgeStatus
-                                    self.localData.setLoveStatus(bridgeStatus)
-                                } else if type == "Friendship" {
-                                    self.friendshipStatus = bridgeStatus
-                                    self.localData.setFriendshipStatus(bridgeStatus)
+                                if !bridgeStatus.isEmpty {
+                                    self.statusLabel.text = bridgeStatus
+                                    
+                                    if type == "Business" {
+                                        self.businessStatus = bridgeStatus
+                                        self.localData.setBusinessStatus(bridgeStatus)
+                                    } else if type == "Love" {
+                                        self.loveStatus = bridgeStatus
+                                        self.localData.setLoveStatus(bridgeStatus)
+                                    } else if type == "Friendship" {
+                                        self.friendshipStatus = bridgeStatus
+                                        self.localData.setFriendshipStatus(bridgeStatus)
+                                    }
+                                    self.localData.synchronize()
+
                                 }
-                                self.localData.synchronize()
                             }
+                        }
+                    } else {
+                        //Setting statusLabel to text for when the user does not have a status set
+                        if type == "Business" {
+                            self.statusLabel.text = self.businessStatus
+                        } else if type == "Love" {
+                            self.statusLabel.text = self.loveStatus
+                        } else if type == "Friendship" {
+                            self.statusLabel.text = self.friendshipStatus
                         }
                     }
                 })
