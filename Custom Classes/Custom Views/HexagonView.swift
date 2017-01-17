@@ -11,6 +11,7 @@ import UIKit
 class HexagonView: UIView {
     
     var hexBackgroundColor = UIColor.black
+    var hexBackgroundImage: UIImage?
     var border = false
     var borderColor = UIColor.black
     var borderWidth: CGFloat = 1.0
@@ -18,6 +19,7 @@ class HexagonView: UIView {
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         backgroundColor = .clear
+        clipsToBounds = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,6 +55,25 @@ class HexagonView: UIView {
         }
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        
+        let path = CGMutablePath()
+        
+        path.move(to: CGPoint(x: bounds.minX, y: bounds.midY))
+        path.addLine(to: CGPoint(x: bounds.minX + 0.25*bounds.width, y: bounds.minY))
+        path.addLine(to: CGPoint(x: bounds.maxX - 0.25*bounds.width, y: bounds.minY))
+        path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.midY))
+        path.addLine(to: CGPoint(x: bounds.maxX - 0.25*bounds.width, y: bounds.maxY))
+        path.addLine(to: CGPoint(x: bounds.minX + 0.25*bounds.width, y: bounds.maxY))
+        path.closeSubpath()
+        
+        if path.contains(point) {
+            return self
+        }
+        
+        return nil
+    }
+    
     func setBackgroundColor(color: UIColor) {
         hexBackgroundColor = color
         DispatchQueue.main.async {
@@ -61,6 +82,7 @@ class HexagonView: UIView {
     }
     
     func setBackgroundImage(image: UIImage) {
+        hexBackgroundImage = image
         if let newImage = fitImageToView(image: image) {
             hexBackgroundColor = UIColor(patternImage: newImage)
         } else {
@@ -68,6 +90,12 @@ class HexagonView: UIView {
         }
         DispatchQueue.main.async {
             self.setNeedsDisplay()
+        }
+    }
+    
+    func resetBackgroundImage() {
+        if let image = hexBackgroundImage {
+            setBackgroundImage(image: image)
         }
     }
     

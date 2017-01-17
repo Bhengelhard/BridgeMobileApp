@@ -84,6 +84,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
 
         
         if let user = PFUser.current() {
+            
             // Creating viewed exit icon
             let xIcon = UIImageView(frame: CGRect(x: 0.044*DisplayUtility.screenWidth, y: 0.04384*DisplayUtility.screenHeight, width: 0.03514*DisplayUtility.screenWidth, height: 0.03508*DisplayUtility.screenWidth))
             xIcon.image = UIImage(named: "Black_X")
@@ -164,6 +165,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             //            }
             scrollView.addSubview(topHexView)
             
+            let topHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
+            topHexView.addGestureRecognizer(topHexViewGR)
+            
             //setting frame and image for leftHexView
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
             let borderColor = DisplayUtility.gradientColor(size: leftHexView.frame.size)
@@ -185,6 +189,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             scrollView.addSubview(leftHexView)
             
+            let leftHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
+            leftHexView.addGestureRecognizer(leftHexViewGR)
+            
             //setting frame and image for rightHexView
             rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
             //Setting static profile images for tech Demo
@@ -203,6 +210,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             //            }
             scrollView.addSubview(rightHexView)
             
+            let rightHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
+            rightHexView.addGestureRecognizer(rightHexViewGR)
+            
             //setting frame and image for bottomHexView
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
             //Setting static profile images for tech Demo
@@ -219,6 +229,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             //                })
             //            }
             scrollView.addSubview(bottomHexView)
+            
+            let bottomHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
+            bottomHexView.addGestureRecognizer(bottomHexViewGR)
             
             // Creating "Quick-Update" section
             let quickUpdateLabel = UILabel()
@@ -537,6 +550,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func save(_ sender: UIButton) {
+        view.endEditing(true)
         if let user = PFUser.current() {
             user["profile_greeting"] = greeting
             
@@ -967,15 +981,15 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                                                         self.statusTextView.text = bridgeStatus
                                                         if type == "Business" {
                                                             self.businessStatus = bridgeStatus
-                                                            self.localData.setBusinessStatus(bridgeStatus)
+                                                            //self.localData.setBusinessStatus(bridgeStatus)
                                                         } else if type == "Love" {
                                                             self.loveStatus = bridgeStatus
-                                                            self.localData.setLoveStatus(bridgeStatus)
+                                                            //self.localData.setLoveStatus(bridgeStatus)
                                                         } else if type == "Friendship" {
                                                             self.friendshipStatus = bridgeStatus
-                                                            self.localData.setFriendshipStatus(bridgeStatus)
+                                                            //self.localData.setFriendshipStatus(bridgeStatus)
                                                         }
-                                                        self.localData.synchronize()
+                                                        //self.localData.synchronize()
                                                     }
                                                 }
                                             }
@@ -998,6 +1012,28 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                     statusButton.setImage(unselectedImage, for: .normal)
                 }
             }
+        }
+    }
+    
+    func profilePicSelected(_ gesture: UIGestureRecognizer) {
+        if let hexView = gesture.view as? HexagonView {
+            let newHexView = HexagonView()
+            newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
+            if let image = hexView.hexBackgroundImage {
+                newHexView.setBackgroundImage(image: image)
+            } else {
+                newHexView.setBackgroundColor(color: hexView.hexBackgroundColor)
+            }
+            newHexView.addBorder(width: 1, color: .black)
+            UIView.animate(withDuration: 0.5, animations: {
+                //self.scrollView.scrollRectToVisible(CGRect(x: 0, y: 0, width: self.scrollView.frame.width, height: self.scrollView.frame.height), animated: true)
+            }, completion: { (finished) in
+                if finished {
+                    let editProfilePicView = ProfilePicturesView(hexView: newHexView, shouldShowEditButtons: true)
+                    self.view.addSubview(editProfilePicView)
+                    editProfilePicView.animate()
+                }
+            })
         }
     }
     

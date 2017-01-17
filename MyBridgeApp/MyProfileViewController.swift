@@ -39,6 +39,8 @@ class MyProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        FacebookFunctions().getPics()
+        
         view.backgroundColor = .white
         
         view.addSubview(scrollView)
