@@ -547,9 +547,17 @@ class UserSettingsViewController: UIViewController {
                 //Saving updated Gender to database
                 if let user = PFUser.current() {
                     user["gender"] = selectedGender.lowercased()
-                    user.saveInBackground()
-                    
-                    pfCloudFunctions.changeBridgePairingsOnStatusUpdate(parameters: [:])
+                    user.saveInBackground(block: { (success, error) in
+                        if error != nil {
+                            print(error ?? "UserSettingsViewController: Got error saving user from updated Gender")
+                        } else if success {
+                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+
+                        } else {
+                            print("UserSettingsViewController: Got error saving user from updated Gender")
+
+                        }
+                    })
                 }
             }
         }
@@ -563,15 +571,20 @@ class UserSettingsViewController: UIViewController {
                 //Saving updated Interested In to database
                 if let user = PFUser.current() {
                     user["interested_in"] = selectedGender.lowercased()
-                    user.saveInBackground()
-                    
-                    pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                    user.saveInBackground(block: { (success, error) in
+                        if error != nil {
+                            print(error ?? "UserSettingsViewController: Got error saving user from updated InterestedIn")
+                        } else if success {
+                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                            
+                        } else {
+                            print("UserSettingsViewController: Got error saving user from updated Gender")
+                        }
+                    })
                 }
             }
         }
-        
-
-        
+        //Return to MyProfileViewController
         performSegue(withIdentifier: "showMyProfile", sender: self)
     }
     

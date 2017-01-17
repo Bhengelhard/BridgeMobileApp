@@ -59,12 +59,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             ob.append((PFUser.current()?.objectId)!)
                             object["message_viewed"] = ob
                         }
-                        
                     }
                     else {
                         object["message_viewed"] = [(PFUser.current()?.objectId)!]
                     }
-
 					object.saveInBackground()
                 }
             }
@@ -318,7 +316,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     //setting background color to off-white blue
     func displayBackgroundView(){
         let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
-        backgroundView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        backgroundView.backgroundColor = .white //UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         view.addSubview(backgroundView)
         view.sendSubview(toBack: backgroundView)
     }
@@ -798,82 +796,103 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var addSenderName = false
-        let messageContent = objectIDToMessageContentArrayMapping[singleMessagePositionToObjectIDMapping[(indexPath as NSIndexPath).row]!]!
-        
+        var messageHeight: CGFloat = 0
         let senderNameLabel = UITextView(frame: CGRect.zero)
         let messageTextLabel = UITextView(frame: CGRect.zero)
         let timestampLabel = UILabel(frame: CGRect.zero)
         let notificationLabel = UILabel(frame: CGRect.zero)
-        messageTextLabel.font = UIFont(name: "Verdana", size: 16)
-        senderNameLabel.font = UIFont(name: "Verdana", size: 12)
-        timestampLabel.font = UIFont(name: "BentonSans", size: 10)
-        notificationLabel.font = UIFont(name: "BentonSans", size: 10)
         
-        if ((messageContent["senderId"] as? String)! != (PFUser.current()?.objectId)!)  {
-            if ( (messageContent["senderName"] as? String)! != (messageContent["previousSenderName"] as? String)!) {
-            addSenderName = true
+        if let messagePosition = singleMessagePositionToObjectIDMapping[(indexPath as NSIndexPath).row] {
+            if let messageContent = objectIDToMessageContentArrayMapping[messagePosition] {
+                messageTextLabel.font = UIFont(name: "Verdana", size: 16)
+                senderNameLabel.font = UIFont(name: "Verdana", size: 12)
+                timestampLabel.font = UIFont(name: "BentonSans", size: 10)
+                notificationLabel.font = UIFont(name: "BentonSans", size: 10)
+                
+                if ((messageContent["senderId"] as? String)! != (PFUser.current()?.objectId)!)  {
+                    if ( (messageContent["senderName"] as? String)! != (messageContent["previousSenderName"] as? String)!) {
+                        addSenderName = true
+                    }
+                }
+                var addTimestamp = false
+                if (messageContent["showTimestamp"] as? Bool)! {
+                    addTimestamp = true
+                }
+                else {
+                    addTimestamp = false
+                }
+                
+                if addTimestamp {
+                    timestampLabel.frame = CGRect(x: UIScreen.main.bounds.width*0.35, y: 0, width: UIScreen.main.bounds.width*0.30, height: 27)
+                    timestampLabel.layer.borderWidth = 1
+                    timestampLabel.layer.cornerRadius = 5
+                    timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.cgColor
+                }
+                if addSenderName {
+                    senderNameLabel.text = (messageContent["senderName"] as? String)!
+                    var width = (UIScreen.main.bounds.width/3 )
+                    width += CGFloat(5)
+                    senderNameLabel.frame = CGRect(x: 5, y: 0, width: width, height: 15)
+                    let fixedWidth = senderNameLabel.frame.size.width
+                    let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+                    var newFrame = senderNameLabel.frame
+                    newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height + 1)
+                    senderNameLabel.frame = newFrame
+                }
+                
+                var addNotification = false
+                if (messageContent["isNotification"] as? Bool)! {
+                    addNotification = true
+                }
+                else {
+                    addNotification = false
+                }
+                
+                
+                if addNotification {
+                    notificationLabel.text = (messageContent["messageText"] as? String)!
+                    notificationLabel.frame = CGRect(x: UIScreen.main.bounds.width*0.35, y: 0, width: UIScreen.main.bounds.width*0.30, height: 27)
+                    messageHeight = notificationLabel.frame.height
+                }
+                else {
+                    messageTextLabel.text = (messageContent["messageText"] as? String)!
+                    messageTextLabel.frame = CGRect(x: UIScreen.main.bounds.width/3.0, y: 0, width: UIScreen.main.bounds.width/1.5, height: 25)
+                    let fixedWidth = messageTextLabel.frame.size.width
+                    let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+                    var newFrame = messageTextLabel.frame
+                    newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+                    messageTextLabel.frame = newFrame
+                    messageHeight = messageTextLabel.frame.height
+                }
             }
         }
-        var addTimestamp = false
-        if (messageContent["showTimestamp"] as? Bool)! {
-            addTimestamp = true
-        }
-        else {
-            addTimestamp = false
-        }
         
-        if addTimestamp {
-            timestampLabel.frame = CGRect(x: UIScreen.main.bounds.width*0.35, y: 0, width: UIScreen.main.bounds.width*0.30, height: 27)
-            timestampLabel.layer.borderWidth = 1
-            timestampLabel.layer.cornerRadius = 5
-            timestampLabel.layer.borderColor = senderNameLabel.backgroundColor?.cgColor
-        }
-        if addSenderName {
-            senderNameLabel.text = (messageContent["senderName"] as? String)!
-            var width = (UIScreen.main.bounds.width/3 )
-            width += CGFloat(5)
-            senderNameLabel.frame = CGRect(x: 5, y: 0, width: width, height: 15)
-            let fixedWidth = senderNameLabel.frame.size.width
-            let newSize = senderNameLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-            var newFrame = senderNameLabel.frame
-            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height + 1)
-            senderNameLabel.frame = newFrame
-        }
-        
-        var addNotification = false
-        if (messageContent["isNotification"] as? Bool)! {
-            addNotification = true
-        }
-        else {
-            addNotification = false
-        }
-        
-        var messageHeight = CGFloat()
-        if addNotification {
-            notificationLabel.text = (messageContent["messageText"] as? String)!
-            notificationLabel.frame = CGRect(x: UIScreen.main.bounds.width*0.35, y: 0, width: UIScreen.main.bounds.width*0.30, height: 27)
-            messageHeight = notificationLabel.frame.height
-        }
-        else {
-            messageTextLabel.text = (messageContent["messageText"] as? String)!
-            messageTextLabel.frame = CGRect(x: UIScreen.main.bounds.width/3.0, y: 0, width: UIScreen.main.bounds.width/1.5, height: 25)
-            let fixedWidth = messageTextLabel.frame.size.width
-            let newSize = messageTextLabel.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-            var newFrame = messageTextLabel.frame
-            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-            messageTextLabel.frame = newFrame
-            messageHeight = messageTextLabel.frame.height
-        }
         return messageHeight + senderNameLabel.frame.height + timestampLabel.frame.height + CGFloat(2)
         
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = SingleMessageTableCell()
-		// FIXME: next line crashes sometimes due to the unwrapping
-        let messageContent = objectIDToMessageContentArrayMapping[singleMessagePositionToObjectIDMapping[(indexPath as NSIndexPath).row]!]!
-        let singleMessageContent = SingleMessageContent(messageContent: messageContent)
-        cell.singleMessageContent = singleMessageContent
+
+		// CHECK ME: next line was crashing sometimes due to the unwrapping
+        if let messagePosition = singleMessagePositionToObjectIDMapping[(indexPath as NSIndexPath).row] {
+            if let messageContent = objectIDToMessageContentArrayMapping[messagePosition] {
+                let singleMessageContent = SingleMessageContent(messageContent: messageContent)
+                cell.singleMessageContent = singleMessageContent
+            }
+        } else {
+//            sleep(2)
+//            if let messagePosition = singleMessagePositionToObjectIDMapping[(indexPath as NSIndexPath).row] {
+//                if let messageContent = objectIDToMessageContentArrayMapping[messagePosition] {
+//                    let singleMessageContent = SingleMessageContent(messageContent: messageContent)
+//                    cell.singleMessageContent = singleMessageContent
+//                }
+//            } else {
+//                //pop-up that internet is not working properly
+//                print("internet is not working properly")
+//            }
+        }
+        
         return cell
         
     }

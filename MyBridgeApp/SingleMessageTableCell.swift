@@ -53,7 +53,7 @@ class SingleMessageTableCell: UITableViewCell {
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)//UIColor.clear
+        backgroundColor = .white//UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)//UIColor.clear
         selectionStyle = .none
         background = UIView(frame: CGRect.zero)
         background.alpha = 0.6
