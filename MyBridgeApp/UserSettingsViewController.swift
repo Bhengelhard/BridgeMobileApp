@@ -543,7 +543,18 @@ class UserSettingsViewController: UIViewController {
             if initialGender != selectedGender {
                 //Saving updated Gender to database
                 if let user = PFUser.current() {
+                    //updating user's gender in the database
                     user["gender"] = selectedGender.lowercased()
+                    
+                    //Updating other gender text in the database
+                    if selectedGender.lowercased() == "other" {
+                        if let otherGenderText = otherGenderTextField.text {
+                            user["other_gender_text"] = otherGenderText
+                        }
+                    } else {
+                        user["other_gender_text"] = ""
+                    }
+                    
                     user.saveInBackground(block: { (success, error) in
                         if error != nil {
                             print(error ?? "UserSettingsViewController: Got error saving user from updated Gender")
@@ -697,10 +708,21 @@ class UserSettingsViewController: UIViewController {
                 //present(AccessViewController(), animated: true, completion: nil)
             }
             else if title == "DELETE PROFILE" {
-                print("delete profile")
+                let alert = UIAlertController(title: "DELETE PROFILE?", message: "Are you sure you want to delete your profile? Nothing sweet can come from this.", preferredStyle: UIAlertControllerStyle.alert)
+                //Create the actions
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
+                    //alert.dismiss(animated: true, completion: nil)
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+                    print("run pfCloud Function to 1. Delete user from bridgePairings table where the users had not been fully connected. 2. Delete user from messages and set notification for message thread to: ___ has left the conversation. 3. Copy user from user's table to DeletedUser table")
+                    PFUser.logOut()
+                    self.performSegue(withIdentifier: "showAccessViewController", sender: self)
+                
+                }))
+                self.present(alert, animated: true, completion: nil)
             }
         }
-
     }
     
     //----Checking which buttons are selected----
