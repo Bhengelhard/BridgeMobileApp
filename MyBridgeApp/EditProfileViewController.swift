@@ -418,7 +418,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             scrollView.addSubview(factsView)
             
             let visibilityLabel = UILabel()
-            visibilityLabel.text = "SHOW MY PROFILE FOR"
+            visibilityLabel.text = "SHOW MY PROFILE FOR:"
             visibilityLabel.textColor = .black
             visibilityLabel.textAlignment = .center
             visibilityLabel.font = UIFont(name: "BentonSans-Light", size: 12)

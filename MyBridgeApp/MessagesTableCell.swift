@@ -48,7 +48,7 @@ class MessagesTableCell: UITableViewCell {
         participants.font = UIFont(name: "BentonSans-Light", size: 18.5)
         
         profilePic = UIImageView()
-        profilePic.backgroundColor = .black
+        profilePic.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)//.black
         profilePic.layer.borderWidth = 2
         
         messageTimestamp = UILabel(frame:CGRect.zero)
