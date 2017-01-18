@@ -593,7 +593,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             })
             
             // Adding bridge statuses
-            
             if let businessStatus = businessStatus {
                 if businessStatus != localData.getBusinessStatus() {
                     localData.setBusinessStatus(businessStatus)

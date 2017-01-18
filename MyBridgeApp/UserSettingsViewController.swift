@@ -766,5 +766,4 @@ class UserSettingsViewController: UIViewController {
         }
         vc.transitioningDelegate = self.transitionManager
     }
-
 }

@@ -14,6 +14,7 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
     var seguedFrom = ""
     
     let localData = LocalData()
+    let transitionManager = TransitionManager()
     
     // views
     let scrollView = UIScrollView()
@@ -40,8 +41,6 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
     var statusPlaceholder = true
     
     // data
-    var greeting = "Hi,"
-    var greetings = ["Hi,", "What's Up?", "Hello there,"]
     var businessStatus: String?
     var loveStatus: String?
     var friendshipStatus: String?
@@ -72,9 +71,6 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             greetingLabel.textColor = .black
             greetingLabel.textAlignment = .center
             greetingLabel.font = UIFont(name: "BentonSans-Light", size: 21)
-            if let userGreeting = user["profile_greeting"] as? String {
-                greeting = userGreeting
-            }
             updateGreetingLabel()
             view.addSubview(greetingLabel)
             
@@ -276,7 +272,7 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             statusView.addSubview(friendshipStatusButton)
             
             statusTextView.isEditable = false
-            statusTextView.frame = CGRect(x: 0, y: businessStatusButton.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.85733*DisplayUtility.screenWidth, height: 0.208*DisplayUtility.screenWidth)
+            statusTextView.frame = CGRect(x: 0, y: businessStatusButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.85733*DisplayUtility.screenWidth, height: 0.208*DisplayUtility.screenWidth)
             statusTextView.center.x = DisplayUtility.screenWidth / 2
             statusTextView.layer.cornerRadius = 13
             statusTextView.layer.borderWidth = 1
@@ -292,11 +288,14 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             statusView.frame = CGRect(x: 0, y: bottomHexView.frame.maxY, width: DisplayUtility.screenWidth, height: statusTextView.frame.maxY)
             scrollView.addSubview(statusView)
             
-            let saveButtonWidth = 0.18266*DisplayUtility.screenWidth
-            let saveButtonHeight = 0.4453*saveButtonWidth
-            let saveButtonFrame = CGRect(x: 0, y: statusView.frame.maxY + 0.055*DisplayUtility.screenHeight, width: saveButtonWidth, height: saveButtonHeight)
-            saveButton = DisplayUtility.gradientButton(frame: saveButtonFrame, text: "save", textColor: UIColor.black, fontSize: 13)
+            let saveButtonWidth = 0.45*DisplayUtility.screenWidth
+            let saveButtonHeight = 0.2063*saveButtonWidth
+            let saveButtonFrame = CGRect(x: 0, y: statusView.frame.maxY + 0.01*DisplayUtility.screenHeight, width: saveButtonWidth, height: saveButtonHeight)
+            saveButton = DisplayUtility.gradientButton(frame: saveButtonFrame, text: "VIEW TUTORIAL", textColor: UIColor.black, fontSize: 15.5)
+            saveButton.layer.borderWidth = 2.0
+            saveButton.layer.borderColor = DisplayUtility.gradientColor(size: saveButton.frame.size).cgColor
             saveButton.center.x = DisplayUtility.screenWidth / 2
+            DisplayUtility.centerTextVerticallyInButton(button: saveButton)
             saveButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
             scrollView.addSubview(saveButton)
             
@@ -306,9 +305,9 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
     
     func layoutBottomBasedOnFactsView() {
         statusView.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: statusTextView.frame.maxY)
-        let saveButtonWidth = 0.18266*DisplayUtility.screenWidth
-        let saveButtonHeight = 0.4453*saveButtonWidth
-        saveButton.frame = CGRect(x: 0, y: statusView.frame.maxY + 0.055*DisplayUtility.screenHeight, width: saveButtonWidth, height: saveButtonHeight)
+        let saveButtonWidth = 0.45*DisplayUtility.screenWidth
+        let saveButtonHeight = 0.2063*saveButtonWidth
+        saveButton.frame = CGRect(x: 0, y: statusView.frame.maxY + 0.02*DisplayUtility.screenHeight, width: saveButtonWidth, height: saveButtonHeight)
         saveButton.center.x = DisplayUtility.screenWidth / 2
         scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: saveButton.frame.maxY + 0.02*DisplayUtility.screenHeight)
     }
@@ -333,12 +332,14 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                     print("User save error: \(error)")
                 } else if succeeded {
                     print("User saved successfully")
+                    let pfCloudFunctions = PFCloudFunctions()
+                    pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
                 } else {
                     print("User did not save successfuly")
                 }
             })
         }
-        dismiss(animated: false, completion: nil)
+        performSegue(withIdentifier: "showTutorial", sender: self)
     }
     
     func updateGreetingLabel() {
@@ -514,6 +515,8 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             } else {
                 if let unselectedImage = unselectedImage {
                     statusButton.setImage(unselectedImage, for: .normal)
+                    statusTextView.textAlignment = .center
+                    DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
                 }
             }
         }
@@ -562,6 +565,16 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
     
     func endEditing(_ gesture: UIGestureRecognizer) {
         view.endEditing(true)
+    }
+    
+    //Setting segue transition information and preparation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == TutorialsViewController.self {
+            self.transitionManager.animationDirection = "Right"
+        }
+        vc.transitioningDelegate = self.transitionManager
     }
     
 }

@@ -164,6 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("None")
             }
         }
+        //Segue to accepted connection notification
         
         //PFPush.handlePush(userInfo)
         if application.applicationState == UIApplicationState.inactive {
