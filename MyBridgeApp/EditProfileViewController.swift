@@ -55,6 +55,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var statusPlaceholder = true
     
     // data
+    var originallyInterestedBusiness: Bool?
+    var originallyInterestedLove: Bool?
+    var originallyInterestedFriendship: Bool?
     var greeting = "Hi,"
     var greetings = ["Hi,", "What's Up?", "Hello there,"]
     var leftHexImage: UIImage?
@@ -431,6 +434,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             statusView.addSubview(visibilityLabel)
             
             if let interestedBusiness = user["interested_in_business"] as? Bool {
+                originallyInterestedBusiness = interestedBusiness
                 if interestedBusiness {
                     businessVisibilityButton.setImage(UIImage(named: "Profile_Selected_Work_Bubble"), for: .normal)
                 } else {
@@ -441,6 +445,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             
             if let interestedLove = user["interested_in_love"] as? Bool {
+                originallyInterestedLove = interestedLove
                 if interestedLove {
                     loveVisibilityButton.setImage(UIImage(named: "Profile_Selected_Dating_Bubble"), for: .normal)
                 } else {
@@ -451,6 +456,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             
             if let interestedFriendship = user["interested_in_friendship"] as? Bool {
+                originallyInterestedFriendship = interestedFriendship
                 if interestedFriendship {
                     friendshipVisibilityButton.setImage(UIImage(named: "Profile_Selected_Friends_Bubble"), for: .normal)
                 } else {
@@ -586,18 +592,28 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             user["selected_facts"] = selectedFacts
             
-            user["interested_in_business"] =
-                businessVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Work_Bubble")
-            user["interested_in_love"] =
-                loveVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Dating_Bubble")
-            user["interested_in_friendship"] =
-                friendshipVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Friends_Bubble")
+            let interestedBusiness = businessVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Work_Bubble")
+            user["interested_in_business"] = interestedBusiness
             
+            let interestedLove = loveVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Dating_Bubble")
+            user["interested_in_love"] = interestedLove
+            
+            let interestedFriendship = friendshipVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Friends_Bubble")
+            user["interested_in_friendship"] = interestedFriendship
+            
+            // save user
             user.saveInBackground(block: { (succeeded, error) in
                 if error != nil {
                     print("User save error: \(error)")
                 } else if succeeded {
                     print("User saved successfully")
+                    
+                    // update other users based on current user's interests, if necessary
+                    if self.originallyInterestedBusiness != interestedBusiness ||
+                        self.originallyInterestedLove != interestedLove ||
+                        self.originallyInterestedFriendship != interestedFriendship {
+                        PFCloudFunctions().changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                    }
                 } else {
                     print("User did not save successfuly")
                 }
