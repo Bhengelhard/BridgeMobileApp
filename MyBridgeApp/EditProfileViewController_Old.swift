@@ -635,12 +635,7 @@ class EditProfileViewController_Old: UIViewController, UITextFieldDelegate, UIIm
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == ProfileViewController.self {
             self.transitionManager.animationDirection = "Right"
-        } else if mirror.subjectType == OptionsFromBotViewController.self {
-            self.transitionManager.animationDirection = "Right"
-            let vc2 = vc as! OptionsFromBotViewController
-            vc2.seguedFrom = seguedFrom
-        }
-        else if mirror.subjectType == MyProfileViewController.self {
+        } else if mirror.subjectType == MyProfileViewController.self {
             self.transitionManager.animationDirection = "Right"
         }
         vc.transitioningDelegate = self.transitionManager

@@ -72,13 +72,9 @@
 		90FF521C1E2D769B00FB4C90 /* ProfilePicturesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FF521B1E2D769B00FB4C90 /* ProfilePicturesView.swift */; };
 		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
 		CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */; };
-		CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829461CAA26D900DC86C9 /* ViewController.swift */; };
 		CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */; };
-		CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */; };
 		CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */; };
-		E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */; };
 		E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */; };
-		E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */; };
 		E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */; };
 		E9D6DF0B1D78809D00138A1F /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */; };
 		E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */; };
@@ -167,13 +163,9 @@
 		90FF521B1E2D769B00FB4C90 /* ProfilePicturesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfilePicturesView.swift; path = "Custom Classes/Custom Views/ProfilePicturesView.swift"; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
-		CB5829461CAA26D900DC86C9 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MyBridgeApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleMessageViewController.swift; path = MyBridgeApp/SingleMessageViewController.swift; sourceTree = SOURCE_ROOT; };
-		CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadPageViewController.swift; path = MyBridgeApp/LoadPageViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
-		E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = MyBridgeApp/StatusTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalProfileViewController.swift; path = MyBridgeApp/ExternalProfileViewController.swift; sourceTree = SOURCE_ROOT; };
-		E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OptionsFromBotViewController.swift; path = MyBridgeApp/OptionsFromBotViewController.swift; sourceTree = SOURCE_ROOT; };
 		E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMessageTableCell.swift; path = MyBridgeApp/NewMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
 		E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMessageViewController.swift; path = MyBridgeApp/NewMessageViewController.swift; sourceTree = SOURCE_ROOT; };
 		E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewBridgeStatusViewController.swift; path = MyBridgeApp/NewBridgeStatusViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -336,12 +328,8 @@
 				305A97C61DAC52600045B4F3 /* MyBridgeApp.entitlements */,
 				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
 				301B1C501E036A0100D507B8 /* AccessViewController.swift */,
-				CB6A329C1CE2461700FADB13 /* LoadPageViewController.swift */,
-				CB5829461CAA26D900DC86C9 /* ViewController.swift */,
 				E9D6DF4D1D78835800138A1F /* SignupViewController.swift */,
 				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
-				E9C1D1A51D6B53AE00E96E98 /* OptionsFromBotViewController.swift */,
-				E92F2E1A1D5B7DC7004CA2FD /* StatusTableViewCell.swift */,
 				30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */,
 				E9D6DF0C1D7880A600138A1F /* NewBridgeStatusViewController.swift */,
 				E9D6DF0A1D78809D00138A1F /* NewMessageViewController.swift */,
@@ -516,7 +504,6 @@
 				3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */,
-				E9C1D1A61D6B53AE00E96E98 /* OptionsFromBotViewController.swift in Sources */,
 				90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */,
 				30A727061E29540F0070B620 /* MessageComposer.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
@@ -534,7 +521,6 @@
 				3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */,
 				304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */,
 				E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */,
-				CB6A329D1CE2461800FADB13 /* LoadPageViewController.swift in Sources */,
 				903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */,
 				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,
 				90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */,
@@ -544,13 +530,11 @@
 				90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */,
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
 				90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */,
-				CB5829491CAA26D900DC86C9 /* ViewController.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,
 				30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */,
 				301B1C551E04473A00D507B8 /* FacebookFunctions.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */,
-				E92F2E1B1D5B7DC7004CA2FD /* StatusTableViewCell.swift in Sources */,
 				E9D6DF0F1D7880B700138A1F /* EditProfileViewController_Old.swift in Sources */,
 				3030C0C21DD54E5E0077F7AC /* CustomKeyboard.swift in Sources */,
 				3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */,

@@ -105,10 +105,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             let mirror = Mirror(reflecting: vc)
             if mirror.subjectType == BridgeViewController.self {
                 self.transitionManager.animationDirection = "Left"
-            } else if mirror.subjectType == OptionsFromBotViewController.self {
-                self.transitionManager.animationDirection = "Top"
-                let vc2 = vc as! OptionsFromBotViewController
-                vc2.seguedFrom = "MessagesViewController"
             } else if mirror.subjectType == SingleMessageViewController.self {
                 self.transitionManager.animationDirection = "Right"
                 let vc2 = vc as! SingleMessageViewController

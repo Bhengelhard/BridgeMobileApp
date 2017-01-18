@@ -211,10 +211,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.transitionManager.animationDirection = "Right"
             let vc2 = vc as! BridgeViewController
             //vc2.postTapped = postTapped
-        } else if mirror.subjectType == OptionsFromBotViewController.self {
-            self.transitionManager.animationDirection = "Top"
-            let vc2 = vc as! OptionsFromBotViewController
-            vc2.seguedFrom = "ProfileViewController"
         } else if mirror.subjectType == EditProfileViewController.self {
             self.transitionManager.animationDirection = "Left"
         } else if mirror.subjectType == TermsOfServiceViewController.self {

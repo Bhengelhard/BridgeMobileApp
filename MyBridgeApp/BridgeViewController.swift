@@ -1215,10 +1215,6 @@ class BridgeViewController: UIViewController {
                 self.transitionManager.animationDirection = "Left"
             } else if mirror.subjectType == MyProfileViewController.self {
                 self.transitionManager.animationDirection = "Left"
-            } else if mirror.subjectType == OptionsFromBotViewController.self {
-                self.transitionManager.animationDirection = "Top"
-                let vc2 = vc as! OptionsFromBotViewController
-                vc2.seguedFrom = "BridgeViewController"
             } else if mirror.subjectType == MessagesViewController.self {
                 self.transitionManager.animationDirection = "Right"
             }
