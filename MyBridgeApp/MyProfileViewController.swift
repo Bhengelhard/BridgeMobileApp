@@ -38,9 +38,7 @@ class MyProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        FacebookFunctions().getPics()
-        
+                
         view.backgroundColor = .white
         
         view.addSubview(scrollView)
@@ -140,28 +138,14 @@ class MyProfileViewController: UIViewController {
             
             let downloader = Downloader()
             
-            //setting frame and image for topHexView
+            //setting frame for topHexView
             topHexView.frame = CGRect(x: 0, y: userSettingsButton.frame.maxY + 0.033*DisplayUtility.screenHeight, width: hexWidth, height: hexHeight)
             topHexView.center.x = DisplayUtility.screenWidth / 2
-            
-            //Setting static profile images for tech Demo
-            let image1 = #imageLiteral(resourceName: "ProfPic2.jpg")
-            //setImageToHexagon(image: image1, hexView: topHexView)
-            topHexView.setBackgroundImage(image: image1)
-            
-//            if let data = localData.getMainProfilePicture() {
-//                if let image = UIImage(data: data) {
-//                    setImageToHexagon(image: image, hexView: topHexView)
-//                }
-//            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-//                downloader.imageFromURL(URL: url, callBack: { (image) in
-//                    self.setImageToHexagon(image: image, hexView: self.topHexView)
-//                })
-//            }
             scrollView.addSubview(topHexView)
             
-            //setting frame and image for leftHexView
+            //setting frame for leftHexView
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
+            /*
             if let data = localData.getMainProfilePicture() {
                 if let image = UIImage(data: data) {
                     self.leftHexView.setBackgroundImage(image: image)
@@ -175,40 +159,38 @@ class MyProfileViewController: UIViewController {
                     }
                 })
             }
+             */
             scrollView.addSubview(leftHexView)
             
-            //setting frame and image for rightHexView
+            //setting frame for rightHexView
             rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            //Setting static profile images for tech Demo
-            let image2 = #imageLiteral(resourceName: "profpic3.jpg")
-            rightHexView.setBackgroundImage(image: image2)
-            
-//            if let data = localData.getMainProfilePicture() {
-//                if let image = UIImage(data: data) {
-//                    setImageToHexagon(image: image, hexView: rightHexView)
-//                }
-//            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-//                downloader.imageFromURL(URL: url, callBack: { (image) in
-//                    self.setImageToHexagon(image: image, hexView: self.rightHexView)
-//                })
-//            }
             scrollView.addSubview(rightHexView)
             
-            //setting frame and image for bottomHexView
+            //setting frame for bottomHexView
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
-            //Setting static profile images for tech Demo
-            let image3 = #imageLiteral(resourceName: "profPic4.jpg")
-            bottomHexView.setBackgroundImage(image: image3)
-//            if let data = localData.getMainProfilePicture() {
-//                if let image = UIImage(data: data) {
-//                    setImageToHexagon(image: image, hexView: bottomHexView)
-//                }
-//            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-//                downloader.imageFromURL(URL: url, callBack: { (image) in
-//                    self.setImageToHexagon(image: image, hexView: self.bottomHexView)
-//                })
-//            }
             scrollView.addSubview(bottomHexView)
+            
+            if let profilePics = user["profile_pictures"] as? [PFFile] {
+                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+                for i in 0..<hexViews.count {
+                    if profilePics.count > i {
+                        profilePics[i].getDataInBackground(block: { (data, error) in
+                            if error != nil {
+                                print(error)
+                            } else {
+                                if let data = data {
+                                    if let image = UIImage(data: data) {
+                                        hexViews[i].setBackgroundImage(image: image)
+                                        let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
+                                        hexViews[i].addGestureRecognizer(hexViewGR)
+                                    }
+                                }
+                                
+                            }
+                        })
+                    }
+                }
+            }
             
             numNectedLastWeekLabel.textColor = .black
             numNectedLastWeekLabel.textAlignment = .center
@@ -329,7 +311,37 @@ class MyProfileViewController: UIViewController {
     //Send user to the editProfileViewController so they can edit their profile
     func editProfileButtonTapped(_ sender: UIButton) {
         //performSegue(withIdentifier: "showEditProfileFromMyProfile", sender: self)
-        present(EditProfileViewController(), animated: false, completion: nil)
+        let editProfileVC = EditProfileViewController()
+        editProfileVC.setHexImages(leftHexImage: leftHexView.hexBackgroundImage, topHexImage: topHexView.hexBackgroundImage, rightHexImage: rightHexView.hexBackgroundImage, bottomHexImage: bottomHexView.hexBackgroundImage)
+        present(editProfileVC, animated: false, completion: nil)
+    }
+    
+    func profilePicSelected(_ gesture: UIGestureRecognizer) {
+        if let hexView = gesture.view as? HexagonView {
+            let newHexView = HexagonView()
+            newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
+            if let image = hexView.hexBackgroundImage {
+                newHexView.setBackgroundImage(image: image)
+            } else {
+                newHexView.setBackgroundColor(color: hexView.hexBackgroundColor)
+            }
+            newHexView.addBorder(width: 1, color: .black)
+            
+            var images = [UIImage]()
+            var startingImageIndex = 0
+            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+            for i in 0..<hexViews.count {
+                if let image = hexViews[i].hexBackgroundImage {
+                    images.append(image)
+                }
+                if hexViews[i] == hexView {
+                    startingImageIndex = i
+                }
+            }
+            let profilePicsView = ProfilePicturesView(hexView: newHexView, images: images, startingImageIndex: startingImageIndex, shouldShowEditButtons: false)
+            self.view.addSubview(profilePicsView)
+            profilePicsView.animate()
+        }
     }
     
     //Send user back to the bridgeViewController
