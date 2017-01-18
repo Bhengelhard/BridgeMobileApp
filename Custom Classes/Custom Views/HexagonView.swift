@@ -76,6 +76,7 @@ class HexagonView: UIView {
     
     func setBackgroundColor(color: UIColor) {
         hexBackgroundColor = color
+        hexBackgroundImage = nil
         DispatchQueue.main.async {
             self.setNeedsDisplay()
         }

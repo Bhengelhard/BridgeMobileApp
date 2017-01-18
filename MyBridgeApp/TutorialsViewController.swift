@@ -59,6 +59,7 @@ class TutorialsViewController: UIPageViewController, UIPageViewControllerDataSou
             dot.layer.borderWidth = 1
             dot.layer.borderColor = UIColor.lightGray.cgColor
             dot.center.x =  2 * dot.center.x / 3
+            print(dot.frame)
         }
     }
     

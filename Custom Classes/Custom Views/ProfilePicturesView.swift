@@ -11,65 +11,61 @@ import UIKit
 class ProfilePicturesView: UIView {
     
     let hexView: HexagonView
-    let rectView = UIView()
-    let editButtonsView = UIView()
+    let images: [UIImage]
+    let startingImageIndex: Int
     let shouldShowEditButtons: Bool
+    let allPicsVC: ProfilePicturesViewController
     
-    let pageVC = ProfilePicturesViewController()
+    let editButtonsView = UIView()
 
     var shouldDisplayDefaultButton = true
     var shouldDisplayDeleteButton = true
     
-    init(hexView: HexagonView, shouldShowEditButtons: Bool) {
+    init(hexView: HexagonView, images: [UIImage], startingImageIndex: Int, shouldShowEditButtons: Bool) {
         self.hexView = hexView
+        self.images = images
+        self.startingImageIndex = startingImageIndex
         self.shouldShowEditButtons = shouldShowEditButtons
+        
+        let picWidth = DisplayUtility.screenWidth
+        let picHeight = picWidth * hexView.frame.height / hexView.frame.width
+        
+        let VCViewFrame = CGRect(x: 0, y: 0.2*DisplayUtility.screenHeight, width: picWidth, height: picHeight)
+        
+        var singlePicVCs = [UIViewController]()
+        for _ in 0..<images.count {
+            let singlePicVC = UIViewController()
+            singlePicVC.view.frame = VCViewFrame
+            singlePicVCs.append(singlePicVC)
+        }
+        
+        allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingImageIndex])
+        
         super.init(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
+        
         backgroundColor = .white
+        
         addSubview(hexView)
         
-        let rectWidth = DisplayUtility.screenWidth
-        let rectHeight = rectWidth * hexView.frame.height / hexView.frame.width
-        rectView.frame = CGRect(x: 0, y: 0.2*DisplayUtility.screenHeight, width: rectWidth, height: rectHeight)
-        rectView.center.x = DisplayUtility.screenWidth / 2
-        
-        if let image = self.hexView.hexBackgroundImage {
-            let viewSize = CGSize(width: rectView.frame.width, height: rectView.frame.width)
-            if let newImage = self.fitImageToView(image: image, viewSize: viewSize) {
-                rectView.backgroundColor = UIColor(patternImage: newImage)
-            } else {
-                rectView.backgroundColor = UIColor(patternImage: image)
-            }
-        } else {
-            rectView.backgroundColor = self.hexView.hexBackgroundColor
-        }
-        rectView.layer.borderWidth = 1
-        rectView.layer.borderColor = UIColor.black.cgColor
-        let gr = UITapGestureRecognizer(target: self, action: #selector(exit(_:)))
-        //rectView.addGestureRecognizer(gr)
-        rectView.isUserInteractionEnabled = true
-        rectView.alpha = 0
-        //addSubview(rectView)
-        pageVC.view.frame = CGRect(x: 0, y: 0.2*DisplayUtility.screenHeight, width: rectWidth, height: rectHeight)
-        pageVC.view.center.x = DisplayUtility.screenWidth / 2
-        addSubview(pageVC.view)
-        let page1 = UIViewController()
-        page1.view.frame = pageVC.view.frame
-        if let image = hexView.hexBackgroundImage {
-            let viewSize = CGSize(width: page1.view.frame.width, height: page1.view.frame.width)
+        for i in 0..<singlePicVCs.count {
+            let singlePicVC = singlePicVCs[i]
+            let image = images[i]
+            let viewSize = CGSize(width: singlePicVC.view.frame.width, height: singlePicVC.view.frame.width)
             if let newImage = fitImageToView(image: image, viewSize: viewSize) {
-                page1.view.backgroundColor = UIColor(patternImage: newImage)
+                singlePicVC.view.backgroundColor = UIColor(patternImage: newImage)
             } else {
-                page1.view.backgroundColor = UIColor(patternImage: image)
+                singlePicVC.view.backgroundColor = UIColor(patternImage: image)
             }
-        } else {
-            page1.view.backgroundColor = hexView.hexBackgroundColor
         }
-        pageVC.view.addGestureRecognizer(gr)
-        let page2 = UIViewController()
-        page2.view.frame = pageVC.view.frame
-        page2.view.backgroundColor = .green
-        pageVC.setVCs(vcs: [page1, page2], initialVC: page1)
-        pageVC.view.alpha = 0
+        
+        allPicsVC.view.alpha = 0
+        allPicsVC.view.frame = VCViewFrame
+        allPicsVC.view.center.x = DisplayUtility.screenWidth / 2
+        
+        let exitGR = UITapGestureRecognizer(target: self, action: #selector(exit(_:)))
+        allPicsVC.view.addGestureRecognizer(exitGR)
+        addSubview(allPicsVC.view)
+        
         
         if shouldShowEditButtons {
         
@@ -128,7 +124,7 @@ class ProfilePicturesView: UIView {
                 buttonY = buttonY + buttonHeight + spaceBetweenButtons
             }
             
-            editButtonsView.frame = CGRect(x: 0, y: rectView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: uploadButton.frame.maxY)
+            editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: uploadButton.frame.maxY)
             editButtonsView.alpha = 0
             addSubview(editButtonsView)
         }
@@ -140,13 +136,12 @@ class ProfilePicturesView: UIView {
     
     func animate() {
         UIView.animate(withDuration: 0.5, animations: { 
-            self.hexView.frame = self.rectView.frame
+            self.hexView.frame = self.allPicsVC.view.frame
             self.hexView.resetBackgroundImage()
         }) { (finished) in
             if finished {
                 UIView.animate(withDuration: 1.0, animations: {
-                    self.rectView.alpha = 1
-                    self.pageVC.view.alpha = 1
+                    self.allPicsVC.view.alpha = 1
                     self.editButtonsView.alpha = 1
                 }, completion: { (finished) in
                     if finished {

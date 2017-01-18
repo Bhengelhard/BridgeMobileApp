@@ -536,9 +536,9 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                 //self.scrollView.scrollRectToVisible(CGRect(x: 0, y: 0, width: self.scrollView.frame.width, height: self.scrollView.frame.height), animated: true)
             }, completion: { (finished) in
                 if finished {
-                    let editProfilePicView = ProfilePicturesView(hexView: newHexView, shouldShowEditButtons: true)
-                    self.view.addSubview(editProfilePicView)
-                    editProfilePicView.animate()
+//                    let profilePicsView = ProfilePicturesView(hexView: newHexView, images: images, startingImageIndex: startingImageIndex, shouldShowEditButtons: true)
+//                    self.view.addSubview(profilePicsView)
+//                    profilePicsView.animate()
                 }
             })
         }
