@@ -641,13 +641,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     func keyboardWillHide(_ notification: Notification) {
-        if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+        if (((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             singleMessageTableView.frame.origin.y = 0.11*DisplayUtility.screenHeight
             if messageText.text.isEmpty {
                 toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
                 messageText.frame.size.height = 35.5
             } else {
-                toolbar.frame.origin.y += keyboardHeight//keyboardSize.height
+                toolbar.frame.origin.y += keyboardHeight
             }
         }
     }

@@ -146,7 +146,7 @@ class LocalStorageUtility{
                                     var friendsArray:[String] = []
                                     var friendsArrayFbId:[String] = []
                                     for item in data {
-                                        if let name = item["name"] as? String {
+                                        if (item["name"] as? String) != nil {
                                             if let id = item["id"] as? String {
                                                 
                                                 friendsArrayFbId.append(id)
