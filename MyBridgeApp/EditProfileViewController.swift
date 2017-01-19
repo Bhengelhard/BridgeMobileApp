@@ -148,9 +148,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             // Profile pictures
             let hexWidth = 0.38154*DisplayUtility.screenWidth
             let hexHeight = hexWidth * sqrt(3) / 2
-            
-            let downloader = Downloader()
-            
+
             //setting frame and image for topHexView
             topHexView.frame = CGRect(x: 0, y: 0, width: hexWidth, height: hexHeight)
             topHexView.center.x = DisplayUtility.screenWidth / 2
@@ -165,6 +163,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             leftHexView.addBorder(width: 3.0, color: borderColor)
             
             /*
+            let downloader = Downloader()
+
             if let data = localData.getMainProfilePicture() {
                 if let image = UIImage(data: data) {
                     self.leftHexView.setBackgroundImage(image: image)

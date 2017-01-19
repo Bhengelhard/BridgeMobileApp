@@ -618,7 +618,6 @@ class BridgeViewController: UIViewController {
                                     
                                     self.localData.setPairings(pairings)
                                     self.localData.synchronize()
-                                    let localData2 = LocalData()
                                     
                                     DispatchQueue.main.async(execute: {
                                         //if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
@@ -1172,7 +1171,7 @@ class BridgeViewController: UIViewController {
             displayNoMoreCardsLabel.alpha = 0
             revisitButton.alpha = 0
         }
-        let message = (notification as NSNotification).userInfo!["message"] as? String
+
         NotificationCenter.default.removeObserver(self)
         self.getBridgePairings(2, typeOfCards: self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay), callBack:nil, bridgeType:nil)
         PFUser.current()?.incrementKey("revitalized_pairs_count")

@@ -137,8 +137,6 @@ class MyProfileViewController: UIViewController {
             let hexWidth = 0.38154*DisplayUtility.screenWidth
             let hexHeight = hexWidth * sqrt(3) / 2
             
-            let downloader = Downloader()
-            
             //setting frame for topHexView
             topHexView.frame = CGRect(x: 0, y: userSettingsButton.frame.maxY + 0.033*DisplayUtility.screenHeight, width: hexWidth, height: hexHeight)
             topHexView.center.x = DisplayUtility.screenWidth / 2
@@ -147,6 +145,8 @@ class MyProfileViewController: UIViewController {
             //setting frame for leftHexView
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
             /*
+            let downloader = Downloader()
+
             if let data = localData.getMainProfilePicture() {
                 if let image = UIImage(data: data) {
                     self.leftHexView.setBackgroundImage(image: image)

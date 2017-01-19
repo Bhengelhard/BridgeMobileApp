@@ -72,8 +72,8 @@ class LocalStorageUtility{
                 if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
                     if let data = try? Data(contentsOf: fbpicUrl) {
                         let imageFile: PFFile = PFFile(data: data)!
-                        var updateProfilePic = true
                         // commenting this out since we will be asking the user if he wants to upload the FB profile picture - cIgAr -
+//                        var updateProfilePic = true
 //                        if let profilePictureFromFbBool = localData.getProfilePictureFromFb(){
 //                            updateProfilePic = profilePictureFromFbBool
 //                        }

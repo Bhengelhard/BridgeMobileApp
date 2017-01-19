@@ -239,8 +239,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         //messageText.addTarget(self, action: #selector(messageTextTapped(_:)), forControlEvents: .TouchUpInside)
         //messageTextRecorder
         let messageTextButton = UIBarButtonItem(customView: messageText)
-        
-        UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.search, target: self, action: nil)
 
         //adding the flexible space
         //Flexible Space
@@ -330,7 +328,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     //adding a placeholder when the user is not editing the textView
     func textViewDidEndEditing(_ textView: UITextView) {
-        ("end editing is working")
         if messageText.text.isEmpty {
             messageText.text = "Type a message..."
             messageText.textColor = UIColor.lightGray
@@ -705,7 +702,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableViewIsDragged (_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: self.view)
         let draggedTableView = gesture.view!
         let tableViewY = draggedTableView.frame.origin.y
         let tableViewHeight = draggedTableView.frame.height
