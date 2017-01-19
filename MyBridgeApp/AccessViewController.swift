@@ -20,6 +20,8 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     let backgroundView = UIImageView()
     let accessTextView = UITextView()
     var updatedText = ""
+    var placeholder = "enter upenn email"
+    let accessTypeButton = UIButton()
     
     //Loading App
     let transitionManager = TransitionManager()
@@ -93,11 +95,8 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     }
     func locationManager(_ manager:CLLocationManager, didUpdateLocations locations:[CLLocation]) {
         locationManager.stopUpdatingLocation()
-        //print("didUpdateLocations")
         if manager.location != nil {
             geoPoint = PFGeoPoint(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
-            //print("LoadViewController posting a notification")
-            //print("\(geoPoint?.latitude),\(geoPoint?.longitude)")
             NotificationCenter.default.post(name: Notification.Name(rawValue: "storeUserLocationOnParse"), object: nil, userInfo:  ["geoPoint":geoPoint!])
         }
     }
@@ -106,28 +105,27 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         
         PFUser.current()?.fetchInBackground(block: { (object, error) in
             
-            /*
-             print("deleting prof pics")
-             user.remove(forKey: "profile_pictures")
-             user.saveInBackground()
-             */
+            //Checking if user has Signed Up
+            let localData = LocalData()
+            let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
+            
             if let user = object as? PFUser {
+                //If the user has no profile pictures saved, then log the user out so a graph request can be performed
                 if user["profile_pictures"] == nil {
-                    print("no profile pictures: logging out...")
                     PFUser.logOutInBackground(block: { (error) in
                         if error != nil {
                             print(error!)
                         } else {
-                            print("log out successful")
-                            self.displayLoginWithFacebook()
+                            if hasSignedUp {
+                                self.displayLoginWithFacebook()
+                            } else {
+                                self.displayAccessTextView()
+                            }
                         }
                     })
                     return
                 }
             }
-            
-            let localData = LocalData()
-            let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
             
             //Updating the user's friends
             self.updateUser()
@@ -144,7 +142,6 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                 }
             }
             else{
-                print("User is not signed In")
                 if hasSignedUp {
                     self.displayLoginWithFacebook()
                 } else {
@@ -157,10 +154,11 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     }
     
     func displayAccessTextView() {
-        accessTextView.frame = CGRect(x: 0, y: 0.8748*DisplayUtility.screenHeight, width: 0.6*DisplayUtility.screenWidth, height: 0.06822*DisplayUtility.screenHeight)
+        //Initializing Access Text View
+        accessTextView.frame = CGRect(x: 0, y: 0.8748*DisplayUtility.screenHeight, width: 0.75*DisplayUtility.screenWidth, height: 0.06822*DisplayUtility.screenHeight)
         accessTextView.center.x = view.center.x
         DisplayUtility.centerTextVerticallyInTextView(textView: accessTextView)
-        accessTextView.text = "enter community code"
+        accessTextView.text = placeholder
         accessTextView.textAlignment = NSTextAlignment.center
         let accessTVGradientColor = DisplayUtility.gradientColor(size: accessTextView.frame.size)
         accessTextView.textColor = UIColor.white
@@ -177,17 +175,46 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(accessTextViewTapped(_:)))
         accessTextView.addGestureRecognizer(tapGestureRecognizer)
         view.addSubview(accessTextView)
+        
+        //Initialize change access type button
+        accessTypeButton.frame = CGRect(x: 0, y: accessTextView.frame.maxY + 0.005*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.03*DisplayUtility.screenHeight)
+        accessTypeButton.center.x = view.center.x
+        accessTypeButton.setTitle("HAVE COMMUNITY CODE?", for: .normal)
+        accessTypeButton.setTitleColor(UIColor.black, for: .normal)
+        accessTypeButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 11)
+        accessTypeButton.titleLabel?.textAlignment = NSTextAlignment.center
+        accessTypeButton.addTarget(self, action: #selector(accessTypeButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(accessTypeButton)
     }
     
     func accessTextViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        print("tapped")
+        //Adding gesture recognizer to the view for closing the accessTextView when the user taps outside of it
+        let backgroundViewEndEditingGR = UITapGestureRecognizer(target: self, action: #selector(endEditing(_:)))
+        view.addGestureRecognizer(backgroundViewEndEditingGR)
+        
         accessTextView.removeGestureRecognizer(tapGestureRecognizer)
+        accessTextView.text = placeholder
         accessTextView.isUserInteractionEnabled = true
         accessTextView.isEditable = true
         accessTextView.becomeFirstResponder()
         accessTextView.textColor = UIColor.lightGray
         accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
-        //DisplayUtility.centerTextVerticallyInTextView(accessTextView)
+    }
+    
+    //Target for access type button to switch the view between community code access and university email access
+    func accessTypeButtonTapped(_ sender: UIButton) {
+        //change to community code access type
+        if placeholder == "enter upenn email" {
+            placeholder = "enter community code"
+            accessTextView.text = placeholder
+            accessTypeButton.setTitle("HAVE UPENN EMAIL?", for: .normal)
+        }
+        //Change to university email access type
+        else if placeholder == "enter community code"{
+            placeholder = "enter upenn email"
+            accessTextView.text = placeholder
+            accessTypeButton.setTitle("HAVE COMMUNITY CODE", for: .normal)
+        }
     }
     
     func displayLoginWithFacebook() {
@@ -241,8 +268,9 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                 self.accessTextView.center.x = self.view.center.x
                 self.backgroundView.image = #imageLiteral(resourceName: "Access_Background_With_White")
             }
+            accessTextView.textColor = UIColor.lightGray
+            accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
             let gradientColor = DisplayUtility.gradientColor(size: self.accessTextView.frame.size)
-            self.accessTextView.textColor = gradientColor
             self.accessTextView.layer.borderColor = gradientColor.cgColor
         }
         
@@ -250,38 +278,79 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         //On Click of Join, check access code
-        if text == "\n" {
-            if accessTextView.text.lowercased() == "shabbat" {
-                accessCode = "shabbat"
-                
-                displayLoginWithFacebook()
-            } else if accessTextView.text.lowercased() == "necter community" {
-                accessCode = "necter community"
-                
-                displayLoginWithFacebook()
-            } else {
-                accessTextView.text = "incorrect community code"
-                accessTextView.textColor = UIColor.lightGray
-                accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
+        if text.range(of: "\n") != nil {
+            //When the user has chosen to enter community access code then they can join with the relevant access codes
+            if placeholder == "enter community code"{
+                if accessTextView.text.lowercased() == "shabbat" {
+                    accessCode = "shabbat"
+                    displayLoginWithFacebook()
+                } else if accessTextView.text.lowercased() == "necter community" {
+                    accessCode = "necter community"
+                    displayLoginWithFacebook()
+                } else {
+                    accessTextView.text = "incorrect community code"
+                    accessTextView.textColor = UIColor.lightGray
+                    accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
+                }
+            }
+            //When the user has chosen to enter university email then they can join with the relevant email
+            else if placeholder == "enter upenn email"{
+                //Check if text contains @ sign for email indicator
+                if accessTextView.text.contains("@") {
+                    
+                    let accessTextComponents = accessTextView.text.lowercased().components(separatedBy: "@")
+                    //Check if the domain of the email address ends with upenn.edu
+                    if let domain = accessTextComponents.last {
+                        var domainComponents = domain.components(separatedBy: ".")
+                        //Check if the user entered a .edu email address
+                        if "edu" == domainComponents.last {
+                            //Check if the edu email is a penn email
+                            domainComponents.removeLast()
+                            if "upenn" == domainComponents.last {
+                                accessCode = accessTextView.text
+                                displayLoginWithFacebook()
+                            } else {
+                                accessTextView.text = "not an affiliated school"
+                                accessTextView.textColor = UIColor.lightGray
+                                accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
+                            }
+                        } else {
+                            //change accessTextView to inform the user they did not yet enter a UPenn email
+                            accessTextView.text = "please enter a upenn email"
+                            accessTextView.textColor = UIColor.lightGray
+                            accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
+                        }
+                    }
+
+                } else {
+                    accessTextView.text = "please enter a valid email"
+                    accessTextView.textColor = UIColor.lightGray
+                    accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
+                }
             }
             return false
         }
-        
         
         //Combine the textView text and the replacement text to create the updated text string
         let currentText:NSString = textView.text as NSString
         updatedText = currentText.replacingCharacters(in: range, with: text)
         
+        let possiblePlaceholders = [placeholder, "please enter a valid email", "please enter a upenn email", "not an affiliated school"]
+        let possibleErrors = ["please enter a valid email", "please enter a upenn email", "not an affiliated school"]
         //If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
         if updatedText.isEmpty {
             //setting the placeholder
-            accessTextView.text = "enter community code"
+            accessTextView.text = placeholder
             accessTextView.textColor = UIColor.lightGray
             accessTextView.selectedTextRange = accessTextView.textRange(from: accessTextView.beginningOfDocument, to: accessTextView.beginningOfDocument)
             return false
         }
             // else if the text view's placeholder is showing and the length of the replacement string is greater than 0, clear the text veiw and set the color to white to prepare for entry
-        else if accessTextView.textColor == UIColor.lightGray && !updatedText.isEmpty && updatedText != "enter community code" && text != "\n"{
+        else if accessTextView.textColor == UIColor.lightGray && !updatedText.isEmpty && !possiblePlaceholders.contains(updatedText) && text != "\n"{
+            accessTextView.text = nil
+            accessTextView.textColor = UIColor.white
+        } else if possibleErrors.contains(accessTextView.text) {
+            //setting the placeholder
             accessTextView.text = nil
             accessTextView.textColor = UIColor.white
         }
@@ -309,6 +378,23 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
             //self.geoPoint = PFGeoPoint.init(latitude: 0.0, longitude: 0.0)
             print("initialize PFGeoPoint at 0,0")
         }
+    }
+    
+    func endEditing(_ gesture: UIGestureRecognizer) {
+        //Changing background view image back to non-white Access_Background
+        backgroundView.image = #imageLiteral(resourceName: "Access_Background")
+        
+        //Closing keyboard and moving textView down to starting position
+        accessTextView.resignFirstResponder()
+        accessTextView.text = placeholder
+        accessTextView.textColor = UIColor.white
+        accessTextView.frame.origin.y = 0.8748*DisplayUtility.screenHeight
+        accessTextView.frame.size.width = 0.75*DisplayUtility.screenWidth
+        accessTextView.center.x = view.center.x
+        
+        //Removing gesture recognizer for closing the keyboard when the keyboard is already closed
+        let backgroundViewEndEditingGR = UITapGestureRecognizer(target: self, action: #selector(endEditing(_:)))
+        view.removeGestureRecognizer(backgroundViewEndEditingGR)
     }
     
     override func viewDidLoad() {
