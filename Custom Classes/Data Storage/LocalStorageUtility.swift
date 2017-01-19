@@ -59,9 +59,9 @@ class LocalStorageUtility{
     //saves  to LocalDataStorage & Parse
     func getMainProfilePicture(){
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
+        _ = graphRequest?.start{ (connection, result, error) -> Void in
                 if error != nil {
-                print(error)
+                print(error!)
                 }
                 else if let result = result as? [String:AnyObject] {
                 let localData = LocalData()
@@ -72,8 +72,8 @@ class LocalStorageUtility{
                 if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
                     if let data = try? Data(contentsOf: fbpicUrl) {
                         let imageFile: PFFile = PFFile(data: data)!
-                        var updateProfilePic = true
                         // commenting this out since we will be asking the user if he wants to upload the FB profile picture - cIgAr -
+//                        var updateProfilePic = true
 //                        if let profilePictureFromFbBool = localData.getProfilePictureFromFb(){
 //                            updateProfilePic = profilePictureFromFbBool
 //                        }
@@ -124,7 +124,7 @@ class LocalStorageUtility{
     func getUserFriends(){
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
+        _ = graphRequest?.start{ (connection, result, error) -> Void in
             if error != nil {
                 print("Error: \(error!)")
             }
@@ -138,7 +138,7 @@ class LocalStorageUtility{
                     if let data = try? Data(contentsOf: fbfriendsUrl) {
                         //background thread to parse the JSON data
                         
-                        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).async {
+                        DispatchQueue.global().async {
                             do{
                                 let friendList: NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                                 
@@ -146,7 +146,7 @@ class LocalStorageUtility{
                                     var friendsArray:[String] = []
                                     var friendsArrayFbId:[String] = []
                                     for item in data {
-                                        if let name = item["name"] as? String {
+                                        if (item["name"] as? String) != nil {
                                             if let id = item["id"] as? String {
                                                 
                                                 friendsArrayFbId.append(id)

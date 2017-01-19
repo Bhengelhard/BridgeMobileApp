@@ -186,11 +186,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     self.profilePicURLs[result.objectId!] = [String: String]()
                     if let user1PhotoURL = result["user1_profile_picture_url"] {
-                        self.profilePicURLs[result.objectId!]?[result["user1_objectId"] as! String] = user1PhotoURL as! String
+                        self.profilePicURLs[result.objectId!]?[result["user1_objectId"] as! String] = (user1PhotoURL as! String)
                     }
                     
                     if let user2PhotoURL = result["user2_profile_picture_url"] {
-                        self.profilePicURLs[result.objectId!]?[result["user2_objectId"] as! String] = user2PhotoURL as! String
+                        self.profilePicURLs[result.objectId!]?[result["user2_objectId"] as! String] = (user2PhotoURL as! String)
                     }
                 }
             }
@@ -723,7 +723,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                 if success {
                                     print("current user saved to the message")
                                 } else if error != nil {
-                                    print(error)
+                                    print(error!)
                                 }
                             })
                             

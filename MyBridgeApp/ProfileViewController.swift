@@ -145,7 +145,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             if let pfData = pfData {
                 pfData.getDataInBackground(block: { (data, error) in
                     if error != nil || data == nil {
-                        print(error)
+                        print(error!)
                     } else {
                         DispatchQueue.main.async(execute: {
                             //self.profilePictureButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)
@@ -209,8 +209,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Right"
-            let vc2 = vc as! BridgeViewController
-            //vc2.postTapped = postTapped
         } else if mirror.subjectType == EditProfileViewController.self {
             self.transitionManager.animationDirection = "Left"
         } else if mirror.subjectType == TermsOfServiceViewController.self {

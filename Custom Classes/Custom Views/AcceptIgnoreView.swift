@@ -347,7 +347,7 @@ class AcceptIgnoreView: UIView {
                         message["message_viewed"] = [PFUser.current()?.objectId]
                         message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
                             if error != nil {
-                                print(error)
+                                print(error!)
                             } else if succeeded {
                                 //Adding users to eachothers FriendLists
                                 let pfCloudFunctions = PFCloudFunctions()
