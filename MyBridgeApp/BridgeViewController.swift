@@ -59,7 +59,8 @@ class BridgeViewController: UIViewController {
     var postTapped = Bool()
     //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
-	let secondSwipeCardShrinkPercentage = 0.98
+    var secondSwipeCardSet = false
+	let secondSwipeCardShrinkPercentage = 0.98    
 
     //navigation bar creation
     var badgeCount = Int()
@@ -347,26 +348,30 @@ class BridgeViewController: UIViewController {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
         swipeCardView.addGestureRecognizer(gesture)
         swipeCardView.isUserInteractionEnabled = true
-        if let aboveView = aboveView
-		{
-			secondSwipeCard = swipeCardView
-
-            //Second card should also have dark layer that fades away with swipe of first card in deck.
-            swipeCardView.frame.size = CGSize(width: /*0.95**/swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
-            swipeCardView.center = aboveView.center
-            swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
-            swipeCardView.isUserInteractionEnabled = false
-			swipeCardView.frame = smallestSwipeCardFrame()
-			swipeCardView.center.x = view.center.x
-            self.view.insertSubview(swipeCardView, belowSubview: aboveView)
-            
-//            darkLayer.frame = swipeCardView.frame//CGRect(x: 0, y: 0, width: swipeCardView.frame.width, height: swipeCardView.frame.height)
-//            darkLayer.layer.cornerRadius = swipeCardView.layer.cornerRadius
-//            darkLayer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-//            view.insertSubview(darkLayer, aboveSubview: secondSwipeCard)
-            
-            
-            
+        if let aboveView = aboveView {
+            if secondSwipeCardSet == false {
+                secondSwipeCard = swipeCardView
+                secondSwipeCardSet = true
+                
+                //Second card should also have dark layer that fades away with swipe of first card in deck.
+                swipeCardView.frame.size = CGSize(width: swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
+                swipeCardView.center = aboveView.center
+                swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+                swipeCardView.isUserInteractionEnabled = false
+                swipeCardView.frame = smallestSwipeCardFrame()
+                swipeCardView.center.x = view.center.x
+                self.view.insertSubview(swipeCardView, belowSubview: aboveView)
+                
+            } else {
+                //Second card should also have dark layer that fades away with swipe of first card in deck.
+                swipeCardView.frame.size = CGSize(width: swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
+                swipeCardView.center = aboveView.center
+                swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+                swipeCardView.isUserInteractionEnabled = false
+                swipeCardView.frame = smallestSwipeCardFrame()
+                swipeCardView.center.x = view.center.x
+                self.view.insertSubview(swipeCardView, belowSubview: aboveView)
+            }
         }
         else {
             swipeCardView.frame = swipeCardView.swipeCardFrame()
