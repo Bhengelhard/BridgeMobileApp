@@ -331,19 +331,22 @@ class MyProfileViewController: UIViewController {
             newHexView.addBorder(width: 1, color: .black)
             
             var images = [UIImage]()
-            var startingImageIndex = 0
+            var originalHexFrames = [CGRect]()
+            var startingIndex = 0
             let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
             for i in 0..<hexViews.count {
                 if let image = hexViews[i].hexBackgroundImage {
                     images.append(image)
+                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
+                    originalHexFrames.append(frame)
                 }
                 if hexViews[i] == hexView {
-                    startingImageIndex = i
+                    startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(hexView: newHexView, images: images, startingImageIndex: startingImageIndex, shouldShowEditButtons: false)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false)
             self.view.addSubview(profilePicsView)
-            profilePicsView.animate()
+            profilePicsView.animateIn()
         }
     }
     

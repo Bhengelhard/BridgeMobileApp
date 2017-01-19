@@ -10,57 +10,61 @@ import UIKit
 
 class ProfilePicturesView: UIView {
     
-    let hexView: HexagonView
+    let originalHexFrames: [CGRect]
     let images: [UIImage]
-    let startingImageIndex: Int
+    let startingIndex: Int
     let shouldShowEditButtons: Bool
     let allPicsVC: ProfilePicturesViewController
+    let picFrame: CGRect
     
     let editButtonsView = UIView()
 
     var shouldDisplayDefaultButton = true
     var shouldDisplayDeleteButton = true
     
-    init(hexView: HexagonView, images: [UIImage], startingImageIndex: Int, shouldShowEditButtons: Bool) {
-        self.hexView = hexView
+    init(images: [UIImage], originalHexFrames: [CGRect], startingIndex: Int, shouldShowEditButtons: Bool) {
         self.images = images
-        self.startingImageIndex = startingImageIndex
+        self.originalHexFrames = originalHexFrames
+        self.startingIndex = startingIndex
         self.shouldShowEditButtons = shouldShowEditButtons
         
         let picWidth = DisplayUtility.screenWidth
-        let picHeight = picWidth * hexView.frame.height / hexView.frame.width
+        let picHeight = picWidth * originalHexFrames[startingIndex].height / originalHexFrames[startingIndex].width
         
-        let VCViewFrame = CGRect(x: 0, y: 0.2*DisplayUtility.screenHeight, width: picWidth, height: picHeight)
+        picFrame = CGRect(x: 0, y: 0.2*DisplayUtility.screenHeight, width: picWidth, height: picHeight)
         
         var singlePicVCs = [UIViewController]()
         for _ in 0..<images.count {
             let singlePicVC = UIViewController()
-            singlePicVC.view.frame = VCViewFrame
             singlePicVCs.append(singlePicVC)
         }
         
-        allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingImageIndex])
+        allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingIndex])
         
         super.init(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
         
         backgroundColor = .white
-        
-        addSubview(hexView)
-        
+                
         for i in 0..<singlePicVCs.count {
             let singlePicVC = singlePicVCs[i]
             let image = images[i]
+            let picView = UIView()
+            print(allPicsVC.pageControl.frame)
+            picView.frame = CGRect(x: 0, y: allPicsVC.pageControl.frame.maxY, width: picFrame.width, height: picFrame.height)
             let viewSize = CGSize(width: singlePicVC.view.frame.width, height: singlePicVC.view.frame.width)
             if let newImage = fitImageToView(image: image, viewSize: viewSize) {
-                singlePicVC.view.backgroundColor = UIColor(patternImage: newImage)
+                picView.backgroundColor = UIColor(patternImage: newImage)
             } else {
-                singlePicVC.view.backgroundColor = UIColor(patternImage: image)
+                picView.backgroundColor = UIColor(patternImage: image)
             }
+            picView.layer.borderWidth = 1
+            picView.layer.borderColor = UIColor.black.cgColor
+            singlePicVC.view.addSubview(picView)
         }
         
         allPicsVC.view.alpha = 0
-        allPicsVC.view.frame = VCViewFrame
-        allPicsVC.view.center.x = DisplayUtility.screenWidth / 2
+        allPicsVC.view.frame = CGRect(x: picFrame.minX, y: picFrame.minY - allPicsVC.pageControl.frame.maxY, width: picFrame.width, height: picFrame.height + allPicsVC.pageControl.frame.maxY)
+        //allPicsVC.view.center.x = DisplayUtility.screenWidth / 2
         
         let exitGR = UITapGestureRecognizer(target: self, action: #selector(exit(_:)))
         allPicsVC.view.addGestureRecognizer(exitGR)
@@ -134,26 +138,43 @@ class ProfilePicturesView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func animate() {
-        UIView.animate(withDuration: 0.5, animations: { 
-            self.hexView.frame = self.allPicsVC.view.frame
-            self.hexView.resetBackgroundImage()
+    func animateIn() {
+        let hexView = HexagonView()
+        hexView.frame = originalHexFrames[startingIndex]
+        hexView.setBackgroundImage(image: images[startingIndex])
+        addSubview(hexView)
+        UIView.animate(withDuration: 0.5, animations: {
+            hexView.frame = CGRect(x: 0, y: self.picFrame.minY, width: self.picFrame.width, height: self.picFrame.height)
+            hexView.resetBackgroundImage()
         }) { (finished) in
             if finished {
-                UIView.animate(withDuration: 1.0, animations: {
-                    self.allPicsVC.view.alpha = 1
-                    self.editButtonsView.alpha = 1
-                }, completion: { (finished) in
-                    if finished {
-                        self.hexView.alpha = 0
-                    }
-                })
+                hexView.removeFromSuperview()
+                self.allPicsVC.view.alpha = 1
+                self.editButtonsView.alpha = 1
             }
         }
     }
     
+    func animateOut(completion: ((Bool) -> Void)?) {
+        let hexView = HexagonView()
+        hexView.frame = CGRect(x: 0, y: self.picFrame.minY, width: self.picFrame.width, height: self.picFrame.height)
+        let index = allPicsVC.pageControl.currentPage
+        hexView.setBackgroundImage(image: images[index])
+        addSubview(hexView)
+        self.allPicsVC.view.alpha = 0
+        self.editButtonsView.alpha = 0
+        UIView.animate(withDuration: 0.5, animations: { 
+            hexView.frame = self.originalHexFrames[index]
+            hexView.resetBackgroundImage()
+        }, completion: completion)
+    }
+    
     func exit(_ gesture: UIGestureRecognizer) {
-        self.removeFromSuperview()
+        self.animateOut { (finished) in
+            if finished {
+                self.removeFromSuperview()
+            }
+        }
     }
     
     func fitImageToView(image: UIImage, viewSize: CGSize) -> UIImage? {
