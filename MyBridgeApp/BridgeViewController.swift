@@ -9,25 +9,6 @@
 import UIKit
 import Parse
 import MapKit
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
 
 class BridgeViewController: UIViewController {
     // Initializing Custom Classes
@@ -704,18 +685,22 @@ class BridgeViewController: UIViewController {
         displayBackgroundView()
         displayNavigationBar()
         initializeNoMoreCards()
-        
-        
-        let bridgePairings = localData.getPairings()
-        if (bridgePairings == nil || bridgePairings?.count < 1) {
-            getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
-        } else if bridgePairings?.count < 2  {
-            getBridgePairings(1,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
-        }
-        else {
-            displayCards()
-        }
-        
+
+		let bridgePairings = localData.getPairings()
+
+		if (bridgePairings == nil || bridgePairings!.count < 1)
+		{
+			getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+		}
+		else if bridgePairings != nil && bridgePairings!.count < 2
+		{
+			getBridgePairings(1,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+		}
+		else
+		{
+			displayCards()
+		}
+
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.alpha = 0.0
         view.insertSubview(connectIcon, belowSubview: missionControlView.blackBackgroundView)
@@ -1093,7 +1078,7 @@ class BridgeViewController: UIViewController {
                 var bridgePairingAlreadyStored = false
                 if currentTypeOfCardsOnDisplay == typesOfCard.all {
                     let pairings = localData.getPairings()
-                    if pairings != nil && pairings?.count > 0 {
+                    if pairings != nil && pairings!.count > 0 {
                         bridgePairingAlreadyStored = true
                     }
                 }
