@@ -101,7 +101,7 @@ class EditProfileViewController_Old: UIViewController, UITextFieldDelegate, UIIm
     }
     //saves  to LocalDataStorage & Parse
     func getMainProfilePictureFromFacebook(){
-        var pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         pagingSpinner.color = UIColor.darkGray
         pagingSpinner.hidesWhenStopped = true
         pagingSpinner.center.x = profilePictureButton.center.x
