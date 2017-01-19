@@ -138,7 +138,7 @@ class LocalStorageUtility{
                     if let data = try? Data(contentsOf: fbfriendsUrl) {
                         //background thread to parse the JSON data
                         
-                        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).async {
+                        DispatchQueue.global().async {
                             do{
                                 let friendList: NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                                 
