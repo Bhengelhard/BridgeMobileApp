@@ -93,18 +93,6 @@ class OtherProfileViewController: UIViewController {
             exitButton.addTarget(self, action: #selector(exit(_:)), for: .touchUpInside)
             view.addSubview(exitButton)
             
-            // Creating viewed check icon
-            let checkIcon = UIImageView(frame: CGRect(x: DisplayUtility.screenWidth - xIcon.frame.minX - 0.05188*DisplayUtility.screenWidth, y: 0, width: 0.05188*DisplayUtility.screenWidth, height: 0.03698*DisplayUtility.screenWidth))
-            checkIcon.center.y = xIcon.center.y
-            checkIcon.image = UIImage(named: "Gradient_Check")
-            view.addSubview(checkIcon)
-            
-            // Creating larger clickable space around privacy icon
-            privacyButton.frame = CGRect(x: checkIcon.frame.minX - 0.02*DisplayUtility.screenWidth, y: checkIcon.frame.minY - 0.02*DisplayUtility.screenWidth, width: checkIcon.frame.width + 0.04*DisplayUtility.screenWidth, height: checkIcon.frame.height + 0.04*DisplayUtility.screenWidth)
-            privacyButton.showsTouchWhenHighlighted = false
-            //privacyButton.addTarget(self, action: nil, for: .touchUpInside)
-            view.addSubview(privacyButton)
-            
             // Creating greeting label
             greetingLabel.textColor = .black
             greetingLabel.textAlignment = .center
@@ -172,21 +160,6 @@ class OtherProfileViewController: UIViewController {
             
             //setting frame for leftHexView
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            /*
-             if let data = localData.getMainProfilePicture() {
-             if let image = UIImage(data: data) {
-             self.leftHexView.setBackgroundImage(image: image)
-             }
-             } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-             downloader.imageFromURL(URL: url, callBack: { (image) in
-             self.leftHexView.setBackgroundImage(image: image)
-             //Saviong mainProfilePicture to device if it has not already been saved
-             if let data = UIImageJPEGRepresentation(image, 1.0){
-             self.localData.setMainProfilePicture(data)
-             }
-             })
-             }
-             */
             scrollView.addSubview(leftHexView)
             
             //setting frame for rightHexView
@@ -208,8 +181,8 @@ class OtherProfileViewController: UIViewController {
                                 if let data = data {
                                     if let image = UIImage(data: data) {
                                         hexViews[i].setBackgroundImage(image: image)
-                                        //let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
-                                        //hexViews[i].addGestureRecognizer(hexViewGR)
+                                        let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
+                                        hexViews[i].addGestureRecognizer(hexViewGR)
                                     }
                                 }
                                 
@@ -351,6 +324,37 @@ class OtherProfileViewController: UIViewController {
         dismiss(animated: false, completion: nil)
     }
     
+    func profilePicSelected(_ gesture: UIGestureRecognizer) {
+        if let hexView = gesture.view as? HexagonView {
+            let newHexView = HexagonView()
+            newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
+            if let image = hexView.hexBackgroundImage {
+                newHexView.setBackgroundImage(image: image)
+            } else {
+                newHexView.setBackgroundColor(color: hexView.hexBackgroundColor)
+            }
+            newHexView.addBorder(width: 1, color: .black)
+            
+            var images = [UIImage]()
+            var originalHexFrames = [CGRect]()
+            var startingIndex = 0
+            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+            for i in 0..<hexViews.count {
+                if let image = hexViews[i].hexBackgroundImage {
+                    images.append(image)
+                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
+                    originalHexFrames.append(frame)
+                }
+                if hexViews[i] == hexView {
+                    startingIndex = i
+                }
+            }
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
+            self.view.addSubview(profilePicsView)
+            profilePicsView.animateIn()
+        }
+    }
+    
     func writeFacts() -> Bool {
         if let user = user {
             if let selectedFacts = user["selected_facts"] as? [String] {
@@ -424,54 +428,68 @@ class OtherProfileViewController: UIViewController {
     }
     
     func statusTypeButtonSelected(_ sender: UIButton) {
-        
-        for statusButton in [businessButton, loveButton, friendshipButton] {
-            var selectedImage: UIImage?
-            var unselectedImage: UIImage?
-            if statusButton == businessButton {
-                selectedImage = UIImage(named: "Profile_Selected_Work_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Work_Icon")
-            } else if statusButton == loveButton {
-                selectedImage = UIImage(named: "Profile_Selected_Dating_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Dating_Icon")
-            } else if statusButton == friendshipButton {
-                selectedImage = UIImage(named: "Profile_Selected_Friends_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Friends_Icon")
-            }
-            if sender == statusButton {
-                if let unselectedImage = unselectedImage,
-                    let selectedImage = selectedImage {
-                    // selecting unselected type
-                    if statusButton.image(for: .normal) == unselectedImage {
-                        statusButton.setImage(selectedImage, for: .normal)
-                        var runQuery = false
-                        var type = ""
-                        if statusButton == businessButton {
-                            if businessStatusSet {
-                                statusLabel.text = businessStatus
-                            } else {
-                                runQuery = true
-                                type = "Business"
+        if let user = user {
+            for statusButton in [businessButton, loveButton, friendshipButton] {
+                var selectedImage: UIImage?
+                var unselectedImage: UIImage?
+                if statusButton == businessButton {
+                    selectedImage = UIImage(named: "Profile_Selected_Work_Icon")
+                    unselectedImage = UIImage(named: "Profile_Unselected_Work_Icon")
+                } else if statusButton == loveButton {
+                    selectedImage = UIImage(named: "Profile_Selected_Dating_Icon")
+                    unselectedImage = UIImage(named: "Profile_Unselected_Dating_Icon")
+                } else if statusButton == friendshipButton {
+                    selectedImage = UIImage(named: "Profile_Selected_Friends_Icon")
+                    unselectedImage = UIImage(named: "Profile_Unselected_Friends_Icon")
+                }
+                if sender == statusButton {
+                    if let unselectedImage = unselectedImage,
+                        let selectedImage = selectedImage {
+                        // selecting unselected type
+                        if statusButton.image(for: .normal) == unselectedImage {
+                            statusButton.setImage(selectedImage, for: .normal)
+                            var runQuery = false
+                            var type = ""
+                            if statusButton == businessButton {
+                                if let interestedBusiness = user["interested_in_business"] as? Bool {
+                                    businessStatusSet = !interestedBusiness
+                                } else {
+                                    businessStatusSet = true
+                                }
+                                if businessStatusSet {
+                                    statusLabel.text = businessStatus
+                                } else {
+                                    runQuery = true
+                                    type = "Business"
+                                }
+                            } else if statusButton == loveButton {
+                                if let interestedLove = user["interested_in_love"] as? Bool {
+                                    loveStatusSet = !interestedLove
+                                } else {
+                                    loveStatusSet = true
+                                }
+                                if loveStatusSet {
+                                    statusLabel.text = loveStatus
+                                } else {
+                                    runQuery = true
+                                    type = "Love"
+                                }
+                            } else if statusButton == friendshipButton {
+                                if let interestedFriendship = user["interested_in_friendship"] as? Bool {
+                                    friendshipStatusSet = !interestedFriendship
+                                } else {
+                                    friendshipStatusSet = true
+                                }
+                                if friendshipStatusSet {
+                                    statusLabel.text = friendshipStatus
+                                } else {
+                                    runQuery = true
+                                    type = "Friendship"
+                                }
                             }
-                        } else if statusButton == loveButton {
-                            if loveStatusSet {
-                                statusLabel.text = loveStatus
-                            } else {
-                                runQuery = true
-                                type = "Love"
-                            }
-                        } else if statusButton == friendshipButton {
-                            if friendshipStatusSet {
-                                statusLabel.text = friendshipStatus
-                            } else {
-                                runQuery = true
-                                type = "Friendship"
-                            }
-                        }
-                        
-                        if runQuery {
-                            print ("running BridgeStatus query")
-                            if let user = user {
+                            
+                            if runQuery {
+                                print ("running BridgeStatus query")
                                 if let objectId = user.objectId {
                                     let query = PFQuery(className: "BridgeStatus")
                                     query.whereKey("userId", equalTo: objectId)
@@ -531,16 +549,14 @@ class OtherProfileViewController: UIViewController {
                                         }
                                     })
                                 }
+                            } else {
+                                self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+                                self.statusLabel.sizeToFit()
+                                self.statusLabel.center.x = DisplayUtility.screenWidth / 2
+                                self.layoutBottomBasedOnStatus()
                             }
-                        } else {
-                            self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-                            self.statusLabel.sizeToFit()
-                            self.statusLabel.center.x = DisplayUtility.screenWidth / 2
-                            self.layoutBottomBasedOnStatus()
-                        }
-                    } else { // unselecting selected type
-                        statusButton.setImage(unselectedImage, for: .normal)
-                        if let user = user {
+                        } else { // unselecting selected type
+                            statusButton.setImage(unselectedImage, for: .normal)
                             if let name = user["name"] as? String {
                                 let firstName = DisplayUtility.firstName(name: name)
                                 statusLabel.text = "Click an icon above to see \(firstName)'s currently displayed requests."
@@ -551,10 +567,10 @@ class OtherProfileViewController: UIViewController {
                             self.layoutBottomBasedOnStatus()
                         }
                     }
-                }
-            } else {
-                if let unselectedImage = unselectedImage {
-                    statusButton.setImage(unselectedImage, for: .normal)
+                } else {
+                    if let unselectedImage = unselectedImage {
+                        statusButton.setImage(unselectedImage, for: .normal)
+                    }
                 }
             }
         }

@@ -566,10 +566,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func save(_ sender: UIButton) {
+        /*
+        // FOR TESTING OTHER PROFILE:
         let otherProfileVC = OtherProfileViewController(userId: "IW33Wt5qvY")
         self.present(otherProfileVC, animated: true, completion: nil)
+        */
         
-        /*
         view.endEditing(true)
         if let user = PFUser.current() {
             user["profile_greeting"] = greeting
@@ -686,7 +688,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         
         
         dismiss(animated: false, completion: nil)
-        */
     }
     
     func greetingLabelTapped(_ gesture: UIGestureRecognizer) {
