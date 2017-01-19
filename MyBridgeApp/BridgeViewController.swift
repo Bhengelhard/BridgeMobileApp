@@ -1049,7 +1049,7 @@ class BridgeViewController: UIViewController {
                 
             }
             var objectId = String()
-            if bridgePairings != nil && bridgePairings.count > 0  {
+            if bridgePairings.count > 0  {
                 objectId = (bridgePairings[x].user1?.objectId)!
                 //If current user has swiped left then turn checked out to false
                 if shouldCheckInPair {
