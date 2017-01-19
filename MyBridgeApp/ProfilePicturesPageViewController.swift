@@ -64,33 +64,11 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
                 maxDotX = max(maxDotX!, dot.frame.maxX)
             }
         }
-        
-        /*
-        if let maxDotX = maxDotX,
-            let minDotX = minDotX {
-            let pageControlWidth = maxDotX - minDotX + 0.05*view.frame.width
-            pageControl.frame = CGRect(x: 0.95*view.frame.width - pageControlWidth, y: pageControl.frame.minY, width: pageControlWidth, height: pageControl.frame.height)
-            pageControl.layer.cornerRadius = 0.4*pageControl.frame.height
-            pageControl.backgroundColor = UIColor.black.withAlphaComponent(0.1)
-        }
-        */
     }
-    
-    /*
-    override init(transitionStyle: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : Any]?) {
-        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: options)
-    }*/
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    /*
-    func setVCs(vcs: [UIViewController], initialVC: UIViewController) {
-        self.vcs = vcs
-        setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
-    }
-    */
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let currIndex = vcs.index(of: viewController) {

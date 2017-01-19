@@ -30,9 +30,12 @@ class MyProfileViewController: UIViewController {
     let loveButton = UIButton()
     let friendshipButton = UIButton()
     let statusLabel = UILabel()
-    var businessStatus = "You have not yet posted a request for work"
-    var loveStatus = "You have not yet posted a request for dating"
-    var friendshipStatus = "You have not yet posted a request for friendship"
+    var businessStatus = "You have not yet posted a request for work."
+    var loveStatus = "You have not yet posted a request for dating."
+    var friendshipStatus = "You have not yet posted a request for friendship."
+    var businessStatusSet = false
+    var loveStatusSet = false
+    var friendshipStatusSet = false
     let friendsAndNectsView = UIView()
     let transitionManager = TransitionManager()
     
@@ -233,7 +236,9 @@ class MyProfileViewController: UIViewController {
             let statusButtonWidth = 0.11596*DisplayUtility.screenWidth
             let statusButtonHeight = statusButtonWidth
             
-            grayOutButtons()
+            businessButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
+            loveButton.setImage(UIImage(named: "Profile_Unselected_Dating_Icon"), for: .normal)
+            friendshipButton.setImage(UIImage(named: "Profile_Unselected_Friends_Icon"), for: .normal)
             
             businessButton.frame = CGRect(x: 0.17716*DisplayUtility.screenWidth, y: bottomHexView.frame.maxY + 0.16*DisplayUtility.screenHeight, width: statusButtonWidth, height: statusButtonHeight)
             businessButton.addTarget(self, action: #selector(statusTypeButtonSelected(_:)), for: .touchUpInside)
@@ -260,7 +265,7 @@ class MyProfileViewController: UIViewController {
             statusLabel.center.x = DisplayUtility.screenWidth / 2
             scrollView.addSubview(statusLabel)
             
-            scrollView.addSubview(friendsAndNectsView)
+            //scrollView.addSubview(friendsAndNectsView)
             
             /*
             let myFriendsButton = UIButton()
@@ -344,7 +349,7 @@ class MyProfileViewController: UIViewController {
                     startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
             self.view.addSubview(profilePicsView)
             profilePicsView.animateIn()
         }
@@ -356,127 +361,141 @@ class MyProfileViewController: UIViewController {
     }
     
     func statusTypeButtonSelected(_ sender: UIButton) {
-        grayOutButtons()
-        var type = ""
-        var statusSet = false
         
-        // TODO: Turn off buttons if same one selected
-        // "You have not yet created a request for ('work', 'dating', 'friendship')"
-
-        if sender == businessButton {
-            if let bridgeStatus = localData.getBusinessStatus() {
-                statusSet = true
-                self.businessStatus = bridgeStatus
+        for statusButton in [businessButton, loveButton, friendshipButton] {
+            var selectedImage: UIImage?
+            var unselectedImage: UIImage?
+            if statusButton == businessButton {
+                selectedImage = UIImage(named: "Profile_Selected_Work_Icon")
+                unselectedImage = UIImage(named: "Profile_Unselected_Work_Icon")
+            } else if statusButton == loveButton {
+                selectedImage = UIImage(named: "Profile_Selected_Dating_Icon")
+                unselectedImage = UIImage(named: "Profile_Unselected_Dating_Icon")
+            } else if statusButton == friendshipButton {
+                selectedImage = UIImage(named: "Profile_Selected_Friends_Icon")
+                unselectedImage = UIImage(named: "Profile_Unselected_Friends_Icon")
             }
-            businessButton.setImage(UIImage(named: "Profile_Selected_Work_Icon"), for: .normal)
-            type = "Business"
-            statusLabel.text = businessStatus
-            statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-            statusLabel.sizeToFit()
-            statusLabel.center.x = DisplayUtility.screenWidth / 2
-            layoutBottomBasedOnStatus()
-        } else if sender == loveButton {
-            if let bridgeStatus = localData.getLoveStatus() {
-                statusSet = true
-                self.loveStatus = bridgeStatus
-            }
-            loveButton.setImage(UIImage(named: "Profile_Selected_Dating_Icon"), for: .normal)
-            type = "Love"
-            statusLabel.text = loveStatus
-            statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-            statusLabel.sizeToFit()
-            statusLabel.center.x = DisplayUtility.screenWidth / 2
-            layoutBottomBasedOnStatus()
-        } else {
-            if let bridgeStatus = localData.getFriendshipStatus() {
-                statusSet = true
-                self.friendshipStatus = bridgeStatus
-            }
-            friendshipButton.setImage(UIImage(named: "Profile_Selected_Friends_Icon"), for: .normal)
-            type = "Friendship"
-            statusLabel.text = friendshipStatus
-            statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-            statusLabel.sizeToFit()
-            statusLabel.center.x = DisplayUtility.screenWidth / 2
-            layoutBottomBasedOnStatus()
-        }
-        
-        self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
-        self.statusLabel.sizeToFit()
-        self.statusLabel.center.x = DisplayUtility.screenWidth / 2
-        
-        //Get currentUser's most recent request (a.k.a bridge_status in DB) for selected connection type
-        if statusSet {
-        //Request already retrived forselected type from local data
-            self.statusLabel.sizeToFit()
-            self.statusLabel.center.x = DisplayUtility.screenWidth / 2
-        }
-        //Setting request for selected type from Database when local data is not available
-        else if let user = PFUser.current() {
-            if let objectId = user.objectId {
-                let query = PFQuery(className: "BridgeStatus")
-                query.whereKey("userId", equalTo: objectId)
-                query.whereKey("bridge_type", equalTo: type)
-                query.order(byDescending: "updatedAt")
-                query.limit = 1
-                query.findObjectsInBackground(block: { (results, error) in
-                    if let error = error {
-                        print("status findObjectsInBackgroundWithBlock error - \(error)")
-                    }
-                    else if let results = results {
-                        if results.count > 0 {
-                            let result = results[0]
-                            if let bridgeStatus = result["bridge_status"] as? String {
-                                if !bridgeStatus.isEmpty {
-                                    self.statusLabel.text = bridgeStatus
-                                    
-                                    if type == "Business" {
-                                        self.businessStatus = bridgeStatus
-                                        self.localData.setBusinessStatus(bridgeStatus)
-                                    } else if type == "Love" {
-                                        self.loveStatus = bridgeStatus
-                                        self.localData.setLoveStatus(bridgeStatus)
-                                    } else if type == "Friendship" {
-                                        self.friendshipStatus = bridgeStatus
-                                        self.localData.setFriendshipStatus(bridgeStatus)
-                                    }
-                                    self.localData.synchronize()
-
-                                }
+            if sender == statusButton {
+                if let unselectedImage = unselectedImage,
+                    let selectedImage = selectedImage {
+                    // selecting unselected type
+                    if statusButton.image(for: .normal) == unselectedImage {
+                        statusButton.setImage(selectedImage, for: .normal)
+                        var runQuery = false
+                        var type = ""
+                        if statusButton == businessButton {
+                            if businessStatusSet {
+                                statusLabel.text = businessStatus
+                            } else {
+                                runQuery = true
+                                type = "Business"
+                            }
+                        } else if statusButton == loveButton {
+                            if loveStatusSet {
+                                statusLabel.text = loveStatus
+                            } else {
+                                runQuery = true
+                                type = "Love"
+                            }
+                        } else if statusButton == friendshipButton {
+                            if friendshipStatusSet {
+                                statusLabel.text = friendshipStatus
+                            } else {
+                                runQuery = true
+                                type = "Friendship"
                             }
                         }
-                    } else {
-                        //Setting statusLabel to text for when the user does not have a status set
-                        if type == "Business" {
-                            self.statusLabel.text = self.businessStatus
-                        } else if type == "Love" {
-                            self.statusLabel.text = self.loveStatus
-                        } else if type == "Friendship" {
-                            self.statusLabel.text = self.friendshipStatus
+                        
+                        if runQuery {
+                            print ("running BridgeStatus query")
+                            if let user = PFUser.current() {
+                                if let objectId = user.objectId {
+                                    let query = PFQuery(className: "BridgeStatus")
+                                    query.whereKey("userId", equalTo: objectId)
+                                    query.whereKey("bridge_type", equalTo: type)
+                                    query.order(byDescending: "updatedAt")
+                                    query.limit = 1
+                                    query.findObjectsInBackground(block: { (results, error) in
+                                        if let error = error {
+                                            print("error - find objects in background - \(error)")
+                                        } else if let results = results {
+                                            if results.count > 0 {
+                                                let result = results[0]
+                                                if let bridgeStatus = result["bridge_status"] as? String {
+                                                    self.statusLabel.text = bridgeStatus
+                                                    if type == "Business" {
+                                                        self.businessStatus = bridgeStatus
+                                                        self.businessStatusSet = true
+                                                    } else if type == "Love" {
+                                                        self.loveStatus = bridgeStatus
+                                                        self.loveStatusSet = true
+                                                    } else if type == "Friendship" {
+                                                        self.friendshipStatus = bridgeStatus
+                                                        self.friendshipStatusSet = true
+                                                    }
+                                                }
+                                            } else {
+                                                if type == "Business" {
+                                                    self.businessStatusSet = true
+                                                    self.statusLabel.text = self.businessStatus
+                                                } else if type == "Love" {
+                                                    self.loveStatusSet = true
+                                                    self.statusLabel.text = self.loveStatus
+                                                } else if type == "Friendship" {
+                                                    self.friendshipStatusSet = true
+                                                    self.statusLabel.text = self.friendshipStatus
+                                                }
+                                            }
+                                            self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+                                            self.statusLabel.sizeToFit()
+                                            self.statusLabel.center.x = DisplayUtility.screenWidth / 2
+                                            self.layoutBottomBasedOnStatus()
+                                        } else {
+                                            if type == "Business" {
+                                                self.businessStatusSet = true
+                                                self.statusLabel.text = self.businessStatus
+                                            } else if type == "Love" {
+                                                self.loveStatusSet = true
+                                                self.statusLabel.text = self.loveStatus
+                                            } else if type == "Friendship" {
+                                                self.friendshipStatusSet = true
+                                                self.statusLabel.text = self.friendshipStatus
+                                            }
+                                            self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+                                            self.statusLabel.sizeToFit()
+                                            self.statusLabel.center.x = DisplayUtility.screenWidth / 2
+                                            self.layoutBottomBasedOnStatus()
+                                        }
+                                    })
+                                }
+                            }
+                        } else {
+                            self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+                            self.statusLabel.sizeToFit()
+                            self.statusLabel.center.x = DisplayUtility.screenWidth / 2
+                            self.layoutBottomBasedOnStatus()
                         }
+                    } else { // unselecting selected type
+                        statusButton.setImage(unselectedImage, for: .normal)
+                        statusLabel.text = "Click an icon above to see your currently displayed requests."
+                        self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
+                        self.statusLabel.sizeToFit()
+                        self.statusLabel.center.x = DisplayUtility.screenWidth / 2
+                        self.layoutBottomBasedOnStatus()
                     }
-                })
+                }
+            } else {
+                if let unselectedImage = unselectedImage {
+                    statusButton.setImage(unselectedImage, for: .normal)
+                }
             }
         }
-        
-        
-        
-        
-        self.layoutBottomBasedOnStatus()
-    }
-    
-    func grayOutButtons() {
-        businessButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
-        loveButton.setImage(UIImage(named: "Profile_Unselected_Dating_Icon"), for: .normal)
-        friendshipButton.setImage(UIImage(named: "Profile_Unselected_Friends_Icon"), for: .normal)
     }
     
     func layoutBottomBasedOnStatus() {
-        friendsAndNectsView.frame = CGRect(x: 0, y: statusLabel.frame.maxY + 0.04*DisplayUtility.screenHeight, width: friendsAndNectsView.frame.width, height: friendsAndNectsView.frame.height)
+        //friendsAndNectsView.frame = CGRect(x: 0, y: statusLabel.frame.maxY + 0.04*DisplayUtility.screenHeight, width: friendsAndNectsView.frame.width, height: friendsAndNectsView.frame.height)
         
-        print(friendsAndNectsView.frame)
-        
-        scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(DisplayUtility.screenHeight, friendsAndNectsView.frame.maxY + 0.02*DisplayUtility.screenHeight))
+        scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(DisplayUtility.screenHeight, statusLabel.frame.maxY + 0.02*DisplayUtility.screenHeight - scrollView.frame.minY))
     }
     
     //Setting segue transition information and preparation
