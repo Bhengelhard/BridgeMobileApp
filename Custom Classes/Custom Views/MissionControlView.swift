@@ -9,8 +9,10 @@
 import UIKit
 import Parse
 
-class MissionControlView: UIView{
-    
+class MissionControlView: UIView
+{
+	// MARK: - Properties
+
     let displayUtility = DisplayUtility()
     let customKeyboard = CustomKeyboard()
     var currentView = UIView()
@@ -55,7 +57,9 @@ class MissionControlView: UIView{
     var wasDraggedUp = 0
     
     let initialFrameY = 0.9177*DisplayUtility.screenHeight
-    
+
+	// MARK: - Methods
+
     override init (frame: CGRect) {
         super.init(frame: frame)
     }
