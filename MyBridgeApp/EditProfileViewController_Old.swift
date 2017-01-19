@@ -109,7 +109,7 @@ class EditProfileViewController_Old: UIViewController, UITextFieldDelegate, UIIm
         view.addSubview(pagingSpinner)
         pagingSpinner.startAnimating()
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
+        _ = graphRequest?.start{ (connection, result, error) -> Void in
             if error != nil {
                 print(error!)
             }

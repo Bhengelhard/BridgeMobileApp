@@ -36,7 +36,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     func updateUser() {
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
-        graphRequest?.start { (connection, result, error) -> Void in
+        _ = graphRequest?.start { (connection, result, error) -> Void in
             if error != nil {
                 print(error!)
             } else if let result = result as? [String:AnyObject]{

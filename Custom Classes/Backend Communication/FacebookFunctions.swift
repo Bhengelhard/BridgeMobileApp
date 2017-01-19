@@ -354,7 +354,7 @@ class FacebookFunctions {
         var sources = [String]()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "albums{name, photos.order(reverse_chronological).limit(4){images}}"])
-        graphRequest?.start(completionHandler: { (_, result, error) in
+        _ = graphRequest?.start(completionHandler: { (_, result, error) in
             if let result = result as? [String:AnyObject] {
                 if let albums = result["albums"] as? [String:AnyObject] {
                     if let data = albums["data"] as? [AnyObject] {
@@ -419,7 +419,7 @@ class FacebookFunctions {
     /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
     func updateUser() {
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
-        graphRequest?.start { (connection, result, error) -> Void in
+        _ = graphRequest?.start { (connection, result, error) -> Void in
             if error != nil {
                 
                 print(error!)

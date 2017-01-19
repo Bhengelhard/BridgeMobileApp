@@ -59,7 +59,7 @@ class LocalStorageUtility{
     //saves  to LocalDataStorage & Parse
     func getMainProfilePicture(){
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
+        _ = graphRequest?.start{ (connection, result, error) -> Void in
                 if error != nil {
                 print(error!)
                 }
@@ -124,7 +124,7 @@ class LocalStorageUtility{
     func getUserFriends(){
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
+        _ = graphRequest?.start{ (connection, result, error) -> Void in
             if error != nil {
                 print("Error: \(error!)")
             }
