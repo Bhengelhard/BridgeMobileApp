@@ -361,7 +361,7 @@ class ReasonForConnection: UIView {
         
         customKeyboard.display(view: self, placeholder: "Why should they 'nect?", buttonTitle: "send", buttonTarget: "bridgeUsers")
         //customKeyboard.messageTextView.returnKeyType = UIReturnKeyType.done
-        customKeyboard.getCurrentViewController(vc: currentViewController as! UIViewController)
+        customKeyboard.getCurrentViewController(vc: currentViewController)
         customKeyboard.resign()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(resignKeyboard(_:)))
         self.addGestureRecognizer(tap)
