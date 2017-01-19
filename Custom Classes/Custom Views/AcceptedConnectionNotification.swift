@@ -121,7 +121,7 @@ class AcceptedConnectionNotification: UIView {
     //Retrieving the currentUser's total connections nected from the Database and setting totalConnectionsNected to that Integer + 1 for the currently displayed connection
     func getTotalConnectionsNected() {
         let query = PFQuery(className: "BridgePairings")
-        query.whereKey("connecter_objectId", equalTo: PFUser.current()?.objectId)
+        query.whereKey("connecter_objectId", equalTo: PFUser.current()!.objectId!)
         query.whereKey("user1_response", equalTo: 1)
         query.whereKey("user2_response", equalTo: 1)
         query.whereKey("accepted_notification_viewed", equalTo: true)

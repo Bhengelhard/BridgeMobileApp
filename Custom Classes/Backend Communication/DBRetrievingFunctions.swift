@@ -14,7 +14,7 @@ class DBRetrievingFunctions {
     //Checking to see if user has any unviewed notifications that a connection they made has accepted
     func queryForAcceptedConnectionNotifications(view: UIView) {
         let acceptedConnectionQuery = PFQuery(className: "BridgePairings")
-        acceptedConnectionQuery.whereKey("connecter_objectId", equalTo: PFUser.current()?.objectId)
+        acceptedConnectionQuery.whereKey("connecter_objectId", equalTo: PFUser.current()!.objectId!)
         acceptedConnectionQuery.whereKey("user1_response", equalTo: 1)
         acceptedConnectionQuery.whereKey("user2_response", equalTo: 1)
         acceptedConnectionQuery.whereKey("accepted_notification_viewed", notEqualTo: true)
