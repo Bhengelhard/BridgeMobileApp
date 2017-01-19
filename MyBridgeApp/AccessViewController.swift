@@ -103,7 +103,29 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     }
 
     func authenticateUser() {
+        
         PFUser.current()?.fetchInBackground(block: { (object, error) in
+            
+            /*
+             print("deleting prof pics")
+             user.remove(forKey: "profile_pictures")
+             user.saveInBackground()
+             */
+            if let user = object as? PFUser {
+                if user["profile_pictures"] == nil {
+                    print("no profile pictures: logging out...")
+                    PFUser.logOutInBackground(block: { (error) in
+                        if error != nil {
+                            print(error)
+                        } else {
+                            print("log out successful")
+                            self.displayLoginWithFacebook()
+                        }
+                    })
+                    return
+                }
+            }
+            
             let localData = LocalData()
             let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
             
@@ -130,6 +152,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                 }
                 
             }
+            
         })
     }
     

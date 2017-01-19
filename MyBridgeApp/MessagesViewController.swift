@@ -105,10 +105,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             let mirror = Mirror(reflecting: vc)
             if mirror.subjectType == BridgeViewController.self {
                 self.transitionManager.animationDirection = "Left"
-            } else if mirror.subjectType == OptionsFromBotViewController.self {
-                self.transitionManager.animationDirection = "Top"
-                let vc2 = vc as! OptionsFromBotViewController
-                vc2.seguedFrom = "MessagesViewController"
             } else if mirror.subjectType == SingleMessageViewController.self {
                 self.transitionManager.animationDirection = "Right"
                 let vc2 = vc as! SingleMessageViewController
@@ -118,181 +114,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    /*
-     func addProfilePicURLsToMessages() {
-     print("adding profile_pic_ulrs to Messages table")
-     let query: PFQuery = PFQuery(className: "Messages")
-     query.limit = 10000
-     query.findObjectsInBackground(block: { (results, error) -> Void in
-     
-     if let error = error {
-     print("refresh findObjectsInBackgroundWithBlock error - \(error)")
-     }
-     else if let results = results {
-     for i in 0..<results.count{
-     
-     let result = results[i]
-     if let id1 = result["user1_objectId"] {
-     let query2 = PFQuery(className: "_User")
-     query2.whereKey("objectId", equalTo: id1)
-     query2.findObjectsInBackground(block: { (results2, error2) -> Void in
-     
-     if let error2 = error2 {
-     print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
-     }
-     else if let results2 = results2 {
-     print(results2.count)
-     if results2.count > 0 {
-     result["user1_profile_picture_url"] = results2[0]["profile_picture_url"]
-     result.saveInBackground()
-     }
-     }
-     })
-     }
-     if let id2 = result["user2_objectId"] {
-     let query2 = PFQuery(className: "_User")
-     query2.whereKey("objectId", equalTo: id2)
-     query2.findObjectsInBackground(block: { (results2, error2) -> Void in
-     
-     if let error2 = error2 {
-     print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
-     }
-     else if let results2 = results2 {
-     if results2.count > 0 {
-     result["user2_profile_picture_url"] = results2[0]["profile_picture_url"]
-     result.saveInBackground()
-     }
-     }
-     })
-     }
-     }
-     }
-     })
-     }
-     */
-    
-    /*
-     func splitArraysInMessages() {
-     let query: PFQuery = PFQuery(className: "Messages")
-     query.limit = 10000
-     
-     query.findObjectsInBackground(block: { (results, error) -> Void in
-     
-     if let error = error {
-     print("refresh findObjectsInBackgroundWithBlock error - \(error)")
-     }
-     else if let results = results {
-     for i in 0..<results.count{
-     
-     let result = results[i]
-     
-     let bridge_builder_id = result["bridge_builder"] as! String
-     let ids = result["ids_in_message"] as! [String]
-     let names = result["names_in_message"] as! [String]
-     var num = 1
-     for i in 0..<ids.count {
-     if ids[i] == bridge_builder_id {
-     continue
-     }
-     result["user\(num)_objectId"] = ids[i]
-     result["user\(num)_name"] = names[i]
-     num = num+1
-     }
-     
-     result.saveInBackground()
-     }
-     }
-     })
-     }
-     */
-    
-    /*
-     func setUserStatusesTo1() {
-     print("setting statuses")
-     let query: PFQuery = PFQuery(className: "BridgePairings")
-     query.whereKey("bridged", equalTo: true)
-     query.limit = 10000
-     query.findObjectsInBackground(block: { (results, error) -> Void in
-     
-     if let error = error {
-     print("refresh findObjectsInBackgroundWithBlock error - \(error)")
-     }
-     else if let results = results {
-     for i in 0..<results.count{
-     
-     let result = results[i]
-     result["user1_response"] = 1
-     result["user2_response"] = 1
-     result.saveInBackground()
-     print("status \(i) done")
-     }
-     }
-     })
-     }
-     */
-    
-    /*
-     func addProfilePicUrlsToMessages() {
-     print("adding profile_pic_ulrs to Messages table")
-     let query: PFQuery = PFQuery(className: "Messages")
-     query.limit = 10000
-     query.findObjectsInBackground(block: { (results, error) -> Void in
-     
-     if let error = error {
-     print("refresh findObjectsInBackgroundWithBlock error - \(error)")
-     }
-     else if let results = results {
-     for i in 0..<results.count{
-     
-     let result = results[i]
-     let ids = result["ids_in_message"] as! [String]
-     print("Message \(i): \(ids)")
-     for id in ids {
-     let query2: PFQuery = PFQuery(className: "_User")
-     query2.whereKey("objectId", equalTo: id)
-     query2.findObjectsInBackground(block: { (results2, error2) -> Void in
-     if let error2 = error2 {
-     print("refresh findObjectsInBackgroundWithBlock error - \(error2)")
-     }
-     else if let results2 = results2 {
-     print(results2.count)
-     if results2.count > 0 {
-     print("!")
-     var urls: [String]
-     if let urls1 = result["profile_picture_urls"] {
-     urls = urls1 as! [String]
-     } else {
-     urls = [String]()
-     }
-     let url = results2[0]["profile_picture_url"] as! String
-     urls.append(url)
-     print(urls.count)
-     result["profile_picture_urls"] = urls
-     result.saveInBackground()
-     }
-     /*
-     if results2.count > 0 {
-     profilePicURLs.append(results2[0]["profile_picture_url"] as! String)
-     }
-     if profilePicURLs.count == ids.count {
-     result["profile_picture_urls"] = profilePicURLs
-     result.saveInBackground()
-     }
-     */
-     }
-     })
-     }
-     }
-     }
-     })
-     
-     }
-     */
-    
-    
     // refresh() fetches the data from Parse
     func refresh() {
-        //self.refresher.endRefreshing()
         
         let currentFilterInfo = self.filterInfo[self.currentFilter]!
         
@@ -302,7 +125,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             query.whereKey("message_type", equalTo: currentFilter)
         }
         query.order(byDescending: "lastSingleMessageAt")
-        //query.skip = noOfElementsFetched
         query.skip = currentFilterInfo.noOfElementsFetched
         query.limit = noOfElementsPerRefresher
         query.cachePolicy = .networkElseCache
@@ -314,11 +136,11 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             else if let results = results {
                 self.noOfElementsFetched += results.count
                 currentFilterInfo.fetch(results.count)
-                //print("self.noOfElementsFetched \(self.noOfElementsFetched)")
+
                 for i in 0..<results.count{
                     
                     let result = results[i]
-                    //self.messagePositionToMessageIdMapping[self.noOfElementsProcessed] = result.objectId!
+
                     currentFilterInfo.messagePositionToMessageIdMapping[currentFilterInfo.noOfElementsProcessed] = result.objectId!
                     currentFilterInfo.process()
                     self.noOfElementsProcessed += 1
@@ -420,29 +242,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         refresh()
         //Updated the new matchesView upon Push Notification
         loadNewMatches()
-        /*
-        
-        filteredPositions = [Int]()
-        toolbarTapped = false
-        encounteredBefore = [:]
-        noOfElementsProcessed = 0
-        noOfElementsFetched = 0
-        let query: PFQuery = PFQuery(className: "Messages")
-        query.whereKey("ids_in_message", contains: PFUser.current()?.objectId)
-        query.order(byDescending: "lastSingleMessageAt")
-        query.limit = 1000
-        query.cachePolicy = .networkElseCache
-        query.countObjectsInBackground {
-            (count: Int32, error: Error?) in
-            if error == nil {
-                self.totalElements = Int(count)
-                self.refresh()
-            }
-            else {
-                print(" not alive")
-            }
-        }
-         */
     }
     
     func initializeFilterInfo() {
@@ -473,57 +272,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         let type = missionControlView.whichFilter()
         currentFilter = type
 
-        //toolbarTapped = true
         filteredPositions = [Int]()
         displayFilterLabel(type: type)
         
-        /*
-        if type != "All Types" {
-            //displaying noMessagesLabel when there are no messages in the filtered message type
-            for i in 0 ..< messageType.count{
-                if messageType[messagePositionToMessageIdMapping[i]!]! == type {
-                    filteredPositions.append(i)
-                }
-            }
-        } else {
-            for i in 0 ..< messageType.count{
-                filteredPositions.append(i)
-            }
-        }
-        if filteredPositions.count == 0 {
-            displayNoMessages()
-        } else {
-            noMessagesLabel.isHidden = true
-        }
-         */
         refresh()
         self.tableView.tableHeaderView = nil
         newMatchesView.filterBy(type: type)
         self.tableView.tableHeaderView = newMatchesView
     }
-    
-    
-    /*func displayToolBar(){
-     
-     postStatusButton.frame = CGRect(x: 0, y: 0, width: 0.175*DisplayUtility.screenWidth, height: 0.175*DisplayUtility.screenWidth)
-     postStatusButton.backgroundColor = DisplayUtility.necterYellow
-     postStatusButton.showsTouchWhenHighlighted = true
-     postStatusButton.layer.borderWidth = 2.0
-     postStatusButton.layer.borderColor = UIColor.white.cgColor
-     postStatusButton.layer.cornerRadius = postStatusButton.frame.size.width/2.0
-     postStatusButton.clipsToBounds = true
-     postStatusButton.center.y = toolbar.center.y - 0.25*0.175*DisplayUtility.screenWidth
-     postStatusButton.center.x = view.center.x
-     postStatusButton.setTitle("+", for: UIControlState())
-     postStatusButton.setTitleColor(UIColor.white, for: UIControlState())
-     postStatusButton.titleLabel?.font = UIFont(name: "Verdana", size: 26)
-     postStatusButton.addTarget(self, action: #selector(postStatusTapped), for: .touchUpInside)
-     
-     }
-     func postStatusTapped(_ sender: UIButton ){
-     print("Post Tapped")
-     performSegue(withIdentifier: "showNewStatusViewControllerFromMessages", sender: self)
-     }*/
     func displayNavigationBar(){
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
         let customNavigationBar = CustomNavigationBar()
@@ -544,22 +300,13 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         let type = missionControlView.whichFilter()
         if type == "All Types" {
             noMessagesLabel.text = "No active connections."
-            //} else if businessButton.isEnabled && loveButton.isEnabled {
-            //noMessagesLabel.text = "No active connections for business or dating."
-            //} else if businessButton.isEnabled && friendshipButton.isEnabled {
-            //noMessagesLabel.text = "No active connections for business or friendship."
-            //} else if friendshipButton.isEnabled && loveButton.isEnabled {
-            //noMessagesLabel.text = "No active connections for friendship or dating."
         } else if type == "Business" {
-            //noMessagesLabel.text = "You do not have any messages for business. Connect your friends for business to start a conversation."
             noMessagesLabel.text = "No active connections for work. Be sweet and 'nect your friends to get the community buzzing!"
             print("business enabled = false")
         } else if type == "Love" {
-            //noMessagesLabel.text = "You do not have any messages for love. Connect your friends for love to start a conversation."
             noMessagesLabel.text = "No active connections for dating. Be sweet and 'nect your friends to get the community buzzing!"
             print("love enabled = false")
         } else if type == "Friendship" {
-            //noMessagesLabel.text = "You do not have any messages for friendship. Connect your friends for friendship to start a conversation."
             noMessagesLabel.text = "No active connections for friendship. Be sweet and 'nect your friends to get the community buzzing!"
         } else {
             noMessagesLabel.text = "You do not have any messages. Be sweet and 'nect your friends to get the community buzzing!"
@@ -568,18 +315,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         noMessagesLabel.textAlignment = .center
         noMessagesLabel.center.x = view.center.x
         noMessagesLabel.center.y = view.center.y
-        //noMessagesLabel.textColor = .red
         noMessagesLabel.adjustsFontSizeToFitWidth = true
-        
-        /*
-         noMessagesLabel.font = UIFont(name: "BentonSans", size: 20)
-         noMessagesLabel.textAlignment = NSTextAlignment.center
-         noMessagesLabel.center.y = view.center.y
-         noMessagesLabel.center.x = view.center.x
-         noMessagesLabel.layer.borderWidth = 2
-         noMessagesLabel.layer.borderColor = DisplayUtility.necterGray.cgColor
-         noMessagesLabel.layer.cornerRadius = 15
-         */
         
         view.addSubview(noMessagesLabel)
     }
@@ -588,38 +324,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         sendingNotificationView.initialize(view: view, sendingText: "Sending...", successText: "Success")
         view.addSubview(sendingNotificationView)
         view.bringSubview(toFront: view)
-//        let botNotificationView = UIView()
-//        botNotificationView.frame = CGRect(x: 0, y: -0.12*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.12*DisplayUtility.screenHeight)
-//        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-//        //always fill the view
-//        blurEffectView.frame = botNotificationView.bounds
-//        
-//        let messageLabel = UILabel(frame: CGRect(x: 0.05*DisplayUtility.screenWidth, y: 0.01*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.11*DisplayUtility.screenHeight))
-//        messageLabel.text = (notification as NSNotification).userInfo!["message"] as? String ?? "No Message Came Up"
-//        messageLabel.textColor = UIColor.darkGray
-//        messageLabel.font = UIFont(name: "Verdana-Bold", size: 14)
-//        messageLabel.numberOfLines = 0
-//        messageLabel.textAlignment = NSTextAlignment.center
-//        
-//        botNotificationView.addSubview(messageLabel)
-//        botNotificationView.insertSubview(blurEffectView, belowSubview: messageLabel)
-//        view.addSubview(botNotificationView)
-//        view.bringSubview(toFront: botNotificationView)
-//        
-//        UIView.animate(withDuration: 0.7, animations: {
-//            botNotificationView.frame.origin.y = 0
-//        })
-//        
-//        let _ = CustomTimer(interval: 4) {i -> Bool in
-//            UIView.animate(withDuration: 0.7, animations: {
-//                botNotificationView.frame.origin.y = -0.12*DisplayUtility.screenHeight
-//            })
-//            return i < 1
-//        }
-//        
-//        
-//        NotificationCenter.default.removeObserver(self)
     }
     
     func displayBackgroundView(){

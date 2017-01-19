@@ -26,6 +26,7 @@ class HalfSwipeCard: UIView {
     
     func initialize(name: String, status: String, photoURL: String!, connectionType: String) {
         self.layer.masksToBounds = true
+        self.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         
         //download Photo from URL
         let photoView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))

@@ -16,6 +16,8 @@ class AcceptIgnoreView: UIView {
     let exitButton = UIButton()
     var acceptButton = UIButton()
     var ignoreButton = UIButton()
+    let newConnectionLabel = UILabel()
+    var numNewConnections = 1
     
     init(newMatch: NewMatch) {
         self.newMatch = newMatch
@@ -40,7 +42,6 @@ class AcceptIgnoreView: UIView {
         exitButton.addTarget(self, action: #selector(dismissView(_:)), for: .touchUpInside)
         addSubview(exitButton)
         
-        let newConnectionLabel = UILabel()
         newConnectionLabel.text = "You have one new connection!"
         newConnectionLabel.textColor = .white
         newConnectionLabel.textAlignment = .center
@@ -170,6 +171,53 @@ class AcceptIgnoreView: UIView {
     
     func setVC(vc: MessagesViewController) {
         self.vc = vc
+        
+        //Setting the newConnectionLabel to the number of new connections
+        updateNumNewConnections()
+        
+    }
+    
+    //Updating the number of new connections and updating the newConnectionsLabel
+    func updateNumNewConnections() {
+        if let messagesVC = vc {
+            let newMatches = messagesVC.newMatchesView.allNewMatches
+            var count = 0
+            for match in newMatches {
+                if match.dot {
+                    count += 1
+                }
+            }
+            numNewConnections = count
+            
+            //Updating the newConnections label to the newly found numNewConnections
+            updateNewConnectionsLabel()
+        }
+        
+    }
+    //Updating new connections label with text displaying the number of new matches that have not been ignored in the matches view
+    func updateNewConnectionsLabel() {
+        if numNewConnections == 0 {
+            newConnectionLabel.text = "You have no new connections."
+        } else if numNewConnections == 1 {
+            newConnectionLabel.text = "You have one new connection!"
+        } else if numNewConnections < 10 {
+            var countAsText = String()
+            switch (numNewConnections) {
+            case 1: countAsText = "one"
+            case 2: countAsText = "two"
+            case 3: countAsText = "three"
+            case 4: countAsText = "four"
+            case 5: countAsText = "five"
+            case 6: countAsText = "six"
+            case 7: countAsText = "seven"
+            case 8: countAsText = "eight"
+            case 9: countAsText = "nine"
+            default: countAsText = ""
+            }
+            newConnectionLabel.text = "You have \(countAsText) new connections!"
+        } else {
+            newConnectionLabel.text = "You have \(numNewConnections) new connections!"
+        }
     }
     
     func phaseOut() {
@@ -178,14 +226,53 @@ class AcceptIgnoreView: UIView {
             self.alpha = 0
         })
     }
-            
+    
     func dismissView(_ sender: UIButton) {
+        print("dismissView Tapped")
         self.phaseOut()
+    }
+    
+    func displayWaitingForOtherUserNotification() {
+        //Reloading messages view controller for when the user exits the AcceptIgnoreView
+        if let vc = self.vc {
+            vc.loadNewMatches()
+        }
+        
+        //Setting the waiting for other user label
+        let waitingForOtherUserLabel = UILabel()
+        waitingForOtherUserLabel.frame.size = CGSize(width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight)
+        waitingForOtherUserLabel.center.x = self.center.x
+        waitingForOtherUserLabel.center.y = acceptButton.center.y
+        if let firstName = newMatch.name.components(separatedBy: " ").first {
+            waitingForOtherUserLabel.text = "Stay tuned! We'll let you know when \(firstName) accepts."
+        } else {
+            waitingForOtherUserLabel.text = "Stay tuned! We'll let you know when they accept."
+        }
+        waitingForOtherUserLabel.textColor = .white
+        waitingForOtherUserLabel.textAlignment = NSTextAlignment.center
+        waitingForOtherUserLabel.font = UIFont(name: "BentonSans-Light", size: 18)
+        waitingForOtherUserLabel.numberOfLines = 2
+        waitingForOtherUserLabel.alpha = 0
+        addSubview(waitingForOtherUserLabel)
+        
+        
+        UIView.animate(withDuration: 0.02, animations: {
+            waitingForOtherUserLabel.alpha = 1
+            self.acceptButton.alpha = 0
+            self.ignoreButton.alpha = 0
+        }) { (success) in
+            if success {
+                self.numNewConnections -= 1
+                self.updateNewConnectionsLabel()
+                self.acceptButton.removeFromSuperview()
+                self.ignoreButton.removeFromSuperview()
+            }
+        }
     }
     
     func accept(_ sender: UIButton) {
         //setting buttons to false so user cannot click them during transition
-        exitButton.isEnabled = false
+        //exitButton.isEnabled = false
         ignoreButton.isEnabled = false
         acceptButton.isEnabled = false
         
@@ -213,14 +300,7 @@ class AcceptIgnoreView: UIView {
                     //setting currentUser's response to 1 after acceptance
                     result["\(self.newMatch.user)_response"] = 1
                     let otherUser = self.newMatch.user == "user1" ? "user2" : "user1"
-                    result.saveInBackground(block: { (succeeded: Bool, error: Error?) in
-                        if result["\(otherUser)_response"] as! Int != 1 {
-                            self.phaseOut()
-                            if let vc = self.vc {
-                                vc.loadNewMatches()
-                            }
-                        }
-                    })
+                    result.saveInBackground()
                     
                     //checking if other user has already accepted
                     if result["\(otherUser)_response"] as! Int == 1 {
@@ -293,12 +373,21 @@ class AcceptIgnoreView: UIView {
                     }
                     //If the other user has not yet accepted
                     else {
-                        if let currentView = self.vc?.view {
-                            let sendingNotificationView = SendingNotificationView()
-                            sendingNotificationView.initialize(view: currentView, sendingText: "Accepting...", successText: "Accepted")
-                            currentView.addSubview(sendingNotificationView)
-                            currentView.bringSubview(toFront: sendingNotificationView)
-                        }
+                        //Display label telling the user they will be notified when the other user accepts
+                        //self.exitButton.isEnabled = true
+                        self.displayWaitingForOtherUserNotification()
+                        
+//                        self.phaseOut()
+//                        print("phasing out")
+//                        if let currentView = self.vc?.view {
+////                            let sendingNotificationView = SendingNotificationView()
+////                            sendingNotificationView.initialize(view: currentView, sendingText: "Accepting...", successText: "Accepted")
+////                            currentView.addSubview(sendingNotificationView)
+////                            currentView.bringSubview(toFront: sendingNotificationView)
+//                            
+//
+//                            
+//                        }
                         
                     }
                 }

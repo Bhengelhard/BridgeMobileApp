@@ -35,7 +35,7 @@ class FacebookFunctions {
         localData.synchronize()
         
         //Log user in with permissions public_profile, email and user_friends
-        let permissions = ["public_profile", "email", "user_friends"]
+        let permissions = ["public_profile", "email", "user_friends", "user_photos", "user_birthday"]
         PFFacebookUtils.logInInBackground(withReadPermissions: permissions) { (user, error) in
             print("got past permissions")
             if let error = error {
@@ -58,7 +58,89 @@ class FacebookFunctions {
                     
                     LocalStorageUtility().getUserFriends()
                     
+                    // get necessary facebook fields
+                    let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, birthday, location"])
+                    graphRequest!.start { (connection, result, error) -> Void in
+                        print("got into graph request")
+                        
+                        if error != nil {
+                            
+                            print(error)
+                            print("got error")
+                            
+                        } else if let result = result as? [String: AnyObject]{
+                            // saves these to parse at every login
+                            print("got result")
+                            var hasInterestedIn = false
+                            if let interested_in = result["interested_in"] {
+                                localData.setInterestedIn(interested_in as! String)
+                                PFUser.current()?["interested_in"] = interested_in
+                                hasInterestedIn = true
+                            }
+                            
+                            
+                            if let gender: String = result["gender"]! as? String {
+                                PFUser.current()?["gender"] = gender
+                                PFUser.current()?["fb_gender"] = gender
+                                //saves a guess at the gender the current user is interested in if it doesn't already exist
+                                if hasInterestedIn == false {
+                                    if gender == "male" {
+                                        PFUser.current()?["interested_in"] = "female"
+                                    } else if gender == "female" {
+                                        PFUser.current()?["interested_in"] = "male"
+                                    }
+                                }
+                            }
+                            
+                            //setting main name and names for Bridge Types to Facebook name
+                            if let name = result["name"] {
+                                global_name = name as! String
+                                // Store the name in core data 06/09
+                                localData.setUsername(global_name)
+                                PFUser.current()?["fb_name"] = name
+                                PFUser.current()?["name"] = name
+                                //PFUser.current()?["business_name"] = name
+                                //PFUser.current()?["love_name"] = name
+                                //PFUser.current()?["friendship_name"] = name
+                            }
+                            if let email = result["email"] {
+                                PFUser.current()?["email"] = email
+                            }
+                            if let id = result["id"] {
+                                PFUser.current()?["fb_id"] =  id
+                            }
+                            
+                            if let birthday = result["birthday"] as? String {
+                                print(result["birthday"]!)
+                                print("birthday")
+                                //getting birthday from Facebook and calculating age
+                                PFUser.current()?["fb_birthday"] = birthday
+                                
+                                //getting age from Birthday
+                                let formatter = DateFormatter()
+                                
+                                //formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
+                                formatter.locale = Locale(identifier: "en_US_POSIX")
+                                formatter.dateFormat = "MM/dd/yyyy"
+                                
+                                if let NSbirthday = formatter.date(from: birthday) {
+                                    let calendar: Calendar = Calendar.current
+                                    let now = Date()
+                                    //calendar.component(.year, from: NSbirthday)
+                                    //let secondsInYear = 365*24*60*60
+                                    //let age = Int(now.timeIntervalSince(NSbirthday)) / secondsInYear
+                                    if let age = ((calendar as NSCalendar).components(.year, from: NSbirthday, to: now, options: [])).year {
+                                        PFUser.current()?["age"] = age
+                                    }
+                                }
+                            }
+                            
+                            PFUser.current()?.saveInBackground()
+                        }
+                    }
+                    
                     if user.isNew {
+                        self.getProfilePictures()
                         
                         //sync profile picture with facebook profile picture
                         LocalStorageUtility().getMainProfilePicture()
@@ -78,6 +160,8 @@ class FacebookFunctions {
                             } else if let result = result as? [String: AnyObject]{
                                 // saves these to parse at every login
                                 print("got result")
+                                
+                                /*
                                 var hasInterestedIn = false
                                 if let interested_in = result["interested_in"] {
                                     localData.setInterestedIn(interested_in as! String)
@@ -117,20 +201,31 @@ class FacebookFunctions {
                                     PFUser.current()?["fb_id"] =  id
                                 }
                                 
-                                if let birthday = result["birthday"] {
+                                if let birthday = result["birthday"] as? String {
                                     print(result["birthday"]!)
                                     print("birthday")
                                     //getting birthday from Facebook and calculating age
                                     PFUser.current()?["fb_birthday"] = birthday
                                     
                                     //getting age from Birthday
-                                    let NSbirthday: Date = birthday as! Date
-                                    let calendar: Calendar = Calendar.current
-                                    let now = Date()
-                                    let age = (calendar as NSCalendar).components(.year, from: NSbirthday, to: now, options: [])
-                                    print(age)
-                                    PFUser.current()?["age"] = age
+                                    let formatter = DateFormatter()
+                                    
+                                    //formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
+                                    formatter.locale = Locale(identifier: "en_US_POSIX")
+                                    formatter.dateFormat = "MM/dd/yyyy"
+                                    
+                                    if let NSbirthday = formatter.date(from: birthday) {
+                                        let calendar: Calendar = Calendar.current
+                                        let now = Date()
+                                        //calendar.component(.year, from: NSbirthday)
+                                        //let secondsInYear = 365*24*60*60
+                                        //let age = Int(now.timeIntervalSince(NSbirthday)) / secondsInYear
+                                        if let age = ((calendar as NSCalendar).components(.year, from: NSbirthday, to: now, options: [])).year {
+                                            PFUser.current()?["age"] = age
+                                        }
+                                    }
                                 }
+                                 */
                                 
                                 //Getting user friends from facebook and then updating the friend_list
                                 if let friends = result["friends"]! as? NSDictionary {
@@ -197,6 +292,10 @@ class FacebookFunctions {
                         //update user and friends
                         //use while access token is nil instead of delay
                         print("not new")
+                        if PFUser.current()?["profile_pictures"] == nil {
+                            self.getProfilePictures()
+                        }
+                        
                         if let _ = (PFUser.current()?["name"]) as? String {
                             let localData = LocalData()
                             localData.setUsername((PFUser.current()?["name"])! as! String)
@@ -249,10 +348,76 @@ class FacebookFunctions {
         
     }
     
+    func getProfilePictures() {
+        print("getting profile pictures")
+        
+        var sources = [String]()
+        
+        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "albums{name, photos.order(reverse_chronological).limit(4){images}}"])
+        graphRequest?.start(completionHandler: { (_, result, error) in
+            if let result = result as? [String:AnyObject] {
+                if let albums = result["albums"] as? [String:AnyObject] {
+                    if let data = albums["data"] as? [AnyObject] {
+                        for album in data {
+                            if let album = album as? [String:AnyObject] {
+                                if let name = album["name"] as? String {
+                                    if name == "Profile Pictures" {
+                                        if let photos = album["photos"] as? [String:AnyObject] {
+                                            if let data2 = photos["data"] as? [AnyObject] {
+                                                for picture in data2 {
+                                                    if let picture = picture as? [String:AnyObject] {
+                                                        if let images = picture["images"] as? [AnyObject] {
+                                                            if images.count > 0 {
+                                                                if let image = images[0] as? [String:AnyObject] {
+                                                                    if let source = image["source"] as? String {
+                                                                        sources.append(source)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            PFUser.current()?["profile_pictures_urls"] = sources
+            PFUser.current()?.saveInBackground(block: { (succeeded, error) in
+                if error != nil {
+                    print(error)
+                }
+            })
+            
+            var imageFiles = [PFFile]()
+            for source in sources {
+                if let url = URL(string: source) {
+                    if let data = try? Data(contentsOf: url) {
+                        let imageFile = PFFile(data: data)!
+                        imageFiles.append(imageFile)
+                    }
+                }
+            }
+            PFUser.current()?["profile_pictures"] = imageFiles
+            PFUser.current()?.saveInBackground()
+        })
+        
+        /*
+        let photosGraphRequest = FBSDKGraphRequest(graphPath: "me/photos", parameters: ["type": "uploaded", "fields": "data.limit(1000)"])
+        print(photosGraphRequest?.graphPath)
+        photosGraphRequest?.start(completionHandler: { (connection, result, error) in
+            print(result ?? "nil")
+        })
+         */
+    }
+    
     //right now just updates users Friends
     /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
     func updateUser() {
-        
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
         graphRequest?.start { (connection, result, error) -> Void in
             if error != nil {

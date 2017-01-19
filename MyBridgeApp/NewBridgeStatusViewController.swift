@@ -485,13 +485,8 @@ class NewBridgeStatusViewController: UIViewController, UITextViewDelegate, UITex
             self.transitionManager.animationDirection = "Bottom"
         } else if mirror.subjectType == MessagesViewController.self {
             self.transitionManager.animationDirection = "Bottom"
-        } else if mirror.subjectType == OptionsFromBotViewController.self {
-            self.transitionManager.animationDirection = "Left"
-            let vc2 = vc as! OptionsFromBotViewController
-            vc2.seguedFrom = seguedFrom
-        }
+        } 
         vc.transitioningDelegate = self.transitionManager
-        
     }
 
     /*

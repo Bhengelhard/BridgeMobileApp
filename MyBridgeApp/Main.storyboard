@@ -37,63 +37,6 @@
             </objects>
             <point key="canvasLocation" x="-1108" y="-171"/>
         </scene>
-        <!--Load Page View Controller-->
-        <scene sceneID="biW-fj-MnX">
-            <objects>
-                <viewController title="Load Page View Controller" id="VvB-sH-Hxl" customClass="LoadPageViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="GNZ-9U-oDd"/>
-                        <viewControllerLayoutGuide type="bottom" id="dqV-EK-GgQ"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ewp-Kf-zdl">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Load Page Option A Scaled to Iphone 6.png" translatesAutoresizingMaskIntoConstraints="NO" id="t8n-RK-RgQ">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Screen over Image.png" translatesAutoresizingMaskIntoConstraints="NO" id="c9w-xs-Vdl">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="necter" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Smv-xO-RG3">
-                                <rect key="frame" x="60" y="261" width="254" height="97"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="75"/>
-                                <color key="textColor" red="0.99607843139999996" green="0.89019607840000003" blue="0.1764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Discover the sweetness of your community" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CWD-hN-Kj8">
-                                <rect key="frame" x="20" y="366" width="335" height="68"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="24"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="t8n-RK-RgQ" secondAttribute="trailing" constant="-20" id="09C-wA-yIN"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="c9w-xs-Vdl" secondAttribute="trailing" constant="-20" id="FkF-Sl-8D9"/>
-                            <constraint firstItem="dqV-EK-GgQ" firstAttribute="top" secondItem="c9w-xs-Vdl" secondAttribute="bottom" id="H0L-Id-6TH"/>
-                            <constraint firstItem="c9w-xs-Vdl" firstAttribute="leading" secondItem="Ewp-Kf-zdl" secondAttribute="leadingMargin" constant="-20" id="MLc-jw-bfC"/>
-                            <constraint firstItem="t8n-RK-RgQ" firstAttribute="top" secondItem="Ewp-Kf-zdl" secondAttribute="topMargin" id="aUN-qW-USo"/>
-                            <constraint firstItem="c9w-xs-Vdl" firstAttribute="top" secondItem="Ewp-Kf-zdl" secondAttribute="topMargin" id="mJ6-VW-1QS"/>
-                            <constraint firstItem="dqV-EK-GgQ" firstAttribute="top" secondItem="t8n-RK-RgQ" secondAttribute="bottom" id="pS5-Gw-Q4h"/>
-                            <constraint firstItem="t8n-RK-RgQ" firstAttribute="leading" secondItem="Ewp-Kf-zdl" secondAttribute="leadingMargin" constant="-20" id="qVl-kE-vDR"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="Vtc-bE-Imc"/>
-                    <connections>
-                        <outlet property="appDescription" destination="CWD-hN-Kj8" id="b7w-U9-gYb"/>
-                        <outlet property="appName" destination="Smv-xO-RG3" id="wPU-x5-w7P"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginFromLoadPage" animates="NO" id="HGT-Vo-Kl8"/>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromLoadPage" id="Lus-h1-21q"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="622-Vr-V33" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-362" y="-1200"/>
-        </scene>
         <!--New Message-->
         <scene sceneID="GLA-rq-wj8">
             <objects>
@@ -132,7 +75,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="96"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="geX-aI-Dai" id="1GK-eo-elS">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JL8-0O-hzJ">
@@ -172,7 +115,7 @@
                                 <items>
                                     <barButtonItem style="plain" id="Nsk-BZ-NOi">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ujX-q0-o8d">
-                                            <rect key="frame" x="16" y="3" width="27" height="39"/>
+                                            <rect key="frame" x="16" y="2.5" width="27" height="39"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" title="Button" image="camera_icon_small.jpg"/>
                                             <connections>
@@ -242,63 +185,6 @@
             </objects>
             <point key="canvasLocation" x="2613.5" y="-1803.5"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Load Page Option A Scaled to Iphone 6.png" translatesAutoresizingMaskIntoConstraints="NO" id="ceO-xL-LOJ">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Screen over Image.png" translatesAutoresizingMaskIntoConstraints="NO" id="fqD-Gr-OBK">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="anP-2u-xN8">
-                                <rect key="frame" x="71" y="445" width="233" height="43"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="20"/>
-                                <state key="normal" title="Login with Facebook"/>
-                                <connections>
-                                    <action selector="fbLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="h5H-0t-AvW"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="necter" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G8m-25-j3c">
-                                <rect key="frame" x="52" y="255" width="271" height="97"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="75"/>
-                                <color key="textColor" red="0.99607843137254903" green="0.8901960784313725" blue="0.17647058823529413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="ceO-xL-LOJ" secondAttribute="trailing" constant="-20" id="ACo-to-lcY"/>
-                            <constraint firstItem="fqD-Gr-OBK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="Gtx-TC-cZs"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="fqD-Gr-OBK" secondAttribute="trailing" constant="-20" id="YWn-X5-fbd"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="fqD-Gr-OBK" secondAttribute="bottom" id="Yb5-Gc-abJ"/>
-                            <constraint firstItem="fqD-Gr-OBK" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="aGH-ca-bP5"/>
-                            <constraint firstItem="ceO-xL-LOJ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="ab8-jK-VY5"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ceO-xL-LOJ" secondAttribute="bottom" id="gCR-xn-fun"/>
-                            <constraint firstItem="ceO-xL-LOJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="qZV-bn-8sG"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="appName" destination="G8m-25-j3c" id="NKv-o8-SXm"/>
-                        <outlet property="fbLoginButton" destination="anP-2u-xN8" id="xF6-Mt-qlx"/>
-                        <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" id="7Zw-u1-iEd"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="297" y="-1200"/>
-        </scene>
         <!--Access View Controller-->
         <scene sceneID="SgD-tP-9oW">
             <objects>
@@ -319,7 +205,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mcU-Go-Vjy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1182" y="-1093"/>
+            <point key="canvasLocation" x="-708" y="-1083"/>
         </scene>
         <!--Sign Up-->
         <scene sceneID="BLG-uK-Zav">
@@ -332,35 +218,15 @@
                     <view key="view" contentMode="scaleAspectFill" id="rP2-HO-xJJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your full name" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LLM-vU-zqu">
-                                <rect key="frame" x="63" y="58" width="178" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="textColor" red="0.24705882352941178" green="0.25098039215686274" blue="0.24313725490196078" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="22"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="nameTextFieldChanges:" destination="nIP-ev-yX8" eventType="editingChanged" id="jxD-wf-aHJ"/>
-                                </connections>
-                            </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ErP-fN-6ni">
-                                <rect key="frame" x="63" y="47" width="268" height="41"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="22"/>
-                                <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <connections>
-                        <outlet property="nameTextField" destination="LLM-vU-zqu" id="vqf-jX-js1"/>
                         <segue destination="ys0-RR-3wC" kind="show" identifier="showTutorial" id="oXV-mI-XnG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Av-h3-KLN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2066" y="-1093"/>
+            <point key="canvasLocation" x="494" y="-1081"/>
         </scene>
         <!--Tutorials View Controller-->
         <scene sceneID="Ich-Kh-Dja">
@@ -381,7 +247,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Okr-SA-oLZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2944" y="-1106"/>
+            <point key="canvasLocation" x="1743" y="-1082"/>
         </scene>
         <!--ProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
@@ -405,7 +271,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FGX-TP-Wxn" id="Czd-tc-gSD">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
@@ -438,7 +304,6 @@
                     <connections>
                         <outlet property="name" destination="5HU-Ir-Pg6" id="eu0-cS-voQ"/>
                         <outlet property="tableView" destination="3js-dl-1M1" id="8nQ-Fb-kdF"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="showLoginView" id="cy1-Ds-r2Z"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewFromProfilePage" id="ORi-q2-txU"/>
                         <segue destination="8CW-0M-81O" kind="show" identifier="showEditProfileViewFromProfilePage" id="0EB-Fw-YUx"/>
                     </connections>
@@ -498,7 +363,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T5a-4r-w51" id="e1H-5M-cRe">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -565,7 +430,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZz-Ig-dI4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="495" y="590"/>
+            <point key="canvasLocation" x="494" y="644"/>
         </scene>
         <!--Single Message View Controller-->
         <scene sceneID="57B-UR-Tv1">
@@ -589,7 +454,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u5J-8h-7eI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1687" y="710"/>
+            <point key="canvasLocation" x="1676" y="644"/>
         </scene>
         <!--External Profile View Controller-->
         <scene sceneID="CaH-1v-N0X">
@@ -610,22 +475,19 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G58-mu-jE9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2500" y="711"/>
+            <point key="canvasLocation" x="2463" y="644"/>
         </scene>
     </scenes>
     <resources>
-        <image name="Load Page Option A Scaled to Iphone 6.png" width="200" height="360"/>
-        <image name="Screen over Image.png" width="200" height="358"/>
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="cC3-sR-uFf"/>
         <segue reference="JHn-8T-jHu"/>
         <segue reference="cjh-Cg-YYX"/>
         <segue reference="xcR-H7-wok"/>
-        <segue reference="EM2-6z-RDo"/>
         <segue reference="0Mi-wm-mTu"/>
-        <segue reference="OnA-y9-bUb"/>
-        <segue reference="B19-eu-GHC"/>
-        <segue reference="HGT-Vo-Kl8"/>
+        <segue reference="VqF-EN-U5i"/>
+        <segue reference="fLD-mo-7R5"/>
     </inferredMetricsTieBreakers>
 </document>
