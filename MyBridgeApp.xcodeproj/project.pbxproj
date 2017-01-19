@@ -654,8 +654,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/BHEngelhard/Desktop/ParseSDK,
-					/Users/BHEngelhard/Desktop/FacebookSDK,
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -684,8 +682,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/BHEngelhard/Desktop/ParseSDK,
-					/Users/BHEngelhard/Desktop/FacebookSDK,
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
