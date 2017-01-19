@@ -57,6 +57,7 @@
 		30E2AF781DDA2AB70023AA95 /* ReasonForConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */; };
 		30EA352B1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */; };
 		67AD26D61E31353400252575 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD26D51E31353400252575 /* Constants.swift */; };
+		67AD26D91E31355600252575 /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD26D81E31355600252575 /* BridgeType.swift */; };
 		814C3ACB1B69877600E307BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814C3AC81B69877600E307BB /* Images.xcassets */; };
 		81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81761A49E0D500E65899 /* libsqlite3.dylib */; };
 		81BA81791A49E0DB00E65899 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81781A49E0DB00E65899 /* AudioToolbox.framework */; };
@@ -147,6 +148,7 @@
 		30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReasonForConnection.swift; path = "Custom Classes/Custom Views/ReasonForConnection.swift"; sourceTree = "<group>"; };
 		30EA352A1D4FD11E00B7F095 /* Load Page Option A Scaled to Iphone 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Page Option A Scaled to Iphone 6.png"; sourceTree = "<group>"; };
 		67AD26D51E31353400252575 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = MyBridgeApp/Constants.swift; sourceTree = "<group>"; };
+		67AD26D81E31355600252575 /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = MyBridgeApp/Types/BridgeType.swift; sourceTree = "<group>"; };
 		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		814C3AC91B69877600E307BB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81BA81451A49DA1800E65899 /* MyBridgeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyBridgeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -288,6 +290,14 @@
 			name = Movies;
 			sourceTree = "<group>";
 		};
+		67AD26D71E31353D00252575 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				67AD26D81E31355600252575 /* BridgeType.swift */,
+			);
+			name = Types;
+			sourceTree = "<group>";
+		};
 		814C3AC51B69877600E307BB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -308,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				67AD26D51E31353400252575 /* Constants.swift */,
+				67AD26D71E31353D00252575 /* Types */,
 				E9D6DF201D78820F00138A1F /* Custom Classes */,
 				81BA81471A49DA1800E65899 /* MyBridgeApp */,
 				30877D9D1E0B7DE600025EB4 /* Movies */,
@@ -497,6 +508,7 @@
 				90FF521C1E2D769B00FB4C90 /* ProfilePicturesView.swift in Sources */,
 				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
 				3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */,
+				67AD26D91E31355600252575 /* BridgeType.swift in Sources */,
 				3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */,
 				3030C0BB1DD54E470077F7AC /* Users.swift in Sources */,
 				30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */,
