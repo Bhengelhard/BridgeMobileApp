@@ -106,16 +106,7 @@ class BridgeViewController: UIViewController {
                 return typesOfColor.business
             }
     }
-    func getCGColor (_ color:typesOfColor) -> CGColor {
-        switch(color) {
-        case typesOfColor.business:
-            return DisplayUtility.businessBlue.cgColor
-        case typesOfColor.love:
-            return  DisplayUtility.loveRed.cgColor
-        case typesOfColor.friendship:
-            return  DisplayUtility.friendshipGreen.cgColor
-        }
-    }
+ 
     func setCityName(_ locationLabel: UILabel, locationCoordinates:[Double], pairing:UserInfoPair) {
         // We will store the city names to LocalData.  Not required now. But will ne be needed in fututre when when optimize. 
         if locationLabel.tag == 0 && pairing.user1?.city != nil {
