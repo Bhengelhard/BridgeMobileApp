@@ -60,7 +60,7 @@ class BridgeViewController: UIViewController {
     //var darkLayer = UIView()
     var secondSwipeCard = SwipeCard()
     var secondSwipeCardSet = false
-	let secondSwipeCardShrinkPercentage = 0.98    
+	let secondSwipeCardShrinkPercentage = 0.98
 
     //navigation bar creation
     var badgeCount = Int()
@@ -904,6 +904,7 @@ class BridgeViewController: UIViewController {
                             self.swipeCardView.center.x = -1.0*DisplayUtility.screenWidth
                             self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                             self.disconnectIcon.alpha = 0.0
+                            self.swipeCardView.overlay.opacity = 0.0
                             }, completion: { (success) in
                                 self.nextPair()
                         })
@@ -919,6 +920,7 @@ class BridgeViewController: UIViewController {
                         self.swipeCardView.center.x = -1.0*DisplayUtility.screenWidth
                         self.disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                         self.disconnectIcon.alpha = 0.0
+                        self.swipeCardView.overlay.opacity = 0.0
                         }, completion: { (success) in
                             self.nextPair()
                     })
@@ -943,6 +945,7 @@ class BridgeViewController: UIViewController {
                             self.swipeCardView.alpha = 0.0
                             self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                             self.connectIcon.alpha = 0.0
+                            self.swipeCardView.overlay.opacity = 0.0
                             }, completion: { (success) in
                                 //self.connectIcon.removeFromSuperview()
                                 self.bridged()
@@ -961,8 +964,8 @@ class BridgeViewController: UIViewController {
                         self.swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                         self.connectIcon.alpha = 0.0
+                        self.swipeCardView.overlay.opacity = 0.0
                         }, completion: { (success) in
-                            //self.connectIcon.removeFromSuperview()
                             self.bridged()
                     })
                     removeCard = false
@@ -979,17 +982,7 @@ class BridgeViewController: UIViewController {
 					swipeCardView = arrayOfCardsInDeck[0]
 					swipeCardView.overlay.removeFromSuperlayer()
 					secondSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
-				}
-
-//                darkLayer.removeFromSuperview()
-//                
-//                //Set new secondSwipeCard and send darkLayer to front of secondSwipeCard
-//                if arrayOfCardsInDeck.count > 1 {
-//                    print("second swipe card is reset")
-//                    secondSwipeCard = arrayOfCardsInDeck[1] as! SwipeCard
-//                    darkLayer.backgroundColor = UIColor.blue
-//                    view.insertSubview(darkLayer, belowSubview: arrayOfCardsInDeck[0])
-//                }
+                }
                 
             } else if showReasonForConnection {
                 
