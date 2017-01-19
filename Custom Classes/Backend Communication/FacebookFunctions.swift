@@ -71,26 +71,6 @@ class FacebookFunctions {
                         } else if let result = result as? [String: AnyObject]{
                             // saves these to parse at every login
                             print("got result")
-                            var hasInterestedIn = false
-                            if let interested_in = result["interested_in"] {
-                                localData.setInterestedIn(interested_in as! String)
-                                PFUser.current()?["interested_in"] = interested_in
-                                hasInterestedIn = true
-                            }
-                            
-                            
-                            if let gender: String = result["gender"]! as? String {
-                                PFUser.current()?["gender"] = gender
-                                PFUser.current()?["fb_gender"] = gender
-                                //saves a guess at the gender the current user is interested in if it doesn't already exist
-                                if hasInterestedIn == false {
-                                    if gender == "male" {
-                                        PFUser.current()?["interested_in"] = "female"
-                                    } else if gender == "female" {
-                                        PFUser.current()?["interested_in"] = "male"
-                                    }
-                                }
-                            }
                             
                             //setting main name and names for Bridge Types to Facebook name
                             if let name = result["name"] {
@@ -105,9 +85,6 @@ class FacebookFunctions {
                             }
                             if let email = result["email"] {
                                 PFUser.current()?["email"] = email
-                            }
-                            if let id = result["id"] {
-                                PFUser.current()?["fb_id"] =  id
                             }
                             
                             if let birthday = result["birthday"] as? String {
@@ -162,26 +139,7 @@ class FacebookFunctions {
                                 print("got result")
                                 
                                 /*
-                                var hasInterestedIn = false
-                                if let interested_in = result["interested_in"] {
-                                    localData.setInterestedIn(interested_in as! String)
-                                    PFUser.current()?["interested_in"] = interested_in
-                                    hasInterestedIn = true
-                                }
                                 
-                                
-                                if let gender: String = result["gender"]! as? String {
-                                    PFUser.current()?["gender"] = gender
-                                    PFUser.current()?["fb_gender"] = gender
-                                    //saves a guess at the gender the current user is interested in if it doesn't already exist
-                                    if hasInterestedIn == false {
-                                        if gender == "male" {
-                                            PFUser.current()?["interested_in"] = "female"
-                                        } else if gender == "female" {
-                                            PFUser.current()?["interested_in"] = "male"
-                                        }
-                                    }
-                                }
                                 
                                 //setting main name and names for Bridge Types to Facebook name
                                 if let name = result["name"] {
@@ -197,9 +155,7 @@ class FacebookFunctions {
                                 if let email = result["email"] {
                                     PFUser.current()?["email"] = email
                                 }
-                                if let id = result["id"] {
-                                    PFUser.current()?["fb_id"] =  id
-                                }
+                                
                                 
                                 if let birthday = result["birthday"] as? String {
                                     print(result["birthday"]!)
@@ -226,6 +182,31 @@ class FacebookFunctions {
                                     }
                                 }
                                  */
+                                
+                                var hasInterestedIn = false
+                                if let interested_in = result["interested_in"] {
+                                    localData.setInterestedIn(interested_in as! String)
+                                    PFUser.current()?["interested_in"] = interested_in
+                                    hasInterestedIn = true
+                                }
+                                
+                                
+                                if let gender: String = result["gender"]! as? String {
+                                    PFUser.current()?["gender"] = gender
+                                    PFUser.current()?["fb_gender"] = gender
+                                    //saves a guess at the gender the current user is interested in if it doesn't already exist
+                                    if hasInterestedIn == false {
+                                        if gender == "male" {
+                                            PFUser.current()?["interested_in"] = "female"
+                                        } else if gender == "female" {
+                                            PFUser.current()?["interested_in"] = "male"
+                                        }
+                                    }
+                                }
+                                
+                                if let id = result["id"] {
+                                    PFUser.current()?["fb_id"] =  id
+                                }
                                 
                                 //Getting user friends from facebook and then updating the friend_list
                                 if let friends = result["friends"]! as? NSDictionary {

@@ -84,6 +84,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         
         view.backgroundColor = .white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         scrollView.backgroundColor = .clear
         let scrollViewEndEditingGR = UITapGestureRecognizer(target: self, action: #selector(endEditing(_:)))
         scrollView.addGestureRecognizer(scrollViewEndEditingGR)
@@ -563,6 +566,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func save(_ sender: UIButton) {
+        /*
+        // FOR TESTING OTHER PROFILE:
+        let otherProfileVC = OtherProfileViewController(userId: "IW33Wt5qvY")
+        self.present(otherProfileVC, animated: true, completion: nil)
+        */
+        
         view.endEditing(true)
         if let user = PFUser.current() {
             user["profile_greeting"] = greeting
@@ -1102,19 +1111,22 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             newHexView.addBorder(width: 1, color: .black)
             
             var images = [UIImage]()
-            var startingImageIndex = 0
+            var originalHexFrames = [CGRect]()
+            var startingIndex = 0
             let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
             for i in 0..<hexViews.count {
                 if let image = hexViews[i].hexBackgroundImage {
                     images.append(image)
+                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
+                    originalHexFrames.append(frame)
                 }
                 if hexViews[i] == hexView {
-                    startingImageIndex = i
+                    startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(hexView: newHexView, images: images, startingImageIndex: startingImageIndex, shouldShowEditButtons: true)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
             self.view.addSubview(profilePicsView)
-            profilePicsView.animate()
+            profilePicsView.animateIn()
         }
     }
     
@@ -1167,6 +1179,37 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     func endEditing(_ gesture: UIGestureRecognizer) {
         view.endEditing(true)
+    }
+    
+    // scroll scroll view when keyboard shows
+    func keyboardWillShow(_ notification:NSNotification) {
+        print("keyboard will show")
+        if let userInfo = notification.userInfo {
+            // get keyboard frame
+            var keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+            keyboardFrame = view.convert(keyboardFrame, from: nil)
+            
+            // update content inset of scroll view
+            scrollView.contentInset.bottom = keyboardFrame.height
+            
+            // update content offset of scroll view
+            scrollView.contentOffset.y = scrollView.contentOffset.y + keyboardFrame.height
+        }
+    }
+    
+    // scroll scroll view when keyboard hides
+    func keyboardWillHide(_ notification:NSNotification){
+        if let userInfo = notification.userInfo {
+            // get keyboard frame
+            var keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+            keyboardFrame = view.convert(keyboardFrame, from: nil)
+        
+            // reset content offset of scroll view
+            scrollView.contentOffset.y = scrollView.contentOffset.y - keyboardFrame.height
+            
+            // reset content inset of scroll view
+            scrollView.contentInset = UIEdgeInsets.zero
+        }
     }
     
 }

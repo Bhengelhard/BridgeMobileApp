@@ -15,6 +15,7 @@ class HexagonView: UIView {
     var border = false
     var borderColor = UIColor.black
     var borderWidth: CGFloat = 1.0
+    var rectangle = false
     
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -27,6 +28,11 @@ class HexagonView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
+        
+        if rectangle {
+            return super.draw(rect)
+        }
+        
         let ctx = UIGraphicsGetCurrentContext()
         
         ctx?.move(to: CGPoint(x: rect.minX, y: rect.midY))
@@ -56,6 +62,10 @@ class HexagonView: UIView {
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        
+        if rectangle {
+            return super.hitTest(point, with: event)
+        }
         
         let path = CGMutablePath()
         
@@ -104,6 +114,13 @@ class HexagonView: UIView {
         border = true
         borderWidth = width
         borderColor = color
+        DispatchQueue.main.async {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    func rectangularize() {
+        rectangle = true
         DispatchQueue.main.async {
             self.setNeedsDisplay()
         }
