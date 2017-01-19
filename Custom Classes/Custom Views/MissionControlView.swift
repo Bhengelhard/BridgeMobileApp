@@ -592,14 +592,4 @@ class MissionControlView: UIView{
         }
         
     }
-
 }
-
-
-
-
-
-
-
-
-
