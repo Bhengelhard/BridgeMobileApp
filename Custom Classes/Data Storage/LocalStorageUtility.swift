@@ -61,7 +61,7 @@ class LocalStorageUtility{
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
         graphRequest?.start{ (connection, result, error) -> Void in
                 if error != nil {
-                print(error)
+                print(error!)
                 }
                 else if let result = result as? [String:AnyObject] {
                 let localData = LocalData()

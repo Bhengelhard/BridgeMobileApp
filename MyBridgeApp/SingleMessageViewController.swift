@@ -201,7 +201,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             }
                         }
                         else {
-                            print(error)
+                            print(error!)
                         }
                     }
                 }
@@ -519,7 +519,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 // push notification ends
                 
             } else {
-                print(error)
+                print(error!)
             }
         }
     }
@@ -545,7 +545,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             let messageQuery = PFQuery(className: "Messages")
             messageQuery.getObjectInBackground(withId: self.messageId, block: { (object, error) in
                 if error != nil {
-                    print(error)
+                    print(error!)
                 } else {
                     let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
                     if let userObjectId1 = CurrentIdsInMessage[0] as? String{
@@ -608,7 +608,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     object!["names_in_message"] = updatedNamesInMessage
                     object!.saveInBackground(block: { (success, error) in
                         if error != nil {
-                            print(error)
+                            print(error!)
                         } else if success {
                             if self.seguedFrom == "BridgeViewController" {
                                 self.performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)

@@ -65,7 +65,7 @@ class FacebookFunctions {
                         
                         if error != nil {
                             
-                            print(error)
+                            print(error!)
                             print("got error")
                             
                         } else if let result = result as? [String: AnyObject]{
@@ -154,7 +154,7 @@ class FacebookFunctions {
                             
                             if error != nil {
                                 
-                                print(error)
+                                print(error!)
                                 print("got error")
                                 
                             } else if let result = result as? [String: AnyObject]{
@@ -238,7 +238,7 @@ class FacebookFunctions {
                                     PFUser.current()?["fb_friends"] = fbFriendIds
                                     PFUser.current()?.saveInBackground(block: { (success, error) in
                                         if error != nil {
-                                            print(error)
+                                            print(error!)
                                         } else {
                                             self.updateFriendList()
                                         }
@@ -389,7 +389,7 @@ class FacebookFunctions {
             PFUser.current()?["profile_pictures_urls"] = sources
             PFUser.current()?.saveInBackground(block: { (succeeded, error) in
                 if error != nil {
-                    print(error)
+                    print(error!)
                 }
             })
             
@@ -422,7 +422,7 @@ class FacebookFunctions {
         graphRequest?.start { (connection, result, error) -> Void in
             if error != nil {
                 
-                print(error)
+                print(error!)
                 
             } else if let result = result as? [String:AnyObject]{
                 
@@ -436,7 +436,7 @@ class FacebookFunctions {
                     PFUser.current()?["fb_friends"] = fbFriendIds
                     PFUser.current()?.saveInBackground(block: { (success, error) in
                         if error != nil {
-                            print(error)
+                            print(error!)
                         } else {
                             self.updateFriendList()
                         }
@@ -458,7 +458,7 @@ class FacebookFunctions {
         
         query.findObjectsInBackground(block: { (objects: [PFObject]?, error: Error?) in
             if error != nil {
-                print(error)
+                print(error!)
             } else if let objects = objects {
                 PFUser.current()?.fetchInBackground(block: { (success, error) in
                     for object in objects {

@@ -20,7 +20,7 @@ class DBRetrievingFunctions {
         acceptedConnectionQuery.whereKey("accepted_notification_viewed", notEqualTo: true)
         acceptedConnectionQuery.findObjectsInBackground { (objects, error) in
             if error != nil {
-                print(error)
+                print(error!)
             } else {
                 print("ran the query")
                 if let objects = objects {

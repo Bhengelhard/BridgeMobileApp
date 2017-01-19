@@ -723,7 +723,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                 if success {
                                     print("current user saved to the message")
                                 } else if error != nil {
-                                    print(error)
+                                    print(error!)
                                 }
                             })
                             

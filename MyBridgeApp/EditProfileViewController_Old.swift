@@ -111,7 +111,7 @@ class EditProfileViewController_Old: UIViewController, UITextFieldDelegate, UIIm
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
         graphRequest?.start{ (connection, result, error) -> Void in
             if error != nil {
-                print(error)
+                print(error!)
             }
             else if let result = result as? [String: AnyObject]{
                 let userId = result["id"]! as! String
@@ -208,7 +208,7 @@ class EditProfileViewController_Old: UIViewController, UITextFieldDelegate, UIIm
             if let pfData = pfData {
                 pfData.getDataInBackground(block: { (data, error) in
                     if error != nil || data == nil {
-                        print(error)
+                        print(error!)
                     } else {
                         let image = UIImage(data: data!, scale: 1.0)
                         self.originalProfilePicture = image!

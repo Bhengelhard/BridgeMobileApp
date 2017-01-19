@@ -177,7 +177,7 @@ class MyProfileViewController: UIViewController {
                     if profilePics.count > i {
                         profilePics[i].getDataInBackground(block: { (data, error) in
                             if error != nil {
-                                print(error)
+                                print(error!)
                             } else {
                                 if let data = data {
                                     if let image = UIImage(data: data) {

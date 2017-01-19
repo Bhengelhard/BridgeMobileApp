@@ -145,7 +145,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             if let pfData = pfData {
                 pfData.getDataInBackground(block: { (data, error) in
                     if error != nil || data == nil {
-                        print(error)
+                        print(error!)
                     } else {
                         DispatchQueue.main.async(execute: {
                             //self.profilePictureButton.setImage(UIImage(data: data!, scale: 1.0), forState:  .Normal)

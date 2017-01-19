@@ -38,7 +38,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
         graphRequest?.start { (connection, result, error) -> Void in
             if error != nil {
-                print(error)
+                print(error!)
             } else if let result = result as? [String:AnyObject]{
                 let friends = result["friends"]! as! NSDictionary
                 let friendsData : NSArray = friends.object(forKey: "data") as! NSArray
@@ -51,7 +51,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                 PFUser.current()?["fb_friends"] = fbFriendIds
                 PFUser.current()?.saveInBackground(block: { (success, error) in
                     if error != nil {
-                        print(error)
+                        print(error!)
                     } else {
                         self.updateFriendList()
                     }
@@ -68,7 +68,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         query.whereKey("fb_id", containedIn: currentUserFbFriends as! [Any])
         query.findObjectsInBackground { (objects: [PFObject]?, error: Error?) in
             if error != nil {
-                print(error)
+                print(error!)
             } else if let objects = objects {
                 PFUser.current()?.fetchInBackground(block: { (success, error) in
                     for object in objects {
@@ -116,7 +116,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                     print("no profile pictures: logging out...")
                     PFUser.logOutInBackground(block: { (error) in
                         if error != nil {
-                            print(error)
+                            print(error!)
                         } else {
                             print("log out successful")
                             self.displayLoginWithFacebook()
