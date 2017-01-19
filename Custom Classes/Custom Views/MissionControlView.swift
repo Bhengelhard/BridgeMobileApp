@@ -256,7 +256,7 @@ class MissionControlView: UIView
         upperHalfView.addSubview(categoryLabel)
     }
     
-    @objc func trendingTapped (_ sender: UIButton) {
+    func trendingTapped (_ sender: UIButton) {
         trendingOptionsView.frame.origin.y = dividingLine.center.y + trendingButton.frame.origin.y - trendingOptionsView.frame.height
         trendingOptionsView.trendingTapped()
     }
