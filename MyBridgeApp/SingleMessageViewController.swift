@@ -741,7 +741,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), for: UIControlEvents.valueChanged)
         singleMessageTableView.addSubview(refresher)
-        singleMessageTableView.register(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
+        singleMessageTableView.register(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell.self))
         messageId = newMessageId
         updateMessages()
         
