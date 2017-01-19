@@ -20,6 +20,18 @@ enum BridgeType: String
 		}
 	}
 
+	init (fromParseValue parseValue: String)
+	{
+		switch parseValue
+		{
+			case "All Types": self = .all
+			case "Business": self = .business
+			case "Love": self = .love 
+			case "Friendship": self = .friendship
+			default: self = .all
+		}
+	}
+
 	var color: UIColor
 	{
 		switch self
