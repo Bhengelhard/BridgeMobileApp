@@ -245,13 +245,15 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         accessTextView.resignFirstResponder()
         
         UIView.animate(withDuration: 0.2) {
-            self.accessTextView.alpha = 1
+            self.accessTextView.alpha = 0
+            self.accessTypeButton.alpha = 0
             fbLoginButton.alpha = 1
             noPostingLabel.alpha = 1
             self.backgroundView.image = #imageLiteral(resourceName: "Access_Background")
         }
         
         accessTextView.removeFromSuperview()
+        accessTypeButton.removeFromSuperview()
     }
     
     func fbLoginTapped (_ sender: UIButton) {
