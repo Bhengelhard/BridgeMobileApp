@@ -236,7 +236,9 @@ class MyProfileViewController: UIViewController {
             let statusButtonWidth = 0.11596*DisplayUtility.screenWidth
             let statusButtonHeight = statusButtonWidth
             
-            grayOutButtons()
+            businessButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
+            loveButton.setImage(UIImage(named: "Profile_Unselected_Dating_Icon"), for: .normal)
+            friendshipButton.setImage(UIImage(named: "Profile_Unselected_Friends_Icon"), for: .normal)
             
             businessButton.frame = CGRect(x: 0.17716*DisplayUtility.screenWidth, y: bottomHexView.frame.maxY + 0.16*DisplayUtility.screenHeight, width: statusButtonWidth, height: statusButtonHeight)
             businessButton.addTarget(self, action: #selector(statusTypeButtonSelected(_:)), for: .touchUpInside)
@@ -475,7 +477,7 @@ class MyProfileViewController: UIViewController {
                         }
                     } else { // unselecting selected type
                         statusButton.setImage(unselectedImage, for: .normal)
-                        statusLabel.text = "Click an icon above to edit current requests."
+                        statusLabel.text = "Click an icon above to see your currently displayed requests."
                         self.statusLabel.frame = CGRect(x: 0, y: self.businessButton.frame.maxY + 0.04*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0)
                         self.statusLabel.sizeToFit()
                         self.statusLabel.center.x = DisplayUtility.screenWidth / 2
@@ -488,12 +490,6 @@ class MyProfileViewController: UIViewController {
                 }
             }
         }
-    }
-    
-    func grayOutButtons() {
-        businessButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
-        loveButton.setImage(UIImage(named: "Profile_Unselected_Dating_Icon"), for: .normal)
-        friendshipButton.setImage(UIImage(named: "Profile_Unselected_Friends_Icon"), for: .normal)
     }
     
     func layoutBottomBasedOnStatus() {
