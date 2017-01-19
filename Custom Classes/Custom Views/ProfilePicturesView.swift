@@ -160,12 +160,25 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         hexView.frame = originalHexFrames[startingIndex]
         hexView.setBackgroundImage(image: images[startingIndex])
         addSubview(hexView)
+        
+        let rectView = UIImageView()
+        rectView.frame = hexView.frame
+        rectView.layer.borderWidth = 1
+        rectView.layer.borderColor = UIColor.black.cgColor
+        rectView.layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: rectView.frame.height / rectView.frame.width)
+        rectView.image = images[startingIndex]
+        rectView.alpha = 0
+        addSubview(rectView)
+
         UIView.animate(withDuration: 0.5, animations: {
             hexView.frame = CGRect(x: 0, y: self.picFrame.minY, width: self.picFrame.width, height: self.picFrame.height)
             hexView.resetBackgroundImage()
+            rectView.frame = CGRect(x: 0, y: self.picFrame.minY, width: self.picFrame.width, height: self.picFrame.height)
+            rectView.alpha = 1
         }) { (finished) in
             if finished {
                 hexView.removeFromSuperview()
+                rectView.removeFromSuperview()
                 self.allPicsVC.view.alpha = 1
                 self.editButtonsView.alpha = 1
             }
@@ -173,17 +186,38 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     }
     
     func animateOut(completion: ((Bool) -> Void)?) {
+        let index = allPicsVC.pageControl.currentPage
+        
         let hexView = HexagonView()
         hexView.frame = CGRect(x: 0, y: self.picFrame.minY, width: self.picFrame.width, height: self.picFrame.height)
-        let index = allPicsVC.pageControl.currentPage
         hexView.setBackgroundImage(image: images[index])
         addSubview(hexView)
+        
+        let rectView = UIImageView()
+        rectView.frame = hexView.frame
+        rectView.layer.borderWidth = 1
+        rectView.layer.borderColor = UIColor.black.cgColor
+        rectView.layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: rectView.frame.height / rectView.frame.width)
+        rectView.image = images[index]
+        rectView.alpha = 1
+        addSubview(rectView)
+        
         self.allPicsVC.view.alpha = 0
         self.editButtonsView.alpha = 0
         UIView.animate(withDuration: 0.5, animations: { 
             hexView.frame = self.originalHexFrames[index]
             hexView.resetBackgroundImage()
-        }, completion: completion)
+            rectView.frame = self.originalHexFrames[index]
+            rectView.alpha = 0
+        }) { (finished) in
+            if (finished) {
+                hexView.removeFromSuperview()
+                rectView.removeFromSuperview()
+            }
+            if let completion = completion {
+                completion(finished)
+            }
+        }
     }
     
     func exit(_ gesture: UIGestureRecognizer) {
