@@ -8,13 +8,16 @@
 
 import Foundation
 import UIKit
+import FBSDKCoreKit
 import Parse
 
-class EditProfileViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
+class EditProfileViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var tempSeguedFrom = ""
     var seguedTo = ""
     var seguedFrom = ""
+    
+    var myProfileVC: MyProfileViewController
     
     let localData = LocalData()
     
@@ -49,6 +52,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     let friendshipStatusButton = UIButton()
     let statusTextView = UITextView()
     var saveButton = UIButton()
+    let uploadMenu = UIView()
+    let imagePicker = UIImagePickerController()
     
     // boolean flags
     var quickUpdatePlaceholder = true
@@ -60,10 +65,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var originallyInterestedFriendship: Bool?
     var greeting = "Hi,"
     var greetings = ["Hi,", "What's Up?", "Hello there,"]
-    var leftHexImage: UIImage?
-    var topHexImage: UIImage?
-    var rightHexImage: UIImage?
-    var bottomHexImage: UIImage?
     var selectedFacts = [String]()
     var businessStatus: String?
     var loveStatus: String?
@@ -77,6 +78,15 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func tappedOutside() {
+    }
+    
+    init(myProfileVC: MyProfileViewController) {
+        self.myProfileVC = myProfileVC
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -203,30 +213,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             bottomHexView.addGestureRecognizer(bottomHexViewGR)
             
             let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            let hexImages = [leftHexImage, topHexImage, rightHexImage, bottomHexImage]
-            let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
+            let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
             for i in 0..<hexViews.count {
-                if let image = hexImages[i] {
+                if let image = myProfileHexViews[i].hexBackgroundImage {
                     hexViews[i].setBackgroundImage(image: image)
-                } else if let profilePics = user["profile_pictures"] as? [PFFile] {
-                    if profilePics.count > i {
-                        profilePics[i].getDataInBackground(block: { (data, error) in
-                            if error != nil {
-                                print(error!)
-                            } else {
-                                if let data = data {
-                                    if let image = UIImage(data: data) {
-                                        hexViews[i].setBackgroundImage(image: image)
-                                    }
-                                }
-                                
-                            }
-                        })
-                    } else {
-                        hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
-                    }
                 } else {
-                    hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
+                    hexViews[i].setBackgroundColor(color: myProfileHexViews[i].hexBackgroundColor)
                 }
             }
             
@@ -557,13 +549,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         }
     }
     
-    func setHexImages(leftHexImage: UIImage?, topHexImage: UIImage?, rightHexImage: UIImage?, bottomHexImage: UIImage?) {
-        self.leftHexImage = leftHexImage
-        self.topHexImage = topHexImage
-        self.rightHexImage = rightHexImage
-        self.bottomHexImage = bottomHexImage
-    }
-    
     func layoutBottomBasedOnFactsView() {
         factsView.frame = CGRect(x: 0, y: quickUpdateView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: factsBackground.frame.maxY)
         statusView.frame = CGRect(x: 0, y: factsView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: statusTextView.frame.maxY)
@@ -575,12 +560,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func exit(_ sender: UIButton) {
+        updateMyProfileHexImages()
         dismiss(animated: false, completion: nil)
     }
     
     func save(_ sender: UIButton) {
-        
         view.endEditing(true)
+        updateMyProfileHexImages()
         if let user = PFUser.current() {
             user["profile_greeting"] = greeting
             
@@ -655,6 +641,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 }
             }
             
+            updateMyProfileStatuses()
+            
             // Adding bridge statuses
             if let businessStatus = businessStatus {
                 if businessStatus != localData.getBusinessStatus() {
@@ -723,6 +711,30 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         
         
         dismiss(animated: false, completion: nil)
+    }
+    
+    func updateMyProfileHexImages() {
+        let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
+        let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+        for i in 0..<myProfileHexViews.count {
+            if let image = hexViews[i].hexBackgroundImage {
+                myProfileHexViews[i].setBackgroundImage(image: image)
+            } else {
+                myProfileHexViews[i].setBackgroundColor(color: hexViews[i].hexBackgroundColor)
+            }
+        }
+    }
+    
+    func updateMyProfileStatuses() {
+        if let businessStatus = businessStatus {
+            myProfileVC.businessStatus = businessStatus
+        }
+        if let loveStatus = loveStatus {
+            myProfileVC.loveStatus = loveStatus
+        }
+        if let friendshipStatus = friendshipStatus {
+            myProfileVC.friendshipStatus = friendshipStatus
+        }
     }
     
     func greetingLabelTapped(_ gesture: UIGestureRecognizer) {
@@ -1165,32 +1177,145 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     func profilePicSelected(_ gesture: UIGestureRecognizer) {
         if let hexView = gesture.view as? HexagonView {
-            let newHexView = HexagonView()
-            newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
-            if let image = hexView.hexBackgroundImage {
-                newHexView.setBackgroundImage(image: image)
-            } else {
-                newHexView.setBackgroundColor(color: hexView.hexBackgroundColor)
-            }
-            newHexView.addBorder(width: 1, color: .black)
-            
-            var images = [UIImage]()
-            var originalHexFrames = [CGRect]()
-            var startingIndex = 0
-            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            for i in 0..<hexViews.count {
-                if let image = hexViews[i].hexBackgroundImage {
-                    images.append(image)
+            if let hexBackgroundImage = hexView.hexBackgroundImage {
+                let newHexView = HexagonView()
+                newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
+                newHexView.setBackgroundImage(image: hexBackgroundImage)
+                newHexView.addBorder(width: 1, color: .black)
+                
+                var images = [UIImage]()
+                var originalHexFrames = [CGRect]()
+                var startingIndex = 0
+                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+                for i in 0..<hexViews.count {
+                    if let image = hexViews[i].hexBackgroundImage {
+                        images.append(image)
+                    }
+                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
+                    originalHexFrames.append(frame)
+                    if hexViews[i] == hexView {
+                        startingIndex = i
+                    }
                 }
-                let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
-                originalHexFrames.append(frame)
-                if hexViews[i] == hexView {
-                    startingIndex = i
+                let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
+                self.view.addSubview(profilePicsView)
+                profilePicsView.animateIn()
+            } else if leftHexView.hexBackgroundImage == nil { // no images
+                uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
+                uploadMenu.center.x = DisplayUtility.screenWidth / 2
+                uploadMenu.backgroundColor = .white
+                view.addSubview(uploadMenu)
+                
+                // add gesture recognizer to hide upload menu
+                let hideUploadMenuGR = UITapGestureRecognizer(target: self, action: #selector(hideUploadMenu(_:)))
+                uploadMenu.addGestureRecognizer(hideUploadMenuGR)
+                
+                let uploadButtonWidth = 0.66*DisplayUtility.screenWidth
+                let uploadButtonHeight = 0.14*DisplayUtility.screenWidth
+                
+                // layout upload from Facebook button
+                let uploadFromFBButton = UIButton()
+                uploadFromFBButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
+                uploadFromFBButton.center.x = uploadMenu.frame.width / 2
+                uploadFromFBButton.center.y = 0.4*uploadMenu.frame.height
+                uploadFromFBButton.setTitle("UPLOAD FROM FACEBOOK", for: .normal)
+                uploadFromFBButton.setTitleColor(.black, for: .normal)
+                uploadFromFBButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+                uploadFromFBButton.titleLabel?.textAlignment = .center
+                uploadFromFBButton.layer.borderWidth = 1
+                uploadFromFBButton.layer.borderColor = UIColor.gray.cgColor
+                uploadFromFBButton.layer.cornerRadius = 0.3*uploadFromFBButton.frame.height
+                
+                // add target to upload from Facebook button
+                uploadFromFBButton.addTarget(self, action: #selector(uploadFromFB(_:)), for: .touchUpInside)
+                
+                uploadMenu.addSubview(uploadFromFBButton)
+                
+                // layout upload from camera roll button
+                let uploadFromCameraRollButton = UIButton()
+                uploadFromCameraRollButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
+                uploadFromCameraRollButton.center.x = uploadMenu.frame.width / 2
+                uploadFromCameraRollButton.center.y = 0.6*uploadMenu.frame.height
+                uploadFromCameraRollButton.setTitle("UPLOAD FROM CAMERA ROLL", for: .normal)
+                uploadFromCameraRollButton.setTitleColor(.black, for: .normal)
+                uploadFromCameraRollButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+                uploadFromCameraRollButton.titleLabel?.textAlignment = .center
+                uploadFromCameraRollButton.layer.borderWidth = 1
+                uploadFromCameraRollButton.layer.borderColor = UIColor.gray.cgColor
+                uploadFromCameraRollButton.layer.cornerRadius = 0.3*uploadFromCameraRollButton.frame.height
+                uploadMenu.addSubview(uploadFromCameraRollButton)
+                
+                // add target to upload from camera roll button
+                uploadFromCameraRollButton.addTarget(self, action: #selector(uploadFromCameraRoll(_:)), for: .touchUpInside)
+                
+                UIView.animate(withDuration: 0.5) { 
+                    self.uploadMenu.frame = self.view.bounds
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
-            self.view.addSubview(profilePicsView)
-            profilePicsView.animateIn()
+        }
+    }
+    
+    func uploadFromFB(_ button: UIButton) {
+        uploadMenu.removeFromSuperview()
+        
+        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
+        graphRequest!.start{ (connection, result, error) -> Void in
+            if error != nil {
+                print(error ?? "error in EditProfileViewController uploadFromFB grapRequest")
+            }
+            else if let result = result as? [String: AnyObject]{
+                let userId = result["id"]! as! String
+                let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
+                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
+                    if let data = try? Data(contentsOf: fbpicUrl) {
+                        DispatchQueue.main.async(execute: {
+                            if let image = UIImage(data: data) {
+                                self.leftHexView.setBackgroundImage(image: image)
+                            }
+                            if let user = PFUser.current() {
+                                if let picFile = PFFile(data: data) {
+                                    user["profile_pictures"] = [picFile]
+                                    user.saveInBackground()
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        }
+    }
+    
+    func uploadFromCameraRoll(_ button: UIButton) {
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    //update the UIImageView once an image has been picked
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        uploadMenu.removeFromSuperview()
+        
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            leftHexView.setBackgroundImage(image: image)
+            if let data = UIImageJPEGRepresentation(image, 1.0) {
+                if let user = PFUser.current() {
+                    if let picFile = PFFile(data: data) {
+                        user["profile_pictures"] = [picFile]
+                        user.saveInBackground()
+                    }
+                }
+            }
+        }
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    
+    func hideUploadMenu(_ gesture: UIGestureRecognizer) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
+        }) { (finished) in
+            if finished {
+                self.uploadMenu.removeFromSuperview()
+            }
         }
     }
     

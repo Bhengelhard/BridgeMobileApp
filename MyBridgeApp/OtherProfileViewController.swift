@@ -191,7 +191,9 @@ class OtherProfileViewController: UIViewController {
             }
             
             let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
+            for hexView in hexViews {
+                hexView.setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
+            }
             if let profilePics = user["profile_pictures"] as? [PFFile] {
                 for i in 0..<hexViews.count {
                     if profilePics.count > i {
@@ -204,8 +206,6 @@ class OtherProfileViewController: UIViewController {
                                         hexViews[i].setBackgroundImage(image: image)
                                         let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
                                         hexViews[i].addGestureRecognizer(hexViewGR)
-                                    } else {
-                                        hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
                                     }
                                 }
                                 
@@ -216,7 +216,7 @@ class OtherProfileViewController: UIViewController {
             }
             else {
                 for hexView in hexViews {
-                    hexView.setBackgroundColor(color: defaultHexBackgroundColor)
+                    hexView.setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
                 }
                 //If the user has not set any profile pictures, then check if the user has something saved in profile_picture_url to set
                 if let urlString = user["profile_picture_url"] as? String {
@@ -230,7 +230,7 @@ class OtherProfileViewController: UIViewController {
                     }
                     
                 }
-                
+
             }
             
             // layout message button

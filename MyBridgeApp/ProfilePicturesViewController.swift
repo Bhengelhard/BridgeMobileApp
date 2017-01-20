@@ -96,7 +96,6 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
     }
     
     func goToPage(index: Int) {
-        print("going to page \(index)")
         if index < vcs.count {
             setViewControllers([vcs[index]], direction: .forward, animated: false, completion: nil)
         }
