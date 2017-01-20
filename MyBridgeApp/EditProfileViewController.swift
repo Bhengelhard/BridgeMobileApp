@@ -247,7 +247,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             quickUpdateTextView.layer.borderWidth = 1
             quickUpdateTextView.layer.borderColor = UIColor.black.cgColor
             quickUpdateTextView.delegate = self
-            quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
+            if let quickUpdate = user["quick_update"] as? String {
+                quickUpdateTextView.text = quickUpdate
+                quickUpdatePlaceholder = false
+            } else {
+                quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
+                quickUpdatePlaceholder = true
+            }
             quickUpdateTextView.textColor = .black
             quickUpdateTextView.textAlignment = .center
             quickUpdateTextView.font = UIFont(name: "BentonSans-Light", size: 14)
@@ -584,7 +590,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         if let user = PFUser.current() {
             user["profile_greeting"] = greeting
             
-            print("quph = \(quickUpdatePlaceholder)")
             if !quickUpdatePlaceholder && quickUpdateTextView.text != "" {
                 user["quick_update"] = quickUpdateTextView.text
             }
