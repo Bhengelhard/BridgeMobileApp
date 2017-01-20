@@ -401,19 +401,19 @@ class OtherProfileViewController: UIViewController {
                 
                 if selectedFacts.contains("Age") {
                     if let age = user["age"] as? Int {
-                        facts.append("I'm \(age)")
+                        facts.append("am \(age)")
                     }
                 }
                 if selectedFacts.contains("City") {
                     if let city = user["city"] as? String {
                         if let currentCity = user["current_city"] as? Bool {
                             if currentCity {
-                                facts.append("I live in \(city)")
+                                facts.append("live in \(city)")
                             } else {
-                                facts.append("I lived in \(city)")
+                                facts.append("lived in \(city)")
                             }
                         } else {
-                            facts.append("I lived in \(city)")
+                            facts.append("lived in \(city)")
                         }
                     }
                 }
@@ -421,12 +421,12 @@ class OtherProfileViewController: UIViewController {
                     if let school = user["school"] as? String {
                         if let currentStudent = user["current_student"] as? Bool {
                             if currentStudent {
-                                facts.append("I go to \(school)")
+                                facts.append("go to \(school)")
                             } else {
-                                facts.append("I went to \(school)")
+                                facts.append("went to \(school)")
                             }
                         } else {
-                            facts.append("I went to \(school)")
+                            facts.append("went to \(school)")
                         }
                     }
                 }
@@ -434,26 +434,31 @@ class OtherProfileViewController: UIViewController {
                     if let work = user["work"] as? String {
                         if let currentWork = user["current_work"] as? Bool {
                             if currentWork {
-                                facts.append("I work at \(work)")
+                                facts.append("work at \(work)")
                             } else {
-                                facts.append("I worked at \(work)")
+                                facts.append("worked at \(work)")
                             }
                         } else {
-                            facts.append("I worked at \(work)")
+                            facts.append("worked at \(work)")
                         }
                     }
                 }
                 if selectedFacts.contains("Religion") {
                     if let religion = user["religion"] as? String {
-                        facts.append("I am \(religion)")
+                        facts.append("am \(religion)")
                     }
                 }
                 if facts.count > 0 {
                     for i in 0..<facts.count {
-                        if i == facts.count - 1 {
-                            factsText = "\(factsText) \(facts[i])."
+                        if i == 0 && i == facts.count - 1 {
+                            factsText = "I \(facts[i])."
+                        }
+                        else if i == 0 {
+                            factsText = "I \(factsText) \(facts[i]), "
+                        } else if i == facts.count - 1 {
+                            factsText = "\(factsText) and \(facts[i])."
                         } else {
-                            factsText = "\(factsText) \(facts[i]),"
+                            factsText = "\(factsText) \(facts[i]), "
                         }
                     }
                     factsTextLabel.text = factsText
