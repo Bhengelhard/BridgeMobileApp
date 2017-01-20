@@ -225,8 +225,8 @@ class OtherProfileViewController: UIViewController {
             messageButton.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.03*DisplayUtility.screenHeight, width: messageButtonWidth, height: messageButtonHeight)
             messageButton.center.x = DisplayUtility.screenWidth / 2
             messageButton.setImage(UIImage(named: "Message_Button"), for: .normal)
-            //messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
-            //scrollView.addSubview(messageButton)
+            messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
+            scrollView.addSubview(messageButton)
             
             let line = UIView()
             let gradientLayer = DisplayUtility.getGradient()
@@ -623,7 +623,16 @@ class OtherProfileViewController: UIViewController {
         self.messageId = id
         self.necterTypeColor = color
         self.singleMessageTitle = title
-        self.performSegue(withIdentifier: "showSingleMessage", sender: self)
+        
+        let singleMessageVC:SingleMessageViewController = SingleMessageViewController()
+        singleMessageVC.isSeguedFromBridgePage = true
+        singleMessageVC.newMessageId = self.messageId
+        singleMessageVC.singleMessageTitle = singleMessageTitle
+        singleMessageVC.seguedFrom = "OtherProfileViewController"
+        singleMessageVC.necterTypeColor = necterTypeColor
+        singleMessageVC.transitioningDelegate = self.transitionManager
+        present(singleMessageVC, animated: true, completion: nil)
+        //self.performSegue(withIdentifier: "showSingleMessage", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

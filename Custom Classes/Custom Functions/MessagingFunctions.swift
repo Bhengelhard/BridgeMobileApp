@@ -31,10 +31,10 @@ class MessagingFunctions {
                 print("message with these users already exists so send users to that message")
                 //message with these users already exists so send users to that message
                 //Transition to single message
-                if let bridgeVC = vc as? BridgeViewController {
-                    if let messageId = object.objectId {
-                        if let type = object["message_type"] as? String {
-                            let color = self.whichColor(type: type)
+                if let messageId = object.objectId {
+                    if let type = object["message_type"] as? String {
+                        let color = self.whichColor(type: type)
+                        if let bridgeVC = vc as? BridgeViewController {
                             if let user1ObjectId = object["user1_objectId"] as? String {
                                 if user1ObjectId != PFUser.current()?.objectId {
                                     if let name = object["user1_name"] as? String {
@@ -49,6 +49,24 @@ class MessagingFunctions {
                             } else {
                                 if let name = object["user2_name"] as? String {
                                     bridgeVC.transitionToMessageWithID(messageId, color: color, title: name)
+                                }
+                            }
+                        } else if let otherProfileVC = vc as? OtherProfileViewController {
+                            //Transition to single message
+                            if let user1ObjectId = object["user1_objectId"] as? String {
+                                if user1ObjectId != PFUser.current()?.objectId {
+                                    if let name = object["user1_name"] as? String {
+                                        otherProfileVC.transitionToMessageWithID(messageId, color: color, title: name)
+                                    }
+                                } else {
+                                    if let name = object["user2_name"] as? String {
+                                        otherProfileVC.transitionToMessageWithID(messageId, color: color, title: name)
+                                    }
+                                    
+                                }
+                            } else {
+                                if let name = object["user2_name"] as? String {
+                                    otherProfileVC.transitionToMessageWithID(messageId, color: color, title: name)
                                 }
                             }
                         }

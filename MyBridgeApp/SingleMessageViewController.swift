@@ -534,8 +534,28 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     }
                 })
             }
+            
+            //Transitioning Back to BridgeViewController
             performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)
-        } else {
+        } else if seguedFrom == "OtherProfileViewController" {
+            //Checking if no messages have been sent and if so deleting the message created for the conversation
+            if noMessagesLabel.alpha == 1.0 {
+                let query = PFQuery(className: "Messages")
+                query.getObjectInBackground(withId: messageId, block: { (object, error) in
+                    if error != nil {
+                        print(error ?? "error in SingleMessagesViewController upon leftBarButtonTapped query")
+                    } else if let object = object {
+                        object.deleteInBackground()
+                    }
+                })
+            }
+            
+            //Transition back to profile
+            self.transitionManager.animationDirection = "Left"
+            self.transitioningDelegate = self.transitionManager
+            dismiss(animated: true, completion: nil)
+        }
+        else {
             performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
         }
         leftBarButton.isSelected = true
