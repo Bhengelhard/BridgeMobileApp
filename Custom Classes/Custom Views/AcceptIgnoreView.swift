@@ -325,24 +325,15 @@ class AcceptIgnoreView: UIView {
                                 //message with these users already exists so send users to that message
                                 //Transition to single message
                                 if let messageId = object.objectId {
-                                    if let type = result["bridge_type"] as? String {
-                                        if let vc = self.vc {
-                                            vc.viewDidLoad()
-                                            if let user1ObjectId = object["user1_objectId"] as? String {
-                                                if otherUser == "user1" {
-                                                    if let name = result["user1_name"] as? String {
-                                                        vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
-                                                    }
-                                                } else {
-                                                    if let name = result["user2_name"] as? String {
-                                                        vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
-                                                    }
-                                                    
-                                                }
-                                            } else {
-                                                if let name = result["user2_name"] as? String {
-                                                    vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
-                                                }
+                                    if let vc = self.vc {
+                                        vc.viewDidLoad()
+                                        if otherUser == "user1" {
+                                            if let name = result["user1_name"] as? String {
+                                                vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
+                                            }
+                                        } else {
+                                            if let name = result["user2_name"] as? String {
+                                                vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
                                             }
                                         }
                                     }
