@@ -46,24 +46,10 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        var minDotX: CGFloat?
-        var maxDotX: CGFloat?
         for i in 0..<pageControl.subviews.count {
             let dot = pageControl.subviews[i]
             dot.layer.borderWidth = 1
             dot.layer.borderColor = UIColor.lightGray.cgColor
-            
-            if minDotX == nil {
-                minDotX = dot.frame.minX
-            } else {
-                minDotX = min(minDotX!, dot.frame.minX)
-            }
-            
-            if maxDotX == nil {
-                maxDotX = dot.frame.maxX
-            } else {
-                maxDotX = max(maxDotX!, dot.frame.maxX)
-            }
         }
     }
     
@@ -109,8 +95,20 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
         }
     }
     
+    func goToPage(index: Int) {
+        print("going to page \(index)")
+        if index < vcs.count {
+            setViewControllers([vcs[index]], direction: .forward, animated: false, completion: nil)
+        }
+    }
+    
     func profilePicturesViewController(_ profilePicturesViewController: ProfilePicturesViewController, didUpdatePageCount count: Int) {
         pageControl.numberOfPages = count
+        for i in 0..<pageControl.subviews.count {
+            let dot = pageControl.subviews[i]
+            dot.layer.borderWidth = 1
+            dot.layer.borderColor = UIColor.lightGray.cgColor
+        }
         if count == 0 {
             pageControl.alpha = 0
         } else {

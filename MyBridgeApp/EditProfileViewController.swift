@@ -777,22 +777,26 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                     facts.append("am \(religion)")
                 }
             }
+            var factsText = ""
             if facts.count > 0 {
                 for i in 0..<facts.count {
                     if i == 0 && i == facts.count - 1 {
-                        factsTextView.text = "I \(facts[i])."
+                        factsText = "I \(facts[i])."
                     }
                     else if i == 0 {
-                        factsTextView.text = "I \(factsTextView.text) \(facts[i]), "
+                        factsText = "I \(factsText) \(facts[i]), "
                     } else if i == facts.count - 1 {
-                        factsTextView.text = "\(factsTextView.text) and \(facts[i])."
+                        factsText = "\(factsText) and \(facts[i])."
                     } else {
-                        factsTextView.text = "\(factsTextView.text) \(facts[i]), "
+                        factsText = "\(factsText) \(facts[i]), "
                     }
                 }
             } else {
-                factsTextView.text = "Click to select from available facts and\ndisplay information."
+                factsText = "Click to select from available facts and\ndisplay information."
             }
+            
+            factsTextView.text = factsText
+            
             
             DisplayUtility.centerTextVerticallyInTextView(textView: factsTextView)
         }
@@ -1135,9 +1139,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             for i in 0..<hexViews.count {
                 if let image = hexViews[i].hexBackgroundImage {
                     images.append(image)
-                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
-                    originalHexFrames.append(frame)
                 }
+                let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
+                originalHexFrames.append(frame)
                 if hexViews[i] == hexView {
                     startingIndex = i
                 }

@@ -396,7 +396,6 @@ class OtherProfileViewController: UIViewController {
     func writeFacts() -> Bool {
         if let user = user {
             if let selectedFacts = user["selected_facts"] as? [String] {
-                var factsText = ""
                 var facts = [String]()
                 
                 if selectedFacts.contains("Age") {
@@ -448,6 +447,7 @@ class OtherProfileViewController: UIViewController {
                         facts.append("am \(religion)")
                     }
                 }
+                var factsText = ""
                 if facts.count > 0 {
                     for i in 0..<facts.count {
                         if i == 0 && i == facts.count - 1 {
