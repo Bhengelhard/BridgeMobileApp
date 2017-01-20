@@ -8,9 +8,10 @@
 
 import Foundation
 import UIKit
+import FBSDKCoreKit
 import Parse
 
-class EditProfileViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
+class EditProfileViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var tempSeguedFrom = ""
     var seguedTo = ""
@@ -51,6 +52,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     let friendshipStatusButton = UIButton()
     let statusTextView = UITextView()
     var saveButton = UIButton()
+    let uploadMenu = UIView()
+    let imagePicker = UIImagePickerController()
     
     // boolean flags
     var quickUpdatePlaceholder = true
@@ -1177,8 +1180,121 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
                 self.view.addSubview(profilePicsView)
                 profilePicsView.animateIn()
-            } else if hexView == leftHexView { // no images
+            } else if leftHexView.hexBackgroundImage == nil { // no images
+                uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
+                uploadMenu.center.x = DisplayUtility.screenWidth / 2
+                uploadMenu.backgroundColor = .white
+                view.addSubview(uploadMenu)
                 
+                // add gesture recognizer to hide upload menu
+                let hideUploadMenuGR = UITapGestureRecognizer(target: self, action: #selector(hideUploadMenu(_:)))
+                uploadMenu.addGestureRecognizer(hideUploadMenuGR)
+                
+                let uploadButtonWidth = 0.66*DisplayUtility.screenWidth
+                let uploadButtonHeight = 0.14*DisplayUtility.screenWidth
+                
+                // layout upload from Facebook button
+                let uploadFromFBButton = UIButton()
+                uploadFromFBButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
+                uploadFromFBButton.center.x = uploadMenu.frame.width / 2
+                uploadFromFBButton.center.y = 0.4*uploadMenu.frame.height
+                uploadFromFBButton.setTitle("UPLOAD FROM FACEBOOK", for: .normal)
+                uploadFromFBButton.setTitleColor(.black, for: .normal)
+                uploadFromFBButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+                uploadFromFBButton.titleLabel?.textAlignment = .center
+                uploadFromFBButton.layer.borderWidth = 1
+                uploadFromFBButton.layer.borderColor = UIColor.gray.cgColor
+                uploadFromFBButton.layer.cornerRadius = 0.3*uploadFromFBButton.frame.height
+                
+                // add target to upload from Facebook button
+                uploadFromFBButton.addTarget(self, action: #selector(uploadFromFB(_:)), for: .touchUpInside)
+                
+                uploadMenu.addSubview(uploadFromFBButton)
+                
+                // layout upload from camera roll button
+                let uploadFromCameraRollButton = UIButton()
+                uploadFromCameraRollButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
+                uploadFromCameraRollButton.center.x = uploadMenu.frame.width / 2
+                uploadFromCameraRollButton.center.y = 0.6*uploadMenu.frame.height
+                uploadFromCameraRollButton.setTitle("UPLOAD FROM CAMERA ROLL", for: .normal)
+                uploadFromCameraRollButton.setTitleColor(.black, for: .normal)
+                uploadFromCameraRollButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+                uploadFromCameraRollButton.titleLabel?.textAlignment = .center
+                uploadFromCameraRollButton.layer.borderWidth = 1
+                uploadFromCameraRollButton.layer.borderColor = UIColor.gray.cgColor
+                uploadFromCameraRollButton.layer.cornerRadius = 0.3*uploadFromCameraRollButton.frame.height
+                uploadMenu.addSubview(uploadFromCameraRollButton)
+                
+                // add target to upload from camera roll button
+                uploadFromCameraRollButton.addTarget(self, action: #selector(uploadFromCameraRoll(_:)), for: .touchUpInside)
+                
+                UIView.animate(withDuration: 0.5) { 
+                    self.uploadMenu.frame = self.view.bounds
+                }
+            }
+        }
+    }
+    
+    func uploadFromFB(_ button: UIButton) {
+        uploadMenu.removeFromSuperview()
+        
+        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
+        graphRequest?.start{ (connection, result, error) -> Void in
+            if error != nil {
+                print(error)
+            }
+            else if let result = result as? [String: AnyObject]{
+                let userId = result["id"]! as! String
+                let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
+                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
+                    if let data = try? Data(contentsOf: fbpicUrl) {
+                        DispatchQueue.main.async(execute: {
+                            if let image = UIImage(data: data) {
+                                self.leftHexView.setBackgroundImage(image: image)
+                            }
+                            if let user = PFUser.current() {
+                                if let picFile = PFFile(data: data) {
+                                    user["profile_pictures"] = [picFile]
+                                    user.saveInBackground()
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        }
+    }
+    
+    func uploadFromCameraRoll(_ button: UIButton) {
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    //update the UIImageView once an image has been picked
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        uploadMenu.removeFromSuperview()
+        
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            leftHexView.setBackgroundImage(image: image)
+            if let data = UIImageJPEGRepresentation(image, 1.0) {
+                if let user = PFUser.current() {
+                    if let picFile = PFFile(data: data) {
+                        user["profile_pictures"] = [picFile]
+                        user.saveInBackground()
+                    }
+                }
+            }
+        }
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    
+    func hideUploadMenu(_ gesture: UIGestureRecognizer) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
+        }) { (finished) in
+            if finished {
+                self.uploadMenu.removeFromSuperview()
             }
         }
     }
