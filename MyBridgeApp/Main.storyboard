@@ -275,7 +275,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
-                                                    <rect key="frame" x="165" y="13" width="44.5" height="17"/>
+                                                    <rect key="frame" x="165" y="13" width="45" height="17"/>
                                                     <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -507,11 +507,11 @@
     <inferredMetricsTieBreakers>
         <segue reference="JHn-8T-jHu"/>
         <segue reference="WWN-20-fau"/>
-        <segue reference="wYg-RW-AbN"/>
-        <segue reference="OnA-y9-bUb"/>
+        <segue reference="00U-Jg-Jap"/>
+        <segue reference="Cel-NN-deF"/>
+        <segue reference="r1p-Ao-g6W"/>
+        <segue reference="fLD-mo-7R5"/>
         <segue reference="1Bx-ML-R6e"/>
-        <segue reference="mf0-bu-EW9"/>
-        <segue reference="B19-eu-GHC"/>
         <segue reference="xcR-H7-wok"/>
     </inferredMetricsTieBreakers>
 </document>

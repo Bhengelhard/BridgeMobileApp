@@ -56,12 +56,16 @@ class AcceptedConnectionNotification: UIView {
     //open user1's profile upon tapping user1ProfilePicture
     @objc func user1ProfilePictureTapped(_ sender: UIButton) {
         print("user1ProfilePictureTapped")
+        let profileVC = OtherProfileViewController(userId: user1ObjectId)
+        vc.present(profileVC, animated: false, completion: nil)
         
     }
     
     //open user2's profile upon tapping user2ProfilePicture
     @objc func user2ProfilePictureTapped(_ sender: UIButton) {
         print("user2ProfilePictureTapped")
+        let profileVC = OtherProfileViewController(userId: user2ObjectId)
+        vc.present(profileVC, animated: false, completion: nil)
     }
     
     //open message between current user and user1 upon tapping leftMessageButton

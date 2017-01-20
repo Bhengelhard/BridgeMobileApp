@@ -522,7 +522,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
-        performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
+        if seguedFrom == "BridgeViewController" {
+            performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)
+        } else {
+            performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
+        }
         leftBarButton.isSelected = true
     }
     func rightBarButtonTapped (_ sender: UIBarButtonItem){
