@@ -16,6 +16,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var seguedTo = ""
     var seguedFrom = ""
     
+    var myProfileVC: MyProfileViewController
+    
     let localData = LocalData()
     
     // views
@@ -60,10 +62,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var originallyInterestedFriendship: Bool?
     var greeting = "Hi,"
     var greetings = ["Hi,", "What's Up?", "Hello there,"]
-    var leftHexImage: UIImage?
-    var topHexImage: UIImage?
-    var rightHexImage: UIImage?
-    var bottomHexImage: UIImage?
     var selectedFacts = [String]()
     var businessStatus: String?
     var loveStatus: String?
@@ -77,6 +75,15 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func tappedOutside() {
+    }
+    
+    init(myProfileVC: MyProfileViewController) {
+        self.myProfileVC = myProfileVC
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -203,30 +210,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             bottomHexView.addGestureRecognizer(bottomHexViewGR)
             
             let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            let hexImages = [leftHexImage, topHexImage, rightHexImage, bottomHexImage]
-            let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
+            let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
             for i in 0..<hexViews.count {
-                if let image = hexImages[i] {
+                if let image = myProfileHexViews[i].hexBackgroundImage {
                     hexViews[i].setBackgroundImage(image: image)
-                } else if let profilePics = user["profile_pictures"] as? [PFFile] {
-                    if profilePics.count > i {
-                        profilePics[i].getDataInBackground(block: { (data, error) in
-                            if error != nil {
-                                print(error!)
-                            } else {
-                                if let data = data {
-                                    if let image = UIImage(data: data) {
-                                        hexViews[i].setBackgroundImage(image: image)
-                                    }
-                                }
-                                
-                            }
-                        })
-                    } else {
-                        hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
-                    }
                 } else {
-                    hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
+                    hexViews[i].setBackgroundColor(color: myProfileHexViews[i].hexBackgroundColor)
                 }
             }
             
@@ -563,13 +552,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         }
     }
     
-    func setHexImages(leftHexImage: UIImage?, topHexImage: UIImage?, rightHexImage: UIImage?, bottomHexImage: UIImage?) {
-        self.leftHexImage = leftHexImage
-        self.topHexImage = topHexImage
-        self.rightHexImage = rightHexImage
-        self.bottomHexImage = bottomHexImage
-    }
-    
     func layoutBottomBasedOnFactsView() {
         factsView.frame = CGRect(x: 0, y: quickUpdateView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: factsBackground.frame.maxY)
         statusView.frame = CGRect(x: 0, y: factsView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: statusTextView.frame.maxY)
@@ -581,12 +563,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func exit(_ sender: UIButton) {
+        updateMyProfileHexImages()
         dismiss(animated: false, completion: nil)
     }
     
     func save(_ sender: UIButton) {
-        
         view.endEditing(true)
+        updateMyProfileHexImages()
         if let user = PFUser.current() {
             user["profile_greeting"] = greeting
             
@@ -661,6 +644,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 }
             }
             
+            updateMyProfileStatuses()
+            
             // Adding bridge statuses
             if let businessStatus = businessStatus {
                 if businessStatus != localData.getBusinessStatus() {
@@ -723,6 +708,30 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         
         
         dismiss(animated: false, completion: nil)
+    }
+    
+    func updateMyProfileHexImages() {
+        let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
+        let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+        for i in 0..<myProfileHexViews.count {
+            if let image = hexViews[i].hexBackgroundImage {
+                myProfileHexViews[i].setBackgroundImage(image: image)
+            } else {
+                myProfileHexViews[i].setBackgroundColor(color: hexViews[i].hexBackgroundColor)
+            }
+        }
+    }
+    
+    func updateMyProfileStatuses() {
+        if let businessStatus = businessStatus {
+            myProfileVC.businessStatus = businessStatus
+        }
+        if let loveStatus = loveStatus {
+            myProfileVC.loveStatus = loveStatus
+        }
+        if let friendshipStatus = friendshipStatus {
+            myProfileVC.friendshipStatus = friendshipStatus
+        }
     }
     
     func greetingLabelTapped(_ gesture: UIGestureRecognizer) {
@@ -1145,32 +1154,32 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     func profilePicSelected(_ gesture: UIGestureRecognizer) {
         if let hexView = gesture.view as? HexagonView {
-            let newHexView = HexagonView()
-            newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
-            if let image = hexView.hexBackgroundImage {
-                newHexView.setBackgroundImage(image: image)
-            } else {
-                newHexView.setBackgroundColor(color: hexView.hexBackgroundColor)
-            }
-            newHexView.addBorder(width: 1, color: .black)
-            
-            var images = [UIImage]()
-            var originalHexFrames = [CGRect]()
-            var startingIndex = 0
-            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            for i in 0..<hexViews.count {
-                if let image = hexViews[i].hexBackgroundImage {
-                    images.append(image)
+            if let hexBackgroundImage = hexView.hexBackgroundImage {
+                let newHexView = HexagonView()
+                newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
+                newHexView.setBackgroundImage(image: hexBackgroundImage)
+                newHexView.addBorder(width: 1, color: .black)
+                
+                var images = [UIImage]()
+                var originalHexFrames = [CGRect]()
+                var startingIndex = 0
+                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+                for i in 0..<hexViews.count {
+                    if let image = hexViews[i].hexBackgroundImage {
+                        images.append(image)
+                    }
+                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
+                    originalHexFrames.append(frame)
+                    if hexViews[i] == hexView {
+                        startingIndex = i
+                    }
                 }
-                let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
-                originalHexFrames.append(frame)
-                if hexViews[i] == hexView {
-                    startingIndex = i
-                }
+                let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
+                self.view.addSubview(profilePicsView)
+                profilePicsView.animateIn()
+            } else if hexView == leftHexView { // no images
+                
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
-            self.view.addSubview(profilePicsView)
-            profilePicsView.animateIn()
         }
     }
     

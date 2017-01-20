@@ -30,9 +30,12 @@ class MyProfileViewController: UIViewController {
     let loveButton = UIButton()
     let friendshipButton = UIButton()
     let statusLabel = UILabel()
-    var businessStatus = "You have not yet posted a request for work."
-    var loveStatus = "You have not yet posted a request for dating."
-    var friendshipStatus = "You have not yet posted a request for friendship."
+    let businessStatusPlaceholder = "You have not yet posted a request for work."
+    let loveStatusPlaceholder = "You have not yet posted a request for dating."
+    let friendshipStatusPlaceholder = "You have not yet posted a request for friendship."
+    var businessStatus = ""
+    var loveStatus = ""
+    var friendshipStatus = ""
     var businessStatusSet = false
     var loveStatusSet = false
     var friendshipStatusSet = false
@@ -176,7 +179,9 @@ class MyProfileViewController: UIViewController {
             scrollView.addSubview(bottomHexView)
             
             let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
+            for hexView in hexViews {
+                hexView.setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
+            }
             if let profilePics = user["profile_pictures"] as? [PFFile] {
                 for i in 0..<hexViews.count {
                     if profilePics.count > i {
@@ -189,18 +194,12 @@ class MyProfileViewController: UIViewController {
                                         hexViews[i].setBackgroundImage(image: image)
                                         let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
                                         hexViews[i].addGestureRecognizer(hexViewGR)
-                                    } else {
-                                        hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
                                     }
                                 }
                                 
                             }
                         })
                     }
-                }
-            } else {
-                for hexView in hexViews {
-                    hexView.setBackgroundColor(color: defaultHexBackgroundColor)
                 }
             }
             
@@ -260,6 +259,10 @@ class MyProfileViewController: UIViewController {
             friendshipButton.frame = CGRect(x: DisplayUtility.screenWidth - businessButton.frame.maxX, y: businessButton.frame.minY, width: statusButtonWidth, height: statusButtonHeight)
             friendshipButton.addTarget(self, action: #selector(statusTypeButtonSelected(_:)), for: .touchUpInside)
             scrollView.addSubview(friendshipButton)
+            
+            businessStatus = businessStatusPlaceholder
+            loveStatus = loveStatusPlaceholder
+            friendshipStatus = friendshipStatusPlaceholder
             
             statusLabel.textColor = UIColor.init(red: 56/255.0, green: 56/255.0, blue: 56/255.0, alpha: 1.0)
             statusLabel.textAlignment = .center
@@ -327,8 +330,7 @@ class MyProfileViewController: UIViewController {
     //Send user to the editProfileViewController so they can edit their profile
     func editProfileButtonTapped(_ sender: UIButton) {
         //performSegue(withIdentifier: "showEditProfileFromMyProfile", sender: self)
-        let editProfileVC = EditProfileViewController()
-        editProfileVC.setHexImages(leftHexImage: leftHexView.hexBackgroundImage, topHexImage: topHexView.hexBackgroundImage, rightHexImage: rightHexView.hexBackgroundImage, bottomHexImage: bottomHexView.hexBackgroundImage)
+        let editProfileVC = EditProfileViewController(myProfileVC: self)
         present(editProfileVC, animated: false, completion: nil)
     }
     

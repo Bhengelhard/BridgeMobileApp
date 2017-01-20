@@ -47,7 +47,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             singlePicVCs.append(singlePicVC)
         }
         
-        allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingIndex])
+        self.allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingIndex])
         
         super.init(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
         
@@ -239,8 +239,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             if i < images.count {
                 hexViews[i].setBackgroundImage(image: images[i])
             } else {
-                let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
-                hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
+                hexViews[i].setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
             }
         }
         self.animateOut { (finished) in

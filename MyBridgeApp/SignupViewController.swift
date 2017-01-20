@@ -60,6 +60,9 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
         
         view.backgroundColor = .white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         scrollView.backgroundColor = .clear
         let scrollViewEndEditingGR = UITapGestureRecognizer(target: self, action: #selector(endEditing(_:)))
         scrollView.addGestureRecognizer(scrollViewEndEditingGR)
@@ -94,26 +97,9 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             let hexWidth = 0.38154*DisplayUtility.screenWidth
             let hexHeight = hexWidth * sqrt(3) / 2
             
-            let downloader = Downloader()
-            
             //setting frame and image for topHexView
             topHexView.frame = CGRect(x: 0, y: 0, width: hexWidth, height: hexHeight)
             topHexView.center.x = DisplayUtility.screenWidth / 2
-            
-            //Setting static profile images for tech Demo
-            let image1 = #imageLiteral(resourceName: "ProfPic2.jpg")
-            //setImageToHexagon(image: image1, hexView: topHexView)
-            topHexView.setBackgroundImage(image: image1)
-            
-            //            if let data = localData.getMainProfilePicture() {
-            //                if let image = UIImage(data: data) {
-            //                    setImageToHexagon(image: image, hexView: topHexView)
-            //                }
-            //            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-            //                downloader.imageFromURL(URL: url, callBack: { (image) in
-            //                    self.setImageToHexagon(image: image, hexView: self.topHexView)
-            //                })
-            //            }
             scrollView.addSubview(topHexView)
             
             let topHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
@@ -123,66 +109,68 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
             let borderColor = DisplayUtility.gradientColor(size: leftHexView.frame.size)
             leftHexView.addBorder(width: 3.0, color: borderColor)
-            //leftHexView.setNeedsDisplay()
-            if let data = localData.getMainProfilePicture() {
-                if let image = UIImage(data: data) {
-                    self.leftHexView.setBackgroundImage(image: image)
-                }
-            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-                downloader.imageFromURL(URL: url, callBack: { (image) in
-                    //self.setImageToHexagon(image: image, hexView: self.leftHexView)
-                    self.leftHexView.setBackgroundImage(image: image)
-                    //Saviong mainProfilePicture to device if it has not already been saved
-                    if let data = UIImageJPEGRepresentation(image, 1.0){
-                        self.localData.setMainProfilePicture(data)
-                    }
-                })
-            }
+            
+            /*
+             let downloader = Downloader()
+             
+             if let data = localData.getMainProfilePicture() {
+             if let image = UIImage(data: data) {
+             self.leftHexView.setBackgroundImage(image: image)
+             }
+             } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
+             downloader.imageFromURL(URL: url, callBack: { (image) in
+             //self.setImageToHexagon(image: image, hexView: self.leftHexView)
+             self.leftHexView.setBackgroundImage(image: image)
+             //Saviong mainProfilePicture to device if it has not already been saved
+             if let data = UIImageJPEGRepresentation(image, 1.0){
+             self.localData.setMainProfilePicture(data)
+             }
+             })
+             }
+             */
             scrollView.addSubview(leftHexView)
             
             let leftHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
             leftHexView.addGestureRecognizer(leftHexViewGR)
             
-            //setting frame and image for rightHexView
+            //setting frame for rightHexView
             rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            //Setting static profile images for tech Demo
-            let image2 = #imageLiteral(resourceName: "profpic3.jpg")
-            //setImageToHexagon(image: image2, hexView: rightHexView)
-            rightHexView.setBackgroundImage(image: image2)
-            
-            //            if let data = localData.getMainProfilePicture() {
-            //                if let image = UIImage(data: data) {
-            //                    setImageToHexagon(image: image, hexView: rightHexView)
-            //                }
-            //            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-            //                downloader.imageFromURL(URL: url, callBack: { (image) in
-            //                    self.setImageToHexagon(image: image, hexView: self.rightHexView)
-            //                })
-            //            }
             scrollView.addSubview(rightHexView)
             
             let rightHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
             rightHexView.addGestureRecognizer(rightHexViewGR)
             
-            //setting frame and image for bottomHexView
+            //setting frame for bottomHexView
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
-            //Setting static profile images for tech Demo
-            let image3 = #imageLiteral(resourceName: "profPic4.jpg")
-            //setImageToHexagon(image: image3, hexView: bottomHexView)
-            bottomHexView.setBackgroundImage(image: image3)
-            //            if let data = localData.getMainProfilePicture() {
-            //                if let image = UIImage(data: data) {
-            //                    setImageToHexagon(image: image, hexView: bottomHexView)
-            //                }
-            //            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-            //                downloader.imageFromURL(URL: url, callBack: { (image) in
-            //                    self.setImageToHexagon(image: image, hexView: self.bottomHexView)
-            //                })
-            //            }
             scrollView.addSubview(bottomHexView)
             
             let bottomHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
             bottomHexView.addGestureRecognizer(bottomHexViewGR)
+            
+            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+            for hexView in hexViews {
+                hexView.setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
+            }
+            if let profilePics = user["profile_pictures"] as? [PFFile] {
+                for i in 0..<hexViews.count {
+                    if profilePics.count > i {
+                        profilePics[i].getDataInBackground(block: { (data, error) in
+                            if error != nil {
+                                print(error!)
+                            } else {
+                                if let data = data {
+                                    if let image = UIImage(data: data) {
+                                        hexViews[i].setBackgroundImage(image: image)
+                                        let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
+                                        hexViews[i].addGestureRecognizer(hexViewGR)
+                                    }
+                                }
+                                
+                            }
+                        })
+                    }
+                }
+            }
             
             let visibilityLabel = UILabel()
             visibilityLabel.text = "SHOW MY PROFILE FOR:"
@@ -338,6 +326,79 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                     print("User did not save successfuly")
                 }
             })
+            
+            // update status of current type based on current text in text view
+            if currentStatusType == "Business" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    businessStatus = nil
+                } else {
+                    businessStatus = statusTextView.text
+                }
+            } else if currentStatusType == "Love" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    loveStatus = nil
+                } else {
+                    loveStatus = statusTextView.text
+                }
+            } else if currentStatusType == "Friendship" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    friendshipStatus = nil
+                } else {
+                    friendshipStatus = statusTextView.text
+                }
+            }
+            
+            // Adding bridge statuses
+            if let businessStatus = businessStatus {
+                localData.setBusinessStatus(businessStatus)
+                let bridgeStatus = PFObject(className: "BridgeStatus")
+                bridgeStatus["bridge_status"] = businessStatus
+                bridgeStatus["bridge_type"] = "Business"
+                bridgeStatus["userId"] = user.objectId
+                bridgeStatus.saveInBackground(block: { (succeeded, error) in
+                    if error != nil {
+                        print("BridgeStatus save error: \(error)")
+                    } else if succeeded {
+                        print("BridgeStatus saved successfully")
+                    } else {
+                        print("BridgeStatus did not save successfully")
+                    }
+                })
+            }
+            
+            if let loveStatus = loveStatus {
+                localData.setLoveStatus(loveStatus)
+                let bridgeStatus = PFObject(className: "BridgeStatus")
+                bridgeStatus["bridge_status"] = loveStatus
+                bridgeStatus["bridge_type"] = "Love"
+                bridgeStatus["userId"] = user.objectId
+                bridgeStatus.saveInBackground(block: { (succeeded, error) in
+                    if error != nil {
+                        print("BridgeStatus save error: \(error)")
+                    } else if succeeded {
+                        print("BridgeStatus saved successfully")
+                    } else {
+                        print("BridgeStatus did not save successfully")
+                    }
+                })
+            }
+            
+            if let friendshipStatus = friendshipStatus {
+                localData.setFriendshipStatus(friendshipStatus)
+                let bridgeStatus = PFObject(className: "BridgeStatus")
+                bridgeStatus["bridge_status"] = friendshipStatus
+                bridgeStatus["bridge_type"] = "Friendship"
+                bridgeStatus["userId"] = user.objectId
+                bridgeStatus.saveInBackground(block: { (succeeded, error) in
+                    if error != nil {
+                        print("BridgeStatus save error: \(error)")
+                    } else if succeeded {
+                        print("BridgeStatus saved successfully")
+                    } else {
+                        print("BridgeStatus did not save successfully")
+                    }
+                })
+            }
         }
         performSegue(withIdentifier: "showTutorial", sender: self)
     }
@@ -402,6 +463,37 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
     }
     
     func statusButtonSelected(_ sender: UIButton) {
+        
+        // update status of current type based on current text in text view
+        if currentStatusType == "Business" {
+            if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                noBusinessStatus = true
+                businessStatus = nil
+            } else {
+                noBusinessStatus = false
+                businessStatus = statusTextView.text
+            }
+        } else if currentStatusType == "Love" {
+            if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                noLoveStatus = true
+                loveStatus = nil
+            } else {
+                noLoveStatus = false
+                loveStatus = statusTextView.text
+            }
+        } else if currentStatusType == "Friendship" {
+            if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                noFriendshipStatus = true
+                friendshipStatus = nil
+            } else {
+                noFriendshipStatus = false
+                friendshipStatus = statusTextView.text
+            }
+        }
+        
+        // stop editing textViews
+        view.endEditing(true)
+        
         for statusButton in [businessStatusButton, loveStatusButton, friendshipStatusButton] {
             var selectedImage: UIImage?
             var unselectedImage: UIImage?
@@ -416,25 +508,17 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                 unselectedImage = UIImage(named: "Profile_Unselected_Friends_Icon")
             }
             if sender == statusButton {
-                if currentStatusType == "Business" {
-                    businessStatus = statusTextView.text
-                } else if currentStatusType == "Love" {
-                    loveStatus = statusTextView.text
-                } else if currentStatusType == "Friendship" {
-                    friendshipStatus = statusTextView.text
-                }
                 if let unselectedImage = unselectedImage,
                     let selectedImage = selectedImage {
+                    // selecting unselected type
                     if statusButton.image(for: .normal) == unselectedImage {
                         statusButton.setImage(selectedImage, for: .normal)
                         statusTextView.isEditable = true
-                        statusTextView.textAlignment = .left
-                        DisplayUtility.topAlignTextVerticallyInTextView(textView: statusTextView)
                         var runQuery = false
                         if statusButton == businessStatusButton {
                             currentStatusType = "Business"
                             if noBusinessStatus {
-                                statusPlaceholder = true
+                                setStatusPlaceholder()
                             } else if let businessStatus = businessStatus {
                                 statusPlaceholder = false
                                 statusTextView.text = businessStatus
@@ -445,7 +529,7 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                         } else if statusButton == loveStatusButton {
                             currentStatusType = "Love"
                             if noLoveStatus {
-                                statusPlaceholder = true
+                                setStatusPlaceholder()
                             } else if let loveStatus = loveStatus {
                                 statusPlaceholder = false
                                 statusTextView.text = loveStatus
@@ -456,7 +540,7 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                         } else if statusButton == friendshipStatusButton {
                             currentStatusType = "Friendship"
                             if noFriendshipStatus {
-                                statusPlaceholder = true
+                                setStatusPlaceholder()
                             } else if let friendshipStatus = friendshipStatus {
                                 statusPlaceholder = false
                                 statusTextView.text = friendshipStatus
@@ -467,6 +551,7 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                         }
                         
                         if runQuery {
+                            print ("running BridgeStatus query")
                             if let user = PFUser.current() {
                                 if let objectId = user.objectId {
                                     if let type = currentStatusType {
@@ -477,9 +562,8 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                                         query.limit = 1
                                         query.findObjectsInBackground(block: { (results, error) in
                                             if let error = error {
-                                                print("status findObjectsInBackgroundWithBlock error - \(error)")
-                                            }
-                                            else if let results = results {
+                                                print("error - find objects in background - \(error)")
+                                            } else if let results = results {
                                                 if results.count > 0 {
                                                     let result = results[0]
                                                     if let bridgeStatus = result["bridge_status"] as? String {
@@ -496,14 +580,41 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                                                         }
                                                         //self.localData.synchronize()
                                                     }
+                                                } else {
+                                                    print("no status")
+                                                    if type == "Business" {
+                                                        self.noBusinessStatus = true
+                                                    } else if type == "Love" {
+                                                        self.noLoveStatus = true
+                                                    } else if type == "Friendship" {
+                                                        self.noFriendshipStatus = true
+                                                    }
+                                                    self.setStatusPlaceholder()
                                                 }
+                                            } else {
+                                                print("no status")
+                                                if type == "Business" {
+                                                    self.noBusinessStatus = true
+                                                } else if type == "Love" {
+                                                    self.noLoveStatus = true
+                                                } else if type == "Friendship" {
+                                                    self.noFriendshipStatus = true
+                                                }
+                                                self.setStatusPlaceholder()
                                             }
+                                            // realign text in status text view to center
+                                            self.statusTextView.textAlignment = .center
+                                            DisplayUtility.centerTextVerticallyInTextView(textView: self.statusTextView)
                                         })
                                     }
                                 }
                             }
+                        } else {
+                            // realign text in status text view to center
+                            statusTextView.textAlignment = .center
+                            DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
                         }
-                    } else {
+                    } else { // unselecting selected type
                         statusButton.setImage(unselectedImage, for: .normal)
                         currentStatusType = nil
                         statusTextView.isEditable = false
@@ -515,32 +626,54 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             } else {
                 if let unselectedImage = unselectedImage {
                     statusButton.setImage(unselectedImage, for: .normal)
-                    statusTextView.textAlignment = .center
-                    DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
                 }
             }
         }
     }
     
+    func setStatusPlaceholder() {
+        var statusTypeStr: String?
+        if currentStatusType == "Business" {
+            statusTypeStr = "work"
+        } else if currentStatusType == "Love" {
+            statusTypeStr = "dating"
+        } else if currentStatusType == "Friendship" {
+            statusTypeStr = "friendship"
+        }
+        if let statusTypeStr = statusTypeStr {
+            statusTextView.text = "Edit and save to post your first \(statusTypeStr) request."
+            statusPlaceholder = true
+        }
+    }
+    
     func profilePicSelected(_ gesture: UIGestureRecognizer) {
         if let hexView = gesture.view as? HexagonView {
-            let newHexView = HexagonView()
-            newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
-            if let image = hexView.hexBackgroundImage {
-                newHexView.setBackgroundImage(image: image)
-            } else {
-                newHexView.setBackgroundColor(color: hexView.hexBackgroundColor)
-            }
-            newHexView.addBorder(width: 1, color: .black)
-            UIView.animate(withDuration: 0.5, animations: {
-                //self.scrollView.scrollRectToVisible(CGRect(x: 0, y: 0, width: self.scrollView.frame.width, height: self.scrollView.frame.height), animated: true)
-            }, completion: { (finished) in
-                if finished {
-//                    let profilePicsView = ProfilePicturesView(hexView: newHexView, images: images, startingImageIndex: startingImageIndex, shouldShowEditButtons: true)
-//                    self.view.addSubview(profilePicsView)
-//                    profilePicsView.animate()
+            if let hexBackgroundImage = hexView.hexBackgroundImage {
+                let newHexView = HexagonView()
+                newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
+                newHexView.setBackgroundImage(image: hexBackgroundImage)
+                newHexView.addBorder(width: 1, color: .black)
+                
+                var images = [UIImage]()
+                var originalHexFrames = [CGRect]()
+                var startingIndex = 0
+                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+                for i in 0..<hexViews.count {
+                    if let image = hexViews[i].hexBackgroundImage {
+                        images.append(image)
+                    }
+                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
+                    originalHexFrames.append(frame)
+                    if hexViews[i] == hexView {
+                        startingIndex = i
+                    }
                 }
-            })
+                let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
+                self.view.addSubview(profilePicsView)
+                profilePicsView.animateIn()
+            } else if hexView == leftHexView { // no images
+                
+            }
         }
     }
     
@@ -548,14 +681,19 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.textAlignment = .left
         DisplayUtility.topAlignTextVerticallyInTextView(textView: textView)
+        if statusPlaceholder {
+            textView.text = nil
+            statusPlaceholder = false
+        }
     }
     
     // Add back placeholder
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.textAlignment = .center
-            DisplayUtility.centerTextVerticallyInTextView(textView: textView)
+            setStatusPlaceholder()
         }
+        textView.textAlignment = .center
+        DisplayUtility.centerTextVerticallyInTextView(textView: textView)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -575,6 +713,37 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             self.transitionManager.animationDirection = "Right"
         }
         vc.transitioningDelegate = self.transitionManager
+    }
+    
+    // scroll scroll view when keyboard shows
+    func keyboardWillShow(_ notification:NSNotification) {
+        print("keyboard will show")
+        if let userInfo = notification.userInfo {
+            // get keyboard frame
+            var keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+            keyboardFrame = view.convert(keyboardFrame, from: nil)
+            
+            // update content inset of scroll view
+            scrollView.contentInset.bottom = keyboardFrame.height
+            
+            // update content offset of scroll view
+            scrollView.contentOffset.y = scrollView.contentOffset.y + keyboardFrame.height
+        }
+    }
+    
+    // scroll scroll view when keyboard hides
+    func keyboardWillHide(_ notification:NSNotification){
+        if let userInfo = notification.userInfo {
+            // get keyboard frame
+            var keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+            keyboardFrame = view.convert(keyboardFrame, from: nil)
+            
+            // reset content offset of scroll view
+            scrollView.contentOffset.y = scrollView.contentOffset.y - keyboardFrame.height
+            
+            // reset content inset of scroll view
+            scrollView.contentInset = UIEdgeInsets.zero
+        }
     }
     
 }
