@@ -107,6 +107,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                 defaultButton.layer.borderWidth = 1
                 defaultButton.layer.borderColor = UIColor.gray.cgColor
                 defaultButton.layer.cornerRadius = 0.3*defaultButton.frame.height
+                defaultButton.addTarget(self, action: #selector(defaultButtonPressed(_:)), for: .touchUpInside)
                 editButtonsView.addSubview(defaultButton)
                 
                 buttonY = buttonY + buttonHeight + spaceBetweenButtons
@@ -129,7 +130,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                 buttonY = buttonY + buttonHeight + spaceBetweenButtons
             }
             
-            editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: uploadButton.frame.maxY)
+            editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: buttonY)
             editButtonsView.alpha = 0
             addSubview(editButtonsView)
         }
@@ -304,19 +305,30 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                 print(error)
             }
             else if let result = result as? [String: AnyObject]{
+                let index = self.allPicsVC.pageControl.currentPage
+                var newPageNum = index
                 let userId = result["id"]! as! String
                 let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
                 if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
                     if let data = try? Data(contentsOf: fbpicUrl) {
                         DispatchQueue.main.async(execute: {
                             if let image = UIImage(data: data) {
-                                self.images[self.allPicsVC.pageControl.currentPage] = image
+                                if self.images.count == 4 {
+                                    self.images[index] = image
+                                } else {
+                                    self.images.append(image)
+                                    newPageNum = self.images.count
+                                }
                                 self.resetImagesForVCs()
                             }
                             if let user = PFUser.current() {
                                 if let picFile = PFFile(data: data) {
                                     if var profilePictures = user["profile_pictures"] as? [PFFile] {
-                                        profilePictures[self.allPicsVC.pageControl.currentPage] = picFile
+                                        if profilePictures.count == 4 {
+                                            profilePictures[index] = picFile
+                                        } else {
+                                            profilePictures.append(picFile)
+                                        }
                                         user["profile_pictures"] = profilePictures
                                         user.saveInBackground()
                                     }
@@ -325,6 +337,8 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                         })
                     }
                 }
+                self.allPicsVC.setViewControllers([self.singlePicVCs[newPageNum]], direction: .forward, animated: false, completion: nil)
+                self.allPicsVC.profilePicturesDelegate?.profilePicturesViewController(self.allPicsVC, didUpdatePageCount: self.images.count)
             }
         }
     }
@@ -365,6 +379,36 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         }
         parentVC.dismiss(animated: true, completion: nil)
 
+    }
+    
+    func defaultButtonPressed(_ button: UIButton) {
+        let index = allPicsVC.pageControl.currentPage
+        if images.count > index {
+            let oldDefaultPic = images[0]
+            images[0] = images[index]
+            images[index] = oldDefaultPic
+            resetImagesForVCs()
+            if let user = PFUser.current() {
+                if var profilePics = user["profile_pictures"] as? [PFFile] {
+                    if profilePics.count > index {
+                        let oldDefaultPic = profilePics[0]
+                        profilePics[0] = profilePics[index]
+                        profilePics[index] = oldDefaultPic
+                        user["profile_pictures"] = profilePics
+                    }
+                }
+                if var profilePicsUrls = user["profile_pictures_urls"] as? [String] {
+                    if profilePicsUrls.count > index {
+                        let oldDefaultPicUrl = profilePicsUrls[0]
+                        profilePicsUrls[0] = profilePicsUrls[index]
+                        profilePicsUrls[index] = oldDefaultPicUrl
+                        user["profile_pictures_urls"] = profilePicsUrls
+                    }
+                }
+                user.saveInBackground()
+            }
+            allPicsVC.setViewControllers([singlePicVCs[0]], direction: .forward, animated: false, completion: nil)
+        }
     }
     
     
