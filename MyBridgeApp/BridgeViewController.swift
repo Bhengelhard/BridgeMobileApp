@@ -738,7 +738,7 @@ class BridgeViewController: UIViewController {
         
         //Check for AcceptedConnectionNotification
         let dbRetrievingFunctions = DBRetrievingFunctions()
-        dbRetrievingFunctions.queryForAcceptedConnectionNotifications(view: view)
+        dbRetrievingFunctions.queryForAcceptedConnectionNotifications(vc: self)
         //Set Notification for PushNotification Listener
         
     }
@@ -1190,6 +1190,15 @@ class BridgeViewController: UIViewController {
             swipeCardView.frame = self.swipeCardFrame
 			self.secondSwipeCard.frame = self.swipeCardView.frame
         })
+    }
+    
+    func transitionToMessageWithID(_ id: String, color: UIColor, title: String) {
+        print("transition ran in BridgeVC")
+        self.messageId = id
+        self.necterTypeColor = color
+        self.singleMessageTitle = title
+        self.segueToSingleMessage = true
+        self.performSegue(withIdentifier: "showSingleMessage", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
