@@ -523,6 +523,17 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
         if seguedFrom == "BridgeViewController" {
+            //Checking if no messages have been sent and if so deleting the message created for the conversation
+            if noMessagesLabel.alpha == 1.0 {
+                let query = PFQuery(className: "Messages")
+                query.getObjectInBackground(withId: messageId, block: { (object, error) in
+                    if error != nil {
+                        print(error ?? "error in SingleMessagesViewController upon leftBarButtonTapped query")
+                    } else if let object = object {
+                        object.deleteInBackground()
+                    }
+                })
+            }
             performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)
         } else {
             performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
