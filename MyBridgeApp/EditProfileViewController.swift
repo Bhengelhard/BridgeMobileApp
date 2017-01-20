@@ -725,7 +725,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     func writeFactsInTextView() {
         if let user = PFUser.current() {
-            factsTextView.text = ""
+            var factsText = ""
+            //factsTextView.text = ""
             var facts = [String]()
             
             if selectedFacts.contains("Age") {
@@ -780,16 +781,17 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             if facts.count > 0 {
                 for i in 0..<facts.count {
                     if i == 0 && i == facts.count - 1 {
-                        factsTextView.text = "I \(facts[i])."
+                        factsText = "I \(facts[i])."
                     }
                     else if i == 0 {
-                        factsTextView.text = "I \(factsTextView.text) \(facts[i]), "
+                        factsText = "I \(factsText) \(facts[i]), "
                     } else if i == facts.count - 1 {
-                        factsTextView.text = "\(factsTextView.text) and \(facts[i])."
+                        factsText = "\(factsText) and \(facts[i])."
                     } else {
-                        factsTextView.text = "\(factsTextView.text) \(facts[i]), "
+                        factsText = "\(factsText) \(facts[i]), "
                     }
                 }
+                factsTextView.text = factsText
             } else {
                 factsTextView.text = "Click to select from available facts and\ndisplay information."
             }

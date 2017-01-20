@@ -336,7 +336,14 @@ class AcceptIgnoreView: UIView {
                         message["user1_objectId"] = userObjectId1
                         let userObjectId2 = (message["ids_in_message"] as! [String])[1]
                         message["user2_objectId"] = userObjectId2
-                        message["user1_name"] = result["\(self.newMatch.user)_name"]
+                        var otherUserObjectId = ""
+                        if userObjectId1 != PFUser.current()?.objectId {
+                            otherUserObjectId = userObjectId1
+                        } else {
+                            otherUserObjectId = userObjectId2
+                        }
+                        let currentUsername = result["\(self.newMatch.user)_name"]
+                        message["user1_name"] = currentUsername
                         let otherUserName = result["\(otherUser)_name"]
                         message["user2_name"] = otherUserName
                         message["user1_profile_picture_url"] = result["\(self.newMatch.user)_profile_picture_url"]
@@ -353,6 +360,7 @@ class AcceptIgnoreView: UIView {
                                 let pfCloudFunctions = PFCloudFunctions()
                                 pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
                                 
+                                
                                 //Close current View with fade
                                 self.phaseOut()
                                 
@@ -360,6 +368,12 @@ class AcceptIgnoreView: UIView {
                                 if let vc = self.vc {
                                     vc.viewDidLoad()
                                     if let messageId = message.objectId {
+                                        if let name = currentUsername as? String {
+                                            pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserObjectId,"alert":"\(name) has accepted the connection!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageId])
+                                        } else {
+                                            pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserObjectId,"alert":"You have one new connection that has just been accepted!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageId])
+                                        }
+                                        
                                         if let name = otherUserName as? String {
                                             vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
                                         } else {
