@@ -579,16 +579,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func save(_ sender: UIButton) {
-        /*
-        // FOR TESTING OTHER PROFILE:
-        let otherProfileVC = OtherProfileViewController(userId: "IW33Wt5qvY")
-        self.present(otherProfileVC, animated: true, completion: nil)
-        */
         
         view.endEditing(true)
         if let user = PFUser.current() {
             user["profile_greeting"] = greeting
             
+            print("quph = \(quickUpdatePlaceholder)")
             if !quickUpdatePlaceholder && quickUpdateTextView.text != "" {
                 user["quick_update"] = quickUpdateTextView.text
             }
@@ -638,6 +634,27 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                     print("User did not save successfuly")
                 }
             })
+            
+            // update status of current type based on current text in text view
+            if currentStatusType == "Business" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    businessStatus = nil
+                } else {
+                    businessStatus = statusTextView.text
+                }
+            } else if currentStatusType == "Love" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    loveStatus = nil
+                } else {
+                    loveStatus = statusTextView.text
+                }
+            } else if currentStatusType == "Friendship" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    friendshipStatus = nil
+                } else {
+                    friendshipStatus = statusTextView.text
+                }
+            }
             
             // Adding bridge statuses
             if let businessStatus = businessStatus {
