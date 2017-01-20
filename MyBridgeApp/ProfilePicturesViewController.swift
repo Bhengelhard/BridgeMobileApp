@@ -31,11 +31,13 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
         
         profilePicturesDelegate = self
         
+        /*
         profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageCount: vcs.count)
         if let firstVC = viewControllers?.first,
             let currIndex = vcs.index(of: firstVC) {
             profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageIndex: currIndex)
         }
+        */
         
         pageControl.pageIndicatorTintColor = .clear
         pageControl.currentPageIndicatorTintColor = .lightGray
@@ -70,6 +72,15 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, completion: ((Bool) -> Void)? = nil) {
+        super.setViewControllers(viewControllers, direction: direction, animated: animated, completion: nil)
+        if let vc = viewControllers?.first {
+            if let index = vcs.index(of: vc) {
+                profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageIndex: index)
+            }
+        }
+    }
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let currIndex = vcs.index(of: viewController) {
             if currIndex - 1 >= 0 {
@@ -100,6 +111,11 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
     
     func profilePicturesViewController(_ profilePicturesViewController: ProfilePicturesViewController, didUpdatePageCount count: Int) {
         pageControl.numberOfPages = count
+        if count == 0 {
+            pageControl.alpha = 0
+        } else {
+            pageControl.alpha = 1
+        }
     }
     
     func profilePicturesViewController(_ profilePicturesViewController: ProfilePicturesViewController, didUpdatePageIndex index: Int) {

@@ -673,7 +673,7 @@ class BridgeViewController: UIViewController {
                                         let bridgeType = bridgeType1 ?? "Business"
                                         let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
                                         var aboveView:UIView? = self.lastCardInStack
-                                        aboveView = self.addCardPairView(aboveView, id: objectId1, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, id2: objectId2, name2: name2, location2: city2, status2: bridgeStatus2, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
+                                        aboveView = self.addCardPairView(aboveView, id: userId1, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, id2: userId2, name2: name2, location2: city2, status2: bridgeStatus2, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
                                         self.lastCardInStack = aboveView!
                                     })
                                 }

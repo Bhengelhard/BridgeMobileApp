@@ -294,9 +294,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             ageBubble.frame = CGRect(x: 0.315*factsEditor.frame.width, y: 0.18*factsEditor.frame.height, width: bubbleWidth, height: bubbleHeight)
             ageBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["age"] != nil {
-                factsEditor.addSubview(ageBubble)
-            }
             
             if selectedFacts.contains("School") {
                 schoolBubble.setImage(selectedBubbleImage, for: .normal)
@@ -305,9 +302,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             schoolBubble.frame = CGRect(x: ageBubble.frame.minX, y: ageBubble.frame.maxY + 0.06*factsEditor.frame.height, width: bubbleWidth, height: bubbleHeight)
             schoolBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["school"] != nil {
-                factsEditor.addSubview(schoolBubble)
-            }
+
             
             if selectedFacts.contains("Religion") {
                 religionBubble.setImage(selectedBubbleImage, for: .normal)
@@ -316,9 +311,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             religionBubble.frame = CGRect(x: ageBubble.frame.minX, y: schoolBubble.frame.maxY + 0.06*factsEditor.frame.height, width: bubbleWidth, height: bubbleHeight)
             religionBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["religion"] != nil {
-                factsEditor.addSubview(religionBubble)
-            }
+
             
             if selectedFacts.contains("City") {
                 cityBubble.setImage(selectedBubbleImage, for: .normal)
@@ -327,9 +320,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             cityBubble.frame = CGRect(x: factsEditor.frame.width - ageBubble.frame.maxX, y: ageBubble.frame.minY, width: bubbleWidth, height: bubbleHeight)
             cityBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["city"] != nil {
-                factsEditor.addSubview(cityBubble)
-            }
+
             
             if selectedFacts.contains("Work") {
                 workBubble.setImage(selectedBubbleImage, for: .normal)
@@ -338,15 +329,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             workBubble.frame = CGRect(x: cityBubble.frame.minX, y: schoolBubble.frame.minY, width: bubbleWidth, height: bubbleHeight)
             workBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["work"] != nil {
-                factsEditor.addSubview(workBubble)
-            }
+
             
             let labelOffsetFromBubble = 0.03*factsEditor.frame.width
             
             let ageLabel = UILabel()
             ageLabel.text = "AGE"
-            ageLabel.textColor = .black
+            ageLabel.textColor = .gray
             ageLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             ageLabel.sizeToFit()
             ageLabel.frame = CGRect(x: ageBubble.frame.minX - ageLabel.frame.width - labelOffsetFromBubble, y: 0, width: ageLabel.frame.width, height: ageLabel.frame.height+1)
@@ -355,7 +344,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             let schoolLabel = UILabel()
             schoolLabel.text = "SCHOOL"
-            schoolLabel.textColor = .black
+            schoolLabel.textColor = .gray
             schoolLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             schoolLabel.sizeToFit()
             schoolLabel.frame = CGRect(x: schoolBubble.frame.minX - schoolLabel.frame.width - labelOffsetFromBubble, y: 0, width: schoolLabel.frame.width, height: schoolLabel.frame.height+1)
@@ -364,7 +353,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             let religionLabel = UILabel()
             religionLabel.text = "RELIGION"
-            religionLabel.textColor = .black
+            religionLabel.textColor = .gray
             religionLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             religionLabel.sizeToFit()
             religionLabel.frame = CGRect(x: religionBubble.frame.minX - religionLabel.frame.width - labelOffsetFromBubble, y: 0, width: religionLabel.frame.width, height: religionLabel.frame.height+1)
@@ -373,7 +362,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             let cityLabel = UILabel()
             cityLabel.text = "CITY"
-            cityLabel.textColor = .black
+            cityLabel.textColor = .gray
             cityLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             cityLabel.sizeToFit()
             cityLabel.frame = CGRect(x: cityBubble.frame.maxX + labelOffsetFromBubble, y: 0, width: cityLabel.frame.width, height: cityLabel.frame.height+1)
@@ -382,12 +371,36 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             let workLabel = UILabel()
             workLabel.text = "WORK"
-            workLabel.textColor = .black
+            workLabel.textColor = .gray
             workLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             workLabel.sizeToFit()
             workLabel.frame = CGRect(x: workBubble.frame.maxX + labelOffsetFromBubble, y: 0, width: workLabel.frame.width, height: workLabel.frame.height+1)
             workLabel.center.y = workBubble.center.y
             factsEditor.addSubview(workLabel)
+            
+            if user["age"] != nil {
+                factsEditor.addSubview(ageBubble)
+                ageLabel.textColor = .black
+            }
+            
+            if user["school"] != nil {
+                factsEditor.addSubview(schoolBubble)
+                schoolLabel.textColor = .black
+            }
+            
+            if user["religion"] != nil {
+                factsEditor.addSubview(religionBubble)
+                religionLabel.textColor = .black
+            }
+            
+            if user["city"] != nil {
+                factsEditor.addSubview(cityBubble)
+                cityLabel.textColor = .black
+            }
+            if user["work"] != nil {
+                factsEditor.addSubview(workBubble)
+                workLabel.textColor = .black
+            }
             
             let editFactsLabel = UILabel()
             editFactsLabel.text = "TO EDIT FACTS, UPDATE ON FACEBOOK."
