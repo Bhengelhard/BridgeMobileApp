@@ -137,6 +137,11 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     }
     
     func resetImagesForVCs() {
+        // add vcs if not enough
+        for i in singlePicVCs.count..<images.count {
+            let singlePicVC = UIViewController()
+            singlePicVCs.append(singlePicVC)
+        }
         for i in 0..<singlePicVCs.count {
             let singlePicVC = singlePicVCs[i]
             let image = images[i]
@@ -317,7 +322,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                                     self.images[index] = image
                                 } else {
                                     self.images.append(image)
-                                    newPageNum = self.images.count
+                                    newPageNum = self.images.count-1
                                 }
                                 self.resetImagesForVCs()
                             }
