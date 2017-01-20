@@ -82,15 +82,16 @@ class MyProfileViewController: UIViewController {
             numNectedLabel.frame = CGRect(x: 0, y: welcomeLabel.frame.maxY + 0.0075*DisplayUtility.screenHeight, width: 0, height: 0)
             
             //Check to get numConnectionsNected from localData
-            if let numNected = localData.getNumConnectionsNected() {
-                self.numNectedLabel.text = "\(numNected) CONNECTIONS 'NECTED"
-                self.numNectedLabel.sizeToFit()
-                self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
-                self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
-                self.view.addSubview(self.numNectedLabel)
-            }
+            //CHANGED TO FALSE SO AS NOT TO CONFLICT IF THE USER HAS MULTIPLE DEVICES
+//            if let numNected = localData.getNumConnectionsNected() {
+//                self.numNectedLabel.text = "\(numNected) CONNECTIONS 'NECTED"
+//                self.numNectedLabel.sizeToFit()
+//                self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
+//                self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
+//                self.view.addSubview(self.numNectedLabel)
+//            }
             //If not available on device, calculate numConnectionsNected with query and then save to device
-            else if let objectId = user.objectId {
+            if let objectId = user.objectId {
                 let query = PFQuery(className: "BridgePairings")
                 query.whereKey("connecter_objectId", equalTo: objectId)
                 query.whereKey("user1_response", equalTo: 1)
