@@ -16,6 +16,8 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
     init(vcs: [UIViewController], initialVC: UIViewController) {
         self.vcs = vcs
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        profilePicturesDelegate = self
+        profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageCount: vcs.count)
         setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
         
         //formatting pageControl
@@ -29,10 +31,7 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
         delegate = self
         dataSource = self
         
-        profilePicturesDelegate = self
-        
         /*
-        profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageCount: vcs.count)
         if let firstVC = viewControllers?.first,
             let currIndex = vcs.index(of: firstVC) {
             profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageIndex: currIndex)
@@ -72,8 +71,9 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     override func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, completion: ((Bool) -> Void)? = nil) {
-        super.setViewControllers(viewControllers, direction: direction, animated: animated, completion: nil)
+        super.setViewControllers(viewControllers, direction: direction, animated: animated, completion: completion)
         if let vc = viewControllers?.first {
             if let index = vcs.index(of: vc) {
                 profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageIndex: index)
