@@ -166,7 +166,7 @@ class OtherProfileViewController: UIViewController {
             let hexWidth = 0.38154*DisplayUtility.screenWidth
             let hexHeight = hexWidth * sqrt(3) / 2
             
-            let downloader = Downloader()
+            //let downloader = Downloader()
             
             //setting frame for topHexView
             topHexView.frame = CGRect(x: 0, y: 0, width: hexWidth, height: hexHeight)
@@ -197,7 +197,7 @@ class OtherProfileViewController: UIViewController {
                     if profilePics.count > i {
                         profilePics[i].getDataInBackground(block: { (data, error) in
                             if error != nil {
-                                print(error)
+                                print(error ?? "profile pictures were not accurately retrieved")
                             } else {
                                 if let data = data {
                                     if let image = UIImage(data: data) {
@@ -213,10 +213,24 @@ class OtherProfileViewController: UIViewController {
                         })
                     }
                 }
-            } else {
+            }
+            else {
                 for hexView in hexViews {
                     hexView.setBackgroundColor(color: defaultHexBackgroundColor)
                 }
+                //If the user has not set any profile pictures, then check if the user has something saved in profile_picture_url to set
+                if let urlString = user["profile_picture_url"] as? String {
+                    if let URL = URL(string: urlString) {
+                        let downloader = Downloader()
+                        downloader.imageFromURL(URL: URL, callBack: { (image) in
+                            self.leftHexView.setBackgroundImage(image: image)
+                            let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
+                            self.leftHexView.addGestureRecognizer(hexViewGR)
+                        })
+                    }
+                    
+                }
+                
             }
             
             // layout message button

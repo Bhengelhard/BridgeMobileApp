@@ -138,7 +138,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     
     func resetImagesForVCs() {
         // add vcs if not enough
-        for i in singlePicVCs.count..<images.count {
+        for _ in singlePicVCs.count..<images.count {
             let singlePicVC = UIViewController()
             singlePicVCs.append(singlePicVC)
         }
@@ -305,9 +305,9 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         uploadMenu.removeFromSuperview()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
+        graphRequest!.start{ (connection, result, error) -> Void in
             if error != nil {
-                print(error)
+                print(error ?? "error in graphRequest of uploadFromFB")
             }
             else if let result = result as? [String: AnyObject]{
                 let index = self.allPicsVC.pageControl.currentPage

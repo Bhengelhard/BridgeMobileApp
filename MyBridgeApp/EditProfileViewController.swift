@@ -652,6 +652,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setBusinessStatus(businessStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
@@ -671,6 +673,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setLoveStatus(loveStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
@@ -690,6 +694,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setFriendshipStatus(friendshipStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
