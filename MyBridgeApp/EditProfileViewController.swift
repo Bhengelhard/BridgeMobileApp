@@ -1124,7 +1124,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                     startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
             self.view.addSubview(profilePicsView)
             profilePicsView.animateIn()
         }

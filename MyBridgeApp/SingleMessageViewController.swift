@@ -609,6 +609,9 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                         } else if success {
                             if self.seguedFrom == "BridgeViewController" {
                                 self.performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)
+                            } else if self.seguedFrom == "OtherProfileViewController" {
+                                //self.dismiss(animated: true, completion: nil)
+                                self.performSegue(withIdentifier: "showOtherProfile", sender: self)
                             } else {
                                 self.performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
                             }

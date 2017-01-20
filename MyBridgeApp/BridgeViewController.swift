@@ -245,6 +245,8 @@ class BridgeViewController: UIViewController {
                     continue
                 }
                 j += 1
+                var id1 = String()
+                var id2 = String()
                 var name1 = String()
                 var name2 = String()
                 var location1 = String()
@@ -255,6 +257,12 @@ class BridgeViewController: UIViewController {
                 var photoFile2: String? = nil
                 var locationCoordinates1 = [Double]()
                 var locationCoordinates2 = [Double]()
+                if let id = pairing.user1?.userId {
+                    id1 = id
+                }
+                if let id = pairing.user2?.userId {
+                    id2 = id
+                }
                 if let name = pairing.user1?.name {
                     name1 = name
                 }
@@ -318,7 +326,7 @@ class BridgeViewController: UIViewController {
 					color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
 				}
 
-                aboveView = addCardPairView(aboveView, name: name1, location: location1, status: status1, photo: photoFile1,locationCoordinates1: locationCoordinates1, name2: name2, location2: location2, status2: status2, photo2: photoFile2,locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
+                aboveView = addCardPairView(aboveView, id: id1, name: name1, location: location1, status: status1, photo: photoFile1,locationCoordinates1: locationCoordinates1, id2: id2, name2: name2, location2: location2, status2: status2, photo2: photoFile2,locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
                 lastCardInStack = aboveView!
             }
             
@@ -330,7 +338,7 @@ class BridgeViewController: UIViewController {
         
     }
 
-    func addCardPairView(_ aboveView:UIView?, name:String?, location:String?, status:String?, photo:String?, locationCoordinates1:[Double]?, name2:String?, location2:String?, status2:String?, photo2:String?, locationCoordinates2:[Double]?, cardColor:typesOfColor?, pairing:UserInfoPair) -> UIView{
+    func addCardPairView(_ aboveView:UIView?, id: String?, name:String?, location:String?, status:String?, photo:String?, locationCoordinates1:[Double]?, id2: String?, name2:String?, location2:String?, status2:String?, photo2:String?, locationCoordinates2:[Double]?, cardColor:typesOfColor?, pairing:UserInfoPair) -> UIView{
         
         var connectionType = String()
         if cardColor == typesOfColor.business {
@@ -348,6 +356,7 @@ class BridgeViewController: UIViewController {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(BridgeViewController.isDragged(_:)))
         swipeCardView.addGestureRecognizer(gesture)
         swipeCardView.isUserInteractionEnabled = true
+
         if let aboveView = aboveView {
             if secondSwipeCardSet == false {
                 secondSwipeCard = swipeCardView
@@ -356,7 +365,7 @@ class BridgeViewController: UIViewController {
                 //Second card should also have dark layer that fades away with swipe of first card in deck.
                 swipeCardView.frame.size = CGSize(width: swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
                 swipeCardView.center = aboveView.center
-                swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+                swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
                 swipeCardView.isUserInteractionEnabled = false
                 swipeCardView.frame = smallestSwipeCardFrame()
                 swipeCardView.center.x = view.center.x
@@ -366,28 +375,82 @@ class BridgeViewController: UIViewController {
                 //Second card should also have dark layer that fades away with swipe of first card in deck.
                 swipeCardView.frame.size = CGSize(width: swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
                 swipeCardView.center = aboveView.center
-                swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+                swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
                 swipeCardView.isUserInteractionEnabled = false
                 swipeCardView.frame = smallestSwipeCardFrame()
                 swipeCardView.center.x = view.center.x
                 self.view.insertSubview(swipeCardView, belowSubview: aboveView)
             }
+//=======
+//        if let aboveView = aboveView
+//		{
+//			secondSwipeCard = swipeCardView
+//
+//            //Second card should also have dark layer that fades away with swipe of first card in deck.
+//            swipeCardView.frame.size = CGSize(width: /*0.95**/swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
+//            swipeCardView.center = aboveView.center
+//            swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+//            swipeCardView.isUserInteractionEnabled = false
+//			swipeCardView.frame = smallestSwipeCardFrame()
+//			swipeCardView.center.x = view.center.x
+//            self.view.insertSubview(swipeCardView, belowSubview: aboveView)
+//            
+////            darkLayer.frame = swipeCardView.frame//CGRect(x: 0, y: 0, width: swipeCardView.frame.width, height: swipeCardView.frame.height)
+////            darkLayer.layer.cornerRadius = swipeCardView.layer.cornerRadius
+////            darkLayer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+////            view.insertSubview(darkLayer, aboveSubview: secondSwipeCard)
+//            
+//            
+//            
+//>>>>>>> wiredFrame
         }
         else {
             swipeCardView.frame = swipeCardView.swipeCardFrame()
             swipeCardView.center.x = view.center.x
-            swipeCardView.initialize(user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+            swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
             swipeCardFrame = swipeCardView.frame
             
             self.view.insertSubview(swipeCardView, belowSubview: connectIcon)
 
 			swipeCardView.overlay.removeFromSuperlayer()
         }
+        
+        // add gesture recognizers for displaying user profile
+        let showProfileTopGR = UITapGestureRecognizer(target: self, action: #selector(showProfileTop(_:)))
+        swipeCardView.topHalf.addGestureRecognizer(showProfileTopGR)
+        
+        let showProfileBottomGR = UITapGestureRecognizer(target: self, action: #selector(showProfileBottom(_:)))
+        swipeCardView.bottomHalf.addGestureRecognizer(showProfileBottomGR)
+        
         //Making sure disconnect and connect Icons are at the front of the view
         arrayOfCardsInDeck.append(swipeCardView)
         arrayOfCardColors.append(swipeCardView.layer.borderColor!)
 
         return swipeCardView
+    }
+    
+    func showProfileTop(_ gesture: UIGestureRecognizer) {
+        let topHalf = gesture.view
+        if let swipeCard = topHalf?.superview as? SwipeCard {
+            print("showing profile of top card, id = \(swipeCard.cardsUser1Id)")
+            if let user1Id = swipeCard.cardsUser1Id {
+                print(user1Id)
+                let profileVC = OtherProfileViewController(userId: user1Id)
+                present(profileVC, animated: false, completion: nil)
+            }
+        }
+    }
+    
+    func showProfileBottom(_ gesture: UIGestureRecognizer) {
+        let bottomHalf = gesture.view
+        if let swipeCard = bottomHalf?.superview as? SwipeCard {
+            print("showing profile of bottom card, id = \(swipeCard.cardsUser2Id)")
+            if let user2Id = swipeCard.cardsUser2Id {
+                print(user2Id)
+                let profileVC = OtherProfileViewController(userId: user2Id)
+                present(profileVC, animated: false, completion: nil)
+            }
+        }
     }
     
     func checkForNotification(){
@@ -637,7 +700,7 @@ class BridgeViewController: UIViewController {
                                         let bridgeType = bridgeType1 ?? "Business"
                                         let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
                                         var aboveView:UIView? = self.lastCardInStack
-                                        aboveView = self.addCardPairView(aboveView, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, name2: name2, location2: city2, status2: bridgeStatus2, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
+                                        aboveView = self.addCardPairView(aboveView, id: objectId1, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, id2: objectId2, name2: name2, location2: city2, status2: bridgeStatus2, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
                                         self.lastCardInStack = aboveView!
                                     })
                                 }

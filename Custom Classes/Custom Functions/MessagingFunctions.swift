@@ -119,11 +119,10 @@ class MessagingFunctions {
                         print("Saved message")
                         
                         //Reload MessagesVC and transition to single message
-                        if let bridgeVC = vc as? BridgeViewController {
-                            if let messageId = message.objectId {
-                                //Transition to single message
-                                if let messageId = message.objectId {
-                                    let color = self.whichColor(type: bridgeType)
+                        if let messageId = message.objectId {
+                            let color = self.whichColor(type: bridgeType)
+                            if let bridgeVC = vc as? BridgeViewController {
+                                    //Transition to single message
                                     if user1ObjectId == currentUserObjectId {
                                         print("time for transition 1")
                                         bridgeVC.transitionToMessageWithID(messageId, color: color, title: user2Name)
@@ -131,6 +130,14 @@ class MessagingFunctions {
                                         print("time for transition 2")
                                         bridgeVC.transitionToMessageWithID(messageId, color: color, title: user1Name)
                                     }
+                            } else if let otherProfileVC = vc as? OtherProfileViewController {
+                                //Transition to single message
+                                if user1ObjectId == currentUserObjectId {
+                                    print("time for transition 1")
+                                    otherProfileVC.transitionToMessageWithID(messageId, color: color, title: user2Name)
+                                } else {
+                                    print("time for transition 2")
+                                    otherProfileVC.transitionToMessageWithID(messageId, color: color, title: user1Name)
                                 }
                             }
                         }

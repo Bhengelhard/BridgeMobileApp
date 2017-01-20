@@ -12,6 +12,8 @@ import Parse
 class OtherProfileViewController: UIViewController {
     let userId: String
     var user: PFUser?
+    var userName: String?
+    var userProfilePictureURL: String?
     
     let scrollView = UIScrollView()
     let exitButton = UIButton()
@@ -37,6 +39,12 @@ class OtherProfileViewController: UIViewController {
     var businessStatusSet = false
     var loveStatusSet = false
     var friendshipStatusSet = false
+    
+    //Transition to SingleMessageVC preparation
+    let transitionManager = TransitionManager()
+    var messageId = ""
+    var necterTypeColor = UIColor()
+    var singleMessageTitle = ""
     
     init(userId: String) {
         self.userId = userId
@@ -65,12 +73,18 @@ class OtherProfileViewController: UIViewController {
         if user == nil {
             if let query = PFUser.query() {
                 query.whereKey("objectId", equalTo: userId)
-                query.getFirstObjectInBackground(block: { (user, error) in
+                query.limit = 1
+                query.findObjectsInBackground(block: { (results, error) in
                     if error != nil {
                         print("error - get first object - \(error)")
-                    } else if let user = user as? PFUser {
-                        self.user = user
-                        self.layoutViews()
+                        self.dismiss(animated: true, completion: nil)
+                    } else if let users = results as? [PFUser] {
+                        if users.count > 0 {
+                            self.user = users[0]
+                            self.layoutViews()
+                        } else {
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     }
                 })
             }
@@ -102,6 +116,7 @@ class OtherProfileViewController: UIViewController {
                 greeting = userGreeting
             }
             if let name = user["name"] as? String {
+                userName = name
                 let firstName = DisplayUtility.firstName(name: name)
                 greetingLabel.text = "\(greeting) I'm \(firstName)."
                 greetingLabel.sizeToFit()
@@ -109,9 +124,9 @@ class OtherProfileViewController: UIViewController {
                 greetingLabel.center.x = DisplayUtility.screenWidth / 2
                 view.addSubview(greetingLabel)
                 
-                businessStatus = "\(firstName) has not yet posted a response for work."
-                loveStatus = "\(firstName) has not yet posted a response for dating."
-                friendshipStatus = "\(firstName) has not yet posted a response for friendship."
+                businessStatus = "\(firstName) has not yet posted a request for work."
+                loveStatus = "\(firstName) has not yet posted a request for dating."
+                friendshipStatus = "\(firstName) has not yet posted a request for friendship."
             }
             
             numNectedLabel.textColor = .gray
@@ -170,8 +185,14 @@ class OtherProfileViewController: UIViewController {
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
             scrollView.addSubview(bottomHexView)
             
+            //getting profilePictureURL
+            if let profilePictureURL = user["profile_picture_url"] as? String {
+                userProfilePictureURL = profilePictureURL
+            }
+            
+            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+            let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
             if let profilePics = user["profile_pictures"] as? [PFFile] {
-                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
                 for i in 0..<hexViews.count {
                     if profilePics.count > i {
                         profilePics[i].getDataInBackground(block: { (data, error) in
@@ -183,12 +204,18 @@ class OtherProfileViewController: UIViewController {
                                         hexViews[i].setBackgroundImage(image: image)
                                         let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
                                         hexViews[i].addGestureRecognizer(hexViewGR)
+                                    } else {
+                                        hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
                                     }
                                 }
                                 
                             }
                         })
                     }
+                }
+            } else {
+                for hexView in hexViews {
+                    hexView.setBackgroundColor(color: defaultHexBackgroundColor)
                 }
             }
             
@@ -198,7 +225,8 @@ class OtherProfileViewController: UIViewController {
             messageButton.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.03*DisplayUtility.screenHeight, width: messageButtonWidth, height: messageButtonHeight)
             messageButton.center.x = DisplayUtility.screenWidth / 2
             messageButton.setImage(UIImage(named: "Message_Button"), for: .normal)
-            scrollView.addSubview(messageButton)
+            //messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
+            //scrollView.addSubview(messageButton)
             
             let line = UIView()
             let gradientLayer = DisplayUtility.getGradient()
@@ -320,6 +348,16 @@ class OtherProfileViewController: UIViewController {
         }
     }
     
+    func messageButtonTapped(_ sender: UIButton) {
+        let messagingFunctions = MessagingFunctions()
+        if let name = userName {
+            if let URL = userProfilePictureURL {
+                messagingFunctions.createDirectMessage(otherUserObjectId: userId, otherUserName: name, otherUserProfilePictureURL: URL, vc: self)
+            }
+        }
+        
+    }
+    
     func exit(_ sender: UIButton) {
         dismiss(animated: false, completion: nil)
     }
@@ -349,7 +387,7 @@ class OtherProfileViewController: UIViewController {
                     startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
             self.view.addSubview(profilePicsView)
             profilePicsView.animateIn()
         }
@@ -578,6 +616,33 @@ class OtherProfileViewController: UIViewController {
     
     func layoutBottomBasedOnStatus() {
         scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(DisplayUtility.screenHeight, statusLabel.frame.maxY + 0.02*DisplayUtility.screenHeight - scrollView.frame.minY))
+    }
+    
+    func transitionToMessageWithID(_ id: String, color: UIColor, title: String) {
+        print("transition ran in BridgeVC")
+        self.messageId = id
+        self.necterTypeColor = color
+        self.singleMessageTitle = title
+        self.performSegue(withIdentifier: "showSingleMessage", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        NotificationCenter.default.removeObserver(self)
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == SingleMessageViewController.self {
+            self.transitionManager.animationDirection = "Right"
+            let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
+            singleMessageVC.isSeguedFromBridgePage = true
+            singleMessageVC.newMessageId = self.messageId
+            singleMessageVC.singleMessageTitle = singleMessageTitle
+            singleMessageVC.seguedFrom = "OtherProfileViewController"
+            singleMessageVC.necterTypeColor = necterTypeColor
+            singleMessageVC.transitioningDelegate = self.transitionManager
+        }
+        vc.transitioningDelegate = self.transitionManager
+            
+        
     }
 
 }
