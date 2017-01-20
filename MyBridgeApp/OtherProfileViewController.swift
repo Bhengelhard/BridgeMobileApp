@@ -65,12 +65,18 @@ class OtherProfileViewController: UIViewController {
         if user == nil {
             if let query = PFUser.query() {
                 query.whereKey("objectId", equalTo: userId)
-                query.getFirstObjectInBackground(block: { (user, error) in
+                query.limit = 1
+                query.findObjectsInBackground(block: { (results, error) in
                     if error != nil {
                         print("error - get first object - \(error)")
-                    } else if let user = user as? PFUser {
-                        self.user = user
-                        self.layoutViews()
+                        self.dismiss(animated: true, completion: nil)
+                    } else if let users = results as? [PFUser] {
+                        if users.count > 0 {
+                            self.user = users[0]
+                            self.layoutViews()
+                        } else {
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     }
                 })
             }
@@ -170,8 +176,9 @@ class OtherProfileViewController: UIViewController {
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
             scrollView.addSubview(bottomHexView)
             
+            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+            let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
             if let profilePics = user["profile_pictures"] as? [PFFile] {
-                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
                 for i in 0..<hexViews.count {
                     if profilePics.count > i {
                         profilePics[i].getDataInBackground(block: { (data, error) in
@@ -183,12 +190,18 @@ class OtherProfileViewController: UIViewController {
                                         hexViews[i].setBackgroundImage(image: image)
                                         let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
                                         hexViews[i].addGestureRecognizer(hexViewGR)
+                                    } else {
+                                        hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
                                     }
                                 }
                                 
                             }
                         })
                     }
+                }
+            } else {
+                for hexView in hexViews {
+                    hexView.setBackgroundColor(color: defaultHexBackgroundColor)
                 }
             }
             
@@ -349,7 +362,7 @@ class OtherProfileViewController: UIViewController {
                     startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
             self.view.addSubview(profilePicsView)
             profilePicsView.animateIn()
         }

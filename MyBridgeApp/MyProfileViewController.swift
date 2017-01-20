@@ -174,8 +174,9 @@ class MyProfileViewController: UIViewController {
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
             scrollView.addSubview(bottomHexView)
             
+            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+            let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
             if let profilePics = user["profile_pictures"] as? [PFFile] {
-                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
                 for i in 0..<hexViews.count {
                     if profilePics.count > i {
                         profilePics[i].getDataInBackground(block: { (data, error) in
@@ -187,12 +188,18 @@ class MyProfileViewController: UIViewController {
                                         hexViews[i].setBackgroundImage(image: image)
                                         let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
                                         hexViews[i].addGestureRecognizer(hexViewGR)
+                                    } else {
+                                        hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
                                     }
                                 }
                                 
                             }
                         })
                     }
+                }
+            } else {
+                for hexView in hexViews {
+                    hexView.setBackgroundColor(color: defaultHexBackgroundColor)
                 }
             }
             
@@ -349,7 +356,7 @@ class MyProfileViewController: UIViewController {
                     startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
             self.view.addSubview(profilePicsView)
             profilePicsView.animateIn()
         }

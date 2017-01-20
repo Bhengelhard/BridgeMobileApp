@@ -14,6 +14,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     
     let originalHexFrames: [CGRect]
     var images: [UIImage]
+    let hexViews: [HexagonView]
     let startingIndex: Int
     let shouldShowEditButtons: Bool
     let allPicsVC: ProfilePicturesViewController
@@ -28,9 +29,10 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     var shouldDisplayDefaultButton = true
     var shouldDisplayDeleteButton = true
     
-    init(images: [UIImage], originalHexFrames: [CGRect], startingIndex: Int, shouldShowEditButtons: Bool, parentVC: UIViewController) {
+    init(images: [UIImage], originalHexFrames: [CGRect], hexViews: [HexagonView], startingIndex: Int, shouldShowEditButtons: Bool, parentVC: UIViewController) {
         self.images = images
         self.originalHexFrames = originalHexFrames
+        self.hexViews = hexViews
         self.startingIndex = startingIndex
         self.shouldShowEditButtons = shouldShowEditButtons
         self.parentVC = parentVC
@@ -221,6 +223,9 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     }
     
     func exit(_ gesture: UIGestureRecognizer) {
+        for i in 0..<images.count {
+            hexViews[i].setBackgroundImage(image: images[i])
+        }
         self.animateOut { (finished) in
             if finished {
                 self.removeFromSuperview()
