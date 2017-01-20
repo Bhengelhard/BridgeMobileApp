@@ -12,6 +12,8 @@ import Parse
 class OtherProfileViewController: UIViewController {
     let userId: String
     var user: PFUser?
+    var userName: String?
+    var userProfilePictureURL: String?
     
     let scrollView = UIScrollView()
     let exitButton = UIButton()
@@ -37,6 +39,12 @@ class OtherProfileViewController: UIViewController {
     var businessStatusSet = false
     var loveStatusSet = false
     var friendshipStatusSet = false
+    
+    //Transition to SingleMessageVC preparation
+    let transitionManager = TransitionManager()
+    var messageId = ""
+    var necterTypeColor = UIColor()
+    var singleMessageTitle = ""
     
     init(userId: String) {
         self.userId = userId
@@ -108,6 +116,7 @@ class OtherProfileViewController: UIViewController {
                 greeting = userGreeting
             }
             if let name = user["name"] as? String {
+                userName = name
                 let firstName = DisplayUtility.firstName(name: name)
                 greetingLabel.text = "\(greeting) I'm \(firstName)."
                 greetingLabel.sizeToFit()
@@ -115,9 +124,9 @@ class OtherProfileViewController: UIViewController {
                 greetingLabel.center.x = DisplayUtility.screenWidth / 2
                 view.addSubview(greetingLabel)
                 
-                businessStatus = "\(firstName) has not yet posted a response for work."
-                loveStatus = "\(firstName) has not yet posted a response for dating."
-                friendshipStatus = "\(firstName) has not yet posted a response for friendship."
+                businessStatus = "\(firstName) has not yet posted a request for work."
+                loveStatus = "\(firstName) has not yet posted a request for dating."
+                friendshipStatus = "\(firstName) has not yet posted a request for friendship."
             }
             
             numNectedLabel.textColor = .gray
@@ -176,6 +185,11 @@ class OtherProfileViewController: UIViewController {
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
             scrollView.addSubview(bottomHexView)
             
+            //getting profilePictureURL
+            if let profilePictureURL = user["profile_picture_url"] as? String {
+                userProfilePictureURL = profilePictureURL
+            }
+            
             let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
             let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
             if let profilePics = user["profile_pictures"] as? [PFFile] {
@@ -211,6 +225,7 @@ class OtherProfileViewController: UIViewController {
             messageButton.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.03*DisplayUtility.screenHeight, width: messageButtonWidth, height: messageButtonHeight)
             messageButton.center.x = DisplayUtility.screenWidth / 2
             messageButton.setImage(UIImage(named: "Message_Button"), for: .normal)
+            messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
             scrollView.addSubview(messageButton)
             
             let line = UIView()
@@ -331,6 +346,16 @@ class OtherProfileViewController: UIViewController {
             layoutBottomBasedOnStatus()
 
         }
+    }
+    
+    func messageButtonTapped(_ sender: UIButton) {
+        let messagingFunctions = MessagingFunctions()
+        if let name = userName {
+            if let URL = userProfilePictureURL {
+                messagingFunctions.createDirectMessage(otherUserObjectId: userId, otherUserName: name, otherUserProfilePictureURL: URL, vc: self)
+            }
+        }
+        
     }
     
     func exit(_ sender: UIButton) {
@@ -591,6 +616,42 @@ class OtherProfileViewController: UIViewController {
     
     func layoutBottomBasedOnStatus() {
         scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(DisplayUtility.screenHeight, statusLabel.frame.maxY + 0.02*DisplayUtility.screenHeight - scrollView.frame.minY))
+    }
+    
+    func transitionToMessageWithID(_ id: String, color: UIColor, title: String) {
+        print("transition ran in BridgeVC")
+        self.messageId = id
+        self.necterTypeColor = color
+        self.singleMessageTitle = title
+        
+        let singleMessageVC:SingleMessageViewController = SingleMessageViewController()
+        singleMessageVC.isSeguedFromBridgePage = true
+        singleMessageVC.newMessageId = self.messageId
+        singleMessageVC.singleMessageTitle = singleMessageTitle
+        singleMessageVC.seguedFrom = "OtherProfileViewController"
+        singleMessageVC.necterTypeColor = necterTypeColor
+        singleMessageVC.transitioningDelegate = self.transitionManager
+        present(singleMessageVC, animated: true, completion: nil)
+        //self.performSegue(withIdentifier: "showSingleMessage", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        NotificationCenter.default.removeObserver(self)
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == SingleMessageViewController.self {
+            self.transitionManager.animationDirection = "Right"
+            let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
+            singleMessageVC.isSeguedFromBridgePage = true
+            singleMessageVC.newMessageId = self.messageId
+            singleMessageVC.singleMessageTitle = singleMessageTitle
+            singleMessageVC.seguedFrom = "OtherProfileViewController"
+            singleMessageVC.necterTypeColor = necterTypeColor
+            singleMessageVC.transitioningDelegate = self.transitionManager
+        }
+        vc.transitioningDelegate = self.transitionManager
+            
+        
     }
 
 }

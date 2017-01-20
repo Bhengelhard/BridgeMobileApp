@@ -65,7 +65,7 @@ class FacebookFunctions {
                         
                         if error != nil {
                             
-                            print(error)
+                            print(error!)
                             print("got error")
                             
                         } else if let result = result as? [String: AnyObject]{
@@ -112,6 +112,14 @@ class FacebookFunctions {
                                 }
                             }
                             
+                            //Adding access code to current user field access_codes to identify which communities the user has joined
+                            if let accessVC = vc as? AccessViewController {
+                                //Checking if user had to enter an access code -> i.e. HasSignedUp was false before they logged in
+                                if !accessVC.accessCode.isEmpty {
+                                    PFUser.current()?.addUniqueObject(accessVC.accessCode, forKey: "access_codes")
+                                }
+                            }
+                            
                             PFUser.current()?.saveInBackground()
                         }
                     }
@@ -131,7 +139,7 @@ class FacebookFunctions {
                             
                             if error != nil {
                                 
-                                print(error)
+                                print(error!)
                                 print("got error")
                                 
                             } else if let result = result as? [String: AnyObject]{
@@ -219,7 +227,7 @@ class FacebookFunctions {
                                     PFUser.current()?["fb_friends"] = fbFriendIds
                                     PFUser.current()?.saveInBackground(block: { (success, error) in
                                         if error != nil {
-                                            print(error)
+                                            print(error!)
                                         } else {
                                             self.updateFriendList()
                                         }
@@ -239,17 +247,6 @@ class FacebookFunctions {
                                 PFUser.current()?["interested_in_friendship"] = true
                                 PFUser.current()?["ran_out_of_pairs"] = 0
                                 
-                                //Adding access code to current user field access_codes to identify which communities the user has joined
-                                if let accessVC = vc as? AccessViewController {
-                                    if let accessCodes = PFUser.current()?["access_codes"] as? [String] {
-                                        if !accessCodes.contains(accessVC.accessCode) {
-                                            var mutableAccessCodes = accessCodes
-                                            PFUser.current()?["access_codes"] = mutableAccessCodes.append(accessVC.accessCode)
-                                        }
-                                    } else {
-                                        PFUser.current()?["access_codes"] = [accessVC.accessCode]
-                                    }
-                                }
                                 PFUser.current()?.saveInBackground()
                                 
                                 //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
@@ -335,7 +332,7 @@ class FacebookFunctions {
         var sources = [String]()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "albums{name, photos.order(reverse_chronological).limit(4){images}}"])
-        graphRequest?.start(completionHandler: { (_, result, error) in
+        _ = graphRequest?.start(completionHandler: { (_, result, error) in
             if let result = result as? [String:AnyObject] {
                 if let albums = result["albums"] as? [String:AnyObject] {
                     if let data = albums["data"] as? [AnyObject] {
@@ -370,7 +367,7 @@ class FacebookFunctions {
             PFUser.current()?["profile_pictures_urls"] = sources
             PFUser.current()?.saveInBackground(block: { (succeeded, error) in
                 if error != nil {
-                    print(error)
+                    print(error!)
                 }
             })
             
@@ -400,10 +397,10 @@ class FacebookFunctions {
     /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
     func updateUser() {
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
-        graphRequest?.start { (connection, result, error) -> Void in
+        _ = graphRequest?.start { (connection, result, error) -> Void in
             if error != nil {
                 
-                print(error)
+                print(error!)
                 
             } else if let result = result as? [String:AnyObject]{
                 
@@ -417,7 +414,7 @@ class FacebookFunctions {
                     PFUser.current()?["fb_friends"] = fbFriendIds
                     PFUser.current()?.saveInBackground(block: { (success, error) in
                         if error != nil {
-                            print(error)
+                            print(error!)
                         } else {
                             self.updateFriendList()
                         }
@@ -439,7 +436,7 @@ class FacebookFunctions {
         
         query.findObjectsInBackground(block: { (objects: [PFObject]?, error: Error?) in
             if error != nil {
-                print(error)
+                print(error!)
             } else if let objects = objects {
                 PFUser.current()?.fetchInBackground(block: { (success, error) in
                     for object in objects {

@@ -40,7 +40,7 @@
         <!--New Message-->
         <scene sceneID="GLA-rq-wj8">
             <objects>
-                <viewController title="New Message" id="a0m-Jv-xyc" customClass="NewMessageViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewMessageStoryboardID" title="New Message" id="a0m-Jv-xyc" customClass="NewMessageViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dbN-GX-HHE"/>
                         <viewControllerLayoutGuide type="bottom" id="9qC-kC-kkl"/>
@@ -75,7 +75,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="96"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="geX-aI-Dai" id="1GK-eo-elS">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JL8-0O-hzJ">
@@ -115,7 +115,7 @@
                                 <items>
                                     <barButtonItem style="plain" id="Nsk-BZ-NOi">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ujX-q0-o8d">
-                                            <rect key="frame" x="16" y="2.5" width="27" height="39"/>
+                                            <rect key="frame" x="16" y="3" width="27" height="39"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" title="Button" image="camera_icon_small.jpg"/>
                                             <connections>
@@ -271,11 +271,11 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FGX-TP-Wxn" id="Czd-tc-gSD">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
-                                                    <rect key="frame" x="54" y="11" width="266" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
+                                                    <rect key="frame" x="165" y="13" width="45" height="17"/>
                                                     <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -331,6 +331,7 @@
                         <segue destination="pCC-By-oJn" kind="show" identifier="showProfilePageFromBridgeView" id="1Bx-ML-R6e"/>
                         <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesPageFromBridgeView" id="OnA-y9-bUb"/>
                         <segue destination="Aqq-nv-Cxw" kind="show" identifier="showMyProfileFromBridgePage" id="WWN-20-fau"/>
+                        <segue destination="sq6-6E-Isb" kind="show" identifier="showOtherProfile" id="mf0-bu-EW9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HbE-ka-aov" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -363,7 +364,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T5a-4r-w51" id="e1H-5M-cRe">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -385,6 +386,27 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZO4-tV-uGJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1950" y="-171"/>
+        </scene>
+        <!--showSingleMessage-->
+        <scene sceneID="0Id-wN-8XS">
+            <objects>
+                <viewController title="showSingleMessage" id="sq6-6E-Isb" customClass="OtherProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TS6-s4-dgS"/>
+                        <viewControllerLayoutGuide type="bottom" id="Rr7-tB-yPv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qsg-cz-roJ" customClass="other">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="ABc-Ef-uKn" kind="show" identifier="showSingleMessage" id="Cel-NN-deF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7sl-fX-GNC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2849" y="-182"/>
         </scene>
         <!--User Settings View Controller-->
         <scene sceneID="FlZ-om-wKv">
@@ -450,6 +472,7 @@
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromSingleMessage" id="00U-Jg-Jap"/>
                         <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesTableFromSingleMessage" id="fLD-mo-7R5"/>
                         <segue destination="j0v-Ba-HI5" kind="show" identifier="showExternalProfileFromSingleMessage" id="fZF-Uh-rbI"/>
+                        <segue destination="sq6-6E-Isb" kind="show" identifier="showOtherProfile" id="r1p-Ao-g6W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u5J-8h-7eI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -482,12 +505,13 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cC3-sR-uFf"/>
         <segue reference="JHn-8T-jHu"/>
-        <segue reference="cjh-Cg-YYX"/>
-        <segue reference="xcR-H7-wok"/>
-        <segue reference="0Mi-wm-mTu"/>
-        <segue reference="VqF-EN-U5i"/>
+        <segue reference="WWN-20-fau"/>
+        <segue reference="00U-Jg-Jap"/>
+        <segue reference="Cel-NN-deF"/>
+        <segue reference="r1p-Ao-g6W"/>
         <segue reference="fLD-mo-7R5"/>
+        <segue reference="1Bx-ML-R6e"/>
+        <segue reference="xcR-H7-wok"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -82,15 +82,16 @@ class MyProfileViewController: UIViewController {
             numNectedLabel.frame = CGRect(x: 0, y: welcomeLabel.frame.maxY + 0.0075*DisplayUtility.screenHeight, width: 0, height: 0)
             
             //Check to get numConnectionsNected from localData
-            if let numNected = localData.getNumConnectionsNected() {
-                self.numNectedLabel.text = "\(numNected) CONNECTIONS 'NECTED"
-                self.numNectedLabel.sizeToFit()
-                self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
-                self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
-                self.view.addSubview(self.numNectedLabel)
-            }
+            //CHANGED TO FALSE SO AS NOT TO CONFLICT IF THE USER HAS MULTIPLE DEVICES
+//            if let numNected = localData.getNumConnectionsNected() {
+//                self.numNectedLabel.text = "\(numNected) CONNECTIONS 'NECTED"
+//                self.numNectedLabel.sizeToFit()
+//                self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
+//                self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
+//                self.view.addSubview(self.numNectedLabel)
+//            }
             //If not available on device, calculate numConnectionsNected with query and then save to device
-            else if let objectId = user.objectId {
+            if let objectId = user.objectId {
                 let query = PFQuery(className: "BridgePairings")
                 query.whereKey("connecter_objectId", equalTo: objectId)
                 query.whereKey("user1_response", equalTo: 1)
@@ -140,8 +141,6 @@ class MyProfileViewController: UIViewController {
             let hexWidth = 0.38154*DisplayUtility.screenWidth
             let hexHeight = hexWidth * sqrt(3) / 2
             
-            let downloader = Downloader()
-            
             //setting frame for topHexView
             topHexView.frame = CGRect(x: 0, y: userSettingsButton.frame.maxY + 0.033*DisplayUtility.screenHeight, width: hexWidth, height: hexHeight)
             topHexView.center.x = DisplayUtility.screenWidth / 2
@@ -150,6 +149,8 @@ class MyProfileViewController: UIViewController {
             //setting frame for leftHexView
             leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
             /*
+            let downloader = Downloader()
+
             if let data = localData.getMainProfilePicture() {
                 if let image = UIImage(data: data) {
                     self.leftHexView.setBackgroundImage(image: image)
@@ -181,7 +182,7 @@ class MyProfileViewController: UIViewController {
                     if profilePics.count > i {
                         profilePics[i].getDataInBackground(block: { (data, error) in
                             if error != nil {
-                                print(error)
+                                print(error!)
                             } else {
                                 if let data = data {
                                     if let image = UIImage(data: data) {

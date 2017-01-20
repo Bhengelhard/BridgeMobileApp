@@ -51,6 +51,7 @@
 		30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */; };
 		30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */; };
 		30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */; };
+		30BAE9A21E31B9210094070B /* MessagingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BAE9A11E31B9210094070B /* MessagingFunctions.swift */; };
 		30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */; };
 		30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */; };
 		30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */; };
@@ -141,6 +142,7 @@
 		30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesView.swift; path = "Custom Classes/Custom Views/NewMatchesView.swift"; sourceTree = "<group>"; };
 		30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptedConnectionNotification.swift; path = "Custom Classes/Custom Views/AcceptedConnectionNotification.swift"; sourceTree = "<group>"; };
 		30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBRetrievingFunctions.swift; path = "Custom Classes/Backend Communication/DBRetrievingFunctions.swift"; sourceTree = "<group>"; };
+		30BAE9A11E31B9210094070B /* MessagingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagingFunctions.swift; path = "Custom Classes/Custom Functions/MessagingFunctions.swift"; sourceTree = "<group>"; };
 		30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HalfSwipeCard.swift; path = "Custom Classes/Custom Views/HalfSwipeCard.swift"; sourceTree = "<group>"; };
 		30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				3030C0CA1DD54E8F0077F7AC /* CustomTimer.swift */,
 				3030C0CB1DD54E8F0077F7AC /* Downloader.swift */,
 				3030C0CC1DD54E8F0077F7AC /* modelName.swift */,
+				30BAE9A11E31B9210094070B /* MessagingFunctions.swift */,
 			);
 			name = "Custom Functions";
 			sourceTree = "<group>";
@@ -535,6 +538,7 @@
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
 				90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,
+				30BAE9A21E31B9210094070B /* MessagingFunctions.swift in Sources */,
 				9032B4541E311B0600136408 /* ProfilePicturesView.swift in Sources */,
 				30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */,
 				301B1C551E04473A00D507B8 /* FacebookFunctions.swift in Sources */,
@@ -649,7 +653,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MyBridgeApp/MyBridgeApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -658,8 +661,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/BHEngelhard/Desktop/ParseSDK,
-					/Users/BHEngelhard/Desktop/FacebookSDK,
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -679,7 +680,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MyBridgeApp/MyBridgeApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -688,8 +688,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/BHEngelhard/Desktop/ParseSDK,
-					/Users/BHEngelhard/Desktop/FacebookSDK,
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;

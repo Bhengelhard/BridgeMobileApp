@@ -201,7 +201,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                             }
                         }
                         else {
-                            print(error)
+                            print(error!)
                         }
                     }
                 }
@@ -239,8 +239,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         //messageText.addTarget(self, action: #selector(messageTextTapped(_:)), forControlEvents: .TouchUpInside)
         //messageTextRecorder
         let messageTextButton = UIBarButtonItem(customView: messageText)
-        
-        UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.search, target: self, action: nil)
 
         //adding the flexible space
         //Flexible Space
@@ -330,7 +328,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     //adding a placeholder when the user is not editing the textView
     func textViewDidEndEditing(_ textView: UITextView) {
-        ("end editing is working")
         if messageText.text.isEmpty {
             messageText.text = "Type a message..."
             messageText.textColor = UIColor.lightGray
@@ -519,13 +516,48 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 // push notification ends
                 
             } else {
-                print(error)
+                print(error!)
             }
         }
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
         toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
-        performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
+        if seguedFrom == "BridgeViewController" {
+            //Checking if no messages have been sent and if so deleting the message created for the conversation
+            if noMessagesLabel.alpha == 1.0 {
+                let query = PFQuery(className: "Messages")
+                query.getObjectInBackground(withId: messageId, block: { (object, error) in
+                    if error != nil {
+                        print(error ?? "error in SingleMessagesViewController upon leftBarButtonTapped query")
+                    } else if let object = object {
+                        object.deleteInBackground()
+                    }
+                })
+            }
+            
+            //Transitioning Back to BridgeViewController
+            performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)
+        } else if seguedFrom == "OtherProfileViewController" {
+            //Checking if no messages have been sent and if so deleting the message created for the conversation
+            if noMessagesLabel.alpha == 1.0 {
+                let query = PFQuery(className: "Messages")
+                query.getObjectInBackground(withId: messageId, block: { (object, error) in
+                    if error != nil {
+                        print(error ?? "error in SingleMessagesViewController upon leftBarButtonTapped query")
+                    } else if let object = object {
+                        object.deleteInBackground()
+                    }
+                })
+            }
+            
+            //Transition back to profile
+            self.transitionManager.animationDirection = "Left"
+            self.transitioningDelegate = self.transitionManager
+            dismiss(animated: true, completion: nil)
+        }
+        else {
+            performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
+        }
         leftBarButton.isSelected = true
     }
     func rightBarButtonTapped (_ sender: UIBarButtonItem){
@@ -545,7 +577,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             let messageQuery = PFQuery(className: "Messages")
             messageQuery.getObjectInBackground(withId: self.messageId, block: { (object, error) in
                 if error != nil {
-                    print(error)
+                    print(error!)
                 } else {
                     let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
                     if let userObjectId1 = CurrentIdsInMessage[0] as? String{
@@ -608,10 +640,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                     object!["names_in_message"] = updatedNamesInMessage
                     object!.saveInBackground(block: { (success, error) in
                         if error != nil {
-                            print(error)
+                            print(error!)
                         } else if success {
                             if self.seguedFrom == "BridgeViewController" {
                                 self.performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)
+                            } else if self.seguedFrom == "OtherProfileViewController" {
+                                //self.dismiss(animated: true, completion: nil)
+                                self.performSegue(withIdentifier: "showOtherProfile", sender: self)
                             } else {
                                 self.performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
                             }
@@ -644,13 +679,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     func keyboardWillHide(_ notification: Notification) {
-        if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+        if (((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             singleMessageTableView.frame.origin.y = 0.11*DisplayUtility.screenHeight
             if messageText.text.isEmpty {
                 toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
                 messageText.frame.size.height = 35.5
             } else {
-                toolbar.frame.origin.y += keyboardHeight//keyboardSize.height
+                toolbar.frame.origin.y += keyboardHeight
             }
         }
     }
@@ -705,7 +740,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableViewIsDragged (_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: self.view)
         let draggedTableView = gesture.view!
         let tableViewY = draggedTableView.frame.origin.y
         let tableViewHeight = draggedTableView.frame.height
@@ -745,7 +779,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         refresher.attributedTitle = NSAttributedString(string:"Pull to see older messages")
         refresher.addTarget(self, action: #selector(SingleMessageViewController.updateMessages), for: UIControlEvents.valueChanged)
         singleMessageTableView.addSubview(refresher)
-        singleMessageTableView.register(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell))
+        singleMessageTableView.register(SingleMessageTableCell.self, forCellReuseIdentifier: NSStringFromClass(SingleMessageTableCell.self))
         messageId = newMessageId
         updateMessages()
         
