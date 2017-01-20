@@ -247,12 +247,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             quickUpdateTextView.layer.borderWidth = 1
             quickUpdateTextView.layer.borderColor = UIColor.black.cgColor
             quickUpdateTextView.delegate = self
-            quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
+            //quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
             quickUpdateTextView.textColor = .black
             quickUpdateTextView.textAlignment = .center
             quickUpdateTextView.font = UIFont(name: "BentonSans-Light", size: 14)
             DisplayUtility.centerTextVerticallyInTextView(textView: quickUpdateTextView)
             quickUpdateView.addSubview(quickUpdateTextView)
+            setQuickUpdateText()
             
             quickUpdateView.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: quickUpdateTextView.frame.maxY)
             scrollView.addSubview(quickUpdateView)
@@ -267,7 +268,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             factsLabel.frame = CGRect(x: 0, y: 0, width: quickUpdateLabel.frame.width, height: quickUpdateLabel.frame.height)
             factsLabel.center.x = DisplayUtility.screenWidth / 2
             factsView.addSubview(factsLabel)
-            
             
             factsBackground.backgroundColor = .clear
             factsBackground.layer.cornerRadius = 13
@@ -729,6 +729,17 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         }
     }
     
+    func setQuickUpdateText() {
+        if let user = PFUser.current() {
+            if let quickUpdate = user["quick_update"] as? String {
+                quickUpdateTextView.text = quickUpdate
+                quickUpdatePlaceholder = false
+            } else {
+                quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
+            }
+        }
+    }
+    
     func writeFactsInTextView() {
         if let user = PFUser.current() {
             var factsText = ""
@@ -784,7 +795,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                     facts.append("am \(religion)")
                 }
             }
-            var factsText = ""
             if facts.count > 0 {
                 for i in 0..<facts.count {
                     if i == 0 && i == facts.count - 1 {
@@ -812,6 +822,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     
     func displayFactsEditor(_ gesture: UIGestureRecognizer) {
+        //close keyboard if opened with Facts Editor is displayed
+        if quickUpdateTextView.isFirstResponder {
+            quickUpdateTextView.resignFirstResponder()
+        } else if statusTextView.isFirstResponder {
+            statusTextView.resignFirstResponder()
+        }
+        
         changeAlphaForAllBut(mainView: factsView, superview: view, alphaInc: -0.7)
 
         UIView.animate(withDuration: 0.5, animations: {
