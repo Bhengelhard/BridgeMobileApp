@@ -20,4 +20,12 @@ struct Constants
 			static let friendship = UIColor(red: 112 / 255, green: 193 / 255, blue: 179 / 255, alpha: 1.0)
 		}
 	}
+
+	struct Sizes
+	{
+		static var screen: CGSize
+		{
+			return UIScreen.main.bounds.size
+		}
+	}
 }
