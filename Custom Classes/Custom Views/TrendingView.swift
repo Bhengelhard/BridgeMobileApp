@@ -54,82 +54,24 @@ class TrendingView : UIView
 		dividingLine = line
 		dividingLine?.isHidden = false
 
-		self.frame.size = CGSize(width: DisplayUtility.screenWidth, height: 0.1574*DisplayUtility.screenHeight)
 		self.isHidden = true
+		let screen = Constants.Sizes.screen
+
+		frame.size = CGSize(width: screen.width, height: 0.1574 * screen.height)
 
 		topView.addSubview(self)
 
-		trendingOption0.frame = CGRect(x: 0.02824*DisplayUtility.screenWidth, y: 0, width: 0.465*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
-		trendingOption0.layer.borderWidth = 1.5
-		trendingOption0.layer.cornerRadius = 5.5
-		trendingOption0.setTitleColor(UIColor.white, for: .normal)
-		trendingOption0.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
-		trendingOption0.titleLabel?.textAlignment = NSTextAlignment.center
-		trendingOption0.backgroundColor = UIColor.clear
-		trendingOption0.tag = 0
-		trendingOption0.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+		let column1X = 0.02824 * screen.width
 
-		self.addSubview(trendingOption0)
+		configureButton(trendingOption0, withTag: 0, at: CGPoint(x: column1X, y: 0))
+		configureButton(trendingOption1, withTag: 1, at: CGPoint(x: column1X, y: 0.05609 * screen.height))
+		configureButton(trendingOption2, withTag: 2, at: CGPoint(x: column1X, y: 0.11218 * screen.height))
 
-		trendingOption1.frame = CGRect(x: 0.02824*DisplayUtility.screenWidth, y: 0.05609*DisplayUtility.screenHeight, width: 0.465*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
-		trendingOption1.layer.borderWidth = 1.5
-		trendingOption1.layer.cornerRadius = 5.5
-		trendingOption1.setTitleColor(UIColor.white, for: .normal)
-		trendingOption1.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
-		trendingOption1.titleLabel?.textAlignment = NSTextAlignment.center
-		trendingOption1.backgroundColor = UIColor.clear
-		trendingOption1.tag = 1
-		trendingOption1.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+		let column2X = 0.50544 * screen.width
 
-		self.addSubview(trendingOption1)
-
-		trendingOption2.frame = CGRect(x: 0.02824*DisplayUtility.screenWidth, y: 0.11218*DisplayUtility.screenHeight, width: 0.465*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
-		trendingOption2.layer.borderWidth = 1.5
-		trendingOption2.layer.cornerRadius = 5.5
-		trendingOption2.setTitleColor(UIColor.white, for: .normal)
-		trendingOption2.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
-		trendingOption2.titleLabel?.textAlignment = NSTextAlignment.center
-		trendingOption2.backgroundColor = UIColor.clear
-		trendingOption2.tag = 2
-		trendingOption2.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
-
-		self.addSubview(trendingOption2)
-
-		trendingOption3.frame = CGRect(x: 0.50544*DisplayUtility.screenWidth, y: 0, width: 0.465*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
-		trendingOption3.layer.borderWidth = 1.5
-		trendingOption3.layer.cornerRadius = 5.5
-		trendingOption3.setTitleColor(UIColor.white, for: .normal)
-		trendingOption3.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
-		trendingOption3.titleLabel?.textAlignment = NSTextAlignment.center
-		trendingOption3.backgroundColor = UIColor.clear
-		trendingOption3.tag = 3
-		trendingOption3.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
-
-		self.addSubview(trendingOption3)
-
-		trendingOption4.frame = CGRect(x: 0.50544*DisplayUtility.screenWidth, y: 0.05609*DisplayUtility.screenHeight, width: 0.465*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
-		trendingOption4.layer.borderWidth = 1.5
-		trendingOption4.layer.cornerRadius = 5.5
-		trendingOption4.setTitleColor(UIColor.white, for: .normal)
-		trendingOption4.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
-		trendingOption4.titleLabel?.textAlignment = NSTextAlignment.center
-		trendingOption4.backgroundColor = UIColor.clear
-		trendingOption4.tag = 4
-		trendingOption4.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
-
-		self.addSubview(trendingOption4)
-
-		trendingOption5.frame = CGRect(x: 0.50544*DisplayUtility.screenWidth, y: 0.11218*DisplayUtility.screenHeight, width: 0.465*DisplayUtility.screenWidth, height: 0.04558*DisplayUtility.screenHeight)
-		trendingOption5.layer.borderWidth = 1.5
-		trendingOption5.layer.cornerRadius = 5.5
-		trendingOption5.setTitleColor(UIColor.white, for: .normal)
-		trendingOption5.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 14)
-		trendingOption5.titleLabel?.textAlignment = NSTextAlignment.center
-		trendingOption5.backgroundColor = UIColor.clear
-		trendingOption5.tag = 5
-		trendingOption5.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
-
-		self.addSubview(trendingOption5)
+		configureButton(trendingOption3, withTag: 3, at: CGPoint(x: column2X, y: 0))
+		configureButton(trendingOption4, withTag: 4, at: CGPoint(x: column2X, y: 0.05609 * screen.height))
+		configureButton(trendingOption5, withTag: 5, at: CGPoint(x: column2X, y: 0.11218 * screen.height))
 
 		let type = missionControlView?.whichFilter()
 
@@ -138,6 +80,32 @@ class TrendingView : UIView
 	}
 
 	// MARK: -
+
+	func configureButton (_ button: UIButton, withTag tag: Int, at position: CGPoint)
+	{
+		let width = 0.465 * DisplayUtility.screenWidth
+		let height = 0.04558 * DisplayUtility.screenHeight
+		let font = UIFont(name: "BentonSans-Light", size: 14)
+
+		button.tag = tag
+		button.frame = CGRect(x: position.x, 
+		                      y: position.y, 
+		                      width: width, 
+		                      height: height)
+		button.layer.borderWidth = 1.5
+		button.layer.cornerRadius = 5.5
+		button.setTitleColor(.white, for: .normal)
+		button.backgroundColor = .clear
+		button.addTarget(self, action: #selector(trendingOptionTapped(_:)), for: .touchUpInside)
+
+		if let label = button.titleLabel
+		{
+			label.font = font
+			label.textAlignment = .center
+		}
+
+		self.addSubview(button)
+	}
 
 	func updateTrendingOptions ()
 	{
