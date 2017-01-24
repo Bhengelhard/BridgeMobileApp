@@ -270,7 +270,7 @@ class EditProfileViewController_Old: UIViewController, UITextFieldDelegate, UIIm
         }
         name.textColor = UIColor.lightGray
         
-        let aSelector : Selector = #selector(EditProfileViewController.lblTapped)
+        let aSelector : Selector = #selector(EditProfileViewController_Old.lblTapped)
         let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
         tapGesture.numberOfTapsRequired = 1
         name.addGestureRecognizer(tapGesture)
@@ -307,7 +307,7 @@ class EditProfileViewController_Old: UIViewController, UITextFieldDelegate, UIIm
         if editableName != noNameText {
             nameTextField.text = editableName
         }
-        let outSelector : Selector = #selector(EditProfileViewController.tappedOutside)
+        let outSelector : Selector = #selector(EditProfileViewController_Old.tappedOutside)
         let outsideTapGesture = UITapGestureRecognizer(target: self, action: outSelector)
         outsideTapGesture.numberOfTapsRequired = 1
         view.addGestureRecognizer(outsideTapGesture)

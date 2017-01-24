@@ -67,6 +67,7 @@
 		9032B4561E31249C00136408 /* OtherProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9032B4551E31249C00136408 /* OtherProfileViewController.swift */; };
 		903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CD1E01E75E0021D81A /* TutorialsViewController.swift */; };
 		903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */; };
+		903E01F61E367CA000AE4B67 /* ProfileViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903E01F51E367CA000AE4B67 /* ProfileViews.swift */; };
 		90512CF21E26A8D900D293BD /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90512CF11E26A8D900D293BD /* EditProfileViewController.swift */; };
 		90AD62281E2E259D001F1074 /* ProfilePicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */; };
 		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
@@ -160,6 +161,7 @@
 		9032B4551E31249C00136408 /* OtherProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OtherProfileViewController.swift; path = MyBridgeApp/OtherProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		903811CD1E01E75E0021D81A /* TutorialsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialsViewController.swift; path = MyBridgeApp/TutorialsViewController.swift; sourceTree = SOURCE_ROOT; };
 		903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTutorialViewController.swift; path = MyBridgeApp/SingleTutorialViewController.swift; sourceTree = SOURCE_ROOT; };
+		903E01F51E367CA000AE4B67 /* ProfileViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViews.swift; path = "Custom Classes/UI Functions/ProfileViews.swift"; sourceTree = "<group>"; };
 		90512CF11E26A8D900D293BD /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileViewController.swift; path = MyBridgeApp/EditProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfilePicturesViewController.swift; path = MyBridgeApp/ProfilePicturesViewController.swift; sourceTree = SOURCE_ROOT; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 			children = (
 				3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */,
 				3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */,
+				903E01F51E367CA000AE4B67 /* ProfileViews.swift */,
 			);
 			name = "UI Functions";
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				30BAE9A21E31B9210094070B /* MessagingFunctions.swift in Sources */,
 				9032B4541E311B0600136408 /* ProfilePicturesView.swift in Sources */,
 				30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */,
+				903E01F61E367CA000AE4B67 /* ProfileViews.swift in Sources */,
 				301B1C551E04473A00D507B8 /* FacebookFunctions.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */,

@@ -13,24 +13,14 @@ import Parse
 
 class EditProfileViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    var tempSeguedFrom = ""
-    var seguedTo = ""
-    var seguedFrom = ""
-    
     var myProfileVC: MyProfileViewController
     
     let localData = LocalData()
     
     // views
     let scrollView = UIScrollView()
-    let exitButton = UIButton()
-    let checkButton = UIButton()
-    let greetingLabel = UILabel()
-    let editingLabel = UILabel()
-    let topHexView = HexagonView()
-    let leftHexView = HexagonView()
-    let rightHexView = HexagonView()
-    let bottomHexView = HexagonView()
+    var navBar: ProfileNavBar?
+    var hexes: ProfileHexagons?
     let quickUpdateView = UIView()
     let quickUpdateTextView = UITextView()
     let factsView = UIView()
@@ -74,12 +64,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var noFriendshipStatus = false
     var currentStatusType: String?
     
-    func lblTapped() {
-    }
-    
-    func tappedOutside() {
-    }
-    
     init(myProfileVC: MyProfileViewController) {
         self.myProfileVC = myProfileVC
         super.init(nibName: nil, bundle: nil)
@@ -104,123 +88,61 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         
         if let user = PFUser.current() {
             
-            // Creating viewed exit icon
-            let xIcon = UIImageView(frame: CGRect(x: 0.044*DisplayUtility.screenWidth, y: 0.04384*DisplayUtility.screenHeight, width: 0.03514*DisplayUtility.screenWidth, height: 0.03508*DisplayUtility.screenWidth))
-            xIcon.image = UIImage(named: "Black_X")
-            view.addSubview(xIcon)
             
-            // Creating larger clickable space around exit icon
-            exitButton.frame = CGRect(x: xIcon.frame.minX - 0.02*DisplayUtility.screenWidth, y: xIcon.frame.minY - 0.02*DisplayUtility.screenWidth, width: xIcon.frame.width + 0.04*DisplayUtility.screenWidth, height: xIcon.frame.height + 0.04*DisplayUtility.screenWidth)
-            exitButton.showsTouchWhenHighlighted = false
-            exitButton.addTarget(self, action: #selector(exit(_:)), for: .touchUpInside)
-            view.addSubview(exitButton)
+            // MARK: Navigation Bar
             
-            // Creating viewed check icon
-            let checkIcon = UIImageView(frame: CGRect(x: DisplayUtility.screenWidth - xIcon.frame.minX - 0.05188*DisplayUtility.screenWidth, y: 0, width: 0.05188*DisplayUtility.screenWidth, height: 0.03698*DisplayUtility.screenWidth))
-            checkIcon.center.y = xIcon.center.y
-            checkIcon.image = UIImage(named: "Gradient_Check")
-            view.addSubview(checkIcon)
+            // create image for exit button
+            let xIcon = UIImageView(image: UIImage(named: "Black_X"))
+            let xIconWidth = 0.03514*DisplayUtility.screenWidth
+            let xIconHeight = xIconWidth * 26.31/26.352
+            xIcon.frame.size = CGSize(width: xIconWidth, height: xIconHeight)
             
-            // Creating larger clickable space around check icon
-            checkButton.frame = CGRect(x: checkIcon.frame.minX - 0.02*DisplayUtility.screenWidth, y: checkIcon.frame.minY - 0.02*DisplayUtility.screenWidth, width: checkIcon.frame.width + 0.04*DisplayUtility.screenWidth, height: checkIcon.frame.height + 0.04*DisplayUtility.screenWidth)
-            checkButton.showsTouchWhenHighlighted = false
-            checkButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
-            view.addSubview(checkButton)
+            // create image for save button
+            let checkIcon = UIImageView(image: UIImage(named: "Gradient_Check"))
+            let checkIconWidth = 0.05188*DisplayUtility.screenWidth
+            let checkIconHeight = checkIconWidth * 27.73/38.907
+            checkIcon.frame.size = CGSize(width: checkIconWidth, height: checkIconHeight)
             
-            // Creating greeting label
-            greetingLabel.textColor = .gray
-            greetingLabel.textAlignment = .center
-            greetingLabel.font = UIFont(name: "BentonSans-Light", size: 21)
+            // set text for greeting label
+            var greetingText = String()
             if let userGreeting = user["profile_greeting"] as? String {
                 greeting = userGreeting
             }
-            updateGreetingLabel()
-            view.addSubview(greetingLabel)
+            if let name = localData.getUsername() {
+                let firstName = DisplayUtility.firstName(name: name)
+                greetingText = "\(greeting) I'm \(firstName)."
+            }
             
-            // Adding gesture recognizer to greeting label
-            greetingLabel.isUserInteractionEnabled = true
+            // initialize navigation bar
+            navBar = ProfileNavBar(leftButtonImageView: xIcon, leftButtonFunc: exit, rightButtonImageView: checkIcon, rightButtonFunc: save, mainText: greetingText, mainTextColor: .gray, subText: "EDITING PROFILE", subTextColor: .black)
+            view.addSubview(navBar!)
+            
+            // add gesture recognizer for greeting label
+            navBar!.mainLabel.isUserInteractionEnabled = true
             let greetingGR = UITapGestureRecognizer(target: self, action: #selector(greetingLabelTapped(_:)))
-            greetingLabel.addGestureRecognizer(greetingGR)
+            navBar!.mainLabel.addGestureRecognizer(greetingGR)
             
-            // Creating editing label
-            editingLabel.textColor = .black
-            editingLabel.textAlignment = .center
-            editingLabel.font = UIFont(name: "BentonSans-Light", size: 12)
-            editingLabel.text = "EDITING PROFILE"
-            editingLabel.sizeToFit()
-            editingLabel.frame = CGRect(x: 0, y: greetingLabel.frame.maxY + 0.0075*DisplayUtility.screenHeight, width: editingLabel.frame.width, height: editingLabel.frame.height)
-            editingLabel.center.x = DisplayUtility.screenWidth / 2
-            view.addSubview(editingLabel)
-            
-            // Set up scroll view
-            scrollView.frame = CGRect(x: 0, y: greetingLabel.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.955*DisplayUtility.screenHeight - greetingLabel.frame.maxY)
+            // place scroll view below navigation bar
+            scrollView.frame = CGRect(x: 0, y: navBar!.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - navBar!.frame.maxY)
             view.addSubview(scrollView)
+            
             
             scrollView.backgroundColor = .clear
             
-            // Profile pictures
-            let hexWidth = 0.38154*DisplayUtility.screenWidth
-            let hexHeight = hexWidth * sqrt(3) / 2
-
-            //setting frame and image for topHexView
-            topHexView.frame = CGRect(x: 0, y: 0, width: hexWidth, height: hexHeight)
-            topHexView.center.x = DisplayUtility.screenWidth / 2
-            scrollView.addSubview(topHexView)
             
-            let topHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
-            topHexView.addGestureRecognizer(topHexViewGR)
+            // MARK: Profile Picture Hexagons
             
-            //setting frame and image for leftHexView
-            leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            let borderColor = DisplayUtility.gradientColor(size: leftHexView.frame.size)
-            leftHexView.addBorder(width: 3.0, color: borderColor)
-            
-            /*
-            let downloader = Downloader()
-
-            if let data = localData.getMainProfilePicture() {
-                if let image = UIImage(data: data) {
-                    self.leftHexView.setBackgroundImage(image: image)
-                }
-            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-                downloader.imageFromURL(URL: url, callBack: { (image) in
-                    //self.setImageToHexagon(image: image, hexView: self.leftHexView)
-                    self.leftHexView.setBackgroundImage(image: image)
-                    //Saviong mainProfilePicture to device if it has not already been saved
-                    if let data = UIImageJPEGRepresentation(image, 1.0){
-                        self.localData.setMainProfilePicture(data)
-                    }
-                })
+            // get images for hexes
+            var hexImages: [UIImage]
+            if let images = myProfileVC.hexImages() {
+                hexImages = images
+            } else {
+                hexImages = [UIImage]()
             }
-            */
-            scrollView.addSubview(leftHexView)
             
-            let leftHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
-            leftHexView.addGestureRecognizer(leftHexViewGR)
-            
-            //setting frame for rightHexView
-            rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            scrollView.addSubview(rightHexView)
-            
-            let rightHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
-            rightHexView.addGestureRecognizer(rightHexViewGR)
-            
-            //setting frame for bottomHexView
-            bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
-            scrollView.addSubview(bottomHexView)
-            
-            let bottomHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
-            bottomHexView.addGestureRecognizer(bottomHexViewGR)
-            
-            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
-            for i in 0..<hexViews.count {
-                if let image = myProfileHexViews[i].hexBackgroundImage {
-                    hexViews[i].setBackgroundImage(image: image)
-                } else {
-                    hexViews[i].setBackgroundColor(color: myProfileHexViews[i].hexBackgroundColor)
-                }
-            }
+            // initialize hexes
+            hexes = ProfileHexagons(minY: 0, parentVC: self, hexImages: hexImages, shouldShowDefaultFrame: true, shouldBeEditable: true)
+            scrollView.addSubview(hexes!)
             
             // Creating "Quick-Update" section
             let quickUpdateLabel = UILabel()
@@ -252,7 +174,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             DisplayUtility.centerTextVerticallyInTextView(textView: quickUpdateTextView)
             quickUpdateView.addSubview(quickUpdateTextView)
             
-            quickUpdateView.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: quickUpdateTextView.frame.maxY)
+            quickUpdateView.frame = CGRect(x: 0, y: hexes!.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: quickUpdateTextView.frame.maxY)
             scrollView.addSubview(quickUpdateView)
             
             // Creating "The Facts" section
@@ -494,13 +416,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             friendshipVisibilityButton.addTarget(self, action: #selector(visibilityButtonSelected(_:)), for: .touchUpInside)
             statusView.addSubview(friendshipVisibilityButton)
             
-            let line = UIView()
-            let gradientLayer = DisplayUtility.getGradient()
-            line.backgroundColor = .clear
-            line.layer.insertSublayer(gradientLayer, at: 0)
-            line.frame = CGRect(x: 0, y: businessVisibilityButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 1)
-            line.center.x = DisplayUtility.screenWidth / 2
-            gradientLayer.frame = line.bounds
+            let line = DisplayUtility.gradientLine(minY: businessVisibilityButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth)
             statusView.addSubview(line)
             
             businessStatusButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
@@ -714,13 +630,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func updateMyProfileHexImages() {
-        let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
-        let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-        for i in 0..<myProfileHexViews.count {
-            if let image = hexViews[i].hexBackgroundImage {
-                myProfileHexViews[i].setBackgroundImage(image: image)
-            } else {
-                myProfileHexViews[i].setBackgroundColor(color: hexViews[i].hexBackgroundColor)
+        if let hexes = hexes {
+            if let myProfileHexes = myProfileVC.hexes {
+                myProfileHexes.setImages(hexImages: hexes.getImages())
             }
         }
     }
@@ -738,22 +650,19 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func greetingLabelTapped(_ gesture: UIGestureRecognizer) {
+        // update greeting label
         if let index = greetings.index(of: greeting) {
             let newIndex = (index + 1) % greetings.count
             greeting = greetings[newIndex]
         } else {
             greeting = "Hi,"
         }
-        updateGreetingLabel()
-    }
-    
-    func updateGreetingLabel() {
-        if let name = localData.getUsername() {
-            let firstName = DisplayUtility.firstName(name: name)
-            greetingLabel.text = "\(greeting) I'm \(firstName)."
-            greetingLabel.sizeToFit()
-            greetingLabel.frame = CGRect(x: 0, y: 0.07969*DisplayUtility.screenHeight, width: greetingLabel.frame.width, height: greetingLabel.frame.height)
-            greetingLabel.center.x = DisplayUtility.screenWidth / 2
+        if let navBar = navBar {
+            if let name = localData.getUsername() {
+                let firstName = DisplayUtility.firstName(name: name)
+                let greetingText = "\(greeting) I'm \(firstName)."
+                navBar.updateMainLabel(mainText: greetingText)
+            }
         }
     }
     
@@ -1151,150 +1060,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 if let unselectedImage = unselectedImage {
                     statusButton.setImage(unselectedImage, for: .normal)
                 }
-            }
-        }
-    }
-    
-    func profilePicSelected(_ gesture: UIGestureRecognizer) {
-        if let hexView = gesture.view as? HexagonView {
-            if let hexBackgroundImage = hexView.hexBackgroundImage {
-                let newHexView = HexagonView()
-                newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
-                newHexView.setBackgroundImage(image: hexBackgroundImage)
-                newHexView.addBorder(width: 1, color: .black)
-                
-                var images = [UIImage]()
-                var originalHexFrames = [CGRect]()
-                var startingIndex = 0
-                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-                for i in 0..<hexViews.count {
-                    if let image = hexViews[i].hexBackgroundImage {
-                        images.append(image)
-                    }
-                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
-                    originalHexFrames.append(frame)
-                    if hexViews[i] == hexView {
-                        startingIndex = i
-                    }
-                }
-                let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
-                self.view.addSubview(profilePicsView)
-                profilePicsView.animateIn()
-            } else if leftHexView.hexBackgroundImage == nil { // no images
-                uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
-                uploadMenu.center.x = DisplayUtility.screenWidth / 2
-                uploadMenu.backgroundColor = .white
-                view.addSubview(uploadMenu)
-                
-                // add gesture recognizer to hide upload menu
-                let hideUploadMenuGR = UITapGestureRecognizer(target: self, action: #selector(hideUploadMenu(_:)))
-                uploadMenu.addGestureRecognizer(hideUploadMenuGR)
-                
-                let uploadButtonWidth = 0.66*DisplayUtility.screenWidth
-                let uploadButtonHeight = 0.14*DisplayUtility.screenWidth
-                
-                // layout upload from Facebook button
-                let uploadFromFBButton = UIButton()
-                uploadFromFBButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
-                uploadFromFBButton.center.x = uploadMenu.frame.width / 2
-                uploadFromFBButton.center.y = 0.4*uploadMenu.frame.height
-                uploadFromFBButton.setTitle("UPLOAD FROM FACEBOOK", for: .normal)
-                uploadFromFBButton.setTitleColor(.black, for: .normal)
-                uploadFromFBButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-                uploadFromFBButton.titleLabel?.textAlignment = .center
-                uploadFromFBButton.layer.borderWidth = 1
-                uploadFromFBButton.layer.borderColor = UIColor.gray.cgColor
-                uploadFromFBButton.layer.cornerRadius = 0.3*uploadFromFBButton.frame.height
-                
-                // add target to upload from Facebook button
-                uploadFromFBButton.addTarget(self, action: #selector(uploadFromFB(_:)), for: .touchUpInside)
-                
-                uploadMenu.addSubview(uploadFromFBButton)
-                
-                // layout upload from camera roll button
-                let uploadFromCameraRollButton = UIButton()
-                uploadFromCameraRollButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
-                uploadFromCameraRollButton.center.x = uploadMenu.frame.width / 2
-                uploadFromCameraRollButton.center.y = 0.6*uploadMenu.frame.height
-                uploadFromCameraRollButton.setTitle("UPLOAD FROM CAMERA ROLL", for: .normal)
-                uploadFromCameraRollButton.setTitleColor(.black, for: .normal)
-                uploadFromCameraRollButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-                uploadFromCameraRollButton.titleLabel?.textAlignment = .center
-                uploadFromCameraRollButton.layer.borderWidth = 1
-                uploadFromCameraRollButton.layer.borderColor = UIColor.gray.cgColor
-                uploadFromCameraRollButton.layer.cornerRadius = 0.3*uploadFromCameraRollButton.frame.height
-                uploadMenu.addSubview(uploadFromCameraRollButton)
-                
-                // add target to upload from camera roll button
-                uploadFromCameraRollButton.addTarget(self, action: #selector(uploadFromCameraRoll(_:)), for: .touchUpInside)
-                
-                UIView.animate(withDuration: 0.5) { 
-                    self.uploadMenu.frame = self.view.bounds
-                }
-            }
-        }
-    }
-    
-    func uploadFromFB(_ button: UIButton) {
-        uploadMenu.removeFromSuperview()
-        
-        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
-            if error != nil {
-                print(error)
-            }
-            else if let result = result as? [String: AnyObject]{
-                let userId = result["id"]! as! String
-                let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
-                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
-                    if let data = try? Data(contentsOf: fbpicUrl) {
-                        DispatchQueue.main.async(execute: {
-                            if let image = UIImage(data: data) {
-                                self.leftHexView.setBackgroundImage(image: image)
-                            }
-                            if let user = PFUser.current() {
-                                if let picFile = PFFile(data: data) {
-                                    user["profile_pictures"] = [picFile]
-                                    user.saveInBackground()
-                                }
-                            }
-                        })
-                    }
-                }
-            }
-        }
-    }
-    
-    func uploadFromCameraRoll(_ button: UIButton) {
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    //update the UIImageView once an image has been picked
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        uploadMenu.removeFromSuperview()
-        
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            leftHexView.setBackgroundImage(image: image)
-            if let data = UIImageJPEGRepresentation(image, 1.0) {
-                if let user = PFUser.current() {
-                    if let picFile = PFFile(data: data) {
-                        user["profile_pictures"] = [picFile]
-                        user.saveInBackground()
-                    }
-                }
-            }
-        }
-        imagePicker.dismiss(animated: true, completion: nil)
-    }
-    
-    func hideUploadMenu(_ gesture: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
-        }) { (finished) in
-            if finished {
-                self.uploadMenu.removeFromSuperview()
             }
         }
     }

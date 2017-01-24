@@ -232,13 +232,7 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             friendshipVisibilityButton.addTarget(self, action: #selector(visibilityButtonSelected(_:)), for: .touchUpInside)
             statusView.addSubview(friendshipVisibilityButton)
             
-            let line = UIView()
-            let gradientLayer = DisplayUtility.getGradient()
-            line.backgroundColor = .clear
-            line.layer.insertSublayer(gradientLayer, at: 0)
-            line.frame = CGRect(x: 0, y: businessVisibilityButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 1)
-            line.center.x = DisplayUtility.screenWidth / 2
-            gradientLayer.frame = line.bounds
+            let line = DisplayUtility.gradientLine(minY: businessVisibilityButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth)
             statusView.addSubview(line)
             
             businessStatusButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
@@ -735,9 +729,9 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
         uploadMenu.removeFromSuperview()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
+        graphRequest?.start{ (_, result, error) -> Void in
             if error != nil {
-                print(error)
+                print(error!)
             }
             else if let result = result as? [String: AnyObject]{
                 let userId = result["id"]! as! String

@@ -16,6 +16,8 @@ class OtherProfileViewController: UIViewController {
     var userProfilePictureURL: String?
     
     let scrollView = UIScrollView()
+    var navBar: ProfileNavBar?
+    var hexes: ProfileHexagons?
     let exitButton = UIButton()
     let privacyButton = UIButton()
     let greetingLabel = UILabel()
@@ -96,21 +98,19 @@ class OtherProfileViewController: UIViewController {
     
     func layoutViews() {
         if let user = user {
-            // Creating viewed exit icon
-            let xIcon = UIImageView(frame: CGRect(x: 0.044*DisplayUtility.screenWidth, y: 0.04384*DisplayUtility.screenHeight, width: 0.03514*DisplayUtility.screenWidth, height: 0.03508*DisplayUtility.screenWidth))
-            xIcon.image = UIImage(named: "Black_X")
-            view.addSubview(xIcon)
             
-            // Creating larger clickable space around exit icon
-            exitButton.frame = CGRect(x: xIcon.frame.minX - 0.02*DisplayUtility.screenWidth, y: xIcon.frame.minY - 0.02*DisplayUtility.screenWidth, width: xIcon.frame.width + 0.04*DisplayUtility.screenWidth, height: xIcon.frame.height + 0.04*DisplayUtility.screenWidth)
-            exitButton.showsTouchWhenHighlighted = false
-            exitButton.addTarget(self, action: #selector(exit(_:)), for: .touchUpInside)
-            view.addSubview(exitButton)
             
-            // Creating greeting label
-            greetingLabel.textColor = .black
-            greetingLabel.textAlignment = .center
-            greetingLabel.font = UIFont(name: "BentonSans-Light", size: 21)
+            // MARK: Navigation Bar
+            
+            // create image for exit button
+            let xIcon = UIImageView(image: UIImage(named: "Black_X"))
+            let xIconWidth = 0.03514*DisplayUtility.screenWidth
+            let xIconHeight = xIconWidth * 26.31/26.352
+            xIcon.frame.size = CGSize(width: xIconWidth, height: xIconHeight)
+            
+            // set text for greeting label
+            var greetingText = String()
+            
             var greeting = "Hi,"
             if let userGreeting = user["profile_greeting"] as? String {
                 greeting = userGreeting
@@ -118,22 +118,18 @@ class OtherProfileViewController: UIViewController {
             if let name = user["name"] as? String {
                 userName = name
                 let firstName = DisplayUtility.firstName(name: name)
-                greetingLabel.text = "\(greeting) I'm \(firstName)."
-                greetingLabel.sizeToFit()
-                greetingLabel.frame = CGRect(x: 0, y: 0.07969*DisplayUtility.screenHeight, width: greetingLabel.frame.width, height: greetingLabel.frame.height)
-                greetingLabel.center.x = DisplayUtility.screenWidth / 2
-                view.addSubview(greetingLabel)
+                greetingText = "\(greeting) I'm \(firstName)."
                 
                 businessStatus = "\(firstName) has not yet posted a request for work."
                 loveStatus = "\(firstName) has not yet posted a request for dating."
                 friendshipStatus = "\(firstName) has not yet posted a request for friendship."
             }
             
-            numNectedLabel.textColor = .gray
-            numNectedLabel.textAlignment = .center
-            numNectedLabel.font = UIFont(name: "BentonSans-Light", size: 12)
-            numNectedLabel.frame = CGRect(x: 0, y: greetingLabel.frame.maxY + 0.0075*DisplayUtility.screenHeight, width: 0, height: 0)
-
+            // initialize navigation bar
+            navBar = ProfileNavBar(leftButtonImageView: xIcon, leftButtonFunc: exit, rightButtonImageView: nil, mainText: greetingText, mainTextColor: .black, subTextColor: .gray)
+            view.addSubview(navBar!)
+            
+            // set text for num 'nected label
             if let objectId = user.objectId {
                 let query = PFQuery(className: "BridgePairings")
                 query.whereKey("connecter_objectId", equalTo: objectId)
@@ -148,89 +144,43 @@ class OtherProfileViewController: UIViewController {
                     }
                     else {
                         let numNected = Int(count)
-                        self.numNectedLabel.text = "\(numNected) CONNECTIONS 'NECTED"
-                        self.numNectedLabel.sizeToFit()
-                        self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
-                        self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
-                        self.view.addSubview(self.numNectedLabel)
+                        let numNectedText = "\(numNected) CONNECTIONS 'NECTED"
+                        if let navBar = self.navBar {
+                            navBar.updateSubLabel(subText: numNectedText)
+                        }
                     }
                     
                 })
             }
             
-            scrollView.frame = CGRect(x: 0, y: greetingLabel.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.955*DisplayUtility.screenHeight - greetingLabel.frame.maxY)
+            // place scroll view below navigation bar
+            scrollView.frame = CGRect(x: 0, y: navBar!.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - navBar!.frame.maxY)
             view.addSubview(scrollView)
             
             scrollView.backgroundColor = .clear
             
-            let hexWidth = 0.38154*DisplayUtility.screenWidth
-            let hexHeight = hexWidth * sqrt(3) / 2
             
-            let downloader = Downloader()
+            // MARK: Profile Picture Hexagons
             
-            //setting frame for topHexView
-            topHexView.frame = CGRect(x: 0, y: 0, width: hexWidth, height: hexHeight)
-            topHexView.center.x = DisplayUtility.screenWidth / 2
-            scrollView.addSubview(topHexView)
+            // initialize hexes
+            hexes = ProfileHexagons(minY: 0, parentVC: self, hexImages: [], shouldShowDefaultFrame: false, shouldBeEditable: false)
+            scrollView.addSubview(hexes!)
             
-            //setting frame for leftHexView
-            leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            scrollView.addSubview(leftHexView)
-            
-            //setting frame for rightHexView
-            rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            scrollView.addSubview(rightHexView)
-            
-            //setting frame for bottomHexView
-            bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
-            scrollView.addSubview(bottomHexView)
-            
-            //getting profilePictureURL
-            if let profilePictureURL = user["profile_picture_url"] as? String {
-                userProfilePictureURL = profilePictureURL
-            }
-            
-            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            for hexView in hexViews {
-                hexView.setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
-            }
+            // add images for hexes
             if let profilePics = user["profile_pictures"] as? [PFFile] {
-                for i in 0..<hexViews.count {
-                    if profilePics.count > i {
-                        profilePics[i].getDataInBackground(block: { (data, error) in
-                            if error != nil {
-                                print(error)
-                            } else {
-                                if let data = data {
-                                    if let image = UIImage(data: data) {
-                                        hexViews[i].setBackgroundImage(image: image)
-                                        let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
-                                        hexViews[i].addGestureRecognizer(hexViewGR)
-                                    }
-                                }
-                                
-                            }
-                        })
-                    }
-                }
+                hexes!.addHexImages(from: profilePics, startingAt: 0)
             }
             
             // layout message button
             let messageButtonWidth = 0.34666*DisplayUtility.screenWidth
             let messageButtonHeight = 53.75 / 260.0 * messageButtonWidth
-            messageButton.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.03*DisplayUtility.screenHeight, width: messageButtonWidth, height: messageButtonHeight)
+            messageButton.frame = CGRect(x: 0, y: hexes!.frame.maxY + 0.03*DisplayUtility.screenHeight, width: messageButtonWidth, height: messageButtonHeight)
             messageButton.center.x = DisplayUtility.screenWidth / 2
             messageButton.setImage(UIImage(named: "Message_Button"), for: .normal)
             messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
             scrollView.addSubview(messageButton)
             
-            let line = UIView()
-            let gradientLayer = DisplayUtility.getGradient()
-            line.backgroundColor = .clear
-            line.layer.insertSublayer(gradientLayer, at: 0)
-            line.frame = CGRect(x: 0, y: messageButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 1)
-            line.center.x = DisplayUtility.screenWidth / 2
-            gradientLayer.frame = line.bounds
+            let line = DisplayUtility.gradientLine(minY: messageButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth)
             scrollView.addSubview(line)
             
             var yOffsetFromLine: CGFloat = 0
@@ -295,13 +245,7 @@ class OtherProfileViewController: UIViewController {
             }
             
             if yOffsetFromLine != 0 {
-                let line2 = UIView()
-                let gradientLayer = DisplayUtility.getGradient()
-                line2.backgroundColor = .clear
-                line2.layer.insertSublayer(gradientLayer, at: 0)
-                line2.frame = CGRect(x: 0, y: line.frame.maxY + yOffsetFromLine + 0.03*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 1)
-                line2.center.x = DisplayUtility.screenWidth / 2
-                gradientLayer.frame = line2.bounds
+                let line2 = DisplayUtility.gradientLine(minY: line.frame.maxY + yOffsetFromLine + 0.03*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth)
                 scrollView.addSubview(line2)
                 
                 yOffsetFromLine = line2.frame.maxY - line.frame.maxY
@@ -356,37 +300,6 @@ class OtherProfileViewController: UIViewController {
     
     func exit(_ sender: UIButton) {
         dismiss(animated: false, completion: nil)
-    }
-    
-    func profilePicSelected(_ gesture: UIGestureRecognizer) {
-        if let hexView = gesture.view as? HexagonView {
-            let newHexView = HexagonView()
-            newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
-            if let image = hexView.hexBackgroundImage {
-                newHexView.setBackgroundImage(image: image)
-            } else {
-                newHexView.setBackgroundColor(color: hexView.hexBackgroundColor)
-            }
-            newHexView.addBorder(width: 1, color: .black)
-            
-            var images = [UIImage]()
-            var originalHexFrames = [CGRect]()
-            var startingIndex = 0
-            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            for i in 0..<hexViews.count {
-                if let image = hexViews[i].hexBackgroundImage {
-                    images.append(image)
-                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
-                    originalHexFrames.append(frame)
-                }
-                if hexViews[i] == hexView {
-                    startingIndex = i
-                }
-            }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
-            self.view.addSubview(profilePicsView)
-            profilePicsView.animateIn()
-        }
     }
     
     func writeFacts() -> Bool {

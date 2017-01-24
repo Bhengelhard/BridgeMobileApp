@@ -10,7 +10,7 @@ import UIKit
 
 class HexagonView: UIView {
     
-    var hexBackgroundColor = UIColor.black
+    var hexBackgroundColor = DisplayUtility.defaultHexBackgroundColor
     var hexBackgroundImage: UIImage?
     var border = false
     var borderColor = UIColor.black
@@ -94,7 +94,7 @@ class HexagonView: UIView {
     
     func setBackgroundImage(image: UIImage) {
         hexBackgroundImage = image
-        if let newImage = fitImageToView(image: image) {
+        if let newImage = DisplayUtility.fitImageToView(image: image, viewSize: frame.size) {
             hexBackgroundColor = UIColor(patternImage: newImage)
         } else {
             hexBackgroundColor = UIColor(patternImage: image)
@@ -108,6 +108,10 @@ class HexagonView: UIView {
         if let image = hexBackgroundImage {
             setBackgroundImage(image: image)
         }
+    }
+    
+    func setDefaultBackgorund() {
+        setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
     }
     
     func addBorder(width: CGFloat, color: UIColor) {
@@ -127,10 +131,18 @@ class HexagonView: UIView {
     }
     
     func fitImageToView(image: UIImage) -> UIImage? {
-        let viewSize = CGSize(width: frame.width, height: frame.width)
+        let imageWToHRatio = image.size.width / image.size.height
+        let viewWToHRatio = frame.width / frame.height
+        var fitSize = CGSize.zero
+        if imageWToHRatio >= viewWToHRatio { // image is wider than view
+            fitSize = CGSize(width: imageWToHRatio*frame.height, height: frame.height)
+        } else { // image is taller than view
+            fitSize = CGSize(width: frame.width, height: frame.height/imageWToHRatio)
+        }
+        //let viewSize = CGSize(width: frame.width, height: frame.width)
         var resultImage: UIImage?
-        UIGraphicsBeginImageContext(viewSize)
-        image.draw(in: CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height))
+        UIGraphicsBeginImageContext(fitSize)
+        image.draw(in: CGRect(x: 0, y: 0, width: fitSize.width, height: fitSize.height))
         resultImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         return resultImage;

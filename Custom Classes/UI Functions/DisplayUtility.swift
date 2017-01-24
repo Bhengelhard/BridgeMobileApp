@@ -12,11 +12,12 @@ import UIKit
 class DisplayUtility {
     
     //static display properties
+    
     //screen size
     static let screenWidth = UIScreen.main.bounds.width
     static let screenHeight = UIScreen.main.bounds.height
+    
     //necter colors
-    //necter Colors
     static let necterYellow = UIColor(red: 237/255, green: 203/255, blue: 116/255, alpha: 1.0)//UIColor(red: 255/255, green: 230/255, blue: 57/255, alpha: 1.0)
     static let businessBlue = UIColor(red: 36.0/255, green: 123.0/255, blue: 160.0/255, alpha: 1.0)
     static let loveRed = UIColor(red: 242.0/255, green: 95.0/255, blue: 92.0/255, alpha: 1.0)
@@ -25,15 +26,16 @@ class DisplayUtility {
     static let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
     
     //gradient colors
-    static let color1 = UIColor(red: 247.0/255.0, green: 237.0/255.0, blue: 144.0/255.0, alpha: 1).cgColor
-    static let color2 = UIColor(red: 255.0/255.0, green: 204.0/255.0, blue: 0.0/255.0, alpha: 1).cgColor
-    static let color3 = UIColor(red: 243.0/255.0, green: 144.0/255.0, blue: 63.0/255.0, alpha: 1).cgColor
-    static let color4 = UIColor(red: 237.0/255.0, green: 104.0/255.0, blue: 60.0/255.0, alpha: 1).cgColor
-    static let color5 = UIColor(red: 233.0/255.0, green: 62.0/255.0, blue: 58.0/255.0, alpha: 1).cgColor
+    static let gradientColor1 = UIColor(red: 247.0/255.0, green: 237.0/255.0, blue: 144.0/255.0, alpha: 1).cgColor
+    static let gradientColor2 = UIColor(red: 255.0/255.0, green: 204.0/255.0, blue: 0.0/255.0, alpha: 1).cgColor
+    static let gradientColor3 = UIColor(red: 243.0/255.0, green: 144.0/255.0, blue: 63.0/255.0, alpha: 1).cgColor
+    static let gradientColor4 = UIColor(red: 237.0/255.0, green: 104.0/255.0, blue: 60.0/255.0, alpha: 1).cgColor
+    static let gradientColor5 = UIColor(red: 233.0/255.0, green: 62.0/255.0, blue: 58.0/255.0, alpha: 1).cgColor
     
-    static func getGradient() -> CAGradientLayer {
+    // gradient functions
+    static func gradientLayer() -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [color1, color2, color3, color4, color5]
+        gradientLayer.colors = [gradientColor1, gradientColor2, gradientColor3, gradientColor4, gradientColor5]
         gradientLayer.locations = [0.0, 0.25, 0.5, 0.75, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
@@ -50,7 +52,6 @@ class DisplayUtility {
         
         return label
     }
-    
     
     static func gradientButton(frame: CGRect, text: String, textColor: UIColor, fontSize: CGFloat) -> UIButton {
         let button = UIButton(frame: frame)
@@ -71,10 +72,10 @@ class DisplayUtility {
         shape.path = UIBezierPath(roundedRect: button.bounds, cornerRadius: button.layer.cornerRadius).cgPath
         shape.strokeColor = UIColor.black.cgColor
         shape.fillColor = UIColor.clear.cgColor
-        let gradient = getGradient()
-        gradient.frame = button.bounds
-        gradient.mask = shape
-        button.layer.addSublayer(gradient)
+        let gradientLayer = self.gradientLayer()
+        gradientLayer.frame = button.bounds
+        gradientLayer.mask = shape
+        button.layer.addSublayer(gradientLayer)
         button.addTarget(self, action: #selector(changeColor(_:)), for: .touchUpInside)
         
         return button
@@ -88,7 +89,7 @@ class DisplayUtility {
     static func gradientColor(size: CGSize) -> UIColor {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         let colorspace = CGColorSpaceCreateDeviceRGB()
-        let colors = [color1, color2, color3, color4, color5]
+        let colors = [gradientColor1, gradientColor2, gradientColor3, gradientColor4, gradientColor5]
         let locations: [CGFloat] = [0.0, 0.25, 0.5, 0.75, 1.0]
         if let gradient = CGGradient(colorsSpace: colorspace, colors: colors as CFArray, locations: locations) {
             if let context = UIGraphicsGetCurrentContext() {
@@ -106,8 +107,17 @@ class DisplayUtility {
         } else {
             return DisplayUtility.necterYellow
         }
-        
-        
+    }
+    
+    static func gradientLine(minY: CGFloat, width: CGFloat) -> UIView {
+        let line = UIView()
+        let gradientLayer = self.gradientLayer()
+        line.backgroundColor = .clear
+        line.layer.insertSublayer(gradientLayer, at: 0)
+        line.frame = CGRect(x: 0, y: minY, width: width, height: 1)
+        line.center.x = DisplayUtility.screenWidth / 2
+        gradientLayer.frame = line.bounds
+        return line
     }
     
     //This is a helper function for the BridgeViewController to display a message when there are no more cards to display
@@ -213,6 +223,23 @@ class DisplayUtility {
     //Top-Align Text Vertically in Text View
     static func topAlignTextVerticallyInTextView(textView: UITextView) {
         textView.contentInset.top = 0
+    }
+    
+    static func fitImageToView(image: UIImage, viewSize: CGSize) -> UIImage? {
+        let imageWToHRatio = image.size.width / image.size.height
+        let viewWToHRatio = viewSize.width / viewSize.height
+        var fitSize = CGSize.zero
+        if imageWToHRatio >= viewWToHRatio { // image is wider than view
+            fitSize = CGSize(width: viewSize.height*imageWToHRatio, height: viewSize.height)
+        } else { // image is taller than view
+            fitSize = CGSize(width: viewSize.width, height: viewSize.height/imageWToHRatio)
+        }
+        var resultImage: UIImage?
+        UIGraphicsBeginImageContext(fitSize)
+        image.draw(in: CGRect(x: (viewSize.width - fitSize.width)/2, y: (viewSize.height - fitSize.height)/2, width: fitSize.width, height: fitSize.height))
+        resultImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return resultImage;
     }
     
     /*

@@ -48,8 +48,7 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
                 for friend in friendsData {
                     let valueDict : NSDictionary = friend as! NSDictionary
                     fbFriendIds.append(valueDict.object(forKey: "id") as! String)
-                }
-                
+                }                
                 PFUser.current()?["fb_friends"] = fbFriendIds
                 PFUser.current()?.saveInBackground(block: { (success, error) in
                     if error != nil {
