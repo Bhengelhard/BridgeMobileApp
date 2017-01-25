@@ -128,9 +128,9 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                 originallyInterestedFriendship = interestedFriendship
             }
             
-            let businessVisible = originallyInterestedBusiness ?? false
-            let loveVisible = originallyInterestedLove ?? false
-            let friendshipVisible = originallyInterestedFriendship ?? false
+            let businessVisible = originallyInterestedBusiness ?? true
+            let loveVisible = originallyInterestedLove ?? true
+            let friendshipVisible = originallyInterestedFriendship ?? true
             
             statusButtons = ProfileStatusButtons(minY: visibilityLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, selectType: selectType, shouldShowVisibilityButtons: true, businessVisible: businessVisible, loveVisible: loveVisible, friendshipVisible: friendshipVisible)
             statusView.addSubview(statusButtons!)
