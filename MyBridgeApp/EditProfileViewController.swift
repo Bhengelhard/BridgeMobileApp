@@ -34,12 +34,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     let workBubble = UIButton()
     var clearViews = [UIView]()
     let statusView = UIView()
-    let businessVisibilityButton = UIButton()
-    let loveVisibilityButton = UIButton()
-    let friendshipVisibilityButton = UIButton()
-    let businessStatusButton = UIButton()
-    let loveStatusButton = UIButton()
-    let friendshipStatusButton = UIButton()
+    var statusButtons: ProfileStatusButtons?
     let statusTextView = UITextView()
     var saveButton = UIButton()
     let uploadMenu = UIView()
@@ -50,12 +45,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var statusPlaceholder = true
     
     // data
-    var originallyInterestedBusiness: Bool?
-    var originallyInterestedLove: Bool?
-    var originallyInterestedFriendship: Bool?
     var greeting = "Hi,"
     var greetings = ["Hi,", "What's Up?", "Hello there,"]
     var selectedFacts = [String]()
+    var originallyInterestedBusiness: Bool?
+    var originallyInterestedLove: Bool?
+    var originallyInterestedFriendship: Bool?
     var businessStatus: String?
     var loveStatus: String?
     var friendshipStatus: String?
@@ -76,15 +71,11 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // set background color to white
         view.backgroundColor = .white
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-        scrollView.backgroundColor = .clear
-        let scrollViewEndEditingGR = UITapGestureRecognizer(target: self, action: #selector(endEditing(_:)))
-        scrollView.addGestureRecognizer(scrollViewEndEditingGR)
-        view.addSubview(scrollView)
         
         if let user = PFUser.current() {
             
@@ -122,12 +113,16 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             let greetingGR = UITapGestureRecognizer(target: self, action: #selector(greetingLabelTapped(_:)))
             navBar!.mainLabel.addGestureRecognizer(greetingGR)
             
+            
+            // MARK: Scroll View
+            
+            scrollView.backgroundColor = .clear
+            let scrollViewEndEditingGR = UITapGestureRecognizer(target: self, action: #selector(endEditing(_:)))
+            scrollView.addGestureRecognizer(scrollViewEndEditingGR)
+            
             // place scroll view below navigation bar
             scrollView.frame = CGRect(x: 0, y: navBar!.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - navBar!.frame.maxY)
             view.addSubview(scrollView)
-            
-            
-            scrollView.backgroundColor = .clear
             
             
             // MARK: Profile Picture Hexagons
@@ -144,7 +139,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             hexes = ProfileHexagons(minY: 0, parentVC: self, hexImages: hexImages, shouldShowDefaultFrame: true, shouldBeEditable: true)
             scrollView.addSubview(hexes!)
             
-            // Creating "Quick-Update" section
+            
+            // MARK: Quick Update
+            
             let quickUpdateLabel = UILabel()
             quickUpdateLabel.text = "QUICK-UPDATE"
             quickUpdateLabel.textColor = .black
@@ -177,7 +174,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             quickUpdateView.frame = CGRect(x: 0, y: hexes!.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: quickUpdateTextView.frame.maxY)
             scrollView.addSubview(quickUpdateView)
             
-            // Creating "The Facts" section
+            
+            // MARK: The Facts
+            
             let factsLabel = UILabel()
             factsLabel.text = "THE FACTS"
             factsLabel.textColor = .black
@@ -352,11 +351,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             let factsTextViewGR = UITapGestureRecognizer(target: self, action: #selector(displayFactsEditor(_:)))
             factsTextViewGR.delegate = self
             factsTextView.addGestureRecognizer(factsTextViewGR)
-            
-        
 
             factsView.frame = CGRect(x: 0, y: quickUpdateView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: factsBackground.frame.maxY)
             scrollView.addSubview(factsView)
+            
+
+            // MARK: Statuses
             
             let visibilityLabel = UILabel()
             visibilityLabel.text = "SHOW MY PROFILE FOR:"
@@ -370,80 +370,25 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             if let interestedBusiness = user["interested_in_business"] as? Bool {
                 originallyInterestedBusiness = interestedBusiness
-                if interestedBusiness {
-                    businessVisibilityButton.setImage(UIImage(named: "Profile_Selected_Work_Bubble"), for: .normal)
-                } else {
-                    businessVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Work_Bubble"), for: .normal)
-                }
-            } else {
-                businessVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Work_Bubble"), for: .normal)
             }
             
             if let interestedLove = user["interested_in_love"] as? Bool {
                 originallyInterestedLove = interestedLove
-                if interestedLove {
-                    loveVisibilityButton.setImage(UIImage(named: "Profile_Selected_Dating_Bubble"), for: .normal)
-                } else {
-                    loveVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Dating_Bubble"), for: .normal)
-                }
-            } else {
-                loveVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Dating_Bubble"), for: .normal)
             }
             
             if let interestedFriendship = user["interested_in_friendship"] as? Bool {
                 originallyInterestedFriendship = interestedFriendship
-                if interestedFriendship {
-                    friendshipVisibilityButton.setImage(UIImage(named: "Profile_Selected_Friends_Bubble"), for: .normal)
-                } else {
-                    friendshipVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Friends_Bubble"), for: .normal)
-                }
-            } else {
-                friendshipVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Friends_Bubble"), for: .normal)
             }
             
-            let visibilityButtonWidth = 0.076*DisplayUtility.screenWidth
-            let visibilityButtonHeight = visibilityButtonWidth
-            
-            businessVisibilityButton.frame = CGRect(x: 0, y: visibilityLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, width: visibilityButtonWidth, height: visibilityButtonHeight)
-            businessVisibilityButton.addTarget(self, action: #selector(visibilityButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(businessVisibilityButton)
-            
-            loveVisibilityButton.frame = CGRect(x: 0, y: businessVisibilityButton.frame.minY, width: visibilityButtonWidth, height: visibilityButtonHeight)
-            loveVisibilityButton.addTarget(self, action: #selector(visibilityButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(loveVisibilityButton)
-            
-            friendshipVisibilityButton.frame = CGRect(x: 0, y: businessVisibilityButton.frame.minY, width: visibilityButtonWidth, height: visibilityButtonHeight)
-            friendshipVisibilityButton.addTarget(self, action: #selector(visibilityButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(friendshipVisibilityButton)
-            
-            let line = DisplayUtility.gradientLine(minY: businessVisibilityButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth)
-            statusView.addSubview(line)
-            
-            businessStatusButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
-            loveStatusButton.setImage(UIImage(named: "Profile_Unselected_Dating_Icon"), for: .normal)
-            friendshipStatusButton.setImage(UIImage(named: "Profile_Unselected_Friends_Icon"), for: .normal)
-            
-            let statusButtonWidth = 0.11159*DisplayUtility.screenWidth
-            let statusButtonHeight = statusButtonWidth
-            
-            businessStatusButton.frame = CGRect(x: 0.17716*DisplayUtility.screenWidth, y: line.frame.maxY + 0.02*DisplayUtility.screenHeight, width: statusButtonWidth, height: statusButtonHeight)
-            businessVisibilityButton.center.x = businessStatusButton.center.x
-            businessStatusButton.addTarget(self, action: #selector(statusButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(businessStatusButton)
-            
-            loveStatusButton.frame = CGRect(x: 0, y: businessStatusButton.frame.minY, width: statusButtonWidth, height: statusButtonHeight)
-            loveStatusButton.center.x = DisplayUtility.screenWidth / 2
-            loveVisibilityButton.center.x = loveStatusButton.center.x
-            loveStatusButton.addTarget(self, action: #selector(statusButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(loveStatusButton)
-            
-            friendshipStatusButton.frame = CGRect(x: DisplayUtility.screenWidth - businessStatusButton.frame.maxX, y: businessStatusButton.frame.minY, width: statusButtonWidth, height: statusButtonHeight)
-            friendshipVisibilityButton.center.x = friendshipStatusButton.center.x
-            friendshipStatusButton.addTarget(self, action: #selector(statusButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(friendshipStatusButton)
-            
+            let businessVisible = originallyInterestedBusiness ?? false
+            let loveVisible = originallyInterestedLove ?? false
+            let friendshipVisible = originallyInterestedFriendship ?? false
+
+            statusButtons = ProfileStatusButtons(minY: visibilityLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, selectType: selectType, shouldShowVisibilityButtons: true, businessVisible: businessVisible, loveVisible: loveVisible, friendshipVisible: friendshipVisible)
+            statusView.addSubview(statusButtons!)
+ 
             statusTextView.isEditable = false
-            statusTextView.frame = CGRect(x: 0, y: businessStatusButton.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.85733*DisplayUtility.screenWidth, height: 0.208*DisplayUtility.screenWidth)
+            statusTextView.frame = CGRect(x: 0, y: statusButtons!.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.85733*DisplayUtility.screenWidth, height: 0.208*DisplayUtility.screenWidth)
             statusTextView.center.x = DisplayUtility.screenWidth / 2
             statusTextView.layer.cornerRadius = 13
             statusTextView.layer.borderWidth = 1
@@ -458,6 +403,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             statusView.frame = CGRect(x: 0, y: factsView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: statusTextView.frame.maxY)
             scrollView.addSubview(statusView)
+            
+            
+            // MARK: Save Button
             
             let saveButtonWidth = 0.18266*DisplayUtility.screenWidth
             let saveButtonHeight = 0.4453*saveButtonWidth
@@ -478,7 +426,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         let saveButtonHeight = 0.4453*saveButtonWidth
         saveButton.frame = CGRect(x: 0, y: statusView.frame.maxY + 0.055*DisplayUtility.screenHeight, width: saveButtonWidth, height: saveButtonHeight)
         saveButton.center.x = DisplayUtility.screenWidth / 2
-        scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: saveButton.frame.maxY + 0.02*DisplayUtility.screenHeight)
+        scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(scrollView.frame.height, saveButton.frame.maxY + 0.02*DisplayUtility.screenHeight))
     }
     
     func exit(_ sender: UIButton) {
@@ -490,6 +438,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         view.endEditing(true)
         updateMyProfileHexImages()
         if let user = PFUser.current() {
+            
             user["profile_greeting"] = greeting
             
             if !quickUpdatePlaceholder && quickUpdateTextView.text != "" {
@@ -515,14 +464,27 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             user["selected_facts"] = selectedFacts
             
-            let interestedBusiness = businessVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Work_Bubble")
-            user["interested_in_business"] = interestedBusiness
+            var interestedBusiness: Bool? = nil
+            var interestedLove: Bool? = nil
+            var interestedFriendship: Bool? = nil
             
-            let interestedLove = loveVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Dating_Bubble")
-            user["interested_in_love"] = interestedLove
+            if let statusButtons = statusButtons {
+                interestedBusiness = statusButtons.isInterestedInBusiness()
+                interestedLove = statusButtons.isInterestedInLove()
+                interestedFriendship = statusButtons.isInterestedInFriendship()
+            }
             
-            let interestedFriendship = friendshipVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Friends_Bubble")
-            user["interested_in_friendship"] = interestedFriendship
+            if let interestedBusiness = interestedBusiness {
+                user["interested_in_business"] = interestedBusiness
+            }
+            
+            if let interestedLove = interestedLove {
+                user["interested_in_love"] = interestedLove
+            }
+            
+            if let interestedFriendship = interestedFriendship {
+                user["interested_in_friendship"] = interestedFriendship
+            }
             
             // save user
             user.saveInBackground(block: { (succeeded, error) in
@@ -535,6 +497,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                     if self.originallyInterestedBusiness != interestedBusiness ||
                         self.originallyInterestedLove != interestedLove ||
                         self.originallyInterestedFriendship != interestedFriendship {
+                        print("must change parings because of interested in update")
                         PFCloudFunctions().changeBridgePairingsOnInterestedInUpdate(parameters: [:])
                     }
                 } else {
@@ -623,8 +586,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 }
             }
         }
-        
-        
         
         dismiss(animated: false, completion: nil)
     }
@@ -871,31 +832,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         }
     }
     
-    func visibilityButtonSelected(_ sender: UIButton) {
-        var selectedImage: UIImage?
-        var unselectedImage: UIImage?
-        if sender == businessVisibilityButton {
-            selectedImage = UIImage(named: "Profile_Selected_Work_Bubble")
-            unselectedImage = UIImage(named: "Profile_Unselected_Work_Bubble")
-        } else if sender == loveVisibilityButton {
-            selectedImage = UIImage(named: "Profile_Selected_Dating_Bubble")
-            unselectedImage = UIImage(named: "Profile_Unselected_Dating_Bubble")
-        } else if sender == friendshipVisibilityButton {
-            selectedImage = UIImage(named: "Profile_Selected_Friends_Bubble")
-            unselectedImage = UIImage(named: "Profile_Unselected_Friends_Bubble")
-        }
-        
-        if let unselectedImage = unselectedImage,
-            let selectedImage = selectedImage {
-            if sender.image(for: .normal) == unselectedImage {
-                sender.setImage(selectedImage, for: .normal)
-            } else {
-                sender.setImage(unselectedImage, for: .normal)
-            }
-        }
-    }
-    
-    func statusButtonSelected(_ sender: UIButton) {
+    func selectType(type: String?) {
         
         // update status of current type based on current text in text view
         if currentStatusType == "Business" {
@@ -927,143 +864,114 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         // stop editing textViews
         view.endEditing(true)
         
-        for statusButton in [businessStatusButton, loveStatusButton, friendshipStatusButton] {
-            var selectedImage: UIImage?
-            var unselectedImage: UIImage?
-            if statusButton == businessStatusButton {
-                selectedImage = UIImage(named: "Profile_Selected_Work_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Work_Icon")
-            } else if statusButton == loveStatusButton {
-                selectedImage = UIImage(named: "Profile_Selected_Dating_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Dating_Icon")
-            } else if statusButton == friendshipStatusButton {
-                selectedImage = UIImage(named: "Profile_Selected_Friends_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Friends_Icon")
+        currentStatusType = type
+        
+        if let type = type {
+            statusTextView.isEditable = true
+            currentStatusType = type
+            var runQuery = false
+            if type == "Business" {
+                if noBusinessStatus {
+                    setStatusPlaceholder()
+                } else if let businessStatus = businessStatus {
+                    statusPlaceholder = false
+                    statusTextView.text = businessStatus
+                } else {
+                    statusPlaceholder = false
+                    runQuery = true
+                }
+            } else if type == "Love" {
+                if noLoveStatus {
+                    setStatusPlaceholder()
+                } else if let loveStatus = loveStatus {
+                    statusPlaceholder = false
+                    statusTextView.text = loveStatus
+                } else {
+                    statusPlaceholder = false
+                    runQuery = true
+                }
+            } else if type == "Friendship" {
+                if noFriendshipStatus {
+                    setStatusPlaceholder()
+                } else if let friendshipStatus = friendshipStatus {
+                    statusPlaceholder = false
+                    statusTextView.text = friendshipStatus
+                } else {
+                    statusPlaceholder = false
+                    runQuery = true
+                }
             }
-            if sender == statusButton {
-                if let unselectedImage = unselectedImage,
-                    let selectedImage = selectedImage {
-                    // selecting unselected type
-                    if statusButton.image(for: .normal) == unselectedImage {
-                        statusButton.setImage(selectedImage, for: .normal)
-                        statusTextView.isEditable = true
-                        var runQuery = false
-                        if statusButton == businessStatusButton {
-                            currentStatusType = "Business"
-                            if noBusinessStatus {
-                                setStatusPlaceholder()
-                            } else if let businessStatus = businessStatus {
-                                statusPlaceholder = false
-                                statusTextView.text = businessStatus
-                            } else {
-                                statusPlaceholder = false
-                                runQuery = true
-                            }
-                        } else if statusButton == loveStatusButton {
-                            currentStatusType = "Love"
-                            if noLoveStatus {
-                                setStatusPlaceholder()
-                            } else if let loveStatus = loveStatus {
-                                statusPlaceholder = false
-                                statusTextView.text = loveStatus
-                            } else {
-                                statusPlaceholder = false
-                                runQuery = true
-                            }
-                        } else if statusButton == friendshipStatusButton {
-                            currentStatusType = "Friendship"
-                            if noFriendshipStatus {
-                                setStatusPlaceholder()
-                            } else if let friendshipStatus = friendshipStatus {
-                                statusPlaceholder = false
-                                statusTextView.text = friendshipStatus
-                            } else {
-                                statusPlaceholder = false
-                                runQuery = true
-                            }
-                        }
-                        
-                        if runQuery {
-                            print ("running BridgeStatus query")
-                            if let user = PFUser.current() {
-                                if let objectId = user.objectId {
-                                    if let type = currentStatusType {
-                                        let query = PFQuery(className: "BridgeStatus")
-                                        query.whereKey("userId", equalTo: objectId)
-                                        query.whereKey("bridge_type", equalTo: type)
-                                        query.order(byDescending: "updatedAt")
-                                        query.limit = 1
-                                        query.findObjectsInBackground(block: { (results, error) in
-                                            if let error = error {
-                                                print("error - find objects in background - \(error)")
-                                            } else if let results = results {
-                                                  if results.count > 0 {
-                                                    let result = results[0]
-                                                    if let bridgeStatus = result["bridge_status"] as? String {
-                                                        self.statusTextView.text = bridgeStatus
-                                                        if type == "Business" {
-                                                            self.businessStatus = bridgeStatus
-                                                            //self.localData.setBusinessStatus(bridgeStatus)
-                                                        } else if type == "Love" {
-                                                            self.loveStatus = bridgeStatus
-                                                            //self.localData.setLoveStatus(bridgeStatus)
-                                                        } else if type == "Friendship" {
-                                                            self.friendshipStatus = bridgeStatus
-                                                            //self.localData.setFriendshipStatus(bridgeStatus)
-                                                        }
-                                                        //self.localData.synchronize()
-                                                    }
-                                                  } else {
-                                                    print("no status")
-                                                    if type == "Business" {
-                                                        self.noBusinessStatus = true
-                                                    } else if type == "Love" {
-                                                        self.noLoveStatus = true
-                                                    } else if type == "Friendship" {
-                                                        self.noFriendshipStatus = true
-                                                    }
-                                                    self.setStatusPlaceholder()
-                                                }
-                                            } else {
-                                                print("no status")
-                                                if type == "Business" {
-                                                    self.noBusinessStatus = true
-                                                } else if type == "Love" {
-                                                    self.noLoveStatus = true
-                                                } else if type == "Friendship" {
-                                                    self.noFriendshipStatus = true
-                                                }
-                                                self.setStatusPlaceholder()
-                                            }
-                                            // realign text in status text view to center
-                                            self.statusTextView.textAlignment = .center
-                                            DisplayUtility.centerTextVerticallyInTextView(textView: self.statusTextView)
-                                        })
+            
+            if runQuery {
+                print ("running BridgeStatus query")
+                if let user = PFUser.current() {
+                    if let objectId = user.objectId {
+                        let query = PFQuery(className: "BridgeStatus")
+                        query.whereKey("userId", equalTo: objectId)
+                        query.whereKey("bridge_type", equalTo: type)
+                        query.order(byDescending: "updatedAt")
+                        query.limit = 1
+                        query.findObjectsInBackground(block: { (results, error) in
+                            if let error = error {
+                                print("error - find objects in background - \(error)")
+                            } else if let results = results {
+                                if results.count > 0 {
+                                    let result = results[0]
+                                    if let bridgeStatus = result["bridge_status"] as? String {
+                                        self.statusTextView.text = bridgeStatus
+                                        if type == "Business" {
+                                            self.businessStatus = bridgeStatus
+                                            //self.localData.setBusinessStatus(bridgeStatus)
+                                        } else if type == "Love" {
+                                            self.loveStatus = bridgeStatus
+                                            //self.localData.setLoveStatus(bridgeStatus)
+                                        } else if type == "Friendship" {
+                                            self.friendshipStatus = bridgeStatus
+                                            //self.localData.setFriendshipStatus(bridgeStatus)
+                                        }
+                                        //self.localData.synchronize()
                                     }
+                                } else {
+                                    print("no status")
+                                    if type == "Business" {
+                                        self.noBusinessStatus = true
+                                    } else if type == "Love" {
+                                        self.noLoveStatus = true
+                                    } else if type == "Friendship" {
+                                        self.noFriendshipStatus = true
+                                    }
+                                    self.setStatusPlaceholder()
                                 }
+                            } else {
+                                print("no status")
+                                if type == "Business" {
+                                    self.noBusinessStatus = true
+                                } else if type == "Love" {
+                                    self.noLoveStatus = true
+                                } else if type == "Friendship" {
+                                    self.noFriendshipStatus = true
+                                }
+                                self.setStatusPlaceholder()
                             }
-                        } else {
                             // realign text in status text view to center
-                            statusTextView.textAlignment = .center
-                            DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
-                        }
-                    } else { // unselecting selected type
-                        statusButton.setImage(unselectedImage, for: .normal)
-                        currentStatusType = nil
-                        statusTextView.isEditable = false
-                        statusTextView.text = "Click an icon above to edit current requests."
-                        statusTextView.textAlignment = .center
-                        DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
+                            self.statusTextView.textAlignment = .center
+                            DisplayUtility.centerTextVerticallyInTextView(textView: self.statusTextView)
+                        })
                     }
                 }
             } else {
-                if let unselectedImage = unselectedImage {
-                    statusButton.setImage(unselectedImage, for: .normal)
-                }
+                // realign text in status text view to center
+                statusTextView.textAlignment = .center
+                DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
             }
+        } else { // type is nil
+            statusTextView.isEditable = false
+            statusTextView.text = "Click an icon above to edit current requests."
+            statusTextView.textAlignment = .center
+            DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
         }
     }
-    
+
     // Remove placeholder
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.textAlignment = .left
