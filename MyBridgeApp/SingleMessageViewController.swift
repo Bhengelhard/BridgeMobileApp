@@ -838,10 +838,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         if let messagePosition = singleMessagePositionToObjectIDMapping[(indexPath as NSIndexPath).row] {
             if let messageContent = objectIDToMessageContentArrayMapping[messagePosition] {
-                messageTextLabel.font = UIFont(name: "Verdana", size: 16)
+                messageTextLabel.font = UIFont(name: "BentonSans-Light", size: 20)
                 senderNameLabel.font = UIFont(name: "Verdana", size: 12)
-                timestampLabel.font = UIFont(name: "BentonSans", size: 10)
-                notificationLabel.font = UIFont(name: "BentonSans", size: 10)
+                timestampLabel.font = UIFont(name: "BentonSans-Light", size: 10)
+                notificationLabel.font = UIFont(name: "BentonSans-Light", size: 10)
                 
                 if ((messageContent["senderId"] as? String)! != (PFUser.current()?.objectId)!)  {
                     if ( (messageContent["senderName"] as? String)! != (messageContent["previousSenderName"] as? String)!) {
