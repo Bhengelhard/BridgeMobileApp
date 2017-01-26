@@ -146,51 +146,6 @@ class FacebookFunctions {
                                 // saves these to parse at every login
                                 print("got result")
                                 
-                                /*
-                                
-                                
-                                //setting main name and names for Bridge Types to Facebook name
-                                if let name = result["name"] {
-                                    global_name = name as! String
-                                    // Store the name in core data 06/09
-                                    localData.setUsername(global_name)
-                                    PFUser.current()?["fb_name"] = name
-                                    PFUser.current()?["name"] = name
-                                    //PFUser.current()?["business_name"] = name
-                                    //PFUser.current()?["love_name"] = name
-                                    //PFUser.current()?["friendship_name"] = name
-                                }
-                                if let email = result["email"] {
-                                    PFUser.current()?["email"] = email
-                                }
-                                
-                                
-                                if let birthday = result["birthday"] as? String {
-                                    print(result["birthday"]!)
-                                    print("birthday")
-                                    //getting birthday from Facebook and calculating age
-                                    PFUser.current()?["fb_birthday"] = birthday
-                                    
-                                    //getting age from Birthday
-                                    let formatter = DateFormatter()
-                                    
-                                    //formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
-                                    formatter.locale = Locale(identifier: "en_US_POSIX")
-                                    formatter.dateFormat = "MM/dd/yyyy"
-                                    
-                                    if let NSbirthday = formatter.date(from: birthday) {
-                                        let calendar: Calendar = Calendar.current
-                                        let now = Date()
-                                        //calendar.component(.year, from: NSbirthday)
-                                        //let secondsInYear = 365*24*60*60
-                                        //let age = Int(now.timeIntervalSince(NSbirthday)) / secondsInYear
-                                        if let age = ((calendar as NSCalendar).components(.year, from: NSbirthday, to: now, options: [])).year {
-                                            PFUser.current()?["age"] = age
-                                        }
-                                    }
-                                }
-                                 */
-                                
                                 var hasInterestedIn = false
                                 if let interested_in = result["interested_in"] {
                                     localData.setInterestedIn(interested_in as! String)
@@ -364,12 +319,13 @@ class FacebookFunctions {
                     }
                 }
             }
+            /*
             PFUser.current()?["profile_pictures_urls"] = sources
             PFUser.current()?.saveInBackground(block: { (succeeded, error) in
                 if error != nil {
                     print(error!)
                 }
-            })
+            })*/
             
             var imageFiles = [PFFile]()
             for source in sources {
@@ -381,7 +337,24 @@ class FacebookFunctions {
                 }
             }
             PFUser.current()?["profile_pictures"] = imageFiles
-            PFUser.current()?.saveInBackground()
+            PFUser.current()?.saveInBackground(block: { (success, error) in
+                if error != nil {
+                    print("error - saving profile pictures - \(error)")
+                }
+                if success {
+                    //Saving profilePicture url
+                    if let profilePictureFiles = PFUser.current()?["profile_pictures"] as? [PFFile] {
+                        var profilePicturesURLs = [String]()
+                        for profilePictureFile in profilePictureFiles {
+                            if let url = profilePictureFile.url {
+                                profilePicturesURLs.append(url)
+                            }
+                        }
+                        PFUser.current()?["profile_pictures_urls"] = profilePicturesURLs
+                        PFUser.current()?.signUpInBackground()
+                    }
+                }
+            })
         })
         
         /*

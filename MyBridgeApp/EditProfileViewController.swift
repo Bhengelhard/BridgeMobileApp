@@ -13,24 +13,14 @@ import Parse
 
 class EditProfileViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    var tempSeguedFrom = ""
-    var seguedTo = ""
-    var seguedFrom = ""
-    
     var myProfileVC: MyProfileViewController
     
     let localData = LocalData()
     
     // views
     let scrollView = UIScrollView()
-    let exitButton = UIButton()
-    let checkButton = UIButton()
-    let greetingLabel = UILabel()
-    let editingLabel = UILabel()
-    let topHexView = HexagonView()
-    let leftHexView = HexagonView()
-    let rightHexView = HexagonView()
-    let bottomHexView = HexagonView()
+    var navBar: ProfileNavBar?
+    var hexes: ProfileHexagons?
     let quickUpdateView = UIView()
     let quickUpdateTextView = UITextView()
     let factsView = UIView()
@@ -44,12 +34,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     let workBubble = UIButton()
     var clearViews = [UIView]()
     let statusView = UIView()
-    let businessVisibilityButton = UIButton()
-    let loveVisibilityButton = UIButton()
-    let friendshipVisibilityButton = UIButton()
-    let businessStatusButton = UIButton()
-    let loveStatusButton = UIButton()
-    let friendshipStatusButton = UIButton()
+    var statusButtons: ProfileStatusButtons?
     let statusTextView = UITextView()
     var saveButton = UIButton()
     let uploadMenu = UIView()
@@ -60,12 +45,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var statusPlaceholder = true
     
     // data
-    var originallyInterestedBusiness: Bool?
-    var originallyInterestedLove: Bool?
-    var originallyInterestedFriendship: Bool?
     var greeting = "Hi,"
     var greetings = ["Hi,", "What's Up?", "Hello there,"]
     var selectedFacts = [String]()
+    var originallyInterestedBusiness: Bool?
+    var originallyInterestedLove: Bool?
+    var originallyInterestedFriendship: Bool?
     var businessStatus: String?
     var loveStatus: String?
     var friendshipStatus: String?
@@ -73,12 +58,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var noLoveStatus = false
     var noFriendshipStatus = false
     var currentStatusType: String?
-    
-    func lblTapped() {
-    }
-    
-    func tappedOutside() {
-    }
     
     init(myProfileVC: MyProfileViewController) {
         self.myProfileVC = myProfileVC
@@ -92,137 +71,77 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // set background color to white
         view.backgroundColor = .white
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        scrollView.backgroundColor = .clear
-        let scrollViewEndEditingGR = UITapGestureRecognizer(target: self, action: #selector(endEditing(_:)))
-        scrollView.addGestureRecognizer(scrollViewEndEditingGR)
-        view.addSubview(scrollView)
-        
         if let user = PFUser.current() {
             
-            // Creating viewed exit icon
-            let xIcon = UIImageView(frame: CGRect(x: 0.044*DisplayUtility.screenWidth, y: 0.04384*DisplayUtility.screenHeight, width: 0.03514*DisplayUtility.screenWidth, height: 0.03508*DisplayUtility.screenWidth))
-            xIcon.image = UIImage(named: "Black_X")
-            view.addSubview(xIcon)
             
-            // Creating larger clickable space around exit icon
-            exitButton.frame = CGRect(x: xIcon.frame.minX - 0.02*DisplayUtility.screenWidth, y: xIcon.frame.minY - 0.02*DisplayUtility.screenWidth, width: xIcon.frame.width + 0.04*DisplayUtility.screenWidth, height: xIcon.frame.height + 0.04*DisplayUtility.screenWidth)
-            exitButton.showsTouchWhenHighlighted = false
-            exitButton.addTarget(self, action: #selector(exit(_:)), for: .touchUpInside)
-            view.addSubview(exitButton)
+            // MARK: Navigation Bar
             
-            // Creating viewed check icon
-            let checkIcon = UIImageView(frame: CGRect(x: DisplayUtility.screenWidth - xIcon.frame.minX - 0.05188*DisplayUtility.screenWidth, y: 0, width: 0.05188*DisplayUtility.screenWidth, height: 0.03698*DisplayUtility.screenWidth))
-            checkIcon.center.y = xIcon.center.y
-            checkIcon.image = UIImage(named: "Gradient_Check")
-            view.addSubview(checkIcon)
+            // create image for exit button
+            let xIcon = UIImageView(image: UIImage(named: "Black_X"))
+            let xIconWidth = 0.03514*DisplayUtility.screenWidth
+            let xIconHeight = xIconWidth * 26.31/26.352
+            xIcon.frame.size = CGSize(width: xIconWidth, height: xIconHeight)
             
-            // Creating larger clickable space around check icon
-            checkButton.frame = CGRect(x: checkIcon.frame.minX - 0.02*DisplayUtility.screenWidth, y: checkIcon.frame.minY - 0.02*DisplayUtility.screenWidth, width: checkIcon.frame.width + 0.04*DisplayUtility.screenWidth, height: checkIcon.frame.height + 0.04*DisplayUtility.screenWidth)
-            checkButton.showsTouchWhenHighlighted = false
-            checkButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
-            view.addSubview(checkButton)
+            // create image for save button
+            let checkIcon = UIImageView(image: UIImage(named: "Gradient_Check"))
+            let checkIconWidth = 0.05188*DisplayUtility.screenWidth
+            let checkIconHeight = checkIconWidth * 27.73/38.907
+            checkIcon.frame.size = CGSize(width: checkIconWidth, height: checkIconHeight)
             
-            // Creating greeting label
-            greetingLabel.textColor = .gray
-            greetingLabel.textAlignment = .center
-            greetingLabel.font = UIFont(name: "BentonSans-Light", size: 21)
+            // set text for greeting label
+            var greetingText = String()
             if let userGreeting = user["profile_greeting"] as? String {
                 greeting = userGreeting
             }
-            updateGreetingLabel()
-            view.addSubview(greetingLabel)
+            if let name = localData.getUsername() {
+                let firstName = DisplayUtility.firstName(name: name)
+                greetingText = "\(greeting) I'm \(firstName)."
+            }
             
-            // Adding gesture recognizer to greeting label
-            greetingLabel.isUserInteractionEnabled = true
+            // initialize navigation bar
+            navBar = ProfileNavBar(leftButtonImageView: xIcon, leftButtonFunc: exit, rightButtonImageView: checkIcon, rightButtonFunc: save, mainText: greetingText, mainTextColor: .gray, subText: "EDITING PROFILE", subTextColor: .black)
+            view.addSubview(navBar!)
+            
+            // add gesture recognizer for greeting label
+            navBar!.mainLabel.isUserInteractionEnabled = true
             let greetingGR = UITapGestureRecognizer(target: self, action: #selector(greetingLabelTapped(_:)))
-            greetingLabel.addGestureRecognizer(greetingGR)
+            navBar!.mainLabel.addGestureRecognizer(greetingGR)
             
-            // Creating editing label
-            editingLabel.textColor = .black
-            editingLabel.textAlignment = .center
-            editingLabel.font = UIFont(name: "BentonSans-Light", size: 12)
-            editingLabel.text = "EDITING PROFILE"
-            editingLabel.sizeToFit()
-            editingLabel.frame = CGRect(x: 0, y: greetingLabel.frame.maxY + 0.0075*DisplayUtility.screenHeight, width: editingLabel.frame.width, height: editingLabel.frame.height)
-            editingLabel.center.x = DisplayUtility.screenWidth / 2
-            view.addSubview(editingLabel)
             
-            // Set up scroll view
-            scrollView.frame = CGRect(x: 0, y: greetingLabel.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.955*DisplayUtility.screenHeight - greetingLabel.frame.maxY)
-            view.addSubview(scrollView)
+            // MARK: Scroll View
             
             scrollView.backgroundColor = .clear
+            let scrollViewEndEditingGR = UITapGestureRecognizer(target: self, action: #selector(endEditing(_:)))
+            scrollView.addGestureRecognizer(scrollViewEndEditingGR)
             
-            // Profile pictures
-            let hexWidth = 0.38154*DisplayUtility.screenWidth
-            let hexHeight = hexWidth * sqrt(3) / 2
-
-            //setting frame and image for topHexView
-            topHexView.frame = CGRect(x: 0, y: 0, width: hexWidth, height: hexHeight)
-            topHexView.center.x = DisplayUtility.screenWidth / 2
-            scrollView.addSubview(topHexView)
+            // place scroll view below navigation bar
+            scrollView.frame = CGRect(x: 0, y: navBar!.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - navBar!.frame.maxY)
+            view.addSubview(scrollView)
             
-            let topHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
-            topHexView.addGestureRecognizer(topHexViewGR)
             
-            //setting frame and image for leftHexView
-            leftHexView.frame = CGRect(x: topHexView.frame.minX - 0.75*hexWidth - 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            let borderColor = DisplayUtility.gradientColor(size: leftHexView.frame.size)
-            leftHexView.addBorder(width: 3.0, color: borderColor)
+            // MARK: Profile Picture Hexagons
             
-            /*
-            let downloader = Downloader()
-
-            if let data = localData.getMainProfilePicture() {
-                if let image = UIImage(data: data) {
-                    self.leftHexView.setBackgroundImage(image: image)
-                }
-            } else if let urlString = user["profile_picture_url"] as? String, let url = URL(string: urlString) {
-                downloader.imageFromURL(URL: url, callBack: { (image) in
-                    //self.setImageToHexagon(image: image, hexView: self.leftHexView)
-                    self.leftHexView.setBackgroundImage(image: image)
-                    //Saviong mainProfilePicture to device if it has not already been saved
-                    if let data = UIImageJPEGRepresentation(image, 1.0){
-                        self.localData.setMainProfilePicture(data)
-                    }
-                })
-            }
-            */
-            scrollView.addSubview(leftHexView)
-            
-            let leftHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
-            leftHexView.addGestureRecognizer(leftHexViewGR)
-            
-            //setting frame for rightHexView
-            rightHexView.frame = CGRect(x: topHexView.frame.minX + 0.75*hexWidth + 3, y: topHexView.frame.midY + 2, width: hexWidth, height: hexHeight)
-            scrollView.addSubview(rightHexView)
-            
-            let rightHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
-            rightHexView.addGestureRecognizer(rightHexViewGR)
-            
-            //setting frame for bottomHexView
-            bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
-            scrollView.addSubview(bottomHexView)
-            
-            let bottomHexViewGR = UITapGestureRecognizer(target: self, action: #selector(profilePicSelected(_:)))
-            bottomHexView.addGestureRecognizer(bottomHexViewGR)
-            
-            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
-            for i in 0..<hexViews.count {
-                if let image = myProfileHexViews[i].hexBackgroundImage {
-                    hexViews[i].setBackgroundImage(image: image)
-                } else {
-                    hexViews[i].setBackgroundColor(color: myProfileHexViews[i].hexBackgroundColor)
-                }
+            // get images for hexes
+            var hexImages: [UIImage]
+            if let images = myProfileVC.hexImages() {
+                hexImages = images
+            } else {
+                hexImages = [UIImage]()
             }
             
-            // Creating "Quick-Update" section
+            // initialize hexes
+            hexes = ProfileHexagons(minY: 0, parentVC: self, hexImages: hexImages, shouldShowDefaultFrame: true, shouldBeEditable: true)
+            scrollView.addSubview(hexes!)
+            
+            
+            // MARK: Quick Update
+            
             let quickUpdateLabel = UILabel()
             quickUpdateLabel.text = "QUICK-UPDATE"
             quickUpdateLabel.textColor = .black
@@ -247,10 +166,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             quickUpdateView.addSubview(quickUpdateTextView)
             setQuickUpdateText()
             
-            quickUpdateView.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: quickUpdateTextView.frame.maxY)
+            quickUpdateView.frame = CGRect(x: 0, y: hexes!.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: quickUpdateTextView.frame.maxY)
             scrollView.addSubview(quickUpdateView)
             
-            // Creating "The Facts" section
+            
+            // MARK: The Facts
+            
             let factsLabel = UILabel()
             factsLabel.text = "THE FACTS"
             factsLabel.textColor = .black
@@ -424,11 +345,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             let factsTextViewGR = UITapGestureRecognizer(target: self, action: #selector(displayFactsEditor(_:)))
             factsTextViewGR.delegate = self
             factsTextView.addGestureRecognizer(factsTextViewGR)
-            
-        
 
             factsView.frame = CGRect(x: 0, y: quickUpdateView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: factsBackground.frame.maxY)
             scrollView.addSubview(factsView)
+            
+
+            // MARK: Statuses
             
             let visibilityLabel = UILabel()
             visibilityLabel.text = "SHOW MY PROFILE FOR:"
@@ -442,86 +364,25 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             if let interestedBusiness = user["interested_in_business"] as? Bool {
                 originallyInterestedBusiness = interestedBusiness
-                if interestedBusiness {
-                    businessVisibilityButton.setImage(UIImage(named: "Profile_Selected_Work_Bubble"), for: .normal)
-                } else {
-                    businessVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Work_Bubble"), for: .normal)
-                }
-            } else {
-                businessVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Work_Bubble"), for: .normal)
             }
             
             if let interestedLove = user["interested_in_love"] as? Bool {
                 originallyInterestedLove = interestedLove
-                if interestedLove {
-                    loveVisibilityButton.setImage(UIImage(named: "Profile_Selected_Dating_Bubble"), for: .normal)
-                } else {
-                    loveVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Dating_Bubble"), for: .normal)
-                }
-            } else {
-                loveVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Dating_Bubble"), for: .normal)
             }
             
             if let interestedFriendship = user["interested_in_friendship"] as? Bool {
                 originallyInterestedFriendship = interestedFriendship
-                if interestedFriendship {
-                    friendshipVisibilityButton.setImage(UIImage(named: "Profile_Selected_Friends_Bubble"), for: .normal)
-                } else {
-                    friendshipVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Friends_Bubble"), for: .normal)
-                }
-            } else {
-                friendshipVisibilityButton.setImage(UIImage(named: "Profile_Unselected_Friends_Bubble"), for: .normal)
             }
             
-            let visibilityButtonWidth = 0.076*DisplayUtility.screenWidth
-            let visibilityButtonHeight = visibilityButtonWidth
-            
-            businessVisibilityButton.frame = CGRect(x: 0, y: visibilityLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, width: visibilityButtonWidth, height: visibilityButtonHeight)
-            businessVisibilityButton.addTarget(self, action: #selector(visibilityButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(businessVisibilityButton)
-            
-            loveVisibilityButton.frame = CGRect(x: 0, y: businessVisibilityButton.frame.minY, width: visibilityButtonWidth, height: visibilityButtonHeight)
-            loveVisibilityButton.addTarget(self, action: #selector(visibilityButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(loveVisibilityButton)
-            
-            friendshipVisibilityButton.frame = CGRect(x: 0, y: businessVisibilityButton.frame.minY, width: visibilityButtonWidth, height: visibilityButtonHeight)
-            friendshipVisibilityButton.addTarget(self, action: #selector(visibilityButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(friendshipVisibilityButton)
-            
-            let line = UIView()
-            let gradientLayer = DisplayUtility.getGradient()
-            line.backgroundColor = .clear
-            line.layer.insertSublayer(gradientLayer, at: 0)
-            line.frame = CGRect(x: 0, y: businessVisibilityButton.frame.maxY + 0.02*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 1)
-            line.center.x = DisplayUtility.screenWidth / 2
-            gradientLayer.frame = line.bounds
-            statusView.addSubview(line)
-            
-            businessStatusButton.setImage(UIImage(named: "Profile_Unselected_Work_Icon"), for: .normal)
-            loveStatusButton.setImage(UIImage(named: "Profile_Unselected_Dating_Icon"), for: .normal)
-            friendshipStatusButton.setImage(UIImage(named: "Profile_Unselected_Friends_Icon"), for: .normal)
-            
-            let statusButtonWidth = 0.11159*DisplayUtility.screenWidth
-            let statusButtonHeight = statusButtonWidth
-            
-            businessStatusButton.frame = CGRect(x: 0.17716*DisplayUtility.screenWidth, y: line.frame.maxY + 0.02*DisplayUtility.screenHeight, width: statusButtonWidth, height: statusButtonHeight)
-            businessVisibilityButton.center.x = businessStatusButton.center.x
-            businessStatusButton.addTarget(self, action: #selector(statusButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(businessStatusButton)
-            
-            loveStatusButton.frame = CGRect(x: 0, y: businessStatusButton.frame.minY, width: statusButtonWidth, height: statusButtonHeight)
-            loveStatusButton.center.x = DisplayUtility.screenWidth / 2
-            loveVisibilityButton.center.x = loveStatusButton.center.x
-            loveStatusButton.addTarget(self, action: #selector(statusButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(loveStatusButton)
-            
-            friendshipStatusButton.frame = CGRect(x: DisplayUtility.screenWidth - businessStatusButton.frame.maxX, y: businessStatusButton.frame.minY, width: statusButtonWidth, height: statusButtonHeight)
-            friendshipVisibilityButton.center.x = friendshipStatusButton.center.x
-            friendshipStatusButton.addTarget(self, action: #selector(statusButtonSelected(_:)), for: .touchUpInside)
-            statusView.addSubview(friendshipStatusButton)
-            
+            let businessVisible = originallyInterestedBusiness ?? false
+            let loveVisible = originallyInterestedLove ?? false
+            let friendshipVisible = originallyInterestedFriendship ?? false
+
+            statusButtons = ProfileStatusButtons(minY: visibilityLabel.frame.maxY + 0.03*DisplayUtility.screenHeight, selectType: selectType, shouldShowVisibilityButtons: true, businessVisible: businessVisible, loveVisible: loveVisible, friendshipVisible: friendshipVisible)
+            statusView.addSubview(statusButtons!)
+ 
             statusTextView.isEditable = false
-            statusTextView.frame = CGRect(x: 0, y: businessStatusButton.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.85733*DisplayUtility.screenWidth, height: 0.208*DisplayUtility.screenWidth)
+            statusTextView.frame = CGRect(x: 0, y: statusButtons!.frame.maxY + 0.03*DisplayUtility.screenHeight, width: 0.85733*DisplayUtility.screenWidth, height: 0.208*DisplayUtility.screenWidth)
             statusTextView.center.x = DisplayUtility.screenWidth / 2
             statusTextView.layer.cornerRadius = 13
             statusTextView.layer.borderWidth = 1
@@ -536,6 +397,9 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             statusView.frame = CGRect(x: 0, y: factsView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: statusTextView.frame.maxY)
             scrollView.addSubview(statusView)
+            
+            
+            // MARK: Save Button
             
             let saveButtonWidth = 0.18266*DisplayUtility.screenWidth
             let saveButtonHeight = 0.4453*saveButtonWidth
@@ -556,7 +420,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         let saveButtonHeight = 0.4453*saveButtonWidth
         saveButton.frame = CGRect(x: 0, y: statusView.frame.maxY + 0.055*DisplayUtility.screenHeight, width: saveButtonWidth, height: saveButtonHeight)
         saveButton.center.x = DisplayUtility.screenWidth / 2
-        scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: saveButton.frame.maxY + 0.02*DisplayUtility.screenHeight)
+        scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(scrollView.frame.height, saveButton.frame.maxY + 0.02*DisplayUtility.screenHeight))
     }
     
     func exit(_ sender: UIButton) {
@@ -566,8 +430,10 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     func save(_ sender: UIButton) {
         view.endEditing(true)
+        
         updateMyProfileHexImages()
         if let user = PFUser.current() {
+            
             user["profile_greeting"] = greeting
             
             if !quickUpdatePlaceholder && quickUpdateTextView.text != "" {
@@ -593,14 +459,27 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             user["selected_facts"] = selectedFacts
             
-            let interestedBusiness = businessVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Work_Bubble")
-            user["interested_in_business"] = interestedBusiness
+            var interestedBusiness: Bool? = nil
+            var interestedLove: Bool? = nil
+            var interestedFriendship: Bool? = nil
             
-            let interestedLove = loveVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Dating_Bubble")
-            user["interested_in_love"] = interestedLove
+            if let statusButtons = statusButtons {
+                interestedBusiness = statusButtons.isInterestedInBusiness()
+                interestedLove = statusButtons.isInterestedInLove()
+                interestedFriendship = statusButtons.isInterestedInFriendship()
+            }
             
-            let interestedFriendship = friendshipVisibilityButton.image(for: .normal) == UIImage(named: "Profile_Selected_Friends_Bubble")
-            user["interested_in_friendship"] = interestedFriendship
+            if let interestedBusiness = interestedBusiness {
+                user["interested_in_business"] = interestedBusiness
+            }
+            
+            if let interestedLove = interestedLove {
+                user["interested_in_love"] = interestedLove
+            }
+            
+            if let interestedFriendship = interestedFriendship {
+                user["interested_in_friendship"] = interestedFriendship
+            }
             
             // save user
             user.saveInBackground(block: { (succeeded, error) in
@@ -613,6 +492,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                     if self.originallyInterestedBusiness != interestedBusiness ||
                         self.originallyInterestedLove != interestedLove ||
                         self.originallyInterestedFriendship != interestedFriendship {
+                        print("must change parings because of interested in update")
                         PFCloudFunctions().changeBridgePairingsOnInterestedInUpdate(parameters: [:])
                     }
                 } else {
@@ -708,19 +588,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
         }
         
-        
-        
         dismiss(animated: false, completion: nil)
     }
     
     func updateMyProfileHexImages() {
-        let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
-        let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-        for i in 0..<myProfileHexViews.count {
-            if let image = hexViews[i].hexBackgroundImage {
-                myProfileHexViews[i].setBackgroundImage(image: image)
-            } else {
-                myProfileHexViews[i].setBackgroundColor(color: hexViews[i].hexBackgroundColor)
+        if let hexes = hexes {
+            if let myProfileHexes = myProfileVC.hexes {
+                myProfileHexes.setImages(hexImages: hexes.getImages())
             }
         }
     }
@@ -738,22 +612,19 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func greetingLabelTapped(_ gesture: UIGestureRecognizer) {
+        // update greeting label
         if let index = greetings.index(of: greeting) {
             let newIndex = (index + 1) % greetings.count
             greeting = greetings[newIndex]
         } else {
             greeting = "Hi,"
         }
-        updateGreetingLabel()
-    }
-    
-    func updateGreetingLabel() {
-        if let name = localData.getUsername() {
-            let firstName = DisplayUtility.firstName(name: name)
-            greetingLabel.text = "\(greeting) I'm \(firstName)."
-            greetingLabel.sizeToFit()
-            greetingLabel.frame = CGRect(x: 0, y: 0.07969*DisplayUtility.screenHeight, width: greetingLabel.frame.width, height: greetingLabel.frame.height)
-            greetingLabel.center.x = DisplayUtility.screenWidth / 2
+        if let navBar = navBar {
+            if let name = localData.getUsername() {
+                let firstName = DisplayUtility.firstName(name: name)
+                let greetingText = "\(greeting) I'm \(firstName)."
+                navBar.updateMainLabel(mainText: greetingText)
+            }
         }
     }
     
@@ -982,31 +853,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         }
     }
     
-    func visibilityButtonSelected(_ sender: UIButton) {
-        var selectedImage: UIImage?
-        var unselectedImage: UIImage?
-        if sender == businessVisibilityButton {
-            selectedImage = UIImage(named: "Profile_Selected_Work_Bubble")
-            unselectedImage = UIImage(named: "Profile_Unselected_Work_Bubble")
-        } else if sender == loveVisibilityButton {
-            selectedImage = UIImage(named: "Profile_Selected_Dating_Bubble")
-            unselectedImage = UIImage(named: "Profile_Unselected_Dating_Bubble")
-        } else if sender == friendshipVisibilityButton {
-            selectedImage = UIImage(named: "Profile_Selected_Friends_Bubble")
-            unselectedImage = UIImage(named: "Profile_Unselected_Friends_Bubble")
-        }
-        
-        if let unselectedImage = unselectedImage,
-            let selectedImage = selectedImage {
-            if sender.image(for: .normal) == unselectedImage {
-                sender.setImage(selectedImage, for: .normal)
-            } else {
-                sender.setImage(unselectedImage, for: .normal)
-            }
-        }
-    }
-    
-    func statusButtonSelected(_ sender: UIButton) {
+    func selectType(type: String?) {
         
         // update status of current type based on current text in text view
         if currentStatusType == "Business" {
@@ -1038,287 +885,114 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         // stop editing textViews
         view.endEditing(true)
         
-        for statusButton in [businessStatusButton, loveStatusButton, friendshipStatusButton] {
-            var selectedImage: UIImage?
-            var unselectedImage: UIImage?
-            if statusButton == businessStatusButton {
-                selectedImage = UIImage(named: "Profile_Selected_Work_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Work_Icon")
-            } else if statusButton == loveStatusButton {
-                selectedImage = UIImage(named: "Profile_Selected_Dating_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Dating_Icon")
-            } else if statusButton == friendshipStatusButton {
-                selectedImage = UIImage(named: "Profile_Selected_Friends_Icon")
-                unselectedImage = UIImage(named: "Profile_Unselected_Friends_Icon")
-            }
-            if sender == statusButton {
-                if let unselectedImage = unselectedImage,
-                    let selectedImage = selectedImage {
-                    // selecting unselected type
-                    if statusButton.image(for: .normal) == unselectedImage {
-                        statusButton.setImage(selectedImage, for: .normal)
-                        statusTextView.isEditable = true
-                        var runQuery = false
-                        if statusButton == businessStatusButton {
-                            currentStatusType = "Business"
-                            if noBusinessStatus {
-                                setStatusPlaceholder()
-                            } else if let businessStatus = businessStatus {
-                                statusPlaceholder = false
-                                statusTextView.text = businessStatus
-                            } else {
-                                statusPlaceholder = false
-                                runQuery = true
-                            }
-                        } else if statusButton == loveStatusButton {
-                            currentStatusType = "Love"
-                            if noLoveStatus {
-                                setStatusPlaceholder()
-                            } else if let loveStatus = loveStatus {
-                                statusPlaceholder = false
-                                statusTextView.text = loveStatus
-                            } else {
-                                statusPlaceholder = false
-                                runQuery = true
-                            }
-                        } else if statusButton == friendshipStatusButton {
-                            currentStatusType = "Friendship"
-                            if noFriendshipStatus {
-                                setStatusPlaceholder()
-                            } else if let friendshipStatus = friendshipStatus {
-                                statusPlaceholder = false
-                                statusTextView.text = friendshipStatus
-                            } else {
-                                statusPlaceholder = false
-                                runQuery = true
-                            }
-                        }
-                        
-                        if runQuery {
-                            print ("running BridgeStatus query")
-                            if let user = PFUser.current() {
-                                if let objectId = user.objectId {
-                                    if let type = currentStatusType {
-                                        let query = PFQuery(className: "BridgeStatus")
-                                        query.whereKey("userId", equalTo: objectId)
-                                        query.whereKey("bridge_type", equalTo: type)
-                                        query.order(byDescending: "updatedAt")
-                                        query.limit = 1
-                                        query.findObjectsInBackground(block: { (results, error) in
-                                            if let error = error {
-                                                print("error - find objects in background - \(error)")
-                                            } else if let results = results {
-                                                  if results.count > 0 {
-                                                    let result = results[0]
-                                                    if let bridgeStatus = result["bridge_status"] as? String {
-                                                        self.statusTextView.text = bridgeStatus
-                                                        if type == "Business" {
-                                                            self.businessStatus = bridgeStatus
-                                                            //self.localData.setBusinessStatus(bridgeStatus)
-                                                        } else if type == "Love" {
-                                                            self.loveStatus = bridgeStatus
-                                                            //self.localData.setLoveStatus(bridgeStatus)
-                                                        } else if type == "Friendship" {
-                                                            self.friendshipStatus = bridgeStatus
-                                                            //self.localData.setFriendshipStatus(bridgeStatus)
-                                                        }
-                                                        //self.localData.synchronize()
-                                                    }
-                                                  } else {
-                                                    print("no status")
-                                                    if type == "Business" {
-                                                        self.noBusinessStatus = true
-                                                    } else if type == "Love" {
-                                                        self.noLoveStatus = true
-                                                    } else if type == "Friendship" {
-                                                        self.noFriendshipStatus = true
-                                                    }
-                                                    self.setStatusPlaceholder()
-                                                }
-                                            } else {
-                                                print("no status")
-                                                if type == "Business" {
-                                                    self.noBusinessStatus = true
-                                                } else if type == "Love" {
-                                                    self.noLoveStatus = true
-                                                } else if type == "Friendship" {
-                                                    self.noFriendshipStatus = true
-                                                }
-                                                self.setStatusPlaceholder()
-                                            }
-                                            // realign text in status text view to center
-                                            self.statusTextView.textAlignment = .center
-                                            DisplayUtility.centerTextVerticallyInTextView(textView: self.statusTextView)
-                                        })
-                                    }
-                                }
-                            }
-                        } else {
-                            // realign text in status text view to center
-                            statusTextView.textAlignment = .center
-                            DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
-                        }
-                    } else { // unselecting selected type
-                        statusButton.setImage(unselectedImage, for: .normal)
-                        currentStatusType = nil
-                        statusTextView.isEditable = false
-                        statusTextView.text = "Click an icon above to edit current requests."
-                        statusTextView.textAlignment = .center
-                        DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
-                    }
-                }
-            } else {
-                if let unselectedImage = unselectedImage {
-                    statusButton.setImage(unselectedImage, for: .normal)
-                }
-            }
-        }
-    }
-    
-    func profilePicSelected(_ gesture: UIGestureRecognizer) {
-        if let hexView = gesture.view as? HexagonView {
-            if let hexBackgroundImage = hexView.hexBackgroundImage {
-                let newHexView = HexagonView()
-                newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
-                newHexView.setBackgroundImage(image: hexBackgroundImage)
-                newHexView.addBorder(width: 1, color: .black)
-                
-                var images = [UIImage]()
-                var originalHexFrames = [CGRect]()
-                var startingIndex = 0
-                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-                for i in 0..<hexViews.count {
-                    if let image = hexViews[i].hexBackgroundImage {
-                        images.append(image)
-                    }
-                    let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
-                    originalHexFrames.append(frame)
-                    if hexViews[i] == hexView {
-                        startingIndex = i
-                    }
-                }
-                let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
-                self.view.addSubview(profilePicsView)
-                profilePicsView.animateIn()
-            } else if leftHexView.hexBackgroundImage == nil { // no images
-                uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
-                uploadMenu.center.x = DisplayUtility.screenWidth / 2
-                uploadMenu.backgroundColor = .white
-                view.addSubview(uploadMenu)
-                
-                // add gesture recognizer to hide upload menu
-                let hideUploadMenuGR = UITapGestureRecognizer(target: self, action: #selector(hideUploadMenu(_:)))
-                uploadMenu.addGestureRecognizer(hideUploadMenuGR)
-                
-                let uploadButtonWidth = 0.66*DisplayUtility.screenWidth
-                let uploadButtonHeight = 0.14*DisplayUtility.screenWidth
-                
-                // layout upload from Facebook button
-                let uploadFromFBButton = UIButton()
-                uploadFromFBButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
-                uploadFromFBButton.center.x = uploadMenu.frame.width / 2
-                uploadFromFBButton.center.y = 0.4*uploadMenu.frame.height
-                uploadFromFBButton.setTitle("UPLOAD FROM FACEBOOK", for: .normal)
-                uploadFromFBButton.setTitleColor(.black, for: .normal)
-                uploadFromFBButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-                uploadFromFBButton.titleLabel?.textAlignment = .center
-                uploadFromFBButton.layer.borderWidth = 1
-                uploadFromFBButton.layer.borderColor = UIColor.gray.cgColor
-                uploadFromFBButton.layer.cornerRadius = 0.3*uploadFromFBButton.frame.height
-                
-                // add target to upload from Facebook button
-                uploadFromFBButton.addTarget(self, action: #selector(uploadFromFB(_:)), for: .touchUpInside)
-                
-                uploadMenu.addSubview(uploadFromFBButton)
-                
-                // layout upload from camera roll button
-                let uploadFromCameraRollButton = UIButton()
-                uploadFromCameraRollButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
-                uploadFromCameraRollButton.center.x = uploadMenu.frame.width / 2
-                uploadFromCameraRollButton.center.y = 0.6*uploadMenu.frame.height
-                uploadFromCameraRollButton.setTitle("UPLOAD FROM CAMERA ROLL", for: .normal)
-                uploadFromCameraRollButton.setTitleColor(.black, for: .normal)
-                uploadFromCameraRollButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-                uploadFromCameraRollButton.titleLabel?.textAlignment = .center
-                uploadFromCameraRollButton.layer.borderWidth = 1
-                uploadFromCameraRollButton.layer.borderColor = UIColor.gray.cgColor
-                uploadFromCameraRollButton.layer.cornerRadius = 0.3*uploadFromCameraRollButton.frame.height
-                uploadMenu.addSubview(uploadFromCameraRollButton)
-                
-                // add target to upload from camera roll button
-                uploadFromCameraRollButton.addTarget(self, action: #selector(uploadFromCameraRoll(_:)), for: .touchUpInside)
-                
-                UIView.animate(withDuration: 0.5) { 
-                    self.uploadMenu.frame = self.view.bounds
-                }
-            }
-        }
-    }
-    
-    func uploadFromFB(_ button: UIButton) {
-        uploadMenu.removeFromSuperview()
+        currentStatusType = type
         
-        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest!.start{ (connection, result, error) -> Void in
-            if error != nil {
-                print(error ?? "error in EditProfileViewController uploadFromFB grapRequest")
+        if let type = type {
+            statusTextView.isEditable = true
+            currentStatusType = type
+            var runQuery = false
+            if type == "Business" {
+                if noBusinessStatus {
+                    setStatusPlaceholder()
+                } else if let businessStatus = businessStatus {
+                    statusPlaceholder = false
+                    statusTextView.text = businessStatus
+                } else {
+                    statusPlaceholder = false
+                    runQuery = true
+                }
+            } else if type == "Love" {
+                if noLoveStatus {
+                    setStatusPlaceholder()
+                } else if let loveStatus = loveStatus {
+                    statusPlaceholder = false
+                    statusTextView.text = loveStatus
+                } else {
+                    statusPlaceholder = false
+                    runQuery = true
+                }
+            } else if type == "Friendship" {
+                if noFriendshipStatus {
+                    setStatusPlaceholder()
+                } else if let friendshipStatus = friendshipStatus {
+                    statusPlaceholder = false
+                    statusTextView.text = friendshipStatus
+                } else {
+                    statusPlaceholder = false
+                    runQuery = true
+                }
             }
-            else if let result = result as? [String: AnyObject]{
-                let userId = result["id"]! as! String
-                let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
-                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
-                    if let data = try? Data(contentsOf: fbpicUrl) {
-                        DispatchQueue.main.async(execute: {
-                            if let image = UIImage(data: data) {
-                                self.leftHexView.setBackgroundImage(image: image)
-                            }
-                            if let user = PFUser.current() {
-                                if let picFile = PFFile(data: data) {
-                                    user["profile_pictures"] = [picFile]
-                                    user.saveInBackground()
+            
+            if runQuery {
+                print ("running BridgeStatus query")
+                if let user = PFUser.current() {
+                    if let objectId = user.objectId {
+                        let query = PFQuery(className: "BridgeStatus")
+                        query.whereKey("userId", equalTo: objectId)
+                        query.whereKey("bridge_type", equalTo: type)
+                        query.order(byDescending: "updatedAt")
+                        query.limit = 1
+                        query.findObjectsInBackground(block: { (results, error) in
+                            if let error = error {
+                                print("error - find objects in background - \(error)")
+                            } else if let results = results {
+                                if results.count > 0 {
+                                    let result = results[0]
+                                    if let bridgeStatus = result["bridge_status"] as? String {
+                                        self.statusTextView.text = bridgeStatus
+                                        if type == "Business" {
+                                            self.businessStatus = bridgeStatus
+                                            //self.localData.setBusinessStatus(bridgeStatus)
+                                        } else if type == "Love" {
+                                            self.loveStatus = bridgeStatus
+                                            //self.localData.setLoveStatus(bridgeStatus)
+                                        } else if type == "Friendship" {
+                                            self.friendshipStatus = bridgeStatus
+                                            //self.localData.setFriendshipStatus(bridgeStatus)
+                                        }
+                                        //self.localData.synchronize()
+                                    }
+                                } else {
+                                    print("no status")
+                                    if type == "Business" {
+                                        self.noBusinessStatus = true
+                                    } else if type == "Love" {
+                                        self.noLoveStatus = true
+                                    } else if type == "Friendship" {
+                                        self.noFriendshipStatus = true
+                                    }
+                                    self.setStatusPlaceholder()
                                 }
+                            } else {
+                                print("no status")
+                                if type == "Business" {
+                                    self.noBusinessStatus = true
+                                } else if type == "Love" {
+                                    self.noLoveStatus = true
+                                } else if type == "Friendship" {
+                                    self.noFriendshipStatus = true
+                                }
+                                self.setStatusPlaceholder()
                             }
+                            // realign text in status text view to center
+                            self.statusTextView.textAlignment = .center
+                            DisplayUtility.centerTextVerticallyInTextView(textView: self.statusTextView)
                         })
                     }
                 }
+            } else {
+                // realign text in status text view to center
+                statusTextView.textAlignment = .center
+                DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
             }
+        } else { // type is nil
+            statusTextView.isEditable = false
+            statusTextView.text = "Click an icon above to edit current requests."
+            statusTextView.textAlignment = .center
+            DisplayUtility.centerTextVerticallyInTextView(textView: statusTextView)
         }
     }
-    
-    func uploadFromCameraRoll(_ button: UIButton) {
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    //update the UIImageView once an image has been picked
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        uploadMenu.removeFromSuperview()
-        
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            leftHexView.setBackgroundImage(image: image)
-            if let data = UIImageJPEGRepresentation(image, 1.0) {
-                if let user = PFUser.current() {
-                    if let picFile = PFFile(data: data) {
-                        user["profile_pictures"] = [picFile]
-                        user.saveInBackground()
-                    }
-                }
-            }
-        }
-        imagePicker.dismiss(animated: true, completion: nil)
-    }
-    
-    func hideUploadMenu(_ gesture: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
-        }) { (finished) in
-            if finished {
-                self.uploadMenu.removeFromSuperview()
-            }
-        }
-    }
-    
+
     // Remove placeholder
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.textAlignment = .left

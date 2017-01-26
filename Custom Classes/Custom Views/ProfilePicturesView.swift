@@ -143,14 +143,11 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         for i in 0..<singlePicVCs.count {
             let singlePicVC = singlePicVCs[i]
             let image = images[i]
-            let picView = UIView()
+            let picView = UIImageView()
+            picView.contentMode = .scaleAspectFill
+            picView.clipsToBounds = true
             picView.frame = CGRect(x: 0, y: allPicsVC.pageControl.frame.maxY, width: picFrame.width, height: picFrame.height)
-            let viewSize = CGSize(width: singlePicVC.view.frame.width, height: singlePicVC.view.frame.width)
-            if let newImage = fitImageToView(image: image, viewSize: viewSize) {
-                picView.backgroundColor = UIColor(patternImage: newImage)
-            } else {
-                picView.backgroundColor = UIColor(patternImage: image)
-            }
+            picView.image = image
             picView.layer.borderWidth = 1
             picView.layer.borderColor = UIColor.black.cgColor
             singlePicVC.view.addSubview(picView)
@@ -179,7 +176,8 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         rectView.frame = hexView.frame
         rectView.layer.borderWidth = 1
         rectView.layer.borderColor = UIColor.black.cgColor
-        rectView.layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: rectView.frame.height / rectView.frame.width)
+        rectView.contentMode = .scaleAspectFill
+        rectView.clipsToBounds = true
         rectView.image = images[startingIndex]
         rectView.alpha = 0
         addSubview(rectView)
@@ -211,7 +209,8 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         rectView.frame = hexView.frame
         rectView.layer.borderWidth = 1
         rectView.layer.borderColor = UIColor.black.cgColor
-        rectView.layer.contentsRect = CGRect(x: 0, y: 0, width: 1, height: rectView.frame.height / rectView.frame.width)
+        rectView.contentMode = .scaleAspectFill
+        rectView.clipsToBounds = true
         rectView.image = images[index]
         rectView.alpha = 1
         addSubview(rectView)
@@ -239,7 +238,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             if i < images.count {
                 hexViews[i].setBackgroundImage(image: images[i])
             } else {
-                hexViews[i].setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
+                hexViews[i].setDefaultBackgorund()
             }
         }
         self.animateOut { (finished) in
@@ -247,15 +246,6 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                 self.removeFromSuperview()
             }
         }
-    }
-    
-    func fitImageToView(image: UIImage, viewSize: CGSize) -> UIImage? {
-        var resultImage: UIImage?
-        UIGraphicsBeginImageContext(viewSize)
-        image.draw(in: CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height))
-        resultImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        return resultImage;
     }
     
     func uploadButtonPressed(_ button: UIButton) {
@@ -315,9 +305,10 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         uploadMenu.removeFromSuperview()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest!.start{ (connection, result, error) -> Void in
+        graphRequest!.start{ (_, result, error) -> Void in
             if error != nil {
-                print(error ?? "error in graphRequest of uploadFromFB")
+                print(error ?? "error in graphRequest of uploadFromFB within ProfilePicturesView")
+
             }
             else if let result = result as? [String: AnyObject]{
                 let userId = result["id"]! as! String

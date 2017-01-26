@@ -31,13 +31,6 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
         delegate = self
         dataSource = self
         
-        /*
-        if let firstVC = viewControllers?.first,
-            let currIndex = vcs.index(of: firstVC) {
-            profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageIndex: currIndex)
-        }
-        */
-        
         pageControl.pageIndicatorTintColor = .clear
         pageControl.currentPageIndicatorTintColor = .lightGray
         view.addSubview(pageControl)
@@ -108,7 +101,7 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
             dot.layer.borderWidth = 1
             dot.layer.borderColor = UIColor.lightGray.cgColor
         }
-        if count == 0 {
+        if count <= 1 {
             pageControl.alpha = 0
         } else {
             pageControl.alpha = 1

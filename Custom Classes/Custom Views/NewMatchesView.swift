@@ -24,7 +24,7 @@ class NewMatchesView: UIScrollView {
         allNewMatches = [NewMatch]()
         displayedNewMatches = [NewMatch]()
         line = UIView()
-        gradientLayer = DisplayUtility.getGradient()
+        gradientLayer = DisplayUtility.gradientLayer()
         super.init(frame: frameWithNoMatches)
         contentSize = frame.size
         line.backgroundColor = .clear
