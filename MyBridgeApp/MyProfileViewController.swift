@@ -22,6 +22,7 @@ class MyProfileViewController: UIViewController {
     let numNectedLastWeekLabel = UILabel()
     var statusButtons: ProfileStatusButtons?
     let statusLabel = UILabel()
+    let unselectedStatusText = "Click an icon above to see your currently displayed requests."
     let businessStatusPlaceholder = "You have not yet posted a request for work."
     let loveStatusPlaceholder = "You have not yet posted a request for dating."
     let friendshipStatusPlaceholder = "You have not yet posted a request for friendship."
@@ -181,7 +182,7 @@ class MyProfileViewController: UIViewController {
             statusLabel.textColor = UIColor.init(red: 56/255.0, green: 56/255.0, blue: 56/255.0, alpha: 1.0)
             statusLabel.textAlignment = .center
             statusLabel.numberOfLines = 0
-            statusLabel.text = "Click an icon above to see your\ncurrently displayed requests."
+            statusLabel.text = unselectedStatusText
             statusLabel.font = UIFont(name: "BentonSans-Light", size: 17)
             statusLabel.adjustsFontSizeToFitWidth = true
             statusLabel.minimumScaleFactor = 0.5
@@ -247,10 +248,9 @@ class MyProfileViewController: UIViewController {
     
     //Send user to the editProfileViewController so they can edit their profile
     func editProfileButtonTapped(_ sender: UIButton) {
-        //performSegue(withIdentifier: "showEditProfileFromMyProfile", sender: self)
         let editProfileVC = EditProfileViewController(myProfileVC: self)
         present(editProfileVC, animated: false, completion: nil)
-        //present(SignupViewController(), animated: true, completion: nil)
+        unselectAllStatusButtons()
     }
     
     //Send user back to the bridgeViewController
@@ -342,8 +342,14 @@ class MyProfileViewController: UIViewController {
                 self.layoutBottomBasedOnStatus()
             }
         } else { // type is nil
-            statusLabel.text = "Click an icon above to see your currently displayed requests."
+            statusLabel.text = unselectedStatusText
             self.layoutBottomBasedOnStatus()
+        }
+    }
+    
+    func unselectAllStatusButtons() {
+        if let statusButtons = statusButtons {
+            statusButtons.unselectAllStatusButtons()
         }
     }
     

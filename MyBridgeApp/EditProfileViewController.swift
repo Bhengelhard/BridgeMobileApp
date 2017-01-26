@@ -436,6 +436,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     func save(_ sender: UIButton) {
         view.endEditing(true)
+        
         updateMyProfileHexImages()
         if let user = PFUser.current() {
             

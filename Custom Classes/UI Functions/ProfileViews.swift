@@ -625,4 +625,20 @@ class ProfileStatusButtons: UIView {
             }
         }
     }
+    
+    func unselectAllStatusButtons() {
+        for statusButton in [businessButton, loveButton, friendshipButton] {
+            var selectedImage: UIImage?
+            if statusButton == businessButton {
+                selectedImage = businessSelectedImage
+            } else if statusButton == loveButton {
+                selectedImage = loveSelectedImage
+            } else if statusButton == friendshipButton {
+                selectedImage = friendshipSelectedImage
+            }
+            if statusButton.image(for: .normal) == selectedImage {
+                statusButtonSelected(statusButton)
+            }
+        }
+    }
 }
