@@ -101,7 +101,7 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
             dot.layer.borderWidth = 1
             dot.layer.borderColor = UIColor.lightGray.cgColor
         }
-        if count == 0 {
+        if count <= 1 {
             pageControl.alpha = 0
         } else {
             pageControl.alpha = 1
