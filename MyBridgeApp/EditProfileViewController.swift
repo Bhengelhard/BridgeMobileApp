@@ -701,11 +701,11 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                         factsText = "I \(facts[i])."
                     }
                     else if i == 0 {
-                        factsText = "I \(factsText) \(facts[i]), "
+                        factsText = "I \(factsText) \(facts[i]),"
                     } else if i == facts.count - 1 {
                         factsText = "\(factsText) and \(facts[i])."
                     } else {
-                        factsText = "\(factsText) \(facts[i]), "
+                        factsText = "\(factsText) \(facts[i]),"
                     }
                 }
                 factsTextView.text = factsText
