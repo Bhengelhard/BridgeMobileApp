@@ -117,6 +117,7 @@ class MyProfileViewController: UIViewController {
             
             editProfileButton.setImage(UIImage(named: "EditProfile_Button"), for: .normal)
             editProfileButton.frame = CGRect(x: 0.61753*DisplayUtility.screenWidth, y: userSettingsButton.frame.minY, width: upperButtonsWidth, height: upperButtonsHeight)
+            editProfileButton.adjustsImageWhenHighlighted = false
             editProfileButton.addTarget(self, action: #selector(editProfileButtonTapped(_:)), for: .touchUpInside)
             scrollView.addSubview(editProfileButton)
             
