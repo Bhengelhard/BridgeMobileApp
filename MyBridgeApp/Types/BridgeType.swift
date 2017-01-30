@@ -9,6 +9,20 @@ enum BridgeType: String
 
 	static let allValues = [all, business, love, friendship]
 
+	var color: UIColor
+	{
+		switch self
+		{
+			case .all: return UIColor.black
+			case .business: return Constants.Colors.bridgeType.business
+			case .love: return Constants.Colors.bridgeType.love
+			case .friendship: return Constants.Colors.bridgeType.friendship
+		}
+	}
+}
+
+extension BridgeType
+{
 	var parseValue: String
 	{
 		switch self
@@ -30,16 +44,5 @@ enum BridgeType: String
 			case "Friendship": self = .friendship
 			default: self = .all
 		}
-	}
-
-	var color: UIColor
-	{
-		switch self
-		{
-			case .all: return UIColor.black
-			case .business: return Constants.Colors.bridgeType.business
-			case .love: return Constants.Colors.bridgeType.love
-			case .friendship: return Constants.Colors.bridgeType.friendship
-		}
-	}
+	}	
 }
