@@ -13,7 +13,7 @@ enum BridgeType: String
 	{
 		switch self
 		{
-			case .all: return UIColor.black
+			case .all: return .black
 			case .business: return Constants.Colors.bridgeType.business
 			case .love: return Constants.Colors.bridgeType.love
 			case .friendship: return Constants.Colors.bridgeType.friendship
