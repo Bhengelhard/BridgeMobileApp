@@ -21,16 +21,24 @@ enum BridgeType: String
 	}
 }
 
+fileprivate enum Parse: String
+{
+	case all = "All Types"
+	case business = "Business"
+	case love = "Love"
+	case friendship = "Friendship"
+}
+
 extension BridgeType
 {
 	var parseValue: String
 	{
 		switch self
 		{
-			case .all: return "All Types"
-			case .business: return "Business"
-			case .love: return "Love"
-			case .friendship: return "Friendship"
+			case .all: return Parse.all.rawValue
+			case .business: return Parse.business.rawValue
+			case .love: return Parse.love.rawValue
+			case .friendship: return Parse.friendship.rawValue
 		}
 	}
 
@@ -38,10 +46,10 @@ extension BridgeType
 	{
 		switch parseValue
 		{
-			case "All Types": self = .all
-			case "Business": self = .business
-			case "Love": self = .love 
-			case "Friendship": self = .friendship
+			case Parse.all.rawValue: self = .all
+			case Parse.business.rawValue: self = .business
+			case Parse.love.rawValue: self = .love 
+			case Parse.friendship.rawValue: self = .friendship
 			default: self = .all
 		}
 	}	
