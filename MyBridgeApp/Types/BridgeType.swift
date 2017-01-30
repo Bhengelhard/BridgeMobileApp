@@ -31,6 +31,7 @@ fileprivate enum Parse: String
 
 extension BridgeType
 {
+	/// A string for sending to Parse for storage.
 	var parseValue: String
 	{
 		switch self
@@ -42,6 +43,7 @@ extension BridgeType
 		}
 	}
 
+	/// A native BridgeType, using a string return from Parse storage.
 	init (fromParseValue parseValue: String)
 	{
 		switch parseValue
