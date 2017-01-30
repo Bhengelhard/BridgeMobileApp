@@ -23,9 +23,9 @@ struct Constants
 
 	struct Sizes
 	{
-		static var screen: CGSize
+		static let screen: CGSize = 
 		{
 			return UIScreen.main.bounds.size
-		}
+		}()
 	}
 }
