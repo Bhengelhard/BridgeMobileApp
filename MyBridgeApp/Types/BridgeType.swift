@@ -26,6 +26,8 @@ extension BridgeType
 	}
 }
 
+// MARK: -
+
 fileprivate enum Parse: String
 {
 	case all = "All Types"
