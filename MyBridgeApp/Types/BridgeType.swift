@@ -8,7 +8,12 @@ enum BridgeType: String
 	case friendship
 
 	static let allValues = [all, business, love, friendship]
+}
 
+// MARK: - Colors
+
+extension BridgeType
+{
 	var color: UIColor
 	{
 		switch self
