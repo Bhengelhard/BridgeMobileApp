@@ -76,7 +76,7 @@ class DBSavingFunctions {
         if var bridgePairings = bridgePairings {
             var x = 0
             for i in 0 ..< (bridgePairings.count) {
-                if bridgeVC.currentTypeOfCardsOnDisplay == .all || bridgePairings[x].user1?.bridgeType == bridgeVC.convertBridgeTypeEnumToBridgeTypeString(bridgeVC.currentTypeOfCardsOnDisplay) {
+                if bridgeVC.currentTypeOfCardsOnDisplay == .all || bridgePairings[x].user1?.bridgeType == bridgeVC.currentTypeOfCardsOnDisplay.parseValue {
                     break
                 }
                 x = i

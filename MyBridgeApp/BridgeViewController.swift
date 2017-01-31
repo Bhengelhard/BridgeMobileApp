@@ -9,25 +9,6 @@
 import UIKit
 import Parse
 import MapKit
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
 
 class BridgeViewController: UIViewController {
     // Initializing Custom Classes
@@ -43,7 +24,7 @@ class BridgeViewController: UIViewController {
     var swipeCardFrame = CGRect()
     var totalNoOfCards = 0
     let localStorageUtility = LocalStorageUtility()
-    var currentTypeOfCardsOnDisplay = typesOfCard.all
+    var currentTypeOfCardsOnDisplay = BridgeType.all
     var lastCardInStack:UIView? = nil // used by getB() to add a card below this
     var displayNoMoreCardsLabel = UILabel()
     var arrayOfCardsInDeck = [SwipeCard]()
@@ -75,67 +56,7 @@ class BridgeViewController: UIViewController {
     //Send title and title Color to singleMessageViewController
     var singleMessageTitle = ""
     var necterTypeColor = UIColor()
-    
-    enum typesOfCard {
-        case all
-        case business
-        case love
-        case friendship
-    }
-    enum typesOfColor {
-        case business
-        case love
-        case friendship
-    }
-    func convertBridgeTypeEnumToBridgeTypeString(_ typeOfCard:typesOfCard) -> String {
-        switch (typeOfCard) {
-        case typesOfCard.all:
-            return "All"
-        case typesOfCard.business:
-                 return "Business"
-        case typesOfCard.love:
-                return "Love"
-        case typesOfCard.friendship:
-                return "Friendship"
-        }
-    }
-    func convertBridgeTypeStringToBridgeTypeEnum(_ typeOfCard:String) -> typesOfCard {
-        switch (typeOfCard) {
-        case "All":
-            return typesOfCard.all
-        case "Business":
-            return typesOfCard.business
-        case "Love":
-            return typesOfCard.love
-        case "Friendship":
-            return typesOfCard.friendship
-        default:
-            return typesOfCard.friendship
-        }
-    }
-    func convertBridgeTypeStringToColorTypeEnum(_ typeOfCard:String) -> typesOfColor {
-            switch (typeOfCard) {
-                
-            case "Business":
-                return typesOfColor.business
-            case "Love":
-                return typesOfColor.love
-            case "Friendship":
-                return typesOfColor.friendship
-            default :
-                return typesOfColor.business
-            }
-    }
-    func getCGColor (_ color:typesOfColor) -> CGColor {
-        switch(color) {
-        case typesOfColor.business:
-            return DisplayUtility.businessBlue.cgColor
-        case typesOfColor.love:
-            return  DisplayUtility.loveRed.cgColor
-        case typesOfColor.friendship:
-            return  DisplayUtility.friendshipGreen.cgColor
-        }
-    }
+ 
     func setCityName(_ locationLabel: UILabel, locationCoordinates:[Double], pairing:UserInfoPair) {
         // We will store the city names to LocalData.  Not required now. But will ne be needed in fututre when when optimize. 
         if locationLabel.tag == 0 && pairing.user1?.city != nil {
@@ -241,7 +162,7 @@ class BridgeViewController: UIViewController {
             var aboveView:UIView? = nil
             for i in 0..<bridgePairings.count {
                 let pairing = bridgePairings[i]
-                if self.currentTypeOfCardsOnDisplay != typesOfCard.all && pairing.user1?.bridgeType != convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
+                if self.currentTypeOfCardsOnDisplay != .all && pairing.user1?.bridgeType != currentTypeOfCardsOnDisplay.parseValue {
                     continue
                 }
                 j += 1
@@ -319,14 +240,28 @@ class BridgeViewController: UIViewController {
                     photoFile2 = mainProfilePicture
                 }
 
-				var color = typesOfColor.business
+				var type = BridgeType.business
 
-				if pairing.user1?.bridgeType != nil
+				if let user1BridgeType = pairing.user1?.bridgeType
 				{
-					color = convertBridgeTypeStringToColorTypeEnum((pairing.user1?.bridgeType)!)
+					type = BridgeType(fromParseValue: user1BridgeType)
 				}
 
-                aboveView = addCardPairView(aboveView, id: id1, name: name1, location: location1, status: status1, photo: photoFile1,locationCoordinates1: locationCoordinates1, id2: id2, name2: name2, location2: location2, status2: status2, photo2: photoFile2,locationCoordinates2: locationCoordinates2, cardColor: color, pairing:pairing)
+				aboveView = addCardPairView(aboveView, 
+				                            id: id1, 
+                                            name: name1, 
+                                            location: location1, 
+                                            status: status1, 
+                                            photo: photoFile1, 
+                                            locationCoordinates1: locationCoordinates1,
+											id2: id2, 
+                                            name2: name2, 
+                                            location2: location2, 
+                                            status2: status2, 
+                                            photo2: photoFile2, 
+                                            locationCoordinates2: locationCoordinates2, 
+                                            type: type, 
+                                            pairing: pairing)
                 lastCardInStack = aboveView!
             }
             
@@ -338,18 +273,23 @@ class BridgeViewController: UIViewController {
         
     }
 
-    func addCardPairView(_ aboveView:UIView?, id: String?, name:String?, location:String?, status:String?, photo:String?, locationCoordinates1:[Double]?, id2: String?, name2:String?, location2:String?, status2:String?, photo2:String?, locationCoordinates2:[Double]?, cardColor:typesOfColor?, pairing:UserInfoPair) -> UIView{
-        
-        var connectionType = String()
-        if cardColor == typesOfColor.business {
-            connectionType = "Business"
-        } else if cardColor == typesOfColor.friendship {
-            connectionType = "Friendship"
-        } else if cardColor == typesOfColor.love {
-            connectionType = "Love"
-        } else {
-            connectionType = "All Types"
-        }
+	func addCardPairView (_ aboveView: UIView?, 
+	                      id: String?, 
+	                      name: String?, 
+	                      location: String?, 
+	                      status: String?, 
+	                      photo: String?, 
+	                      locationCoordinates1: [Double]?, 
+	                      id2: String?, 
+	                      name2: String?, 
+	                      location2: String?, 
+	                      status2: String?, 
+	                      photo2: String?, 
+	                      locationCoordinates2: [Double]?, 
+	                      type: BridgeType, 
+	                      pairing: UserInfoPair) -> UIView
+	{
+        let connectionType = type.parseValue
         let swipeCardView = SwipeCard()
 
         //superDeckView.backgroundColor = UIColor.white.withAlphaComponent(1.0)
@@ -697,11 +637,33 @@ class BridgeViewController: UIViewController {
                                             self.displayNoMoreCardsLabel.alpha = 0
                                             self.revisitButton.alpha = 0
                                         }
-                                        let bridgeType = bridgeType1 ?? "Business"
-                                        let color = self.convertBridgeTypeStringToColorTypeEnum(bridgeType)
-                                        var aboveView:UIView? = self.lastCardInStack
-                                        aboveView = self.addCardPairView(aboveView, id: userId1, name: name1, location: city1, status: bridgeStatus1, photo: profilePictureFile1,locationCoordinates1: location1, id2: userId2, name2: name2, location2: city2, status2: bridgeStatus2, photo2: profilePictureFile2,locationCoordinates2: location2, cardColor: color, pairing:userInfoPair)
-                                        self.lastCardInStack = aboveView!
+
+										var bridgeType = BridgeType.business
+
+										if bridgeType1 != nil
+										{
+											bridgeType = BridgeType(fromParseValue: bridgeType1!)
+										}
+
+										var aboveView: UIView? = self.lastCardInStack
+
+										aboveView = self.addCardPairView(aboveView, 
+										                                 id: userId1, 
+										                                 name: name1, 
+										                                 location: city1, 
+										                                 status: bridgeStatus1, 
+										                                 photo: profilePictureFile1, 
+										                                 locationCoordinates1: location1, 
+										                                 id2: userId2, 
+										                                 name2: name2, 
+										                                 location2: city2, 
+										                                 status2: bridgeStatus2, 
+										                                 photo2: profilePictureFile2, 
+										                                 locationCoordinates2: location2, 
+										                                 type: bridgeType, 
+										                                 pairing: userInfoPair)
+
+										self.lastCardInStack = aboveView!
                                     })
                                 }
                             }
@@ -772,18 +734,22 @@ class BridgeViewController: UIViewController {
         displayBackgroundView()
         displayNavigationBar()
         initializeNoMoreCards()
-        
-        
-        let bridgePairings = localData.getPairings()
-        if (bridgePairings == nil || bridgePairings?.count < 1) {
-            getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
-        } else if bridgePairings?.count < 2  {
-            getBridgePairings(1,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
-        }
-        else {
-            displayCards()
-        }
-        
+
+		let bridgePairings = localData.getPairings()
+
+		if (bridgePairings == nil || bridgePairings!.count < 1)
+		{
+			getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+		}
+		else if bridgePairings != nil && bridgePairings!.count < 2
+		{
+			getBridgePairings(1,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
+		}
+		else
+		{
+			displayCards()
+		}
+
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.alpha = 0.0
         view.insertSubview(connectIcon, belowSubview: missionControlView.blackBackgroundView)
@@ -1103,7 +1069,7 @@ class BridgeViewController: UIViewController {
         if var bridgePairings = bridgePairings {
             var x = 0
             for i in 0 ..< (bridgePairings.count) {
-                if self.currentTypeOfCardsOnDisplay == typesOfCard.all || bridgePairings[x].user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay) {
+                if currentTypeOfCardsOnDisplay == .all || bridgePairings[x].user1?.bridgeType == currentTypeOfCardsOnDisplay.parseValue {
                     break
                 }
                 x = i
@@ -1128,7 +1094,7 @@ class BridgeViewController: UIViewController {
                 objectId = "no object to search for"
             }
             var bridgeType = "All"
-            bridgeType = convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)
+            bridgeType = currentTypeOfCardsOnDisplay.parseValue
             
             localData.setPairings(bridgePairings)
             localData.synchronize()
@@ -1152,16 +1118,16 @@ class BridgeViewController: UIViewController {
                 lastCardInStack = nil
                 //check if a bridgePairing is already stored in localData
                 var bridgePairingAlreadyStored = false
-                if currentTypeOfCardsOnDisplay == typesOfCard.all {
+                if currentTypeOfCardsOnDisplay == .all {
                     let pairings = localData.getPairings()
-                    if pairings != nil && pairings?.count > 0 {
+                    if pairings != nil && pairings!.count > 0 {
                         bridgePairingAlreadyStored = true
                     }
                 }
                 else {
                     if let bridgePairings = localData.getPairings() {
                         for pair in bridgePairings {
-                            if pair.user1?.bridgeType == convertBridgeTypeEnumToBridgeTypeString(currentTypeOfCardsOnDisplay) {
+                            if pair.user1?.bridgeType == currentTypeOfCardsOnDisplay.parseValue {
                                 bridgePairingAlreadyStored = true
                             }
                         }
@@ -1182,23 +1148,23 @@ class BridgeViewController: UIViewController {
         let type = missionControlView.whichFilter()
         switch(type){
         case "All Types":
-            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
+            currentTypeOfCardsOnDisplay = .all
             displayNoMoreCardsLabel.text = "No active matches to 'nect. Please check back tomorrow."
             break
         case "Business":
-            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Business")
+            currentTypeOfCardsOnDisplay = .business
             displayNoMoreCardsLabel.text = "No active matches to 'nect for work. Please check back tomorrow."
             break
         case "Love":
-            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Love")
+            currentTypeOfCardsOnDisplay = .love
             displayNoMoreCardsLabel.text = "No active matches to 'nect for dating. Please check back tomorrow."
             break
         case "Friendship":
-            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("Friendship")
+            currentTypeOfCardsOnDisplay = .friendship
             displayNoMoreCardsLabel.text = "No active matches to 'nect for friendship. Please check back tomorrow."
             break
         default:
-            currentTypeOfCardsOnDisplay = convertBridgeTypeStringToBridgeTypeEnum("All")
+            currentTypeOfCardsOnDisplay = .all
         }
         for i in 0..<arrayOfCardsInDeck.count {
             arrayOfCardsInDeck[i].removeFromSuperview()
@@ -1219,7 +1185,7 @@ class BridgeViewController: UIViewController {
         
         revisitButton.removeFromSuperview()
         NotificationCenter.default.addObserver(self, selector: #selector(self.revitalizeMyPairsHelper), name: NSNotification.Name(rawValue: "revitalizeMyPairsHelper"), object: nil)
-        self.pfCloudFunctions.revitalizeMyPairs(parameters: ["bridgeType":self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay)])
+        self.pfCloudFunctions.revitalizeMyPairs(parameters: ["bridgeType":currentTypeOfCardsOnDisplay.parseValue])
         self.lastCardInStack = nil
     }
     //after response from revitalize pairs, run this code
@@ -1234,7 +1200,7 @@ class BridgeViewController: UIViewController {
         }
 
         NotificationCenter.default.removeObserver(self)
-        self.getBridgePairings(2, typeOfCards: self.convertBridgeTypeEnumToBridgeTypeString(self.currentTypeOfCardsOnDisplay), callBack:nil, bridgeType:nil)
+        self.getBridgePairings(2, typeOfCards: currentTypeOfCardsOnDisplay.parseValue, callBack:nil, bridgeType:nil)
         PFUser.current()?.incrementKey("revitalized_pairs_count")
         PFUser.current()?.saveInBackground()
     }
