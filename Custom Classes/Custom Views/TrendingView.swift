@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class TrendingView : UIView
 {
@@ -175,41 +176,102 @@ class TrendingView : UIView
 		var option5 = [Any]()
 		var option6 = [Any]()
 
-		if type == "Business"
+		// Retrieving the accessType from the database to decide which set of trending options to display
+		var accessType = [String]()
+
+		if let user = PFUser.current()
 		{
-			option1 = ["Study Partner", "I'm looking for someone to study with", DisplayUtility.businessBlue]
-			option2 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
-			option3 = ["Investor", "I am raising money for a venture I am working on", DisplayUtility.businessBlue]
-			option4 = ["Investment", "I am looking to invest in something game-changing", DisplayUtility.businessBlue]
-			option5 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
-			option6 = ["Intern", "I am looking for an intern for a venture I started", DisplayUtility.businessBlue]
+			print("got user")
+
+			if let savedAccessType = user["access_codes"]
+			{
+				accessType = savedAccessType as! [String]
+
+				print("access type \(accessType)")
+			}
+			else
+			{
+				print("access codes are nil")
+			}
 		}
-		else if type == "Love"
+
+		if accessType.contains("shabbat")
 		{
-			option1 = ["Formal Date", "I'm looking for some one to go to a formal with me", DisplayUtility.loveRed]
-			option2 = ["See a Movie", "I want to take a date to see a cool new movie.", DisplayUtility.loveRed]
-			option3 = ["Soulmate", "I'm looking for my soulmate. Set me up with someone awesome!", DisplayUtility.loveRed]
-			option4 = ["Date Night", "I'm looking for someone to go to a date night with me", DisplayUtility.loveRed]
-			option5 = ["Dinner", "I'm looking for someone to go to dinner with me", DisplayUtility.loveRed]
-			option6 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
-		}
-		else if type == "Friendship"
-		{
-			option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
-			option2 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
-			option3 = ["Hosting Shabbat", "I am hosting a shabbat meal. Send someone my way!", DisplayUtility.friendshipGreen]
-			option4 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
-			option5 = ["Running Partner", "I am trying to find someone to run with me", DisplayUtility.friendshipGreen]
-			option6 = ["Shabbat Meal", "I am looking for a shabbat meal. Know anyone hosting?", DisplayUtility.friendshipGreen]
+			if type == "Business"
+			{
+				option1 = ["Study Partner", "I'm looking for someone to study with", DisplayUtility.businessBlue]
+				option2 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
+				option3 = ["Investor", "I am raising money for a venture I am working on", DisplayUtility.businessBlue]
+				option4 = ["Investment", "I am looking to invest in something game-changing", DisplayUtility.businessBlue]
+				option5 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
+				option6 = ["Intern", "I am looking for an intern for a venture I started", DisplayUtility.businessBlue]
+			}
+			else if type == "Love"
+			{
+				option1 = ["Formal Date", "I'm looking for some one to go to a formal with me", DisplayUtility.loveRed]
+				option2 = ["See a Movie", "I want to take a date to see a cool new movie.", DisplayUtility.loveRed]
+				option3 = ["Soulmate", "I'm looking for my soulmate. Set me up with someone awesome!", DisplayUtility.loveRed]
+				option4 = ["Date Night", "I'm looking for someone to go to a date night with me", DisplayUtility.loveRed]
+				option5 = ["Dinner", "I'm looking for someone to go to dinner with me", DisplayUtility.loveRed]
+				option6 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
+			}
+			else if type == "Friendship"
+			{
+				option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
+				option2 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
+				option3 = ["Hosting Shabbat", "I am hosting a shabbat meal. Send someone my way!", DisplayUtility.friendshipGreen]
+				option4 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
+				option5 = ["Running Partner", "I am trying to find someone to run with me", DisplayUtility.friendshipGreen]
+				option6 = ["Shabbat Meal", "I am looking for a shabbat meal. Know anyone hosting?", DisplayUtility.friendshipGreen]
+			}
+			else
+			{
+				option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
+				option2 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
+				option3 = ["Hosting Shabbat", "I am hosting a shabbat meal. Send someone my way!", DisplayUtility.friendshipGreen]
+				option4 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
+				option5 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
+				option6 = ["Shabbat Meal", "I am looking for a shabbat meal. Know anyone hosting?", DisplayUtility.friendshipGreen]
+			}
 		}
 		else
 		{
-			option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
-			option2 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
-			option3 = ["Hosting Shabbat", "I am hosting a shabbat meal. Send someone my way!", DisplayUtility.friendshipGreen]
-			option4 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
-			option5 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
-			option6 = ["Shabbat Meal", "I am looking for a shabbat meal. Know anyone hosting?", DisplayUtility.friendshipGreen]
+			if type == "Business"
+			{
+				option1 = ["Study Partner", "I'm looking for someone to study with", DisplayUtility.businessBlue]
+				option2 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
+				option3 = ["Investor", "I am raising money for a venture I am working on", DisplayUtility.businessBlue]
+				option4 = ["Investment", "I am looking to invest in something game-changing", DisplayUtility.businessBlue]
+				option5 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
+				option6 = ["Intern", "I am looking for an intern for a venture I started", DisplayUtility.businessBlue]
+			}
+			else if type == "Love"
+			{
+				option1 = ["Formal Date", "I'm looking for some one to go to a formal with me", DisplayUtility.loveRed]
+				option2 = ["See a Movie", "I want to take a date to see a cool new movie.", DisplayUtility.loveRed]
+				option3 = ["Soulmate", "I'm looking for my soulmate. Set me up with someone awesome!", DisplayUtility.loveRed]
+				option4 = ["Date Night", "I'm looking for someone to go to a date night with me", DisplayUtility.loveRed]
+				option5 = ["Dinner", "I'm looking for someone to go to dinner with me", DisplayUtility.loveRed]
+				option6 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
+			}
+			else if type == "Friendship"
+			{
+				option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
+				option2 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
+				option3 = ["Fellow Foodie", "I want grab some good food with someone. 'nect me!", DisplayUtility.friendshipGreen]
+				option4 = ["Random", "Introduce me to someone random! I'm trying to meet some awesome people", DisplayUtility.friendshipGreen]
+				option5 = ["Running Partner", "I am trying to find someone to run with me", DisplayUtility.friendshipGreen]
+				option6 = ["Drinking Buddy", "I just want to drink. Anyone else feel the same way?", DisplayUtility.friendshipGreen]
+			}
+			else
+			{
+				option1 = ["Gym Buddy", "I am looking for someone to go to the gym with me", DisplayUtility.friendshipGreen]
+				option2 = ["Co-Founder", "I am looking for someone to join me for a venture", DisplayUtility.businessBlue]
+				option3 = ["Date Night", "I'm looking for someone to go to a date night with me", DisplayUtility.loveRed]
+				option4 = ["Roommate", "I need a roommate. Any suggestions?", DisplayUtility.friendshipGreen]
+				option5 = ["Wine", "I'm looking for someone to open a bottle of wine with", DisplayUtility.loveRed]
+				option6 = ["Internship", "I'm looking for an internship for the summer", DisplayUtility.businessBlue]
+			}
 		}
 
 		top6Options = [0: option1, 1: option2, 2: option3, 3: option4, 4: option5, 5: option6]

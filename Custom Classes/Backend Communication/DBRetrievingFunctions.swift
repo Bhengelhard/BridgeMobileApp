@@ -12,7 +12,7 @@ import Parse
 class DBRetrievingFunctions {
     
     //Checking to see if user has any unviewed notifications that a connection they made has accepted
-    func queryForAcceptedConnectionNotifications(view: UIView) {
+    func queryForAcceptedConnectionNotifications(vc: UIViewController) {
         let acceptedConnectionQuery = PFQuery(className: "BridgePairings")
         acceptedConnectionQuery.whereKey("connecter_objectId", equalTo: PFUser.current()!.objectId!)
         acceptedConnectionQuery.whereKey("user1_response", equalTo: 1)
@@ -41,8 +41,8 @@ class DBRetrievingFunctions {
                                                 print(user2ObjectId)
                                                 if let user2ProfilePictureURL = object["user2_profile_picture_url"] as? String {
                                                     print(user2ProfilePictureURL)
-                                                    let acceptedConnectionNotification = AcceptedConnectionNotification(acceptedConnectionObjectId: acceptedConnectionObjectId, user1Name: user1Name, user1ObjectId: user1ObjectId, user1ProfilePictureURL: user1ProfilePictureURL, user2Name: user2Name, user2ObjectId: user2ObjectId, user2ProfilePictureURL: user2ProfilePictureURL)
-                                                    view.addSubview(acceptedConnectionNotification)
+                                                    let acceptedConnectionNotification = AcceptedConnectionNotification(acceptedConnectionObjectId: acceptedConnectionObjectId, user1Name: user1Name, user1ObjectId: user1ObjectId, user1ProfilePictureURL: user1ProfilePictureURL, user2Name: user2Name, user2ObjectId: user2ObjectId, user2ProfilePictureURL: user2ProfilePictureURL, vc: vc)
+                                                    vc.view.addSubview(acceptedConnectionNotification)
                                                     break
                                                 }
                                                 

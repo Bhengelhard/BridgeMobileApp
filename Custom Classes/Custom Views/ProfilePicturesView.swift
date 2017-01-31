@@ -14,6 +14,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     
     let originalHexFrames: [CGRect]
     var images: [UIImage]
+    let hexViews: [HexagonView]
     let startingIndex: Int
     let shouldShowEditButtons: Bool
     let allPicsVC: ProfilePicturesViewController
@@ -23,14 +24,15 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     var singlePicVCs = [UIViewController]()
     let editButtonsView = UIView()
     let uploadMenu = UIView()
+    let uploadButton = UIButton()
+    let defaultButton = UIButton()
+    let deleteButton = UIButton()
     let imagePicker = UIImagePickerController()
     
-    var shouldDisplayDefaultButton = true
-    var shouldDisplayDeleteButton = true
-    
-    init(images: [UIImage], originalHexFrames: [CGRect], startingIndex: Int, shouldShowEditButtons: Bool, parentVC: UIViewController) {
+    init(images: [UIImage], originalHexFrames: [CGRect], hexViews: [HexagonView], startingIndex: Int, shouldShowEditButtons: Bool, parentVC: UIViewController) {
         self.images = images
         self.originalHexFrames = originalHexFrames
+        self.hexViews = hexViews
         self.startingIndex = startingIndex
         self.shouldShowEditButtons = shouldShowEditButtons
         self.parentVC = parentVC
@@ -45,7 +47,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             singlePicVCs.append(singlePicVC)
         }
         
-        allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingIndex])
+        self.allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingIndex])
         
         super.init(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
         
@@ -68,72 +70,76 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         
         addSubview(allPicsVC.view)
         
-        
         if shouldShowEditButtons {
-        
-            let buttonWidth = 0.33*DisplayUtility.screenWidth
-            let buttonHeight = 0.07*DisplayUtility.screenWidth
-            
-            let spaceBetweenButtons = 0.03*DisplayUtility.screenHeight
-            var buttonY: CGFloat = 0.0
-            
-            let uploadButton = UIButton()
-            uploadButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
-            uploadButton.center.x = DisplayUtility.screenWidth / 2
-            uploadButton.contentVerticalAlignment = .fill
-            uploadButton.setTitle("UPLOAD", for: .normal)
-            uploadButton.setTitleColor(.black, for: .normal)
-            uploadButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-            uploadButton.titleLabel?.textAlignment = .center
-            uploadButton.layer.borderWidth = 1
-            uploadButton.layer.borderColor = UIColor.gray.cgColor
-            uploadButton.layer.cornerRadius = 0.3*uploadButton.frame.height
-            uploadButton.addTarget(self, action: #selector(uploadButtonPressed(_:)), for: .touchUpInside)
-            editButtonsView.addSubview(uploadButton)
-            
-            buttonY = buttonY + buttonHeight + spaceBetweenButtons
-            
-            if shouldDisplayDefaultButton {
-                let defaultButton = UIButton()
-                defaultButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
-                defaultButton.center.x = DisplayUtility.screenWidth / 2
-                defaultButton.contentVerticalAlignment = .fill
-                defaultButton.setTitle("SET DEFAULT", for: .normal)
-                defaultButton.setTitleColor(.black, for: .normal)
-                defaultButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-                defaultButton.titleLabel?.textAlignment = .center
-                defaultButton.layer.borderWidth = 1
-                defaultButton.layer.borderColor = UIColor.gray.cgColor
-                defaultButton.layer.cornerRadius = 0.3*defaultButton.frame.height
-                editButtonsView.addSubview(defaultButton)
-                
-                buttonY = buttonY + buttonHeight + spaceBetweenButtons
-            }
-            
-            if shouldDisplayDeleteButton {
-                let deleteButton = UIButton()
-                deleteButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
-                deleteButton.center.x = DisplayUtility.screenWidth / 2
-                deleteButton.contentVerticalAlignment = .fill
-                deleteButton.setTitle("DELETE", for: .normal)
-                deleteButton.setTitleColor(.black, for: .normal)
-                deleteButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-                deleteButton.titleLabel?.textAlignment = .center
-                deleteButton.layer.borderWidth = 1
-                deleteButton.layer.borderColor = UIColor.gray.cgColor
-                deleteButton.layer.cornerRadius = 0.3*deleteButton.frame.height
-                editButtonsView.addSubview(deleteButton)
-                
-                buttonY = buttonY + buttonHeight + spaceBetweenButtons
-            }
-            
-            editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: uploadButton.frame.maxY)
-            editButtonsView.alpha = 0
-            addSubview(editButtonsView)
+            layoutEditButtonsView()
         }
+        
+    }
+    
+    func layoutEditButtonsView() {
+        
+        let buttonWidth = 0.33*DisplayUtility.screenWidth
+        let buttonHeight = 0.07*DisplayUtility.screenWidth
+        
+        let spaceBetweenButtons = 0.03*DisplayUtility.screenHeight
+        var buttonY: CGFloat = 0.0
+        
+        uploadButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        uploadButton.center.x = DisplayUtility.screenWidth / 2
+        uploadButton.contentVerticalAlignment = .fill
+        uploadButton.setTitle("UPLOAD", for: .normal)
+        uploadButton.setTitleColor(.black, for: .normal)
+        uploadButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+        uploadButton.titleLabel?.textAlignment = .center
+        uploadButton.layer.borderWidth = 1
+        uploadButton.layer.borderColor = UIColor.gray.cgColor
+        uploadButton.layer.cornerRadius = 0.3*uploadButton.frame.height
+        uploadButton.addTarget(self, action: #selector(uploadButtonPressed(_:)), for: .touchUpInside)
+        editButtonsView.addSubview(uploadButton)
+        
+        buttonY = buttonY + buttonHeight + spaceBetweenButtons
+    
+        defaultButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        defaultButton.center.x = DisplayUtility.screenWidth / 2
+        defaultButton.contentVerticalAlignment = .fill
+        defaultButton.setTitle("SET DEFAULT", for: .normal)
+        defaultButton.setTitleColor(.black, for: .normal)
+        defaultButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+        defaultButton.titleLabel?.textAlignment = .center
+        defaultButton.layer.borderWidth = 1
+        defaultButton.layer.borderColor = UIColor.gray.cgColor
+        defaultButton.layer.cornerRadius = 0.3*defaultButton.frame.height
+        defaultButton.addTarget(self, action: #selector(defaultButtonPressed(_:)), for: .touchUpInside)
+        editButtonsView.addSubview(defaultButton)
+        
+        buttonY = buttonY + buttonHeight + spaceBetweenButtons
+    
+        deleteButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        deleteButton.center.x = DisplayUtility.screenWidth / 2
+        deleteButton.contentVerticalAlignment = .fill
+        deleteButton.setTitle("DELETE", for: .normal)
+        deleteButton.setTitleColor(.black, for: .normal)
+        deleteButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+        deleteButton.titleLabel?.textAlignment = .center
+        deleteButton.layer.borderWidth = 1
+        deleteButton.layer.borderColor = UIColor.gray.cgColor
+        deleteButton.layer.cornerRadius = 0.3*deleteButton.frame.height
+        deleteButton.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
+        editButtonsView.addSubview(deleteButton)
+        
+        buttonY = buttonY + buttonHeight + spaceBetweenButtons
+        
+        editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: buttonY)
+        editButtonsView.alpha = 0
+        addSubview(editButtonsView)
     }
     
     func resetImagesForVCs() {
+        // add vcs if not enough
+        for _ in singlePicVCs.count..<images.count {
+            let singlePicVC = UIViewController()
+            singlePicVCs.append(singlePicVC)
+        }
         for i in 0..<singlePicVCs.count {
             let singlePicVC = singlePicVCs[i]
             let image = images[i]
@@ -148,6 +154,14 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             picView.layer.borderWidth = 1
             picView.layer.borderColor = UIColor.black.cgColor
             singlePicVC.view.addSubview(picView)
+        }
+        allPicsVC.vcs = singlePicVCs
+        allPicsVC.profilePicturesDelegate?.profilePicturesViewController(allPicsVC, didUpdatePageCount: singlePicVCs.count)
+        
+        if singlePicVCs.count <= 1 {
+            deleteButton.alpha = 0
+        } else {
+            deleteButton.alpha = 1
         }
     }
     
@@ -221,6 +235,13 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     }
     
     func exit(_ gesture: UIGestureRecognizer) {
+        for i in 0..<hexViews.count {
+            if i < images.count {
+                hexViews[i].setBackgroundImage(image: images[i])
+            } else {
+                hexViews[i].setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
+            }
+        }
         self.animateOut { (finished) in
             if finished {
                 self.removeFromSuperview()
@@ -294,9 +315,9 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         uploadMenu.removeFromSuperview()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest?.start{ (connection, result, error) -> Void in
+        graphRequest!.start{ (connection, result, error) -> Void in
             if error != nil {
-                print(error)
+                print(error ?? "error in graphRequest of uploadFromFB")
             }
             else if let result = result as? [String: AnyObject]{
                 let userId = result["id"]! as! String
@@ -304,19 +325,32 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                 if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
                     if let data = try? Data(contentsOf: fbpicUrl) {
                         DispatchQueue.main.async(execute: {
+                            let index = self.allPicsVC.pageControl.currentPage
+                            var nextPageNum = index
                             if let image = UIImage(data: data) {
-                                self.images[self.allPicsVC.pageControl.currentPage] = image
+                                if self.images.count == 4 {
+                                    self.images[index] = image
+                                } else {
+                                    self.images.append(image)
+                                    nextPageNum = self.images.count-1
+                                }
                                 self.resetImagesForVCs()
                             }
                             if let user = PFUser.current() {
                                 if let picFile = PFFile(data: data) {
                                     if var profilePictures = user["profile_pictures"] as? [PFFile] {
-                                        profilePictures[self.allPicsVC.pageControl.currentPage] = picFile
+                                        if profilePictures.count == 4 {
+                                            profilePictures[index] = picFile
+                                        } else {
+                                            profilePictures.append(picFile)
+                                        }
                                         user["profile_pictures"] = profilePictures
                                         user.saveInBackground()
                                     }
                                 }
                             }
+                            self.allPicsVC.profilePicturesDelegate?.profilePicturesViewController(self.allPicsVC, didUpdatePageCount: self.images.count)
+                            self.allPicsVC.goToPage(index: nextPageNum)
                         })
                     }
                 }
@@ -343,23 +377,99 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         uploadMenu.removeFromSuperview()
         
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            self.images[self.allPicsVC.pageControl.currentPage] = pickedImage
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            let index = self.allPicsVC.pageControl.currentPage
+            var nextPageNum = index
+            if self.images.count == 4 {
+                self.images[index] = image
+            } else {
+                self.images.append(image)
+                nextPageNum = self.images.count-1
+            }
             self.resetImagesForVCs()
-            if let data = UIImageJPEGRepresentation(pickedImage, 1.0) {
+            if let data = UIImageJPEGRepresentation(image, 1.0) {
                 if let user = PFUser.current() {
                     if let picFile = PFFile(data: data) {
                         if var profilePictures = user["profile_pictures"] as? [PFFile] {
-                            profilePictures[self.allPicsVC.pageControl.currentPage] = picFile
+                            if profilePictures.count == 4 {
+                                profilePictures[index] = picFile
+                            } else {
+                                profilePictures.append(picFile)
+                            }
                             user["profile_pictures"] = profilePictures
                             user.saveInBackground()
                         }
                     }
                 }
             }
+            self.allPicsVC.profilePicturesDelegate?.profilePicturesViewController(self.allPicsVC, didUpdatePageCount: self.images.count)
+            self.allPicsVC.goToPage(index: nextPageNum)
         }
         parentVC.dismiss(animated: true, completion: nil)
 
+    }
+    
+    func defaultButtonPressed(_ button: UIButton) {
+        let index = allPicsVC.pageControl.currentPage
+        if images.count > index {
+            let oldDefaultPic = images[0]
+            images[0] = images[index]
+            images[index] = oldDefaultPic
+            resetImagesForVCs()
+            if let user = PFUser.current() {
+                if var profilePics = user["profile_pictures"] as? [PFFile] {
+                    if profilePics.count > index {
+                        let oldDefaultPic = profilePics[0]
+                        profilePics[0] = profilePics[index]
+                        profilePics[index] = oldDefaultPic
+                        user["profile_pictures"] = profilePics
+                    }
+                }
+                if var profilePicsUrls = user["profile_pictures_urls"] as? [String] {
+                    if profilePicsUrls.count > index {
+                        let oldDefaultPicUrl = profilePicsUrls[0]
+                        profilePicsUrls[0] = profilePicsUrls[index]
+                        profilePicsUrls[index] = oldDefaultPicUrl
+                        user["profile_pictures_urls"] = profilePicsUrls
+                    }
+                }
+                user.saveInBackground()
+            }
+            allPicsVC.goToPage(index: 0)
+        }
+    }
+    
+    func deleteButtonPressed(_ button: UIButton) {
+        if images.count <= 1 {
+            return
+        }
+        let index = allPicsVC.pageControl.currentPage
+        if images.count > index {
+            images.remove(at: index)
+            singlePicVCs.remove(at: index)
+            resetImagesForVCs()
+            if let user = PFUser.current() {
+                if var profilePics = user["profile_pictures"] as? [PFFile] {
+                    if profilePics.count > index {
+                        profilePics.remove(at: index)
+                        user["profile_pictures"] = profilePics
+                    }
+                }
+                if var profilePicsUrls = user["profile_pictures_urls"] as? [String] {
+                    if profilePicsUrls.count > index {
+                        profilePicsUrls.remove(at: index)
+                        user["profile_pictures_urls"] = profilePicsUrls
+                    }
+                }
+                user.saveInBackground()
+            }
+        }
+        if index == images.count && index > 0 {
+            allPicsVC.goToPage(index: index-1)
+        } else {
+            allPicsVC.goToPage(index: index)
+        }
+        
     }
     
     

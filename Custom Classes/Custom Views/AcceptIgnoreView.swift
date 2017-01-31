@@ -304,71 +304,127 @@ class AcceptIgnoreView: UIView {
                     
                     //checking if other user has already accepted
                     if result["\(otherUser)_response"] as! Int == 1 {
-                        let message = PFObject(className: "Messages")
-                        let acl = PFACL()
-                        acl.getPublicReadAccess = true
-                        acl.getPublicWriteAccess = true
-                        message.acl = acl
-
-                        message["names_in_message"] = [
-                            result["\(self.newMatch.user)_name"],
-                            result["\(otherUser)_name"]
-                        ]
-                        message["message_type"] = result["bridge_type"]
-                        if self.newMatch.user == "user1" {
-                            message["ids_in_message"] = [
-                                result["user_objectId1"],
-                                result["user_objectId2"]
-                            ]
+                        //Checking if message with paired user's already exists
+                        let messagesQuery = PFQuery(className: "Messages")
+                        let currentUserObjectId = PFUser.current()?.objectId
+                        var otherUserObjectId = ""
+                        if otherUser == "user1" {
+                            if let id = result["user_objectId1"] as? String {
+                                otherUserObjectId = id
+                            }
                         } else {
-                            message["ids_in_message"] = [
-                                result["user_objectId2"],
-                                result["user_objectId1"]
-                            ]
+                            if let id = result["user_objectId2"] as? String {
+                                otherUserObjectId = id
+                            }
                         }
-                        message["no_of_single_messages"] = 1
-                        message["profile_picture_urls"] = [
-                            result["\(self.newMatch.user)_profile_picture_url"],
-                            result["\(otherUser)_profile_picture_url"]
-                        ]
-                        message["lastSingleMessageAt"] = Date()
-                        let userObjectId1 = (message["ids_in_message"] as! [String])[0]
-                        message["user1_objectId"] = userObjectId1
-                        let userObjectId2 = (message["ids_in_message"] as! [String])[1]
-                        message["user2_objectId"] = userObjectId2
-                        message["user1_name"] = result["\(self.newMatch.user)_name"]
-                        let otherUserName = result["\(otherUser)_name"]
-                        message["user2_name"] = otherUserName
-                        message["user1_profile_picture_url"] = result["\(self.newMatch.user)_profile_picture_url"]
-                        message["user2_profile_picture_url"] = result["\(otherUser)_profile_picture_url"]
-                        message["message_viewed"] = [String]()
-                        message["bridge_builder"] = result["connecter_objectId"]
-                        message["message_type"] = self.newMatch.type
-                        message["message_viewed"] = [PFUser.current()?.objectId]
-                        message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
-                            if error != nil {
-                                print(error!)
-                            } else if succeeded {
-                                //Adding users to eachothers FriendLists
-                                let pfCloudFunctions = PFCloudFunctions()
-                                pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
-                                
-                                //Close current View with fade
-                                self.phaseOut()
-                                
-                                //Reload MessagesVC and transition to single message
-                                if let vc = self.vc {
-                                    vc.viewDidLoad()
-                                    if let messageId = message.objectId {
-                                        if let name = otherUserName as? String {
-                                            vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
+                        let optionsForIdsInMessage = [[currentUserObjectId, otherUserObjectId], [otherUserObjectId, currentUserObjectId]]
+                        messagesQuery.whereKey("ids_in_message", containedIn: optionsForIdsInMessage)
+                        messagesQuery.getFirstObjectInBackground(block: { (object, error) in
+                            if let object = object {
+                                print("message with these users already exists so send users to that message")
+                                //message with these users already exists so send users to that message
+                                //Transition to single message
+                                if let messageId = object.objectId {
+                                    if let vc = self.vc {
+                                        vc.viewDidLoad()
+                                        if otherUser == "user1" {
+                                            if let name = result["user1_name"] as? String {
+                                                vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
+                                            }
                                         } else {
-                                            vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: "Conversation")
+                                            if let name = result["user2_name"] as? String {
+                                                vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
+                                            }
                                         }
                                     }
                                 }
+                            } else {
+                                //print(error ?? "There were no such objects")
+                                print("message does not yet exist so create new message")
+                                //message does not yet exist so create new message
+                                let message = PFObject(className: "Messages")
+                                let acl = PFACL()
+                                acl.getPublicReadAccess = true
+                                acl.getPublicWriteAccess = true
+                                message.acl = acl
+                                
+                                message["names_in_message"] = [
+                                    result["\(self.newMatch.user)_name"],
+                                    result["\(otherUser)_name"]
+                                ]
+                                message["message_type"] = result["bridge_type"]
+                                if self.newMatch.user == "user1" {
+                                    message["ids_in_message"] = [
+                                        result["user_objectId1"],
+                                        result["user_objectId2"]
+                                    ]
+                                } else {
+                                    message["ids_in_message"] = [
+                                        result["user_objectId2"],
+                                        result["user_objectId1"]
+                                    ]
+                                }
+                                message["no_of_single_messages"] = 1
+                                message["profile_picture_urls"] = [
+                                    result["\(self.newMatch.user)_profile_picture_url"],
+                                    result["\(otherUser)_profile_picture_url"]
+                                ]
+                                message["lastSingleMessageAt"] = Date()
+                                let userObjectId1 = (message["ids_in_message"] as! [String])[0]
+                                message["user1_objectId"] = userObjectId1
+                                let userObjectId2 = (message["ids_in_message"] as! [String])[1]
+                                message["user2_objectId"] = userObjectId2
+                                var otherUserObjectId = ""
+                                if userObjectId1 != PFUser.current()?.objectId {
+                                    otherUserObjectId = userObjectId1
+                                } else {
+                                    otherUserObjectId = userObjectId2
+                                }
+                                let currentUsername = result["\(self.newMatch.user)_name"]
+                                message["user1_name"] = currentUsername
+                                let otherUserName = result["\(otherUser)_name"]
+                                message["user2_name"] = otherUserName
+                                message["user1_profile_picture_url"] = result["\(self.newMatch.user)_profile_picture_url"]
+                                message["user2_profile_picture_url"] = result["\(otherUser)_profile_picture_url"]
+                                message["message_viewed"] = [String]()
+                                message["bridge_builder"] = result["connecter_objectId"]
+                                message["message_type"] = self.newMatch.type
+                                message["message_viewed"] = [PFUser.current()?.objectId]
+                                message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
+                                    if error != nil {
+                                        print(error!)
+                                    } else if succeeded {
+                                        //Adding users to eachothers FriendLists
+                                        let pfCloudFunctions = PFCloudFunctions()
+                                        pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
+                                        
+                                        
+                                        //Close current View with fade
+                                        self.phaseOut()
+                                        
+                                        //Reload MessagesVC and transition to single message
+                                        if let vc = self.vc {
+                                            vc.viewDidLoad()
+                                            if let messageId = message.objectId {
+                                                //Sending Push notifications that the second user accepted
+                                                if let name = currentUsername as? String {
+                                                    pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserObjectId,"alert":"\(name) has accepted the connection!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageId])
+                                                } else {
+                                                    pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserObjectId,"alert":"You have one new connection that has just been accepted!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageId])
+                                                }
+                                                
+                                                //Segueing user into SingleMessageViewController
+                                                if let name = otherUserName as? String {
+                                                    vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
+                                                } else {
+                                                    vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: "Conversation")
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                })
                             }
-                            
                         })
                     }
                     //If the other user has not yet accepted

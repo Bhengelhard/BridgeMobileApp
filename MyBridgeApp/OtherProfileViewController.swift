@@ -12,6 +12,8 @@ import Parse
 class OtherProfileViewController: UIViewController {
     let userId: String
     var user: PFUser?
+    var userName: String?
+    var userProfilePictureURL: String?
     
     let scrollView = UIScrollView()
     let exitButton = UIButton()
@@ -37,6 +39,12 @@ class OtherProfileViewController: UIViewController {
     var businessStatusSet = false
     var loveStatusSet = false
     var friendshipStatusSet = false
+    
+    //Transition to SingleMessageVC preparation
+    let transitionManager = TransitionManager()
+    var messageId = ""
+    var necterTypeColor = UIColor()
+    var singleMessageTitle = ""
     
     init(userId: String) {
         self.userId = userId
@@ -65,12 +73,18 @@ class OtherProfileViewController: UIViewController {
         if user == nil {
             if let query = PFUser.query() {
                 query.whereKey("objectId", equalTo: userId)
-                query.getFirstObjectInBackground(block: { (user, error) in
+                query.limit = 1
+                query.findObjectsInBackground(block: { (results, error) in
                     if error != nil {
                         print("error - get first object - \(error)")
-                    } else if let user = user as? PFUser {
-                        self.user = user
-                        self.layoutViews()
+                        self.dismiss(animated: true, completion: nil)
+                    } else if let users = results as? [PFUser] {
+                        if users.count > 0 {
+                            self.user = users[0]
+                            self.layoutViews()
+                        } else {
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     }
                 })
             }
@@ -102,6 +116,7 @@ class OtherProfileViewController: UIViewController {
                 greeting = userGreeting
             }
             if let name = user["name"] as? String {
+                userName = name
                 let firstName = DisplayUtility.firstName(name: name)
                 greetingLabel.text = "\(greeting) I'm \(firstName)."
                 greetingLabel.sizeToFit()
@@ -109,9 +124,9 @@ class OtherProfileViewController: UIViewController {
                 greetingLabel.center.x = DisplayUtility.screenWidth / 2
                 view.addSubview(greetingLabel)
                 
-                businessStatus = "\(firstName) has not yet posted a response for work."
-                loveStatus = "\(firstName) has not yet posted a response for dating."
-                friendshipStatus = "\(firstName) has not yet posted a response for friendship."
+                businessStatus = "\(firstName) has not yet posted a request for work."
+                loveStatus = "\(firstName) has not yet posted a request for dating."
+                friendshipStatus = "\(firstName) has not yet posted a request for friendship."
             }
             
             numNectedLabel.textColor = .gray
@@ -151,7 +166,7 @@ class OtherProfileViewController: UIViewController {
             let hexWidth = 0.38154*DisplayUtility.screenWidth
             let hexHeight = hexWidth * sqrt(3) / 2
             
-            let downloader = Downloader()
+            //let downloader = Downloader()
             
             //setting frame for topHexView
             topHexView.frame = CGRect(x: 0, y: 0, width: hexWidth, height: hexHeight)
@@ -170,13 +185,21 @@ class OtherProfileViewController: UIViewController {
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
             scrollView.addSubview(bottomHexView)
             
+            //getting profilePictureURL
+            if let profilePictureURL = user["profile_picture_url"] as? String {
+                userProfilePictureURL = profilePictureURL
+            }
+            
+            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+            for hexView in hexViews {
+                hexView.setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
+            }
             if let profilePics = user["profile_pictures"] as? [PFFile] {
-                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
                 for i in 0..<hexViews.count {
                     if profilePics.count > i {
                         profilePics[i].getDataInBackground(block: { (data, error) in
                             if error != nil {
-                                print(error)
+                                print(error ?? "profile pictures were not accurately retrieved")
                             } else {
                                 if let data = data {
                                     if let image = UIImage(data: data) {
@@ -191,6 +214,24 @@ class OtherProfileViewController: UIViewController {
                     }
                 }
             }
+            else {
+                for hexView in hexViews {
+                    hexView.setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
+                }
+                //If the user has not set any profile pictures, then check if the user has something saved in profile_picture_url to set
+                if let urlString = user["profile_picture_url"] as? String {
+                    if let URL = URL(string: urlString) {
+                        let downloader = Downloader()
+                        downloader.imageFromURL(URL: URL, callBack: { (image) in
+                            self.leftHexView.setBackgroundImage(image: image)
+                            let hexViewGR = UITapGestureRecognizer(target: self, action: #selector(self.profilePicSelected(_:)))
+                            self.leftHexView.addGestureRecognizer(hexViewGR)
+                        })
+                    }
+                    
+                }
+
+            }
             
             // layout message button
             let messageButtonWidth = 0.34666*DisplayUtility.screenWidth
@@ -198,6 +239,7 @@ class OtherProfileViewController: UIViewController {
             messageButton.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.03*DisplayUtility.screenHeight, width: messageButtonWidth, height: messageButtonHeight)
             messageButton.center.x = DisplayUtility.screenWidth / 2
             messageButton.setImage(UIImage(named: "Message_Button"), for: .normal)
+            messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
             scrollView.addSubview(messageButton)
             
             let line = UIView()
@@ -320,6 +362,16 @@ class OtherProfileViewController: UIViewController {
         }
     }
     
+    func messageButtonTapped(_ sender: UIButton) {
+        let messagingFunctions = MessagingFunctions()
+        if let name = userName {
+            if let URL = userProfilePictureURL {
+                messagingFunctions.createDirectMessage(otherUserObjectId: userId, otherUserName: name, otherUserProfilePictureURL: URL, vc: self)
+            }
+        }
+        
+    }
+    
     func exit(_ sender: UIButton) {
         dismiss(animated: false, completion: nil)
     }
@@ -349,7 +401,7 @@ class OtherProfileViewController: UIViewController {
                     startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
             self.view.addSubview(profilePicsView)
             profilePicsView.animateIn()
         }
@@ -358,24 +410,23 @@ class OtherProfileViewController: UIViewController {
     func writeFacts() -> Bool {
         if let user = user {
             if let selectedFacts = user["selected_facts"] as? [String] {
-                var factsText = ""
                 var facts = [String]()
                 
                 if selectedFacts.contains("Age") {
                     if let age = user["age"] as? Int {
-                        facts.append("I'm \(age)")
+                        facts.append("am \(age)")
                     }
                 }
                 if selectedFacts.contains("City") {
                     if let city = user["city"] as? String {
                         if let currentCity = user["current_city"] as? Bool {
                             if currentCity {
-                                facts.append("I live in \(city)")
+                                facts.append("live in \(city)")
                             } else {
-                                facts.append("I lived in \(city)")
+                                facts.append("lived in \(city)")
                             }
                         } else {
-                            facts.append("I lived in \(city)")
+                            facts.append("lived in \(city)")
                         }
                     }
                 }
@@ -383,12 +434,12 @@ class OtherProfileViewController: UIViewController {
                     if let school = user["school"] as? String {
                         if let currentStudent = user["current_student"] as? Bool {
                             if currentStudent {
-                                facts.append("I go to \(school)")
+                                facts.append("go to \(school)")
                             } else {
-                                facts.append("I went to \(school)")
+                                facts.append("went to \(school)")
                             }
                         } else {
-                            facts.append("I went to \(school)")
+                            facts.append("went to \(school)")
                         }
                     }
                 }
@@ -396,26 +447,32 @@ class OtherProfileViewController: UIViewController {
                     if let work = user["work"] as? String {
                         if let currentWork = user["current_work"] as? Bool {
                             if currentWork {
-                                facts.append("I work at \(work)")
+                                facts.append("work at \(work)")
                             } else {
-                                facts.append("I worked at \(work)")
+                                facts.append("worked at \(work)")
                             }
                         } else {
-                            facts.append("I worked at \(work)")
+                            facts.append("worked at \(work)")
                         }
                     }
                 }
                 if selectedFacts.contains("Religion") {
                     if let religion = user["religion"] as? String {
-                        facts.append("I am \(religion)")
+                        facts.append("am \(religion)")
                     }
                 }
+                var factsText = ""
                 if facts.count > 0 {
                     for i in 0..<facts.count {
-                        if i == facts.count - 1 {
-                            factsText = "\(factsText) \(facts[i])."
+                        if i == 0 && i == facts.count - 1 {
+                            factsText = "I \(facts[i])."
+                        }
+                        else if i == 0 {
+                            factsText = "I \(factsText) \(facts[i]), "
+                        } else if i == facts.count - 1 {
+                            factsText = "\(factsText) and \(facts[i])."
                         } else {
-                            factsText = "\(factsText) \(facts[i]),"
+                            factsText = "\(factsText) \(facts[i]), "
                         }
                     }
                     factsTextLabel.text = factsText
@@ -578,6 +635,42 @@ class OtherProfileViewController: UIViewController {
     
     func layoutBottomBasedOnStatus() {
         scrollView.contentSize = CGSize(width: DisplayUtility.screenWidth, height: max(DisplayUtility.screenHeight, statusLabel.frame.maxY + 0.02*DisplayUtility.screenHeight - scrollView.frame.minY))
+    }
+    
+    func transitionToMessageWithID(_ id: String, color: UIColor, title: String) {
+        print("transition ran in BridgeVC")
+        self.messageId = id
+        self.necterTypeColor = color
+        self.singleMessageTitle = title
+        
+        let singleMessageVC:SingleMessageViewController = SingleMessageViewController()
+        singleMessageVC.isSeguedFromBridgePage = true
+        singleMessageVC.newMessageId = self.messageId
+        singleMessageVC.singleMessageTitle = singleMessageTitle
+        singleMessageVC.seguedFrom = "OtherProfileViewController"
+        singleMessageVC.necterTypeColor = necterTypeColor
+        singleMessageVC.transitioningDelegate = self.transitionManager
+        present(singleMessageVC, animated: true, completion: nil)
+        //self.performSegue(withIdentifier: "showSingleMessage", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        NotificationCenter.default.removeObserver(self)
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == SingleMessageViewController.self {
+            self.transitionManager.animationDirection = "Right"
+            let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
+            singleMessageVC.isSeguedFromBridgePage = true
+            singleMessageVC.newMessageId = self.messageId
+            singleMessageVC.singleMessageTitle = singleMessageTitle
+            singleMessageVC.seguedFrom = "OtherProfileViewController"
+            singleMessageVC.necterTypeColor = necterTypeColor
+            singleMessageVC.transitioningDelegate = self.transitionManager
+        }
+        vc.transitioningDelegate = self.transitionManager
+            
+        
     }
 
 }

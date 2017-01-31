@@ -112,6 +112,14 @@ class FacebookFunctions {
                                 }
                             }
                             
+                            //Adding access code to current user field access_codes to identify which communities the user has joined
+                            if let accessVC = vc as? AccessViewController {
+                                //Checking if user had to enter an access code -> i.e. HasSignedUp was false before they logged in
+                                if !accessVC.accessCode.isEmpty {
+                                    PFUser.current()?.addUniqueObject(accessVC.accessCode, forKey: "access_codes")
+                                }
+                            }
+                            
                             PFUser.current()?.saveInBackground()
                         }
                     }
@@ -239,17 +247,6 @@ class FacebookFunctions {
                                 PFUser.current()?["interested_in_friendship"] = true
                                 PFUser.current()?["ran_out_of_pairs"] = 0
                                 
-                                //Adding access code to current user field access_codes to identify which communities the user has joined
-                                if let accessVC = vc as? AccessViewController {
-                                    if let accessCodes = PFUser.current()?["access_codes"] as? [String] {
-                                        if !accessCodes.contains(accessVC.accessCode) {
-                                            var mutableAccessCodes = accessCodes
-                                            PFUser.current()?["access_codes"] = mutableAccessCodes.append(accessVC.accessCode)
-                                        }
-                                    } else {
-                                        PFUser.current()?["access_codes"] = [accessVC.accessCode]
-                                    }
-                                }
                                 PFUser.current()?.saveInBackground()
                                 
                                 //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up

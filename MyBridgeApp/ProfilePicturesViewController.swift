@@ -16,6 +16,8 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
     init(vcs: [UIViewController], initialVC: UIViewController) {
         self.vcs = vcs
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        profilePicturesDelegate = self
+        profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageCount: vcs.count)
         setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
         
         //formatting pageControl
@@ -29,13 +31,12 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
         delegate = self
         dataSource = self
         
-        profilePicturesDelegate = self
-        
-        profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageCount: vcs.count)
+        /*
         if let firstVC = viewControllers?.first,
             let currIndex = vcs.index(of: firstVC) {
             profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageIndex: currIndex)
         }
+        */
         
         pageControl.pageIndicatorTintColor = .clear
         pageControl.currentPageIndicatorTintColor = .lightGray
@@ -45,29 +46,25 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        var minDotX: CGFloat?
-        var maxDotX: CGFloat?
         for i in 0..<pageControl.subviews.count {
             let dot = pageControl.subviews[i]
             dot.layer.borderWidth = 1
             dot.layer.borderColor = UIColor.lightGray.cgColor
-            
-            if minDotX == nil {
-                minDotX = dot.frame.minX
-            } else {
-                minDotX = min(minDotX!, dot.frame.minX)
-            }
-            
-            if maxDotX == nil {
-                maxDotX = dot.frame.maxX
-            } else {
-                maxDotX = max(maxDotX!, dot.frame.maxX)
-            }
         }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    override func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, completion: ((Bool) -> Void)? = nil) {
+        super.setViewControllers(viewControllers, direction: direction, animated: animated, completion: completion)
+        if let vc = viewControllers?.first {
+            if let index = vcs.index(of: vc) {
+                profilePicturesDelegate?.profilePicturesViewController(self, didUpdatePageIndex: index)
+            }
+        }
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -98,8 +95,24 @@ class ProfilePicturesViewController: UIPageViewController, UIPageViewControllerD
         }
     }
     
+    func goToPage(index: Int) {
+        if index < vcs.count {
+            setViewControllers([vcs[index]], direction: .forward, animated: false, completion: nil)
+        }
+    }
+    
     func profilePicturesViewController(_ profilePicturesViewController: ProfilePicturesViewController, didUpdatePageCount count: Int) {
         pageControl.numberOfPages = count
+        for i in 0..<pageControl.subviews.count {
+            let dot = pageControl.subviews[i]
+            dot.layer.borderWidth = 1
+            dot.layer.borderColor = UIColor.lightGray.cgColor
+        }
+        if count == 0 {
+            pageControl.alpha = 0
+        } else {
+            pageControl.alpha = 1
+        }
     }
     
     func profilePicturesViewController(_ profilePicturesViewController: ProfilePicturesViewController, didUpdatePageIndex index: Int) {

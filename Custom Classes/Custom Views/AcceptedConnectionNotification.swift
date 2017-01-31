@@ -23,8 +23,9 @@ class AcceptedConnectionNotification: UIView {
     var user2ProfilePictureURL: String
     let user1ProfilePicture = UIButton(type: .custom)
     let user2ProfilePicture = UIButton(type: .custom)
+    var vc: UIViewController
     
-    init(acceptedConnectionObjectId: String, user1Name: String, user1ObjectId: String, user1ProfilePictureURL: String, user2Name: String, user2ObjectId: String, user2ProfilePictureURL: String) {
+    init(acceptedConnectionObjectId: String, user1Name: String, user1ObjectId: String, user1ProfilePictureURL: String, user2Name: String, user2ObjectId: String, user2ProfilePictureURL: String, vc: UIViewController) {
         self.acceptedConnectionObjectId = acceptedConnectionObjectId
         self.user1Name = user1Name
         self.user1ObjectId = user1ObjectId
@@ -32,6 +33,7 @@ class AcceptedConnectionNotification: UIView {
         self.user2Name = user2Name
         self.user2ObjectId = user2ObjectId
         self.user2ProfilePictureURL = user2ProfilePictureURL
+        self.vc = vc
         
         super.init(frame: CGRect(x: 0.0, y: 0.0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
         
@@ -54,21 +56,32 @@ class AcceptedConnectionNotification: UIView {
     //open user1's profile upon tapping user1ProfilePicture
     @objc func user1ProfilePictureTapped(_ sender: UIButton) {
         print("user1ProfilePictureTapped")
+        let profileVC = OtherProfileViewController(userId: user1ObjectId)
+        vc.present(profileVC, animated: false, completion: nil)
+        
     }
     
     //open user2's profile upon tapping user2ProfilePicture
     @objc func user2ProfilePictureTapped(_ sender: UIButton) {
         print("user2ProfilePictureTapped")
+        let profileVC = OtherProfileViewController(userId: user2ObjectId)
+        vc.present(profileVC, animated: false, completion: nil)
     }
     
     //open message between current user and user1 upon tapping leftMessageButton
     @objc func leftMessageButtonTapped(_ sender: UIButton) {
         print("leftMessageButtonTapped")
+        
+        let messagingFunctions = MessagingFunctions()
+        messagingFunctions.createDirectMessage(otherUserObjectId: user1ObjectId, otherUserName: user1Name, otherUserProfilePictureURL: user1ProfilePictureURL, vc: vc)
     }
     
     //open message between current user and user2 upon tapping rightMessageButton
     @objc func rightMessageButtonTapped(_ sender: UIButton) {
         print("rightMessageButtonTapped")
+        
+        let messagingFunctions = MessagingFunctions()
+        messagingFunctions.createDirectMessage(otherUserObjectId: user2ObjectId, otherUserName: user2Name, otherUserProfilePictureURL: user2ProfilePictureURL, vc: vc)
     }
     
     //exit acceptedConnectionNotification with animation upon tapping exitButton
@@ -106,11 +119,7 @@ class AcceptedConnectionNotification: UIView {
                             
                             //Check for another AcceptedConnectionNotification
                             let dbRetrievingFunctions = DBRetrievingFunctions()
-                            if let view = self.superview {
-                                dbRetrievingFunctions.queryForAcceptedConnectionNotifications(view: view)
-                            }
-                            
-                            
+                            dbRetrievingFunctions.queryForAcceptedConnectionNotifications(vc: self.vc)
                         }
                     })
                 }
@@ -214,9 +223,9 @@ class AcceptedConnectionNotification: UIView {
         user2ProfilePicture.addTarget(self, action: #selector(user2ProfilePictureTapped(_:)), for: .touchUpInside)
         self.addSubview(user2ProfilePicture)
         
-        //Disabling Profile Picture User Interaction until Profiles Epic is ready to be connected
-        user1ProfilePicture.isUserInteractionEnabled = false
-        user2ProfilePicture.isUserInteractionEnabled = false
+//        //Disabling Profile Picture User Interaction until Profiles Epic is ready to be connected
+//        user1ProfilePicture.isUserInteractionEnabled = false
+//        user2ProfilePicture.isUserInteractionEnabled = false
         
         //Downloading the profile pictures and using callbacks to set the button images
         getProfilePictures()
@@ -263,9 +272,9 @@ class AcceptedConnectionNotification: UIView {
         rightMessageButton.addTarget(self, action: #selector(rightMessageButtonTapped(_:)), for: .touchUpInside)
         self.addSubview(rightMessageButton)
         
-        //Disabling Message Button Interaction until singleMessage is ready to be connected
-        rightMessageButton.isUserInteractionEnabled = false
-        leftMessageButton.isUserInteractionEnabled = false
+//        //Disabling Message Button Interaction until singleMessage is ready to be connected
+//        rightMessageButton.isUserInteractionEnabled = false
+//        leftMessageButton.isUserInteractionEnabled = false
         
         //Setting Dashed Lines
         //Left Dashed Line

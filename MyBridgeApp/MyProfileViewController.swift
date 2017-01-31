@@ -30,9 +30,12 @@ class MyProfileViewController: UIViewController {
     let loveButton = UIButton()
     let friendshipButton = UIButton()
     let statusLabel = UILabel()
-    var businessStatus = "You have not yet posted a request for work."
-    var loveStatus = "You have not yet posted a request for dating."
-    var friendshipStatus = "You have not yet posted a request for friendship."
+    let businessStatusPlaceholder = "You have not yet posted a request for work."
+    let loveStatusPlaceholder = "You have not yet posted a request for dating."
+    let friendshipStatusPlaceholder = "You have not yet posted a request for friendship."
+    var businessStatus = ""
+    var loveStatus = ""
+    var friendshipStatus = ""
     var businessStatusSet = false
     var loveStatusSet = false
     var friendshipStatusSet = false
@@ -82,15 +85,16 @@ class MyProfileViewController: UIViewController {
             numNectedLabel.frame = CGRect(x: 0, y: welcomeLabel.frame.maxY + 0.0075*DisplayUtility.screenHeight, width: 0, height: 0)
             
             //Check to get numConnectionsNected from localData
-            if let numNected = localData.getNumConnectionsNected() {
-                self.numNectedLabel.text = "\(numNected) CONNECTIONS 'NECTED"
-                self.numNectedLabel.sizeToFit()
-                self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
-                self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
-                self.view.addSubview(self.numNectedLabel)
-            }
+            //CHANGED TO FALSE SO AS NOT TO CONFLICT IF THE USER HAS MULTIPLE DEVICES
+//            if let numNected = localData.getNumConnectionsNected() {
+//                self.numNectedLabel.text = "\(numNected) CONNECTIONS 'NECTED"
+//                self.numNectedLabel.sizeToFit()
+//                self.numNectedLabel.frame = CGRect(x: 0, y: self.numNectedLabel.frame.minY, width: self.numNectedLabel.frame.width, height: self.numNectedLabel.frame.height)
+//                self.numNectedLabel.center.x = DisplayUtility.screenWidth / 2
+//                self.view.addSubview(self.numNectedLabel)
+//            }
             //If not available on device, calculate numConnectionsNected with query and then save to device
-            else if let objectId = user.objectId {
+            if let objectId = user.objectId {
                 let query = PFQuery(className: "BridgePairings")
                 query.whereKey("connecter_objectId", equalTo: objectId)
                 query.whereKey("user1_response", equalTo: 1)
@@ -174,8 +178,11 @@ class MyProfileViewController: UIViewController {
             bottomHexView.frame = CGRect(x: topHexView.frame.minX, y: topHexView.frame.maxY + 4, width: hexWidth, height: hexHeight)
             scrollView.addSubview(bottomHexView)
             
+            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+            for hexView in hexViews {
+                hexView.setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
+            }
             if let profilePics = user["profile_pictures"] as? [PFFile] {
-                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
                 for i in 0..<hexViews.count {
                     if profilePics.count > i {
                         profilePics[i].getDataInBackground(block: { (data, error) in
@@ -253,6 +260,10 @@ class MyProfileViewController: UIViewController {
             friendshipButton.addTarget(self, action: #selector(statusTypeButtonSelected(_:)), for: .touchUpInside)
             scrollView.addSubview(friendshipButton)
             
+            businessStatus = businessStatusPlaceholder
+            loveStatus = loveStatusPlaceholder
+            friendshipStatus = friendshipStatusPlaceholder
+            
             statusLabel.textColor = UIColor.init(red: 56/255.0, green: 56/255.0, blue: 56/255.0, alpha: 1.0)
             statusLabel.textAlignment = .center
             statusLabel.numberOfLines = 0
@@ -319,8 +330,7 @@ class MyProfileViewController: UIViewController {
     //Send user to the editProfileViewController so they can edit their profile
     func editProfileButtonTapped(_ sender: UIButton) {
         //performSegue(withIdentifier: "showEditProfileFromMyProfile", sender: self)
-        let editProfileVC = EditProfileViewController()
-        editProfileVC.setHexImages(leftHexImage: leftHexView.hexBackgroundImage, topHexImage: topHexView.hexBackgroundImage, rightHexImage: rightHexView.hexBackgroundImage, bottomHexImage: bottomHexView.hexBackgroundImage)
+        let editProfileVC = EditProfileViewController(myProfileVC: self)
         present(editProfileVC, animated: false, completion: nil)
     }
     
@@ -349,7 +359,7 @@ class MyProfileViewController: UIViewController {
                     startingIndex = i
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
+            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: false, parentVC: self)
             self.view.addSubview(profilePicsView)
             profilePicsView.animateIn()
         }

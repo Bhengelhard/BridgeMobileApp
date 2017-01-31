@@ -8,13 +8,16 @@
 
 import Foundation
 import UIKit
+import FBSDKCoreKit
 import Parse
 
-class EditProfileViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
+class EditProfileViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var tempSeguedFrom = ""
     var seguedTo = ""
     var seguedFrom = ""
+    
+    var myProfileVC: MyProfileViewController
     
     let localData = LocalData()
     
@@ -49,6 +52,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     let friendshipStatusButton = UIButton()
     let statusTextView = UITextView()
     var saveButton = UIButton()
+    let uploadMenu = UIView()
+    let imagePicker = UIImagePickerController()
     
     // boolean flags
     var quickUpdatePlaceholder = true
@@ -60,10 +65,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     var originallyInterestedFriendship: Bool?
     var greeting = "Hi,"
     var greetings = ["Hi,", "What's Up?", "Hello there,"]
-    var leftHexImage: UIImage?
-    var topHexImage: UIImage?
-    var rightHexImage: UIImage?
-    var bottomHexImage: UIImage?
     var selectedFacts = [String]()
     var businessStatus: String?
     var loveStatus: String?
@@ -77,6 +78,15 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func tappedOutside() {
+    }
+    
+    init(myProfileVC: MyProfileViewController) {
+        self.myProfileVC = myProfileVC
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -203,30 +213,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             bottomHexView.addGestureRecognizer(bottomHexViewGR)
             
             let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            let hexImages = [leftHexImage, topHexImage, rightHexImage, bottomHexImage]
-            let defaultHexBackgroundColor = UIColor(red: 234/255.0, green: 237/255.0, blue: 239/255.0, alpha: 1)
+            let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
             for i in 0..<hexViews.count {
-                if let image = hexImages[i] {
+                if let image = myProfileHexViews[i].hexBackgroundImage {
                     hexViews[i].setBackgroundImage(image: image)
-                } else if let profilePics = user["profile_pictures"] as? [PFFile] {
-                    if profilePics.count > i {
-                        profilePics[i].getDataInBackground(block: { (data, error) in
-                            if error != nil {
-                                print(error!)
-                            } else {
-                                if let data = data {
-                                    if let image = UIImage(data: data) {
-                                        hexViews[i].setBackgroundImage(image: image)
-                                    }
-                                }
-                                
-                            }
-                        })
-                    } else {
-                        hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
-                    }
                 } else {
-                    hexViews[i].setBackgroundColor(color: defaultHexBackgroundColor)
+                    hexViews[i].setBackgroundColor(color: myProfileHexViews[i].hexBackgroundColor)
                 }
             }
             
@@ -247,12 +239,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             quickUpdateTextView.layer.borderWidth = 1
             quickUpdateTextView.layer.borderColor = UIColor.black.cgColor
             quickUpdateTextView.delegate = self
-            quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
+
             quickUpdateTextView.textColor = .black
             quickUpdateTextView.textAlignment = .center
             quickUpdateTextView.font = UIFont(name: "BentonSans-Light", size: 14)
             DisplayUtility.centerTextVerticallyInTextView(textView: quickUpdateTextView)
             quickUpdateView.addSubview(quickUpdateTextView)
+            setQuickUpdateText()
             
             quickUpdateView.frame = CGRect(x: 0, y: bottomHexView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: quickUpdateTextView.frame.maxY)
             scrollView.addSubview(quickUpdateView)
@@ -267,7 +260,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             factsLabel.frame = CGRect(x: 0, y: 0, width: quickUpdateLabel.frame.width, height: quickUpdateLabel.frame.height)
             factsLabel.center.x = DisplayUtility.screenWidth / 2
             factsView.addSubview(factsLabel)
-            
             
             factsBackground.backgroundColor = .clear
             factsBackground.layer.cornerRadius = 13
@@ -294,9 +286,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             ageBubble.frame = CGRect(x: 0.315*factsEditor.frame.width, y: 0.18*factsEditor.frame.height, width: bubbleWidth, height: bubbleHeight)
             ageBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["age"] != nil {
-                factsEditor.addSubview(ageBubble)
-            }
             
             if selectedFacts.contains("School") {
                 schoolBubble.setImage(selectedBubbleImage, for: .normal)
@@ -305,9 +294,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             schoolBubble.frame = CGRect(x: ageBubble.frame.minX, y: ageBubble.frame.maxY + 0.06*factsEditor.frame.height, width: bubbleWidth, height: bubbleHeight)
             schoolBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["school"] != nil {
-                factsEditor.addSubview(schoolBubble)
-            }
+
             
             if selectedFacts.contains("Religion") {
                 religionBubble.setImage(selectedBubbleImage, for: .normal)
@@ -316,9 +303,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             religionBubble.frame = CGRect(x: ageBubble.frame.minX, y: schoolBubble.frame.maxY + 0.06*factsEditor.frame.height, width: bubbleWidth, height: bubbleHeight)
             religionBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["religion"] != nil {
-                factsEditor.addSubview(religionBubble)
-            }
+
             
             if selectedFacts.contains("City") {
                 cityBubble.setImage(selectedBubbleImage, for: .normal)
@@ -327,9 +312,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             cityBubble.frame = CGRect(x: factsEditor.frame.width - ageBubble.frame.maxX, y: ageBubble.frame.minY, width: bubbleWidth, height: bubbleHeight)
             cityBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["city"] != nil {
-                factsEditor.addSubview(cityBubble)
-            }
+
             
             if selectedFacts.contains("Work") {
                 workBubble.setImage(selectedBubbleImage, for: .normal)
@@ -338,15 +321,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             }
             workBubble.frame = CGRect(x: cityBubble.frame.minX, y: schoolBubble.frame.minY, width: bubbleWidth, height: bubbleHeight)
             workBubble.addTarget(self, action: #selector(bubbleSelected(_:)), for: .touchUpInside)
-            if user["work"] != nil {
-                factsEditor.addSubview(workBubble)
-            }
+
             
             let labelOffsetFromBubble = 0.03*factsEditor.frame.width
             
             let ageLabel = UILabel()
             ageLabel.text = "AGE"
-            ageLabel.textColor = .black
+            ageLabel.textColor = .gray
             ageLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             ageLabel.sizeToFit()
             ageLabel.frame = CGRect(x: ageBubble.frame.minX - ageLabel.frame.width - labelOffsetFromBubble, y: 0, width: ageLabel.frame.width, height: ageLabel.frame.height+1)
@@ -355,7 +336,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             let schoolLabel = UILabel()
             schoolLabel.text = "SCHOOL"
-            schoolLabel.textColor = .black
+            schoolLabel.textColor = .gray
             schoolLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             schoolLabel.sizeToFit()
             schoolLabel.frame = CGRect(x: schoolBubble.frame.minX - schoolLabel.frame.width - labelOffsetFromBubble, y: 0, width: schoolLabel.frame.width, height: schoolLabel.frame.height+1)
@@ -364,7 +345,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             let religionLabel = UILabel()
             religionLabel.text = "RELIGION"
-            religionLabel.textColor = .black
+            religionLabel.textColor = .gray
             religionLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             religionLabel.sizeToFit()
             religionLabel.frame = CGRect(x: religionBubble.frame.minX - religionLabel.frame.width - labelOffsetFromBubble, y: 0, width: religionLabel.frame.width, height: religionLabel.frame.height+1)
@@ -373,7 +354,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             let cityLabel = UILabel()
             cityLabel.text = "CITY"
-            cityLabel.textColor = .black
+            cityLabel.textColor = .gray
             cityLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             cityLabel.sizeToFit()
             cityLabel.frame = CGRect(x: cityBubble.frame.maxX + labelOffsetFromBubble, y: 0, width: cityLabel.frame.width, height: cityLabel.frame.height+1)
@@ -382,12 +363,36 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             let workLabel = UILabel()
             workLabel.text = "WORK"
-            workLabel.textColor = .black
+            workLabel.textColor = .gray
             workLabel.font = UIFont(name: "BentonSans-Light", size: 15)
             workLabel.sizeToFit()
             workLabel.frame = CGRect(x: workBubble.frame.maxX + labelOffsetFromBubble, y: 0, width: workLabel.frame.width, height: workLabel.frame.height+1)
             workLabel.center.y = workBubble.center.y
             factsEditor.addSubview(workLabel)
+            
+            if user["age"] != nil {
+                factsEditor.addSubview(ageBubble)
+                ageLabel.textColor = .black
+            }
+            
+            if user["school"] != nil {
+                factsEditor.addSubview(schoolBubble)
+                schoolLabel.textColor = .black
+            }
+            
+            if user["religion"] != nil {
+                factsEditor.addSubview(religionBubble)
+                religionLabel.textColor = .black
+            }
+            
+            if user["city"] != nil {
+                factsEditor.addSubview(cityBubble)
+                cityLabel.textColor = .black
+            }
+            if user["work"] != nil {
+                factsEditor.addSubview(workBubble)
+                workLabel.textColor = .black
+            }
             
             let editFactsLabel = UILabel()
             editFactsLabel.text = "TO EDIT FACTS, UPDATE ON FACEBOOK."
@@ -544,13 +549,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         }
     }
     
-    func setHexImages(leftHexImage: UIImage?, topHexImage: UIImage?, rightHexImage: UIImage?, bottomHexImage: UIImage?) {
-        self.leftHexImage = leftHexImage
-        self.topHexImage = topHexImage
-        self.rightHexImage = rightHexImage
-        self.bottomHexImage = bottomHexImage
-    }
-    
     func layoutBottomBasedOnFactsView() {
         factsView.frame = CGRect(x: 0, y: quickUpdateView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: factsBackground.frame.maxY)
         statusView.frame = CGRect(x: 0, y: factsView.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: statusTextView.frame.maxY)
@@ -562,17 +560,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func exit(_ sender: UIButton) {
+        updateMyProfileHexImages()
         dismiss(animated: false, completion: nil)
     }
     
     func save(_ sender: UIButton) {
-        /*
-        // FOR TESTING OTHER PROFILE:
-        let otherProfileVC = OtherProfileViewController(userId: "IW33Wt5qvY")
-        self.present(otherProfileVC, animated: true, completion: nil)
-        */
-        
         view.endEditing(true)
+        updateMyProfileHexImages()
         if let user = PFUser.current() {
             user["profile_greeting"] = greeting
             
@@ -626,6 +620,29 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 }
             })
             
+            // update status of current type based on current text in text view
+            if currentStatusType == "Business" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    businessStatus = nil
+                } else {
+                    businessStatus = statusTextView.text
+                }
+            } else if currentStatusType == "Love" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    loveStatus = nil
+                } else {
+                    loveStatus = statusTextView.text
+                }
+            } else if currentStatusType == "Friendship" {
+                if statusPlaceholder || statusTextView.text.isEmpty { // no status
+                    friendshipStatus = nil
+                } else {
+                    friendshipStatus = statusTextView.text
+                }
+            }
+            
+            updateMyProfileStatuses()
+            
             // Adding bridge statuses
             if let businessStatus = businessStatus {
                 if businessStatus != localData.getBusinessStatus() {
@@ -639,6 +656,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setBusinessStatus(businessStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
@@ -658,6 +677,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setLoveStatus(loveStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
@@ -677,6 +698,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setFriendshipStatus(friendshipStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
@@ -688,6 +711,30 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         
         
         dismiss(animated: false, completion: nil)
+    }
+    
+    func updateMyProfileHexImages() {
+        let myProfileHexViews = [myProfileVC.leftHexView, myProfileVC.topHexView, myProfileVC.rightHexView, myProfileVC.bottomHexView]
+        let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+        for i in 0..<myProfileHexViews.count {
+            if let image = hexViews[i].hexBackgroundImage {
+                myProfileHexViews[i].setBackgroundImage(image: image)
+            } else {
+                myProfileHexViews[i].setBackgroundColor(color: hexViews[i].hexBackgroundColor)
+            }
+        }
+    }
+    
+    func updateMyProfileStatuses() {
+        if let businessStatus = businessStatus {
+            myProfileVC.businessStatus = businessStatus
+        }
+        if let loveStatus = loveStatus {
+            myProfileVC.loveStatus = loveStatus
+        }
+        if let friendshipStatus = friendshipStatus {
+            myProfileVC.friendshipStatus = friendshipStatus
+        }
     }
     
     func greetingLabelTapped(_ gesture: UIGestureRecognizer) {
@@ -710,26 +757,39 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         }
     }
     
+    func setQuickUpdateText() {
+        if let user = PFUser.current() {
+            if let quickUpdate = user["quick_update"] as? String {
+                quickUpdateTextView.text = quickUpdate
+                quickUpdatePlaceholder = false
+            } else {
+                quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
+                quickUpdatePlaceholder = true
+            }
+        }
+    }
+    
     func writeFactsInTextView() {
         if let user = PFUser.current() {
-            factsTextView.text = ""
+            var factsText = ""
+            //factsTextView.text = ""
             var facts = [String]()
             
             if selectedFacts.contains("Age") {
                 if let age = user["age"] as? Int {
-                    facts.append("I'm \(age)")
+                    facts.append("am \(age)")
                 }
             }
             if selectedFacts.contains("City") {
                 if let city = user["city"] as? String {
                     if let currentCity = user["current_city"] as? Bool {
                         if currentCity {
-                            facts.append("I live in \(city)")
+                            facts.append("live in \(city)")
                         } else {
-                            facts.append("I lived in \(city)")
+                            facts.append("lived in \(city)")
                         }
                     } else {
-                        facts.append("I lived in \(city)")
+                        facts.append("lived in \(city)")
                     }
                 }
             }
@@ -737,12 +797,12 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 if let school = user["school"] as? String {
                     if let currentStudent = user["current_student"] as? Bool {
                         if currentStudent {
-                            facts.append("I go to \(school)")
+                            facts.append("go to \(school)")
                         } else {
-                            facts.append("I went to \(school)")
+                            facts.append("went to \(school)")
                         }
                     } else {
-                        facts.append("I went to \(school)")
+                        facts.append("went to \(school)")
                     }
                 }
             }
@@ -750,31 +810,40 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 if let work = user["work"] as? String {
                     if let currentWork = user["current_work"] as? Bool {
                         if currentWork {
-                            facts.append("I work at \(work)")
+                            facts.append("work at \(work)")
                         } else {
-                            facts.append("I worked at \(work)")
+                            facts.append("worked at \(work)")
                         }
                     } else {
-                        facts.append("I worked at \(work)")
+                        facts.append("worked at \(work)")
                     }
                 }
             }
             if selectedFacts.contains("Religion") {
                 if let religion = user["religion"] as? String {
-                    facts.append("I am \(religion)")
+                    facts.append("am \(religion)")
                 }
             }
             if facts.count > 0 {
                 for i in 0..<facts.count {
-                    if i == facts.count - 1 {
-                        factsTextView.text = "\(factsTextView.text!) \(facts[i])."
+                    if i == 0 && i == facts.count - 1 {
+                        factsText = "I \(facts[i])."
+                    }
+                    else if i == 0 {
+                        factsText = "I \(factsText) \(facts[i]), "
+                    } else if i == facts.count - 1 {
+                        factsText = "\(factsText) and \(facts[i])."
                     } else {
-                        factsTextView.text = "\(factsTextView.text!) \(facts[i]),"
+                        factsText = "\(factsText) \(facts[i]), "
                     }
                 }
+                factsTextView.text = factsText
             } else {
-                factsTextView.text = "Click to select from available facts and\ndisplay information."
+                factsText = "Click to select from available facts and\ndisplay information."
             }
+            
+            factsTextView.text = factsText
+            
             
             DisplayUtility.centerTextVerticallyInTextView(textView: factsTextView)
         }
@@ -782,6 +851,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     
     func displayFactsEditor(_ gesture: UIGestureRecognizer) {
+        //close keyboard if opened with Facts Editor is displayed
+        if quickUpdateTextView.isFirstResponder {
+            quickUpdateTextView.resignFirstResponder()
+        } else if statusTextView.isFirstResponder {
+            statusTextView.resignFirstResponder()
+        }
+        
         changeAlphaForAllBut(mainView: factsView, superview: view, alphaInc: -0.7)
 
         UIView.animate(withDuration: 0.5, animations: {
@@ -1101,32 +1177,145 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     func profilePicSelected(_ gesture: UIGestureRecognizer) {
         if let hexView = gesture.view as? HexagonView {
-            let newHexView = HexagonView()
-            newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
-            if let image = hexView.hexBackgroundImage {
-                newHexView.setBackgroundImage(image: image)
-            } else {
-                newHexView.setBackgroundColor(color: hexView.hexBackgroundColor)
-            }
-            newHexView.addBorder(width: 1, color: .black)
-            
-            var images = [UIImage]()
-            var originalHexFrames = [CGRect]()
-            var startingIndex = 0
-            let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
-            for i in 0..<hexViews.count {
-                if let image = hexViews[i].hexBackgroundImage {
-                    images.append(image)
+            if let hexBackgroundImage = hexView.hexBackgroundImage {
+                let newHexView = HexagonView()
+                newHexView.frame = CGRect(x: hexView.frame.minX, y: scrollView.frame.minY - scrollView.contentOffset.y + hexView.frame.minY, width: hexView.frame.width, height: hexView.frame.height)
+                newHexView.setBackgroundImage(image: hexBackgroundImage)
+                newHexView.addBorder(width: 1, color: .black)
+                
+                var images = [UIImage]()
+                var originalHexFrames = [CGRect]()
+                var startingIndex = 0
+                let hexViews = [leftHexView, topHexView, rightHexView, bottomHexView]
+                for i in 0..<hexViews.count {
+                    if let image = hexViews[i].hexBackgroundImage {
+                        images.append(image)
+                    }
                     let frame = CGRect(x: hexViews[i].frame.minX, y: hexViews[i].frame.minY + scrollView.frame.minY - scrollView.contentOffset.y, width: hexViews[i].frame.width, height: hexViews[i].frame.height)
                     originalHexFrames.append(frame)
+                    if hexViews[i] == hexView {
+                        startingIndex = i
+                    }
                 }
-                if hexViews[i] == hexView {
-                    startingIndex = i
+                let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, hexViews: hexViews, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
+                self.view.addSubview(profilePicsView)
+                profilePicsView.animateIn()
+            } else if leftHexView.hexBackgroundImage == nil { // no images
+                uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
+                uploadMenu.center.x = DisplayUtility.screenWidth / 2
+                uploadMenu.backgroundColor = .white
+                view.addSubview(uploadMenu)
+                
+                // add gesture recognizer to hide upload menu
+                let hideUploadMenuGR = UITapGestureRecognizer(target: self, action: #selector(hideUploadMenu(_:)))
+                uploadMenu.addGestureRecognizer(hideUploadMenuGR)
+                
+                let uploadButtonWidth = 0.66*DisplayUtility.screenWidth
+                let uploadButtonHeight = 0.14*DisplayUtility.screenWidth
+                
+                // layout upload from Facebook button
+                let uploadFromFBButton = UIButton()
+                uploadFromFBButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
+                uploadFromFBButton.center.x = uploadMenu.frame.width / 2
+                uploadFromFBButton.center.y = 0.4*uploadMenu.frame.height
+                uploadFromFBButton.setTitle("UPLOAD FROM FACEBOOK", for: .normal)
+                uploadFromFBButton.setTitleColor(.black, for: .normal)
+                uploadFromFBButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+                uploadFromFBButton.titleLabel?.textAlignment = .center
+                uploadFromFBButton.layer.borderWidth = 1
+                uploadFromFBButton.layer.borderColor = UIColor.gray.cgColor
+                uploadFromFBButton.layer.cornerRadius = 0.3*uploadFromFBButton.frame.height
+                
+                // add target to upload from Facebook button
+                uploadFromFBButton.addTarget(self, action: #selector(uploadFromFB(_:)), for: .touchUpInside)
+                
+                uploadMenu.addSubview(uploadFromFBButton)
+                
+                // layout upload from camera roll button
+                let uploadFromCameraRollButton = UIButton()
+                uploadFromCameraRollButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
+                uploadFromCameraRollButton.center.x = uploadMenu.frame.width / 2
+                uploadFromCameraRollButton.center.y = 0.6*uploadMenu.frame.height
+                uploadFromCameraRollButton.setTitle("UPLOAD FROM CAMERA ROLL", for: .normal)
+                uploadFromCameraRollButton.setTitleColor(.black, for: .normal)
+                uploadFromCameraRollButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+                uploadFromCameraRollButton.titleLabel?.textAlignment = .center
+                uploadFromCameraRollButton.layer.borderWidth = 1
+                uploadFromCameraRollButton.layer.borderColor = UIColor.gray.cgColor
+                uploadFromCameraRollButton.layer.cornerRadius = 0.3*uploadFromCameraRollButton.frame.height
+                uploadMenu.addSubview(uploadFromCameraRollButton)
+                
+                // add target to upload from camera roll button
+                uploadFromCameraRollButton.addTarget(self, action: #selector(uploadFromCameraRoll(_:)), for: .touchUpInside)
+                
+                UIView.animate(withDuration: 0.5) { 
+                    self.uploadMenu.frame = self.view.bounds
                 }
             }
-            let profilePicsView = ProfilePicturesView(images: images, originalHexFrames: originalHexFrames, startingIndex: startingIndex, shouldShowEditButtons: true, parentVC: self)
-            self.view.addSubview(profilePicsView)
-            profilePicsView.animateIn()
+        }
+    }
+    
+    func uploadFromFB(_ button: UIButton) {
+        uploadMenu.removeFromSuperview()
+        
+        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
+        graphRequest!.start{ (connection, result, error) -> Void in
+            if error != nil {
+                print(error ?? "error in EditProfileViewController uploadFromFB grapRequest")
+            }
+            else if let result = result as? [String: AnyObject]{
+                let userId = result["id"]! as! String
+                let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
+                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
+                    if let data = try? Data(contentsOf: fbpicUrl) {
+                        DispatchQueue.main.async(execute: {
+                            if let image = UIImage(data: data) {
+                                self.leftHexView.setBackgroundImage(image: image)
+                            }
+                            if let user = PFUser.current() {
+                                if let picFile = PFFile(data: data) {
+                                    user["profile_pictures"] = [picFile]
+                                    user.saveInBackground()
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        }
+    }
+    
+    func uploadFromCameraRoll(_ button: UIButton) {
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    //update the UIImageView once an image has been picked
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        uploadMenu.removeFromSuperview()
+        
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            leftHexView.setBackgroundImage(image: image)
+            if let data = UIImageJPEGRepresentation(image, 1.0) {
+                if let user = PFUser.current() {
+                    if let picFile = PFFile(data: data) {
+                        user["profile_pictures"] = [picFile]
+                        user.saveInBackground()
+                    }
+                }
+            }
+        }
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    
+    func hideUploadMenu(_ gesture: UIGestureRecognizer) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
+        }) { (finished) in
+            if finished {
+                self.uploadMenu.removeFromSuperview()
+            }
         }
     }
     

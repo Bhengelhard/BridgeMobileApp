@@ -10,8 +10,10 @@ import UIKit
 
 class SwipeCard: UIView {
     
-    var cardsUser1PhotoURL:String?
-    var cardsUser2PhotoURL:String?
+    var cardsUser1Id: String?
+    var cardsUser2Id: String?
+    var cardsUser1PhotoURL: String?
+    var cardsUser2PhotoURL: String?
     var cardsUser1City: String?
     var cardsUser2City: String?
     var cardsPredictedType: String?
@@ -34,9 +36,8 @@ class SwipeCard: UIView {
         fatalError("This is a fatal error message from CustomClasses/CustomViews/SwipeCard.swift")
     }
     
-    func initialize(user1PhotoURL: String!, user1Name: String, user1Status: String, user1City: String?, user2PhotoURL: String!, user2Name: String, user2Status: String, user2City: String?, connectionType: String) {
+    func initialize(user1Id: String?, user1PhotoURL: String!, user1Name: String, user1Status: String, user1City: String?, user2Id: String?, user2PhotoURL: String!, user2Name: String, user2Status: String, user2City: String?, connectionType: String) {
         self.layer.cornerRadius = 13.379
-
 
         cardsPredictedType = connectionType
         
@@ -80,6 +81,10 @@ class SwipeCard: UIView {
             
             layer.insertSublayer(shadowLayer, below: nil)
         }
+        
+        //Setting the user's ids
+        cardsUser1Id = user1Id
+        cardsUser2Id = user2Id
         
         //Setting the User's cities to inform suggestions for Reason for Connections
         

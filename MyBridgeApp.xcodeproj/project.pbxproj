@@ -51,6 +51,7 @@
 		30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */; };
 		30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */; };
 		30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */; };
+		30BAE9A21E31B9210094070B /* MessagingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BAE9A11E31B9210094070B /* MessagingFunctions.swift */; };
 		30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */; };
 		30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */; };
 		30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */; };
@@ -69,7 +70,7 @@
 		903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CD1E01E75E0021D81A /* TutorialsViewController.swift */; };
 		903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */; };
 		90512CF21E26A8D900D293BD /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90512CF11E26A8D900D293BD /* EditProfileViewController.swift */; };
-		90AD62281E2E259D001F1074 /* ProfilePicturesPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AD62271E2E259D001F1074 /* ProfilePicturesPageViewController.swift */; };
+		90AD62281E2E259D001F1074 /* ProfilePicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */; };
 		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
 		90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */; };
 		90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AA1E0B080100330646 /* HexagonView.swift */; };
@@ -143,6 +144,7 @@
 		30AA7D641DDCD0CE00DD344D /* NewMatchesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesView.swift; path = "Custom Classes/Custom Views/NewMatchesView.swift"; sourceTree = "<group>"; };
 		30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptedConnectionNotification.swift; path = "Custom Classes/Custom Views/AcceptedConnectionNotification.swift"; sourceTree = "<group>"; };
 		30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBRetrievingFunctions.swift; path = "Custom Classes/Backend Communication/DBRetrievingFunctions.swift"; sourceTree = "<group>"; };
+		30BAE9A11E31B9210094070B /* MessagingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagingFunctions.swift; path = "Custom Classes/Custom Functions/MessagingFunctions.swift"; sourceTree = "<group>"; };
 		30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HalfSwipeCard.swift; path = "Custom Classes/Custom Views/HalfSwipeCard.swift"; sourceTree = "<group>"; };
 		30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
@@ -163,7 +165,7 @@
 		903811CD1E01E75E0021D81A /* TutorialsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialsViewController.swift; path = MyBridgeApp/TutorialsViewController.swift; sourceTree = SOURCE_ROOT; };
 		903811CF1E01E7F30021D81A /* SingleTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTutorialViewController.swift; path = MyBridgeApp/SingleTutorialViewController.swift; sourceTree = SOURCE_ROOT; };
 		90512CF11E26A8D900D293BD /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileViewController.swift; path = MyBridgeApp/EditProfileViewController.swift; sourceTree = SOURCE_ROOT; };
-		90AD62271E2E259D001F1074 /* ProfilePicturesPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfilePicturesPageViewController.swift; path = MyBridgeApp/ProfilePicturesPageViewController.swift; sourceTree = SOURCE_ROOT; };
+		90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfilePicturesViewController.swift; path = MyBridgeApp/ProfilePicturesViewController.swift; sourceTree = SOURCE_ROOT; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
 		90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController.swift; path = MyBridgeApp/MyProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		90CA09AA1E0B080100330646 /* HexagonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexagonView.swift; path = "Custom Classes/Custom Views/HexagonView.swift"; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				3030C0CA1DD54E8F0077F7AC /* CustomTimer.swift */,
 				3030C0CB1DD54E8F0077F7AC /* Downloader.swift */,
 				3030C0CC1DD54E8F0077F7AC /* modelName.swift */,
+				30BAE9A11E31B9210094070B /* MessagingFunctions.swift */,
 			);
 			name = "Custom Functions";
 			sourceTree = "<group>";
@@ -353,7 +356,7 @@
 				90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */,
 				90512CF11E26A8D900D293BD /* EditProfileViewController.swift */,
 				9032B4551E31249C00136408 /* OtherProfileViewController.swift */,
-				90AD62271E2E259D001F1074 /* ProfilePicturesPageViewController.swift */,
+				90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */,
 				307A7F591D46619300858F96 /* ProfileViewController.swift */,
 				E9D6DF0E1D7880B700138A1F /* EditProfileViewController_Old.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
@@ -551,6 +554,7 @@
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
 				90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */,
 				E9D6DF0D1D7880A600138A1F /* NewBridgeStatusViewController.swift in Sources */,
+				30BAE9A21E31B9210094070B /* MessagingFunctions.swift in Sources */,
 				9032B4541E311B0600136408 /* ProfilePicturesView.swift in Sources */,
 				30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */,
 				301B1C551E04473A00D507B8 /* FacebookFunctions.swift in Sources */,
@@ -564,7 +568,7 @@
 				3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */,
 				E9D6DF541D78836900138A1F /* TermsOfServiceViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
-				90AD62281E2E259D001F1074 /* ProfilePicturesPageViewController.swift in Sources */,
+				90AD62281E2E259D001F1074 /* ProfilePicturesViewController.swift in Sources */,
 				30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */,
 				3030C0CE1DD54E8F0077F7AC /* Downloader.swift in Sources */,
 				903811D01E01E7F30021D81A /* SingleTutorialViewController.swift in Sources */,
