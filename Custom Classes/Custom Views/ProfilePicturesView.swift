@@ -24,6 +24,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     var singlePicVCs = [UIViewController]()
     let editButtonsView = UIView()
     let uploadMenu = UIView()
+    let cropButton = UIButton()
     let uploadButton = UIButton()
     let defaultButton = UIButton()
     let deleteButton = UIButton()
@@ -60,9 +61,8 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         addGestureRecognizer(exitGR)
         
         // add gesture recognizer to prevent exit
-        //let doNothingGR = UITapGestureRecognizer(target: self, action: nil)
-        let cropGR = UITapGestureRecognizer(target: self, action: #selector(cropButtonPressed(_:)))
-        allPicsVC.view.addGestureRecognizer(cropGR)
+        let doNothingGR = UITapGestureRecognizer(target: self, action: nil)
+        allPicsVC.view.addGestureRecognizer(doNothingGR)
         
         resetImagesForVCs()
         
@@ -77,19 +77,28 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         
     }
     
-    func cropButtonPressed(_ gesture: UIGestureRecognizer) {
-        let vc = CropImageViewController()
-        vc.setImage(image: images[allPicsVC.pageControl.currentPage])
-        parentVC.present(vc, animated: true, completion: nil)
-    }
-    
     func layoutEditButtonsView() {
         
         let buttonWidth = 0.33*DisplayUtility.screenWidth
         let buttonHeight = 0.07*DisplayUtility.screenWidth
         
-        let spaceBetweenButtons = 0.03*DisplayUtility.screenHeight
+        let spaceBetweenButtons = 0.015*DisplayUtility.screenHeight
         var buttonY: CGFloat = 0.0
+        
+        cropButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        cropButton.center.x = DisplayUtility.screenWidth / 2
+        cropButton.contentVerticalAlignment = .fill
+        cropButton.setTitle("CROP", for: .normal)
+        cropButton.setTitleColor(.black, for: .normal)
+        cropButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
+        cropButton.titleLabel?.textAlignment = .center
+        cropButton.layer.borderWidth = 1
+        cropButton.layer.borderColor = UIColor.gray.cgColor
+        cropButton.layer.cornerRadius = 0.3*cropButton.frame.height
+        cropButton.addTarget(self, action: #selector(cropButtonPressed(_:)), for: .touchUpInside)
+        editButtonsView.addSubview(cropButton)
+        
+        buttonY = buttonY + buttonHeight + spaceBetweenButtons
         
         uploadButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
         uploadButton.center.x = DisplayUtility.screenWidth / 2
@@ -136,7 +145,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         
         buttonY = buttonY + buttonHeight + spaceBetweenButtons
         
-        editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: buttonY)
+        editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.03*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: buttonY)
         editButtonsView.alpha = 0
         addSubview(editButtonsView)
     }
@@ -247,6 +256,11 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                 self.removeFromSuperview()
             }
         }
+    }
+    
+    func cropButtonPressed(_ gesture: UIGestureRecognizer) {
+        let cropImageVC = CropImageViewController(image: images[allPicsVC.pageControl.currentPage])
+        parentVC.present(cropImageVC, animated: true, completion: nil)
     }
     
     func uploadButtonPressed(_ button: UIButton) {
