@@ -306,7 +306,8 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         uploadMenu.removeFromSuperview()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest?.start{ (_, result, error) -> Void in
+        let connection = FBSDKGraphRequestConnection()
+        connection.add(graphRequest) { (_, result, error) -> Void in
             if error != nil {
                 print(error!)
             }
@@ -347,6 +348,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                 }
             }
         }
+        connection.start()
     }
     
     func hideUploadMenu(_ gesture: UIGestureRecognizer) {

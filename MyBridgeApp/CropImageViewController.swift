@@ -13,7 +13,6 @@ class CropImageViewController: UIViewController {
     let imageView = UIImageView()
     var imageViewCenter = CGPoint()
     let box = UIView()
-    var maxScale: CGFloat = 0.0
     var minScale: CGFloat = 0.0
     var currentScale: CGFloat = 1.0
     var standardBoxSize = CGSize.zero
@@ -75,13 +74,14 @@ class CropImageViewController: UIViewController {
         imageView.frame = CGRect(x: 0, y: 0, width: min(view.frame.width, view.frame.height * imageWToHRatio), height: min(view.frame.height, view.frame.width / imageWToHRatio))
         imageView.center = CGPoint(x: view.frame.width / 2, y: view.frame.height / 2)
         
-        maxScale = min(imageView.frame.width / box.frame.width, imageView.frame.height / box.frame.height)
+        //maxScale = min(imageView.frame.width / box.frame.width, imageView.frame.height / box.frame.height)
         minScale = 0.4
         
         adjustGrayBoxes()
         
     }
     func zoom(_ gesture: UIPinchGestureRecognizer) {
+        var maxScale: CGFloat = 0.0
         
         maxScale = min(
             min(
