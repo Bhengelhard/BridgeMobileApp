@@ -33,6 +33,11 @@ class ProfileStatusButtons: UIView {
     let loveVisibilityButton = UIButton()
     let friendshipVisibilityButton = UIButton()
     
+    // currently visible
+    var businessCurrentlyVisible = false
+    var loveCurrentlyVisible = false
+    var friendshipCurrentlyVisible = false
+    
     // status button images
     let businessSelectedImage = UIImage(named: "Profile_Selected_Work_Icon")
     let loveSelectedImage = UIImage(named: "Profile_Selected_Dating_Icon")
@@ -45,6 +50,9 @@ class ProfileStatusButtons: UIView {
     let businessButton = UIButton()
     let loveButton = UIButton()
     let friendshipButton = UIButton()
+    
+    // currently selected
+    var currentlySelected: String? = nil
     
     init(minY: CGFloat, selectType: @escaping (String?) -> Void, shouldShowVisibilityButtons: Bool = false, businessVisible: Bool = false, loveVisible: Bool = false, friendshipVisible: Bool = false) {
         
@@ -64,6 +72,10 @@ class ProfileStatusButtons: UIView {
         var statusButtonMinY: CGFloat = 0
         
         if shouldShowVisibilityButtons {
+            businessCurrentlyVisible = businessVisible
+            loveCurrentlyVisible = loveVisible
+            friendshipCurrentlyVisible = friendshipVisible
+            
             // set initial images for visibility buttons
             if businessVisible {
                 businessVisibilityButton.setImage(businessVisibleImage, for: .normal)
@@ -139,26 +151,27 @@ class ProfileStatusButtons: UIView {
     }
     
     func visibilityButtonSelected(_ sender: UIButton) {
-        var visibleImage: UIImage?
-        var invisibleImage: UIImage?
         if sender == businessVisibilityButton {
-            visibleImage = businessVisibleImage
-            invisibleImage = businessInvisibleImage
-        } else if sender == loveVisibilityButton {
-            visibleImage = loveVisibleImage
-            invisibleImage = loveInvisibleImage
-        } else if sender == friendshipVisibilityButton {
-            visibleImage = friendshipVisibleImage
-            invisibleImage = friendshipInvisibleImage
-        }
-        
-        if let invisibleImage = invisibleImage,
-            let visibleImage = visibleImage {
-            if sender.image(for: .normal) == invisibleImage {
-                sender.setImage(visibleImage, for: .normal)
+            if businessCurrentlyVisible {
+                sender.setImage(businessInvisibleImage, for: .normal)
             } else {
-                sender.setImage(invisibleImage, for: .normal)
+                sender.setImage(businessVisibleImage, for: .normal)
             }
+            businessCurrentlyVisible = !businessCurrentlyVisible
+        } else if sender == loveVisibilityButton {
+            if loveCurrentlyVisible {
+                sender.setImage(loveInvisibleImage, for: .normal)
+            } else {
+                sender.setImage(loveVisibleImage, for: .normal)
+            }
+            loveCurrentlyVisible = !loveCurrentlyVisible
+        } else if sender == friendshipVisibilityButton {
+            if friendshipCurrentlyVisible {
+                sender.setImage(friendshipInvisibleImage, for: .normal)
+            } else {
+                sender.setImage(friendshipVisibleImage, for: .normal)
+            }
+            friendshipCurrentlyVisible = !friendshipCurrentlyVisible
         }
     }
     
@@ -166,76 +179,64 @@ class ProfileStatusButtons: UIView {
         if !shouldShowVisibilityButtons {
             return nil
         }
-        return businessVisibilityButton.image(for: .normal) == businessVisibleImage
+        return businessCurrentlyVisible
     }
     
     func isInterestedInLove() -> Bool? {
         if !shouldShowVisibilityButtons {
             return nil
         }
-        return loveVisibilityButton.image(for: .normal) == loveVisibleImage
+        return loveCurrentlyVisible
     }
     
     func isInterestedInFriendship() -> Bool? {
         if !shouldShowVisibilityButtons {
             return nil
         }
-        return friendshipVisibilityButton.image(for: .normal) == friendshipVisibleImage
+        return friendshipCurrentlyVisible
     }
     
     func statusButtonSelected(_ sender: UIButton) {
-        for statusButton in [businessButton, loveButton, friendshipButton] {
-            var selectedImage: UIImage?
-            var unselectedImage: UIImage?
-            if statusButton == businessButton {
-                selectedImage = businessSelectedImage
-                unselectedImage = businessUnselectedImage
-            } else if statusButton == loveButton {
-                selectedImage = loveSelectedImage
-                unselectedImage = loveUnselectedImage
-            } else if statusButton == friendshipButton {
-                selectedImage = friendshipSelectedImage
-                unselectedImage = friendshipUnselectedImage
-            }
-            if sender == statusButton { // selected button
-                if let unselectedImage = unselectedImage,
-                    let selectedImage = selectedImage {
-                    // selecting unselected type
-                    if statusButton.image(for: .normal) == unselectedImage {
-                        statusButton.setImage(selectedImage, for: .normal)
-                        if statusButton == businessButton {
-                            selectType("Business")
-                        } else if statusButton == loveButton {
-                            selectType("Love")
-                        } else if statusButton == friendshipButton {
-                            selectType("Friendship")
-                        }
-                    } else { // unselecting selected type
-                        statusButton.setImage(unselectedImage, for: .normal)
-                        selectType(nil)
-                    }
-                }
-            } else { // not selected button
-                if let unselectedImage = unselectedImage {
-                    statusButton.setImage(unselectedImage, for: .normal)
-                }
+        // unselect previously selected button
+        if currentlySelected == "Business" {
+            businessButton.setImage(businessUnselectedImage, for: .normal)
+        } else if currentlySelected == "Love" {
+            loveButton.setImage(loveUnselectedImage, for: .normal)
+        } else if currentlySelected == "Friendship" {
+            friendshipButton.setImage(friendshipUnselectedImage, for: .normal)
+        }
+        
+        // select new button
+        if sender == businessButton && currentlySelected != "Business" {
+            currentlySelected = "Business"
+            sender.setImage(businessSelectedImage, for: .normal)
+        } else if sender == loveButton && currentlySelected != "Love" {
+            currentlySelected = "Love"
+            sender.setImage(loveSelectedImage, for: .normal)
+        } else if sender == friendshipButton && currentlySelected != "Friendship" {
+            currentlySelected = "Friendship"
+            sender.setImage(friendshipSelectedImage, for: .normal)
+        } else { // unselecting selected type
+            currentlySelected = nil
+            if sender == businessButton {
+                sender.setImage(businessUnselectedImage, for: .normal)
+            } else if sender == loveButton {
+                sender.setImage(loveUnselectedImage, for: .normal)
+            } else if sender == friendshipButton {
+                sender.setImage(friendshipUnselectedImage, for: .normal)
             }
         }
+        selectType(currentlySelected)
     }
     
     func unselectAllStatusButtons() {
-        for statusButton in [businessButton, loveButton, friendshipButton] {
-            var selectedImage: UIImage?
-            if statusButton == businessButton {
-                selectedImage = businessSelectedImage
-            } else if statusButton == loveButton {
-                selectedImage = loveSelectedImage
-            } else if statusButton == friendshipButton {
-                selectedImage = friendshipSelectedImage
-            }
-            if statusButton.image(for: .normal) == selectedImage {
-                statusButtonSelected(statusButton)
-            }
+        if currentlySelected == "Business" {
+            businessButton.setImage(businessUnselectedImage, for: .normal)
+        } else if currentlySelected == "Love" {
+            loveButton.setImage(loveUnselectedImage, for: .normal)
+        } else if currentlySelected == "Friendship" {
+            friendshipButton.setImage(friendshipUnselectedImage, for: .normal)
         }
+        currentlySelected = nil
     }
 }

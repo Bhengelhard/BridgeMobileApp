@@ -249,7 +249,7 @@ class MyProfileViewController: UIViewController {
     //Send user to the editProfileViewController so they can edit their profile
     func editProfileButtonTapped(_ sender: UIButton) {
         let editProfileVC = EditProfileViewController(myProfileVC: self)
-        present(editProfileVC, animated: false, completion: nil)
+        present(editProfileVC, animated: true, completion: nil)
         unselectAllStatusButtons()
     }
     

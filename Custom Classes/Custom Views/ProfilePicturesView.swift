@@ -60,8 +60,9 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         addGestureRecognizer(exitGR)
         
         // add gesture recognizer to prevent exit
-        let doNothingGR = UITapGestureRecognizer(target: self, action: nil)
-        allPicsVC.view.addGestureRecognizer(doNothingGR)
+        //let doNothingGR = UITapGestureRecognizer(target: self, action: nil)
+        let cropGR = UITapGestureRecognizer(target: self, action: #selector(cropButtonPressed(_:)))
+        allPicsVC.view.addGestureRecognizer(cropGR)
         
         resetImagesForVCs()
         
@@ -74,6 +75,12 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             layoutEditButtonsView()
         }
         
+    }
+    
+    func cropButtonPressed(_ gesture: UIGestureRecognizer) {
+        let vc = CropImageViewController()
+        vc.setImage(image: images[allPicsVC.pageControl.currentPage])
+        parentVC.present(vc, animated: true, completion: nil)
     }
     
     func layoutEditButtonsView() {
@@ -148,8 +155,6 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             picView.clipsToBounds = true
             picView.frame = CGRect(x: 0, y: allPicsVC.pageControl.frame.maxY, width: picFrame.width, height: picFrame.height)
             picView.image = image
-            picView.layer.borderWidth = 1
-            picView.layer.borderColor = UIColor.black.cgColor
             singlePicVC.view.addSubview(picView)
         }
         allPicsVC.vcs = singlePicVCs
@@ -174,8 +179,6 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         
         let rectView = UIImageView()
         rectView.frame = hexView.frame
-        rectView.layer.borderWidth = 1
-        rectView.layer.borderColor = UIColor.black.cgColor
         rectView.contentMode = .scaleAspectFill
         rectView.clipsToBounds = true
         rectView.image = images[startingIndex]
@@ -207,8 +210,6 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         
         let rectView = UIImageView()
         rectView.frame = hexView.frame
-        rectView.layer.borderWidth = 1
-        rectView.layer.borderColor = UIColor.black.cgColor
         rectView.contentMode = .scaleAspectFill
         rectView.clipsToBounds = true
         rectView.image = images[index]

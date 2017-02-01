@@ -186,7 +186,7 @@ class OtherProfileViewController: UIViewController {
             
             if let quickUpdate = user["quick_update"] as? String {
                 let quickUpdateLabel = UILabel()
-                quickUpdateLabel.text = "QUICK-UPDATE"
+                quickUpdateLabel.text = "QUICK UPDATE"
                 quickUpdateLabel.textColor = .black
                 quickUpdateLabel.textAlignment = .center
                 quickUpdateLabel.font = UIFont(name: "BentonSans-Light", size: 12)
