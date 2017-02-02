@@ -445,16 +445,19 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     var user = ""
                     var otherUser = ""
-                    if let user1_objectId = result["user_objectId1"] {
-                        if (user1_objectId as! String) == currentUser_objectId {
-                            user = "user1"
-                            otherUser = "user2"
-                        }
-                    }
-                    if let user2_objectId = result["user_objectId2"] {
-                        if (user2_objectId as! String) == currentUser_objectId {
+                    var otherUserObjectId = ""
+                    if let user1_objectId = result["user_objectId1"] as? String {
+                        if user1_objectId != currentUser_objectId {
                             user = "user2"
                             otherUser = "user1"
+                            otherUserObjectId = user1_objectId
+                        }
+                    }
+                    if let user2_objectId = result["user_objectId2"] as? String {
+                        if user2_objectId != currentUser_objectId {
+                            user = "user1"
+                            otherUser = "user2"
+                            otherUserObjectId = user2_objectId
                         }
                     }
                     
@@ -481,7 +484,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                             color = .black
                                         }
                                         if let status = result["\(otherUser)_bridge_status"] as? String {
-                                            let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURLString, name: name, type: type, color: color, dot: dot, status: status)
+                                            let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURLString, name: name, type: type, color: color, dot: dot, status: status, otherUserObjectId: otherUserObjectId)
                                             let downloader = Downloader()
                                             if let profilePicURL = URL(string: profilePicURLString) {
                                                 downloader.imageFromURL(URL: profilePicURL, callBack: { (image: UIImage) in

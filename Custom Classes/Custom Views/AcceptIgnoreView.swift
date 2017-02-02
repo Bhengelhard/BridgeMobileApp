@@ -71,8 +71,8 @@ class AcceptIgnoreView: UIView {
         addSubview(scrollView)
         
         let halfCard = HalfSwipeCard()
-        //halfCard.frame = CGRect(x: 0.075*frame.width, y: acceptButton.frame.maxY + 0.03*frame.height, width: 0.85*frame.width, height: 0.85*frame.width)
         halfCard.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: scrollView.frame.width)
+        halfCard.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(displayOtherUserProfile(_:))))
         
         let name = DisplayUtility.firstNameLastNameInitial(name: newMatch.name)
         
@@ -118,6 +118,7 @@ class AcceptIgnoreView: UIView {
             connecterProfilePicView.layer.borderColor = newMatch.color.cgColor
             connecterProfilePicView.clipsToBounds = true
             connecterProfilePicView.contentMode = UIViewContentMode.scaleAspectFill
+            connecterProfilePicView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(displayConnecterProfile(_:))))
             cardBackground.addSubview(connecterProfilePicView)
             
             if let connecterName = newMatch.connecterName {
@@ -217,6 +218,30 @@ class AcceptIgnoreView: UIView {
             newConnectionLabel.text = "You have \(countAsText) new connections!"
         } else {
             newConnectionLabel.text = "You have \(numNewConnections) new connections!"
+        }
+    }
+    
+    /// On Tap of Half Card (a.k.a. the user that has been introduced to the current user), open corresponding profile
+    func displayOtherUserProfile (_ gestureRecognizer: UITapGestureRecognizer) {
+        print("displayOtherUserProfile")
+        let profileVC = OtherProfileViewController(userId: newMatch.otherUserObjectId)
+        print("New Match object Id is \(newMatch.otherUserObjectId)")
+        if let messagesVC = vc {
+            print("messagesVC exists")
+            messagesVC.present(profileVC, animated: false, completion: nil)
+        }
+    }
+    
+    /// On Tap of Connecter's Profile Picture, open corresponding profile
+    func displayConnecterProfile (_ gestureRecognizer: UITapGestureRecognizer) {
+        print("displayConnectorProfile")
+        if let id = newMatch.connecterObjectId {
+            let profileVC = OtherProfileViewController(userId: id)
+            print("New Match object Id is \(newMatch.connecterObjectId)")
+            if let messagesVC = vc {
+                print("messagesVC exists")
+                messagesVC.present(profileVC, animated: false, completion: nil)
+            }
         }
     }
     

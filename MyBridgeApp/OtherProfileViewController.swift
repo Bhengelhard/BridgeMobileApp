@@ -61,6 +61,9 @@ class OtherProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        print("otherProfileVC Did Load")
+        
         // set background color to white
         view.backgroundColor = .white
         
