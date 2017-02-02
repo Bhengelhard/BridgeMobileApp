@@ -61,11 +61,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, FacebookImag
         // add gesture recognizer to exit
         let exitGR = UITapGestureRecognizer(target: self, action: #selector(exit(_:)))
         addGestureRecognizer(exitGR)
-        
-        // add gesture recognizer to prevent exit
-        let doNothingGR = UITapGestureRecognizer(target: self, action: nil)
-        allPicsVC.view.addGestureRecognizer(doNothingGR)
-        
+                
         resetImagesForVCs()
         
         allPicsVC.view.alpha = 0

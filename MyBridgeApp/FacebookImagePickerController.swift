@@ -21,8 +21,8 @@ class FacebookImagePickerController: UINavigationController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        let fbImageCollectionVC = FacebookImageCollectionViewController()
-        pushViewController(fbImageCollectionVC, animated: false)
+        let fbImagesVC = FacebookImagesViewController()
+        pushViewController(fbImagesVC, animated: false)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -34,7 +34,7 @@ protocol FacebookImagePickerControllerDelegate: UINavigationControllerDelegate {
     func fbImagePickerController(_ picker: FacebookImagePickerController, didPickImage image: UIImage)
 }
 
-class FacebookImageCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class FacebookImagesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var collectionView: UICollectionView?
     var images = [UIImage]()
