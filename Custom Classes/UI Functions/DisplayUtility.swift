@@ -120,6 +120,19 @@ class DisplayUtility {
         return line
     }
     
+    static func plainButton(frame: CGRect, text: String, fontSize: CGFloat) -> UIButton {
+        let button = UIButton(frame: frame)
+        button.contentVerticalAlignment = .fill
+        button.setTitle(text, for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont(name: "BentonSans-Light", size: fontSize)
+        button.titleLabel?.textAlignment = .center
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.gray.cgColor
+        button.layer.cornerRadius = 0.3*button.frame.height
+        return button
+    }
+    
     //This is a helper function for the BridgeViewController to display a message when there are no more cards to display
     
     func displayNoMoreCards(view: UIView, businessButton: UIButton, loveButton: UIButton, friendshipButton: UIButton, displayNoMoreCardsLabel: UILabel?) {
