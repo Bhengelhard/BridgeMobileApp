@@ -270,7 +270,6 @@ class BridgeViewController: UIViewController {
         if  j == 0 {
             self.displayNoMoreCards()
         }
-        
     }
 
 	func addCardPairView (_ aboveView: UIView?, 
@@ -777,13 +776,21 @@ class BridgeViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
 		PFCloudFunctions().updateApplicationBadge()
 
-        //print("postTapped = \(postTapped)")
-        /*if postTapped {
+        // Display the swipe tutorial popup if it has yet to be shown
+        if let hasSeenSwipeTutorialPopup = localData.getFirstTimeOnBridgeVC() {
+            print("got firstTimeOnBridgeVC \(hasSeenSwipeTutorialPopup)")
+            if hasSeenSwipeTutorialPopup {
+                print("user has not yet seen the swipe tutorial popUp")
+                let alert = UIAlertController(title: "How to 'nect?", message: "Swipe right to introduce.\nSwipe left to see more", preferredStyle: UIAlertControllerStyle.alert)
+                //Create the actions
+                alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in
+                    self.localData.setFirstTimeOnBridgeVC(false)
+                    self.localData.synchronize()
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
 
-            sleep(UInt32(0.2))
-            missionControlView.displayPostRequest()
-            postTapped = false
-        }*/
     }
 
 	func smallestSwipeCardFrame () -> CGRect
@@ -959,47 +966,16 @@ class BridgeViewController: UIViewController {
             }
             //User Swiped Right
             else if swipeCardView.center.x > 0.75*DisplayUtility.screenWidth {
-                
-                let isFirstTimeSwipedRight : Bool = localData.getFirstTimeSwipingRight()!
-                if isFirstTimeSwipedRight{
-                    //show alert for swiping right here and then bridging or not
-                    let alert = UIAlertController(title: "Connect?", message: "Dragging a pair of pictures to the right indicates you want to introduce the friends shown.", preferredStyle: UIAlertControllerStyle.alert)
-                    //Create the actions
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
-                        
-                    }))
-                    alert.addAction(UIAlertAction(title: "Connect", style: .default, handler: { (action) in
-                        UIView.animate(withDuration: 0.4, animations: {
-                            self.swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
-                            self.swipeCardView.alpha = 0.0
-                            self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
-                            self.connectIcon.alpha = 0.0
-                            self.swipeCardView.overlay.opacity = 0.0
-                            }, completion: { (success) in
-                                //self.connectIcon.removeFromSuperview()
-                                self.bridged()
-                        })
-                        removeCard = false
-                        showReasonForConnection = true
-                        
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    
-                    self.localData.setFirstTimeSwipingRight(false)
-                    self.localData.synchronize()
-                }
-                else {
-                    UIView.animate(withDuration: 0.4, animations: {
-                        self.swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
-                        self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
-                        self.connectIcon.alpha = 0.0
-                        self.swipeCardView.overlay.opacity = 0.0
-                        }, completion: { (success) in
-                            self.bridged()
-                    })
-                    removeCard = false
-                    showReasonForConnection = true
-                }
+                UIView.animate(withDuration: 0.4, animations: {
+                    self.swipeCardView.center.x = 1.6*DisplayUtility.screenWidth
+                    self.connectIcon.center.x = 1.6*DisplayUtility.screenWidth
+                    self.connectIcon.alpha = 0.0
+                    self.swipeCardView.overlay.opacity = 0.0
+                    }, completion: { (success) in
+                        self.bridged()
+                })
+                removeCard = false
+                showReasonForConnection = true
             }
 
 			if removeCard

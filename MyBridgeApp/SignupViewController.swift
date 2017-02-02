@@ -158,11 +158,11 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
             let viewTutorialButtonWidth = 0.45*DisplayUtility.screenWidth
             let viewTutorialButtonHeight = 0.2063*viewTutorialButtonWidth
             let viewTutorialButtonFrame = CGRect(x: 0, y: statusView.frame.maxY + 0.01*DisplayUtility.screenHeight, width: viewTutorialButtonWidth, height: viewTutorialButtonHeight)
-            viewTutorialButton = DisplayUtility.gradientButton(frame: viewTutorialButtonFrame, text: "VIEW TUTORIAL", textColor: UIColor.black, fontSize: 15.5)
+            viewTutorialButton = DisplayUtility.gradientButton(frame: viewTutorialButtonFrame, text: "BEGIN 'NECTING", textColor: UIColor.black, fontSize: 15.5)
             viewTutorialButton.layer.borderWidth = 2.0
             viewTutorialButton.layer.borderColor = DisplayUtility.gradientColor(size: viewTutorialButton.frame.size).cgColor
             viewTutorialButton.center.x = DisplayUtility.screenWidth / 2
-            DisplayUtility.centerTextVerticallyInButton(button: viewTutorialButton)
+            //DisplayUtility.centerTextVerticallyInButton(button: viewTutorialButton)
             viewTutorialButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
             scrollView.addSubview(viewTutorialButton)
             
@@ -292,7 +292,13 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
                 })
             }
         }
-        performSegue(withIdentifier: "showTutorial", sender: self)
+        
+        // Setting local data to indicate user has signed up
+        localData.setHasSignedUp(true)
+        localData.synchronize()
+        
+        // Segueing to BridgeViewController after the user signs up
+        performSegue(withIdentifier: "showBridgeVC", sender: self)
     }
     
     func changeAlphaForAllBut(mainView: UIView?, superview: UIView, alphaInc: CGFloat) {
@@ -509,6 +515,8 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == TutorialsViewController.self {
             self.transitionManager.animationDirection = "Right"
+        } else if mirror.subjectType == BridgeViewController.self {
+            self.transitionManager.animationDirection = "Top"
         }
         vc.transitioningDelegate = self.transitionManager
     }

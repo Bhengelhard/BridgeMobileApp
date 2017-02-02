@@ -533,6 +533,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("--------------------- Will display called ---------------------")
         let currentFilterInfo = self.filterInfo[self.currentFilter]!
         if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < currentFilterInfo.totalElements) ) {
             if self.encounteredBefore[self.noOfElementsFetched] == nil {

@@ -401,6 +401,10 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let localData = LocalData()
+        localData.setHasSignedUp(false)
+        localData.synchronize()
+        
         //Setting the delegate
         accessTextView.delegate = self
         

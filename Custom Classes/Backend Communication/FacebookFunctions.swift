@@ -24,7 +24,7 @@ class FacebookFunctions {
         let localData = LocalData()
         
         //setting first Time Swiping Right to true so the user will be notified of what swiping does for their first swipe
-        localData.setFirstTimeSwipingRight(true)
+        localData.setFirstTimeOnBridgeVC(true)
         
         //setting first Time SwipingRight to true so the user will be notified of what swiping does for their first swipe
         localData.setFirstTimeSwipingLeft(true)

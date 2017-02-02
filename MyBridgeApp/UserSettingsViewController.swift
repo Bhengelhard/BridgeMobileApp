@@ -63,8 +63,8 @@ class UserSettingsViewController: UIViewController {
         
     }
     
-    //----Data Retrieval Functions----
-    //Getting User's Settings from local Data if it is saved and if not checking _User table in DB and then saving to device
+    // MARK: - Data Retrieval Functions
+    // Getting User's Settings from local Data if it is saved and if not checking _User table in DB and then saving to device
     func getUserSettings() {
         //Getting Interested In from local Data
         var interestedInSaved = false

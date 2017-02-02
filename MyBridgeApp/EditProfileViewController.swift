@@ -715,7 +715,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             
             factsTextView.text = factsText
             
-            
             DisplayUtility.centerTextVerticallyInTextView(textView: factsTextView)
         }
     }
