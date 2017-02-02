@@ -227,8 +227,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         filterContentForSearchText(searchController.searchBar.text!)
     }
     func reloadMessageTable(_ notification: Notification) {
-        print("Listened at reloadMessageTable")
-        
         initializeFilterInfo()
         
         names = [String : [String]]()
@@ -262,7 +260,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.filterInfo[type]?.setTotalElements(Int(count))
                 }
                 else {
-                    print(" not alive")
+                    print("initializeFilterInfo query in MessagesViewController did not return count")
                 }
             }
         }
@@ -290,7 +288,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         leftBarButton.isSelected = true
     }
     func displayNoMessages() {
-        print("displayNoMessages() called")
         let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.85*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
         
         noMessagesLabel.frame = labelFrame
@@ -302,10 +299,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             noMessagesLabel.text = "No active connections."
         } else if type == "Business" {
             noMessagesLabel.text = "No active connections for work. Be sweet and 'nect your friends to get the community buzzing!"
-            print("business enabled = false")
         } else if type == "Love" {
             noMessagesLabel.text = "No active connections for dating. Be sweet and 'nect your friends to get the community buzzing!"
-            print("love enabled = false")
         } else if type == "Friendship" {
             noMessagesLabel.text = "No active connections for friendship. Be sweet and 'nect your friends to get the community buzzing!"
         } else {
@@ -379,7 +374,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             else {
-                print(" not alive")
+                print("Messages Query to refresh the messages in the table did not find the count")
             }
         }
         
@@ -533,7 +528,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("--------------------- Will display called ---------------------")
         let currentFilterInfo = self.filterInfo[self.currentFilter]!
         if ((indexPath as NSIndexPath).row == messages.count - 1 && (noOfElementsFetched < currentFilterInfo.totalElements) ) {
             if self.encounteredBefore[self.noOfElementsFetched] == nil {

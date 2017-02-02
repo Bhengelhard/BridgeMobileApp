@@ -263,7 +263,14 @@ class FacebookFunctions {
                             if hasSignedUp == true {
                                 vc.performSegue(withIdentifier: "showBridgeViewController", sender: self)
                             } else {
-                               vc.performSegue(withIdentifier: "showSignUp", sender: self)
+                            
+                                //If the user has already provided an access code, then do not display it again
+                                let hasProvidedAccessCode = localData.getHasProvidedAccessCode() ?? false
+                                if !hasProvidedAccessCode {
+                                    localData.setHasProvidedAccessCode(true)
+                                    localData.synchronize()
+                                }
+                                vc.performSegue(withIdentifier: "showSignUp", sender: self)
                             }
                             
                         })
