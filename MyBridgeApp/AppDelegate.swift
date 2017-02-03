@@ -198,11 +198,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBSDKAppEvents.activateApp()
+        
+        //Checking Reachability of internet access
+        let reachability = Reachability()
+        let isconnectedToNetwork = reachability.connectedToNetwork()
+        
+        //If the user is not connected to a network, then display an alert indicating the issue that cannot be dismissed unless the user connects to a network
+        if isconnectedToNetwork == false {
+            let alert = UIAlertController(title: "Not connected to internet", message: "Go to settings to fix this", preferredStyle: UIAlertControllerStyle.alert)
+            if let window = self.window {
+                print("is correct window")
+                if let vc = window.rootViewController {
+                    print("is rootViewController")
+                    vc.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
+        print("The current User's device \(isconnectedToNetwork)")
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {

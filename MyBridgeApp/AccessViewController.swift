@@ -377,14 +377,11 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     }
 
     func storeUserLocationOnParse(_ notification: Notification) {
-        print("storeUserLocationOnParse - \((notification as NSNotification).userInfo)")
         let geoPoint = (notification as NSNotification).userInfo!["geoPoint"] as? PFGeoPoint
         if let geoPoint = geoPoint {
             self.geoPoint = geoPoint
-            print(geoPoint)
         } else {
             //self.geoPoint = PFGeoPoint.init(latitude: 0.0, longitude: 0.0)
-            print("initialize PFGeoPoint at 0,0")
         }
     }
     
@@ -422,12 +419,12 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         // Listen for a notification from LoadPageViewController when it has got the user's location. cIgaR 08/18/16
         NotificationCenter.default.addObserver(self, selector: #selector(self.storeUserLocationOnParse), name: NSNotification.Name(rawValue: "storeUserLocationOnParse"), object: nil)
         
-        // Updating the location of the user and asking for access if the app has not asked yet
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
+//        // Updating the location of the user and asking for access if the app has not asked yet
+//        locationManager.delegate = self
+//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//        locationManager.requestWhenInUseAuthorization()
+//        locationManager.requestAlwaysAuthorization()
+//        locationManager.startUpdatingLocation()
         
         // Check if the current user has signed in to decide what to display
         authenticateUser()

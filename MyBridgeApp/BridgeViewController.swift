@@ -371,9 +371,7 @@ class BridgeViewController: UIViewController {
     func showProfileTop(_ gesture: UIGestureRecognizer) {
         let topHalf = gesture.view
         if let swipeCard = topHalf?.superview as? SwipeCard {
-            print("showing profile of top card, id = \(swipeCard.cardsUser1Id)")
             if let user1Id = swipeCard.cardsUser1Id {
-                print(user1Id)
                 let profileVC = OtherProfileViewController(userId: user1Id)
                 present(profileVC, animated: false, completion: nil)
             }
@@ -383,9 +381,7 @@ class BridgeViewController: UIViewController {
     func showProfileBottom(_ gesture: UIGestureRecognizer) {
         let bottomHalf = gesture.view
         if let swipeCard = bottomHalf?.superview as? SwipeCard {
-            print("showing profile of bottom card, id = \(swipeCard.cardsUser2Id)")
             if let user2Id = swipeCard.cardsUser2Id {
-                print(user2Id)
                 let profileVC = OtherProfileViewController(userId: user2Id)
                 present(profileVC, animated: false, completion: nil)
             }
@@ -409,19 +405,15 @@ class BridgeViewController: UIViewController {
                             }
                             else {
                                 self.badgeCount += 1//current user did not view the message
-                                print("badge count incrementing")
                                 break
                             }
                         }
                         else {
                             self.badgeCount += 1//current user did not view the message
-                            print("badge count incrementing 2")
-
                             break
                         }
                     }
                     if self.badgeCount > 0 {
-                        print("badgeCount is greater than 0")
                         DispatchQueue.main.async(execute: {
                             self.customNavigationBar.updateRightBarButton(newIcon: "Inbox_Navbar_Icon_Notification", newSelectedIcon: "Inbox_Navbar_Icon_Notification")
                         })
@@ -691,7 +683,6 @@ class BridgeViewController: UIViewController {
         }
     }
     func updateBridgePage(_ notification: Notification) {
-        print("updateNoOfUnreadMessagesIcon")
         let aps = (notification as NSNotification).userInfo!["aps"] as? NSDictionary
         badgeCount = (aps!["badge"] as? Int)!
         DispatchQueue.main.async(execute: {
@@ -778,9 +769,7 @@ class BridgeViewController: UIViewController {
 
         // Display the swipe tutorial popup if it has yet to be shown
         if let hasSeenSwipeTutorialPopup = localData.getFirstTimeOnBridgeVC() {
-            print("got firstTimeOnBridgeVC \(hasSeenSwipeTutorialPopup)")
             if hasSeenSwipeTutorialPopup {
-                print("user has not yet seen the swipe tutorial popUp")
                 let alert = UIAlertController(title: "How to 'nect?", message: "Swipe right to introduce.\nSwipe left to see more", preferredStyle: UIAlertControllerStyle.alert)
                 //Create the actions
                 alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in
@@ -1181,7 +1170,6 @@ class BridgeViewController: UIViewController {
         PFUser.current()?.saveInBackground()
     }
     func connectionCanceled(swipeCardView: SwipeCard) {
-        print("connection Canceled called")
         view.bringSubview(toFront: connectIcon)
         view.bringSubview(toFront: disconnectIcon)
         swipeCardView.alpha = 1
@@ -1198,7 +1186,6 @@ class BridgeViewController: UIViewController {
     }
     
     func transitionToMessageWithID(_ id: String, color: UIColor, title: String) {
-        print("transition ran in BridgeVC")
         self.messageId = id
         self.necterTypeColor = color
         self.singleMessageTitle = title
