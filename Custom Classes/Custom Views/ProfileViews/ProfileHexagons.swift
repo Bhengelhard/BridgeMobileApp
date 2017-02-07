@@ -24,6 +24,8 @@ class ProfileHexagons: UIView, UIImagePickerControllerDelegate, UINavigationCont
     var uploadMenu: UIView?
     let imagePicker = UIImagePickerController()
     
+    static let hexWToHRatio: CGFloat = 2 / sqrt(3)
+    
     init(minY: CGFloat, parentVC: UIViewController, hexImages: [UIImage],  shouldShowDefaultFrame: Bool, shouldBeEditable: Bool) {
         // initialize min y and parent view controller
         self.minY = minY
@@ -43,7 +45,7 @@ class ProfileHexagons: UIView, UIImagePickerControllerDelegate, UINavigationCont
         
         // set hex frames
         let hexWidth = 0.38154*DisplayUtility.screenWidth
-        let hexHeight = hexWidth * sqrt(3) / 2
+        let hexHeight = hexWidth / ProfileHexagons.hexWToHRatio
         
         topHexView.frame = CGRect(x: 0, y: 0, width: hexWidth, height: hexHeight)
         topHexView.center.x = DisplayUtility.screenWidth / 2
@@ -61,7 +63,7 @@ class ProfileHexagons: UIView, UIImagePickerControllerDelegate, UINavigationCont
             if hexImages.count > i {
                 hexView.setBackgroundImage(image: hexImages[i])
             } else {
-                hexView.setDefaultBackgorund()
+                hexView.setDefaultBackground()
             }
         }
         
@@ -144,7 +146,7 @@ class ProfileHexagons: UIView, UIImagePickerControllerDelegate, UINavigationCont
             if hexImages.count > i {
                 hexViews[i].setBackgroundImage(image: hexImages[i])
             } else {
-                hexViews[i].setDefaultBackgorund()
+                hexViews[i].setDefaultBackground()
             }
         }
     }

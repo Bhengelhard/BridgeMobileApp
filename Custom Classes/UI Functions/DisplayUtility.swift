@@ -245,7 +245,7 @@ class DisplayUtility {
         if imageWToHRatio >= viewWToHRatio { // image is wider than view
             fitSize = CGSize(width: viewSize.height*imageWToHRatio, height: viewSize.height)
         } else { // image is taller than view
-            fitSize = CGSize(width: viewSize.width, height: viewSize.height/imageWToHRatio)
+            fitSize = CGSize(width: viewSize.width, height: viewSize.width/imageWToHRatio)
         }
         var resultImage: UIImage?
         UIGraphicsBeginImageContext(fitSize)

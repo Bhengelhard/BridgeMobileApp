@@ -10,7 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import Parse
 
-class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, FacebookImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, FacebookImagePickerControllerDelegate, UINavigationControllerDelegate, CropImageViewControllerDelegate {
     
     let originalHexFrames: [CGRect]
     var images: [UIImage]
@@ -51,7 +51,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, FacebookImag
         
         self.allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingIndex])
         
-        super.init(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
+        super.init(frame: parentVC.view.bounds)
         
         backgroundColor = .white
         
@@ -238,7 +238,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, FacebookImag
             if i < images.count {
                 hexViews[i].setBackgroundImage(image: images[i])
             } else {
-                hexViews[i].setDefaultBackgorund()
+                hexViews[i].setDefaultBackground()
             }
         }
         self.animateOut { (finished) in
@@ -249,8 +249,90 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, FacebookImag
     }
     
     func cropButtonPressed(_ gesture: UIGestureRecognizer) {
-        let cropImageVC = CropImageViewController(image: images[allPicsVC.pageControl.currentPage])
+        var croppedImageFrame: CGRect?
+        if let user = PFUser.current() {
+            let index = allPicsVC.pageControl.currentPage
+            if let croppedImageFrames = user["cropped_image_frames"] as? [[String: CGFloat]?] {
+                if croppedImageFrames.count > index {
+                    if let croppedImageFrameDict = croppedImageFrames[index] {
+                        if let x = croppedImageFrameDict["X"], let y = croppedImageFrameDict["Y"],
+                            let width = croppedImageFrameDict["Width"], let height = croppedImageFrameDict["Height"] {
+                            croppedImageFrame = CGRect(x: x, y: y, width: width, height: height)
+                        }
+                    }
+                }
+            }
+            if let profilePictureFiles = user["profile_pictures"] as? [PFFile] {
+                let profilePictureFile = profilePictureFiles[index]
+                profilePictureFile.getDataInBackground(block: { (data, error) in
+                    if let error = error {
+                        print("error - getting propic data - \(error)")
+                    } else if let data = data {
+                        if let image = UIImage(data: data) {
+                            let cropImageVC = CropImageViewController(image: image, croppedImageFrame: croppedImageFrame)
+                            cropImageVC.delegate = self
+                            self.parentVC.present(cropImageVC, animated: true, completion: nil)
+                        }
+                    }
+                })
+            }
+        }
+        /*
+        let cropImageVC = CropImageViewController(image: images[allPicsVC.pageControl.currentPage], croppedImageFrame: croppedImageFrame)
+        cropImageVC.delegate = self
         parentVC.present(cropImageVC, animated: true, completion: nil)
+ */
+    }
+    
+    func cropImageViewController(cropImageViewController: CropImageViewController, didCropImageTo croppedImage: UIImage, withCroppedImageFrame croppedImageFrame: CGRect) {
+        let index = allPicsVC.pageControl.currentPage
+
+        if let user = PFUser.current() {
+            // save cropped picture to user
+            if let data = UIImageJPEGRepresentation(croppedImage, 1.0) {
+                if let croppedImageFile = PFFile(data: data) {
+                    var croppedImages: [PFFile?]
+                    if let croppedProfilePictures = user["cropped_profile_pictures"] as? [PFFile?] {
+                        croppedImages = croppedProfilePictures
+                    } else {
+                        croppedImages = [PFFile?]()
+                    }
+                    while croppedImages.count <= index {
+                        croppedImages.append(nil)
+                    }
+                    croppedImages[index] = croppedImageFile
+                    user["cropped_profile_pictures"] = croppedImages
+                }
+            }
+            
+            // save frame of crop box to user
+            if let croppedImageFrameDict = croppedImageFrame.dictionaryRepresentation as? [String: CGFloat] {
+                var croppedImageFrames: [[String: CGFloat]?]
+                if let userCroppedImageFrames = user["cropped_image_frames"] as? [[String: CGFloat]?] {
+                    croppedImageFrames = userCroppedImageFrames
+                } else {
+                    croppedImageFrames = [[String:CGFloat]?]()
+                }
+                while croppedImageFrames.count <= index {
+                    croppedImageFrames.append(nil)
+                }
+                croppedImageFrames[index] = croppedImageFrameDict
+                user["cropped_image_frames"] = croppedImageFrames
+            }
+            
+            user.saveInBackground(block: { (succeeded, error) in
+                if let error = error {
+                    print("error - saving user's cropped pic - \(error)")
+                } else if succeeded {
+                    print("successfully saved user's cropped pic")
+                } else {
+                    print("did not successfully save user's cropped pic")
+                }
+            })
+        }
+        
+        images[index] = croppedImage
+        resetImagesForVCs()
     }
     
     func uploadButtonPressed(_ button: UIButton) {

@@ -7,14 +7,16 @@
 //
 
 import UIKit
+import Parse
 
 class CropImageViewController: UIViewController {
     
+    var delegate: CropImageViewControllerDelegate?
     let image: UIImage
     let imageView:  UIImageView
     let cropBox: UIView
-    let initialCropBoxOrigin: CGPoint?
-    let initialCropBoxSize: CGSize?
+    var initialCroppedImageOrigin: CGPoint?
+    var initialCroppedImageSize: CGSize?
     var minScale: CGFloat = 0.0
     var maxScale: CGFloat = 0.0
     var currentScale: CGFloat = 1.0
@@ -26,12 +28,15 @@ class CropImageViewController: UIViewController {
     let rightGrayBox = UIView()
     let bottomGrayBox = UIView()
     
-    init(image: UIImage, initialCropBoxOrigin: CGPoint? = nil, initialCropBoxSize: CGSize? = nil) {
+    init(image: UIImage, croppedImageFrame: CGRect? = nil) {
         self.image = image
-        self.imageView = UIImageView()
-        self.cropBox = UIView()
-        self.initialCropBoxOrigin = initialCropBoxOrigin
-        self.initialCropBoxSize = initialCropBoxSize
+        imageView = UIImageView()
+        cropBox = UIView()
+        if let croppedImageFrame = croppedImageFrame {
+            initialCroppedImageOrigin = croppedImageFrame.origin
+            initialCroppedImageSize = croppedImageFrame.size
+        }
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -49,30 +54,29 @@ class CropImageViewController: UIViewController {
         
         // imageView should fit entire width or height of view
         let imageWToHRatio = image.size.width / image.size.height
-        imageView.frame = CGRect(x: 0, y: 0.05*DisplayUtility.screenHeight, width: min(view.frame.width, view.frame.height * imageWToHRatio), height: min(view.frame.height, view.frame.width / imageWToHRatio))
-        // center image view in view
+        let imageViewHeight = min(min(view.frame.height, view.frame.width / imageWToHRatio), 0.75*DisplayUtility.screenHeight)
+        let imageViewWidth = min(view.frame.width, imageViewHeight * imageWToHRatio)
+        imageView.frame = CGRect(x: 0, y: 0.05*DisplayUtility.screenHeight, width: imageViewWidth, height: imageViewHeight)
         imageView.center.x = view.frame.width / 2
         view.addSubview(imageView)
         
-        // tap gesture recognizer for exiting
-        let exitGR = UITapGestureRecognizer(target: self, action: #selector(exit(_:)))
-        imageView.addGestureRecognizer(exitGR)
         
         cropBox.backgroundColor = .clear
         cropBox.isUserInteractionEnabled = true
         
-        maxCropBoxSize = CGSize(width: min(imageView.frame.width, imageView.frame.height), height: min(imageView.frame.height, imageView.frame.width))
+        let croppedImageWToHRatio = ProfileHexagons.hexWToHRatio
+        maxCropBoxSize = CGSize(width: min(imageView.frame.width, imageView.frame.height * croppedImageWToHRatio), height: min(imageView.frame.height, imageView.frame.width / croppedImageWToHRatio))
         
         // set size of crop box
-        if let cropBoxSize = initialCropBoxSize {
-            cropBox.frame.size = cropBoxSize
+        if let croppedImageSize = initialCroppedImageSize {
+            cropBox.frame.size = CGSize(width: croppedImageSize.width * imageView.frame.width / image.size.width, height: croppedImageSize.height * imageView.frame.height / image.size.height)
         } else { // default to max possible size
             cropBox.frame.size = maxCropBoxSize
         }
         
         // set position of crop box
-        if let cropBoxOrigin = initialCropBoxOrigin {
-            cropBox.frame.origin = cropBoxOrigin
+        if let croppedImageOrigin = initialCroppedImageOrigin {
+            cropBox.frame.origin = CGPoint(x: croppedImageOrigin.x * imageView.frame.width / image.size.width, y: croppedImageOrigin.y * imageView.frame.height / image.size.height)
         } else { // default to center of image view
             cropBox.center = CGPoint(x: imageView.frame.width / 2, y: imageView.frame.height / 2)
         }
@@ -80,7 +84,7 @@ class CropImageViewController: UIViewController {
         
         imageView.addSubview(cropBox)
 
-        currentScale = max(cropBox.frame.width / imageView.frame.width, cropBox.frame.height / imageView.frame.height)
+        currentScale = max(cropBox.frame.width / maxCropBoxSize.width, cropBox.frame.height / maxCropBoxSize.height)
         maxScale = 1.0
         minScale = 0.4
         
@@ -108,9 +112,98 @@ class CropImageViewController: UIViewController {
         let moveGR = UIPanGestureRecognizer(target: self, action: #selector(move(_:)))
         cropBox.addGestureRecognizer(moveGR)
         
-        /*
         let showBigImageGR = UITapGestureRecognizer(target: self, action: #selector(showImage(_:)))
-        box.addGestureRecognizer(showBigImageGR)*/
+        cropBox.addGestureRecognizer(showBigImageGR)
+        
+        // create buttons menu
+        let menu = UIView()
+        
+        let buttonWidth = 0.33*DisplayUtility.screenWidth
+        let buttonHeight = 0.212*buttonWidth
+        
+        
+        // create save button
+        let saveButtonFrame = CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight)
+        let saveButton = DisplayUtility.plainButton(frame: saveButtonFrame, text: "SAVE", fontSize: 13)
+        saveButton.center.x = DisplayUtility.screenWidth / 2
+        menu.addSubview(saveButton)
+        
+        // add target for save button
+        saveButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
+        
+        
+        // create cancel button
+        let cancelButtonFrame = CGRect(x: 0, y: saveButton.frame.maxY + 0.015*DisplayUtility.screenHeight, width: buttonWidth, height: buttonHeight)
+        let cancelButton = DisplayUtility.plainButton(frame: cancelButtonFrame, text: "CANCEL", fontSize: 13)
+        cancelButton.center.x = DisplayUtility.screenWidth / 2
+        menu.addSubview(cancelButton)
+        
+        // add target for cancel button
+        cancelButton.addTarget(self, action: #selector(cancel(_:)), for: .touchUpInside)
+        
+        menu.frame = CGRect(x: 0, y: imageView.frame.maxY + 0.05*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: cancelButton.frame.maxY)
+        view.addSubview(menu)
+    }
+    
+    func save(_ sender: UIButton) {
+        if let delegate = delegate {
+            delegate.cropImageViewController(cropImageViewController: self, didCropImageTo: croppedImage(), withCroppedImageFrame: croppedImageFrame())
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func croppedImage() -> UIImage {
+        let imageRef = image.cgImage!
+        let bitmapInfo = imageRef.bitmapInfo
+        let colorspaceInfo = imageRef.colorSpace!
+        var bitmap: CGContext?
+        
+        let targetWidth = image.size.width
+        let targetHeight = image.size.height
+        
+        if image.imageOrientation == .up || image.imageOrientation == .down {
+            bitmap = CGContext(data: nil, width: Int(targetWidth), height: Int(targetHeight), bitsPerComponent: imageRef.bitsPerComponent, bytesPerRow: imageRef.bytesPerRow, space: colorspaceInfo, bitmapInfo: bitmapInfo.rawValue)
+        } else {
+            bitmap = CGContext(data: nil, width: Int(targetHeight), height: Int(targetWidth), bitsPerComponent: imageRef.bitsPerComponent, bytesPerRow: imageRef.bytesPerRow, space: colorspaceInfo, bitmapInfo: bitmapInfo.rawValue)
+        }
+        
+        if let bitmap = bitmap {
+            // rotate and translate image if orientation is not up
+            if image.imageOrientation == .left {
+                bitmap.rotate(by: 90 * CGFloat.pi / 180)
+                bitmap.translateBy(x: 0, y: -targetHeight)
+            } else if image.imageOrientation == .right {
+                bitmap.rotate(by: -90 * CGFloat.pi / 180)
+                bitmap.translateBy(x: -targetWidth, y: 0)
+            } else if image.imageOrientation == .down {
+                bitmap.translateBy(x: targetWidth, y: targetHeight)
+                bitmap.rotate(by: -180 * CGFloat.pi / 180)
+            }
+            
+            bitmap.draw(imageRef, in: CGRect(x: 0, y: 0, width: targetWidth, height: targetHeight))
+            let newImageRef = bitmap.makeImage()
+            if let newImageRef = newImageRef {
+                let newImage = UIImage(cgImage: newImageRef)
+                
+                // crop image
+                let cropFrame = CGRect(x: cropBox.frame.minX * newImage.size.width / imageView.frame.width, y: cropBox.frame.minY * newImage.size.height / imageView.frame.height, width: cropBox.frame.width * newImage.size.width / imageView.frame.width, height: cropBox.frame.height * newImage.size.height / imageView.frame.height)
+                let croppedImageRef = newImageRef.cropping(to: cropFrame)
+                if let croppedImageRef = croppedImageRef {
+                    let croppedImage = UIImage(cgImage: croppedImageRef)
+                    return croppedImage
+                }
+            }
+        }
+        return image
+    }
+    
+    func croppedImageFrame() -> CGRect {
+        let croppedImageFrame = CGRect(x: cropBox.frame.minX / imageView.frame.width * image.size.width, y: cropBox.frame.minY / imageView.frame.height * image.size.height, width: cropBox.frame.width / imageView.frame.width * image.size.width, height: cropBox.frame.height / imageView.frame.height * image.size.height)
+        return croppedImageFrame
+    }
+    
+    func cancel(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
     }
     
     func zoom(_ gesture: UIPinchGestureRecognizer) {
@@ -175,65 +268,65 @@ class CropImageViewController: UIViewController {
         topGrayBox.frame = CGRect(x: cropBox.frame.minX, y: 0, width: cropBox.frame.width, height: cropBox.frame.minY)
         rightGrayBox.frame = CGRect(x: cropBox.frame.maxX, y: 0, width: imageView.frame.width - cropBox.frame.maxX, height: imageView.frame.height)
         bottomGrayBox.frame = CGRect(x: cropBox.frame.minX, y: cropBox.frame.maxY, width: cropBox.frame.width, height: imageView.frame.height - cropBox.frame.maxY)
-        
-        /*
-        leftGrayBox.backgroundColor = .red
-        topGrayBox.backgroundColor = .orange
-        rightGrayBox.backgroundColor = .yellow
-        bottomGrayBox.backgroundColor = .green
-        */
     }
     
     func showImage(_ gesture: UIGestureRecognizer) {
-        let image = imageView.image
-        let imageRef = image?.cgImage
-        let bitmapInfo = imageRef?.bitmapInfo
-        let colorspaceInfo = imageRef?.colorSpace
-        var bitmap: CGContext
+        print("showing image")
+        
+        let imageRef = image.cgImage!
+        let bitmapInfo = imageRef.bitmapInfo
+        let colorspaceInfo = imageRef.colorSpace!
+        var bitmap: CGContext?
         
         let targetWidth = DisplayUtility.screenWidth
-        let targetHeight = DisplayUtility.screenHeight
+        let targetHeight = DisplayUtility.screenWidth
         
-        if image?.imageOrientation == .up || image?.imageOrientation == .down {
-            bitmap = CGContext(data: nil, width: Int(targetWidth), height: Int(targetHeight), bitsPerComponent: imageRef!.bitsPerComponent, bytesPerRow: imageRef!.bytesPerRow, space: colorspaceInfo!, bitmapInfo: bitmapInfo!.rawValue)!
+        if image.imageOrientation == .up || image.imageOrientation == .down {
+            bitmap = CGContext(data: nil, width: Int(targetWidth), height: Int(targetHeight), bitsPerComponent: imageRef.bitsPerComponent, bytesPerRow: imageRef.bytesPerRow, space: colorspaceInfo, bitmapInfo: bitmapInfo.rawValue)
         } else {
-            bitmap = CGContext(data: nil, width: Int(targetHeight), height: Int(targetWidth), bitsPerComponent: imageRef!.bitsPerComponent, bytesPerRow: imageRef!.bytesPerRow, space: colorspaceInfo!, bitmapInfo: bitmapInfo!.rawValue)!
+            bitmap = CGContext(data: nil, width: Int(targetHeight), height: Int(targetWidth), bitsPerComponent: imageRef.bitsPerComponent, bytesPerRow: imageRef.bytesPerRow, space: colorspaceInfo, bitmapInfo: bitmapInfo.rawValue)
         }
         
-        if image?.imageOrientation == .left {
-            bitmap.rotate(by: 90 * CGFloat.pi / 180)
-            bitmap.translateBy(x: 0, y: -targetHeight)
-        } else if image?.imageOrientation == .right {
-            bitmap.rotate(by: -90 * CGFloat.pi / 180)
-            bitmap.translateBy(x: -targetWidth, y: 0)
-        } else if image?.imageOrientation == .down {
-            bitmap.translateBy(x: targetWidth, y: targetHeight)
-            bitmap.rotate(by: -180 * CGFloat.pi / 180)
+        if let bitmap = bitmap {
+            if image.imageOrientation == .left {
+                print("LEFT")
+                bitmap.rotate(by: 90 * CGFloat.pi / 180)
+                bitmap.translateBy(x: 0, y: -targetHeight)
+            } else if image.imageOrientation == .right {
+                print("RIGHT")
+                bitmap.rotate(by: -90 * CGFloat.pi / 180)
+                bitmap.translateBy(x: -targetWidth, y: 0)
+            } else if image.imageOrientation == .down {
+                print("DOWN")
+                bitmap.translateBy(x: targetWidth, y: targetHeight)
+                bitmap.rotate(by: -180 * CGFloat.pi / 180)
+            } else {
+                print("UP")
+            }
+            
+            bitmap.draw(imageRef, in: CGRect(x: 0, y: 0, width: targetWidth, height: targetHeight))
+            let newImageRef = bitmap.makeImage()
+            if let newImageRef = newImageRef {
+                let newImage = UIImage(cgImage: newImageRef)
+                let cropFrame = CGRect(x: cropBox.frame.minX * newImage.size.width / imageView.frame.width, y: cropBox.frame.minY * newImage.size.height / imageView.frame.height, width: cropBox.frame.width * newImage.size.width / imageView.frame.width, height: cropBox.frame.height * newImage.size.height / imageView.frame.height)
+                let croppedImageRef = newImageRef.cropping(to: cropFrame)
+                if let croppedImageRef = croppedImageRef {
+                    let croppedImage = UIImage(cgImage: croppedImageRef)
+                    let bigImageView = UIImageView()
+                    bigImageView.image = croppedImage
+                    bigImageView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth)
+                    view.addSubview(bigImageView)
+                    UIView.animate(withDuration: 3.0) {
+                        bigImageView.alpha = 0
+                    }
+                }
+            }
+            
         }
         
-        
-        //CGContextDrawImage(bitmap, CGRect(x: 0, y: 0, width: targetWidth, height: targetHeight), imageRef)
-        
-        /*
-        let cropImageViewFrame = view.convert(box.frame, to: imageView)
-        let imageToImageViewWRatio = imageView.image!.size.width / imageView.frame.width
-        let imageToImageViewHRatio = imageView.image!.size.height / imageView.frame.height
-        let cropFrame = CGRect(x: cropImageViewFrame.minX * imageToImageViewWRatio, y: cropImageViewFrame.minY * imageToImageViewHRatio, width: cropImageViewFrame.width * imageToImageViewWRatio, height: cropImageViewFrame.height * imageToImageViewHRatio)
-        var croppedImage: CGImage
-        if imageView.image?.imageOrientation == .up || imageView.image?.imageOrientation == .down {
-        }
-        let imageRef = imageView.image!.cgImage!.cropping(to: cropFrame)!
-        let bigImageView = UIImageView()
-        bigImageView.image = UIImage(cgImage: imageRef)
-        bigImageView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth)
-        view.addSubview(bigImageView)
-        UIView.animate(withDuration: 3.0) { 
-            bigImageView.alpha = 0
-        }
-        */
     }
-    
-    func exit(_ gesture: UIGestureRecognizer) {
-        dismiss(animated: true, completion: nil)
-    }
+}
+
+protocol CropImageViewControllerDelegate {
+    func cropImageViewController(cropImageViewController: CropImageViewController, didCropImageTo croppedImage: UIImage, withCroppedImageFrame croppedImageFrame: CGRect)
 }

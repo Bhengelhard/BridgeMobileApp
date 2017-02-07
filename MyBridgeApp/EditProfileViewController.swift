@@ -506,28 +506,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 }
             })
             
-            /*
-            // update status of current type based on current text in text view
-            if currentStatusType == "Business" {
-                if statusPlaceholder || statusTextView.text.isEmpty { // no status
-                    businessStatus = nil
-                } else {
-                    businessStatus = statusTextView.text
-                }
-            } else if currentStatusType == "Love" {
-                if statusPlaceholder || statusTextView.text.isEmpty { // no status
-                    loveStatus = nil
-                } else {
-                    loveStatus = statusTextView.text
-                }
-            } else if currentStatusType == "Friendship" {
-                if statusPlaceholder || statusTextView.text.isEmpty { // no status
-                    friendshipStatus = nil
-                } else {
-                    friendshipStatus = statusTextView.text
-                }
-            }
-            */
             if let statusButtons = statusButtons {
                 statusButtons.unselectAllStatusButtons()
             }

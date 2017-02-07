@@ -57,11 +57,19 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
             collectionView.backgroundColor = .white
             collectionView.dataSource = self
             collectionView.delegate = self
-            collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+            collectionView.register(FacebookImageCell.self, forCellWithReuseIdentifier: "Cell")
             
             view.addSubview(collectionView)
         }
         
+        getPhotos()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func getPhotos() {
         let connection = FBSDKGraphRequestConnection()
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "albums{name, photos.order(reverse_chronological){images}}"])
         connection.add(graphRequest) { (_, result, error) in
@@ -72,30 +80,9 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
                             if let album = album as? [String:AnyObject] {
                                 if let name = album["name"] as? String {
                                     if name == "Profile Pictures" {
-                                        if let photos = album["photos"] as? [String:AnyObject] {
-                                            if let data2 = photos["data"] as? [AnyObject] {
-                                                for picture in data2 {
-                                                    if let picture = picture as? [String:AnyObject] {
-                                                        if let images = picture["images"] as? [AnyObject] {
-                                                            if images.count > 0 {
-                                                                if let image = images[0] as? [String:AnyObject] {
-                                                                    if let source = image["source"] as? String {
-                                                                        if let url = URL(string: source) {
-                                                                            if let data = try? Data(contentsOf: url) {
-                                                                                let image = UIImage(data: data)!
-                                                                                self.images.append(image)
-                                                                                if let collectionView = self.collectionView {
-                                                                                    collectionView.reloadData()
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                        if let id = album["id"] as? String {
+                                            print("album id = \(id)")
+                                            self.getPhotosFromAlbum(id: id, nextCursor: nil)
                                         }
                                     }
                                 }
@@ -108,12 +95,50 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
         connection.start()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func getPhotosFromAlbum(id: String, nextCursor: String?) {
+        var params = ["fields": "source"]
+        if let nextCursor = nextCursor {
+            params["after"] = nextCursor
+        }
+        let connection = FBSDKGraphRequestConnection()
+        let graphRequest = FBSDKGraphRequest(graphPath: "/\(id)/photos", parameters: params)
+        connection.add(graphRequest) { (_, result, error) in
+            print(result ?? "no result")
+            if let result = result as? [String:AnyObject] {
+                print(result)
+                if let data = result["data"] as? [AnyObject] {
+                    for picture in data {
+                        if let picture = picture as? [String:AnyObject] {
+                            if let source = picture["source"] as? String {
+                                if let url = URL(string: source) {
+                                    if let data = try? Data(contentsOf: url) {
+                                        let image = UIImage(data: data)!
+                                        self.images.append(image)
+                                        if let collectionView = self.collectionView {
+                                            collectionView.reloadData()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                // check for more pages
+                if let paging = result["paging"] as? [String:AnyObject] {
+                    if paging["next"] != nil { // there are more pages
+                        if let cursors = paging["cursors"] as? [String:AnyObject] {
+                            if let after = cursors["after"] as? String {
+                                self.getPhotosFromAlbum(id: id, nextCursor: after) // recursive call with "after" cursor
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        connection.start()
     }
     
     func cancel(_ sender: UIButton) {
-        print("cancel pressed")
         dismiss(animated: true, completion: nil)
     }
     
@@ -126,15 +151,9 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        cell.backgroundColor = .clear
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! FacebookImageCell
         let image = images[indexPath.row]
-        let imageView = UIImageView(image: image)
-        let imageWToHRatio = image.size.width / image.size.height
-        imageView.frame = CGRect(x: 0, y: 0, width: min(cell.frame.width, cell.frame.height * imageWToHRatio), height: min(cell.frame.height, cell.frame.width / imageWToHRatio))
-        imageView.center = CGPoint(x: cell.frame.width/2, y: cell.frame.height/2)
-        cell.addSubview(imageView)
-        
+        cell.setImage(image: image)
         return cell
     }
     
@@ -148,4 +167,26 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
             }
         }
     }
+}
+
+class FacebookImageCell: UICollectionViewCell {
+    let imageView = UIImageView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clear
+        addSubview(imageView)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setImage(image: UIImage) {
+        imageView.image = image
+        let imageWToHRatio = image.size.width / image.size.height
+        imageView.frame = CGRect(x: 0, y: 0, width: min(frame.width, frame.height * imageWToHRatio), height: min(frame.height, frame.width / imageWToHRatio))
+        imageView.center = CGPoint(x: frame.width/2, y: frame.height/2)
+    }
+    
 }

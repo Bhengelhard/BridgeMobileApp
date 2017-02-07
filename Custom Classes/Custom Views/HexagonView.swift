@@ -16,7 +16,7 @@ class HexagonView: UIView {
     var borderColor = UIColor.black
     var borderWidth: CGFloat = 1.0
     var rectangle = false
-    
+        
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         backgroundColor = .clear
@@ -110,7 +110,7 @@ class HexagonView: UIView {
         }
     }
     
-    func setDefaultBackgorund() {
+    func setDefaultBackground() {
         setBackgroundColor(color: DisplayUtility.defaultHexBackgroundColor)
     }
     
