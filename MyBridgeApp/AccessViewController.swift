@@ -128,7 +128,9 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
             }
             
             //Updating the user's friends
-            self.updateUser()
+            
+            let fbFunctions = FacebookFunctions()
+            fbFunctions.updateFacebookFriends()
             
             //Checking if user is already logged in
             if (localData.getUsername() != nil) && ((PFUser.current()!.objectId) != nil){                 LocalStorageUtility().getUserFriends()

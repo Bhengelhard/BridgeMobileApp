@@ -16,6 +16,7 @@ import FBSDKLoginKit
 class FacebookFunctions {
     
     var geoPoint:PFGeoPoint?
+    var fbFriendIds = [String]()
     
     //Login User after they click the login with facebook button
     func loginWithFacebook (vc: UIViewController){
@@ -37,13 +38,11 @@ class FacebookFunctions {
         //Log user in with permissions public_profile, email and user_friends
         let permissions = ["public_profile", "email", "user_friends", "user_photos", "user_birthday"]
         PFFacebookUtils.logInInBackground(withReadPermissions: permissions) { (user, error) in
-            print("got past permissions")
             if let error = error {
                 print(error)
                 print("got to error")
             } else {
                 if let user = user {
-                    print("got user")
                     /* Check if the global variable geoPoint has been set to the user's location. If so, store it in Parse. Extremely important since the location would be used to get the user's current city in LocalUtility().getBridgePairings() which is indeed called in SignupViewController - cIgAr 08/18/16 */
                     if let geoPoint = self.geoPoint {
                         PFUser.current()?["location"] = geoPoint
@@ -61,8 +60,6 @@ class FacebookFunctions {
                     // get necessary facebook fields
                     let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, birthday, location"])
                     graphRequest!.start { (connection, result, error) -> Void in
-                        print("got into graph request")
-                        
                         if error != nil {
                             
                             print(error!)
@@ -70,8 +67,6 @@ class FacebookFunctions {
                             
                         } else if let result = result as? [String: AnyObject]{
                             // saves these to parse at every login
-                            print("got result")
-                            
                             //setting main name and names for Bridge Types to Facebook name
                             if let name = result["name"] {
                                 global_name = name as! String
@@ -88,8 +83,6 @@ class FacebookFunctions {
                             }
                             
                             if let birthday = result["birthday"] as? String {
-                                print(result["birthday"]!)
-                                print("birthday")
                                 //getting birthday from Facebook and calculating age
                                 PFUser.current()?["fb_birthday"] = birthday
                                 
@@ -130,12 +123,10 @@ class FacebookFunctions {
                         //sync profile picture with facebook profile picture
                         LocalStorageUtility().getMainProfilePicture()
                         
-                        print("got to new user")
                         let localData = LocalData()
                         
                         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, friends, birthday, location"])
                         graphRequest!.start { (connection, result, error) -> Void in
-                            print("got into graph request")
                             
                             if error != nil {
                                 
@@ -144,8 +135,6 @@ class FacebookFunctions {
                                 
                             } else if let result = result as? [String: AnyObject]{
                                 // saves these to parse at every login
-                                print("got result")
-                                
                                 var hasInterestedIn = false
                                 if let interested_in = result["interested_in"] {
                                     localData.setInterestedIn(interested_in as! String)
@@ -224,7 +213,6 @@ class FacebookFunctions {
                         //spinner
                         //update user and friends
                         //use while access token is nil instead of delay
-                        print("not new")
                         if PFUser.current()?["profile_pictures"] == nil {
                             self.getProfilePictures()
                         }
@@ -236,7 +224,7 @@ class FacebookFunctions {
                         }
                         let localData = LocalData()
                         if localData.getMainProfilePicture() == nil {
-                            print("user is not new but we are getting his picture")
+                            // User is not new but we are getting his picture
                             LocalStorageUtility().getMainProfilePictureFromParse()
                         }
                         
@@ -279,7 +267,6 @@ class FacebookFunctions {
                     
                     
                 } else {
-                    print("there is no user")
                     //self.activityIndicator.stopAnimating()
                     UIApplication.shared.endIgnoringInteractionEvents()
                 }
@@ -289,8 +276,6 @@ class FacebookFunctions {
     }
     
     func getProfilePictures() {
-        print("getting profile pictures")
-        
         var sources = [String]()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "albums{name, photos.order(reverse_chronological).limit(4){images}}"])
@@ -373,43 +358,69 @@ class FacebookFunctions {
          */
     }
     
-    //right now just updates users Friends
-    /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
-    func updateUser() {
-        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "friends"])
+    // MARK: -
+
+    func updateFacebookFriends () {
+        facebookFriends(withCursor: nil)
+    }
+
+    func facebookFriends (withCursor after: String?){
+        var parameters = ["fields": ""]
+
+        if after != nil {
+            parameters["after"] = after!
+        }
+        
+        let graphRequest = FBSDKGraphRequest(graphPath: "me/friends", parameters: parameters)
+
         _ = graphRequest?.start { (connection, result, error) -> Void in
             if error != nil {
-                
                 print(error!)
-                
-            } else if let result = result as? [String:AnyObject]{
-                
-                if let friends = result["friends"]! as? NSDictionary {
-                    let friendsData : NSArray = friends.object(forKey: "data") as! NSArray
-                    var fbFriendIds = [String]()
-                    for friend in friendsData {
-                        let valueDict : NSDictionary = friend as! NSDictionary
-                        fbFriendIds.append(valueDict.object(forKey: "id") as! String)
-                    }
-                    PFUser.current()?["fb_friends"] = fbFriendIds
-                    PFUser.current()?.saveInBackground(block: { (success, error) in
-                        if error != nil {
-                            print(error!)
-                        } else {
-                            self.updateFriendList()
+            }
+            else if let dictionary = result as? Dictionary<String, AnyObject> {
+                //if let friends = dictionary["friends"] as? Dictionary<String, AnyObject> {
+                if let data = dictionary["data"] as? [Dictionary<String, AnyObject>] {
+                    for friend in data {
+                        if let id = friend["id"] as? String {
+                            self.fbFriendIds.append(id)
                         }
-                    })
+                        
+                    }
+                }
+
+                if let paging = dictionary["paging"] as? Dictionary<String, AnyObject> {
+                    if let _ = paging["next"] {
+                        if let cursors = paging["cursors"] as? Dictionary<String, AnyObject> {
+                            if let cursor = cursors["after"] as? String
+                            {
+                                return self.facebookFriends(withCursor: cursor)
+                            }
+                        }
+                    } else {
+                        // After paging through the whole list, save the fbids to the fbFriends
+                        PFUser.current()?["fb_friends"] = self.fbFriendIds
+                        PFUser.current()?.saveInBackground(block: { (success, error) in
+                            if error != nil {
+                                print(error!)
+                            } else {
+                                // Convert fbIds to parse objectIds
+                                self.updateFriendList()
+                            }
+                        })
+                        
+                    }
                 }
             }
         }
+        
     }
     
-    /* Why is this in viewDidAppear? I'm leaving it here for historical reasons - cIgAr - 08/18/16*/
+    // Update the user's friendList in the User Table with objectIds corresponding to the User's FaceBook Friends
     func updateFriendList() {
         //add graph request to update users fb_friends
         //query to find and save fb_friends
-        
         let currentUserFbFriends = PFUser.current()!["fb_friends"] as! NSArray
+        let currentUserUnmatchedList = PFUser.current()!["unmatched_list"] as! NSArray
         let query: PFQuery = PFQuery(className: "_User")
         
         query.whereKey("fb_id", containedIn: currentUserFbFriends as [AnyObject])
@@ -420,21 +431,15 @@ class FacebookFunctions {
             } else if let objects = objects {
                 PFUser.current()?.fetchInBackground(block: { (success, error) in
                     for object in objects {
-                        var containedInFriendList = false
-                        if let friendList: NSArray = PFUser.current()!["friend_list"] as? NSArray {
-                            //This was exchanged for the following in Swift3 migration -> containedInFriendList = friendList.contains {$0 as! String == object.objectId!}
-                            containedInFriendList = friendList.contains(object.objectId!)
-                        }
-                        if containedInFriendList == false {
-                            if PFUser.current()!["friend_list"] != nil {
-                                let currentFriendList = PFUser.current()!["friend_list"]
-                                PFUser.current()!["friend_list"] = currentFriendList as! Array + [object.objectId!]
-                            } else {
-                                PFUser.current()!["friend_list"] = [object.objectId!]
+                        if let friendsObjectId = object.objectId {
+                            
+                            // Do not include users the current user has unmatched
+                            if !currentUserUnmatchedList.contains(friendsObjectId) {
+                                PFUser.current()?.addUniqueObject(friendsObjectId, forKey: "friend_list")
                             }
                         }
-                        PFUser.current()?.saveInBackground()
                     }
+                    PFUser.current()?.saveInBackground()
                 })
             }
         })
