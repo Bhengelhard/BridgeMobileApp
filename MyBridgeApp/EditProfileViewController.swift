@@ -158,18 +158,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             quickUpdateTextView.layer.borderWidth = 1
             quickUpdateTextView.layer.borderColor = UIColor.black.cgColor
             quickUpdateTextView.delegate = self
-            if let quickUpdate = user["quick_update"] as? String {
-                quickUpdateTextView.text = quickUpdate
-                quickUpdatePlaceholder = false
-            } else {
-                quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
-                quickUpdatePlaceholder = true
-            }
+
             quickUpdateTextView.textColor = .black
             quickUpdateTextView.textAlignment = .center
             quickUpdateTextView.font = UIFont(name: "BentonSans-Light", size: 14)
             DisplayUtility.centerTextVerticallyInTextView(textView: quickUpdateTextView)
             quickUpdateView.addSubview(quickUpdateTextView)
+            setQuickUpdateText()
             
             quickUpdateView.frame = CGRect(x: 0, y: hexes!.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: quickUpdateTextView.frame.maxY)
             scrollView.addSubview(quickUpdateView)
@@ -186,7 +181,6 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             factsLabel.frame = CGRect(x: 0, y: 0, width: quickUpdateLabel.frame.width, height: quickUpdateLabel.frame.height)
             factsLabel.center.x = DisplayUtility.screenWidth / 2
             factsView.addSubview(factsLabel)
-            
             
             factsBackground.backgroundColor = .clear
             factsBackground.layer.cornerRadius = 13
@@ -525,6 +519,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setBusinessStatus(businessStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
@@ -544,6 +540,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setLoveStatus(loveStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
@@ -563,6 +561,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                             print("BridgeStatus save error: \(error)")
                         } else if succeeded {
                             print("BridgeStatus saved successfully")
+                            self.localData.setFriendshipStatus(friendshipStatus)
+                            self.localData.synchronize()
                         } else {
                             print("BridgeStatus did not save successfully")
                         }
@@ -611,9 +611,22 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
         }
     }
     
+    func setQuickUpdateText() {
+        if let user = PFUser.current() {
+            if let quickUpdate = user["quick_update"] as? String {
+                quickUpdateTextView.text = quickUpdate
+                quickUpdatePlaceholder = false
+            } else {
+                quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
+                quickUpdatePlaceholder = true
+            }
+        }
+    }
+    
     func writeFactsInTextView() {
         if let user = PFUser.current() {
-            factsTextView.text = ""
+            var factsText = ""
+            //factsTextView.text = ""
             var facts = [String]()
             
             if selectedFacts.contains("Age") {
@@ -665,26 +678,25 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                     facts.append("am \(religion)")
                 }
             }
-            var factsText = ""
             if facts.count > 0 {
                 for i in 0..<facts.count {
                     if i == 0 && i == facts.count - 1 {
                         factsText = "I \(facts[i])."
                     }
                     else if i == 0 {
-                        factsText = "I \(factsText) \(facts[i]), "
+                        factsText = "I \(factsText) \(facts[i]),"
                     } else if i == facts.count - 1 {
                         factsText = "\(factsText) and \(facts[i])."
                     } else {
-                        factsText = "\(factsText) \(facts[i]), "
+                        factsText = "\(factsText) \(facts[i]),"
                     }
                 }
+                factsTextView.text = factsText
             } else {
                 factsText = "Click to select from available facts and\ndisplay information."
             }
             
             factsTextView.text = factsText
-            
             
             DisplayUtility.centerTextVerticallyInTextView(textView: factsTextView)
         }
@@ -692,6 +704,13 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     
     func displayFactsEditor(_ gesture: UIGestureRecognizer) {
+        //close keyboard if opened with Facts Editor is displayed
+        if quickUpdateTextView.isFirstResponder {
+            quickUpdateTextView.resignFirstResponder()
+        } else if statusTextView.isFirstResponder {
+            statusTextView.resignFirstResponder()
+        }
+        
         changeAlphaForAllBut(mainView: factsView, superview: view, alphaInc: -0.7)
 
         UIView.animate(withDuration: 0.5, animations: {

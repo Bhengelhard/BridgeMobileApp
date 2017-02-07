@@ -227,8 +227,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         filterContentForSearchText(searchController.searchBar.text!)
     }
     func reloadMessageTable(_ notification: Notification) {
-        print("Listened at reloadMessageTable")
-        
         initializeFilterInfo()
         
         names = [String : [String]]()
@@ -262,7 +260,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.filterInfo[type]?.setTotalElements(Int(count))
                 }
                 else {
-                    print(" not alive")
+                    print("initializeFilterInfo query in MessagesViewController did not return count")
                 }
             }
         }
@@ -290,7 +288,6 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         leftBarButton.isSelected = true
     }
     func displayNoMessages() {
-        print("displayNoMessages() called")
         let labelFrame: CGRect = CGRect(x: 0,y: 0, width: 0.85*DisplayUtility.screenWidth,height: DisplayUtility.screenHeight * 0.2)
         
         noMessagesLabel.frame = labelFrame
@@ -302,10 +299,8 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             noMessagesLabel.text = "No active connections."
         } else if type == "Business" {
             noMessagesLabel.text = "No active connections for work. Be sweet and 'nect your friends to get the community buzzing!"
-            print("business enabled = false")
         } else if type == "Love" {
             noMessagesLabel.text = "No active connections for dating. Be sweet and 'nect your friends to get the community buzzing!"
-            print("love enabled = false")
         } else if type == "Friendship" {
             noMessagesLabel.text = "No active connections for friendship. Be sweet and 'nect your friends to get the community buzzing!"
         } else {
@@ -379,7 +374,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             else {
-                print(" not alive")
+                print("Messages Query to refresh the messages in the table did not find the count")
             }
         }
         
@@ -450,16 +445,19 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     var user = ""
                     var otherUser = ""
-                    if let user1_objectId = result["user_objectId1"] {
-                        if (user1_objectId as! String) == currentUser_objectId {
-                            user = "user1"
-                            otherUser = "user2"
-                        }
-                    }
-                    if let user2_objectId = result["user_objectId2"] {
-                        if (user2_objectId as! String) == currentUser_objectId {
+                    var otherUserObjectId = ""
+                    if let user1_objectId = result["user_objectId1"] as? String {
+                        if user1_objectId != currentUser_objectId {
                             user = "user2"
                             otherUser = "user1"
+                            otherUserObjectId = user1_objectId
+                        }
+                    }
+                    if let user2_objectId = result["user_objectId2"] as? String {
+                        if user2_objectId != currentUser_objectId {
+                            user = "user1"
+                            otherUser = "user2"
+                            otherUserObjectId = user2_objectId
                         }
                     }
                     
@@ -486,7 +484,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
                                             color = .black
                                         }
                                         if let status = result["\(otherUser)_bridge_status"] as? String {
-                                            let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURLString, name: name, type: type, color: color, dot: dot, status: status)
+                                            let newMatch = NewMatch(user: user, objectId: objectId!, profilePicURL: profilePicURLString, name: name, type: type, color: color, dot: dot, status: status, otherUserObjectId: otherUserObjectId)
                                             let downloader = Downloader()
                                             if let profilePicURL = URL(string: profilePicURLString) {
                                                 downloader.imageFromURL(URL: profilePicURL, callBack: { (image: UIImage) in

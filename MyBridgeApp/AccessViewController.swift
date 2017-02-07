@@ -104,9 +104,10 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
         
         PFUser.current()?.fetchInBackground(block: { (object, error) in
             
-            //Checking if user has Signed Up
+            //Checking if user has Signed Up or ProvidedAccessCode
             let localData = LocalData()
             let hasSignedUp:Bool = localData.getHasSignedUp() ?? false
+            let hasProvidedAccessCode: Bool = localData.getHasProvidedAccessCode() ?? false
             
             if let user = object as? PFUser {
                 //If the user has no profile pictures saved, then log the user out so a graph request can be performed
@@ -128,27 +129,33 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
             
             //Updating the user's friends
             self.updateUser()
-            if (localData.getUsername() != nil) && ((PFUser.current()!.objectId) != nil){ //remember to change this back to username
-                LocalStorageUtility().getUserFriends()
-                //LocalStorageUtility().getMainProfilePicture()
+            
+            //Checking if user is already logged in
+            if (localData.getUsername() != nil) && ((PFUser.current()!.objectId) != nil){                 LocalStorageUtility().getUserFriends()
                 
-                
-                //User has SignedUp before
+                // If User has already signed up, go directly to BridgeViewController
                 if hasSignedUp {
                     self.performSegue(withIdentifier: "showBridgeViewController", sender: self)
-                } else {
+                }
+                // If User has already provided an access code, skip entering access code and allow user to log in
+                else if hasProvidedAccessCode {
+                    self.displayLoginWithFacebook()
+                }
+                // If User has not signed up or provided an access code, then show access text view so they can start from the beginning of the process
+                else {
                     self.displayAccessTextView()
                 }
             }
-            else{
-                if hasSignedUp {
+                
+            // User is not logged in yet
+            else {
+                // Checking if user has already provided an access code
+                if hasProvidedAccessCode {
                     self.displayLoginWithFacebook()
                 } else {
                     self.displayAccessTextView()
                 }
-                
             }
-            
         })
     }
     
@@ -218,19 +225,19 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     
     func displayLoginWithFacebook() {
         let fbLoginButton = UIButton()
-        fbLoginButton.frame = CGRect(x: 0, y: 0.8748*DisplayUtility.screenHeight, width: 0.54125*DisplayUtility.screenWidth, height: 0.04093*DisplayUtility.screenHeight)
+        fbLoginButton.frame = CGRect(x: 0, y: 0.8748*DisplayUtility.screenHeight, width: 0.6579*DisplayUtility.screenWidth, height: 0.049*DisplayUtility.screenHeight)
         fbLoginButton.center.x = view.center.x
         fbLoginButton.setTitle("LOGIN WITH FACEBOOK", for: .normal)
         fbLoginButton.setTitleColor(UIColor.white, for: .normal)
         fbLoginButton.setTitleColor(DisplayUtility.gradientColor(size: (fbLoginButton.titleLabel?.frame.size)!), for: .highlighted)
-        fbLoginButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 12)
+        fbLoginButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 16)
         fbLoginButton.backgroundColor = UIColor(red: 66.0/255.0, green: 103.0/255.0, blue: 178.0/255.0, alpha: 1)
         fbLoginButton.layer.cornerRadius = 8
         //fbLoginButton.showsTouchWhenHighlighted = false
         fbLoginButton.addTarget(self, action: #selector(fbLoginTapped(_:)), for: .touchUpInside)
         view.addSubview(fbLoginButton)
         
-        let noPostingLabel = UILabel(frame: CGRect(x: 0, y: 0.93*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.02*DisplayUtility.screenHeight))
+        let noPostingLabel = UILabel(frame: CGRect(x: 0, y: 0.93*DisplayUtility.screenHeight, width: 0.9*DisplayUtility.screenWidth, height: 0.024*DisplayUtility.screenHeight))
         noPostingLabel.center.x = view.center.x
         noPostingLabel.textAlignment = NSTextAlignment.center
         noPostingLabel.text = "No need to get sour! We never post to Facebook."
@@ -370,14 +377,11 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     }
 
     func storeUserLocationOnParse(_ notification: Notification) {
-        print("storeUserLocationOnParse - \((notification as NSNotification).userInfo)")
         let geoPoint = (notification as NSNotification).userInfo!["geoPoint"] as? PFGeoPoint
         if let geoPoint = geoPoint {
             self.geoPoint = geoPoint
-            print(geoPoint)
         } else {
             //self.geoPoint = PFGeoPoint.init(latitude: 0.0, longitude: 0.0)
-            print("initialize PFGeoPoint at 0,0")
         }
     }
     
@@ -401,28 +405,28 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Setting the delegate
+        // Setting the delegate
         accessTextView.delegate = self
         
-        //Creating observer for when thekeyboard shows
+        // Creating observer for when thekeyboard shows
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 
-        //Displaying the backgroundView
+        // Displaying the backgroundView
         backgroundView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         backgroundView.image = #imageLiteral(resourceName: "Access_Background")
         view.addSubview(backgroundView)
         
-        //Listen for a notification from LoadPageViewController when it has got the user's location. cIgaR 08/18/16
+        // Listen for a notification from LoadPageViewController when it has got the user's location. cIgaR 08/18/16
         NotificationCenter.default.addObserver(self, selector: #selector(self.storeUserLocationOnParse), name: NSNotification.Name(rawValue: "storeUserLocationOnParse"), object: nil)
         
-        //Updating the location of the user and asking for access if the app has not asked yet
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
+//        // Updating the location of the user and asking for access if the app has not asked yet
+//        locationManager.delegate = self
+//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//        locationManager.requestWhenInUseAuthorization()
+//        locationManager.requestAlwaysAuthorization()
+//        locationManager.startUpdatingLocation()
         
-        //Check if the current user has signed in to decide what to display
+        // Check if the current user has signed in to decide what to display
         authenticateUser()
         
     }

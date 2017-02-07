@@ -24,7 +24,7 @@ class FacebookFunctions {
         let localData = LocalData()
         
         //setting first Time Swiping Right to true so the user will be notified of what swiping does for their first swipe
-        localData.setFirstTimeSwipingRight(true)
+        localData.setFirstTimeOnBridgeVC(true)
         
         //setting first Time SwipingRight to true so the user will be notified of what swiping does for their first swipe
         localData.setFirstTimeSwipingLeft(true)
@@ -263,7 +263,14 @@ class FacebookFunctions {
                             if hasSignedUp == true {
                                 vc.performSegue(withIdentifier: "showBridgeViewController", sender: self)
                             } else {
-                               vc.performSegue(withIdentifier: "showSignUp", sender: self)
+                            
+                                //If the user has already provided an access code, then do not display it again
+                                let hasProvidedAccessCode = localData.getHasProvidedAccessCode() ?? false
+                                if !hasProvidedAccessCode {
+                                    localData.setHasProvidedAccessCode(true)
+                                    localData.synchronize()
+                                }
+                                vc.performSegue(withIdentifier: "showSignUp", sender: self)
                             }
                             
                         })

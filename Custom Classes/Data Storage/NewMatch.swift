@@ -11,6 +11,7 @@ import UIKit
 
 class NewMatch: NSObject {
     var user: String
+    /// objectId of the related row in the BridgePairing table
     var objectId: String
     var profilePicURL: String
     var profilePic: UIImage?
@@ -24,8 +25,10 @@ class NewMatch: NSObject {
     var connecterPicURL: String?
     var connecterPic: UIImage?
     var reasonForConnection: String?
+    /// ObjectId of the user that is not the current User in the corresponding row of the BridgePairing Table
+    var otherUserObjectId: String
     
-    init(user: String, objectId: String, profilePicURL: String, name: String, type: String, color: UIColor, dot: Bool, status: String) {
+    init(user: String, objectId: String, profilePicURL: String, name: String, type: String, color: UIColor, dot: Bool, status: String, otherUserObjectId: String) {
         self.user = user
         self.objectId = objectId
         self.profilePicURL = profilePicURL
@@ -34,6 +37,7 @@ class NewMatch: NSObject {
         self.color = color
         self.dot = dot
         self.status = status
+        self.otherUserObjectId = otherUserObjectId
     }
     
     func setConnecterInfo(objectId: String?, name: String?, profilePicURL: String?, reasonForConnection: String?) {

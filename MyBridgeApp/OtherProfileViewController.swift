@@ -61,6 +61,9 @@ class OtherProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        print("otherProfileVC Did Load")
+        
         // set background color to white
         view.backgroundColor = .white
         
@@ -144,7 +147,6 @@ class OtherProfileViewController: UIViewController {
             
             
             // MARK: Scroll View
-            
             // make scroll view transparent
             scrollView.backgroundColor = .clear
             
@@ -162,6 +164,21 @@ class OtherProfileViewController: UIViewController {
             // add images for hexes
             if let profilePics = user["profile_pictures"] as? [PFFile] {
                 hexes!.addHexImages(from: profilePics, startingAt: 0)
+            }
+            else {
+                //If the user has not set any profile pictures, then check if the user has something saved in profile_picture_url to set
+                if let urlString = user["profile_picture_url"] as? String {
+                    if let URL = URL(string: urlString) {
+                        let downloader = Downloader()
+                        downloader.imageFromURL(URL: URL, callBack: { (image) in
+                            if let hexes = self.hexes {
+                                hexes.addImage(hexImage: image)
+                            }
+                        })
+                    }
+                    
+                }
+
             }
             
             
@@ -364,15 +381,14 @@ class OtherProfileViewController: UIViewController {
                             factsText = "I \(facts[i])."
                         }
                         else if i == 0 {
-                            factsText = "I \(factsText) \(facts[i]), "
+                            factsText = "I \(facts[i]),"
                         } else if i == facts.count - 1 {
                             factsText = "\(factsText) and \(facts[i])."
                         } else {
-                            factsText = "\(factsText) \(facts[i]), "
+                            factsText = "\(factsText) \(facts[i]),"
                         }
                     }
                     factsTextLabel.text = factsText
-                    
                     return true
                 }
             }
