@@ -46,7 +46,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     
     // data
     var greeting = "Hi,"
-    var greetings = ["Hi,", "What's Up?", "Hello there,"]
+    var greetings = ["Hi,", "What's up?", "Let's 'nect!"]
     var selectedFacts = [String]()
     var originallyInterestedBusiness: Bool?
     var originallyInterestedLove: Bool?
@@ -143,7 +143,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             // MARK: Quick Update
             
             let quickUpdateLabel = UILabel()
-            quickUpdateLabel.text = "QUICK-UPDATE"
+            quickUpdateLabel.text = "QUICK UPDATE"
             quickUpdateLabel.textColor = .black
             quickUpdateLabel.textAlignment = .center
             quickUpdateLabel.font = UIFont(name: "BentonSans-Light", size: 12)
@@ -353,7 +353,7 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
             // MARK: Statuses
             
             let visibilityLabel = UILabel()
-            visibilityLabel.text = "SHOW MY PROFILE FOR:"
+            visibilityLabel.text = "SHOW MY PROFILE FOR"
             visibilityLabel.textColor = .black
             visibilityLabel.textAlignment = .center
             visibilityLabel.font = UIFont(name: "BentonSans-Light", size: 12)
@@ -500,25 +500,8 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 }
             })
             
-            // update status of current type based on current text in text view
-            if currentStatusType == "Business" {
-                if statusPlaceholder || statusTextView.text.isEmpty { // no status
-                    businessStatus = nil
-                } else {
-                    businessStatus = statusTextView.text
-                }
-            } else if currentStatusType == "Love" {
-                if statusPlaceholder || statusTextView.text.isEmpty { // no status
-                    loveStatus = nil
-                } else {
-                    loveStatus = statusTextView.text
-                }
-            } else if currentStatusType == "Friendship" {
-                if statusPlaceholder || statusTextView.text.isEmpty { // no status
-                    friendshipStatus = nil
-                } else {
-                    friendshipStatus = statusTextView.text
-                }
+            if let statusButtons = statusButtons {
+                statusButtons.unselectAllStatusButtons()
             }
             
             updateMyProfileStatuses()

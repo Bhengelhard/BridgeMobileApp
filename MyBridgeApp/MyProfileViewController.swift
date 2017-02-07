@@ -129,8 +129,24 @@ class MyProfileViewController: UIViewController {
             scrollView.addSubview(hexes!)
             
             // add images for hexes
-            if let profilePics = user["profile_pictures"] as? [PFFile] {
-                hexes!.addHexImages(from: profilePics, startingAt: 0)
+            if let profilePicFiles = user["profile_pictures"] as? [PFFile] {
+                let croppedProfilePicFiles = user["cropped_profile_pictures"] as? [PFFile?]
+                var hexImageFiles = [PFFile]()
+                for i in 0..<profilePicFiles.count {
+                    var usedCropped = false
+                    if let croppedProfilePicFiles = croppedProfilePicFiles { // cropped pics non-nil
+                        if croppedProfilePicFiles.count > i { // cropped pics contains enough pics
+                            if let croppedProfilePicFile = croppedProfilePicFiles[i] { // corresponding crop pic non-nil
+                                hexImageFiles.append(croppedProfilePicFile)
+                                usedCropped = true
+                            }
+                        }
+                    }
+                    if !usedCropped {
+                        hexImageFiles.append(profilePicFiles[i])
+                    }
+                }
+                hexes!.addHexImages(from: hexImageFiles, startingAt: 0)
             }
             
             numNectedLastWeekLabel.textColor = .black
@@ -250,7 +266,7 @@ class MyProfileViewController: UIViewController {
     //Send user to the editProfileViewController so they can edit their profile
     func editProfileButtonTapped(_ sender: UIButton) {
         let editProfileVC = EditProfileViewController(myProfileVC: self)
-        present(editProfileVC, animated: false, completion: nil)
+        present(editProfileVC, animated: true, completion: nil)
         unselectAllStatusButtons()
     }
     

@@ -10,7 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import Parse
 
-class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, FacebookImagePickerControllerDelegate, UINavigationControllerDelegate, CropImageViewControllerDelegate {
     
     let originalHexFrames: [CGRect]
     var images: [UIImage]
@@ -24,9 +24,11 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
     var singlePicVCs = [UIViewController]()
     let editButtonsView = UIView()
     let uploadMenu = UIView()
-    let uploadButton = UIButton()
-    let defaultButton = UIButton()
-    let deleteButton = UIButton()
+    var cropButton = UIButton()
+    var uploadButton = UIButton()
+    var defaultButton = UIButton()
+    var deleteButton = UIButton()
+    let fbImagePicker = FacebookImagePickerController()
     let imagePicker = UIImagePickerController()
     
     init(images: [UIImage], originalHexFrames: [CGRect], hexViews: [HexagonView], startingIndex: Int, shouldShowEditButtons: Bool, parentVC: UIViewController) {
@@ -49,20 +51,17 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         
         self.allPicsVC = ProfilePicturesViewController(vcs: singlePicVCs, initialVC: singlePicVCs[startingIndex])
         
-        super.init(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
+        super.init(frame: parentVC.view.bounds)
         
         backgroundColor = .white
         
+        fbImagePicker.delegate = self
         imagePicker.delegate = self
         
         // add gesture recognizer to exit
         let exitGR = UITapGestureRecognizer(target: self, action: #selector(exit(_:)))
         addGestureRecognizer(exitGR)
-        
-        // add gesture recognizer to prevent exit
-        let doNothingGR = UITapGestureRecognizer(target: self, action: nil)
-        allPicsVC.view.addGestureRecognizer(doNothingGR)
-        
+                
         resetImagesForVCs()
         
         allPicsVC.view.alpha = 0
@@ -81,55 +80,62 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         let buttonWidth = 0.33*DisplayUtility.screenWidth
         let buttonHeight = 0.07*DisplayUtility.screenWidth
         
-        let spaceBetweenButtons = 0.03*DisplayUtility.screenHeight
+        let spaceBetweenButtons = 0.015*DisplayUtility.screenHeight
         var buttonY: CGFloat = 0.0
         
-        uploadButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        // create crop button
+        let cropButtonFrame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        cropButton = DisplayUtility.plainButton(frame: cropButtonFrame, text: "CROP", fontSize: 13)
+        cropButton.center.x = DisplayUtility.screenWidth / 2
+        editButtonsView.addSubview(cropButton)
+        
+        // add target for crop button
+        cropButton.addTarget(self, action: #selector(cropButtonPressed(_:)), for: .touchUpInside)
+        
+        // update buttonY
+        buttonY = buttonY + buttonHeight + spaceBetweenButtons
+        
+        
+        // create upload button
+        let uploadButtonFrame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        uploadButton = DisplayUtility.plainButton(frame: uploadButtonFrame, text: "UPLOAD", fontSize: 13)
         uploadButton.center.x = DisplayUtility.screenWidth / 2
-        uploadButton.contentVerticalAlignment = .fill
-        uploadButton.setTitle("UPLOAD", for: .normal)
-        uploadButton.setTitleColor(.black, for: .normal)
-        uploadButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-        uploadButton.titleLabel?.textAlignment = .center
-        uploadButton.layer.borderWidth = 1
-        uploadButton.layer.borderColor = UIColor.gray.cgColor
-        uploadButton.layer.cornerRadius = 0.3*uploadButton.frame.height
-        uploadButton.addTarget(self, action: #selector(uploadButtonPressed(_:)), for: .touchUpInside)
         editButtonsView.addSubview(uploadButton)
         
+        // add target for upload button
+        uploadButton.addTarget(self, action: #selector(uploadButtonPressed(_:)), for: .touchUpInside)
+        
+        // update buttonY
         buttonY = buttonY + buttonHeight + spaceBetweenButtons
-    
-        defaultButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        
+        
+        // create default button
+        let defaultButtonFrame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        defaultButton = DisplayUtility.plainButton(frame: defaultButtonFrame, text: "SET DEFAULT", fontSize: 13)
         defaultButton.center.x = DisplayUtility.screenWidth / 2
-        defaultButton.contentVerticalAlignment = .fill
-        defaultButton.setTitle("SET DEFAULT", for: .normal)
-        defaultButton.setTitleColor(.black, for: .normal)
-        defaultButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-        defaultButton.titleLabel?.textAlignment = .center
-        defaultButton.layer.borderWidth = 1
-        defaultButton.layer.borderColor = UIColor.gray.cgColor
-        defaultButton.layer.cornerRadius = 0.3*defaultButton.frame.height
-        defaultButton.addTarget(self, action: #selector(defaultButtonPressed(_:)), for: .touchUpInside)
         editButtonsView.addSubview(defaultButton)
         
+        // add target for default button
+        defaultButton.addTarget(self, action: #selector(defaultButtonPressed(_:)), for: .touchUpInside)
+        
+        // update buttonY
         buttonY = buttonY + buttonHeight + spaceBetweenButtons
-    
-        deleteButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        
+        
+        // create delete button
+        let deleteButtonFrame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: buttonHeight)
+        deleteButton = DisplayUtility.plainButton(frame: deleteButtonFrame, text: "DELETE", fontSize: 13)
         deleteButton.center.x = DisplayUtility.screenWidth / 2
-        deleteButton.contentVerticalAlignment = .fill
-        deleteButton.setTitle("DELETE", for: .normal)
-        deleteButton.setTitleColor(.black, for: .normal)
-        deleteButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-        deleteButton.titleLabel?.textAlignment = .center
-        deleteButton.layer.borderWidth = 1
-        deleteButton.layer.borderColor = UIColor.gray.cgColor
-        deleteButton.layer.cornerRadius = 0.3*deleteButton.frame.height
-        deleteButton.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
         editButtonsView.addSubview(deleteButton)
         
+        // add target for delete button
+        deleteButton.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
+        
+        // update buttonY
         buttonY = buttonY + buttonHeight + spaceBetweenButtons
         
-        editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.045*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: buttonY)
+        
+        editButtonsView.frame = CGRect(x: 0, y: allPicsVC.view.frame.maxY + 0.03*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: buttonY)
         editButtonsView.alpha = 0
         addSubview(editButtonsView)
     }
@@ -148,8 +154,6 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             picView.clipsToBounds = true
             picView.frame = CGRect(x: 0, y: allPicsVC.pageControl.frame.maxY, width: picFrame.width, height: picFrame.height)
             picView.image = image
-            picView.layer.borderWidth = 1
-            picView.layer.borderColor = UIColor.black.cgColor
             singlePicVC.view.addSubview(picView)
         }
         allPicsVC.vcs = singlePicVCs
@@ -174,8 +178,6 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         
         let rectView = UIImageView()
         rectView.frame = hexView.frame
-        rectView.layer.borderWidth = 1
-        rectView.layer.borderColor = UIColor.black.cgColor
         rectView.contentMode = .scaleAspectFill
         rectView.clipsToBounds = true
         rectView.image = images[startingIndex]
@@ -207,8 +209,6 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         
         let rectView = UIImageView()
         rectView.frame = hexView.frame
-        rectView.layer.borderWidth = 1
-        rectView.layer.borderColor = UIColor.black.cgColor
         rectView.contentMode = .scaleAspectFill
         rectView.clipsToBounds = true
         rectView.image = images[index]
@@ -238,7 +238,7 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
             if i < images.count {
                 hexViews[i].setBackgroundImage(image: images[i])
             } else {
-                hexViews[i].setDefaultBackgorund()
+                hexViews[i].setDefaultBackground()
             }
         }
         self.animateOut { (finished) in
@@ -246,6 +246,93 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
                 self.removeFromSuperview()
             }
         }
+    }
+    
+    func cropButtonPressed(_ gesture: UIGestureRecognizer) {
+        var croppedImageFrame: CGRect?
+        if let user = PFUser.current() {
+            let index = allPicsVC.pageControl.currentPage
+            if let croppedImageFrames = user["cropped_image_frames"] as? [[String: CGFloat]?] {
+                if croppedImageFrames.count > index {
+                    if let croppedImageFrameDict = croppedImageFrames[index] {
+                        if let x = croppedImageFrameDict["X"], let y = croppedImageFrameDict["Y"],
+                            let width = croppedImageFrameDict["Width"], let height = croppedImageFrameDict["Height"] {
+                            croppedImageFrame = CGRect(x: x, y: y, width: width, height: height)
+                        }
+                    }
+                }
+            }
+            if let profilePictureFiles = user["profile_pictures"] as? [PFFile] {
+                let profilePictureFile = profilePictureFiles[index]
+                profilePictureFile.getDataInBackground(block: { (data, error) in
+                    if let error = error {
+                        print("error - getting propic data - \(error)")
+                    } else if let data = data {
+                        if let image = UIImage(data: data) {
+                            let cropImageVC = CropImageViewController(image: image, croppedImageFrame: croppedImageFrame)
+                            cropImageVC.delegate = self
+                            self.parentVC.present(cropImageVC, animated: true, completion: nil)
+                        }
+                    }
+                })
+            }
+        }
+        /*
+        let cropImageVC = CropImageViewController(image: images[allPicsVC.pageControl.currentPage], croppedImageFrame: croppedImageFrame)
+        cropImageVC.delegate = self
+        parentVC.present(cropImageVC, animated: true, completion: nil)
+ */
+    }
+    
+    func cropImageViewController(cropImageViewController: CropImageViewController, didCropImageTo croppedImage: UIImage, withCroppedImageFrame croppedImageFrame: CGRect) {
+        let index = allPicsVC.pageControl.currentPage
+
+        if let user = PFUser.current() {
+            // save cropped picture to user
+            if let data = UIImageJPEGRepresentation(croppedImage, 1.0) {
+                if let croppedImageFile = PFFile(data: data) {
+                    var croppedImages: [PFFile?]
+                    if let croppedProfilePictures = user["cropped_profile_pictures"] as? [PFFile?] {
+                        croppedImages = croppedProfilePictures
+                    } else {
+                        croppedImages = [PFFile?]()
+                    }
+                    while croppedImages.count <= index {
+                        croppedImages.append(nil)
+                    }
+                    croppedImages[index] = croppedImageFile
+                    user["cropped_profile_pictures"] = croppedImages
+                }
+            }
+            
+            // save frame of crop box to user
+            if let croppedImageFrameDict = croppedImageFrame.dictionaryRepresentation as? [String: CGFloat] {
+                var croppedImageFrames: [[String: CGFloat]?]
+                if let userCroppedImageFrames = user["cropped_image_frames"] as? [[String: CGFloat]?] {
+                    croppedImageFrames = userCroppedImageFrames
+                } else {
+                    croppedImageFrames = [[String:CGFloat]?]()
+                }
+                while croppedImageFrames.count <= index {
+                    croppedImageFrames.append(nil)
+                }
+                croppedImageFrames[index] = croppedImageFrameDict
+                user["cropped_image_frames"] = croppedImageFrames
+            }
+            
+            user.saveInBackground(block: { (succeeded, error) in
+                if let error = error {
+                    print("error - saving user's cropped pic - \(error)")
+                } else if succeeded {
+                    print("successfully saved user's cropped pic")
+                } else {
+                    print("did not successfully save user's cropped pic")
+                }
+            })
+        }
+        
+        images[index] = croppedImage
+        resetImagesForVCs()
     }
     
     func uploadButtonPressed(_ button: UIButton) {
@@ -261,102 +348,77 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, UINavigation
         let uploadButtonWidth = 0.66*DisplayUtility.screenWidth
         let uploadButtonHeight = 0.14*DisplayUtility.screenWidth
         
-        // layout upload from Facebook button
-        let uploadFromFBButton = UIButton()
-        uploadFromFBButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
-        uploadFromFBButton.center.x = uploadMenu.frame.width / 2
-        uploadFromFBButton.center.y = 0.4*uploadMenu.frame.height
-        uploadFromFBButton.setTitle("UPLOAD FROM FACEBOOK", for: .normal)
-        uploadFromFBButton.setTitleColor(.black, for: .normal)
-        uploadFromFBButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-        uploadFromFBButton.titleLabel?.textAlignment = .center
-        uploadFromFBButton.layer.borderWidth = 1
-        uploadFromFBButton.layer.borderColor = UIColor.gray.cgColor
-        uploadFromFBButton.layer.cornerRadius = 0.3*uploadFromFBButton.frame.height
         
+        // create upload from Facebook button
+        let uploadFBButtonFrame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
+        let uploadFBButton = DisplayUtility.plainButton(frame: uploadFBButtonFrame, text: "UPLOAD FROM FACEBOOK", fontSize: 13)
+        uploadFBButton.center = CGPoint(x: 0.5*uploadMenu.frame.width, y: 0.4*uploadMenu.frame.height)
+        uploadMenu.addSubview(uploadFBButton)
+
         // add target to upload from Facebook button
-        uploadFromFBButton.addTarget(self, action: #selector(uploadFromFB(_:)), for: .touchUpInside)
+        uploadFBButton.addTarget(self, action: #selector(uploadFromFB(_:)), for: .touchUpInside)
         
-        uploadMenu.addSubview(uploadFromFBButton)
         
-        // layout upload from camera roll button
-        let uploadFromCameraRollButton = UIButton()
-        uploadFromCameraRollButton.frame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
-        uploadFromCameraRollButton.center.x = uploadMenu.frame.width / 2
-        uploadFromCameraRollButton.center.y = 0.6*uploadMenu.frame.height
-        uploadFromCameraRollButton.setTitle("UPLOAD FROM CAMERA ROLL", for: .normal)
-        uploadFromCameraRollButton.setTitleColor(.black, for: .normal)
-        uploadFromCameraRollButton.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 13)
-        uploadFromCameraRollButton.titleLabel?.textAlignment = .center
-        uploadFromCameraRollButton.layer.borderWidth = 1
-        uploadFromCameraRollButton.layer.borderColor = UIColor.gray.cgColor
-        uploadFromCameraRollButton.layer.cornerRadius = 0.3*uploadFromCameraRollButton.frame.height
-        uploadMenu.addSubview(uploadFromCameraRollButton)
+        // create upload from camera roll button
+        let uploadCameraRollButtonFrame = CGRect(x: 0, y: 0, width: uploadButtonWidth, height: uploadButtonHeight)
+        let uploadCameraRollButton = DisplayUtility.plainButton(frame: uploadCameraRollButtonFrame, text: "UPLOAD FROM CAMERA ROLL", fontSize: 13)
+        uploadCameraRollButton.center = CGPoint(x: 0.5*uploadMenu.frame.width, y: 0.6*uploadMenu.frame.height)
+        uploadMenu.addSubview(uploadCameraRollButton)
         
         // add target to upload from camera roll button
-        uploadFromCameraRollButton.addTarget(self, action: #selector(uploadFromCameraRoll(_:)), for: .touchUpInside)
+        uploadCameraRollButton.addTarget(self, action: #selector(uploadFromCameraRoll(_:)), for: .touchUpInside)
         
-        UIView.animate(withDuration: 0.5) { 
+        UIView.animate(withDuration: 0.5) {
             self.uploadMenu.frame = self.bounds
         }
     }
     
-    func uploadFromFB(_ button: UIButton) {
-        uploadMenu.removeFromSuperview()
-        
-        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name"])
-        graphRequest!.start{ (_, result, error) -> Void in
-            if error != nil {
-                print(error ?? "error in graphRequest of uploadFromFB within ProfilePicturesView")
-
-            }
-            else if let result = result as? [String: AnyObject]{
-                let userId = result["id"]! as! String
-                let facebookProfilePictureUrl = "https://graph.facebook.com/" + userId + "/picture?type=large"
-                if let fbpicUrl = URL(string: facebookProfilePictureUrl) {
-                    if let data = try? Data(contentsOf: fbpicUrl) {
-                        DispatchQueue.main.async(execute: {
-                            let index = self.allPicsVC.pageControl.currentPage
-                            var nextPageNum = index
-                            if let image = UIImage(data: data) {
-                                if self.images.count == 4 {
-                                    self.images[index] = image
-                                } else {
-                                    self.images.append(image)
-                                    nextPageNum = self.images.count-1
-                                }
-                                self.resetImagesForVCs()
-                            }
-                            if let user = PFUser.current() {
-                                if let picFile = PFFile(data: data) {
-                                    if var profilePictures = user["profile_pictures"] as? [PFFile] {
-                                        if profilePictures.count == 4 {
-                                            profilePictures[index] = picFile
-                                        } else {
-                                            profilePictures.append(picFile)
-                                        }
-                                        user["profile_pictures"] = profilePictures
-                                        user.saveInBackground()
-                                    }
-                                }
-                            }
-                            self.allPicsVC.profilePicturesDelegate?.profilePicturesViewController(self.allPicsVC, didUpdatePageCount: self.images.count)
-                            self.allPicsVC.goToPage(index: nextPageNum)
-                        })
-                    }
-                }
-            }
-        }
-    }
-    
     func hideUploadMenu(_ gesture: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.5, animations: { 
+        UIView.animate(withDuration: 0.5, animations: {
             self.uploadMenu.frame = CGRect(x: 0, y: DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight)
         }) { (finished) in
             if finished {
                 self.uploadMenu.removeFromSuperview()
             }
         }
+    }
+    
+    func uploadFromFB(_ button: UIButton) {
+        parentVC.present(fbImagePicker, animated: true, completion: nil)
+    }
+    
+    // update the UIImageView once an image has been picked
+    func fbImagePickerController(_ picker: FacebookImagePickerController, didPickImage image: UIImage) {
+        uploadMenu.removeFromSuperview()
+        
+        let index = self.allPicsVC.pageControl.currentPage
+        var nextPageNum = index
+        if self.images.count == 4 {
+            self.images[index] = image
+        } else {
+            self.images.append(image)
+            nextPageNum = self.images.count-1
+        }
+        self.resetImagesForVCs()
+        if let data = UIImageJPEGRepresentation(image, 1.0) {
+            if let user = PFUser.current() {
+                if let picFile = PFFile(data: data) {
+                    if var profilePictures = user["profile_pictures"] as? [PFFile] {
+                        if profilePictures.count == 4 {
+                            profilePictures[index] = picFile
+                        } else {
+                            profilePictures.append(picFile)
+                        }
+                        user["profile_pictures"] = profilePictures
+                        user.saveInBackground()
+                    }
+                }
+            }
+        }
+        self.allPicsVC.profilePicturesDelegate?.profilePicturesViewController(self.allPicsVC, didUpdatePageCount: self.images.count)
+        self.allPicsVC.goToPage(index: nextPageNum)
+        
+        parentVC.dismiss(animated: true, completion: nil)
     }
     
     func uploadFromCameraRoll(_ button: UIButton) {
