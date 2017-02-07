@@ -368,7 +368,6 @@ class ProfilePicturesView: UIView, UIImagePickerControllerDelegate, FacebookImag
         // add target to upload from camera roll button
         uploadCameraRollButton.addTarget(self, action: #selector(uploadFromCameraRoll(_:)), for: .touchUpInside)
         
-        
         UIView.animate(withDuration: 0.5) {
             self.uploadMenu.frame = self.bounds
         }

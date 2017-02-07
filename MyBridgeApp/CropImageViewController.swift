@@ -314,7 +314,7 @@ class CropImageViewController: UIViewController {
                     let croppedImage = UIImage(cgImage: croppedImageRef)
                     let bigImageView = UIImageView()
                     bigImageView.image = croppedImage
-                    bigImageView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth)
+                    bigImageView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth / ProfileHexagons.hexWToHRatio)
                     view.addSubview(bigImageView)
                     UIView.animate(withDuration: 3.0) {
                         bigImageView.alpha = 0
