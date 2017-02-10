@@ -112,7 +112,7 @@ class OtherProfileViewController: UIViewController {
             reportIcon.frame.size = CGSize(width: reportIconWidth, height: reportIconHeight)
             
             if let id = user.objectId, let name = user["name"] as? String {
-                let reportMenu = ReportUserMenu(parentVC: self, superView: view, userId: id, userName: name)
+                reportMenu = ReportUserMenu(parentVC: self, superView: view, userId: id, userName: name)
             }
             
             // set text for greeting label
@@ -164,7 +164,12 @@ class OtherProfileViewController: UIViewController {
             scrollView.backgroundColor = .clear
             
             // place scroll view below navigation bar
-            scrollView.frame = CGRect(x: 0, y: navBar!.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - navBar!.frame.maxY)
+            if let navBar = self.navBar {
+                scrollView.frame = CGRect(x: 0, y: navBar.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - navBar.frame.maxY)
+            } else {
+                
+            }
+            
             view.addSubview(scrollView)
             
             

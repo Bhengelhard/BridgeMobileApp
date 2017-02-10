@@ -33,6 +33,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     
     //getting information on which viewController the user was on prior to this one
     var seguedFrom = ""
+    var otherUserObjectId = ""
     var messageId = String() {
         didSet {
             updateProfilePictureInNavBar()
@@ -621,6 +622,13 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
+    /// When the other user's profile picture is tapped, display the other user's profile
+    func otherUserProfilePictureTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        print("gesture recognized")
+        let profileVC = OtherProfileViewController(userId: otherUserObjectId)
+        self.present(profileVC, animated: false, completion: nil)
+    }
+    
     func displayNavigationBar(){
         
         let profilePictureImageViewWidth = 0.1684*DisplayUtility.screenWidth
@@ -644,6 +652,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         navBar.addSubview(profilePictureImageView)
         
         updateProfilePictureInNavBar()
+        
+        // Gesture recognizer to open the otherUser's profile when the navBar is tapped
+        navBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(otherUserProfilePictureTapped(_:))))
+
         
         let leftBarButtonImageView = UIImageView()
         leftBarButtonImageView.image = UIImage(named: "Left_Arrow")
@@ -694,6 +706,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                         let downloader = Downloader()
                         downloader.imageFromURL(URL: url, imageView: self.profilePictureImageView, callBack: nil)
                     }
+                }
+                
+                // Getting the otherUserObjectId
+                if let id = message["\(user)_objectId"] as? String {
+                    self.otherUserObjectId = id
                 }
             }
             
