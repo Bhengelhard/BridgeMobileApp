@@ -66,6 +66,7 @@
 		9021CC471E3A541000720260 /* ProfileHexagons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9021CC461E3A541000720260 /* ProfileHexagons.swift */; };
 		9021CC491E3A548600720260 /* ProfileStatusButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9021CC481E3A548600720260 /* ProfileStatusButtons.swift */; };
 		9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9026A0671DDF83F1007CE4D9 /* NewMatch.swift */; };
+		9028FA3E1E4D2CC7002CC80F /* ReportUserMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9028FA3D1E4D2CC7002CC80F /* ReportUserMenu.swift */; };
 		9032B4541E311B0600136408 /* ProfilePicturesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9032B4531E311B0600136408 /* ProfilePicturesView.swift */; };
 		9032B4561E31249C00136408 /* OtherProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9032B4551E31249C00136408 /* OtherProfileViewController.swift */; };
 		903811CE1E01E75E0021D81A /* TutorialsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903811CD1E01E75E0021D81A /* TutorialsViewController.swift */; };
@@ -164,6 +165,7 @@
 		9021CC461E3A541000720260 /* ProfileHexagons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHexagons.swift; sourceTree = "<group>"; };
 		9021CC481E3A548600720260 /* ProfileStatusButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileStatusButtons.swift; sourceTree = "<group>"; };
 		9026A0671DDF83F1007CE4D9 /* NewMatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatch.swift; path = "Custom Classes/Data Storage/NewMatch.swift"; sourceTree = "<group>"; };
+		9028FA3D1E4D2CC7002CC80F /* ReportUserMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportUserMenu.swift; path = "Custom Classes/Custom Views/ReportUserMenu.swift"; sourceTree = "<group>"; };
 		9032B4531E311B0600136408 /* ProfilePicturesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfilePicturesView.swift; path = "Custom Classes/Custom Views/ProfilePicturesView.swift"; sourceTree = "<group>"; };
 		9032B4551E31249C00136408 /* OtherProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OtherProfileViewController.swift; path = MyBridgeApp/OtherProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		903811CD1E01E75E0021D81A /* TutorialsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialsViewController.swift; path = MyBridgeApp/TutorialsViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -257,6 +259,7 @@
 				90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */,
 				9032B4531E311B0600136408 /* ProfilePicturesView.swift */,
 				9021CC431E3A539D00720260 /* ProfileViews */,
+				9028FA3D1E4D2CC7002CC80F /* ReportUserMenu.swift */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 				67AD26D61E31353400252575 /* Constants.swift in Sources */,
 				90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */,
 				9021CC451E3A53C400720260 /* ProfileNavBar.swift in Sources */,
+				9028FA3E1E4D2CC7002CC80F /* ReportUserMenu.swift in Sources */,
 				30A727061E29540F0070B620 /* MessageComposer.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
 				1BF692D81D09E32B0030B6D0 /* DataController.swift in Sources */,

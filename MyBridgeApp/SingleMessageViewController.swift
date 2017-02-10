@@ -12,8 +12,10 @@ import Parse
 class SingleMessageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     
     //Creating the navigationBar
-    let leftBarButton = UIButton()
-    let rightBarButton = UIButton()
+    let navBar = UIView()
+    //let leftBarButton = UIButton()
+    //let rightBarButton = UIButton()
+    var reportMenu: ReportUserMenu?
     
     //Creating the tableView
     let singleMessageTableView = UITableView()
@@ -520,7 +522,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             }
         }
     }
-    func leftBarButtonTapped (_ sender: UIBarButtonItem){
+    func leftBarButtonTapped (_ sender: UIButton){
         toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
         if seguedFrom == "BridgeViewController" {
             //Checking if no messages have been sent and if so deleting the message created for the conversation
@@ -558,114 +560,100 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         else {
             performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
         }
-        leftBarButton.isSelected = true
+        //leftBarButton.isSelected = true
     }
-    func rightBarButtonTapped (_ sender: UIBarButtonItem){
-        let alert = UIAlertController(title: "Unmatch?", message: "Are you sure you want to unmatch \(singleMessageTitle)? You will leave this conversation and no longer be able to introduce each other.", preferredStyle: UIAlertControllerStyle.alert)
-        //Create the actions
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
-            self.rightBarButton.isSelected = false
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
-            //send notification that user has left the message
-            self.isNotification = true
-            self.sendMessageAndNotification()
-            
-            
-            //take currentUser out of the current ids_in_message
-            let messageQuery = PFQuery(className: "Messages")
-            messageQuery.getObjectInBackground(withId: self.messageId, block: { (object, error) in
-                if error != nil {
-                    print(error!)
-                } else {
-                    let CurrentIdsInMessage: NSArray = object!["ids_in_message"] as! NSArray
-                    if let userObjectId1 = CurrentIdsInMessage[0] as? String{
-                        if let userObjectId2 = CurrentIdsInMessage[1] as? String{
-                            //removing User's from eachother's friend_lists
-                            let pfCloudFunctions = PFCloudFunctions()
-                            pfCloudFunctions.removeUsersFromEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
-                            print("removeUsersFromEachothersFriendLists was called")
-                            
-                            //Delete any bridgePairings downloaded to phone that have the user removed from my friendlist
-                            //Finding the OtherUser's objectId
-                            var otherUserId = userObjectId1
-                            if userObjectId1 == PFUser.current()?.objectId {
-                                otherUserId = userObjectId2
-                            }
-                            print("otherUserId = \(otherUserId)")
-                            //Getting the pairings currently saved on the phone and checking if any contain the other user
-                            let localData = LocalData()
-                            let bridgePairings = localData.getPairings()
-                            var updatedParings = [UserInfoPair]()
-                            if let pairings = bridgePairings {
-                                for pair in pairings {
-                                    if let user1Id = pair.user1?.userId {
-                                        if let user2Id = pair.user2?.userId {
-                                            if user1Id != otherUserId && user2Id != otherUserId {
-                                                updatedParings.append(pair)
-                                            } else {
-                                                if let objectId = pair.user1?.objectId {
-                                                    let query = PFQuery(className:"BridgePairings")
-                                                    query.getObjectInBackground(withId: objectId, block: { (result, error) -> Void in
-                                                        if let result = result {
-                                                            result["checked_out"] = false
-                                                            result.saveInBackground()
-                                                        }
-                                                    })
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            localData.setPairings(updatedParings)
-                            localData.synchronize()
-                            
-                            //Send push notification that deletes any bridgePairings downloaded to phone that have the CurrentUser
-                        }
+    
+    func createReportMenu() {
+        getMessage { (message) in
+            var userId: String?
+            var userName: String?
+            if let user1ObjectId = message["user1_objectId"] as? String {
+                if user1ObjectId != PFUser.current()?.objectId {
+                    userId = user1ObjectId
+                    if let user1Name = message["user1_name"] as? String {
+                        userName = user1Name
                     }
-                    
-                    
-                    let CurrentNamesInMessage: NSArray = object!["names_in_message"] as! NSArray
-                    var updatedIdsInMessage = [String]()
-                    var updatedNamesInMessage = [String]()
-                    for i in 0...(CurrentIdsInMessage.count - 1) {
-                        if CurrentIdsInMessage[i] as? String != PFUser.current()?.objectId {
-                            updatedIdsInMessage.append(CurrentIdsInMessage[i] as! String)
-                            updatedNamesInMessage.append(CurrentNamesInMessage[i] as! String)
-                        }
+                } else if let user2ObjectId = message["user2_objectId"] as? String {
+                    userId = user2ObjectId
+                    if let user2Name = message["user2_name"] as? String {
+                        userName = user2Name
                     }
-                    object!["ids_in_message"] = updatedIdsInMessage
-                    object!["names_in_message"] = updatedNamesInMessage
-                    object!.saveInBackground(block: { (success, error) in
-                        if error != nil {
-                            print(error!)
-                        } else if success {
-                            if self.seguedFrom == "BridgeViewController" {
-                                self.performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)
-                            } else if self.seguedFrom == "OtherProfileViewController" {
-                                //self.dismiss(animated: true, completion: nil)
-                                self.performSegue(withIdentifier: "showOtherProfile", sender: self)
-                            } else {
-                                self.performSegue(withIdentifier: "showMessagesTableFromSingleMessage", sender: self)
-                            }
-                        }
-                    })
                 }
-            })
-            
-            
-        }))
-        
-        self.present(alert, animated: true, completion: nil)
-        rightBarButton.isSelected = true
+            }
+            print("user Id: \(userId), name: \(userName)")
+            if let userId = userId, let userName = userName {
+                self.reportMenu = ReportUserMenu(parentVC: self, superView: self.view, userId: userId, userName: userName)
+            }
+        }
     }
+    
+    func rightBarButtonTapped (_ sender: UIButton){
+        createReportMenu()
+        if let reportMenu = reportMenu {
+            reportMenu.animateIn(UIButton())
+        }
+    }
+    
+    func getMessage(completion: ((PFObject) -> Void)?) {
+        let query = PFQuery(className: "Messages")
+        query.whereKey("objectId", equalTo: messageId)
+        query.limit = 1
+        query.findObjectsInBackground(block: { (results, error) in
+            if let error = error {
+                print("error - getting message with id \(self.messageId) - \(error)")
+            } else if let results = results {
+                if results.count >= 1 {
+                    let result = results[0]
+                    if let completion = completion {
+                        print("2")
+                        completion(result)
+                    }
+                } else {
+                    print("*")
+                }
+            }
+        })
+    }
+    
     func displayNavigationBar(){
-        let customNavigationBar = CustomNavigationBar()
-        rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        //let customNavigationBar = CustomNavigationBar()
+        //rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        //leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
+        //customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: "Leave_Conversation_Gray", rightBarButtonSelectedIcon: "Leave_Conversation_Yellow", rightBarButton: rightBarButton, title: singleMessageTitle)
+        //customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: "Report_User", rightBarButtonSelectedIcon: "Report_User", rightBarButton: rightBarButton, title: nil)
+        
+        let leftBarButtonImageView = UIImageView()
+        leftBarButtonImageView.image = UIImage(named: "Left_Arrow")
+        let leftBarButtonImageViewWidth = 0.0533*DisplayUtility.screenWidth
+        let leftBarButtonImageViewHeight = leftBarButtonImageViewWidth * 29.095/39.972
+        leftBarButtonImageView.frame = CGRect(x: 0.02464*DisplayUtility.screenWidth, y: 0.05984*DisplayUtility.screenHeight, width: leftBarButtonImageViewWidth, height: leftBarButtonImageViewHeight)
+        navBar.addSubview(leftBarButtonImageView)
+        
+        // Formatting left button
+        let leftBarButton = UIButton()
+        leftBarButton.frame = CGRect(x: leftBarButtonImageView.frame.minX - 0.02*DisplayUtility.screenWidth, y: leftBarButtonImageView.frame.minY - 0.02*DisplayUtility.screenWidth, width: leftBarButtonImageView.frame.width + 0.04*DisplayUtility.screenWidth, height: leftBarButtonImageView.frame.height + 0.04*DisplayUtility.screenWidth)
+        leftBarButton.showsTouchWhenHighlighted = false
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
-        customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: "Leave_Conversation_Gray", rightBarButtonSelectedIcon: "Leave_Conversation_Yellow", rightBarButton: rightBarButton, title: singleMessageTitle)
+        navBar.addSubview(leftBarButton)
+        
+        let rightBarButtonImageView = UIImageView()
+        rightBarButtonImageView.image = UIImage(named: "Report_User")
+        let rightBarButtonImageViewWidth = 0.0633*DisplayUtility.screenWidth
+        let rightBarButtonImageViewHeight = rightBarButtonImageViewWidth
+        rightBarButtonImageView.frame = CGRect(x: DisplayUtility.screenWidth - rightBarButtonImageViewWidth - leftBarButtonImageView.frame.minX, y: 0, width: rightBarButtonImageViewWidth, height: rightBarButtonImageViewHeight)
+        rightBarButtonImageView.center.y = leftBarButtonImageView.center.y
+        navBar.addSubview(rightBarButtonImageView)
+        
+        // Formatting right button
+        let rightBarButton = UIButton()
+        rightBarButton.frame = CGRect(x: rightBarButtonImageView.frame.minX - 0.02*DisplayUtility.screenWidth, y: rightBarButtonImageView.frame.minY - 0.02*DisplayUtility.screenWidth, width: rightBarButtonImageView.frame.width + 0.04*DisplayUtility.screenWidth, height: rightBarButtonImageView.frame.height + 0.04*DisplayUtility.screenWidth)
+        rightBarButton.showsTouchWhenHighlighted = false
+        rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        navBar.addSubview(rightBarButton)
+        
+        navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: max(leftBarButton.frame.maxY, rightBarButton.frame.maxY) + 0.02*DisplayUtility.screenHeight)
+        view.addSubview(navBar)
+        
     }
     func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
@@ -758,7 +746,6 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         singleMessageTableView.separatorStyle = UITableViewCellSeparatorStyle.none
         singleMessageTableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
         view.addSubview(singleMessageTableView)
-        
         displayNavigationBar()
         
         //let customKeyboard = CustomKeyboard()
