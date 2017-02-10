@@ -82,11 +82,11 @@ class NewMessageViewController: UIViewController, UITableViewDataSource, UITable
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segueToSingleMessage {
-        segueToSingleMessage = false
-        let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
-        singleMessageVC.transitioningDelegate = self.transitionManager
-        singleMessageVC.isSeguedFromNewMessage = true
-        singleMessageVC.newMessageId = self.messageId
+            segueToSingleMessage = false
+            let singleMessageVC:SingleMessageViewController = segue.destination as! SingleMessageViewController
+            singleMessageVC.transitioningDelegate = self.transitionManager
+            singleMessageVC.isSeguedFromNewMessage = true
+            singleMessageVC.newMessageId = self.messageId
         }
     }
     

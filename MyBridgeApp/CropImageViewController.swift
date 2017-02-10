@@ -17,7 +17,7 @@ class CropImageViewController: UIViewController {
     let cropBox: UIView
     var initialCroppedImageOrigin: CGPoint?
     var initialCroppedImageSize: CGSize?
-    var minScale: CGFloat = 0.0
+    var minScale: CGFloat = 0.0 // TODO: use iphone 7+ width & height
     var maxScale: CGFloat = 0.0
     var currentScale: CGFloat = 1.0
     var maxCropBoxSize = CGSize()
@@ -147,9 +147,21 @@ class CropImageViewController: UIViewController {
     
     func save(_ sender: UIButton) {
         if let delegate = delegate {
-            delegate.cropImageViewController(cropImageViewController: self, didCropImageTo: croppedImage(), withCroppedImageFrame: croppedImageFrame())
+            let croppedImage = self.croppedImage()
+            delegate.cropImageViewController(cropImageViewController: self, didCropImageTo: croppedImage, withCroppedImageFrame: croppedImageFrame())
+            let bigImageView = UIImageView()
+            bigImageView.image = croppedImage
+            bigImageView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth / ProfileHexagons.hexWToHRatio)
+            view.addSubview(bigImageView)
+            UIView.animate(withDuration: 3.0, animations: { 
+                bigImageView.alpha = 0
+            }, completion: { (finished) in
+                if finished {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            })
         }
-        dismiss(animated: true, completion: nil)
+        //dismiss(animated: true, completion: nil)
     }
     
     func croppedImage() -> UIImage {
@@ -166,30 +178,34 @@ class CropImageViewController: UIViewController {
         } else {
             bitmap = CGContext(data: nil, width: Int(targetHeight), height: Int(targetWidth), bitsPerComponent: imageRef.bitsPerComponent, bytesPerRow: imageRef.bytesPerRow, space: colorspaceInfo, bitmapInfo: bitmapInfo.rawValue)
         }
-        
+
         if let bitmap = bitmap {
             // rotate and translate image if orientation is not up
             if image.imageOrientation == .left {
+                print("LEFT")
                 bitmap.rotate(by: 90 * CGFloat.pi / 180)
                 bitmap.translateBy(x: 0, y: -targetHeight)
             } else if image.imageOrientation == .right {
+                print("RIGHT")
                 bitmap.rotate(by: -90 * CGFloat.pi / 180)
                 bitmap.translateBy(x: -targetWidth, y: 0)
             } else if image.imageOrientation == .down {
+                print("DOWN")
                 bitmap.translateBy(x: targetWidth, y: targetHeight)
                 bitmap.rotate(by: -180 * CGFloat.pi / 180)
+            } else {
+                print("UP")
             }
             
             bitmap.draw(imageRef, in: CGRect(x: 0, y: 0, width: targetWidth, height: targetHeight))
-            let newImageRef = bitmap.makeImage()
-            if let newImageRef = newImageRef {
+            if let newImageRef = bitmap.makeImage() {
                 let newImage = UIImage(cgImage: newImageRef)
                 
                 // crop image
                 let cropFrame = CGRect(x: cropBox.frame.minX * newImage.size.width / imageView.frame.width, y: cropBox.frame.minY * newImage.size.height / imageView.frame.height, width: cropBox.frame.width * newImage.size.width / imageView.frame.width, height: cropBox.frame.height * newImage.size.height / imageView.frame.height)
-                let croppedImageRef = newImageRef.cropping(to: cropFrame)
-                if let croppedImageRef = croppedImageRef {
-                    let croppedImage = UIImage(cgImage: croppedImageRef)
+                if let croppedImageRef = newImageRef.cropping(to: cropFrame) {
+                    //let croppedImage = UIImage(cgImage: croppedImageRef)
+                    let croppedImage = UIImage(cgImage: croppedImageRef, scale: 1.0, orientation: .up)
                     return croppedImage
                 }
             }
@@ -313,8 +329,8 @@ class CropImageViewController: UIViewController {
                 if let croppedImageRef = croppedImageRef {
                     let croppedImage = UIImage(cgImage: croppedImageRef)
                     let bigImageView = UIImageView()
-                    bigImageView.image = croppedImage
-                    bigImageView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth)
+                    bigImageView.image = newImage
+                    bigImageView.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth * newImage.size.height / newImage.size.width)
                     view.addSubview(bigImageView)
                     UIView.animate(withDuration: 3.0) {
                         bigImageView.alpha = 0

@@ -15,6 +15,7 @@ class OtherProfileViewController: UIViewController {
     var userName: String?
     var userProfilePictureURL: String?
     
+    var reportMenu: ReportUserMenu?
     let scrollView = UIScrollView()
     var navBar: ProfileNavBar?
     var hexes: ProfileHexagons?
@@ -104,6 +105,16 @@ class OtherProfileViewController: UIViewController {
             let xIconHeight = xIconWidth * 26.31/26.352
             xIcon.frame.size = CGSize(width: xIconWidth, height: xIconHeight)
             
+            //create image for report user button
+            let reportIcon = UIImageView(image: UIImage(named: "Report_User"))
+            let reportIconWidth = 0.061*DisplayUtility.screenWidth
+            let reportIconHeight = reportIconWidth
+            reportIcon.frame.size = CGSize(width: reportIconWidth, height: reportIconHeight)
+            
+            if let id = user.objectId, let name = user["name"] as? String {
+                reportMenu = ReportUserMenu(parentVC: self, superView: view, userId: id, userName: name)
+            }
+            
             // set text for greeting label
             var greetingText = String()
             
@@ -118,8 +129,10 @@ class OtherProfileViewController: UIViewController {
             }
             
             // initialize navigation bar
-            navBar = ProfileNavBar(leftButtonImageView: xIcon, leftButtonFunc: exit, rightButtonImageView: nil, mainText: greetingText, mainTextColor: .black, subTextColor: .gray)
-            view.addSubview(navBar!)
+            if let reportMenu = reportMenu {
+                navBar = ProfileNavBar(leftButtonImageView: xIcon, leftButtonFunc: exit, rightButtonImageView: reportIcon, rightButtonFunc: reportMenu.animateIn, mainText: greetingText, mainTextColor: .black, subTextColor: .gray)
+                view.addSubview(navBar!)
+            }
             
             // set text for num 'nected label
             if let objectId = user.objectId {
@@ -151,7 +164,12 @@ class OtherProfileViewController: UIViewController {
             scrollView.backgroundColor = .clear
             
             // place scroll view below navigation bar
-            scrollView.frame = CGRect(x: 0, y: navBar!.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - navBar!.frame.maxY)
+            if let navBar = self.navBar {
+                scrollView.frame = CGRect(x: 0, y: navBar.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight - navBar.frame.maxY)
+            } else {
+                
+            }
+            
             view.addSubview(scrollView)
             
             
