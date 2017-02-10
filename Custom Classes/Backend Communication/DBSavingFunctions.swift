@@ -87,8 +87,20 @@ class DBSavingFunctions {
             
             //Push Notification Messages
             let pfCloudFunctions = PFCloudFunctions()
-            let notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + type
-            let notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + type
+            var notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for " + type
+            var notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for " + type
+            
+            if type == "Love" {
+                notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " to date"
+                notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " to date"
+            } else if type == "Business"{
+                notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " for work"
+                notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " for work"
+            } else if type == "Friendship"{
+                notificationMessage1 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user2!.name! + " to be friends " + type
+                notificationMessage2 = PFUser.current()!["name"] as! String + " has connected you with "+bridgePairings[x].user1!.name! + " to be friends " + type
+            }
+            
             //Users being connected
             let userObjectId1 = bridgePairings[x].user1!.userId!
             let userObjectId2 = bridgePairings[x].user2!.userId!

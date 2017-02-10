@@ -714,7 +714,7 @@ class BridgeViewController: UIViewController {
         // Display the swipe tutorial popup if it has yet to be shown
         if let hasSeenSwipeTutorialPopup = localData.getFirstTimeOnBridgeVC() {
             if hasSeenSwipeTutorialPopup {
-                let alert = UIAlertController(title: "How to 'nect?", message: "Swipe right to introduce.\nSwipe left to see more", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "How to 'nect!", message: "Our algorithm pairs two of your friends. Swipe right to introduce them. Swipe left to see the next pair.", preferredStyle: UIAlertControllerStyle.alert)
                 //Create the actions
                 alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in
                     self.localData.setFirstTimeOnBridgeVC(false)
