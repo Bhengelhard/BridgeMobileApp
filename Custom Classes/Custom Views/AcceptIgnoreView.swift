@@ -349,18 +349,44 @@ class AcceptIgnoreView: UIView {
                                 print("message with these users already exists so send users to that message")
                                 //message with these users already exists so send users to that message
                                 //Transition to single message
+                                print("got object")
                                 if let messageId = object.objectId {
+                                    print("got messageId")
                                     if let vc = self.vc {
                                         vc.viewDidLoad()
-                                        if otherUser == "user1" {
-                                            if let name = result["user1_name"] as? String {
-                                                vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
-                                            }
+                                        print("got vc")
+                                        let userObjectId1 = result["user_objectId1"] as! String
+                                        let userObjectId2 = result["user_objectId2"] as! String
+                                        var otherUserObjectId = ""
+                                        if userObjectId1 != PFUser.current()?.objectId {
+                                            otherUserObjectId = userObjectId1
                                         } else {
-                                            if let name = result["user2_name"] as? String {
-                                                vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
+                                            otherUserObjectId = userObjectId2
+                                        }
+                                        let currentUsername = result["\(self.newMatch.user)_name"] as! String
+                                        let otherUserName = result["\(otherUser)_name"] as! String
+                                        let connecterObjectId = result["connecter_objectId"] as! String
+                                        
+                                        //Sending Push notifications that the second user accepted
+                                        let pfCloudFunctions = PFCloudFunctions()
+                                        if !otherUserObjectId.isEmpty {
+                                            print("got user object id")
+                                            if !otherUserName.isEmpty {
+                                                pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserObjectId,"alert":"\(otherUserName) has accepted the connection!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageId])
+                                            } else {
+                                                pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserObjectId,"alert":"You have one new connection that has just been accepted!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageId])
                                             }
                                         }
+                                        
+                                        
+                                        // Send push notification to the connecter of the match
+                                        pfCloudFunctions.pushNotification(parameters: ["userObjectId": connecterObjectId,"alert":"Sweet 'nect! \(currentUsername) and \(otherUserName) accepted your connection.", "messageType": "ConnecterNotification"])
+                                        
+                                        // Transition to SingleMessagesViewController
+                                        vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: otherUserName)
+
+                                        
+                                        
                                     }
                                 }
                             } else {
@@ -412,22 +438,23 @@ class AcceptIgnoreView: UIView {
                                 message["user1_profile_picture_url"] = result["\(self.newMatch.user)_profile_picture_url"]
                                 message["user2_profile_picture_url"] = result["\(otherUser)_profile_picture_url"]
                                 message["message_viewed"] = [String]()
-                                message["bridge_builder"] = result["connecter_objectId"]
+                                let connecterObjectId = result["connecter_objectId"]
+                                message["bridge_builder"] = connecterObjectId
                                 message["message_type"] = self.newMatch.type
                                 message["message_viewed"] = [PFUser.current()?.objectId]
                                 message.saveInBackground(block: { (succeeded: Bool, error: Error?) in
                                     if error != nil {
                                         print(error!)
                                     } else if succeeded {
-                                        //Adding users to eachothers FriendLists
+                                        // Adding users to eachothers FriendLists
                                         let pfCloudFunctions = PFCloudFunctions()
                                         pfCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1": userObjectId1, "userObjectId2": userObjectId2])
                                         
                                         
-                                        //Close current View with fade
+                                        // Close current View with fade
                                         self.phaseOut()
                                         
-                                        //Reload MessagesVC and transition to single message
+                                        // Reload MessagesVC and transition to single message
                                         if let vc = self.vc {
                                             vc.viewDidLoad()
                                             if let messageId = message.objectId {
@@ -438,7 +465,10 @@ class AcceptIgnoreView: UIView {
                                                     pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserObjectId,"alert":"You have one new connection that has just been accepted!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageId])
                                                 }
                                                 
-                                                //Segueing user into SingleMessageViewController
+                                                // Send push notification to the connecter of the match
+                                                pfCloudFunctions.pushNotification(parameters: ["userObjectId": connecterObjectId,"alert":"Sweet 'nect! \(currentUsername) and \(otherUserName) accepted your connection.", "messageType": "ConnecterNotification"])
+                                                
+                                                // Segueing user into SingleMessageViewController
                                                 if let name = otherUserName as? String {
                                                     vc.transitionToMessageWithID(messageId, color: self.newMatch.color, title: name)
                                                 } else {

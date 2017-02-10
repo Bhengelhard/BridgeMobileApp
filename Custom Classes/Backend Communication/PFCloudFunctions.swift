@@ -82,6 +82,7 @@ class PFCloudFunctions {
     }
     
     func pushNotification(parameters: [AnyHashable: Any]?) {
+        print("push notification called")
         PFCloud.callFunction(inBackground: "pushNotification", withParameters: parameters, block: {
             (response: Any?, error: Error?) in
             if error == nil {

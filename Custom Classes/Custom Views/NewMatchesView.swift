@@ -81,7 +81,7 @@ class NewMatchesView: UIScrollView {
         gradientLayer.frame = line.bounds
         line.isHidden = false
         
-        newMatchesTitle.frame = CGRect(x: 0.0463*frame.width, y: self.frame.minY + 0.02*frame.height, width: 0.8*frame.width, height: 0.05*frame.width)
+        newMatchesTitle.frame = CGRect(x: 0.0463*frame.width, y: self.frame.minY + 0.02*frame.height, width: 0.8*frame.width, height: 0.06*frame.width)
         newMatchesTitle.isHidden = false
         
         // add profile picture

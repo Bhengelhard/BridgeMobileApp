@@ -312,7 +312,7 @@
         <!--Bridge-->
         <scene sceneID="zUx-7Q-hEN">
             <objects>
-                <viewController id="cMo-Jt-lEF" customClass="BridgeViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BridgeViewController" id="cMo-Jt-lEF" customClass="BridgeViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Wc8-na-Rlz"/>
                         <viewControllerLayoutGuide type="bottom" id="UBQ-FB-IgE"/>
@@ -510,13 +510,13 @@
         <image name="camera_icon_small.jpg" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xcR-H7-wok"/>
+        <segue reference="JHn-8T-jHu"/>
         <segue reference="WWN-20-fau"/>
-        <segue reference="wYg-RW-AbN"/>
+        <segue reference="00U-Jg-Jap"/>
+        <segue reference="Cel-NN-deF"/>
+        <segue reference="mf0-bu-EW9"/>
         <segue reference="OnA-y9-bUb"/>
         <segue reference="1Bx-ML-R6e"/>
-        <segue reference="mf0-bu-EW9"/>
-        <segue reference="B19-eu-GHC"/>
-        <segue reference="JHn-8T-jHu"/>
+        <segue reference="xcR-H7-wok"/>
     </inferredMetricsTieBreakers>
 </document>

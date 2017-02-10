@@ -106,9 +106,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "updateBridgePage"), object: nil, userInfo: userInfo)
         
         //Segueing to Appropriate View
+        let messageType = userInfo["messageType"] as? String
         let messageId = userInfo["messageId"] as? String
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        if messageId != nil {
+        if messageType == "ConnecterNotification" {
+            //Segue to SingleMessageViewController
+            let vc: BridgeViewController = storyboard.instantiateViewController(withIdentifier: "BridgeViewController") as! BridgeViewController
+            if application.applicationState == UIApplicationState.inactive {
+                print("UIApplicationState.Inactive but ")
+                self.window?.rootViewController = vc
+            }else if application.applicationState == UIApplicationState.background {
+                print("UIApplicationState.Background")
+            }else if application.applicationState == UIApplicationState.active {
+                print("UIApplicationState.Active")
+            }
+            else{
+                print("None")
+            }
+
+        }
+         else if messageId != nil {
             //Segue to SingleMessageViewController
             let vc: SingleMessageViewController = storyboard.instantiateViewController(withIdentifier: "SingleMessageViewController") as! SingleMessageViewController
             vc.newMessageId = messageId!
