@@ -15,6 +15,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     let navBar = UIView()
     //let leftBarButton = UIButton()
     //let rightBarButton = UIButton()
+    let profilePictureImageView = UIImageView()
     var reportMenu: ReportUserMenu?
     
     //Creating the tableView
@@ -32,7 +33,11 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     
     //getting information on which viewController the user was on prior to this one
     var seguedFrom = ""
-    var messageId = String()
+    var messageId = String() {
+        didSet {
+            updateProfilePictureInNavBar()
+        }
+    }
     var singleMessageTitle = "Conversation"
     var firstTableAppearance = true
     
@@ -563,35 +568,38 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         //leftBarButton.isSelected = true
     }
     
-    func createReportMenu() {
-        getMessage { (message) in
-            var userId: String?
-            var userName: String?
-            if let user1ObjectId = message["user1_objectId"] as? String {
-                if user1ObjectId != PFUser.current()?.objectId {
-                    userId = user1ObjectId
-                    if let user1Name = message["user1_name"] as? String {
-                        userName = user1Name
-                    }
-                } else if let user2ObjectId = message["user2_objectId"] as? String {
-                    userId = user2ObjectId
-                    if let user2Name = message["user2_name"] as? String {
-                        userName = user2Name
+    func displayReportMenu() {
+        if let reportMenu = reportMenu {
+            reportMenu.animateIn(UIButton())
+        } else {
+            getMessage { (message) in
+                var userId: String?
+                var userName: String?
+                if let user1ObjectId = message["user1_objectId"] as? String {
+                    if user1ObjectId != PFUser.current()?.objectId {
+                        userId = user1ObjectId
+                        if let user1Name = message["user1_name"] as? String {
+                            userName = user1Name
+                        }
+                    } else if let user2ObjectId = message["user2_objectId"] as? String {
+                        userId = user2ObjectId
+                        if let user2Name = message["user2_name"] as? String {
+                            userName = user2Name
+                        }
                     }
                 }
-            }
-            print("user Id: \(userId), name: \(userName)")
-            if let userId = userId, let userName = userName {
-                self.reportMenu = ReportUserMenu(parentVC: self, superView: self.view, userId: userId, userName: userName)
+                if let userId = userId, let userName = userName {
+                    self.reportMenu = ReportUserMenu(parentVC: self, superView: self.view, userId: userId, userName: userName)
+                    if let reportMenu = self.reportMenu {
+                        reportMenu.animateIn(UIButton())
+                    }
+                }
             }
         }
     }
     
     func rightBarButtonTapped (_ sender: UIButton){
-        createReportMenu()
-        if let reportMenu = reportMenu {
-            reportMenu.animateIn(UIButton())
-        }
+        displayReportMenu()
     }
     
     func getMessage(completion: ((PFObject) -> Void)?) {
@@ -605,28 +613,44 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
                 if results.count >= 1 {
                     let result = results[0]
                     if let completion = completion {
-                        print("2")
                         completion(result)
                     }
                 } else {
-                    print("*")
                 }
             }
         })
     }
     
     func displayNavigationBar(){
-        //let customNavigationBar = CustomNavigationBar()
-        //rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
-        //leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
-        //customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: "Leave_Conversation_Gray", rightBarButtonSelectedIcon: "Leave_Conversation_Yellow", rightBarButton: rightBarButton, title: singleMessageTitle)
-        //customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Left_Arrow", leftBarButtonSelectedIcon: "Left_Arrow", leftBarButton: leftBarButton, rightBarButtonIcon: "Report_User", rightBarButtonSelectedIcon: "Report_User", rightBarButton: rightBarButton, title: nil)
+        
+        let profilePictureImageViewWidth = 0.1684*DisplayUtility.screenWidth
+        let profilePictureImageViewHeight = profilePictureImageViewWidth
+        profilePictureImageView.frame = CGRect(x: 0, y: 0.08*DisplayUtility.screenWidth, width: profilePictureImageViewWidth, height: profilePictureImageViewHeight)
+        profilePictureImageView.center.x = DisplayUtility.screenWidth/2
+        profilePictureImageView.layer.cornerRadius = profilePictureImageView.frame.height/2
+        profilePictureImageView.backgroundColor = .black
+        
+        let grayLine = UIView()
+        grayLine.frame = CGRect(x: 0, y: profilePictureImageView.frame.minY + 0.85*profilePictureImageView.frame.height, width: DisplayUtility.screenWidth, height: 1)
+        grayLine.backgroundColor = .lightGray
+        navBar.addSubview(grayLine)
+        
+        let whiteLine = UIView()
+        whiteLine.frame = CGRect(x: 0, y: grayLine.frame.minY, width: 1.33*profilePictureImageView.frame.width, height: grayLine.frame.height)
+        whiteLine.center.x = profilePictureImageView.center.x
+        whiteLine.backgroundColor = .white
+        navBar.addSubview(whiteLine)
+        
+        navBar.addSubview(profilePictureImageView)
+        
+        updateProfilePictureInNavBar()
         
         let leftBarButtonImageView = UIImageView()
         leftBarButtonImageView.image = UIImage(named: "Left_Arrow")
         let leftBarButtonImageViewWidth = 0.0533*DisplayUtility.screenWidth
         let leftBarButtonImageViewHeight = leftBarButtonImageViewWidth * 29.095/39.972
-        leftBarButtonImageView.frame = CGRect(x: 0.02464*DisplayUtility.screenWidth, y: 0.05984*DisplayUtility.screenHeight, width: leftBarButtonImageViewWidth, height: leftBarButtonImageViewHeight)
+        leftBarButtonImageView.frame = CGRect(x: 0.02464*DisplayUtility.screenWidth, y: 0, width: leftBarButtonImageViewWidth, height: leftBarButtonImageViewHeight)
+        leftBarButtonImageView.center.y = profilePictureImageView.center.y
         navBar.addSubview(leftBarButtonImageView)
         
         // Formatting left button
@@ -638,10 +662,10 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         
         let rightBarButtonImageView = UIImageView()
         rightBarButtonImageView.image = UIImage(named: "Report_User")
-        let rightBarButtonImageViewWidth = 0.0633*DisplayUtility.screenWidth
+        let rightBarButtonImageViewWidth = 0.07*DisplayUtility.screenWidth
         let rightBarButtonImageViewHeight = rightBarButtonImageViewWidth
         rightBarButtonImageView.frame = CGRect(x: DisplayUtility.screenWidth - rightBarButtonImageViewWidth - leftBarButtonImageView.frame.minX, y: 0, width: rightBarButtonImageViewWidth, height: rightBarButtonImageViewHeight)
-        rightBarButtonImageView.center.y = leftBarButtonImageView.center.y
+        rightBarButtonImageView.center.y = profilePictureImageView.center.y
         navBar.addSubview(rightBarButtonImageView)
         
         // Formatting right button
@@ -651,10 +675,31 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
         navBar.addSubview(rightBarButton)
         
-        navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: max(leftBarButton.frame.maxY, rightBarButton.frame.maxY) + 0.02*DisplayUtility.screenHeight)
+        navBar.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: max(profilePictureImageView.frame.maxY, max(leftBarButton.frame.maxY, rightBarButton.frame.maxY)) + 0.02*DisplayUtility.screenHeight)
         view.addSubview(navBar)
         
     }
+    
+    func updateProfilePictureInNavBar() {
+        getMessage { (message) in
+            if let user1ObjectId = message["user1_objectId"] as? String {
+                var user = "user1"
+                if user1ObjectId == PFUser.current()?.objectId {
+                    user = "user2"
+                }
+                print("user")
+                if let profilePictureUrl = message["\(user)_profile_picture_url"] as? String {
+                    let url = URL(string: profilePictureUrl)
+                    if let url = url {
+                        let downloader = Downloader()
+                        downloader.imageFromURL(URL: url, imageView: self.profilePictureImageView, callBack: nil)
+                    }
+                }
+            }
+            
+        }
+    }
+    
     func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = ((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
@@ -668,7 +713,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func keyboardWillHide(_ notification: Notification) {
         if (((notification as NSNotification).userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            singleMessageTableView.frame.origin.y = 0.11*DisplayUtility.screenHeight
+            singleMessageTableView.frame.origin.y = navBar.frame.maxY
             if messageText.text.isEmpty {
                 toolbar.frame = CGRect(x: 0, y: 0.925*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.075*DisplayUtility.screenHeight)
                 messageText.frame.size.height = 35.5
@@ -740,13 +785,15 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        displayNavigationBar()
+        
         singleMessageTableView.delegate = self
         singleMessageTableView.dataSource = self
-        singleMessageTableView.frame = CGRect(x: 0, y: 0.11*DisplayUtility.screenHeight, width: DisplayUtility.screenWidth, height: 0.8*DisplayUtility.screenHeight)
+        singleMessageTableView.frame = CGRect(x: 0, y: navBar.frame.maxY, width: DisplayUtility.screenWidth, height: 0.8*DisplayUtility.screenHeight)
         singleMessageTableView.separatorStyle = UITableViewCellSeparatorStyle.none
         singleMessageTableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
         view.addSubview(singleMessageTableView)
-        displayNavigationBar()
         
         //let customKeyboard = CustomKeyboard()
         //customKeyboard.display(view: view, placeholder: "Type a message...", buttonTitle: "Send", buttonTarget: "sendSingleMessage")
