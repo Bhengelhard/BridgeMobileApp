@@ -1,3 +1,11 @@
+//
+//  Constants.swift
+//  MyBridgeApp
+//
+//  Created by Blake Engelhard on 12/16/16.
+//  Copyright © 2016 BHE Ventures LLC. All rights reserved.
+//
+
 import UIKit
 
 struct Constants

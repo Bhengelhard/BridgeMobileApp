@@ -320,28 +320,6 @@ class BridgeViewController: UIViewController {
                 swipeCardView.center.x = view.center.x
                 self.view.insertSubview(swipeCardView, belowSubview: aboveView)
             }
-//=======
-//        if let aboveView = aboveView
-//		{
-//			secondSwipeCard = swipeCardView
-//
-//            //Second card should also have dark layer that fades away with swipe of first card in deck.
-//            swipeCardView.frame.size = CGSize(width: /*0.95**/swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
-//            swipeCardView.center = aboveView.center
-//            swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
-//            swipeCardView.isUserInteractionEnabled = false
-//			swipeCardView.frame = smallestSwipeCardFrame()
-//			swipeCardView.center.x = view.center.x
-//            self.view.insertSubview(swipeCardView, belowSubview: aboveView)
-//            
-////            darkLayer.frame = swipeCardView.frame//CGRect(x: 0, y: 0, width: swipeCardView.frame.width, height: swipeCardView.frame.height)
-////            darkLayer.layer.cornerRadius = swipeCardView.layer.cornerRadius
-////            darkLayer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-////            view.insertSubview(darkLayer, aboveSubview: secondSwipeCard)
-//            
-//            
-//            
-//>>>>>>> wiredFrame
         }
         else {
             swipeCardView.frame = swipeCardView.swipeCardFrame()
@@ -421,45 +399,20 @@ class BridgeViewController: UIViewController {
                 }
             }
         })
-//        if badgeCount == 0 {
-//            //User does not have any notifications
-//            return false
-//        } else {
-//            //User has notifications
-//            return true
-//        }
     }
     func displayNavigationBar(){
         rightBarButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
         leftBarButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
-        //setting messagesIcon to the icon specifying if there are or are not notifications
-        var rightBarButtonIcon = ""
-        var rightBarButtonSelectedIcon = ""
         
-        //if !hasNotification() {
-            rightBarButtonIcon = "Inbox_Navbar_Icon"
-            rightBarButtonSelectedIcon = "Inbox_Navbar_Icon"
-           // print("Does not have notification")
-//        } else {
-//            print("Has Notification")
-//            rightBarButtonIcon = "Inbox_Navbar_Icon_Notification"
-//            rightBarButtonSelectedIcon = "Inbox_Navbar_Icon_Notification"
-//        }
+        //setting messagesIcon to the icon specifying if there are or are not notifications
+        let rightBarButtonIcon = "Inbox_Navbar_Icon"
+        let rightBarButtonSelectedIcon = "Inbox_Navbar_Icon"
 
         customNavigationBar.createCustomNavigationBar(view: view, leftBarButtonIcon: "Profile_Navbar_Icon", leftBarButtonSelectedIcon: "Profile_Icon_Yellow", leftBarButton: leftBarButton, rightBarButtonIcon: rightBarButtonIcon, rightBarButtonSelectedIcon: rightBarButtonSelectedIcon, rightBarButton: rightBarButton, title: "necter")
         checkForNotification()
-        
     }
     func leftBarButtonTapped (_ sender: UIBarButtonItem){
-        //performSegue(withIdentifier: "showProfilePageFromBridgeView", sender: self)
-        //let myProfileVC = MyProfileViewController()
-        
-        //present(TutorialsViewController(), animated: false, completion: nil)
-
-        //present(MyProfileViewController(), animated: true, completion: nil)
         performSegue(withIdentifier: "showMyProfileFromBridgePage", sender: self)
-        //self.present(myProfileVC, animated: true, completion: nil)
-        
         leftBarButton.isSelected = true
     }
     func rightBarButtonTapped (_ sender: UIBarButtonItem){
@@ -469,10 +422,6 @@ class BridgeViewController: UIViewController {
     
     // downloads  bridge pairings of different types depending upon the typeOfCards
     func getBridgePairings(_ maxNoOfCards:Int, typeOfCards:String, callBack: ((_ bridgeType: String)->Void)?, bridgeType: String?){
-        //if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
-        //displayNoMoreCardsLabel.removeFromSuperview()
-        //revisitButton.removeFromSuperview()
-        //}
         
         //Turning noMoreCards Label and Button off if they are displayed
         if displayNoMoreCardsLabel.alpha == 1 {
@@ -619,10 +568,7 @@ class BridgeViewController: UIViewController {
                                     self.localData.synchronize()
                                     
                                     DispatchQueue.main.async(execute: {
-                                        //if let displayNoMoreCardsLabel = self.displayNoMoreCardsLabel {
-                                        //self.displayNoMoreCardsLabel.removeFromSuperview()
-                                        //self.revisitButton.removeFromSuperview()
-                                       // }
+                                        
                                         //Turning noMoreCards Label and Button off if they are displayed
                                         if self.displayNoMoreCardsLabel.alpha == 1 {
                                             self.displayNoMoreCardsLabel.alpha = 0
@@ -702,7 +648,7 @@ class BridgeViewController: UIViewController {
     }
     func displayBackgroundView(){
         let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight))
-        backgroundView.backgroundColor = .white//UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        backgroundView.backgroundColor = .white
         view.addSubview(backgroundView)
     }
     
@@ -711,9 +657,6 @@ class BridgeViewController: UIViewController {
         
         secondSwipeCard.tag = 0
         
-        //This is setting the badge number to 0 when the user opens the app and needs to be fixed so the actual badge is set
-        //UIApplication.shared.applicationIconBadgeNumber = 0
-        
         //Creating Notifications
         //Listener for Post Status Notification
         NotificationCenter.default.addObserver(self, selector: #selector(self.displayMessageFromBot), name: NSNotification.Name(rawValue: "displayMessageFromBot"), object: nil)
@@ -721,8 +664,11 @@ class BridgeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateBridgePage), name: NSNotification.Name(rawValue: "updateBridgePage"), object: nil)
         //Lister for updating filter from Mission Control being tapped
         NotificationCenter.default.addObserver(self, selector: #selector(self.filtersTapped), name: NSNotification.Name(rawValue: "filtersTapped"), object: nil)
+        
+        // Displaying UI Features
         displayBackgroundView()
         displayNavigationBar()
+        
         initializeNoMoreCards()
 
 		let bridgePairings = localData.getPairings()
@@ -743,17 +689,15 @@ class BridgeViewController: UIViewController {
         connectIcon.image = UIImage(named: "Necter_Icon")
         connectIcon.alpha = 0.0
         view.insertSubview(connectIcon, belowSubview: missionControlView.blackBackgroundView)
-        //connectIcon.bringSubview(toFront: view)
         
         disconnectIcon.image = UIImage(named: "Disconnect_Icon")
         disconnectIcon.alpha = 0.0
         view.insertSubview(disconnectIcon, belowSubview: missionControlView.blackBackgroundView)
-        //disconnectIcon.bringSubview(toFront: view)
 
         wasLastSwipeInDeck = false
         
         //Create Mission Control
-        missionControlView.initialize(view: view, revisitLabel: displayNoMoreCardsLabel, revisitButton: revisitButton)
+        //missionControlView.initialize(view: view, revisitLabel: displayNoMoreCardsLabel, revisitButton: revisitButton)
         
         //Check for AcceptedConnectionNotification
         let dbRetrievingFunctions = DBRetrievingFunctions()
@@ -782,8 +726,7 @@ class BridgeViewController: UIViewController {
 
     }
 
-	func smallestSwipeCardFrame () -> CGRect
-	{
+	func smallestSwipeCardFrame () -> CGRect {
 		let maxFrame = swipeCardView.swipeCardFrame()
 		let percent = CGFloat(secondSwipeCardShrinkPercentage)
 		let inset = CGSize(width: maxFrame.size.width * percent, 
@@ -795,8 +738,7 @@ class BridgeViewController: UIViewController {
 		              height: maxFrame.size.height - (inset.height * 2))
 	}
 
-    func isDragged(_ gesture: UIPanGestureRecognizer)
-	{
+    func isDragged(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self.view)
         swipeCardView = gesture.view as! SwipeCard
         swipeCardView.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
@@ -811,38 +753,6 @@ class BridgeViewController: UIViewController {
         //Displaying and Removing the connect and disconnect icons
         let disconnectIconX = max(min((-1.5*(swipeCardView.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
         let connectIconX = max(min(((-2.0/3.0)*(swipeCardView.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
-
-        //Changing second card in stack with Swipe
-//        if secondSwipeCard.tag != 0 {
-//            let darkLayerAlpha = min(max(((-4.0/5.0)*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)) + 0.4, 0), 0.5)
-//            darkLayer.alpha = darkLayerAlpha
-//            
-//        }
-        
-//        if secondSwipeCard.tag != 0 {
-//            print("have a second swipe card")
-//            let savedCenter = swipeCardView.center
-//            print("percentage of page \(abs(swipeCardView.center.x - view.center.x)/DisplayUtility.screenWidth)")
-//            if secondSwipeCard.frame.width < swipeCardFrame.width {
-//                secondSwipeCard.frame.size.width += abs(translation.x)
-//                
-//            }
-//            if secondSwipeCard.frame.height < swipeCardFrame.height {
-//                secondSwipeCard.frame.size.height += abs(translation.x)
-//                secondSwipeCard.frame.origin.y -= abs(translation.x)
-//            }
-//            
-//            secondSwipeCard.frame.size.width = 0.1*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)*(swipeCardFrame.width) + 0.95*swipeCardFrame.width
-//            secondSwipeCard.frame.size.height =  0.1*((abs(swipeCardView.center.x - view.center.x))/DisplayUtility.screenWidth)*(swipeCardFrame.height) + 0.95*swipeCardFrame.height
-//            secondSwipeCard.topHalf.frame = CGRect(x: 0, y: 0, width: secondSwipeCard.frame.width, height: 0.5*secondSwipeCard.frame.height)
-//            secondSwipeCard.bottomHalf.frame = CGRect(x: 0, y: 0.5*secondSwipeCard.frame.height, width: secondSwipeCard.frame.width, height: 0.5*secondSwipeCard.frame.height)
-//            print("width = \(secondSwipeCard.frame.size.width)")
-//            print("height = \(secondSwipeCard.frame.size.height)")
-//            swipeCardView.center = savedCenter
-//            
-//            secondSwipeCard.frame = swipeCardFrame
-//            
-//            //        }
         
         //Limiting Y axis of swipe
         if swipeCardView.center.y > swipeCardFrame.origin.y + 0.5*swipeCardFrame.height  {
@@ -853,38 +763,33 @@ class BridgeViewController: UIViewController {
         
         //animating connect and disconnect icons when card is positioned from 0.4% of DisplayUtility.screenWidth to 0.25% of DisplayUtility.screenWidth
         if swipeCardView.center.x < 0.4*DisplayUtility.screenWidth{
+            
             //fading in with swipe left from 0.4% of DisplayUtility.screenWidth to 0.25% of screen width
             self.disconnectIcon.alpha = -6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)+2.66
             self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
-            //})
+            
         } else if swipeCardView.center.x > 0.6*DisplayUtility.screenWidth {
             
             //fading in with swipe right from 0.6% of DisplayUtility.screenWidth to 0.75% of screen width
             self.connectIcon.alpha = 6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)-4
             self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
+            
         } else {
+            
             self.disconnectIcon.alpha = -6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)+2.66
             self.disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
             self.connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
 
             self.connectIcon.alpha = 6.66*(swipeCardView.center.x/DisplayUtility.screenWidth)-4
+            
         }
-        
-        /*//limiting y values of card movement
-        if swipeCardView.frame.minY < 0.05*DisplayUtility.screenHeight {
-            swipeCardView.frame.origin.y = 0.05*DisplayUtility.screenHeight
-        } else if swipeCardView.frame.maxY > DisplayUtility.screenHeight {
-            swipeCardView.frame.origin.y = DisplayUtility.screenHeight - swipeCardView.frame.height
-        }*/
 
-		if gesture.state == .began
-		{
+		if gesture.state == .began {
 			secondSwipeCard.frame = smallestSwipeCardFrame()
 			secondSwipeCard.center.x = view.center.x
 		}
 
-		if gesture.state == .changed
-		{
+		if gesture.state == .changed {
 			let multiplier = CGFloat(secondSwipeCardShrinkPercentage)
 			let cardCenterX = swipeCardView.center.x
 			let screenMiddleX = DisplayUtility.screenWidth / 2
@@ -904,16 +809,15 @@ class BridgeViewController: UIViewController {
 			let overlayMultiplier = CGFloat(secondSwipeCard.defaultOverlayOpacity)
 			var overlayPercent: CGFloat = 2.0 * (direction / screenMiddleX) - overlayMultiplier
 
-			if overlayPercent < 0
-			{
+			if overlayPercent < 0 {
 				overlayPercent = abs(overlayPercent)
 
 				secondSwipeCard.overlay.opacity = Float(overlayPercent)
 			}
 		}
 
-		if gesture.state == .ended
-		{
+		if gesture.state == .ended {
+            
             //User Swiped Left
             if swipeCardView.center.x < 0.25*DisplayUtility.screenWidth {
                 let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
@@ -1081,28 +985,45 @@ class BridgeViewController: UIViewController {
             }
             else {
                 lastCardInStack = nil
-                //check if a bridgePairing is already stored in localData
-                var bridgePairingAlreadyStored = false
-                if currentTypeOfCardsOnDisplay == .all {
-                    let pairings = localData.getPairings()
-                    if pairings != nil && pairings!.count > 0 {
-                        bridgePairingAlreadyStored = true
-                    }
+                secondSwipeCardSet = false
+                
+                let bridgePairings = localData.getPairings()
+                
+                if (bridgePairings == nil || bridgePairings!.count < 1)
+                {
+                    getBridgePairings(2,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
                 }
-                else {
-                    if let bridgePairings = localData.getPairings() {
-                        for pair in bridgePairings {
-                            if pair.user1?.bridgeType == currentTypeOfCardsOnDisplay.parseValue {
-                                bridgePairingAlreadyStored = true
-                            }
-                        }
-                    }
+                else if bridgePairings != nil && bridgePairings!.count < 2
+                {
+                    getBridgePairings(1,typeOfCards: "EachOfAllType", callBack: nil, bridgeType: nil)
                 }
-                if bridgePairingAlreadyStored == false {
-                    self.displayNoMoreCards()
-                    PFUser.current()?.incrementKey("ran_out_of_pairs")
-                    PFUser.current()?.saveInBackground()
+                else
+                {
+                    displayCards()
                 }
+//                //check if a bridgePairing is already stored in localData
+//                var bridgePairingAlreadyStored = false
+//                if currentTypeOfCardsOnDisplay == .all {
+//                    let pairings = localData.getPairings()
+//                    if pairings != nil && pairings!.count > 0 {
+//                        bridgePairingAlreadyStored = true
+//                    }
+//                }
+//                else {
+//                    if let bridgePairings = localData.getPairings() {
+//                        for pair in bridgePairings {
+//                            if pair.user1?.bridgeType == currentTypeOfCardsOnDisplay.parseValue {
+//                                bridgePairingAlreadyStored = true
+//                            }
+//                        }
+//                    }
+//                }
+//                if bridgePairingAlreadyStored == false {
+//                    print(1)
+//                    self.displayNoMoreCards()
+//                    PFUser.current()?.incrementKey("ran_out_of_pairs")
+//                    PFUser.current()?.saveInBackground()
+//                }
             }
         }
     }

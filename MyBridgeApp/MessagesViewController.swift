@@ -391,7 +391,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorStyle = .none
         tableView.backgroundColor = .white//UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         
-        missionControlView.initialize(view: view, revisitLabel: noMessagesLabel, revisitButton: UIButton())
+        //missionControlView.initialize(view: view, revisitLabel: noMessagesLabel, revisitButton: UIButton())
         displayFilterLabel(type: "All Types")
         displayBackgroundView()
     }
@@ -543,12 +543,14 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
             self.pagingSpinner.stopAnimating()
         }
     }
+    
+    /// Returns the number of sections in the TableView
     func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
+    
+    /// Returns the number of rows in the TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         if (searchController.isActive && searchController.searchBar.text != "") || toolbarTapped {
             return filteredPositions.count
         }

@@ -16,15 +16,17 @@ class NewMatchesView: UIScrollView {
     var allNewMatches: [NewMatch]
     var displayedNewMatches: [NewMatch]
     let line: UIView
+    var newMatchesTitle: UILabel
     let gradientLayer: CAGradientLayer
     
     init() {
         frameWithNoMatches = CGRect(x: 0, y: 0, width: 0, height: 0)
-        frameWithMatches = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.17*DisplayUtility.screenHeight)
+        frameWithMatches = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.2*DisplayUtility.screenHeight)
         allNewMatches = [NewMatch]()
         displayedNewMatches = [NewMatch]()
         line = UIView()
         gradientLayer = DisplayUtility.gradientLayer()
+        newMatchesTitle = UILabel()
         super.init(frame: frameWithNoMatches)
         contentSize = frame.size
         line.backgroundColor = .clear
@@ -32,6 +34,14 @@ class NewMatchesView: UIScrollView {
 
         line.isHidden = true
         addSubview(line)
+        
+        //Initialize Title when matches should be displayed
+        newMatchesTitle.text = "NEW CONNECTIONS:"
+        newMatchesTitle.font = UIFont(name: "BentonSans-Light", size: 18)
+        newMatchesTitle.textAlignment = NSTextAlignment.left
+        newMatchesTitle.isHidden = true
+        addSubview(newMatchesTitle)
+        
     }
     
     func setVC(vc: MessagesViewController) {
@@ -71,6 +81,9 @@ class NewMatchesView: UIScrollView {
         gradientLayer.frame = line.bounds
         line.isHidden = false
         
+        newMatchesTitle.frame = CGRect(x: 0.0463*frame.width, y: self.frame.minY + 0.02*frame.height, width: 0.8*frame.width, height: 0.05*frame.width)
+        newMatchesTitle.isHidden = false
+        
         // add profile picture
         var profilePicView = UIImageView()
         if let profilePic = newMatch.profilePic {
@@ -81,7 +94,7 @@ class NewMatchesView: UIScrollView {
             let downloader = Downloader()
             downloader.imageFromURL(URL: url, imageView: profilePicView, callBack: nil)
         }
-        profilePicView.frame = CGRect(x: CGFloat(position)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY, width: 0.168*frame.width, height: 0.168*frame.width)
+        profilePicView.frame = CGRect(x: CGFloat(position)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY + 0.05*DisplayUtility.screenHeight, width: 0.168*frame.width, height: 0.168*frame.width)
         profilePicView.layer.cornerRadius = profilePicView.frame.height/2
         profilePicView.layer.borderWidth = 2
         profilePicView.layer.borderColor = newMatch.color.cgColor
@@ -104,7 +117,7 @@ class NewMatchesView: UIScrollView {
         } else {
             firstName = name
         }
-        let nameLabel = UILabel(frame: CGRect(x: profilePicView.frame.minX, y: profilePicView.frame.maxY + 0.1*frame.height, width: 0, height: 0.2*frame.height))
+        let nameLabel = UILabel(frame: CGRect(x: profilePicView.frame.minX, y: profilePicView.frame.maxY + 0.08*frame.height, width: 0, height: 0.2*frame.height))
         nameLabel.text = firstName
         nameLabel.sizeToFit()
         nameLabel.frame = CGRect(x: profilePicView.frame.midX - nameLabel.frame.width/2, y: nameLabel.frame.minY, width: nameLabel.frame.width, height: nameLabel.frame.height)

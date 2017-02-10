@@ -37,7 +37,8 @@ class SwipeCard: UIView {
     }
     
     func initialize(user1Id: String?, user1PhotoURL: String!, user1Name: String, user1Status: String, user1City: String?, user2Id: String?, user2PhotoURL: String!, user2Name: String, user2Status: String, user2City: String?, connectionType: String) {
-        self.layer.cornerRadius = 13.379
+        let swipCardCornerRadius: CGFloat = 9//13.379
+        self.layer.cornerRadius = swipCardCornerRadius
 
         cardsPredictedType = connectionType
         
@@ -46,7 +47,7 @@ class SwipeCard: UIView {
         cardsUser1PhotoURL = user1PhotoURL
         
         //applying rounded corners to the topHalf
-        let maskPath = UIBezierPath(roundedRect: topHalf.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
+        let maskPath = UIBezierPath(roundedRect: topHalf.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: swipCardCornerRadius, height: swipCardCornerRadius))
         let topHalfShape = CAShapeLayer()
         topHalfShape.path = maskPath.cgPath
         topHalf.layer.mask = topHalfShape
@@ -56,7 +57,7 @@ class SwipeCard: UIView {
         cardsUser2PhotoURL = user2PhotoURL
         
         //applying rounded corners to the bottomHalf
-        let maskPath2 = UIBezierPath(roundedRect: bottomHalf.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 13.379, height: 13.379))
+        let maskPath2 = UIBezierPath(roundedRect: bottomHalf.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: swipCardCornerRadius, height: swipCardCornerRadius))
         let bottomHalfShape = CAShapeLayer()
         bottomHalfShape.path = maskPath2.cgPath
         bottomHalf.layer.mask = bottomHalfShape
@@ -104,7 +105,15 @@ class SwipeCard: UIView {
     }
 
     func swipeCardFrame () -> CGRect {
-        return CGRect(x: 0.071*DisplayUtility.screenWidth, y: 0.115*DisplayUtility.screenHeight, width: 0.97*0.8586*DisplayUtility.screenWidth, height: 0.97*0.8178*DisplayUtility.screenHeight)
+        //Width is half of height to keep photos as squares
+        let originY = 0.12*DisplayUtility.screenHeight
+        let height = 0.98*DisplayUtility.screenHeight - originY
+        let width = 0.9*DisplayUtility.screenWidth
+        let originX = (DisplayUtility.screenWidth - width) / 2
+        
+        
+        return CGRect(x: originX, y: originY, width: width, height: height)
+        //return CGRect(x: 0.071*DisplayUtility.screenWidth, y: 0.115*DisplayUtility.screenHeight, width: 0.97*0.8586*DisplayUtility.screenWidth, height: 0.97*0.8178*DisplayUtility.screenHeight)
         /*CGRect(x: 0.071*DisplayUtility.screenWidth, y: 0.1178*DisplayUtility.screenHeight, width: 0.8586*DisplayUtility.screenWidth, height: 0.8178*DisplayUtility.screenHeight)*/
     }
     

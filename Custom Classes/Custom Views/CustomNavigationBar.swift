@@ -61,23 +61,24 @@ class CustomNavigationBar: UIView {
             view.addSubview(rightImageView)
         }
         
-        //setting the navBar title
+        // Setting the navBar title
         if let titleText = title {
             if titleText == "necter" {
-                //Adding the title as a gradient text
+                
+                
+                // Adding the title as a gradient text
                 let font = UIFont(name: "Verdana", size: 40)
-                let titleFrame = CGRect(x: 0, y: 0.04633*DisplayUtility.screenHeight, width: 0.5*DisplayUtility.screenWidth, height: 0.105*DisplayUtility.screenWidth)
+                var titleFrame = CGRect(x: 0, y: 0.04633*DisplayUtility.screenHeight, width: 0.5*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenWidth)
+                // Placing the navbar title in line with the bottom of the rightBarButton
+                if let barButton = rightBarButton {
+                    titleFrame.origin.y = barButton.frame.minY //- titleFrame.size.height
+                }
+                
                 let label = DisplayUtility.gradientLabel(text: titleText, frame: titleFrame, font: font!)
                 label.center.x = view.center.x
-                label.center.y = rightBarButton!.center.y
+                //label.center.y = rightBarButton!.center.y
                 label.textAlignment = NSTextAlignment.center
                 view.addSubview(label)
-//                //Adding the title as an imageView
-//                let titleFrame = CGRect(x: 0, y: 0.04633*DisplayUtility.screenHeight, width: 0.3*DisplayUtility.screenWidth, height: 0.04*DisplayUtility.screenHeight)
-//                let imageView = UIImageView(frame: titleFrame)
-//                imageView.center.x = view.center.x
-//                imageView.image = #imageLiteral(resourceName: "Necter_Navbar_Logo")
-//                view.addSubview(imageView)
             } else if titleText == "Inbox" {
                 let font = UIFont(name: "BentonSans-Light", size: 24)
                 let titleFrame = CGRect(x: 0, y: 0.04633*DisplayUtility.screenHeight, width: 0.5*DisplayUtility.screenWidth, height: 0.04*DisplayUtility.screenHeight)

@@ -122,7 +122,6 @@ class HalfSwipeCard: UIView {
         self.addSubview(connectionTypeIcon)
         
         let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
-        nameLabel.center.y = connectionTypeIcon.center.y
         nameLabel.text = DisplayUtility.firstNameLastNameInitial(name: name)
         nameLabel.textColor = UIColor.white
         nameLabel.font = UIFont(name: "BentonSans-Bold", size: 22)
@@ -147,7 +146,13 @@ class HalfSwipeCard: UIView {
             statusTextView.text = status
             displayUtility.setViewHeightFromContent(view: statusTextView)
             self.addSubview(statusTextView)
+        } else {
+            connectionTypeIcon.frame.origin.y = 0.83*self.frame.height
         }
+        
+        // Setting origin y value of nameLabel based on placement of connectionTypeIcon which is based on whether there is a status
+        nameLabel.center.y = connectionTypeIcon.center.y
+
     }
     
     func callbackToSetPhoto(_ image: UIImage) -> Void {

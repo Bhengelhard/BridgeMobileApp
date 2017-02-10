@@ -265,8 +265,8 @@ class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextV
     }
     
     func fbLoginTapped (_ sender: UIButton) {
-        let facebookFunctions = FacebookFunctions()
-        facebookFunctions.loginWithFacebook(vc: self)
+        let fbLogin = FBLogin()
+        fbLogin.initialize(vc: self)
     }
     
     func keyboardWillShow(_ notification: Notification) {

@@ -180,6 +180,10 @@ class OtherProfileViewController: UIViewController {
                 }
 
             }
+                
+                if let profilePictureURL = user["profile_picture_url"] as? String {
+                    userProfilePictureURL = profilePictureURL
+                }
             
             
             // MARK: Message Button
@@ -307,9 +311,12 @@ class OtherProfileViewController: UIViewController {
     }
     
     func messageButtonTapped(_ sender: UIButton) {
+        print("messageButtonTapped")
         let messagingFunctions = MessagingFunctions()
         if let name = userName {
+            print("name retrieved")
             if let URL = userProfilePictureURL {
+                print("url retrieved")
                 messagingFunctions.createDirectMessage(otherUserObjectId: userId, otherUserName: name, otherUserProfilePictureURL: URL, vc: self)
             }
         }
