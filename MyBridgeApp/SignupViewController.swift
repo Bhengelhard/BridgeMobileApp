@@ -497,9 +497,7 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
-        if mirror.subjectType == TutorialsViewController.self {
-            self.transitionManager.animationDirection = "Right"
-        } else if mirror.subjectType == BridgeViewController.self {
+        if mirror.subjectType == BridgeViewController.self {
             self.transitionManager.animationDirection = "Top"
         }
         vc.transitioningDelegate = self.transitionManager
