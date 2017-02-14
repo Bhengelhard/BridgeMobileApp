@@ -150,8 +150,8 @@ class FacebookFunctions {
     func updateFriendList() {
         //add graph request to update users fb_friends
         //query to find and save fb_friends
-        let currentUserFbFriends = PFUser.current()!["fb_friends"] as! NSArray
-        let currentUserUnmatchedList = PFUser.current()!["unmatched_list"] as! NSArray
+        let currentUserFbFriends = PFUser.current()!["fb_friends"] as? [String] ?? [String]()
+        let currentUserUnmatchedList = PFUser.current()!["unmatched_list"] as? [String] ?? [String]()
         let query: PFQuery = PFQuery(className: "_User")
         
         query.whereKey("fb_id", containedIn: currentUserFbFriends as [AnyObject])
