@@ -36,74 +36,6 @@ class HalfSwipeCard: UIView {
                 downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
             }
         }
-        /*
-        //card's profile pictures are retrieved if they are already saved to the phone using mapping to the associated bridgePairing objectId and the position of the card (i.e. either upperDeckCard or not)
-        let localData = LocalData()
-        if let pairings = localData.getPairings() {
-            for pair in pairings {
-                if self.frame.origin.y == 0 {
-                    //Sets the image on the HalfSwipeCard to user1's saved profile picture in the pair
-                    if let data = pair.user1?.savedProfilePicture {
-                        //applying filter to make the white text more legible
-                        let beginImage = CIImage(data: data as Data)
-                        let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
-                        edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
-                        edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
-                        edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
-                        
-                        let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
-                        
-                        let newImage = UIImage(cgImage: newCGImage!)
-                        photoView.image = newImage
-                        photoView.contentMode = UIViewContentMode.scaleAspectFill
-                        photoView.clipsToBounds = true
-                    }
-                    //Downloads the photo from the URL and then saves to the pairing
-                    else {
-                        /*if let bridgePairingObjectId = pair.user1?.objectId {
-                            if let URL = URL(string: photoURL) {
-                                Downloader.load(URL, imageView: photoView, bridgePairingObjectId: bridgePairingObjectId , isUpperDeckCard: true)
-                            }
-                        }*/
-                        if let URL = URL(string: photoURL) {
-                            downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
-                            break
-                        }
-                    }
-                }
-                else {
-                    //Sets the image on the HalfSwipeCard to user2's saved profile picture in the pair
-                    if let data = pair.user2?.savedProfilePicture {
-                        //applying filter to make the white text more legible
-                        let beginImage = CIImage(data: data as Data)
-                        let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
-                        edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
-                        edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
-                        edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
-                        
-                        let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
-                        
-                        let newImage = UIImage(cgImage: newCGImage!)
-                        photoView.image = newImage
-                        photoView.contentMode = UIViewContentMode.scaleAspectFill
-                        photoView.clipsToBounds = true
-                    }
-                    //Downloads the photo from the URL and then saves to the pairing
-                    else {
-                        /*if let bridgePairingObjectId = pair.user2?.objectId {
-                            if let URL = URL(string: photoURL) {
-                                Downloader.load(URL, imageView: photoView, bridgePairingObjectId: bridgePairingObjectId , isUpperDeckCard: false)
-                            }
-                        }*/
-                        if let URL = URL(string: photoURL) {
-                            downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
-                            break
-                        }
-                    }
-                }
-                
-            }
-        }*/
         
         layoutHalfCard(name: name, status: status, photoView: photoView, connectionType: connectionType)
 
@@ -158,4 +90,75 @@ class HalfSwipeCard: UIView {
     func callbackToSetPhoto(_ image: UIImage) -> Void {
         photo = image
     }
+    
+    
+    
+    /*
+     //card's profile pictures are retrieved if they are already saved to the phone using mapping to the associated bridgePairing objectId and the position of the card (i.e. either upperDeckCard or not)
+     let localData = LocalData()
+     if let pairings = localData.getPairings() {
+     for pair in pairings {
+     if self.frame.origin.y == 0 {
+     //Sets the image on the HalfSwipeCard to user1's saved profile picture in the pair
+     if let data = pair.user1?.savedProfilePicture {
+     //applying filter to make the white text more legible
+     let beginImage = CIImage(data: data as Data)
+     let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+     edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+     edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+     edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+     
+     let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+     
+     let newImage = UIImage(cgImage: newCGImage!)
+     photoView.image = newImage
+     photoView.contentMode = UIViewContentMode.scaleAspectFill
+     photoView.clipsToBounds = true
+     }
+     //Downloads the photo from the URL and then saves to the pairing
+     else {
+     /*if let bridgePairingObjectId = pair.user1?.objectId {
+     if let URL = URL(string: photoURL) {
+     Downloader.load(URL, imageView: photoView, bridgePairingObjectId: bridgePairingObjectId , isUpperDeckCard: true)
+     }
+     }*/
+     if let URL = URL(string: photoURL) {
+     downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
+     break
+     }
+     }
+     }
+     else {
+     //Sets the image on the HalfSwipeCard to user2's saved profile picture in the pair
+     if let data = pair.user2?.savedProfilePicture {
+     //applying filter to make the white text more legible
+     let beginImage = CIImage(data: data as Data)
+     let edgeDetectFilter = CIFilter(name: "CIVignetteEffect")!
+     edgeDetectFilter.setValue(beginImage, forKey: kCIInputImageKey)
+     edgeDetectFilter.setValue(0.2, forKey: "inputIntensity")
+     edgeDetectFilter.setValue(0.2, forKey: "inputRadius")
+     
+     let newCGImage = CIContext(options: nil).createCGImage(edgeDetectFilter.outputImage!, from: (edgeDetectFilter.outputImage?.extent)!)
+     
+     let newImage = UIImage(cgImage: newCGImage!)
+     photoView.image = newImage
+     photoView.contentMode = UIViewContentMode.scaleAspectFill
+     photoView.clipsToBounds = true
+     }
+     //Downloads the photo from the URL and then saves to the pairing
+     else {
+     /*if let bridgePairingObjectId = pair.user2?.objectId {
+     if let URL = URL(string: photoURL) {
+     Downloader.load(URL, imageView: photoView, bridgePairingObjectId: bridgePairingObjectId , isUpperDeckCard: false)
+     }
+     }*/
+     if let URL = URL(string: photoURL) {
+     downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
+     break
+     }
+     }
+     }
+     
+     }
+     }*/
 }

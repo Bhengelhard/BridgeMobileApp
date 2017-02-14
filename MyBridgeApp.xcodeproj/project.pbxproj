@@ -87,6 +87,7 @@
 		E9D6DF511D78836200138A1F /* SingleMessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF4F1D78836200138A1F /* SingleMessageContent.swift */; };
 		E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF501D78836200138A1F /* SingleMessageTableCell.swift */; };
 		E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */; };
+		F5E62C9E5752580839560F1D /* Pods_MyBridgeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E713802418DFAB7F52236C40 /* Pods_MyBridgeApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,6 +135,7 @@
 		30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
 		30E2AF771DDA2AB70023AA95 /* ReasonForConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReasonForConnection.swift; path = "Custom Classes/Custom Views/ReasonForConnection.swift"; sourceTree = "<group>"; };
+		49DBC5D84C119536F5E4F525 /* Pods-MyBridgeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyBridgeApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyBridgeApp/Pods-MyBridgeApp.debug.xcconfig"; sourceTree = "<group>"; };
 		67AD26D51E31353400252575 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = MyBridgeApp/Constants.swift; sourceTree = "<group>"; };
 		814C3AC81B69877600E307BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		814C3AC91B69877600E307BB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -157,10 +159,12 @@
 		90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController.swift; path = MyBridgeApp/MyProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		90CA09AA1E0B080100330646 /* HexagonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexagonView.swift; path = "Custom Classes/Custom Views/HexagonView.swift"; sourceTree = "<group>"; };
 		90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
+		A406D97A77270C2F8022759D /* Pods-MyBridgeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyBridgeApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyBridgeApp/Pods-MyBridgeApp.release.xcconfig"; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleMessageViewController.swift; path = MyBridgeApp/SingleMessageViewController.swift; sourceTree = SOURCE_ROOT; };
 		CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountSettingsTableViewController.swift; path = MyBridgeApp/AccountSettingsTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		E713802418DFAB7F52236C40 /* Pods_MyBridgeApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyBridgeApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E977C9D21D805F620048DBD1 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalProfileViewController.swift; path = MyBridgeApp/ExternalProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMessageTableCell.swift; path = MyBridgeApp/NewMessageTableCell.swift; sourceTree = SOURCE_ROOT; };
 		E9D6DF101D7880C400138A1F /* MessagesTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTableCell.swift; path = MyBridgeApp/MessagesTableCell.swift; sourceTree = SOURCE_ROOT; };
@@ -190,6 +194,7 @@
 				81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */,
 				E9D6DF151D7880EA00138A1F /* Bolts.framework in Frameworks */,
 				E9D6DF1D1D78810F00138A1F /* ParseUI.framework in Frameworks */,
+				F5E62C9E5752580839560F1D /* Pods_MyBridgeApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +341,15 @@
 			name = "Server-Side Functions";
 			sourceTree = "<group>";
 		};
+		64CDD67E3E87CF517C1CB316 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				49DBC5D84C119536F5E4F525 /* Pods-MyBridgeApp.debug.xcconfig */,
+				A406D97A77270C2F8022759D /* Pods-MyBridgeApp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		67AD26D71E31353D00252575 /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -367,6 +381,7 @@
 				814C3AC51B69877600E307BB /* Resources */,
 				81BA816A1A49DB5600E65899 /* Frameworks */,
 				81BA81461A49DA1800E65899 /* Products */,
+				64CDD67E3E87CF517C1CB316 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -401,6 +416,7 @@
 				E9D6DF1A1D78810800138A1F /* ParseFacebookUtilsV4.framework */,
 				E9D6DF1C1D78810F00138A1F /* ParseUI.framework */,
 				81BA81751A49E0C500E65899 /* System Frameworks */,
+				E713802418DFAB7F52236C40 /* Pods_MyBridgeApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -446,9 +462,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 81BA81641A49DA1800E65899 /* Build configuration list for PBXNativeTarget "MyBridgeApp" */;
 			buildPhases = (
+				2CC4AAABB28B57A655A2A3EE /* [CP] Check Pods Manifest.lock */,
 				81BA81411A49DA1800E65899 /* Sources */,
 				81BA81421A49DA1800E65899 /* Frameworks */,
 				81BA81431A49DA1800E65899 /* Resources */,
+				DA1DB3FE2891E8DB2C333E43 /* [CP] Embed Pods Frameworks */,
+				BB424A17D316E5C41CE735DB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -513,6 +532,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2CC4AAABB28B57A655A2A3EE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BB424A17D316E5C41CE735DB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MyBridgeApp/Pods-MyBridgeApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DA1DB3FE2891E8DB2C333E43 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MyBridgeApp/Pods-MyBridgeApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		81BA81411A49DA1800E65899 /* Sources */ = {
@@ -680,6 +747,7 @@
 		};
 		81BA81651A49DA1800E65899 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49DBC5D84C119536F5E4F525 /* Pods-MyBridgeApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -707,6 +775,7 @@
 		};
 		81BA81661A49DA1800E65899 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A406D97A77270C2F8022759D /* Pods-MyBridgeApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
