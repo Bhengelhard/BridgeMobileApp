@@ -11,10 +11,28 @@ import Parse
 /// a Necter User
 class User: NSObject {
     
-    private let pfUser: PFUser
+    typealias UserBlock = (User) -> Void
+    
+    private let parseUser: PFUser
+    
     let id: String?
     var fbID: String?
     var name: String?
+    
+    var firstName: String? {
+        if let name = name {
+            return DisplayUtility.firstName(name: name)
+        }
+        return nil
+    }
+    
+    var firstNameLastNameInitial: String? {
+        if let name = name {
+            return DisplayUtility.firstNameLastNameInitial(name: name)
+        }
+        return nil
+    }
+    
     var email: String?
     var friendList: [String]?
     var ranOutOfPairs: Int?
@@ -28,86 +46,94 @@ class User: NSObject {
     var religion: String?
     var quickUpdate: String?
     
-    private init(pfUser: PFUser) {
-        self.pfUser = pfUser
+    var pictureIDs: [String]?
+    
+    private var pictureIDsToPictures = [String: Picture]()
+    
+    private init(parseUser: PFUser) {
+        self.parseUser = parseUser
         
-        id = pfUser.objectId
+        id = parseUser.objectId
         
-        if let pfFBID = pfUser["fb_id"] as? String {
-            fbID = pfFBID
+        if let parseFBID = parseUser["fb_id"] as? String {
+            fbID = parseFBID
         }
         
-        if let pfName = pfUser["name"] as? String {
-            name = pfName
+        if let parseName = parseUser["name"] as? String {
+            name = parseName
         }
         
-        if let pfEmail = pfUser["email"] as? String {
-            email = pfEmail
+        if let parseEmail = parseUser["email"] as? String {
+            email = parseEmail
         }
         
-        if let pfFriendList = pfUser["friendList"] as? [String] {
-            friendList = pfFriendList
+        if let parseFriendList = parseUser["friendList"] as? [String] {
+            friendList = parseFriendList
         }
         
-        if let pfRanOutOfPairs = pfUser["ran_out_of_pairs"] as? Int {
-            ranOutOfPairs = pfRanOutOfPairs
+        if let parseRanOutOfPairs = parseUser["ran_out_of_pairs"] as? Int {
+            ranOutOfPairs = parseRanOutOfPairs
         }
         
-        if let pfGender = pfUser["gender"] as? String {
-            if pfGender == "male" {
+        if let parseGender = parseUser["gender"] as? String {
+            if parseGender == "male" {
                 gender = .male
-            } else if pfGender == "female" {
+            } else if parseGender == "female" {
                 gender = .female
             } else {
                 gender = .other
             }
         }
         
-        if let pfFBBirthday = pfUser["fb_birthday"] as? Date {
-            fbBirthday = pfFBBirthday
+        if let parseFBBirthday = parseUser["fb_birthday"] as? Date {
+            fbBirthday = parseFBBirthday
         }
 
-        if let pfAge = pfUser["age"] as? Int {
-            age = pfAge
+        if let parseAge = parseUser["age"] as? Int {
+            age = parseAge
         }
         
-        if let pfCity = pfUser["city"] as? String {
-            city = pfCity
+        if let parseCity = parseUser["city"] as? String {
+            city = parseCity
         }
         
-        if let pfSchool = pfUser["school"] as? String {
-            school = pfSchool
+        if let parseSchool = parseUser["school"] as? String {
+            school = parseSchool
         }
         
-        if let pfEmployer = pfUser["employer"] as? String {
-            employer = pfEmployer
+        if let parseEmployer = parseUser["employer"] as? String {
+            employer = parseEmployer
         }
         
-        if let pfReligion = pfUser["religion"] as? String {
-            religion = pfReligion
+        if let parseReligion = parseUser["religion"] as? String {
+            religion = parseReligion
         }
         
-        if let pfQuickUpdate = pfUser["quick_update"] as? String {
-            quickUpdate = pfQuickUpdate
+        if let parseQuickUpdate = parseUser["quick_update"] as? String {
+            quickUpdate = parseQuickUpdate
         }
         
         super.init()
     }
     
-    static func getCurrent(withBlock block: ((User) -> Void)? = nil) {
-        if let pfUser = PFUser.current() {
-            let user = User(pfUser: pfUser)
+    static func getCurrent(withBlock block: UserBlock? = nil) {
+        if let parseUser = PFUser.current() {
+            let user = User(parseUser: parseUser)
             if let block = block {
                 block(user)
             }
+        } else {
+            print("error getting current user")
         }
     }
     
-    static func get(withId id: String, withBlock block: ((User) -> Void)? = nil) {
+    static func get(withId id: String, withBlock block: UserBlock? = nil) {
         let query = PFQuery(className: "_User")
-        query.getObjectInBackground(withId: id) { (pfObject, error) in
-            if let pfUser = pfObject as? PFUser {
-                let user = User(pfUser: pfUser)
+        query.getObjectInBackground(withId: id) { (parseObject, error) in
+            if let error = error {
+                print("error getting user with id \(id) - \(error)")
+            } else if let parseUser = parseObject as? PFUser {
+                let user = User(parseUser: parseUser)
                 if let block = block {
                     block(user)
                 }
@@ -115,55 +141,81 @@ class User: NSObject {
         }
     }
     
-    func save(withBlock block: ((User) -> Void)? = nil) {
+    func getPicture(atIndex index: Int, withBlock block: Picture.PictureBlock? = nil) {
+        if let pictureIDs = pictureIDs {
+            if index < pictureIDs.count {
+                let pictureID = pictureIDs[index]
+                if let picture = pictureIDsToPictures[pictureID] { // picture has already been retrieved
+                    if let block = block {
+                        block(picture)
+                    }
+                } else { // must retrieve picture
+                    Picture.get(withId: pictureID) { (picture) in
+                        self.pictureIDsToPictures[pictureID] = picture
+                        if let block = block {
+                            block(picture)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getMainPicture(withBlock block: Picture.PictureBlock? = nil) {
+        getPicture(atIndex: 0, withBlock: block)
+    }
+    
+    func save(withBlock block: UserBlock? = nil) {
         if let fbID = fbID {
-            pfUser["fb_id"] = fbID
+            parseUser["fb_id"] = fbID
         }
         if let name = name {
-            pfUser["name"] = name
+            parseUser["name"] = name
         }
         if let email = email {
-            pfUser["email"] = email
+            parseUser["email"] = email
         }
         if let friendList = friendList {
-            pfUser["friend_list"] = friendList
+            parseUser["friend_list"] = friendList
         }
         if let ranOutOfPairs = ranOutOfPairs {
-            pfUser["ran_out_of_pairs"] = ranOutOfPairs
+            parseUser["ran_out_of_pairs"] = ranOutOfPairs
         }
         if let gender = gender {
             if gender == .male {
-                pfUser["gender"] = "male"
+                parseUser["gender"] = "male"
             } else if gender == .female {
-                pfUser["gender"] = "female"
+                parseUser["gender"] = "female"
             } else {
-                pfUser["gender"] = "other"
+                parseUser["gender"] = "other"
             }
         }
         if let fbBirthday = fbBirthday {
-            pfUser["fb_birthday"] = fbBirthday
+            parseUser["fb_birthday"] = fbBirthday
         }
         if let age = age {
-            pfUser["age"] = age
+            parseUser["age"] = age
         }
         if let city = city {
-            pfUser["city"] = city
+            parseUser["city"] = city
         }
         if let school = school {
-            pfUser["school"] = school
+            parseUser["school"] = school
         }
         if let employer = employer {
-            pfUser["employer"] = employer
+            parseUser["employer"] = employer
         }
         if let religion = religion {
-            pfUser["religion"] = religion
+            parseUser["religion"] = religion
         }
         if let quickUpdate = quickUpdate {
-            pfUser["quick_update"] = quickUpdate
+            parseUser["quick_update"] = quickUpdate
         }
         
-        pfUser.saveInBackground { (succeeded, error) in
-            if succeeded {
+        parseUser.saveInBackground { (succeeded, error) in
+            if let error = error {
+                print("error saving user - \(error)")
+            } else if succeeded {
                 if let block = block {
                     block(self)
                 }
