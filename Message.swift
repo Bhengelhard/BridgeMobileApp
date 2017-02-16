@@ -142,22 +142,32 @@ class Message: NSObject {
     func save(withBlock block: MessageBlock?) {
         if let user1ID = user1ID {
             parseMessage["user1_objectID"] = user1ID
+        } else {
+            parseMessage.remove(forKey: "user1_objectID")
         }
         
         if let user2ID = user2ID {
             parseMessage["user2_objectID"] = user2ID
+        } else {
+            parseMessage.remove(forKey: "user2_objectID")
         }
         
         if let bridgeBuilderID = bridgeBuilderID {
             parseMessage["bridge_builder"] = bridgeBuilderID
+        } else {
+            parseMessage.remove(forKey: "bridge_builder")
         }
         
         if let user1Name = user1Name {
             parseMessage["user1_name"] = user1Name
+        }  else {
+            parseMessage.remove(forKey: "user1_name")
         }
         
         if let user2Name = user2Name {
             parseMessage["user2_name"] = user2Name
+        } else {
+            parseMessage.remove(forKey: "user2_name")
         }
         
         parseMessage.saveInBackground { (succeeded, error) in

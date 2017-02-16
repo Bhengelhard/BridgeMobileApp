@@ -168,19 +168,34 @@ class User: NSObject {
     func save(withBlock block: UserBlock? = nil) {
         if let fbID = fbID {
             parseUser["fb_id"] = fbID
+        } else {
+            parseUser.remove(forKey: "fb_id")
         }
+        
         if let name = name {
             parseUser["name"] = name
+        } else {
+            parseUser.remove(forKey: "name")
         }
+        
         if let email = email {
             parseUser["email"] = email
+        } else {
+            parseUser.remove(forKey: "email")
         }
+        
         if let friendList = friendList {
             parseUser["friend_list"] = friendList
+        } else {
+            parseUser.remove(forKey: "friend_list")
         }
+        
         if let ranOutOfPairs = ranOutOfPairs {
             parseUser["ran_out_of_pairs"] = ranOutOfPairs
+        } else {
+            parseUser.remove(forKey: "ran_out_of_pairs")
         }
+        
         if let gender = gender {
             if gender == .male {
                 parseUser["gender"] = "male"
@@ -189,27 +204,56 @@ class User: NSObject {
             } else {
                 parseUser["gender"] = "other"
             }
+        } else {
+            parseUser.remove(forKey: "gender")
         }
+        
         if let fbBirthday = fbBirthday {
             parseUser["fb_birthday"] = fbBirthday
+        } else {
+            parseUser.remove(forKey: "fb_birthday")
         }
+        
         if let age = age {
             parseUser["age"] = age
+        } else {
+            parseUser.remove(forKey: "age")
         }
+        
         if let city = city {
             parseUser["city"] = city
+        } else {
+            parseUser.remove(forKey: "city")
         }
+        
         if let school = school {
             parseUser["school"] = school
+        } else {
+            parseUser.remove(forKey: "school")
         }
+        
         if let employer = employer {
             parseUser["employer"] = employer
+        } else {
+            parseUser.remove(forKey: "employer")
         }
+        
         if let religion = religion {
             parseUser["religion"] = religion
+        } else {
+            parseUser.remove(forKey: "religion")
         }
+        
         if let quickUpdate = quickUpdate {
             parseUser["quick_update"] = quickUpdate
+        } else {
+            parseUser.remove(forKey: "quick_update")
+        }
+        
+        if let pictureIDs = pictureIDs {
+            parseUser["pictures"] = pictureIDs
+        } else {
+            parseUser.remove(forKey: "pictures")
         }
         
         parseUser.saveInBackground { (succeeded, error) in

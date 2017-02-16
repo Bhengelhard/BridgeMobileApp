@@ -89,18 +89,24 @@ class Picture: NSObject {
             if let imageFile = imageToPFFile(image: image) {
                 parsePicture["image_file"] = imageFile
             }
+        } else {
+            parsePicture.remove(forKey: "image_file")
         }
         
         if let croppedImage = croppedImage {
             if let croppedImageFile = imageToPFFile(image: croppedImage) {
                 parsePicture["cropped_image_file"] = croppedImageFile
             }
+        } else {
+            parsePicture.remove(forKey: "cropped_image_file")
         }
         
         if let cropFrame = cropFrame {
             if let cropFrameDict = cropFrame.dictionaryRepresentation as? [String: CGFloat] {
                 parsePicture["crop_frame"] = cropFrameDict
             }
+        } else {
+            parsePicture.remove(forKey: "cropFrame")
         }
         
         parsePicture.saveInBackground { (succeeded, error) in
