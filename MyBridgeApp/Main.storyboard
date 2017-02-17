@@ -36,6 +36,27 @@
             </objects>
             <point key="canvasLocation" x="-1108" y="-171"/>
         </scene>
+        <!--Privacy Policy View Controller-->
+        <scene sceneID="ovV-6Z-0TW">
+            <objects>
+                <viewController id="agA-Ob-cUS" customClass="PrivacyPolicyViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Wbd-sX-Im0"/>
+                        <viewControllerLayoutGuide type="bottom" id="2ZJ-6v-IqQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eGp-O4-HXK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="Qv3-Na-w7J" kind="show" identifier="showLogin" id="Zf9-Tg-H2E"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9ld-lD-Zsd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-708" y="-1889"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="SgD-tP-9oW">
             <objects>
@@ -52,6 +73,7 @@
                     <connections>
                         <segue destination="nIP-ev-yX8" kind="show" identifier="showSignUp" id="ox5-al-Zda"/>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeViewController" id="cC3-sR-uFf"/>
+                        <segue destination="agA-Ob-cUS" kind="show" identifier="showPrivacyPolicy" id="oYU-ZE-Xv8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mcU-Go-Vjy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -101,7 +123,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FGX-TP-Wxn" id="Czd-tc-gSD">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
@@ -194,7 +216,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T5a-4r-w51" id="e1H-5M-cRe">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -202,7 +224,7 @@
                                         <rect key="frame" x="0.0" y="108" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sXF-O8-4hx" id="RYW-hh-tey">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -340,9 +362,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Bdu-f2-69i"/>
         <segue reference="WWN-20-fau"/>
         <segue reference="cC3-sR-uFf"/>
+        <segue reference="Zf9-Tg-H2E"/>
         <segue reference="1Bx-ML-R6e"/>
         <segue reference="OnA-y9-bUb"/>
         <segue reference="mf0-bu-EW9"/>

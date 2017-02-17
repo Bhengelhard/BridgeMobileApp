@@ -1,42 +1,36 @@
 //
-//  LoginViewController.swift
+//  PrivacyPolicyViewController.swift
 //  MyBridgeApp
 //
-//  Created by Blake Engelhard on 2/14/17.
+//  Created by Blake Engelhard on 2/17/17.
 //  Copyright © 2017 Parse. All rights reserved.
 //
 
 import UIKit
 
 /// The LoginViewController class defines the authentification and loggin process
-class LoginViewController: UIViewController {
+class PrivacyPolicyViewController: UIViewController {
     
     // MARK: Global Variables
-    let accessCode = ""
-    
-    let layout = LoginLayout()
+    let layout = PrivacyPolicyLayout()
     let transitionManager = TransitionManager()
-
-    var didSetupConstraints = false
     
+    var didSetupConstraints = false
+
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        layout.seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped(_:)), for: .touchUpInside)
-        
+
+        layout.returnToLoginButton.addTarget(self, action: #selector(returnToLogin(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
         view = UIView()
         view.backgroundColor = UIColor.white
         
-        print("Login setup)")
-        
         view.setNeedsUpdateConstraints()
     }
-    
-    
+
     override func updateViewConstraints() {
         didSetupConstraints = layout.initialize(view: view, didSetupConstraints: didSetupConstraints)
         
@@ -44,9 +38,9 @@ class LoginViewController: UIViewController {
     }
     
     // MARK: - Targets
-    /// Segues to PrivacyInformationViewController to show more information about privacy while using the application
-    func seeMoreButtonTapped (_ sender: UIButton) {
-        self.performSegue(withIdentifier: "showPrivacyPolicy", sender: self)
+    /// Segues to Login
+    func returnToLogin(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "showLogin", sender: self)
     }
     
 
@@ -54,11 +48,10 @@ class LoginViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
-        if mirror.subjectType == PrivacyPolicyViewController.self {
-            self.transitionManager.animationDirection = "Top"
+        if mirror.subjectType == LoginViewController.self {
+            self.transitionManager.animationDirection = "Bottom"
         }
         //vc.transitioningDelegate = self.transitionManager
-
     }
 
 }
