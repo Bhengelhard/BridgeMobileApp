@@ -15,6 +15,8 @@
 		302799D61E5768E400AFFB90 /* PrivacyPolicyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799D51E5768E400AFFB90 /* PrivacyPolicyLayout.swift */; };
 		302799D81E5768F800AFFB90 /* PrivacyPolicyObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799D71E5768F800AFFB90 /* PrivacyPolicyObjects.swift */; };
 		302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799D91E579FC300AFFB90 /* SwipeViewController.swift */; };
+		302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799DB1E57A71800AFFB90 /* SwipeLayout.swift */; };
+		302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799DD1E57A72700AFFB90 /* SwipeObjects.swift */; };
 		3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B01DD54E3F0077F7AC /* LocalData.swift */; };
 		3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */; };
 		3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B21DD54E3F0077F7AC /* PairInfo.swift */; };
@@ -106,6 +108,8 @@
 		302799D51E5768E400AFFB90 /* PrivacyPolicyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrivacyPolicyLayout.swift; path = "Custom Classes/UI Functions/PrivacyPolicyLayout.swift"; sourceTree = "<group>"; };
 		302799D71E5768F800AFFB90 /* PrivacyPolicyObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrivacyPolicyObjects.swift; path = "Custom Classes/UI Functions/PrivacyPolicyObjects.swift"; sourceTree = "<group>"; };
 		302799D91E579FC300AFFB90 /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeViewController.swift; path = MyBridgeApp/SwipeViewController.swift; sourceTree = SOURCE_ROOT; };
+		302799DB1E57A71800AFFB90 /* SwipeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeLayout.swift; path = "Custom Classes/UI Functions/SwipeLayout.swift"; sourceTree = "<group>"; };
+		302799DD1E57A72700AFFB90 /* SwipeObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeObjects.swift; path = "Custom Classes/UI Functions/SwipeObjects.swift"; sourceTree = "<group>"; };
 		3030C0B01DD54E3F0077F7AC /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalData.swift; path = "Custom Classes/Data Storage/LocalData.swift"; sourceTree = "<group>"; };
 		3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalStorageUtility.swift; path = "Custom Classes/Data Storage/LocalStorageUtility.swift"; sourceTree = "<group>"; };
 		3030C0B21DD54E3F0077F7AC /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PairInfo.swift; path = "Custom Classes/Data Storage/PairInfo.swift"; sourceTree = "<group>"; };
@@ -273,6 +277,8 @@
 				300A1D7D1E53EB6C0071FED7 /* LoginLayout.swift */,
 				3079EB241E54FACD008AB6E5 /* LoginObjects.swift */,
 				302799D51E5768E400AFFB90 /* PrivacyPolicyLayout.swift */,
+				302799DB1E57A71800AFFB90 /* SwipeLayout.swift */,
+				302799DD1E57A72700AFFB90 /* SwipeObjects.swift */,
 				302799D71E5768F800AFFB90 /* PrivacyPolicyObjects.swift */,
 			);
 			name = "UI Functions";
@@ -615,6 +621,7 @@
 				302799D81E5768F800AFFB90 /* PrivacyPolicyObjects.swift in Sources */,
 				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
 				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
+				302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */,
 				302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */,
 				3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */,
 				3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */,
@@ -663,6 +670,7 @@
 				30BAE9A21E31B9210094070B /* MessagingFunctions.swift in Sources */,
 				9032B4541E311B0600136408 /* ProfilePicturesView.swift in Sources */,
 				30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */,
+				302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */,
 				30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */,

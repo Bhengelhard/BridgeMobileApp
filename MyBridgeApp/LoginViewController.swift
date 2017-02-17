@@ -31,8 +31,6 @@ class LoginViewController: UIViewController {
         view = UIView()
         view.backgroundColor = UIColor.white
         
-        print("Login setup)")
-        
         view.setNeedsUpdateConstraints()
     }
     

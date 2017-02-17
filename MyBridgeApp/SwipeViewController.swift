@@ -3,33 +3,53 @@
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 2/17/17.
-//  Copyright © 2017 Parse. All rights reserved.
+//  Copyright © 2017 BHE Ventures LLC. All rights reserved.
 //
 
 import UIKit
 
+/// The SwipeViewController class displays and handles swiping for introductions
 class SwipeViewController: UIViewController {
 
+    // MARK: Global Variables
+    let layout = SwipeLayout()
+    let transitionManager = TransitionManager()
+    
+    var didSetupConstraints = false
+    
+    // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func loadView() {
+        view = UIView()
+        view.backgroundColor = UIColor.white
+        
+        view.setNeedsUpdateConstraints()
     }
-    */
-
+    
+    
+    override func updateViewConstraints() {
+        didSetupConstraints = layout.initialize(view: view, didSetupConstraints: didSetupConstraints)
+        
+        super.updateViewConstraints()
+    }
+    
+    // MARK: - Targets
+    
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == MyProfileViewController.self {
+            self.transitionManager.animationDirection = "Left"
+        } else if mirror.subjectType == MessagesViewController.self {
+            self.transitionManager.animationDirection = "Right"
+        }
+        //vc.transitioningDelegate = self.transitionManager
+        
+    }
+    
 }

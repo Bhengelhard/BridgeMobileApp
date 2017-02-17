@@ -64,15 +64,6 @@ class LoginLayout {
     
 }
 
-class LoginLayoutUpdate {
-    
-    func updateButton() {
-        
-        
-    }
-    
-}
-
 
 
 
