@@ -33,7 +33,7 @@ class LoginObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.setTitle("LOGIN WITH FACEBOOK", for: .normal)
+            self.setTitle("CONNECT WITH FACEBOOK", for: .normal)
             self.setTitleColor(UIColor.white, for: .normal)
             self.setTitleColor(DisplayUtility.gradientColor(size: (self.titleLabel?.frame.size)!), for: .highlighted)
             self.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 16)

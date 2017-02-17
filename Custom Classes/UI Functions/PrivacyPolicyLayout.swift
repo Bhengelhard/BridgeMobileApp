@@ -13,12 +13,27 @@ class PrivacyPolicyLayout {
     // MARK: Global Variables
     let returnToLoginButton = PrivacyPolicyObjects.ReturnToLoginButton()
     let fbLoginButton = PrivacyPolicyObjects.FBLoginButton()
-    let privacyHeaderLabel = PrivacyPolicyObjects.Label(text: "text")
-    let neverPostLabel = PrivacyPolicyObjects.Label(text: "text")
-    let introducedByLabel = PrivacyPolicyObjects.Label(text: "text")
-    let introductionControlLabel = PrivacyPolicyObjects.Label(text: "text")
-    let introducedByControlLabel = PrivacyPolicyObjects.Label(text: "text")
+    let privacyHeaderLabel = PrivacyPolicyObjects.Header()
+    let neverPostLabel: PrivacyPolicyObjects.Label
+    let introducedByLabel: PrivacyPolicyObjects.Label
+    let introductionControlLabel: PrivacyPolicyObjects.Label
+    let introducedByControlLabel: PrivacyPolicyObjects.Label
     let privacyPolicyButton = PrivacyPolicyObjects.PrivacyPolicyButton()
+    
+    init() {
+        let neverPostText = "We never post to Facebook."
+        neverPostLabel = PrivacyPolicyObjects.Label(text: neverPostText)
+        
+        let introducedText = "You will only be introduced to other users by people you are already friends with."
+        introducedByLabel = PrivacyPolicyObjects.Label(text: introducedText)
+        
+        let introductionControlText = "You have control over the users you can introduce."
+        introductionControlLabel = PrivacyPolicyObjects.Label(text: introductionControlText)
+        
+        let introducedByControlText = "You have control over the users who can introduce you."
+        introducedByControlLabel = PrivacyPolicyObjects.Label(text: introducedByControlText)
+        
+    }
     
     // MARK: - Layout
     /// Sets the initial layout constraints
@@ -65,7 +80,7 @@ class PrivacyPolicyLayout {
             view.addSubview(privacyPolicyButton)
             privacyPolicyButton.autoPinEdge(.top, to: .bottom, of: introducedByControlLabel, withOffset: 35)
             privacyPolicyButton.autoAlignAxis(.vertical, toSameAxisOf: view)
-
+            //privacyPolicyButton.autoSetDimensions(to: CGSize(width: 50, height: 100))
             
         }
         
