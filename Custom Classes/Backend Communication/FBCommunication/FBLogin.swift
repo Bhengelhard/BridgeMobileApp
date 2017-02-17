@@ -108,7 +108,7 @@ class FBLogin {
                             }
                             
                             //Adding access code to current user field access_codes to identify which communities the user has joined
-                            if let accessVC = vc as? AccessViewController {
+                            if let accessVC = vc as? LoginViewController {
                                 //Checking if user had to enter an access code -> i.e. HasSignedUp was false before they logged in
                                 if !accessVC.accessCode.isEmpty {
                                     PFUser.current()?.addUniqueObject(accessVC.accessCode, forKey: "access_codes")
