@@ -12,12 +12,18 @@ import UIKit
 class Picture: NSObject {
     typealias PictureBlock = (Picture) -> Void
     
-    let parsePicture: PFObject
+    private let parsePicture: PFObject
     
+    /// The objectId of the Picture
     let id: String?
     
+    /// The full, uncropped image
     var image: UIImage?
+    
+    /// The cropped image
     var croppedImage: UIImage?
+    
+    /// The frame of the cropped portion of the image
     var cropFrame: CGRect?
     
     private init(parsePicture: PFObject) {

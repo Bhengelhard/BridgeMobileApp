@@ -73,7 +73,6 @@ class MyProfileViewController: UIViewController {
                 query.whereKey("accepted_notification_viewed", equalTo: true)
                 query.limit = 1000
                 query.countObjectsInBackground(block: { (count, error) in
-                    print("numNected query executing...")
                     if let error = error {
                         print("numNected findObjectsInBackgroundWithBlock error - \(error)")
                     }
@@ -165,7 +164,6 @@ class MyProfileViewController: UIViewController {
                 query.whereKey("updatedAt", greaterThanOrEqualTo: dateOneWeekAgo) // filter on past week
                 query.limit = 1000
                 query.countObjectsInBackground(block: { (count, error) in
-                    print("numNected query executing...")
                     if let error = error {
                         print("numNected findObjectsInBackgroundWithBlock error - \(error)")
                     }

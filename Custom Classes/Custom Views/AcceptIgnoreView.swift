@@ -332,11 +332,12 @@ class AcceptIgnoreView: UIView {
                         //Checking if message with paired user's already exists
                         let messagesQuery = PFQuery(className: "Messages")
                         var currentUserObjectId = ""
+                        /*
                         User.getCurrent(withBlock: { (user) in
                             if let id = user.id {
                                 currentUserObjectId = id
                             }
-                        })
+                        })*/
                         var otherUserObjectId = ""
                         if otherUser == "user1" {
                             if let id = result["user_objectId1"] as? String {

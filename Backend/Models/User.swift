@@ -15,10 +15,16 @@ class User: NSObject {
     
     private let parseUser: PFUser
     
+    /// The objectId of the User
     let id: String?
+    
+    /// The Facebook ID of the User
     var fbID: String?
+    
+    /// The full name of the User
     var name: String?
     
+    /// The first name of the User
     var firstName: String? {
         if let name = name {
             return DisplayUtility.firstName(name: name)
@@ -26,6 +32,7 @@ class User: NSObject {
         return nil
     }
     
+    /// The first name and first initial of the last name of the User
     var firstNameLastNameInitial: String? {
         if let name = name {
             return DisplayUtility.firstNameLastNameInitial(name: name)
@@ -33,19 +40,43 @@ class User: NSObject {
         return nil
     }
     
+    /// The email of the User
     var email: String?
+    
+    ///The objectIds of the User's friends
     var friendList: [String]?
+    
+    /// How many times the User has run out of pairs
     var ranOutOfPairs: Int?
+    
+    /// The gender of the User
     var gender: Gender?
+    
+    /// The gender that the User is interested in
     var interestedIn: Gender?
+    
+    /// The User's birthday on Facebook
     var fbBirthday: Date?
+    
+    /// The age of the User
     var age: Int?
+    
+    /// The city of the User
     var city: String?
+    
+    /// THe school of the User
     var school: String?
+    
+    /// The emplyer of the User
     var employer: String?
+    
+    /// The religion of the User
     var religion: String?
+    
+    /// A quick update about the User
     var quickUpdate: String?
     
+    /// The objectIds of the User's Pictures
     var pictureIDs: [String]?
     
     private var pictureIDsToPictures = [String: Picture]()
@@ -116,6 +147,8 @@ class User: NSObject {
         super.init()
     }
     
+    /// Gets the currently logged in User and calls the given block on the result.
+    /// - parameter block: the block to call on the result
     static func getCurrent(withBlock block: UserBlock? = nil) {
         if let parseUser = PFUser.current() {
             let user = User(parseUser: parseUser)
@@ -127,6 +160,10 @@ class User: NSObject {
         }
     }
     
+    /// Gets the User with the provided objectId and calls the given block on the
+    /// result.
+    /// - parameter id: the objectId of the User
+    /// - parameter block: the block to call on the result
     static func get(withId id: String, withBlock block: UserBlock? = nil) {
         let query = PFQuery(className: "_User")
         query.getObjectInBackground(withId: id) { (parseObject, error) in
