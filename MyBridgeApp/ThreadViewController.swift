@@ -11,7 +11,7 @@ import UIKit
 class ThreadViewController: UIViewController {
 
     // MARK: Global Variables
-    let layout = MyProfileLayout()
+    let layout = ThreadLayout()
     let transitionManager = TransitionManager()
     
     var didSetupConstraints = false

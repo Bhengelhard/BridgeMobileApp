@@ -63,6 +63,9 @@
 		30BF6FFD1E5BDF530008C2B5 /* new_EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */; };
 		30BF6FFF1E5BDF710008C2B5 /* EditProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */; };
 		30BF70011E5BDF820008C2B5 /* EditProfileObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */; };
+		30BF70031E5BE2B20008C2B5 /* ExternalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70021E5BE2B20008C2B5 /* ExternalViewController.swift */; };
+		30BF70051E5BE2CF0008C2B5 /* ExternalLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70041E5BE2CF0008C2B5 /* ExternalLayout.swift */; };
+		30BF70071E5BE2FD0008C2B5 /* ExternalObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70061E5BE2FD0008C2B5 /* ExternalObjects.swift */; };
 		30BFA0B21E4BBB9600A17F5E /* FacebookFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */; };
 		30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */; };
 		30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */; };
@@ -168,6 +171,9 @@
 		30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = new_EditProfileViewController.swift; path = MyBridgeApp/new_EditProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileLayout.swift; path = "Custom Classes/UI Functions/EditProfileLayout.swift"; sourceTree = "<group>"; };
 		30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileObjects.swift; path = "Custom Classes/UI Functions/EditProfileObjects.swift"; sourceTree = "<group>"; };
+		30BF70021E5BE2B20008C2B5 /* ExternalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalViewController.swift; path = MyBridgeApp/ExternalViewController.swift; sourceTree = SOURCE_ROOT; };
+		30BF70041E5BE2CF0008C2B5 /* ExternalLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalLayout.swift; sourceTree = "<group>"; };
+		30BF70061E5BE2FD0008C2B5 /* ExternalObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalObjects.swift; path = "Custom Classes/UI Functions/ExternalObjects.swift"; sourceTree = "<group>"; };
 		30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FacebookFunctions.swift; path = "Custom Classes/Backend Communication/FBCommunication/FacebookFunctions.swift"; sourceTree = "<group>"; };
 		30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLogin.swift; path = "Custom Classes/Backend Communication/FBCommunication/FBLogin.swift"; sourceTree = "<group>"; };
 		30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = Types/BridgeType.swift; sourceTree = "<group>"; };
@@ -310,6 +316,8 @@
 				30BF6FFA1E5BDEB40008C2B5 /* ThreadObjects.swift */,
 				30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */,
 				30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */,
+				30BF70041E5BE2CF0008C2B5 /* ExternalLayout.swift */,
+				30BF70061E5BE2FD0008C2B5 /* ExternalObjects.swift */,
 			);
 			name = "UI Functions";
 			sourceTree = "<group>";
@@ -344,6 +352,7 @@
 				30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */,
 				30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */,
 				30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */,
+				30BF70021E5BE2B20008C2B5 /* ExternalViewController.swift */,
 				300A1D811E53F9EF0071FED7 /* LoginViewController.swift */,
 				302799D31E57684D00AFFB90 /* PrivacyPolicyViewController.swift */,
 				302799D91E579FC300AFFB90 /* SwipeViewController.swift */,
@@ -652,6 +661,7 @@
 				3030C0B81DD54E3F0077F7AC /* UserInfo.swift in Sources */,
 				304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */,
 				3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */,
+				30BF70071E5BE2FD0008C2B5 /* ExternalObjects.swift in Sources */,
 				302799D81E5768F800AFFB90 /* PrivacyPolicyObjects.swift in Sources */,
 				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
 				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
@@ -659,6 +669,7 @@
 				302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */,
 				302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */,
 				30BF6FF11E5BDD860008C2B5 /* new_MessagesViewController.swift in Sources */,
+				30BF70051E5BE2CF0008C2B5 /* ExternalLayout.swift in Sources */,
 				30BF6FED1E5BDB8A0008C2B5 /* MyProfileLayout.swift in Sources */,
 				3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */,
 				3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */,
@@ -670,6 +681,7 @@
 				30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */,
 				9032B4561E31249C00136408 /* OtherProfileViewController.swift in Sources */,
 				30BF6FF31E5BDDAB0008C2B5 /* MessagesLayout.swift in Sources */,
+				30BF70031E5BE2B20008C2B5 /* ExternalViewController.swift in Sources */,
 				3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */,

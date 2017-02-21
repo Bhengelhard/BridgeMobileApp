@@ -11,7 +11,7 @@ import UIKit
 class new_MessagesViewController: UIViewController {
 
     // MARK: Global Variables
-    let layout = MyProfileLayout()
+    let layout = MessagesLayout()
     let transitionManager = TransitionManager()
     
     var didSetupConstraints = false

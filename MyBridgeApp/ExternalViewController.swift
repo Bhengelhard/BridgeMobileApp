@@ -1,5 +1,5 @@
 //
-//  new_EditProfileViewController.swift
+//  ExternalViewController.swift
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 2/20/17.
@@ -8,10 +8,10 @@
 
 import UIKit
 
-class new_EditProfileViewController: UIViewController {
+class ExternalViewController: UIViewController {
 
     // MARK: Global Variables
-    let layout = EditProfileLayout()
+    let layout = ExternalLayout()
     let transitionManager = TransitionManager()
     
     var didSetupConstraints = false
@@ -47,5 +47,5 @@ class new_EditProfileViewController: UIViewController {
     //        }
     //        //vc.transitioningDelegate = self.transitionManager
     //    }
-
+    
 }
