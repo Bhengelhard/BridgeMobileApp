@@ -10,4 +10,51 @@ import UIKit
 
 class EditProfileObjects {
     
+    class NavBar: UINavigationBar {
+        
+        class doneButton: UIBarButtonItem {
+            
+        }
+    }
+    
+    class EditImages: UICollectionView {
+        
+    }
+    
+    class LargeImage: UIImageView {
+        
+    }
+    
+    class SmallImage: UIImageView {
+        
+    }
+    
+    class DeleteButton: UIButton {
+        
+    }
+    
+    class AddButton: UIButton {
+        
+    }
+    
+    class Number: UILabel {
+        
+    }
+    
+    class Table: UITableView {
+        
+    }
+    
+    class Header: UITableViewHeaderFooterView {
+        
+    }
+    
+    class TextViewCell: UITableViewCell {
+        
+    }
+    
+    class ClickableCell: UITableViewCell {
+        
+    }
+    
 }

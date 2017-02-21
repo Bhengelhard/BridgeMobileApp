@@ -10,4 +10,27 @@ import UIKit
 
 class ThreadObjects {
     
+    class navBar: UINavigationBar {
+        
+    }
+    
+    class Table: UITableView {
+        
+    }
+    
+    class NameTableCell: UITableViewCell {
+        
+    }
+    
+    class MessageTableCell: UITableViewCell {
+        
+    }
+    
+    class NotificationTableCell: UITableViewCell {
+        
+    }
+    
+    class Keyboard: CustomKeyboard {
+        
+    }
 }

@@ -1,5 +1,5 @@
 //
-//  ExternalViewController.swift
+//  ExternalProfileViewController.swift
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 2/20/17.
@@ -8,10 +8,10 @@
 
 import UIKit
 
-class ExternalViewController: UIViewController {
+class ExternalProfileViewController: UIViewController {
 
     // MARK: Global Variables
-    let layout = ExternalLayout()
+    let layout = ExternalProfileLayout()
     let transitionManager = TransitionManager()
     
     var didSetupConstraints = false
