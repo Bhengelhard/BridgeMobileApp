@@ -863,15 +863,16 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == BridgeViewController.self || mirror.subjectType == MessagesViewController.self {
             self.transitionManager.animationDirection = "Left"
-        } else if mirror.subjectType == ExternalProfileViewController.self {
-            let vc2 = vc as! ExternalProfileViewController
-            vc2.singleMessageTitle = singleMessageTitle
-            vc2.necterTypeColor = necterTypeColor
-            vc2.seguedFrom = seguedFrom
-            //send which button was clicked
-            //send the user's objectId
-            self.transitionManager.animationDirection = "Bottom"
         }
+//        else if mirror.subjectType == ExternalProfileViewController.self {
+//            let vc2 = vc as! ExternalProfileViewController
+//            vc2.singleMessageTitle = singleMessageTitle
+//            vc2.necterTypeColor = necterTypeColor
+//            vc2.seguedFrom = seguedFrom
+//            //send which button was clicked
+//            //send the user's objectId
+//            self.transitionManager.animationDirection = "Bottom"
+//        }
         vc.transitioningDelegate = self.transitionManager
     }
     

@@ -24,7 +24,7 @@ class MyProfileObjects {
     class ProfilePictureBackground: UIImageView {
         
     }
-    class ProfilePicture: UIButton {
+    class ProfilePicture: HexagonView {
         
     }
     
