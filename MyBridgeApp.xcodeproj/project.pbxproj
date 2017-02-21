@@ -66,6 +66,9 @@
 		30BF70031E5BE2B20008C2B5 /* ExternalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70021E5BE2B20008C2B5 /* ExternalViewController.swift */; };
 		30BF70051E5BE2CF0008C2B5 /* ExternalLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70041E5BE2CF0008C2B5 /* ExternalLayout.swift */; };
 		30BF70071E5BE2FD0008C2B5 /* ExternalObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70061E5BE2FD0008C2B5 /* ExternalObjects.swift */; };
+		30BF700B1E5C95C60008C2B5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF700A1E5C95C60008C2B5 /* SettingsViewController.swift */; };
+		30BF700D1E5C95F60008C2B5 /* SettingsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF700C1E5C95F60008C2B5 /* SettingsLayout.swift */; };
+		30BF700F1E5C960C0008C2B5 /* SettingsObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF700E1E5C960C0008C2B5 /* SettingsObjects.swift */; };
 		30BFA0B21E4BBB9600A17F5E /* FacebookFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */; };
 		30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */; };
 		30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */; };
@@ -174,6 +177,9 @@
 		30BF70021E5BE2B20008C2B5 /* ExternalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalViewController.swift; path = MyBridgeApp/ExternalViewController.swift; sourceTree = SOURCE_ROOT; };
 		30BF70041E5BE2CF0008C2B5 /* ExternalLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalLayout.swift; sourceTree = "<group>"; };
 		30BF70061E5BE2FD0008C2B5 /* ExternalObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalObjects.swift; path = "Custom Classes/UI Functions/ExternalObjects.swift"; sourceTree = "<group>"; };
+		30BF700A1E5C95C60008C2B5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = MyBridgeApp/SettingsViewController.swift; sourceTree = SOURCE_ROOT; };
+		30BF700C1E5C95F60008C2B5 /* SettingsLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsLayout.swift; path = "Custom Classes/UI Functions/SettingsLayout.swift"; sourceTree = "<group>"; };
+		30BF700E1E5C960C0008C2B5 /* SettingsObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsObjects.swift; path = "Custom Classes/UI Functions/SettingsObjects.swift"; sourceTree = "<group>"; };
 		30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FacebookFunctions.swift; path = "Custom Classes/Backend Communication/FBCommunication/FacebookFunctions.swift"; sourceTree = "<group>"; };
 		30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLogin.swift; path = "Custom Classes/Backend Communication/FBCommunication/FBLogin.swift"; sourceTree = "<group>"; };
 		30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = Types/BridgeType.swift; sourceTree = "<group>"; };
@@ -318,6 +324,8 @@
 				30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */,
 				30BF70041E5BE2CF0008C2B5 /* ExternalLayout.swift */,
 				30BF70061E5BE2FD0008C2B5 /* ExternalObjects.swift */,
+				30BF700C1E5C95F60008C2B5 /* SettingsLayout.swift */,
+				30BF700E1E5C960C0008C2B5 /* SettingsObjects.swift */,
 			);
 			name = "UI Functions";
 			sourceTree = "<group>";
@@ -334,6 +342,41 @@
 			name = "Custom Functions";
 			sourceTree = "<group>";
 		};
+		30BF70081E5C95920008C2B5 /* updated */ = {
+			isa = PBXGroup;
+			children = (
+				30BF6FEA1E5BDB700008C2B5 /* new_MyProfileViewController.swift */,
+				30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */,
+				30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */,
+				30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */,
+				30BF70021E5BE2B20008C2B5 /* ExternalViewController.swift */,
+				300A1D811E53F9EF0071FED7 /* LoginViewController.swift */,
+				302799D31E57684D00AFFB90 /* PrivacyPolicyViewController.swift */,
+				302799D91E579FC300AFFB90 /* SwipeViewController.swift */,
+				30BF700A1E5C95C60008C2B5 /* SettingsViewController.swift */,
+			);
+			name = updated;
+			sourceTree = "<group>";
+		};
+		30BF70091E5C95A70008C2B5 /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				30A727091E2EF7550070B620 /* SignupViewController.swift */,
+				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
+				301B1C501E036A0100D507B8 /* OldAccessViewController.swift */,
+				30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */,
+				90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */,
+				90512CF11E26A8D900D293BD /* EditProfileViewController.swift */,
+				9032B4551E31249C00136408 /* OtherProfileViewController.swift */,
+				90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */,
+				907201421E41D96B00A77BC4 /* CropImageViewController.swift */,
+				30A727031E293A9A0070B620 /* MessagesViewController.swift */,
+				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
+				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
+			);
+			name = Old;
+			sourceTree = "<group>";
+		};
 		30BFA0AF1E4BBB6600A17F5E /* FB Communication */ = {
 			isa = PBXGroup;
 			children = (
@@ -347,26 +390,8 @@
 		30BFA0B61E4CCC3900A17F5E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				301B1C501E036A0100D507B8 /* OldAccessViewController.swift */,
-				30BF6FEA1E5BDB700008C2B5 /* new_MyProfileViewController.swift */,
-				30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */,
-				30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */,
-				30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */,
-				30BF70021E5BE2B20008C2B5 /* ExternalViewController.swift */,
-				300A1D811E53F9EF0071FED7 /* LoginViewController.swift */,
-				302799D31E57684D00AFFB90 /* PrivacyPolicyViewController.swift */,
-				302799D91E579FC300AFFB90 /* SwipeViewController.swift */,
-				30A727091E2EF7550070B620 /* SignupViewController.swift */,
-				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
-				30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */,
-				90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */,
-				90512CF11E26A8D900D293BD /* EditProfileViewController.swift */,
-				9032B4551E31249C00136408 /* OtherProfileViewController.swift */,
-				90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */,
-				907201421E41D96B00A77BC4 /* CropImageViewController.swift */,
-				30A727031E293A9A0070B620 /* MessagesViewController.swift */,
-				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
-				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
+				30BF70081E5C95920008C2B5 /* updated */,
+				30BF70091E5C95A70008C2B5 /* Old */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -666,6 +691,7 @@
 				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
 				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
 				30BF6FEF1E5BDBA40008C2B5 /* MyProfileObjects.swift in Sources */,
+				30BF700D1E5C95F60008C2B5 /* SettingsLayout.swift in Sources */,
 				302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */,
 				302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */,
 				30BF6FF11E5BDD860008C2B5 /* new_MessagesViewController.swift in Sources */,
@@ -701,6 +727,7 @@
 				30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
 				304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */,
+				30BF700F1E5C960C0008C2B5 /* SettingsObjects.swift in Sources */,
 				304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */,
 				30BF6FF71E5BDE7A0008C2B5 /* ThreadViewController.swift in Sources */,
 				3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */,
@@ -708,6 +735,7 @@
 				3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */,
 				304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */,
 				E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */,
+				30BF700B1E5C95C60008C2B5 /* SettingsViewController.swift in Sources */,
 				300A1D821E53F9EF0071FED7 /* LoginViewController.swift in Sources */,
 				30BF6FFD1E5BDF530008C2B5 /* new_EditProfileViewController.swift in Sources */,
 				90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */,

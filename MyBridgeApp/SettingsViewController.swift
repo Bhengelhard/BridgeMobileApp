@@ -1,17 +1,17 @@
 //
-//  new_MyProfileViewController.swift
+//  SettingsViewController.swift
 //  MyBridgeApp
 //
-//  Created by Blake Engelhard on 2/20/17.
+//  Created by Blake Engelhard on 2/21/17.
 //  Copyright © 2017 BHE Ventures LLC. All rights reserved.
 //
 
 import UIKit
 
-class new_MyProfileViewController: UIViewController {
+class SettingsViewController: UIViewController {
 
     // MARK: Global Variables
-    let layout = MyProfileLayout()
+    let layout = SettingsLayout()
     let transitionManager = TransitionManager()
     
     var didSetupConstraints = false
@@ -39,13 +39,13 @@ class new_MyProfileViewController: UIViewController {
     
     
     // MARK: - Navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let vc = segue.destination
-//        let mirror = Mirror(reflecting: vc)
-//        if mirror.subjectType == LoginViewController.self {
-//            self.transitionManager.animationDirection = "Bottom"
-//        }
-//        //vc.transitioningDelegate = self.transitionManager
-//    }
+    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //        let vc = segue.destination
+    //        let mirror = Mirror(reflecting: vc)
+    //        if mirror.subjectType == LoginViewController.self {
+    //            self.transitionManager.animationDirection = "Bottom"
+    //        }
+    //        //vc.transitioningDelegate = self.transitionManager
+    //    }
 
 }
