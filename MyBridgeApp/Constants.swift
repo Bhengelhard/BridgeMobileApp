@@ -8,18 +8,14 @@
 
 import UIKit
 
-struct Constants
-{
-	struct Colors
-	{
-		struct necter
-		{
+struct Constants {
+	struct Colors {
+		struct necter {
 			static let yellow = UIColor(red: 237 / 255, green: 203 / 255, blue: 116 / 255, alpha: 1.0)
 			static let gray = UIColor(red: 76 / 255, green: 76 / 255, blue: 77 / 255, alpha: 1.0)
 		}
 
-		struct bridgeType
-		{
+		struct bridgeType {
 			/// Blue
 			static let business = UIColor(red: 36 / 255, green: 123 / 255, blue: 160 / 255, alpha: 1.0)
 			/// Red
@@ -29,11 +25,18 @@ struct Constants
 		}
 	}
 
-	struct Sizes
-	{
-		static let screen: CGSize = 
-		{
+	struct Sizes {
+		static let screen: CGSize =  {
 			return UIScreen.main.bounds.size
-		}()
+        }()
 	}
+    
+    struct Fonts {
+        /// BentonSansLight Size 14
+        static let light14 = UIFont(name: "BentonSans-Light", size: 14)
+        
+//        static let bentonSansLight = "BentonSans-Light"
+        static let bentonSansBold = "BentonSans-Bold"
+    }
+    
 }

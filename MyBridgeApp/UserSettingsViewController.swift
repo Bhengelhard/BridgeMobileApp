@@ -704,8 +704,8 @@ class UserSettingsViewController: UIViewController {
             }
             else if title == "LOGOUT" {
                 PFUser.logOut()
-                performSegue(withIdentifier: "showAccessViewController", sender: self)
-                //present(AccessViewController(), animated: true, completion: nil)
+                performSegue(withIdentifier: "showLoginViewController", sender: self)
+                //present(LoginViewController(), animated: true, completion: nil)
             }
             else if title == "DELETE PROFILE" {
                 let alert = UIAlertController(title: "DELETE PROFILE?", message: "Are you sure you want to delete your profile? Nothing sweet can come from this.", preferredStyle: UIAlertControllerStyle.alert)
@@ -717,7 +717,7 @@ class UserSettingsViewController: UIViewController {
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
                     print("run pfCloud Function to 1. Delete user from bridgePairings table where the users had not been fully connected. 2. Delete user from messages and set notification for message thread to: ___ has left the conversation. 3. Copy user from user's table to DeletedUser table")
                     PFUser.logOut()
-                    self.performSegue(withIdentifier: "showAccessViewController", sender: self)
+                    self.performSegue(withIdentifier: "showLoginViewController", sender: self)
                 
                 }))
                 self.present(alert, animated: true, completion: nil)
@@ -761,7 +761,7 @@ class UserSettingsViewController: UIViewController {
         let mirror = Mirror(reflecting: vc)
         if mirror.subjectType == MyProfileViewController.self {
             self.transitionManager.animationDirection = "Bottom"
-        } else if mirror.subjectType == AccessViewController.self {
+        } else if mirror.subjectType == LoginViewController.self {
             self.transitionManager.animationDirection = "Top"
         }
         vc.transitioningDelegate = self.transitionManager

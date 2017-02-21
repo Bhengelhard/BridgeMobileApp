@@ -14,7 +14,7 @@ import FBSDKLoginKit
 import CoreData
 import CoreLocation
 
-class AccessViewController: UIViewController, CLLocationManagerDelegate, UITextViewDelegate {
+class OldAccessViewController: UIViewController, CLLocationManagerDelegate, UITextViewDelegate {
     
     //User Interface
     let backgroundView = UIImageView()

@@ -190,24 +190,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("applicationDidBecomeActive")
         
-        //Checking Reachability of internet access
-        let reachability = Reachability()
-        let isconnectedToNetwork = reachability.connectedToNetwork()
-        
-        //If the user is not connected to a network, then display an alert indicating the issue that cannot be dismissed unless the user connects to a network
-        if isconnectedToNetwork == false {
-            let alert = UIAlertController(title: "Not connected to internet", message: "To continue 'necting, please connect to a network.", preferredStyle: UIAlertControllerStyle.alert)
-            
-            if let window = self.window {
-                print("is correct window")
-                if let vc = window.rootViewController {
-                    print("is inputViewController")
-                    vc.present(alert, animated: true, completion: nil)
-                }
-            }
-        }
-        print("The current User's device \(isconnectedToNetwork)")
-        
+//        //Checking Reachability of internet access
+//        let reachability = Reachability()
+//        let isconnectedToNetwork = reachability.connectedToNetwork()
+//        
+//        //If the user is not connected to a network, then display an alert indicating the issue that cannot be dismissed unless the user connects to a network
+//        if isconnectedToNetwork == false {
+//            let alert = UIAlertController(title: "Not connected to internet", message: "To continue 'necting, please connect to a network.", preferredStyle: UIAlertControllerStyle.alert)
+//            
+//            if let window = self.window {
+//                print("is correct window")
+//                if let vc = window.rootViewController {
+//                    print("is inputViewController")
+//                    vc.present(alert, animated: true, completion: nil)
+//                }
+//            }
+//        }
+//        print("The current User's device \(isconnectedToNetwork)")
         
     }
     
