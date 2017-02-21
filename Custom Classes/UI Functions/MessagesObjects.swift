@@ -1,5 +1,5 @@
 //
-//  MyProfileObjects.swift
+//  MessagesObjects.swift
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 2/20/17.
@@ -8,6 +8,6 @@
 
 import UIKit
 
-class MyProfileObjects {
+class MessagesObjects {
     
 }

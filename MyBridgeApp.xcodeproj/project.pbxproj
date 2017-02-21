@@ -54,6 +54,9 @@
 		30BF6FEB1E5BDB700008C2B5 /* new_MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FEA1E5BDB700008C2B5 /* new_MyProfileViewController.swift */; };
 		30BF6FED1E5BDB8A0008C2B5 /* MyProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FEC1E5BDB8A0008C2B5 /* MyProfileLayout.swift */; };
 		30BF6FEF1E5BDBA40008C2B5 /* MyProfileObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FEE1E5BDBA40008C2B5 /* MyProfileObjects.swift */; };
+		30BF6FF11E5BDD860008C2B5 /* new_MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */; };
+		30BF6FF31E5BDDAB0008C2B5 /* MessagesLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */; };
+		30BF6FF51E5BDDBD0008C2B5 /* MessagesObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */; };
 		30BFA0B21E4BBB9600A17F5E /* FacebookFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */; };
 		30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */; };
 		30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */; };
@@ -151,6 +154,9 @@
 		30BF6FEA1E5BDB700008C2B5 /* new_MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = new_MyProfileViewController.swift; path = MyBridgeApp/new_MyProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		30BF6FEC1E5BDB8A0008C2B5 /* MyProfileLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileLayout.swift; path = "Custom Classes/UI Functions/MyProfileLayout.swift"; sourceTree = "<group>"; };
 		30BF6FEE1E5BDBA40008C2B5 /* MyProfileObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileObjects.swift; path = "Custom Classes/UI Functions/MyProfileObjects.swift"; sourceTree = "<group>"; };
+		30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = new_MessagesViewController.swift; path = MyBridgeApp/new_MessagesViewController.swift; sourceTree = SOURCE_ROOT; };
+		30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesLayout.swift; path = "Custom Classes/UI Functions/MessagesLayout.swift"; sourceTree = "<group>"; };
+		30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesObjects.swift; path = "Custom Classes/UI Functions/MessagesObjects.swift"; sourceTree = "<group>"; };
 		30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FacebookFunctions.swift; path = "Custom Classes/Backend Communication/FBCommunication/FacebookFunctions.swift"; sourceTree = "<group>"; };
 		30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLogin.swift; path = "Custom Classes/Backend Communication/FBCommunication/FBLogin.swift"; sourceTree = "<group>"; };
 		30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = Types/BridgeType.swift; sourceTree = "<group>"; };
@@ -288,6 +294,8 @@
 				302799D71E5768F800AFFB90 /* PrivacyPolicyObjects.swift */,
 				30BF6FEC1E5BDB8A0008C2B5 /* MyProfileLayout.swift */,
 				30BF6FEE1E5BDBA40008C2B5 /* MyProfileObjects.swift */,
+				30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */,
+				30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */,
 			);
 			name = "UI Functions";
 			sourceTree = "<group>";
@@ -319,6 +327,7 @@
 			children = (
 				301B1C501E036A0100D507B8 /* OldAccessViewController.swift */,
 				30BF6FEA1E5BDB700008C2B5 /* new_MyProfileViewController.swift */,
+				30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */,
 				300A1D811E53F9EF0071FED7 /* LoginViewController.swift */,
 				302799D31E57684D00AFFB90 /* PrivacyPolicyViewController.swift */,
 				302799D91E579FC300AFFB90 /* SwipeViewController.swift */,
@@ -633,15 +642,18 @@
 				30BF6FEF1E5BDBA40008C2B5 /* MyProfileObjects.swift in Sources */,
 				302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */,
 				302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */,
+				30BF6FF11E5BDD860008C2B5 /* new_MessagesViewController.swift in Sources */,
 				30BF6FED1E5BDB8A0008C2B5 /* MyProfileLayout.swift in Sources */,
 				3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */,
 				3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */,
+				30BF6FF51E5BDDBD0008C2B5 /* MessagesObjects.swift in Sources */,
 				30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */,
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				306BD21F1E4416100020C4BA /* Reachability.swift in Sources */,
 				90512CF21E26A8D900D293BD /* EditProfileViewController.swift in Sources */,
 				30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */,
 				9032B4561E31249C00136408 /* OtherProfileViewController.swift in Sources */,
+				30BF6FF31E5BDDAB0008C2B5 /* MessagesLayout.swift in Sources */,
 				3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */,
 				307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */,
 				3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */,

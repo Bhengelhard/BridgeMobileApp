@@ -1,5 +1,5 @@
 //
-//  MyProfileLayout.swift
+//  MessagesLayout.swift
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 2/20/17.
@@ -8,7 +8,7 @@
 
 import PureLayout
 
-class MyProfileLayout {
+class MessagesLayout {
     
     // MARK: Global Variables
     
