@@ -60,6 +60,9 @@
 		30BF6FF71E5BDE7A0008C2B5 /* ThreadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */; };
 		30BF6FF91E5BDEA50008C2B5 /* ThreadLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF81E5BDEA50008C2B5 /* ThreadLayout.swift */; };
 		30BF6FFB1E5BDEB40008C2B5 /* ThreadObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FFA1E5BDEB40008C2B5 /* ThreadObjects.swift */; };
+		30BF6FFD1E5BDF530008C2B5 /* new_EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */; };
+		30BF6FFF1E5BDF710008C2B5 /* EditProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */; };
+		30BF70011E5BDF820008C2B5 /* EditProfileObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */; };
 		30BFA0B21E4BBB9600A17F5E /* FacebookFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */; };
 		30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */; };
 		30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */; };
@@ -163,6 +166,9 @@
 		30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadViewController.swift; path = MyBridgeApp/ThreadViewController.swift; sourceTree = SOURCE_ROOT; };
 		30BF6FF81E5BDEA50008C2B5 /* ThreadLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadLayout.swift; path = "Custom Classes/UI Functions/ThreadLayout.swift"; sourceTree = "<group>"; };
 		30BF6FFA1E5BDEB40008C2B5 /* ThreadObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadObjects.swift; path = "Custom Classes/UI Functions/ThreadObjects.swift"; sourceTree = "<group>"; };
+		30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = new_EditProfileViewController.swift; path = MyBridgeApp/new_EditProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileLayout.swift; path = "Custom Classes/UI Functions/EditProfileLayout.swift"; sourceTree = "<group>"; };
+		30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileObjects.swift; path = "Custom Classes/UI Functions/EditProfileObjects.swift"; sourceTree = "<group>"; };
 		30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FacebookFunctions.swift; path = "Custom Classes/Backend Communication/FBCommunication/FacebookFunctions.swift"; sourceTree = "<group>"; };
 		30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLogin.swift; path = "Custom Classes/Backend Communication/FBCommunication/FBLogin.swift"; sourceTree = "<group>"; };
 		30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = Types/BridgeType.swift; sourceTree = "<group>"; };
@@ -304,6 +310,8 @@
 				30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */,
 				30BF6FF81E5BDEA50008C2B5 /* ThreadLayout.swift */,
 				30BF6FFA1E5BDEB40008C2B5 /* ThreadObjects.swift */,
+				30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */,
+				30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */,
 			);
 			name = "UI Functions";
 			sourceTree = "<group>";
@@ -337,6 +345,7 @@
 				30BF6FEA1E5BDB700008C2B5 /* new_MyProfileViewController.swift */,
 				30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */,
 				30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */,
+				30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */,
 				300A1D811E53F9EF0071FED7 /* LoginViewController.swift */,
 				302799D31E57684D00AFFB90 /* PrivacyPolicyViewController.swift */,
 				302799D91E579FC300AFFB90 /* SwipeViewController.swift */,
@@ -642,6 +651,7 @@
 			files = (
 				9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */,
 				E9D6DF511D78836200138A1F /* SingleMessageContent.swift in Sources */,
+				30BF70011E5BDF820008C2B5 /* EditProfileObjects.swift in Sources */,
 				3030C0B81DD54E3F0077F7AC /* UserInfo.swift in Sources */,
 				304FEBE71DE49EFD00B3A8A7 /* CircleView.swift in Sources */,
 				3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */,
@@ -673,6 +683,7 @@
 				9028FA3E1E4D2CC7002CC80F /* ReportUserMenu.swift in Sources */,
 				30A727061E29540F0070B620 /* MessageComposer.swift in Sources */,
 				307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */,
+				30BF6FFF1E5BDF710008C2B5 /* EditProfileLayout.swift in Sources */,
 				300A1D7E1E53EB6C0071FED7 /* LoginLayout.swift in Sources */,
 				301B1C511E036A0100D507B8 /* OldAccessViewController.swift in Sources */,
 				CBEFCD6B1CE53F0200695B15 /* AccountSettingsTableViewController.swift in Sources */,
@@ -690,6 +701,7 @@
 				E9D6DF521D78836200138A1F /* SingleMessageTableCell.swift in Sources */,
 				300A1D821E53F9EF0071FED7 /* LoginViewController.swift in Sources */,
 				E977C9D31D805F630048DBD1 /* ExternalProfileViewController.swift in Sources */,
+				30BF6FFD1E5BDF530008C2B5 /* new_EditProfileViewController.swift in Sources */,
 				90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */,
 				3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */,
 				9021CC471E3A541000720260 /* ProfileHexagons.swift in Sources */,
