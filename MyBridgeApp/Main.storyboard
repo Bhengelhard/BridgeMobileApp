@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="I6S-lr-TAb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Qv3-Na-w7J">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -75,10 +75,10 @@
             </objects>
             <point key="canvasLocation" x="426" y="-1989"/>
         </scene>
-        <!--Login View Controller-->
+        <!--Old Access View Controller-->
         <scene sceneID="SgD-tP-9oW">
             <objects>
-                <viewController id="Qv3-Na-w7J" customClass="LoginViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Qv3-Na-w7J" customClass="OldAccessViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HNo-fJ-WZG"/>
                         <viewControllerLayoutGuide type="bottom" id="lAO-fO-gnn"/>
@@ -264,7 +264,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZO4-tV-uGJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-257" y="2959"/>
+            <point key="canvasLocation" x="1746" y="644"/>
         </scene>
         <!--showSingleMessage-->
         <scene sceneID="0Id-wN-8XS">
@@ -333,102 +333,6 @@
             </objects>
             <point key="canvasLocation" x="494" y="644"/>
         </scene>
-        <!--Bridge View Controller-->
-        <scene sceneID="9q2-yG-ooI">
-            <objects>
-                <viewController id="t5P-NN-anR" customClass="BridgeViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="qDK-nN-0T3"/>
-                        <viewControllerLayoutGuide type="bottom" id="lIE-Kg-FyL"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="dWX-rS-5jf">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lgz-A4-s9d">
-                                <rect key="frame" x="190" y="251" width="10" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" systemItem="favorites" id="cQV-hJ-Pwz"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YiV-m8-u6E" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-256.80000000000001" y="2231.3343328335832"/>
-        </scene>
-        <!--My Profile View Controller-->
-        <scene sceneID="YEH-ah-kry">
-            <objects>
-                <viewController id="twP-wB-LjU" customClass="MyProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="HLC-tW-gbf"/>
-                        <viewControllerLayoutGuide type="bottom" id="wtm-WQ-qAP"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="PTo-cx-2OW">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZYt-xj-2Xg">
-                                <rect key="frame" x="166" y="259" width="8" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" systemItem="contacts" id="EOS-HP-f79"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wxt-rZ-SVh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-256.80000000000001" y="1576.4617691154424"/>
-        </scene>
-        <!--Old Access View Controller-->
-        <scene sceneID="fKg-Rt-Xfn">
-            <objects>
-                <viewController id="I6S-lr-TAb" customClass="OldAccessViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="elx-oZ-QEQ"/>
-                        <viewControllerLayoutGuide type="bottom" id="m2G-PV-AhY"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="5vj-MH-ayv">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <segue destination="h1L-Xo-2mg" kind="show" identifier="showBridgeViewController" id="TxI-bf-6oi"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aLW-eo-Gnd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2346" y="1904"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="957-gA-CxH">
-            <objects>
-                <tabBarController id="h1L-Xo-2mg" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="UpU-Zv-z5t">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="twP-wB-LjU" kind="relationship" relationship="viewControllers" id="TqL-wD-j5W"/>
-                        <segue destination="t5P-NN-anR" kind="relationship" relationship="viewControllers" id="Ebt-Jd-cfw"/>
-                        <segue destination="zXt-b0-Sdf" kind="relationship" relationship="viewControllers" id="qkT-Fj-DA8"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZFW-8D-PeO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1207" y="1904"/>
-        </scene>
         <!--Single Message View Controller-->
         <scene sceneID="57B-UR-Tv1">
             <objects>
@@ -451,17 +355,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u5J-8h-7eI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1676" y="644"/>
+            <point key="canvasLocation" x="2514" y="644"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="1Bx-ML-R6e"/>
-        <segue reference="wYg-RW-AbN"/>
-        <segue reference="qkT-Fj-DA8"/>
-        <segue reference="0Jc-ZY-MLe"/>
-        <segue reference="WWN-20-fau"/>
-        <segue reference="mf0-bu-EW9"/>
-        <segue reference="xcR-H7-wok"/>
+        <segue reference="cC3-sR-uFf"/>
         <segue reference="Zf9-Tg-H2E"/>
+        <segue reference="WWN-20-fau"/>
+        <segue reference="xcR-H7-wok"/>
+        <segue reference="r1p-Ao-g6W"/>
+        <segue reference="0Jc-ZY-MLe"/>
+        <segue reference="fLD-mo-7R5"/>
     </inferredMetricsTieBreakers>
 </document>
