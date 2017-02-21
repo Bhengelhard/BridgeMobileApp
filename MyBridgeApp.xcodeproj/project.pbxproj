@@ -57,6 +57,9 @@
 		30BF6FF11E5BDD860008C2B5 /* new_MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */; };
 		30BF6FF31E5BDDAB0008C2B5 /* MessagesLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */; };
 		30BF6FF51E5BDDBD0008C2B5 /* MessagesObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */; };
+		30BF6FF71E5BDE7A0008C2B5 /* ThreadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */; };
+		30BF6FF91E5BDEA50008C2B5 /* ThreadLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FF81E5BDEA50008C2B5 /* ThreadLayout.swift */; };
+		30BF6FFB1E5BDEB40008C2B5 /* ThreadObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FFA1E5BDEB40008C2B5 /* ThreadObjects.swift */; };
 		30BFA0B21E4BBB9600A17F5E /* FacebookFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */; };
 		30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */; };
 		30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */; };
@@ -157,6 +160,9 @@
 		30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = new_MessagesViewController.swift; path = MyBridgeApp/new_MessagesViewController.swift; sourceTree = SOURCE_ROOT; };
 		30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesLayout.swift; path = "Custom Classes/UI Functions/MessagesLayout.swift"; sourceTree = "<group>"; };
 		30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesObjects.swift; path = "Custom Classes/UI Functions/MessagesObjects.swift"; sourceTree = "<group>"; };
+		30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadViewController.swift; path = MyBridgeApp/ThreadViewController.swift; sourceTree = SOURCE_ROOT; };
+		30BF6FF81E5BDEA50008C2B5 /* ThreadLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadLayout.swift; path = "Custom Classes/UI Functions/ThreadLayout.swift"; sourceTree = "<group>"; };
+		30BF6FFA1E5BDEB40008C2B5 /* ThreadObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadObjects.swift; path = "Custom Classes/UI Functions/ThreadObjects.swift"; sourceTree = "<group>"; };
 		30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FacebookFunctions.swift; path = "Custom Classes/Backend Communication/FBCommunication/FacebookFunctions.swift"; sourceTree = "<group>"; };
 		30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLogin.swift; path = "Custom Classes/Backend Communication/FBCommunication/FBLogin.swift"; sourceTree = "<group>"; };
 		30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = Types/BridgeType.swift; sourceTree = "<group>"; };
@@ -296,6 +302,8 @@
 				30BF6FEE1E5BDBA40008C2B5 /* MyProfileObjects.swift */,
 				30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */,
 				30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */,
+				30BF6FF81E5BDEA50008C2B5 /* ThreadLayout.swift */,
+				30BF6FFA1E5BDEB40008C2B5 /* ThreadObjects.swift */,
 			);
 			name = "UI Functions";
 			sourceTree = "<group>";
@@ -328,6 +336,7 @@
 				301B1C501E036A0100D507B8 /* OldAccessViewController.swift */,
 				30BF6FEA1E5BDB700008C2B5 /* new_MyProfileViewController.swift */,
 				30BF6FF01E5BDD860008C2B5 /* new_MessagesViewController.swift */,
+				30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */,
 				300A1D811E53F9EF0071FED7 /* LoginViewController.swift */,
 				302799D31E57684D00AFFB90 /* PrivacyPolicyViewController.swift */,
 				302799D91E579FC300AFFB90 /* SwipeViewController.swift */,
@@ -673,6 +682,7 @@
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
 				304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */,
 				304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */,
+				30BF6FF71E5BDE7A0008C2B5 /* ThreadViewController.swift in Sources */,
 				3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */,
 				9021CC491E3A548600720260 /* ProfileStatusButtons.swift in Sources */,
 				3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */,
@@ -701,6 +711,7 @@
 				302799D41E57684D00AFFB90 /* PrivacyPolicyViewController.swift in Sources */,
 				3030C0C21DD54E5E0077F7AC /* CustomKeyboard.swift in Sources */,
 				3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */,
+				30BF6FF91E5BDEA50008C2B5 /* ThreadLayout.swift in Sources */,
 				3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */,
 				907201471E4316B500A77BC4 /* FacebookImagePickerController.swift in Sources */,
 				3079EB251E54FACD008AB6E5 /* LoginObjects.swift in Sources */,
@@ -709,6 +720,7 @@
 				907201431E41D96B00A77BC4 /* CropImageViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
 				302799D61E5768E400AFFB90 /* PrivacyPolicyLayout.swift in Sources */,
+				30BF6FFB1E5BDEB40008C2B5 /* ThreadObjects.swift in Sources */,
 				90AD62281E2E259D001F1074 /* ProfilePicturesViewController.swift in Sources */,
 				30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */,
 				3030C0CE1DD54E8F0077F7AC /* Downloader.swift in Sources */,
