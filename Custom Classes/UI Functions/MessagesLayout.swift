@@ -11,6 +11,12 @@ import PureLayout
 class MessagesLayout {
     
     // MARK: Global Variables
+    let navBar = MessagesObjects.NavBar()
+    let newMatchesTitle = MessagesObjects.NewMatchesTitle()
+    let newMatchesScrollView = MessagesObjects.NewMatchesScrollView()
+    let messagesTitle = MessagesObjects.MessagesTitle()
+    let messagesTable = MessagesObjects.MessagesTable()
+    let messagesTableCell = MessagesObjects.MessagesTableCell()
     
     // MARK: - Layout
     /// Sets the initial layout constraints
