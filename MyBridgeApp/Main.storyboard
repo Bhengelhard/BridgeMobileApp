@@ -141,7 +141,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FGX-TP-Wxn" id="Czd-tc-gSD">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
@@ -234,7 +234,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T5a-4r-w51" id="e1H-5M-cRe">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -242,7 +242,7 @@
                                         <rect key="frame" x="0.0" y="108" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sXF-O8-4hx" id="RYW-hh-tey">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -349,7 +349,6 @@
                     <connections>
                         <segue destination="cMo-Jt-lEF" kind="show" identifier="showBridgeFromSingleMessage" id="00U-Jg-Jap"/>
                         <segue destination="zXt-b0-Sdf" kind="show" identifier="showMessagesTableFromSingleMessage" id="fLD-mo-7R5"/>
-                        <segue destination="j0v-Ba-HI5" kind="show" identifier="showExternalProfileFromSingleMessage" id="fZF-Uh-rbI"/>
                         <segue destination="sq6-6E-Isb" kind="show" identifier="showOtherProfile" id="r1p-Ao-g6W"/>
                     </connections>
                 </viewController>
@@ -357,36 +356,15 @@
             </objects>
             <point key="canvasLocation" x="1676" y="644"/>
         </scene>
-        <!--External Profile View Controller-->
-        <scene sceneID="CaH-1v-N0X">
-            <objects>
-                <viewController id="j0v-Ba-HI5" customClass="ExternalProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="WOF-r8-Smk"/>
-                        <viewControllerLayoutGuide type="bottom" id="GZF-bT-fZd"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="LA3-Ku-qqJ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <connections>
-                        <segue destination="ABc-Ef-uKn" kind="show" identifier="showSingleMessageFromExternalProfile" id="VqF-EN-U5i"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="G58-mu-jE9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2463" y="644"/>
-        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="WWN-20-fau"/>
+        <segue reference="1Bx-ML-R6e"/>
         <segue reference="cC3-sR-uFf"/>
         <segue reference="Zf9-Tg-H2E"/>
-        <segue reference="1Bx-ML-R6e"/>
         <segue reference="OnA-y9-bUb"/>
+        <segue reference="WWN-20-fau"/>
         <segue reference="mf0-bu-EW9"/>
-        <segue reference="Cel-NN-deF"/>
         <segue reference="xcR-H7-wok"/>
+        <segue reference="Cel-NN-deF"/>
     </inferredMetricsTieBreakers>
 </document>
