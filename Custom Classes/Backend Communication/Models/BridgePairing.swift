@@ -287,7 +287,7 @@ class BridgePairing: NSObject {
                 block(user)
             }
         } else {
-            User.get(withId: id) { (user) in
+            User.get(withID: id) { (user) in
                 self.userIDsToUsers[id] = user
                 if let block = block {
                     block(user)
@@ -320,7 +320,7 @@ class BridgePairing: NSObject {
                 block(picture)
             }
         } else {
-            Picture.get(withId: id) { (picture) in
+            Picture.get(withID: id) { (picture) in
                 self.pictureIDsToPictures[id] = picture
                 if let block = block {
                     block(picture)

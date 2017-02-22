@@ -128,6 +128,7 @@ class LocalData {
     func setMyGender(_ myGender: String) {
         self.myGender = myGender
     }
+    
     func getMyGender() -> String? {
         let userDefaults = UserDefaults.standard
         if let _ = userDefaults.object(forKey: "userInfo"){
@@ -139,6 +140,27 @@ class LocalData {
             return nil
         }
     }
+    
+    /*
+    func getMyGender() -> Gender? {
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "userInfo") {
+            let decoded  = userDefaults.object(forKey: "userInfo") as! Data
+            let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
+            if let myGender = userInfo.myGender {
+                let myGenderLowercased = myGender.lowercased()
+                if myGenderLowercased == "male" {
+                    return .male
+                }
+                if myGenderLowercased == "female" {
+                    return .female
+                }
+                return .other
+            }
+        }
+        return nil
+    }
+     */
 
     
     //Saving number of connections the currentUser has connected to the user's device

@@ -168,7 +168,7 @@ class Message: NSObject {
     /// the result.
     /// - parameter id: the objectId of the Message
     /// - parameter block: the block to call on the result
-    static func get(withId id: String, withBlock block: MessageBlock? = nil) {
+    static func get(withID id: String, withBlock block: MessageBlock? = nil) {
         let query = PFQuery(className: "Messages")
         query.getObjectInBackground(withId: id) { (parseObject, error) in
             if let error = error {
@@ -210,7 +210,7 @@ class Message: NSObject {
         if index < parseMessages.count {
             let parseMessage = parseMessages[index]
             if let parseMessageObjectId = parseMessage.objectId {
-                Message.get(withId: parseMessageObjectId) { (message) in
+                Message.get(withID: parseMessageObjectId) { (message) in
                     if let block = block {
                         block(message)
                     }
@@ -255,7 +255,7 @@ class Message: NSObject {
                 block(user)
             }
         } else {
-            User.get(withId: id) { (user) in
+            User.get(withID: id) { (user) in
                 self.userIDsToUsers[id] = user
                 if let block = block {
                     block(user)
@@ -282,7 +282,7 @@ class Message: NSObject {
                 block(picture)
             }
         } else {
-            Picture.get(withId: id) { (picture) in
+            Picture.get(withID: id) { (picture) in
                 self.pictureIDsToPictures[id] = picture
                 if let block = block {
                     block(picture)

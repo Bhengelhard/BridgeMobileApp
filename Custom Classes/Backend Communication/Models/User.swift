@@ -46,14 +46,14 @@ class User: NSObject {
     ///The objectIds of the User's friends
     var friendList: [String]?
     
+    /// The reputation score of the User
+    var reputation: Int?
+    
     /// How many times the User has run out of pairs
     var ranOutOfPairs: Int?
     
     /// The gender of the User
     var gender: Gender?
-    
-    /// The gender that the User is interested in
-    var interestedIn: Gender?
     
     /// The User's birthday on Facebook
     var fbBirthday: Date?
@@ -66,12 +66,6 @@ class User: NSObject {
     
     /// THe school of the User
     var school: String?
-    
-    /// The emplyer of the User
-    var employer: String?
-    
-    /// The religion of the User
-    var religion: String?
     
     /// A quick update about the User
     var quickUpdate: String?
@@ -100,6 +94,10 @@ class User: NSObject {
         
         if let parseFriendList = parseUser["friendList"] as? [String] {
             friendList = parseFriendList
+        }
+        
+        if let parseReputation = parseUser["reputation"] as? Int {
+            reputation = parseReputation
         }
         
         if let parseRanOutOfPairs = parseUser["ran_out_of_pairs"] as? Int {
@@ -132,14 +130,6 @@ class User: NSObject {
             school = parseSchool
         }
         
-        if let parseEmployer = parseUser["employer"] as? String {
-            employer = parseEmployer
-        }
-        
-        if let parseReligion = parseUser["religion"] as? String {
-            religion = parseReligion
-        }
-        
         if let parseQuickUpdate = parseUser["quick_update"] as? String {
             quickUpdate = parseQuickUpdate
         }
@@ -164,7 +154,7 @@ class User: NSObject {
     /// result.
     /// - parameter id: the objectId of the User
     /// - parameter block: the block to call on the result
-    static func get(withId id: String, withBlock block: UserBlock? = nil) {
+    static func get(withID id: String, withBlock block: UserBlock? = nil) {
         let query = PFQuery(className: "_User")
         query.getObjectInBackground(withId: id) { (parseObject, error) in
             if let error = error {
@@ -187,7 +177,7 @@ class User: NSObject {
                         block(picture)
                     }
                 } else { // must retrieve picture
-                    Picture.get(withId: pictureID) { (picture) in
+                    Picture.get(withID: pictureID) { (picture) in
                         self.pictureIDsToPictures[pictureID] = picture
                         if let block = block {
                             block(picture)
@@ -225,6 +215,12 @@ class User: NSObject {
             parseUser["friend_list"] = friendList
         } else {
             parseUser.remove(forKey: "friend_list")
+        }
+        
+        if let reputation = reputation {
+            parseUser["reputation"] = reputation
+        } else {
+            parseUser.remove(forKey: "reputation")
         }
         
         if let ranOutOfPairs = ranOutOfPairs {
@@ -268,19 +264,7 @@ class User: NSObject {
         } else {
             parseUser.remove(forKey: "school")
         }
-        
-        if let employer = employer {
-            parseUser["employer"] = employer
-        } else {
-            parseUser.remove(forKey: "employer")
-        }
-        
-        if let religion = religion {
-            parseUser["religion"] = religion
-        } else {
-            parseUser.remove(forKey: "religion")
-        }
-        
+                
         if let quickUpdate = quickUpdate {
             parseUser["quick_update"] = quickUpdate
         } else {
@@ -303,10 +287,4 @@ class User: NSObject {
             }
         }
     }
-}
-
-enum Gender {
-    case male
-    case female
-    case other
 }

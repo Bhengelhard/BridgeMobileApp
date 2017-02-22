@@ -40,8 +40,7 @@ class MyProfileViewController: UIViewController {
         
         // set background color to white
         view.backgroundColor = .white
-        
-        
+                
         if let user = PFUser.current() {
             
             

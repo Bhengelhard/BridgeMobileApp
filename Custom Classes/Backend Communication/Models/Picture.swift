@@ -69,7 +69,7 @@ class Picture: NSObject {
         }
     }
     
-    static func get(withId id: String, withBlock block: PictureBlock? = nil) {
+    static func get(withID id: String, withBlock block: PictureBlock? = nil) {
         let query = PFQuery(className: "Pictures")
         query.getObjectInBackground(withId: id) { (parseObject, error) in
             if let error = error {

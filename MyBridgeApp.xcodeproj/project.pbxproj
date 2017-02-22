@@ -97,11 +97,16 @@
 		90512CF21E26A8D900D293BD /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90512CF11E26A8D900D293BD /* EditProfileViewController.swift */; };
 		907201431E41D96B00A77BC4 /* CropImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907201421E41D96B00A77BC4 /* CropImageViewController.swift */; };
 		907201471E4316B500A77BC4 /* FacebookImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907201461E4316B500A77BC4 /* FacebookImagePickerController.swift */; };
+		90AB6B111E5E1BAE00EBEBC0 /* MessagesBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */; };
 		90AD62281E2E259D001F1074 /* ProfilePicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */; };
 		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
 		90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */; };
 		90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AA1E0B080100330646 /* HexagonView.swift */; };
 		90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */; };
+		90F5E3BF1E5CD376001399F6 /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3BE1E5CD376001399F6 /* Gender.swift */; };
+		90F5E3C11E5CD5FA001399F6 /* MyProfileBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3C01E5CD5FA001399F6 /* MyProfileBackend.swift */; };
+		90F5E3C31E5CDD5F001399F6 /* ExternalBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3C21E5CDD5F001399F6 /* ExternalBackend.swift */; };
+		90F5E3C61E5CE0F9001399F6 /* ExternalLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3C51E5CE0F9001399F6 /* ExternalLogic.swift */; };
 		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
 		CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */; };
 		CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */; };
@@ -208,18 +213,23 @@
 		9028FA3D1E4D2CC7002CC80F /* ReportUserMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportUserMenu.swift; path = "Custom Classes/Custom Views/ReportUserMenu.swift"; sourceTree = "<group>"; };
 		9032B4531E311B0600136408 /* ProfilePicturesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfilePicturesView.swift; path = "Custom Classes/Custom Views/ProfilePicturesView.swift"; sourceTree = "<group>"; };
 		9032B4551E31249C00136408 /* OtherProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OtherProfileViewController.swift; path = MyBridgeApp/OtherProfileViewController.swift; sourceTree = SOURCE_ROOT; };
-		9043B7771E56ABC100D76BCE /* BridgePairing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgePairing.swift; path = Backend/Models/BridgePairing.swift; sourceTree = "<group>"; };
-		9043B7781E56ABC100D76BCE /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Message.swift; path = Backend/Models/Message.swift; sourceTree = "<group>"; };
-		9043B7791E56ABC100D76BCE /* Picture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Picture.swift; path = Backend/Models/Picture.swift; sourceTree = "<group>"; };
-		9043B77A1E56ABC100D76BCE /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Backend/Models/User.swift; sourceTree = "<group>"; };
+		9043B7771E56ABC100D76BCE /* BridgePairing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgePairing.swift; sourceTree = "<group>"; };
+		9043B7781E56ABC100D76BCE /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		9043B7791E56ABC100D76BCE /* Picture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Picture.swift; sourceTree = "<group>"; };
+		9043B77A1E56ABC100D76BCE /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		90512CF11E26A8D900D293BD /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileViewController.swift; path = MyBridgeApp/EditProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		907201421E41D96B00A77BC4 /* CropImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CropImageViewController.swift; path = MyBridgeApp/CropImageViewController.swift; sourceTree = SOURCE_ROOT; };
 		907201461E4316B500A77BC4 /* FacebookImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FacebookImagePickerController.swift; path = MyBridgeApp/FacebookImagePickerController.swift; sourceTree = SOURCE_ROOT; };
+		90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesBackend.swift; path = "Custom Classes/Backend Communication/MessagesBackend.swift"; sourceTree = "<group>"; };
 		90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfilePicturesViewController.swift; path = MyBridgeApp/ProfilePicturesViewController.swift; sourceTree = SOURCE_ROOT; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
 		90CA09A81E0AF3C700330646 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController.swift; path = MyBridgeApp/MyProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		90CA09AA1E0B080100330646 /* HexagonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexagonView.swift; path = "Custom Classes/Custom Views/HexagonView.swift"; sourceTree = "<group>"; };
 		90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptIgnoreView.swift; path = "Custom Classes/Custom Views/AcceptIgnoreView.swift"; sourceTree = "<group>"; };
+		90F5E3BE1E5CD376001399F6 /* Gender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Gender.swift; path = Types/Gender.swift; sourceTree = "<group>"; };
+		90F5E3C01E5CD5FA001399F6 /* MyProfileBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileBackend.swift; path = "Custom Classes/Backend Communication/MyProfileBackend.swift"; sourceTree = "<group>"; };
+		90F5E3C21E5CDD5F001399F6 /* ExternalBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalBackend.swift; path = "Custom Classes/Backend Communication/ExternalBackend.swift"; sourceTree = "<group>"; };
+		90F5E3C51E5CE0F9001399F6 /* ExternalLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalLogic.swift; sourceTree = "<group>"; };
 		A406D97A77270C2F8022759D /* Pods-MyBridgeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyBridgeApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyBridgeApp/Pods-MyBridgeApp.release.xcconfig"; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeViewController.swift; path = MyBridgeApp/BridgeViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -304,9 +314,13 @@
 		3030C0AD1DD54D310077F7AC /* Backend Communication */ = {
 			isa = PBXGroup;
 			children = (
+				9034769B1E53988A0065B973 /* Models */,
 				30BFA0AF1E4BBB6600A17F5E /* FB Communication */,
 				30BFA0BB1E4CCDC900A17F5E /* Server-Side Functions */,
 				30BFA0BA1E4CCDBB00A17F5E /* Database Communication */,
+				90F5E3C01E5CD5FA001399F6 /* MyProfileBackend.swift */,
+				90F5E3C21E5CDD5F001399F6 /* ExternalBackend.swift */,
+				90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */,
 			);
 			name = "Backend Communication";
 			sourceTree = "<group>";
@@ -456,6 +470,7 @@
 			isa = PBXGroup;
 			children = (
 				30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */,
+				90F5E3BE1E5CD376001399F6 /* Gender.swift */,
 			);
 			name = Types;
 			sourceTree = "<group>";
@@ -475,7 +490,6 @@
 		81BA813C1A49DA1800E65899 = {
 			isa = PBXGroup;
 			children = (
-				9034769A1E5398830065B973 /* Backend */,
 				67AD26D51E31353400252575 /* Constants.swift */,
 				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
 				67AD26D71E31353D00252575 /* Types */,
@@ -546,14 +560,6 @@
 			path = "Custom Classes/Custom Views/ProfileViews";
 			sourceTree = "<group>";
 		};
-		9034769A1E5398830065B973 /* Backend */ = {
-			isa = PBXGroup;
-			children = (
-				9034769B1E53988A0065B973 /* Models */,
-			);
-			name = Backend;
-			sourceTree = "<group>";
-		};
 		9034769B1E53988A0065B973 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -563,6 +569,16 @@
 				9043B77A1E56ABC100D76BCE /* User.swift */,
 			);
 			name = Models;
+			path = "Custom Classes/Backend Communication/Models";
+			sourceTree = "<group>";
+		};
+		90F5E3C41E5CE080001399F6 /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				90F5E3C51E5CE0F9001399F6 /* ExternalLogic.swift */,
+			);
+			name = Logic;
+			path = "Custom Classes/Logic";
 			sourceTree = "<group>";
 		};
 		E9D6DF201D78820F00138A1F /* Custom Classes */ = {
@@ -570,6 +586,7 @@
 			children = (
 				3030C0AB1DD54CC70077F7AC /* Data Storage */,
 				3030C0AC1DD54CEA0077F7AC /* Custom Views */,
+				90F5E3C41E5CE080001399F6 /* Logic */,
 				3030C0AD1DD54D310077F7AC /* Backend Communication */,
 				3030C0AF1DD54DA00077F7AC /* Custom Functions */,
 				3030C0AE1DD54D800077F7AC /* UI Functions */,
@@ -770,13 +787,16 @@
 				30BF6FFD1E5BDF530008C2B5 /* new_EditProfileViewController.swift in Sources */,
 				90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */,
 				9043B77D1E56ABC100D76BCE /* Picture.swift in Sources */,
+				90F5E3BF1E5CD376001399F6 /* Gender.swift in Sources */,
 				3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */,
 				9021CC471E3A541000720260 /* ProfileHexagons.swift in Sources */,
 				30A727041E293A9A0070B620 /* MessagesViewController.swift in Sources */,
+				90F5E3C31E5CDD5F001399F6 /* ExternalBackend.swift in Sources */,
 				30A7270A1E2EF7550070B620 /* SignupViewController.swift in Sources */,
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
 				90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */,
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
+				90F5E3C61E5CE0F9001399F6 /* ExternalLogic.swift in Sources */,
 				30BFA0B21E4BBB9600A17F5E /* FacebookFunctions.swift in Sources */,
 				90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */,
 				30BFA0BD1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift in Sources */,
@@ -791,6 +811,8 @@
 				302799D41E57684D00AFFB90 /* PrivacyPolicyViewController.swift in Sources */,
 				3030C0C21DD54E5E0077F7AC /* CustomKeyboard.swift in Sources */,
 				3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */,
+				90AB6B111E5E1BAE00EBEBC0 /* MessagesBackend.swift in Sources */,
+				90F5E3C11E5CD5FA001399F6 /* MyProfileBackend.swift in Sources */,
 				30BF6FF91E5BDEA50008C2B5 /* ThreadLayout.swift in Sources */,
 				3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */,
 				907201471E4316B500A77BC4 /* FacebookImagePickerController.swift in Sources */,
