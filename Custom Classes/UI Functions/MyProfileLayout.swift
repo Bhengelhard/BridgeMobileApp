@@ -19,7 +19,7 @@ class MyProfileLayout {
     let reputationText = MyProfileObjects.ReputationText()
     let settingsButton = MyProfileObjects.SettingsButton()
     let friendsImage = MyProfileObjects.FriendsImage()
-    let inviteFriendsButton = MyProfileObjects.InviteFriendsButton()
+    let inviteButton = MyProfileObjects.InviteButton()
     
     // MARK: - Layout
     /// Sets the initial layout constraints
@@ -30,7 +30,7 @@ class MyProfileLayout {
             // Layout the navigation bar with title image and left and right bar button items
             view.addSubview(navBar)
             navBar.autoPinEdge(toSuperviewEdge: .top)
-            navBar.autoPinEdge(toSuperviewEdge: .leading)
+            navBar.autoPinEdge(toSuperviewEdge: .left)
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
@@ -42,16 +42,44 @@ class MyProfileLayout {
             profilePictureBackground.autoMatch(.height, to: .width, of: profilePictureBackground)
             
             // Layout the profilePicture with the current User's profile Picture
-            profilePictureBackground.addSubview(profilePicture)
-            profilePicture.autoCenterInSuperview()
+            view.addSubview(profilePicture)
+            profilePicture.autoAlignAxis(.horizontal, toSameAxisOf: profilePictureBackground)
+            profilePicture.autoAlignAxis(.vertical, toSameAxisOf: profilePictureBackground)
             profilePicture.autoSetDimensions(to: CGSize(width: 150, height: 150))
             
             // Layout editProfileButton on the bottom right corner of the profilePictureBackground Hexagon
-            profilePicture.addSubview(editProfileButton)
+            view.addSubview(editProfileButton)
             editProfileButton.autoPinEdge(.bottom, to: .bottom, of: profilePicture)
             editProfileButton.autoPinEdge(.right, to: .right, of: profilePicture)
             editProfileButton.autoSetDimensions(to: CGSize(width: 60, height: 60))
             
+            // Layout reputationScore below the profilePicture with the user's score
+            view.addSubview(reputationScore)
+            reputationScore.autoAlignAxis(.vertical, toSameAxisOf: view)
+            reputationScore.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 35)
+            reputationScore.autoSetDimensions(to: CGSize(width: 44, height: 44))
+            
+            // Layout reputationText below the reputationScore
+            view.addSubview(reputationText)
+            reputationText.autoAlignAxis(.vertical, toSameAxisOf: view)
+            reputationText.autoPinEdge(.top, to: .bottom, of: reputationScore, withOffset: 2)
+            
+            // Layout settingsButton below the reputationText
+            view.addSubview(settingsButton)
+            settingsButton.autoAlignAxis(.vertical, toSameAxisOf: view)
+            settingsButton.autoPinEdge(.top, to: .bottom, of: reputationText, withOffset: 35)
+            
+            // Layout friendsImage to pin to the bottom of the view
+            view.addSubview(friendsImage)
+            friendsImage.autoPinEdge(toSuperviewEdge: .left)
+            friendsImage.autoPinEdge(toSuperviewEdge: .bottom)
+            friendsImage.autoMatch(.width, to: .width, of: view)
+            
+            // Layout inviteButton to center of the friendsImage
+            view.addSubview(inviteButton)
+            inviteButton.autoAlignAxis(.horizontal, toSameAxisOf: friendsImage)
+            inviteButton.autoAlignAxis(.vertical, toSameAxisOf: friendsImage)
+            inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
             
         }
         
