@@ -8,7 +8,7 @@
 
 import UIKit
 
-class new_MessagesViewController: UIViewController {
+class New_MessagesViewController: UIViewController {
 
     // MARK: Global Variables
     let layout = MessagesLayout()

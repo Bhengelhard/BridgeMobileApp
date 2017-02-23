@@ -13,7 +13,7 @@ class ExternalProfileLayout {
     // MARK: Global Variables
     let dismissButton = ExternalProfileObjects.DismissButton()
     let reportButton = ExternalProfileObjects.ReportButton()
-    let profilePicturesView = ExternalProfileObjects.ProfilePicturesViewController()
+    let profilePicturesView = ExternalProfileObjects.ProfilePicturesPageViewController()
     let profilePictures = [ExternalProfileObjects.Image()]
     let name = ExternalProfileObjects.Name()
     let factLabel = ExternalProfileObjects.FactLabel()

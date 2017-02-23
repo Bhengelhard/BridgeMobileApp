@@ -8,7 +8,7 @@
 
 import UIKit
 
-class new_MyProfileViewController: UIViewController {
+class New_MyProfileViewController: UIViewController {
 
     // MARK: Global Variables
     let layout = MyProfileLayout()

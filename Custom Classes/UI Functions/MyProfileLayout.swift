@@ -27,6 +27,12 @@ class MyProfileLayout {
         
         if (!didSetupConstraints) {
             
+            // Layout the navigation bar with title image and left and right bar button items
+            view.addSubview(navBar)
+            navBar.autoPinEdge(toSuperviewEdge: .top)
+            navBar.autoPinEdge(toSuperviewEdge: .leading)
+            navBar.autoMatch(.width, to: .width, of: view)
+            navBar.autoSetDimension(.height, toSize: 64)
             
         }
         
