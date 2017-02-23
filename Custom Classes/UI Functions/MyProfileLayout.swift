@@ -34,6 +34,25 @@ class MyProfileLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
+            // Layout the profilePictureBackground with the Profile Faded Hexagon Image
+            view.addSubview(profilePictureBackground)
+            profilePictureBackground.autoPinEdge(.top, to: .bottom, of: navBar)
+            profilePictureBackground.autoPinEdge(.left, to: .left, of: view)
+            profilePictureBackground.autoMatch(.width, to: .width, of: view)
+            profilePictureBackground.autoMatch(.height, to: .width, of: profilePictureBackground)
+            
+            // Layout the profilePicture with the current User's profile Picture
+            profilePictureBackground.addSubview(profilePicture)
+            profilePicture.autoCenterInSuperview()
+            profilePicture.autoSetDimensions(to: CGSize(width: 150, height: 150))
+            
+            // Layout editProfileButton on the bottom right corner of the profilePictureBackground Hexagon
+            profilePicture.addSubview(editProfileButton)
+            editProfileButton.autoPinEdge(.bottom, to: .bottom, of: profilePicture)
+            editProfileButton.autoPinEdge(.right, to: .right, of: profilePicture)
+            editProfileButton.autoSetDimensions(to: CGSize(width: 60, height: 60))
+            
+            
         }
         
         return true

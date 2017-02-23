@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import Parse
 
 class MyProfileObjects {
     
+    // Navigation Bar Object for the MyProfileViewController
     class NavBar: UINavigationBar {
         
         init() {
@@ -46,19 +48,62 @@ class MyProfileObjects {
             fatalError("init(coder:) has not been implemented")
         }
         
+        // Add Target to rightBarButton for segue from MyProfileViewController to SwipeViewController
         func rightBarButtonTapped(_ sender: UIBarButtonItem) {
             print("segue from MyProfileViewController to SwipeViewController")
         }
     }
     
+    // Glowing Faded Hexagon Image on MyProfileViewController
     class ProfilePictureBackground: UIImageView {
         
-    }
-    class ProfilePicture: HexagonView {
+        init() {
+            super.init(frame: CGRect())
+            
+            self.image = #imageLiteral(resourceName: "Profile_Faded_Hexagon")
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
         
     }
     
+    // Current User's Main Profile Picture displayed inside of a Hexagon
+    class ProfilePicture: HexagonView {
+        
+        override init() {
+            super.init()
+            
+            // **Backend - delete Parse Import at top
+            self.setBackgroundImage(image: #imageLiteral(resourceName: "Profile_Navbar_Icon"))
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+    }
+    
+    // Button that segues the user from MyProfileViewController to the EditProfileViewController
     class EditProfileButton: UIButton {
+        
+        init() {
+            super.init(frame: CGRect())
+            
+            self.setBackgroundImage(#imageLiteral(resourceName: "Profile_Edit_Button"), for: .normal)
+            self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        func tapped(_ sender: UIButton) {
+            print("EditProfileButton tapped")
+        }
         
     }
     
