@@ -10,7 +10,7 @@ import UIKit
 
 class SwipeObjects {
     
-    class NavBar: CustomNavigationBar {
+    class NavBar: NecterNavigationBar {
         
     }
     

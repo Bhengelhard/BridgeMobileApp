@@ -35,11 +35,22 @@ struct Constants {
         /// BentonSansLight Size 14
         static let light14 = UIFont(name: "BentonSans-Light", size: 14)
         
-        /// BentonSansBold Size 50
-        static let bold50 = UIFont(name: "BentonSans-Bold", size: 24)
+        /// BentonSansLight Size 18
+        static let light18 = UIFont(name: "BentonSans-Light", size: 18)
         
-//        static let bentonSansLight = "BentonSans-Light"
-        static let bentonSansBold = "BentonSans-Bold"
+        /// BentonSansBold Size 16
+        static let bold16 = UIFont(name: "BentonSans-Bold", size: 16)
+        
+        /// BentonSansBold Size 24
+        static let bold24 = UIFont(name: "BentonSans-Bold", size: 24)
     }
+    
+}
+
+enum ViewControllersEnum: String {
+    
+    case SwipeViewController
+    case MessagesViewController
+    case MyProfileViewController
     
 }

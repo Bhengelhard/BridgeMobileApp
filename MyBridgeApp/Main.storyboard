@@ -36,15 +36,15 @@
             </objects>
             <point key="canvasLocation" x="-1108" y="-171"/>
         </scene>
-        <!--New My Profile View Controller-->
+        <!--New Messages View Controller-->
         <scene sceneID="8ti-bP-rwI">
             <objects>
-                <viewController id="cn6-67-Hku" customClass="New_MyProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cn6-67-Hku" customClass="New_MessagesViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="a6i-Ol-Zz4"/>
                         <viewControllerLayoutGuide type="bottom" id="2MI-aU-DlM"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3mR-7Z-n6x">
+                    <view key="view" contentMode="scaleToFill" id="3mR-7Z-n6x" customClass="New_Mesagges">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -52,7 +52,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ANM-bZ-0Bm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1978" y="-2074"/>
+            <point key="canvasLocation" x="-2878" y="-2073"/>
         </scene>
         <!--Privacy Policy View Controller-->
         <scene sceneID="ovV-6Z-0TW">
@@ -91,7 +91,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fad-Hy-ths" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="426" y="-1989"/>
+            <point key="canvasLocation" x="-2118" y="-2073"/>
         </scene>
         <!--Old Access View Controller-->
         <scene sceneID="SgD-tP-9oW">

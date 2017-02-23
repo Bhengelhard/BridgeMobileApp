@@ -23,7 +23,7 @@
 		3030C0B81DD54E3F0077F7AC /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B31DD54E3F0077F7AC /* UserInfo.swift */; };
 		3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B41DD54E3F0077F7AC /* UserInfoPair.swift */; };
 		3030C0C21DD54E5E0077F7AC /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0BE1DD54E5E0077F7AC /* CustomKeyboard.swift */; };
-		3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */; };
+		3030C0C31DD54E5E0077F7AC /* NecterNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0BF1DD54E5E0077F7AC /* NecterNavigationBar.swift */; };
 		3030C0C41DD54E5E0077F7AC /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */; };
 		3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */; };
 		3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0CA1DD54E8F0077F7AC /* CustomTimer.swift */; };
@@ -133,7 +133,7 @@
 		3030C0B31DD54E3F0077F7AC /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserInfo.swift; path = "Custom Classes/Data Storage/UserInfo.swift"; sourceTree = "<group>"; };
 		3030C0B41DD54E3F0077F7AC /* UserInfoPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserInfoPair.swift; path = "Custom Classes/Data Storage/UserInfoPair.swift"; sourceTree = "<group>"; };
 		3030C0BE1DD54E5E0077F7AC /* CustomKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomKeyboard.swift; path = "Custom Classes/Custom Views/CustomKeyboard.swift"; sourceTree = "<group>"; };
-		3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBar.swift; path = "Custom Classes/Custom Views/CustomNavigationBar.swift"; sourceTree = "<group>"; };
+		3030C0BF1DD54E5E0077F7AC /* NecterNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NecterNavigationBar.swift; path = "Custom Classes/Custom Views/NecterNavigationBar.swift"; sourceTree = "<group>"; };
 		3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomSearchBar.swift; path = "Custom Classes/Custom Views/CustomSearchBar.swift"; sourceTree = "<group>"; };
 		3030C0C11DD54E5E0077F7AC /* MissionControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MissionControlView.swift; path = "Custom Classes/Custom Views/MissionControlView.swift"; sourceTree = "<group>"; };
 		3030C0CA1DD54E8F0077F7AC /* CustomTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomTimer.swift; path = "Custom Classes/Custom Functions/CustomTimer.swift"; sourceTree = "<group>"; };
@@ -273,7 +273,7 @@
 				304FEBE61DE49EFD00B3A8A7 /* CircleView.swift */,
 				304FEBE21DE498A300B3A8A7 /* SendingNotificationView.swift */,
 				3030C0BE1DD54E5E0077F7AC /* CustomKeyboard.swift */,
-				3030C0BF1DD54E5E0077F7AC /* CustomNavigationBar.swift */,
+				3030C0BF1DD54E5E0077F7AC /* NecterNavigationBar.swift */,
 				3030C0C01DD54E5E0077F7AC /* CustomSearchBar.swift */,
 				30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */,
 				30A727051E29540F0070B620 /* MessageComposer.swift */,
@@ -739,7 +739,7 @@
 				300A1D821E53F9EF0071FED7 /* LoginViewController.swift in Sources */,
 				30BF6FFD1E5BDF530008C2B5 /* new_EditProfileViewController.swift in Sources */,
 				90CA09A91E0AF3C700330646 /* MyProfileViewController.swift in Sources */,
-				3030C0C31DD54E5E0077F7AC /* CustomNavigationBar.swift in Sources */,
+				3030C0C31DD54E5E0077F7AC /* NecterNavigationBar.swift in Sources */,
 				9021CC471E3A541000720260 /* ProfileHexagons.swift in Sources */,
 				30A727041E293A9A0070B620 /* MessagesViewController.swift in Sources */,
 				30A7270A1E2EF7550070B620 /* SignupViewController.swift in Sources */,

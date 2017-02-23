@@ -11,7 +11,7 @@ import PureLayout
 class MyProfileLayout {
     
     // MARK: Global Variables
-    let navBar = MyProfileObjects.NavBar()
+    let navBar = MyProfileObjects.NavBar(ViewControllersEnum.MyProfileViewController)
     let profilePictureBackground = MyProfileObjects.ProfilePictureBackground()
     let profilePicture = MyProfileObjects.ProfilePicture()
     let editProfileButton = MyProfileObjects.EditProfileButton()
@@ -27,25 +27,25 @@ class MyProfileLayout {
         
         if (!didSetupConstraints) {
             
-            // Layout the navigation bar with title image and left and right bar button items
+            // Layout the navigation bar with title image and right bar button items
             view.addSubview(navBar)
             navBar.autoPinEdge(toSuperviewEdge: .top)
             navBar.autoPinEdge(toSuperviewEdge: .left)
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
-            // Layout the profilePictureBackground with the Profile Faded Hexagon Image
-            view.addSubview(profilePictureBackground)
-            profilePictureBackground.autoPinEdge(.top, to: .bottom, of: navBar)
-            profilePictureBackground.autoPinEdge(.left, to: .left, of: view)
-            profilePictureBackground.autoMatch(.width, to: .width, of: view)
-            profilePictureBackground.autoMatch(.height, to: .width, of: profilePictureBackground)
+//            // Layout the profilePictureBackground with the Profile Faded Hexagon Image
+//            view.addSubview(profilePictureBackground)
+//            profilePictureBackground.autoPinEdge(.top, to: .bottom, of: navBar)
+//            profilePictureBackground.autoPinEdge(.left, to: .left, of: view)
+//            profilePictureBackground.autoMatch(.width, to: .width, of: view)
+//            profilePictureBackground.autoMatch(.height, to: .width, of: profilePictureBackground)
             
             // Layout the profilePicture with the current User's profile Picture
             view.addSubview(profilePicture)
-            profilePicture.autoAlignAxis(.horizontal, toSameAxisOf: profilePictureBackground)
-            profilePicture.autoAlignAxis(.vertical, toSameAxisOf: profilePictureBackground)
-            profilePicture.autoSetDimensions(to: CGSize(width: 150, height: 150))
+            profilePicture.autoAlignAxis(.vertical, toSameAxisOf: view)
+            profilePicture.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 35)
+            profilePicture.autoSetDimensions(to: CGSize(width: 260, height: 260))
             
             // Layout editProfileButton on the bottom right corner of the profilePictureBackground Hexagon
             view.addSubview(editProfileButton)
@@ -56,13 +56,14 @@ class MyProfileLayout {
             // Layout reputationScore below the profilePicture with the user's score
             view.addSubview(reputationScore)
             reputationScore.autoAlignAxis(.vertical, toSameAxisOf: view)
-            reputationScore.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 35)
-            reputationScore.autoSetDimensions(to: CGSize(width: 44, height: 44))
+            reputationScore.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 8)
+            reputationScore.autoSetDimensions(to: CGSize(width: 45, height: 45))
             
             // Layout reputationText below the reputationScore
             view.addSubview(reputationText)
             reputationText.autoAlignAxis(.vertical, toSameAxisOf: view)
             reputationText.autoPinEdge(.top, to: .bottom, of: reputationScore, withOffset: 2)
+
             
             // Layout settingsButton below the reputationText
             view.addSubview(settingsButton)

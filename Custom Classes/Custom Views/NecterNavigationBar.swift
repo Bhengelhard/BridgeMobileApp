@@ -9,13 +9,99 @@
 //
 
 import UIKit
-import Parse
+
+/// Navigation Bar Object for the MyProfileViewController
+class NecterNavigationBar: UINavigationBar {
+    
+    init(_ viewController: ViewControllersEnum) {
+        super.init(frame: CGRect())
+        
+        // Setting the color of the navigation bar to white
+        self.backgroundColor = UIColor.white
+        
+        // Removing line at the bottom of the navigation bar
+        self.setBackgroundImage(UIImage(), for: .default)
+        self.shadowImage = UIImage()
+        
+        // Setting the navigation Bar Title Image
+        let navItem = UINavigationItem()
+        let titleImageView = UIImageView()
+        titleImageView.frame.size = CGSize(width: 40, height: 40)
+        titleImageView.contentMode = .scaleAspectFit
+        navItem.titleView = titleImageView
+        
+        // Setting the right Bar Button Item
+        let rightButton = UIButton()
+        rightButton.frame.size = CGSize(width: 30, height: 30)
+        
+        // Setting the left Bar Button Item
+        let leftButton = UIButton()
+        leftButton.frame.size = CGSize(width: 30, height: 30)
+        
+        
+        // setting items based on the current View Controller
+        if viewController == .SwipeViewController {
+            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            rightButton.setImage(rightIcon, for: .normal)
+            rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+            
+            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            leftButton.setImage(leftIcon, for: .normal)
+            leftButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
+            
+            let titleImage = #imageLiteral(resourceName: "All_Types_Icon_Colors")
+            titleImageView.image = titleImage
+            
+        } else if viewController == .MessagesViewController {
+            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            leftButton.setImage(leftIcon, for: .normal)
+            leftButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
+            
+            let titleImage = #imageLiteral(resourceName: "Messages_Navbar_Active")
+            titleImageView.image = titleImage
+            
+        } else if viewController == .MyProfileViewController {
+            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            rightButton.setImage(rightIcon, for: .normal)
+            rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+            
+            let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
+            titleImageView.image = titleImage
+        }
+        
+        let rightItem = UIBarButtonItem(customView: rightButton)
+        navItem.rightBarButtonItem = rightItem
+        
+        let leftItem = UIBarButtonItem(customView: leftButton)
+        navItem.leftBarButtonItem = leftItem
+        
+        
+        
+        
+        
+        self.setItems([navItem], animated: false)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // Add Target to rightBarButton for segue from MyProfileViewController to SwipeViewController
+    func rightBarButtonTapped(_ sender: UIBarButtonItem) {
+        print("segue from MyProfileViewController to SwipeViewController")
+    }
+    
+    // Add Target to leftBarButton for segue from MyProfileViewController to SwipeViewController
+    func leftBarButtonTapped(_ sender: UIBarButtonItem) {
+        print("segue from MyProfileViewController to SwipeViewController")
+    }
+}
 
 class CustomNavigationBar: UIView {
-    
+
     var classRightBarButton = UIButton()
     var rightImageView = UIImageView()
-    
+
     func createCustomNavigationBar (view: UIView, leftBarButtonIcon: String?, leftBarButtonSelectedIcon: String?, leftBarButton: UIButton?, rightBarButtonIcon: String?, rightBarButtonSelectedIcon: String?, rightBarButton: UIButton?, title: String?){
         self.frame = CGRect(x: 0, y: 0, width: DisplayUtility.screenWidth, height: 0.105*DisplayUtility.screenHeight)
         self.backgroundColor = UIColor.clear

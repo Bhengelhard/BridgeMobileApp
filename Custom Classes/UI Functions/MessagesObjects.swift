@@ -10,18 +10,12 @@ import UIKit
 
 class MessagesObjects {
     
-    class NavBar: UINavigationBar {
+    class NavBar: NecterNavigationBar {
         
-        class TitleImage: UIImageView {
-            
-        }
-        
-        class RightBarButton: UIImageView {
-            
-        }
     }
     
     class NewMatchesTitle: UILabel {
+        
         
     }
     

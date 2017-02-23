@@ -11,7 +11,7 @@ import PureLayout
 class MessagesLayout {
     
     // MARK: Global Variables
-    let navBar = MessagesObjects.NavBar()
+    let navBar = MessagesObjects.NavBar(ViewControllersEnum.MessagesViewController)
     let newMatchesTitle = MessagesObjects.NewMatchesTitle()
     let newMatchesScrollView = MessagesObjects.NewMatchesScrollView()
     let messagesTitle = MessagesObjects.MessagesTitle()
@@ -23,6 +23,13 @@ class MessagesLayout {
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
         
         if (!didSetupConstraints) {
+            
+            // Layout the navigation bar with title image and left bar button items
+            view.addSubview(navBar)
+            navBar.autoPinEdge(toSuperviewEdge: .top)
+            navBar.autoPinEdge(toSuperviewEdge: .left)
+            navBar.autoMatch(.width, to: .width, of: view)
+            navBar.autoSetDimension(.height, toSize: 64)
             
             
         }

@@ -7,52 +7,55 @@
 //
 
 import UIKit
-import Parse
 
 class MyProfileObjects {
     
-    /// Navigation Bar Object for the MyProfileViewController
-    class NavBar: UINavigationBar {
+    class NavBar: NecterNavigationBar {
         
-        init() {
-            super.init(frame: CGRect())
-            
-            // Setting the color of the navigation bar to white
-            self.backgroundColor = UIColor.white
-            
-            // Removing line at the bottom of the navigation bar
-            self.setBackgroundImage(UIImage(), for: .default)
-            self.shadowImage = UIImage()
-            
-            // Setting the navigation Bar Title Image
-            let navItem = UINavigationItem()
-            let logo = #imageLiteral(resourceName: "Profile_Navbar_Active")
-            let imageView = UIImageView(image: logo)
-            imageView.frame.size = CGSize(width: 40, height: 40)
-            imageView.contentMode = .scaleAspectFit
-            navItem.titleView = imageView
-            
-            // Setting the right Bar Button Item
-            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
-            let rightButton = UIButton()
-            rightButton.frame.size = CGSize(width: 36, height: 36)
-            rightButton.setImage(rightIcon, for: .normal)
-            rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
-            let rightItem = UIBarButtonItem(customView: rightButton)
-            navItem.rightBarButtonItem = rightItem
-            
-            self.setItems([navItem], animated: false)
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-        // Add Target to rightBarButton for segue from MyProfileViewController to SwipeViewController
-        func rightBarButtonTapped(_ sender: UIBarButtonItem) {
-            print("segue from MyProfileViewController to SwipeViewController")
-        }
     }
+    
+//    /// Navigation Bar Object for the MyProfileViewController
+//    class NavBar: UINavigationBar {
+//        
+//        init() {
+//            super.init(frame: CGRect())
+//            
+//            // Setting the color of the navigation bar to white
+//            self.backgroundColor = UIColor.white
+//            
+//            // Removing line at the bottom of the navigation bar
+//            self.setBackgroundImage(UIImage(), for: .default)
+//            self.shadowImage = UIImage()
+//            
+//            // Setting the navigation Bar Title Image
+//            let navItem = UINavigationItem()
+//            let logo = #imageLiteral(resourceName: "Profile_Navbar_Active")
+//            let imageView = UIImageView(image: logo)
+//            imageView.frame.size = CGSize(width: 40, height: 40)
+//            imageView.contentMode = .scaleAspectFit
+//            navItem.titleView = imageView
+//            
+//            // Setting the right Bar Button Item
+//            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
+//            let rightButton = UIButton()
+//            rightButton.frame.size = CGSize(width: 36, height: 36)
+//            rightButton.setImage(rightIcon, for: .normal)
+//            rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+//            let rightItem = UIBarButtonItem(customView: rightButton)
+//            navItem.rightBarButtonItem = rightItem
+//            
+//            self.setItems([navItem], animated: false)
+//        }
+//        
+//        required init?(coder aDecoder: NSCoder) {
+//            fatalError("init(coder:) has not been implemented")
+//        }
+//        
+//        // Add Target to rightBarButton for segue from MyProfileViewController to SwipeViewController
+//        func rightBarButtonTapped(_ sender: UIBarButtonItem) {
+//            print("segue from MyProfileViewController to SwipeViewController")
+//        }
+//    }
     
     /// Glowing Faded Hexagon Image on MyProfileViewController
     class ProfilePictureBackground: UIImageView {
@@ -76,7 +79,7 @@ class MyProfileObjects {
             super.init()
             
             // **Backend - delete Parse Import at top
-            self.setBackgroundImage(image: #imageLiteral(resourceName: "Profile_Navbar_Icon"))
+            self.setBackgroundImage(image: #imageLiteral(resourceName: "Example_User_Profile_Picture"))
             self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_:))))
             
         }
@@ -122,7 +125,7 @@ class MyProfileObjects {
             self.layer.borderColor = UIColor.black.cgColor
             self.layer.borderWidth = 3
             self.setTitle("15", for: .normal)
-            self.titleLabel?.font = Constants.Fonts.bold50
+            self.titleLabel?.font = Constants.Fonts.bold24
             self.setTitleColor(UIColor.black, for: .normal)
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
             
@@ -147,7 +150,7 @@ class MyProfileObjects {
             self.setTitle("REPUTATION", for: .normal)
             self.setTitleColor(UIColor.gray, for: .normal)
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
-            self.titleLabel?.font = Constants.Fonts.light14
+            self.titleLabel?.font = Constants.Fonts.light18
             
         }
         
@@ -170,7 +173,7 @@ class MyProfileObjects {
             self.setTitle("MY SETTINGS", for: .normal)
             self.setTitleColor(UIColor.red, for: .normal)
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
-            self.titleLabel?.font = Constants.Fonts.light14
+            self.titleLabel?.font = Constants.Fonts.light18
             
         }
         
