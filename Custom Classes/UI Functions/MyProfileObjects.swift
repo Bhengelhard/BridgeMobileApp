@@ -77,11 +77,16 @@ class MyProfileObjects {
             
             // **Backend - delete Parse Import at top
             self.setBackgroundImage(image: #imageLiteral(resourceName: "Profile_Navbar_Icon"))
+            self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_:))))
             
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+        
+        func tapped(_ sender: UITapGestureRecognizer) {
+            print("ProfilePicture tapped")
         }
         
     }
