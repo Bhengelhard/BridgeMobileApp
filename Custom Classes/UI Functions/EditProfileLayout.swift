@@ -27,14 +27,6 @@ class EditProfileLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
-//            // Layout the editImagesView below the navigation bar
-//            editImagesView.backgroundColor = UIColor.red
-//            view.addSubview(editImagesView)
-//            view.autoMatch(.width, to: .width, of: view)
-//            view.autoPinEdge(.top, to: .bottom, of: navBar)
-//            view.autoPinEdge(toSuperviewEdge: .left)
-//            view.autoSetDimension(.height, toSize: 394.5)
-
             
         }
         

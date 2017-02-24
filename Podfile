@@ -2,7 +2,6 @@
 # platform :ios, '9.0'
 
 target 'MyBridgeApp' do
-  pod 'SlackTextViewController', '~> 1.9'
   pod 'PureLayout', '~> 3.0'
   
   use_frameworks!
