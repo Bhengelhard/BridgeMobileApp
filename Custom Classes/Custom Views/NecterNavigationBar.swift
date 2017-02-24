@@ -42,7 +42,6 @@ class NecterNavigationBar: UINavigationBar {
         let leftItem = UIBarButtonItem(customView: leftButton)
         navItem.leftBarButtonItem = leftItem
         
-        
         // Setting navigation item images and targets for the SwipeViewController
         if viewController == .SwipeViewController {
             let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
@@ -84,6 +83,15 @@ class NecterNavigationBar: UINavigationBar {
 
             let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
             titleImageView.image = titleImage
+        }
+        // Setting navigation item images and targets for the EditProfileViewController
+        else if viewController == .EditProfileViewController {
+            navItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(rightBarButtonTapped(_:)))
+            navItem.rightBarButtonItem?.tintColor = UIColor.orange
+            
+            navItem.titleView = nil
+            navItem.title = "Edit Profile"
+            
         }
         
         // Adding the navigation items to the navigation bar

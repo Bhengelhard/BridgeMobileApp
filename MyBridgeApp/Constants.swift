@@ -53,5 +53,6 @@ enum ViewControllersEnum: String {
     case MessagesViewController
     case MyProfileViewController
     case ThreadViewController
+    case EditProfileViewController
     
 }

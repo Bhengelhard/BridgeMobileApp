@@ -10,14 +10,19 @@ import UIKit
 
 class EditProfileObjects {
     
-    class NavBar: UINavigationBar {
+    class NavBar: NecterNavigationBar {
         
-        class doneButton: UIBarButtonItem {
+        init() {
+            super.init(ViewControllersEnum.EditProfileViewController)
             
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
         }
     }
     
-    class EditImages: UICollectionView {
+    class EditImagesView: UICollectionView {
         
     }
     

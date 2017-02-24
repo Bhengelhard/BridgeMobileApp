@@ -36,10 +36,10 @@
             </objects>
             <point key="canvasLocation" x="-1108" y="-171"/>
         </scene>
-        <!--Thread View Controller-->
+        <!--New Edit Profile View Controller-->
         <scene sceneID="8ti-bP-rwI">
             <objects>
-                <viewController id="cn6-67-Hku" customClass="ThreadViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cn6-67-Hku" customClass="new_EditProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="a6i-Ol-Zz4"/>
                         <viewControllerLayoutGuide type="bottom" id="2MI-aU-DlM"/>
