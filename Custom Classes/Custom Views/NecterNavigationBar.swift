@@ -67,6 +67,13 @@ class NecterNavigationBar: UINavigationBar {
             
             let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
             titleImageView.image = titleImage
+        } else if viewController == .ThreadViewController {
+            let leftIcon = #imageLiteral(resourceName: "Back_Button")
+            leftButton.setImage(leftIcon, for: .normal)
+            leftButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+
+            let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
+            titleImageView.image = titleImage
         }
         
         let rightItem = UIBarButtonItem(customView: rightButton)
@@ -95,6 +102,7 @@ class NecterNavigationBar: UINavigationBar {
     func leftBarButtonTapped(_ sender: UIBarButtonItem) {
         print("segue from MyProfileViewController to SwipeViewController")
     }
+    
 }
 
 class CustomNavigationBar: UIView {

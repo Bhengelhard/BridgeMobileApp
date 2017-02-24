@@ -36,10 +36,10 @@
             </objects>
             <point key="canvasLocation" x="-1108" y="-171"/>
         </scene>
-        <!--New Messages View Controller-->
+        <!--Thread View Controller-->
         <scene sceneID="8ti-bP-rwI">
             <objects>
-                <viewController id="cn6-67-Hku" customClass="New_MessagesViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cn6-67-Hku" customClass="ThreadViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="a6i-Ol-Zz4"/>
                         <viewControllerLayoutGuide type="bottom" id="2MI-aU-DlM"/>
@@ -378,10 +378,10 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="1Bx-ML-R6e"/>
-        <segue reference="cC3-sR-uFf"/>
-        <segue reference="Zf9-Tg-H2E"/>
+        <segue reference="ORi-q2-txU"/>
         <segue reference="WWN-20-fau"/>
-        <segue reference="xcR-H7-wok"/>
+        <segue reference="0EB-Fw-YUx"/>
+        <segue reference="Zf9-Tg-H2E"/>
         <segue reference="r1p-Ao-g6W"/>
         <segue reference="0Jc-ZY-MLe"/>
         <segue reference="fLD-mo-7R5"/>

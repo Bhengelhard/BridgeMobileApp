@@ -10,7 +10,7 @@ import UIKit
 
 class ThreadObjects {
     
-    class navBar: UINavigationBar {
+    class navBar: NecterNavigationBar {
         
     }
     

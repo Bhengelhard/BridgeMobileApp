@@ -18,20 +18,29 @@ class SwipeObjects {
         
         init(text: String) {
             super.init(frame: CGRect())
-            self.setTitle("text", for: .normal)
+            self.setTitle(text, for: .normal)
             self.setTitleColor(UIColor.white, for: .normal)
+            self.layer.cornerRadius = 10
+            self.backgroundColor = UIColor.red
+            self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+        
+        func tapped (_ sender: UIButton) {
+            print("tapped")
+        }
+        
     }
     
     class InfoButton: UIButton {
         
         init() {
             super.init(frame: CGRect())
-            self.setTitle("i", for: .normal)
+            
+            self.setImage(#imageLiteral(resourceName: "Profile_Unselected_Gray_Bubble"), for: .normal)
         }
         
         required init?(coder aDecoder: NSCoder) {

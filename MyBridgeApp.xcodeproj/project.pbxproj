@@ -311,9 +311,9 @@
 				300A1D7D1E53EB6C0071FED7 /* LoginLayout.swift */,
 				3079EB241E54FACD008AB6E5 /* LoginObjects.swift */,
 				302799D51E5768E400AFFB90 /* PrivacyPolicyLayout.swift */,
+				302799D71E5768F800AFFB90 /* PrivacyPolicyObjects.swift */,
 				302799DB1E57A71800AFFB90 /* SwipeLayout.swift */,
 				302799DD1E57A72700AFFB90 /* SwipeObjects.swift */,
-				302799D71E5768F800AFFB90 /* PrivacyPolicyObjects.swift */,
 				30BF6FEC1E5BDB8A0008C2B5 /* MyProfileLayout.swift */,
 				30BF6FEE1E5BDBA40008C2B5 /* MyProfileObjects.swift */,
 				30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */,
@@ -361,6 +361,7 @@
 		30BF70091E5C95A70008C2B5 /* Old */ = {
 			isa = PBXGroup;
 			children = (
+				30A727031E293A9A0070B620 /* MessagesViewController.swift */,
 				30A727091E2EF7550070B620 /* SignupViewController.swift */,
 				CB5829451CAA26D900DC86C9 /* BridgeViewController.swift */,
 				301B1C501E036A0100D507B8 /* OldAccessViewController.swift */,
@@ -370,7 +371,6 @@
 				9032B4551E31249C00136408 /* OtherProfileViewController.swift */,
 				90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */,
 				907201421E41D96B00A77BC4 /* CropImageViewController.swift */,
-				30A727031E293A9A0070B620 /* MessagesViewController.swift */,
 				CB6A32981CC483CC00FADB13 /* SingleMessageViewController.swift */,
 				CBEFCD6A1CE53F0200695B15 /* AccountSettingsTableViewController.swift */,
 			);

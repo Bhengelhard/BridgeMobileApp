@@ -16,18 +16,43 @@ class MessagesObjects {
     
     class NewMatchesTitle: UILabel {
         
+        init() {
+            super.init(frame: CGRect())
+            
+            self.text = "New Matches"
+            self.font = Constants.Fonts.bold16
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
         
     }
     
     class NewMatchesScrollView: NewMatchesView {
-        
+
     }
     
     class MessagesTitle: UILabel {
         
+        init() {
+            super.init(frame: CGRect())
+            
+            self.text = "Messages"
+            self.font = Constants.Fonts.bold16
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
     }
     
     class MessagesTable: UITableView {
+        
+        
         
     }
     
