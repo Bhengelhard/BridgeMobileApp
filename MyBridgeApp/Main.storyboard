@@ -44,7 +44,7 @@
                         <viewControllerLayoutGuide type="top" id="a6i-Ol-Zz4"/>
                         <viewControllerLayoutGuide type="bottom" id="2MI-aU-DlM"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3mR-7Z-n6x" customClass="New_Mesagges">
+                    <view key="view" contentMode="scaleToFill" id="3mR-7Z-n6x">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

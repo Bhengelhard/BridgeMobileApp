@@ -22,12 +22,15 @@ class ThreadLayout {
         if (!didSetupConstraints) {
             
             // MARK: Layout Objects
+            
             // Layout the navigation bar at the top of the view for navigating from the SwipeViewController to the MessagesViewController and the MyProfileViewController
             view.addSubview(navBar)
             navBar.autoPinEdge(toSuperviewEdge: .top)
             navBar.autoPinEdge(toSuperviewEdge: .left)
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
+            
+            // Layout the keyboard pinned to the bottom of the view
             
         }
         

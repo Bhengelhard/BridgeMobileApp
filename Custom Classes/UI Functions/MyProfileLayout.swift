@@ -27,6 +27,9 @@ class MyProfileLayout {
         
         if (!didSetupConstraints) {
             
+            print(DisplayUtility.screenWidth)
+            print(DisplayUtility.screenHeight)
+            
             // Layout the navigation bar with title image and right bar button items
             view.addSubview(navBar)
             navBar.autoPinEdge(toSuperviewEdge: .top)
@@ -45,19 +48,22 @@ class MyProfileLayout {
             view.addSubview(profilePicture)
             profilePicture.autoAlignAxis(.vertical, toSameAxisOf: view)
             profilePicture.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 35)
-            profilePicture.autoSetDimensions(to: CGSize(width: 260, height: 260))
+            let hexWToHRatio: CGFloat = 2 / sqrt(3)
+            let hexWidth : CGFloat = 190
+            let hexHeight = hexWidth / hexWToHRatio
+            profilePicture.autoSetDimensions(to: CGSize(width: hexWidth, height: hexHeight))
             
             // Layout editProfileButton on the bottom right corner of the profilePictureBackground Hexagon
             view.addSubview(editProfileButton)
             editProfileButton.autoPinEdge(.bottom, to: .bottom, of: profilePicture)
             editProfileButton.autoPinEdge(.right, to: .right, of: profilePicture)
-            editProfileButton.autoSetDimensions(to: CGSize(width: 60, height: 60))
+            editProfileButton.autoSetDimensions(to: CGSize(width: 70, height: 70))
             
             // Layout reputationScore below the profilePicture with the user's score
             view.addSubview(reputationScore)
             reputationScore.autoAlignAxis(.vertical, toSameAxisOf: view)
             reputationScore.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 8)
-            reputationScore.autoSetDimensions(to: CGSize(width: 45, height: 45))
+            reputationScore.autoSetDimensions(to: CGSize(width: 40, height: 40))
             
             // Layout reputationText below the reputationScore
             view.addSubview(reputationText)
