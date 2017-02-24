@@ -12,6 +12,14 @@ class SwipeObjects {
     
     class NavBar: NecterNavigationBar {
         
+        init() {
+            super.init(ViewControllersEnum.SwipeViewController)
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
     }
     
     class DecisionButton: UIButton {

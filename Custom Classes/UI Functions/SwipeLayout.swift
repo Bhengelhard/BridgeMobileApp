@@ -11,7 +11,7 @@ import PureLayout
 class SwipeLayout {
     
     // MARK: Global Variables
-    let navBar = SwipeObjects.NavBar(ViewControllersEnum.SwipeViewController)
+    let navBar = SwipeObjects.NavBar()
     let firstSwipeCard = SwipeCard()
     let secondSwipeCard = SwipeCard()
     let passButton = SwipeObjects.DecisionButton(text: "PASS")

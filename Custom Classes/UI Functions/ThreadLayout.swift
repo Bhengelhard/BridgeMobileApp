@@ -11,7 +11,7 @@ import PureLayout
 class ThreadLayout {
     
     // MARK: Global Variables
-    let navBar = ThreadObjects.navBar(ViewControllersEnum.ThreadViewController)
+    let navBar = ThreadObjects.navBar()
     let table = ThreadObjects.Table()
     let keyboard = ThreadObjects.Keyboard()
     

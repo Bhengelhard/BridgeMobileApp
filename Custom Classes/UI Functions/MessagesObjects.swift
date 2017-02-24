@@ -12,6 +12,15 @@ class MessagesObjects {
     
     class NavBar: NecterNavigationBar {
         
+        init() {
+            super.init(ViewControllersEnum.MessagesViewController)
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
     }
     
     class NewMatchesTitle: UILabel {

@@ -33,13 +33,17 @@ class NecterNavigationBar: UINavigationBar {
         // Setting the right Bar Button Item
         let rightButton = UIButton()
         rightButton.frame.size = CGSize(width: 30, height: 30)
+        let rightItem = UIBarButtonItem(customView: rightButton)
+        navItem.rightBarButtonItem = rightItem
         
         // Setting the left Bar Button Item
         let leftButton = UIButton()
         leftButton.frame.size = CGSize(width: 30, height: 30)
+        let leftItem = UIBarButtonItem(customView: leftButton)
+        navItem.leftBarButtonItem = leftItem
         
         
-        // setting items based on the current View Controller
+        // Setting navigation item images and targets for the SwipeViewController
         if viewController == .SwipeViewController {
             let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
             rightButton.setImage(rightIcon, for: .normal)
@@ -52,7 +56,9 @@ class NecterNavigationBar: UINavigationBar {
             let titleImage = #imageLiteral(resourceName: "All_Types_Icon_Colors")
             titleImageView.image = titleImage
             
-        } else if viewController == .MessagesViewController {
+        }
+        // Setting navigation item images and targets for the MessagesViewController
+        else if viewController == .MessagesViewController {
             let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
             leftButton.setImage(leftIcon, for: .normal)
             leftButton.addTarget(self, action: #selector(leftBarButtonTapped(_:)), for: .touchUpInside)
@@ -60,14 +66,18 @@ class NecterNavigationBar: UINavigationBar {
             let titleImage = #imageLiteral(resourceName: "Messages_Navbar_Active")
             titleImageView.image = titleImage
             
-        } else if viewController == .MyProfileViewController {
+        }
+        // Setting navigation item images and targets for the MyProfileViewController
+        else if viewController == .MyProfileViewController {
             let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
             rightButton.setImage(rightIcon, for: .normal)
             rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
             
             let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
             titleImageView.image = titleImage
-        } else if viewController == .ThreadViewController {
+        }
+        // Setting navigation item images and targets for the ThreadViewController
+        else if viewController == .ThreadViewController {
             let leftIcon = #imageLiteral(resourceName: "Back_Button")
             leftButton.setImage(leftIcon, for: .normal)
             leftButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
@@ -76,16 +86,7 @@ class NecterNavigationBar: UINavigationBar {
             titleImageView.image = titleImage
         }
         
-        let rightItem = UIBarButtonItem(customView: rightButton)
-        navItem.rightBarButtonItem = rightItem
-        
-        let leftItem = UIBarButtonItem(customView: leftButton)
-        navItem.leftBarButtonItem = leftItem
-        
-        
-        
-        
-        
+        // Adding the navigation items to the navigation bar
         self.setItems([navItem], animated: false)
     }
     

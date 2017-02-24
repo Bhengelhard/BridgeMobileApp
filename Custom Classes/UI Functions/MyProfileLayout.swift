@@ -11,7 +11,7 @@ import PureLayout
 class MyProfileLayout {
     
     // MARK: Global Variables
-    let navBar = MyProfileObjects.NavBar(ViewControllersEnum.MyProfileViewController)
+    let navBar = MyProfileObjects.NavBar()
     let profilePictureBackground = MyProfileObjects.ProfilePictureBackground()
     let profilePicture = MyProfileObjects.ProfilePicture()
     let editProfileButton = MyProfileObjects.EditProfileButton()

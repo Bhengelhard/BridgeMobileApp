@@ -11,7 +11,7 @@ import PureLayout
 class MessagesLayout {
     
     // MARK: Global Variables
-    let navBar = MessagesObjects.NavBar(ViewControllersEnum.MessagesViewController)
+    let navBar = MessagesObjects.NavBar()
     let newMatchesTitle = MessagesObjects.NewMatchesTitle()
     let newMatchesScrollView = MessagesObjects.NewMatchesScrollView()
     let messagesTitle = MessagesObjects.MessagesTitle()
