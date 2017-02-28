@@ -12,10 +12,10 @@ import PureLayout
 class LoginLayout {
     
     // MARK: Global Variables
-    let tutorialsView = LoginObjects.TutorialsView()
     let fbLoginButton = LoginObjects.FBLoginButton()
     let loginInformationLabel = LoginObjects.LoginInformationLabel()
     let seeMoreButton = LoginObjects.SeeMoreButton()
+    let tutorialsPageViewController = LoginObjects.TutorialsPageViewController()
     
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
@@ -23,16 +23,27 @@ class LoginLayout {
         if (!didSetupConstraints) {
             
             // MARK: Layout Objects
-            //Layout the tutorialsViewController at the top of the view so the user can swipe through the tutorial pages
+            var tutorialsView = UIView()
+            
+            if let tView = tutorialsPageViewController.view {
+                tutorialsView = tView
+            }
+            
+            
+            //Layout the tutorialsViewPageController at the top of the view so the user can swipe through the tutorial pages
             view.addSubview(tutorialsView)
-            tutorialsView.autoPinEdge(toSuperviewEdge: .top, withInset: 58)
+            tutorialsView.autoPinEdge(toSuperviewEdge: .top)
+            tutorialsView.autoPinEdge(toSuperviewEdge: .left)
             tutorialsView.autoMatch(.width, to: .width, of: view)
-            tutorialsView.autoSetDimension(.height, toSize: 431.5)
+            
+            // Set the pageControl of the tutorialsViewPageController
+            tutorialsPageViewController.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
             
             // Layout the fbLoginButton below the tutorialsViewController to the bottom with 80pt inset and dimensions of 300x40
             view.addSubview(fbLoginButton)
             fbLoginButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
             fbLoginButton.autoAlignAxis(toSuperviewAxis: .vertical)
+            fbLoginButton.autoPinEdge(.top, to: .bottom, of: tutorialsView, withOffset: 35)
             
             // Layout Objects Pinned to the Bottom
             // Layout the loginInformation Label just above the seeMoreButton to tell the user about necter's facebook posting policy and terms of service

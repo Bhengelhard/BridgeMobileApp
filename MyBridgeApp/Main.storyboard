@@ -36,10 +36,10 @@
             </objects>
             <point key="canvasLocation" x="-1108" y="-171"/>
         </scene>
-        <!--External Profile View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="8ti-bP-rwI">
             <objects>
-                <viewController id="cn6-67-Hku" customClass="ExternalProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cn6-67-Hku" customClass="LoginViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="a6i-Ol-Zz4"/>
                         <viewControllerLayoutGuide type="bottom" id="2MI-aU-DlM"/>
@@ -163,7 +163,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-vb-aRK">
-                                                    <rect key="frame" x="165" y="11" width="45" height="21"/>
+                                                    <rect key="frame" x="165" y="13" width="45" height="17"/>
                                                     <fontDescription key="fontDescription" name="BentonSans-Light" family="BentonSans" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
