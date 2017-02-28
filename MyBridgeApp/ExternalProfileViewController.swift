@@ -20,6 +20,11 @@ class ExternalProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        layout.scrollView.contentSize = CGSize(width: view.frame.width, height: max(layout.scrollView.frame.height, layout.messageButton.frame.maxY + 20))
+//        
+//        print(max(layout.scrollView.frame.height, layout.messageButton.frame.maxY + 20))
+//        print(view.frame.height)
+        
     }
     
     override func loadView() {
@@ -33,6 +38,14 @@ class ExternalProfileViewController: UIViewController {
         didSetupConstraints = layout.initialize(view: view, didSetupConstraints: didSetupConstraints)
         
         super.updateViewConstraints()
+    }
+    
+    
+    override func viewDidLayoutSubviews() {
+        
+        // Setting the size of the content within the Scroll View so it will scroll to the specified height
+        let contentSize = CGSize(width: layout.scrollView.frame.width, height: layout.messageButton.frame.maxY + 20)
+        layout.scrollView.contentSize = contentSize
     }
     
     // MARK: - Targets

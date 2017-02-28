@@ -12,7 +12,6 @@ class EditProfileLayout {
     
     // MARK: Global Variables
     let navBar = EditProfileObjects.NavBar()
-    let editImagesView = EditProfileObjects.EditImagesView()
     
     // MARK: - Layout
     /// Sets the initial layout constraints

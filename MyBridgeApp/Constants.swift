@@ -38,6 +38,9 @@ struct Constants {
         /// BentonSansLight Size 18
         static let light18 = UIFont(name: "BentonSans-Light", size: 18)
         
+        /// BentonSansLight Size 24
+        static let light24 = UIFont(name: "BentonSans-Light", size: 24)
+        
         /// BentonSansBold Size 16
         static let bold16 = UIFont(name: "BentonSans-Bold", size: 16)
         

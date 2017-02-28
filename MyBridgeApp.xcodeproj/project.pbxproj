@@ -32,6 +32,7 @@
 		3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */; };
 		3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */; };
 		3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0D41DD550240077F7AC /* SwipeCard.swift */; };
+		303139091E65D6E300F8D9BF /* ReusableObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303139081E65D6E300F8D9BF /* ReusableObjects.swift */; };
 		304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */; };
 		304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */; };
 		304FEBE11DE3918E00B3A8A7 /* DashedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */; };
@@ -142,6 +143,7 @@
 		3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayUtility.swift; path = "Custom Classes/UI Functions/DisplayUtility.swift"; sourceTree = "<group>"; };
 		3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionManager.swift; path = "Custom Classes/UI Functions/TransitionManager.swift"; sourceTree = "<group>"; };
 		3030C0D41DD550240077F7AC /* SwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeCard.swift; path = "Custom Classes/Custom Views/SwipeCard.swift"; sourceTree = "<group>"; };
+		303139081E65D6E300F8D9BF /* ReusableObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReusableObjects.swift; path = "Custom Classes/UI Functions/ReusableObjects.swift"; sourceTree = "<group>"; };
 		304FEBDA1DDE40A200B3A8A7 /* PFCloudFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PFCloudFunctions.swift; path = "Custom Classes/Backend Communication/PFCloudFunctions.swift"; sourceTree = "<group>"; };
 		304FEBDC1DDE413500B3A8A7 /* DBSavingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBSavingFunctions.swift; path = "Custom Classes/Backend Communication/DBSavingFunctions.swift"; sourceTree = "<group>"; };
 		304FEBE01DE3918E00B3A8A7 /* DashedLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DashedLine.swift; path = "Custom Classes/Custom Views/DashedLine.swift"; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 				302799DD1E57A72700AFFB90 /* SwipeObjects.swift */,
 				30BF6FEC1E5BDB8A0008C2B5 /* MyProfileLayout.swift */,
 				30BF6FEE1E5BDBA40008C2B5 /* MyProfileObjects.swift */,
+				303139081E65D6E300F8D9BF /* ReusableObjects.swift */,
 				30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */,
 				30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */,
 				30BF6FF81E5BDEA50008C2B5 /* ThreadLayout.swift */,
@@ -705,6 +708,7 @@
 				306BD21F1E4416100020C4BA /* Reachability.swift in Sources */,
 				90512CF21E26A8D900D293BD /* EditProfileViewController.swift in Sources */,
 				30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */,
+				303139091E65D6E300F8D9BF /* ReusableObjects.swift in Sources */,
 				9032B4561E31249C00136408 /* OtherProfileViewController.swift in Sources */,
 				30BF6FF31E5BDDAB0008C2B5 /* MessagesLayout.swift in Sources */,
 				30BF70031E5BE2B20008C2B5 /* ExternalProfileViewController.swift in Sources */,
