@@ -115,7 +115,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     // refresh() fetches the data from Parse
-    func refresh() {
+    func refresh() { // **BACKEND
         
         let currentFilterInfo = self.filterInfo[self.currentFilter]!
         
@@ -226,7 +226,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
     func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text!)
     }
-    func reloadMessageTable(_ notification: Notification) {
+    func reloadMessageTable(_ notification: Notification) { // **BACKEND
         initializeFilterInfo()
         
         names = [String : [String]]()
@@ -420,7 +420,7 @@ class MessagesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.frame = CGRect(x: 0, y: filterLabel.frame.maxY, width: DisplayUtility.screenWidth, height: DisplayUtility.screenHeight-filterLabel.frame.maxY)
     }
     
-    func loadNewMatches() {
+    func loadNewMatches() { // **BACKEND
         newMatchesView = NewMatchesView()
         newMatchesView.setVC(vc: self)
         self.tableView.tableHeaderView = self.newMatchesView

@@ -24,6 +24,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         layout.seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped(_:)), for: .touchUpInside)
+        layout.fbLoginButton.addTarget(self, action: #selector(loginWithFB(_:)), for: .touchUpInside)
         
     }
     
@@ -43,10 +44,15 @@ class LoginViewController: UIViewController {
     
     // MARK: - Targets
     /// Segues to PrivacyInformationViewController to show more information about privacy while using the application
-    func seeMoreButtonTapped (_ sender: UIButton) {
+    func seeMoreButtonTapped(_ sender: UIButton) {
         self.performSegue(withIdentifier: "showPrivacyPolicy", sender: self)
     }
     
+    /// Authenticates user through Facebook Login
+    func loginWithFB(_ sender: UIButton) {
+        let fbLogin = FBLogin()
+        fbLogin.initialize(vc: self)
+    }
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

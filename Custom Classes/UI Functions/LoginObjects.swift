@@ -38,13 +38,12 @@ class LoginObjects {
             self.setTitleColor(DisplayUtility.gradientColor(size: (self.titleLabel?.frame.size)!), for: .highlighted)
             self.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 16)
             self.backgroundColor = UIColor(red: 66.0/255.0, green: 103.0/255.0, blue: 178.0/255.0, alpha: 1)
-            self.layer.cornerRadius = 8            
+            self.layer.cornerRadius = 8
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
     }
     
     /// Displays label letting user know about privacy information and the necter terms of service

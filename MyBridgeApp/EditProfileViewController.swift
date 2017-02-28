@@ -440,6 +440,10 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
                 user["quick_update"] = quickUpdateTextView.text
             }
             
+            /*User.getCurrent(withBlock: { (user) in
+                user.save()
+            })*/
+            
             var selectedFacts = [String]()
             let selectedImage = UIImage(named: "Profile_Selected_Gray_Bubble")
             if ageBubble.image(for: .normal) == selectedImage {
@@ -612,15 +616,16 @@ class EditProfileViewController: UIViewController, UITextViewDelegate, UIGesture
     }
     
     func setQuickUpdateText() {
-        if let user = PFUser.current() {
-            if let quickUpdate = user["quick_update"] as? String {
-                quickUpdateTextView.text = quickUpdate
-                quickUpdatePlaceholder = false
+        /*
+        User.getCurrent { (user) in
+            if let quickUpdate = user.quickUpdate {
+                self.quickUpdateTextView.text = quickUpdate
+                self.quickUpdatePlaceholder = false
             } else {
-                quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
-                quickUpdatePlaceholder = true
+                self.quickUpdateTextView.text = "What have you been up to recently?\nWhat are your plans for the near future?"
+                self.quickUpdatePlaceholder = true
             }
-        }
+        }*/
     }
     
     func writeFactsInTextView() {

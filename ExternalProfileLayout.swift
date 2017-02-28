@@ -71,6 +71,10 @@ class ExternalProfileLayout {
             reportButton.layer.cornerRadius = diameter / 2.0
             reportButton.backgroundColor = UIColor.blue
             
+            // Set the pageControl of the profilePicturesPageViewController
+            profilePicturesView.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
+            profilePicturesView.pageControl.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
+            
             // Set the name below the profilePicturesView
             scrollView.addSubview(name)
             name.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
