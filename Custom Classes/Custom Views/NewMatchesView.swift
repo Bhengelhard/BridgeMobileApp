@@ -145,4 +145,9 @@ class NewMatchesView: UIScrollView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func addUser(_ user: User) {
+        // FIXME: implement
+    }
+    
+    
 }

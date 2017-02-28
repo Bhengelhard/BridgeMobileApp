@@ -911,7 +911,7 @@ class BridgeViewController: UIViewController {
         }
     }
 
-    func bridged(){
+    func bridged() {
         if let swipeCard = arrayOfCardsInDeck.first{
             let reasonForConnectionView = ReasonForConnection()
             reasonForConnectionView.initialize(vc: self)

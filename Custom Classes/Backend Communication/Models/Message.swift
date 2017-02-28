@@ -11,6 +11,7 @@ import Parse
 
 class Message: NSObject {
     typealias MessageBlock = (Message) -> Void
+    typealias MessagesBlock = ([Message]) -> Void
     
     private let parseMessage: PFObject
     
@@ -182,41 +183,52 @@ class Message: NSObject {
         }
     }
     
-    /// Gets all Messages with the given User, in reverse chronological order of the most
-    /// recent message, and executes the given block on each result
-    static func getAll(withUser user: User, withBlock block: MessageBlock? = nil) {
+    static func getAll(withUser user: User, withLimit limit: Int = 10000, withSkip skip: Int = 0, withBlock block: MessagesBlock? = nil) {
         if let userID = user.id {
             let subQuery1 = PFQuery(className: "Messages")
             subQuery1.whereKey("user1_objectId", equalTo: userID)
             let subQuery2 = PFQuery(className: "Messages")
             subQuery2.whereKey("user2_objectId", equalTo: userID)
-
+            
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             query.order(byDescending: "lastSingleMessageAt")
-
+            query.limit = limit
+            query.skip = skip
+            
             query.findObjectsInBackground { (parseMessages, error) in
                 if let error = error {
                     print("error getting messages - \(error)")
                 } else if let parseMessages = parseMessages {
-                    self.getAll(from: parseMessages, startingAt: 0, withBlock: block)
+                    var messages = [Message]()
+                    for parseMessage in parseMessages {
+                        let message = Message(parseMessage: parseMessage)
+                        messages.append(message)
+                    }
+                    if let block = block {
+                        block(messages)
+                    }
                 }
             }
         }
     }
-    
-    // Gets message, executes block, then recurses with next message. This ensures that all of the
-    // blocks will be executed in order
-    private static func getAll(from parseMessages: [PFObject], startingAt index: Int, withBlock block: MessageBlock? = nil) {
-        if index < parseMessages.count {
-            let parseMessage = parseMessages[index]
-            if let parseMessageObjectId = parseMessage.objectId {
-                Message.get(withID: parseMessageObjectId) { (message) in
+        
+    static func countAll(withUser user: User, withBlock block: ((Int32) -> Void)? = nil) {
+        if let userID = user.id {
+            let subQuery1 = PFQuery(className: "Messages")
+            subQuery1.whereKey("user1_objectId", equalTo: userID)
+            let subQuery2 = PFQuery(className: "Messages")
+            subQuery2.whereKey("user2_objectId", equalTo: userID)
+            
+            let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            query.countObjectsInBackground(block: { (count, error) in
+                if let error = error {
+                    print("error counting messages - \(error)")
+                } else {
                     if let block = block {
-                        block(message)
+                        block(count)
                     }
-                    self.getAll(from: parseMessages, startingAt: index+1, withBlock: block)
                 }
-            }
+            })
         }
     }
     

@@ -11,6 +11,7 @@ import Parse
 class BridgePairing: NSObject {
     
     typealias BridgePairingBlock = (BridgePairing) -> Void
+    typealias BridgePairingsBlock = ([BridgePairing]) -> Void
     
     private let parseBridgePairing: PFObject
     
@@ -247,6 +248,63 @@ class BridgePairing: NSObject {
                 let bridgePairing = BridgePairing(parseBridgePairing: parseBridgePairing)
                 if let block = block {
                     block(bridgePairing)
+                }
+            }
+        }
+    }
+    
+    static func getAll(withUser user: User, bridgedOnly: Bool = false, withLimit limit: Int = 10000, withBlock block: BridgePairingsBlock? = nil) {
+        if let userID = user.id {
+            let subQuery1 = PFQuery(className: "BridgePairings")
+            subQuery1.whereKey("user_objectId1", equalTo: userID)
+            let subQuery2 = PFQuery(className: "BridgePairings")
+            subQuery2.whereKey("user_objectId2", equalTo: userID)
+            
+            let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            if bridgedOnly {
+                query.whereKey("bridges", equalTo: true)
+            }
+            query.limit = limit
+            
+            query.findObjectsInBackground { (parseBridgePairings, error) in
+                if let error = error {
+                    print("error getting bridge pairings - \(error)")
+                } else if let parseBridgePairings = parseBridgePairings {
+                    var bridgePairings = [BridgePairing]()
+                    for parseBridgePairing in parseBridgePairings {
+                        let bridgePairing = BridgePairing(parseBridgePairing: parseBridgePairing)
+                        bridgePairings.append(bridgePairing)
+                    }
+                    if let block = block {
+                        block(bridgePairings)
+                    }
+                }
+            }
+        }
+    }
+    
+    static func getAllWithFriends(ofUser user: User, withLimit limit: Int = 10000, withBlock block: BridgePairingsBlock? = nil) {
+        if let userFriendList = user.friendList {
+            let subQuery1 = PFQuery(className: "BridgePairings")
+            subQuery1.whereKey("user_objectId1", containedIn: userFriendList)
+            let subQuery2 = PFQuery(className: "BridgePairings")
+            subQuery2.whereKey("user_objectId2", containedIn: userFriendList)
+            
+            let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            query.limit = limit
+            
+            query.findObjectsInBackground { (parseBridgePairings, error) in
+                if let error = error {
+                    print("error getting bridge pairings - \(error)")
+                } else if let parseBridgePairings = parseBridgePairings {
+                    var bridgePairings = [BridgePairing]()
+                    for parseBridgePairing in parseBridgePairings {
+                        let bridgePairing = BridgePairing(parseBridgePairing: parseBridgePairing)
+                        bridgePairings.append(bridgePairing)
+                    }
+                    if let block = block {
+                        block(bridgePairings)
+                    }
                 }
             }
         }

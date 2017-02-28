@@ -12,6 +12,7 @@ import Parse
 class User: NSObject {
     
     typealias UserBlock = (User) -> Void
+    typealias UsersBlock = ([User]) -> Void
     
     private let parseUser: PFUser
     
@@ -164,6 +165,32 @@ class User: NSObject {
                 if let block = block {
                     block(user)
                 }
+            }
+        }
+    }
+    
+    func getFriends(withBlock block: UsersBlock? = nil) {
+        if let id = id {
+            if let friendList = friendList {
+                let query = PFQuery(className: "_User")
+                query.whereKey("friend_list", contains: id)
+                query.limit = 10000
+                query.findObjectsInBackground(block: { (parseObjects, error) in
+                    if let error = error {
+                        print("error finding users - \(error)")
+                    } else if let parseObjects = parseObjects {
+                        var users = [User]()
+                        for parseObject in parseObjects {
+                            if let parseUser = parseObject as? PFUser {
+                                let user = User(parseUser: parseUser)
+                                users.append(user)
+                            }
+                        }
+                        if let block = block {
+                            block(users)
+                        }
+                    }
+                })
             }
         }
     }
