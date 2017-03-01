@@ -13,8 +13,10 @@ import MapKit
 class SwipeBackend {
     
     var lastCardInStack:UIView? = nil
-    var topSwipeCard: SwipeCard?
-    var bottomSwipeCard: SwipeCard?
+    var topSwipeCard = SwipeCard()
+    var bottomSwipeCard = SwipeCard()
+    var topBridgePairing: BridgePairing?
+    var bottomBridgePairing: BridgePairing?
     
     func setCityName(locationLabel: UILabel, locationCoordinates:[Double], pairing:UserInfoPair) {
         // We will store the city names to LocalData.  Not required now. But will ne be needed in fututre when when optimize.
@@ -29,8 +31,8 @@ class SwipeBackend {
             })
         }
         else {
-            var longitude :CLLocationDegrees = -122.0312186
-            var latitude :CLLocationDegrees = 37.33233141
+            var longitude: CLLocationDegrees = -122.0312186
+            var latitude: CLLocationDegrees = 37.33233141
             if locationCoordinates.count == 2 {
                 longitude = locationCoordinates[1]
                 latitude = locationCoordinates[0]
@@ -56,54 +58,75 @@ class SwipeBackend {
         }
     }
     
-    func getBridgePairing(forCard swipeCard: SwipeCard) {
-        
+    private func getNextBridgePairings(topSwipeCard: SwipeCard? = nil, bottomSwipeCard: SwipeCard) {
         User.getCurrent { (user) in
-            BridgePairing.getAllWithFriends(ofUser: user, withLimit: 1) { (bridgePairings) in
-                for bridgePairing in bridgePairings {
+            var limit = 1
+            if topSwipeCard != nil {
+                limit = 2
+            }
+            BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: limit, notCheckedOutOnly: true) { (bridgePairings) in
+                for i in 0..<bridgePairings.count {
+                    let bridgePairing = bridgePairings[i]
+                    
+                    var swipeCardIsBottom = true
+                    if i == 0 {
+                        if topSwipeCard != nil {
+                            swipeCardIsBottom = false
+                        }
+                    }
+                    
+                    var swipeCard = bottomSwipeCard
+                    if swipeCardIsBottom {
+                        self.bottomBridgePairing = bridgePairing
+                    } else {
+                        if let topSwipeCard = topSwipeCard {
+                            swipeCard = topSwipeCard
+                        }
+                        self.topBridgePairing = bridgePairing
+                    }
+                    
+                    if let userID = user.id {
+                        if var shownTo = bridgePairing.shownTo {
+                            shownTo.append(userID)
+                            bridgePairing.shownTo = shownTo
+                        } else {
+                            let shownTo = [userID]
+                            bridgePairing.shownTo = shownTo
+                        }
+                    }
+                    
+                    bridgePairing.checkedOut = true
+                    
                     var user1:PairInfo? = nil
                     var user2:PairInfo? = nil
                     
-                    let name1 = bridgePairing.user1Name
-                    let name2 = bridgePairing.user2Name
-                    let userId1 = bridgePairing.user1ID
-                    let userId2 = bridgePairing.user2ID
+                    let name1 = bridgePairing.user1Name ?? ""
+                    let name2 = bridgePairing.user2Name ?? ""
+                    let userId1 = bridgePairing.user1ID ?? ""
+                    let userId2 = bridgePairing.user2ID ?? ""
                     
-                    let location1:[Double]? = nil
-                    let location2:[Double]? = nil
-                    let bridgeStatus1:String? = nil
-                    let bridgeStatus2:String? = nil
-                    let city1:String? = nil
-                    let city2:String? = nil
-                    let bridgeType1:String? = nil
-                    let bridgeType2:String? = nil
+                    let location1 = [Double]()
+                    let location2 = [Double]()
+                    let bridgeStatus1 = ""
+                    let bridgeStatus2 = ""
+                    let city1 = ""
+                    let city2 = ""
+                    let bridgeType1 = ""
+                    let bridgeType2 = ""
                     
-                    let objectId1 = bridgePairing.id
-                    let objectId2 = bridgePairing.id
+                    let objectId1 = bridgePairing.id ?? ""
+                    let objectId2 = bridgePairing.id ?? ""
                     
-//                    result["checked_out"]  = true
-//                    if let _ = result["shown_to"] {
-//                        if var ar = result["shown_to"] as? [String] {
-//                            let s = (PFUser.current()?.objectId)! as String
-//                            ar.append(s)
-//                            result["shown_to"] = ar
-//                        }
-//                        else {
-//                            result["shown_to"] = [(PFUser.current()?.objectId)!]
-//                        }
-//                    }
-//                    else {
-//                        result["shown_to"] = [(PFUser.current()?.objectId)!]
-//                    }
                     let profilePictureFile1:String? = nil
                     let profilePictureFile2:String? = nil
-//                    if let ob = result["user1_profile_picture_url"] as? String {
-//                        profilePictureFile1 = ob
-//                    }
-//                    if let ob = result["user2_profile_picture_url"] as? String {
-//                        profilePictureFile2 = ob
-//                    }
+                    //                    if let ob = result["user1_profile_picture_url"] as? String {
+                    //                        profilePictureFile1 = ob
+                    //                    }
+                    //                    if let ob = result["user2_profile_picture_url"] as? String {
+                    //                        profilePictureFile2 = ob
+                    //                    }
                     bridgePairing.save()
+                    
                     user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1, savedProfilePicture: nil)
                     user2 = PairInfo(name:name2, mainProfilePicture: profilePictureFile2, profilePictures: nil,location: location2, bridgeStatus: bridgeStatus2, objectId: objectId2,  bridgeType: bridgeType2, userId: userId2, city: city2, savedProfilePicture: nil)
                     let userInfoPair = UserInfoPair(user1: user1, user2: user2)
@@ -112,58 +135,20 @@ class SwipeBackend {
                     localData.addPair(userInfoPair)
                     localData.synchronize()
                     
-                    DispatchQueue.main.async(execute: {
-                        
-                        let aboveView = self.addCardPairView(id: userId1,
-                                                             name: name1,
-                                                             location: city1,
-                                                             status: bridgeStatus1,
-                                                             photo: profilePictureFile1,
-                                                             locationCoordinates1: location1,
-                                                             id2: userId2,
-                                                             name2: name2,
-                                                             location2: city2,
-                                                             status2: bridgeStatus2,
-                                                             photo2: profilePictureFile2,
-                                                             locationCoordinates2: location2,
-                                                             pairing: userInfoPair)
-                        
-                        self.lastCardInStack = aboveView
-                    })
-                
+                    swipeCard.initialize(user1Id: userId1, user1PhotoURL: profilePictureFile1, user1Name: name1, user1Status: bridgeStatus1, user1City: "", user2Id: userId2, user2PhotoURL: profilePictureFile2, user2Name: name2, user2Status: bridgeStatus2, user2City: "", connectionType: BridgeType.business.rawValue)
                 }
             }
         }
     }
     
-    func addCardPairView (id: String?,
-                          name: String?,
-                          location: String?,
-                          status: String?,
-                          photo: String?,
-                          locationCoordinates1: [Double]?,
-                          id2: String?,
-                          name2: String?,
-                          location2: String?,
-                          status2: String?,
-                          photo2: String?,
-                          locationCoordinates2: [Double]?,
-                          pairing: UserInfoPair) -> UIView {
-        let swipeCardView = SwipeCard()
-        
-        if bottomSwipeCard == nil {
-            bottomSwipeCard = swipeCardView
-        }
-            
-        swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: BridgeType.business.rawValue)
-        
-        return swipeCardView
-    }
-    
-    func moveBottomSwipeCardToTop() -> UIView? {
+    func moveBottomSwipeCardToTopAndResetBottom() {
         let oldTopSwipeCard = topSwipeCard
         topSwipeCard = bottomSwipeCard
-        bottomSwipeCard = nil
-        return oldTopSwipeCard
+        bottomSwipeCard = oldTopSwipeCard
+        getNextBridgePairings(bottomSwipeCard: bottomSwipeCard)
+    }
+    
+    func setTopAndBottomSwipeCards() {
+        getNextBridgePairings(topSwipeCard: topSwipeCard, bottomSwipeCard: bottomSwipeCard)
     }
 }

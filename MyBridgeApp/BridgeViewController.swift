@@ -448,6 +448,7 @@ class BridgeViewController: UIViewController {
                         
                         query.whereKey("checked_out", equalTo: false)
                         query.whereKey("shown_to", notEqualTo:(PFUser.current()?.objectId)!)
+
                         if (typeOfCards != "All" && typeOfCards != "EachOfAllType") {
                             query.whereKey("bridge_type", equalTo: typeOfCards)
                         }
