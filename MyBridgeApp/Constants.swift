@@ -49,14 +49,3 @@ struct Constants {
     }
     
 }
-
-enum ViewControllersEnum: String {
-    
-    case SwipeViewController
-    case MessagesViewController
-    case MyProfileViewController
-    case ThreadViewController
-    case EditProfileViewController
-    case SettingsViewController
-    
-}

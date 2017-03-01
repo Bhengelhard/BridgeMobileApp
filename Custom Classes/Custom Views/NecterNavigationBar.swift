@@ -44,8 +44,9 @@ class NecterNavigationBar: UINavigationBar {
         let leftItem = UIBarButtonItem(customView: leftButton)
         navItem.leftBarButtonItem = leftItem
         
-        // 
+        // Setting Title Font
         titleTextAttributes = [NSFontAttributeName: Constants.Fonts.light24]
+        
         // Adding the navigation items to the navigation bar
         self.setItems([navItem], animated: false)
     }

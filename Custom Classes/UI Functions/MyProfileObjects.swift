@@ -156,18 +156,11 @@ class MyProfileObjects {
             super.init(frame: CGRect())
             
             self.setImage(#imageLiteral(resourceName: "Profile_Invite_Button"), for: .normal)
-            self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
-        // Presents Message with text prepopulated
-        func tapped(_ sender: UIButton) {
-            print("InviteButton tapped")
-        }
-        
     }
     
 }
