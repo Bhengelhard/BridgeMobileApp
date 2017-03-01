@@ -544,7 +544,7 @@ class SingleMessageViewController: UIViewController, UITableViewDelegate, UITabl
             }
             
             //Transitioning Back to BridgeViewController
-            performSegue(withIdentifier: "showBridgeFromSingleMessage", sender: self)
+            performSegue(withIdentifier: "showSwipe", sender: self)
         } else if seguedFrom == "OtherProfileViewController" {
             //Checking if no messages have been sent and if so deleting the message created for the conversation
             if noMessagesLabel.alpha == 1.0 {

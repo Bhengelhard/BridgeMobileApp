@@ -301,7 +301,7 @@ class DBSavingFunctions {
         getBridgePairings(1,typeOfCards: bridgeType, callBack: nil, bridgeType: nil)
         // }
         segueToSingleMessage = true
-        performSegue(withIdentifier: "showSingleMessage", sender: nil)
+        performSegue(withIdentifier: "showThread", sender: nil)
     }*/
     
     

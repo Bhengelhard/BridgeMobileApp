@@ -535,7 +535,6 @@ class OtherProfileViewController: UIViewController {
         singleMessageVC.necterTypeColor = necterTypeColor
         singleMessageVC.transitioningDelegate = self.transitionManager
         present(singleMessageVC, animated: true, completion: nil)
-        //self.performSegue(withIdentifier: "showSingleMessage", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

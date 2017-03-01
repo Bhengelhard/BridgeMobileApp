@@ -190,7 +190,7 @@ class MessagingFunctions {
 //            bridgeVC.messageId = id
 //            bridgeVC.necterTypeColor = color
 //            bridgeVC.singleMessageTitle = title
-//            bridgeVC.performSegue(withIdentifier: "showSingleMessage", sender: self)
+//            bridgeVC.performSegue(withIdentifier: "showThread", sender: self)
 //        }
 //    }
     

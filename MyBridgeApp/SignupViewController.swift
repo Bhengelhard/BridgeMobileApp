@@ -282,7 +282,7 @@ class SignupViewController: UIViewController, UITextViewDelegate, UIGestureRecog
         localData.synchronize()
         
         // Segueing to BridgeViewController after the user signs up
-        performSegue(withIdentifier: "showBridgeVC", sender: self)
+        performSegue(withIdentifier: "showSwipe", sender: self)
     }
     
     func changeAlphaForAllBut(mainView: UIView?, superview: UIView, alphaInc: CGFloat) {

@@ -137,7 +137,7 @@ class OldAccessViewController: UIViewController, CLLocationManagerDelegate, UITe
                 
                 // If User has already signed up, go directly to BridgeViewController
                 if hasSignedUp {
-                    self.performSegue(withIdentifier: "showBridgeViewController", sender: self)
+                    self.performSegue(withIdentifier: "showSwipe", sender: self)
                 }
                 // If User has already provided an access code, skip entering access code and allow user to log in
                 else if hasProvidedAccessCode {

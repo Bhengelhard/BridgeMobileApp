@@ -10,7 +10,7 @@ import UIKit
 
 class NewMatchesView: UIScrollView {
     
-    var vc: MessagesViewController?
+    var vc: OldMessagesViewController?
     let frameWithNoMatches: CGRect
     let frameWithMatches: CGRect
     var allNewMatches: [NewMatch]
@@ -44,7 +44,7 @@ class NewMatchesView: UIScrollView {
         
     }
     
-    func setVC(vc: MessagesViewController) {
+    func setVC(vc: OldMessagesViewController) {
         self.vc = vc
     }
     

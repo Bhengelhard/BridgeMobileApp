@@ -236,7 +236,7 @@ class FBLogin {
                             UIApplication.shared.endIgnoringInteractionEvents()
                             
                             if hasSignedUp == true {
-                                vc.performSegue(withIdentifier: "showBridgeViewController", sender: self)
+                                vc.performSegue(withIdentifier: "showSwipe", sender: self)
                             } else {
                                 
                                 //If the user has already provided an access code, then do not display it again

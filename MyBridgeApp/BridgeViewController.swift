@@ -1111,7 +1111,7 @@ class BridgeViewController: UIViewController {
         self.necterTypeColor = color
         self.singleMessageTitle = title
         self.segueToSingleMessage = true
-        self.performSegue(withIdentifier: "showSingleMessage", sender: self)
+        self.performSegue(withIdentifier: "showThread", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

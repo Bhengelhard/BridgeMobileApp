@@ -28,6 +28,9 @@ class SwipeViewController: UIViewController {
         view.backgroundColor = UIColor.white
         
         view.setNeedsUpdateConstraints()
+        
+        layout.passButton.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+        
     }
     
     
@@ -38,6 +41,10 @@ class SwipeViewController: UIViewController {
     }
     
     // MARK: - Targets
+    
+    func tapped(_ sender: UIButton) {
+        
+    }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

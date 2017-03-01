@@ -9,19 +9,8 @@
 import UIKit
 
 class MainPageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource{
-
-//    let myProfileViewController = New_MyProfileViewController()
-//    let swipeViewController = SwipeViewController()
-//    let messagesViewController = New_MessagesViewController()
     
-    var arrayOfVCs = [New_MyProfileViewController(), SwipeViewController(), New_MessagesViewController()]
-    
-//    override init(transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : Any]? = nil) {
-//        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-//        
-//        
-//    }
-    
+    var arrayOfVCs = [UIViewController]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,10 +18,26 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDelegate
         delegate = self
         dataSource = self
         
-        //self.arrayOfVCs = [myProfileViewController, swipeViewController, messagesViewController]
+        if let sb = storyboard {
+            let myProfileViewController = sb.instantiateViewController(withIdentifier: "MyProfileViewController") as! MyProfileViewController
+            myProfileViewController.layout.navBar.rightButton.addTarget(self, action: #selector(myProfileRightButtonTapped(_:)), for: .touchUpInside)
+            
+            let swipeViewController = sb.instantiateViewController(withIdentifier: "SwipeViewController") as! SwipeViewController
+            swipeViewController.layout.navBar.leftButton.addTarget(self, action: #selector(swipeLeftButtonTapped(_:)), for: .touchUpInside)
+            swipeViewController.layout.navBar.rightButton.addTarget(self, action: #selector(swipeRightButtonTapped(_:)), for: .touchUpInside)
+            
+            let messagesViewController = sb.instantiateViewController(withIdentifier: "MessagesViewController") as! MessagesViewController
+            messagesViewController.layout.navBar.leftButton.addTarget(self, action: #selector(messagesLeftButtonTapped(_:)), for: .touchUpInside)
+            
+            arrayOfVCs = [myProfileViewController, swipeViewController, messagesViewController]
+        } else {
+            arrayOfVCs = [MyProfileViewController(), SwipeViewController(), MessagesViewController()]
+        }
+        
         self.view.backgroundColor = UIColor.white
         
         setViewControllers([arrayOfVCs[1]], direction: .forward, animated: true, completion: nil)
+        
     
     }
 
@@ -61,6 +66,26 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDelegate
         return nil
     }
 
+    // Mark: - Targets
+    
+    // Segue from MyProfileViewController to SwipeViewController via the PageViewController
+    func myProfileRightButtonTapped(_ sender: UIButton) {
+        setViewControllers([arrayOfVCs[1]], direction: .forward, animated: true, completion: nil)
+    }
+    
+    // Segue from SwipeViewController to MessagesViewController via the PageViewController
+    func swipeRightButtonTapped(_ sender: UIButton) {
+        setViewControllers([arrayOfVCs[2]], direction: .forward, animated: true, completion: nil)
+    }
+    // Segue from SwipeViewController to MyProfileViewController via the PageViewController
+    func swipeLeftButtonTapped(_ sender: UIButton) {
+        setViewControllers([arrayOfVCs[0]], direction: .reverse, animated: true, completion: nil)
+    }
+    
+    // Segue from MyProfileViewController to SwipeViewController via the PageViewController
+    func messagesLeftButtonTapped(_ sender: UIButton) {
+        setViewControllers([arrayOfVCs[1]], direction: .reverse, animated: true, completion: nil)
+    }
     
 
     /*

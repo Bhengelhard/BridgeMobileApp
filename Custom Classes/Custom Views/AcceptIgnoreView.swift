@@ -12,7 +12,7 @@ import Parse
 class AcceptIgnoreView: UIView {
     
     var newMatch: NewMatch
-    var vc: MessagesViewController?
+    var vc: OldMessagesViewController?
     let exitButton = UIButton()
     var acceptButton = UIButton()
     var ignoreButton = UIButton()
@@ -170,7 +170,7 @@ class AcceptIgnoreView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setVC(vc: MessagesViewController) {
+    func setVC(vc: OldMessagesViewController) {
         self.vc = vc
         
         //Setting the newConnectionLabel to the number of new connections
