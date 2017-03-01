@@ -35,7 +35,7 @@ class LoginObjects {
         let chatVC = TutorialViewController(color: UIColor.orange)
         
         init() {
-            super.init(arrayOfVCs: [initialVC, swipeRightVC, swipeLeftVC, chatVC])
+            super.init(arrayOfVCs: [initialVC, swipeRightVC, swipeLeftVC, chatVC], startingIndex: 0)
             
         }
         

@@ -47,79 +47,21 @@ class ExternalProfileObjects {
         }
     }
     
-    class ProfilePicturesPageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    class ProfilePicturesPageViewController: ReusableObjects.NecterPageViewController {
         
-        var arrayOfVCs = [UIViewController]()
-        let pageControl = UIPageControl()
+        let profilePictureVC1 = ProfilePicturesViewController(color: UIColor.red)
+        let profilePictureVC2 = ProfilePicturesViewController(color: UIColor.blue)
+        let profilePictureVC3 = ProfilePicturesViewController(color: UIColor.green)
+        let profilePictureVC4 = ProfilePicturesViewController(color: UIColor.orange)
         
         init() {
-            super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-            
-            delegate = self
-            dataSource = self
-            
-            self.view.backgroundColor = UIColor.red
-            
-            let profPic1 = ProfilePicturesViewController(color: UIColor.blue)
-            arrayOfVCs.append(profPic1)
-            
-            let profPic2 = ProfilePicturesViewController(color: UIColor.red)
-            arrayOfVCs.append(profPic2)
-            
-            let profPic3 = ProfilePicturesViewController(color: UIColor.green)
-            arrayOfVCs.append(profPic3)
-            
-            let profPic4 = ProfilePicturesViewController(color: UIColor.orange)
-            arrayOfVCs.append(profPic4)
-            
-            setViewControllers([arrayOfVCs[0]], direction: .forward, animated: true, completion: nil)
-            
-            // Setting PageController with the number of pages and tintColors
-            pageControl.numberOfPages = arrayOfVCs.count
-            pageControl.currentPage = 0
-            pageControl.pageIndicatorTintColor = UIColor.lightGray
-            pageControl.currentPageIndicatorTintColor = UIColor.black
-            
-            view.addSubview(pageControl)
+            super.init(arrayOfVCs: [profilePictureVC1, profilePictureVC2, profilePictureVC3, profilePictureVC4], startingIndex: 0)
         }
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
-        func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-            if let currIndex = arrayOfVCs.index(of: viewController) {
-                if currIndex + 1 < arrayOfVCs.count {
-                    return arrayOfVCs[currIndex + 1]
-                }
-                else {
-                    return arrayOfVCs.first
-                }
-            }
-            
-            return nil
-        }
-        
-        func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-            
-            if let currIndex = arrayOfVCs.index(of: viewController) {
-                if currIndex - 1 >= 0 {
-                    return arrayOfVCs[currIndex - 1]
-                }
-                else {
-                    return arrayOfVCs.last
-                }
-            }
-            return nil
-        }
-        
-        func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-            if let currentVC = viewControllers?.first {
-                if let currentIndex = arrayOfVCs.index(of: currentVC) {
-                    pageControl.currentPage = currentIndex
-                }
-            }
-        }
         
     }
     

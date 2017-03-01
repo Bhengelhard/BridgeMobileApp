@@ -43,6 +43,8 @@
 		3079EB251E54FACD008AB6E5 /* LoginObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3079EB241E54FACD008AB6E5 /* LoginObjects.swift */; };
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
+		3080202A1E663C3A0091E63D /* OldMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308020291E663C3A0091E63D /* OldMainPageViewController.swift */; };
+		3080202C1E6649080091E63D /* MainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3080202B1E6649080091E63D /* MainPageViewController.swift */; };
 		30A726F21E2683850070B620 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F11E2683850070B620 /* Main.storyboard */; };
 		30A726FC1E27D9160070B620 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */; };
 		30A727041E293A9A0070B620 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727031E293A9A0070B620 /* MessagesViewController.swift */; };
@@ -168,6 +170,8 @@
 		3079EB241E54FACD008AB6E5 /* LoginObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginObjects.swift; path = "Custom Classes/UI Functions/LoginObjects.swift"; sourceTree = "<group>"; };
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
+		308020291E663C3A0091E63D /* OldMainPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OldMainPageViewController.swift; path = MyBridgeApp/OldMainPageViewController.swift; sourceTree = SOURCE_ROOT; };
+		3080202B1E6649080091E63D /* MainPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainPageViewController.swift; path = MyBridgeApp/MainPageViewController.swift; sourceTree = SOURCE_ROOT; };
 		30A726F11E2683850070B620 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSettingsViewController.swift; path = MyBridgeApp/UserSettingsViewController.swift; sourceTree = SOURCE_ROOT; };
 		30A727031E293A9A0070B620 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MyBridgeApp/MessagesViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -380,6 +384,8 @@
 			isa = PBXGroup;
 			children = (
 				30BF6FEA1E5BDB700008C2B5 /* New_MyProfileViewController.swift */,
+				308020291E663C3A0091E63D /* OldMainPageViewController.swift */,
+				3080202B1E6649080091E63D /* MainPageViewController.swift */,
 				30BF6FF01E5BDD860008C2B5 /* New_MessagesViewController.swift */,
 				30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */,
 				30BF6FFC1E5BDF530008C2B5 /* new_EditProfileViewController.swift */,
@@ -800,6 +806,7 @@
 				30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */,
 				CB6A32991CC483CD00FADB13 /* SingleMessageViewController.swift in Sources */,
 				304FEBDB1DDE40A200B3A8A7 /* PFCloudFunctions.swift in Sources */,
+				3080202C1E6649080091E63D /* MainPageViewController.swift in Sources */,
 				30BF700F1E5C960C0008C2B5 /* SettingsObjects.swift in Sources */,
 				304FEBE31DE498A300B3A8A7 /* SendingNotificationView.swift in Sources */,
 				30BF6FF71E5BDE7A0008C2B5 /* ThreadViewController.swift in Sources */,
@@ -837,6 +844,7 @@
 				302799D41E57684D00AFFB90 /* PrivacyPolicyViewController.swift in Sources */,
 				903477BB1E652CB8007E2CAE /* SwipeBackend.swift in Sources */,
 				3030C0C21DD54E5E0077F7AC /* CustomKeyboard.swift in Sources */,
+				3080202A1E663C3A0091E63D /* OldMainPageViewController.swift in Sources */,
 				3030C0D51DD550240077F7AC /* SwipeCard.swift in Sources */,
 				90AB6B111E5E1BAE00EBEBC0 /* MessagesBackend.swift in Sources */,
 				90F5E3C11E5CD5FA001399F6 /* MyProfileBackend.swift in Sources */,

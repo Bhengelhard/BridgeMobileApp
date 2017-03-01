@@ -40,25 +40,29 @@ class ReusableObjects {
         
         var arrayOfVCs: [UIViewController]
         let pageControl = UIPageControl()
+        var startingIndex: Int
         
-        init(arrayOfVCs: [UIViewController]) {
+        init(arrayOfVCs: [UIViewController], startingIndex: Int) {
             self.arrayOfVCs = arrayOfVCs
+            self.startingIndex = startingIndex
             super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
             
             delegate = self
             dataSource = self
+                        
+            setViewControllers([arrayOfVCs[startingIndex]], direction: .forward, animated: true, completion: nil)
             
-            self.view.backgroundColor = UIColor.red
+            // Add pageControl for pageViewControllers that start at 0, i.e. not the MainPageViewController
+            if startingIndex == 0 {
+                // Setting PageController with the number of pages and tintColors
+                pageControl.numberOfPages = arrayOfVCs.count
+                pageControl.currentPage = 0
+                pageControl.pageIndicatorTintColor = UIColor.lightGray
+                pageControl.currentPageIndicatorTintColor = UIColor.black
+                
+                view.addSubview(pageControl)
+            }
             
-            setViewControllers([arrayOfVCs[0]], direction: .forward, animated: true, completion: nil)
-            
-            // Setting PageController with the number of pages and tintColors
-            pageControl.numberOfPages = arrayOfVCs.count
-            pageControl.currentPage = 0
-            pageControl.pageIndicatorTintColor = UIColor.lightGray
-            pageControl.currentPageIndicatorTintColor = UIColor.black
-            
-            view.addSubview(pageControl)
         }
         
         required init?(coder: NSCoder) {
@@ -70,7 +74,7 @@ class ReusableObjects {
                 if currIndex + 1 < arrayOfVCs.count {
                     return arrayOfVCs[currIndex + 1]
                 }
-                else {
+                else if startingIndex == 0 {
                     return arrayOfVCs.first
                 }
             }
@@ -84,7 +88,7 @@ class ReusableObjects {
                 if currIndex - 1 >= 0 {
                     return arrayOfVCs[currIndex - 1]
                 }
-                else {
+                else if startingIndex == 0 {
                     return arrayOfVCs.last
                 }
             }
