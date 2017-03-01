@@ -11,6 +11,7 @@ import PureLayout
 class SettingsLayout {
     
     // MARK: Global Variables
+    let navBar = SettingsObjects.NavBar()
     
     // MARK: - Layout
     /// Sets the initial layout constraints
@@ -18,6 +19,12 @@ class SettingsLayout {
         
         if (!didSetupConstraints) {
             
+            // Layout the navigation bar at the top of the view with a done button for dismissing the EditProfileViewController
+            view.addSubview(navBar)
+            navBar.autoPinEdge(toSuperviewEdge: .top)
+            navBar.autoPinEdge(toSuperviewEdge: .left)
+            navBar.autoMatch(.width, to: .width, of: view)
+            navBar.autoSetDimension(.height, toSize: 64)
             
         }
         

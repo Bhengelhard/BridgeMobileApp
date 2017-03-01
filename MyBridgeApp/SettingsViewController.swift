@@ -20,6 +20,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -36,7 +37,9 @@ class SettingsViewController: UIViewController {
     }
     
     // MARK: - Targets
-    
+    func rightBarButtonTapped(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+    }
     
     // MARK: - Navigation
     //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -12,9 +12,19 @@ class SwipeObjects {
     
     class NavBar: NecterNavigationBar {
         
-        init() {
-            super.init(ViewControllersEnum.SwipeViewController)
+        override init() {
+            super.init()
             
+            // Setting Navigation Items
+            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            rightButton.setImage(rightIcon, for: .normal)
+            
+            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            leftButton.setImage(leftIcon, for: .normal)
+            
+            let titleImage = #imageLiteral(resourceName: "All_Types_Icon_Colors")
+            titleImageView.image = titleImage
+            navItem.titleView = titleImageView
         }
         
         required init?(coder aDecoder: NSCoder) {

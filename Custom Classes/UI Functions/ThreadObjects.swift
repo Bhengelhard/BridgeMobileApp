@@ -12,12 +12,22 @@ class ThreadObjects {
     
     class navBar: NecterNavigationBar {
         
-        init() {
-            super.init(ViewControllersEnum.ThreadViewController)
+        override init() {
+            super.init()
+            
+            // Setting Navigation Items
+            let leftIcon = #imageLiteral(resourceName: "Back_Button")
+            leftButton.setImage(leftIcon, for: .normal)
+            
+            let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
+            titleImageView.image = titleImage
+            navItem.titleView = titleImageView
             
             // Adding line at the bottom of the navigation bar
             self.setBackgroundImage(UIImage(), for: .default)
             self.shadowImage = nil
+            
+            
         }
         
         required init?(coder aDecoder: NSCoder) {

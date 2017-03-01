@@ -55,7 +55,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9ld-lD-Zsd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-446" y="-2785"/>
+            <point key="canvasLocation" x="-226" y="-2785"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="SgD-tP-9oW">
@@ -82,7 +82,7 @@
         <!--MyProfileViewController-->
         <scene sceneID="2Q1-Sh-WJc">
             <objects>
-                <viewController storyboardIdentifier="MyProfileViewController" title="MyProfileViewController" id="pCC-By-oJn" customClass="MyProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MyProfileViewController" title="MyProfileViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pCC-By-oJn" customClass="MyProfileViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RF9-hT-rQY"/>
                         <viewControllerLayoutGuide type="bottom" id="mqy-Xj-XPR"/>
@@ -114,7 +114,7 @@
         <!--Swipe View Controller-->
         <scene sceneID="zUx-7Q-hEN">
             <objects>
-                <viewController storyboardIdentifier="SwipeViewController" id="cMo-Jt-lEF" customClass="SwipeViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SwipeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cMo-Jt-lEF" customClass="SwipeViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Wc8-na-Rlz"/>
                         <viewControllerLayoutGuide type="bottom" id="UBQ-FB-IgE"/>
@@ -138,7 +138,7 @@
         <!--Messages View Controller-->
         <scene sceneID="J0S-Cf-yZ2">
             <objects>
-                <viewController storyboardIdentifier="MessagesViewController" id="zXt-b0-Sdf" customClass="MessagesViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MessagesViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="zXt-b0-Sdf" customClass="MessagesViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="k2p-mA-BRw"/>
                         <viewControllerLayoutGuide type="bottom" id="9X2-ac-XBt"/>
@@ -249,7 +249,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8lC-KB-F1q" id="kfi-gc-fWu">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fcj-i4-EKL">
@@ -314,7 +314,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FXd-WW-t0r" id="eLY-5g-1SE">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -322,7 +322,7 @@
                                         <rect key="frame" x="0.0" y="108" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gms-Nz-bGZ" id="R9u-Vf-276">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -348,9 +348,9 @@
     <inferredMetricsTieBreakers>
         <segue reference="f6C-jp-D3w"/>
         <segue reference="OnA-y9-bUb"/>
-        <segue reference="ORi-q2-txU"/>
-        <segue reference="0Mi-wm-mTu"/>
-        <segue reference="KhQ-jD-w9H"/>
+        <segue reference="wYg-RW-AbN"/>
+        <segue reference="mf0-bu-EW9"/>
+        <segue reference="1Bx-ML-R6e"/>
         <segue reference="0Jc-ZY-MLe"/>
     </inferredMetricsTieBreakers>
 </document>

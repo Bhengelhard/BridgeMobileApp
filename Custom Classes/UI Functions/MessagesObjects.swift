@@ -12,9 +12,16 @@ class MessagesObjects {
     
     class NavBar: NecterNavigationBar {
         
-        init() {
-            super.init(ViewControllersEnum.MessagesViewController)
+        override init() {
+            super.init()
             
+            // Setting Navigation Items
+            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            leftButton.setImage(leftIcon, for: .normal)
+            
+            let titleImage = #imageLiteral(resourceName: "Messages_Navbar_Active")
+            titleImageView.image = titleImage
+            navItem.titleView = titleImageView
         }
         
         required init?(coder aDecoder: NSCoder) {

@@ -38,7 +38,7 @@ class EditProfileViewController: UIViewController {
     
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "showMyProfile", sender: self)
+        dismiss(animated: true, completion: nil)
     }
     
     

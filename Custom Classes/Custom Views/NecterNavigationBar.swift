@@ -15,8 +15,10 @@ class NecterNavigationBar: UINavigationBar {
     
     let rightButton = UIButton()
     let leftButton = UIButton()
+    let navItem = UINavigationItem()
+    let titleImageView = UIImageView()
     
-    init(_ viewController: ViewControllersEnum) {
+    init() {
         super.init(frame: CGRect())
         
         // Setting the color of the navigation bar to white
@@ -27,70 +29,23 @@ class NecterNavigationBar: UINavigationBar {
         self.shadowImage = UIImage()
         
         // Setting the navigation Bar Title Image
-        let navItem = UINavigationItem()
-        let titleImageView = UIImageView()
         titleImageView.frame.size = CGSize(width: 40, height: 40)
         titleImageView.contentMode = .scaleAspectFit
-        navItem.titleView = titleImageView
         
         // Setting the right Bar Button Item
+        rightButton.titleLabel?.font = Constants.Fonts.bold16
         rightButton.frame.size = CGSize(width: 30, height: 30)
         let rightItem = UIBarButtonItem(customView: rightButton)
         navItem.rightBarButtonItem = rightItem
         
         // Setting the left Bar Button Item
+        leftButton.titleLabel?.font = Constants.Fonts.bold16
         leftButton.frame.size = CGSize(width: 30, height: 30)
         let leftItem = UIBarButtonItem(customView: leftButton)
         navItem.leftBarButtonItem = leftItem
         
-        // Setting navigation item images and targets for the SwipeViewController
-        if viewController == .SwipeViewController {
-            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
-            rightButton.setImage(rightIcon, for: .normal)
-            
-            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
-            leftButton.setImage(leftIcon, for: .normal)
-            
-            let titleImage = #imageLiteral(resourceName: "All_Types_Icon_Colors")
-            titleImageView.image = titleImage
-            
-        }
-        // Setting navigation item images and targets for the MessagesViewController
-        else if viewController == .MessagesViewController {
-            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
-            leftButton.setImage(leftIcon, for: .normal)
-            
-            let titleImage = #imageLiteral(resourceName: "Messages_Navbar_Active")
-            titleImageView.image = titleImage
-            
-        }
-        // Setting navigation item images and targets for the MyProfileViewController
-        else if viewController == .MyProfileViewController {
-            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
-            rightButton.setImage(rightIcon, for: .normal)
-            
-            let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
-            titleImageView.image = titleImage
-        }
-        // Setting navigation item images and targets for the ThreadViewController
-        else if viewController == .ThreadViewController {
-            let leftIcon = #imageLiteral(resourceName: "Back_Button")
-            leftButton.setImage(leftIcon, for: .normal)
-
-            let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
-            titleImageView.image = titleImage
-        }
-        // Setting navigation item images and targets for the EditProfileViewController
-        else if viewController == .EditProfileViewController {
-            rightButton.setTitle("Done", for: .normal)
-            rightButton.setTitleColor(UIColor.orange, for: .normal)
-            rightButton.sizeToFit()
-            
-            navItem.titleView = nil
-            navItem.title = "Edit Profile"
-            
-        }
-        
+        // 
+        titleTextAttributes = [NSFontAttributeName: Constants.Fonts.light24]
         // Adding the navigation items to the navigation bar
         self.setItems([navItem], animated: false)
     }

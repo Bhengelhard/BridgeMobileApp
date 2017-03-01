@@ -20,8 +20,11 @@ class MyProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Adding Targets
         layout.editProfileButton.addTarget(self, action: #selector(editProfileButtonTapped(_:)), for: .touchUpInside)
         layout.settingsButton.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)
+        layout.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profilePictureTapped(_:))))
+
     }
     
     override func loadView() {
@@ -39,15 +42,22 @@ class MyProfileViewController: UIViewController {
     
     // MARK: - Targets
     
-    // Segue from MyProfileViewController to EditProfileViewController
+    // Present EditProfileViewController
     func editProfileButtonTapped(_ sender: UIButton) {
-        print("editProfileButtonTapped in MyProfileViewController")
-        performSegue(withIdentifier: "showEditProfile", sender: self)
+        present(EditProfileViewController(), animated: true, completion: nil)
     }
     
+    // Present SettingsViewController
     func settingsButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "showSettings", sender: self)
+        present(SettingsViewController(), animated: true, completion: nil)
     }
+    
+    // Present ExternalUserViewController
+    func profilePictureTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        present(ExternalProfileViewController(), animated: true, completion: nil)
+    }
+    
+    
     
     // MARK: - Navigation
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

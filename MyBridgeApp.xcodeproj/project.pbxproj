@@ -341,6 +341,7 @@
 		3030C0AE1DD54D800077F7AC /* UI Functions */ = {
 			isa = PBXGroup;
 			children = (
+				303139081E65D6E300F8D9BF /* ReusableObjects.swift */,
 				3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */,
 				3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */,
 				300A1D7D1E53EB6C0071FED7 /* LoginLayout.swift */,
@@ -351,7 +352,6 @@
 				302799DD1E57A72700AFFB90 /* SwipeObjects.swift */,
 				30BF6FEC1E5BDB8A0008C2B5 /* MyProfileLayout.swift */,
 				30BF6FEE1E5BDBA40008C2B5 /* MyProfileObjects.swift */,
-				303139081E65D6E300F8D9BF /* ReusableObjects.swift */,
 				30BF6FF21E5BDDAB0008C2B5 /* MessagesLayout.swift */,
 				30BF6FF41E5BDDBD0008C2B5 /* MessagesObjects.swift */,
 				30BF6FF81E5BDEA50008C2B5 /* ThreadLayout.swift */,

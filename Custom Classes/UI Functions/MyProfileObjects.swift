@@ -12,9 +12,16 @@ class MyProfileObjects {
     
     class NavBar: NecterNavigationBar {
         
-        init() {
-            super.init(ViewControllersEnum.MyProfileViewController)
+        override init() {
+            super.init()
             
+            // Setting Navigation Items
+            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            rightButton.setImage(rightIcon, for: .normal)
+            
+            let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
+            titleImageView.image = titleImage
+            navItem.titleView = titleImageView
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -43,18 +50,12 @@ class MyProfileObjects {
         override init() {
             super.init()
             
-            // **Backend - delete Parse Import at top
+            // ** Placeholder Image - delete Parse Import at top
             self.setBackgroundImage(image: #imageLiteral(resourceName: "Example_User_Profile_Picture"))
-            self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_:))))
-            
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
-        }
-        
-        func tapped(_ sender: UITapGestureRecognizer) {
-            print("ProfilePicture tapped")
         }
         
     }

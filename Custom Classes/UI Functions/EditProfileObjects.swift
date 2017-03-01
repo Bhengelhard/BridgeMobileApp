@@ -12,9 +12,14 @@ class EditProfileObjects {
     
     class NavBar: NecterNavigationBar {
         
-        init() {
-            super.init(ViewControllersEnum.EditProfileViewController)
+        override init() {
+            super.init()
             
+            rightButton.setTitle("Done", for: .normal)
+            rightButton.setTitleColor(UIColor.orange, for: .normal)
+            rightButton.sizeToFit()
+            
+            navItem.title = "Edit Profile"
         }
         
         required init?(coder aDecoder: NSCoder) {

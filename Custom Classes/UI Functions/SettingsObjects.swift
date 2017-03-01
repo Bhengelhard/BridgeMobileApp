@@ -10,4 +10,21 @@ import UIKit
 
 class SettingsObjects {
     
+    class NavBar: NecterNavigationBar {
+        
+        override init() {
+            super.init()
+            
+            rightButton.setTitle("Done", for: .normal)
+            rightButton.setTitleColor(UIColor.orange, for: .normal)
+            rightButton.sizeToFit()
+            
+            navItem.title = "Settings"
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
 }

@@ -16,17 +16,11 @@ class ExternalProfileObjects {
             super.init(frame: CGRect())
             
             self.setImage(#imageLiteral(resourceName: "Down_Arrow"), for: .normal)
-            self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
         }
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
-        func tapped(_ sender: UIButton) {
-            print("tapped")
-        }
-        
     }
     
     class ReportButton: UIButton {

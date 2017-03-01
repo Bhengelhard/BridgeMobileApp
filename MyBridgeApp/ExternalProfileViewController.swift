@@ -20,11 +20,7 @@ class ExternalProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        layout.scrollView.contentSize = CGSize(width: view.frame.width, height: max(layout.scrollView.frame.height, layout.messageButton.frame.maxY + 20))
-//        
-//        print(max(layout.scrollView.frame.height, layout.messageButton.frame.maxY + 20))
-//        print(view.frame.height)
-        
+        layout.dismissButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -40,7 +36,6 @@ class ExternalProfileViewController: UIViewController {
         super.updateViewConstraints()
     }
     
-    
     override func viewDidLayoutSubviews() {
         
         // Setting the size of the content within the Scroll View so it will scroll to the specified height
@@ -49,7 +44,9 @@ class ExternalProfileViewController: UIViewController {
     }
     
     // MARK: - Targets
-    
+    func dismissButtonTapped(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+    }
     
     // MARK: - Navigation
     //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
