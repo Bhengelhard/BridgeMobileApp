@@ -7,7 +7,8 @@
 //
 
 class MessagesLogic {
-    func filterContentForSearchText(_ searchText:String, messagePositionToIDMapping: [Int: String], messageNames: [String: String], messageSnapshots: [String: String]) -> [Int] {
+    
+    static func filterContentForSearchText(_ searchText:String, messagePositionToIDMapping: [Int: String], messageNames: [String: String], messageSnapshots: [String: String]) -> [Int] {
         var filteredPositions = [Int]()
         for i in 0 ..< messagePositionToIDMapping.count  {
             if let messageID = messagePositionToIDMapping[i] {
