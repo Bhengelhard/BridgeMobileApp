@@ -54,7 +54,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("called the cell for rowat")
         let cell = MessagesTableCell()
         cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
         
@@ -62,7 +61,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected the row")
     }
     
     // MARK: - Targets

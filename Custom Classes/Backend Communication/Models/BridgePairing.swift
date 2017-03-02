@@ -306,7 +306,9 @@ class BridgePairing: NSObject, NSCoding {
     }
     
     static func getAllWithFriends(ofUser user: User, notShownOnly: Bool = false, withLimit limit: Int = 10000, notCheckedOutOnly: Bool = false, withBlock block: BridgePairingsBlock? = nil) {
+        
         if let userFriendList = user.friendList {
+            
             let subQuery1 = PFQuery(className: "BridgePairings")
             subQuery1.whereKey("user_objectId1", containedIn: userFriendList)
             let subQuery2 = PFQuery(className: "BridgePairings")

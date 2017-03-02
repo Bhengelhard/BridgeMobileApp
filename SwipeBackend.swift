@@ -152,7 +152,7 @@ class SwipeBackend {
     }
     
     /// set up both swipe cards
-    func setTopAndBottomSwipeCards() {
+    func setInitialTopAndBottomSwipeCards(topSwipeCard: SwipeCard, bottomSwipeCard: SwipeCard) {
         getNextBridgePairings(topSwipeCard: topSwipeCard, bottomSwipeCard: bottomSwipeCard)
     }
     

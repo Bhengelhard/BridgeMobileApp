@@ -12,8 +12,8 @@ class SwipeLayout {
     
     // MARK: Global Variables
     let navBar = SwipeObjects.NavBar()
-    let firstSwipeCard = SwipeCard()
-    let secondSwipeCard = SwipeCard()
+    let topSwipeCard = SwipeCard()
+    let bottomSwipeCard = SwipeCard()
     let passButton = SwipeObjects.DecisionButton(text: "PASS")
     let nectButton = SwipeObjects.DecisionButton(text: "NECT")
     let infoButton = SwipeObjects.InfoButton()
@@ -33,13 +33,13 @@ class SwipeLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
+            view.addSubview(topSwipeCard)
+            topSwipeCard.autoCenterInSuperview()
             
-//            let toolBarView = UIView()
-//            view.addSubview(toolBarView)
-//            toolBarView.autoAlignAxis(.vertical, toSameAxisOf: view)
-//            toolBarView.autoPinEdge(.bottom, to: .bottom, of: view)
-//            toolBarView.autoMatch(.width, to: .width, of: view)
-//            toolBarView.autoSetDimension(.height, toSize: 49)
+            view.addSubview(bottomSwipeCard)
+            bottomSwipeCard.autoCenterInSuperview()
+            
+            
             
             view.addSubview(infoButton)
             view.addSubview(passButton)

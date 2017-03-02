@@ -31,6 +31,10 @@ class SwipeViewController: UIViewController {
         
         layout.passButton.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
         
+        // Get the next swipeCards
+        let swipeBackend = SwipeBackend()
+        swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
+        
     }
     
     

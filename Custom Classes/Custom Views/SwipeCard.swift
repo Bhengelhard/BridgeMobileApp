@@ -37,6 +37,7 @@ class SwipeCard: UIView {
     }
     
     func initialize(user1Id: String?, user1PhotoURL: String!, user1Name: String, user1Status: String, user1City: String?, user2Id: String?, user2PhotoURL: String!, user2Name: String, user2Status: String, user2City: String?, connectionType: String) {
+        print("initialize")
         let swipCardCornerRadius: CGFloat = 9//13.379
         self.layer.cornerRadius = swipCardCornerRadius
 

@@ -93,7 +93,7 @@ class User: NSObject {
             email = parseEmail
         }
         
-        if let parseFriendList = parseUser["friendList"] as? [String] {
+        if let parseFriendList = parseUser["friend_list"] as? [String] {
             friendList = parseFriendList
         }
         
