@@ -304,7 +304,7 @@ class BridgeViewController: UIViewController {
                 //Second card should also have dark layer that fades away with swipe of first card in deck.
                 swipeCardView.frame.size = CGSize(width: swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
                 swipeCardView.center = aboveView.center
-                swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+                //swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
                 swipeCardView.isUserInteractionEnabled = false
                 swipeCardView.frame = smallestSwipeCardFrame()
                 swipeCardView.center.x = view.center.x
@@ -314,7 +314,7 @@ class BridgeViewController: UIViewController {
                 //Second card should also have dark layer that fades away with swipe of first card in deck.
                 swipeCardView.frame.size = CGSize(width: swipeCardFrame.size.width, height: /*0.95**/swipeCardFrame.size.height)
                 swipeCardView.center = aboveView.center
-                swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+                //swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
                 swipeCardView.isUserInteractionEnabled = false
                 swipeCardView.frame = smallestSwipeCardFrame()
                 swipeCardView.center.x = view.center.x
@@ -324,7 +324,7 @@ class BridgeViewController: UIViewController {
         else {
             swipeCardView.frame = swipeCardView.swipeCardFrame()
             swipeCardView.center.x = view.center.x
-            swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
+            //swipeCardView.initialize(user1Id: id, user1PhotoURL: photo, user1Name: name!, user1Status: status!, user1City: location, user2Id: id2, user2PhotoURL: photo2, user2Name: name2!, user2Status: status2!, user2City: location2, connectionType: connectionType)
             swipeCardFrame = swipeCardView.frame
             
             self.view.insertSubview(swipeCardView, belowSubview: connectIcon)

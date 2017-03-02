@@ -111,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         if messageType == "ConnecterNotification" {
             //Segue to SingleMessageViewController
-            let vc: BridgeViewController = storyboard.instantiateViewController(withIdentifier: "BridgeViewController") as! BridgeViewController
+            let vc: SwipeViewController = storyboard.instantiateViewController(withIdentifier: "SwipeViewController") as! SwipeViewController
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = vc
@@ -127,8 +127,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
          else if messageId != nil {
             //Segue to SingleMessageViewController
-            let vc: SingleMessageViewController = storyboard.instantiateViewController(withIdentifier: "SingleMessageViewController") as! SingleMessageViewController
-            vc.newMessageId = messageId!
+            let vc: ThreadViewController = storyboard.instantiateViewController(withIdentifier: "ThreadViewController") as! ThreadViewController
+            // vc.newMessageId = messageId!
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = vc

@@ -29,11 +29,17 @@ class SwipeViewController: UIViewController {
         
         view.setNeedsUpdateConstraints()
         
-        layout.passButton.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
-        
         // Get the next swipeCards
         let swipeBackend = SwipeBackend()
         swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
+        
+        // Add Targets
+        layout.passButton.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+        
+        
+        layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeTopGesture(_:))))
+        
+        //layout.bottomSwipeCard.addGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIGestureRecognizer#>)
         
     }
     
@@ -44,10 +50,24 @@ class SwipeViewController: UIViewController {
         super.updateViewConstraints()
     }
     
-    // MARK: - Targets
-    
+    // MARK: - Targets and GestureRecognizer
     func tapped(_ sender: UIButton) {
         
+    }
+    
+    func swipeTopGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+        if gestureRecognizer.view == layout.topSwipeCard {
+            callIsDragged(gestureRecognizer: gestureRecognizer, bottomSwipeCard: layout.bottomSwipeCard)
+        } else {
+            callIsDragged(gestureRecognizer: gestureRecognizer, bottomSwipeCard: layout.topSwipeCard)
+        }
+    }
+    func callIsDragged(gestureRecognizer: UIPanGestureRecognizer, bottomSwipeCard: SwipeCard) {
+        let swipeBackend = SwipeBackend()
+        let moveBottomToTop = swipeBackend.moveBottomSwipeCardToTopAndResetBottom
+        let checkIn = swipeBackend.checkIn
+        
+        SwipeLogic.isDragged(gesture: gestureRecognizer, vc: self, yCenter: self.view.center.y, bottomSwipeCard: bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: moveBottomToTop, checkIn: checkIn)
     }
     
     // MARK: - Navigation

@@ -17,6 +17,8 @@ class SwipeLayout {
     let passButton = SwipeObjects.DecisionButton(text: "PASS")
     let nectButton = SwipeObjects.DecisionButton(text: "NECT")
     let infoButton = SwipeObjects.InfoButton()
+    let connectIcon = UIImageView(image: #imageLiteral(resourceName: "Necter_Icon"))
+    let disconnectIcon = UIImageView(image: #imageLiteral(resourceName: "Disconnect_Icon"))
     
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
@@ -33,13 +35,16 @@ class SwipeLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
+            let height = 450
+            let width = 300
+            let size = CGSize(width: width, height: height)
             view.addSubview(topSwipeCard)
             topSwipeCard.autoCenterInSuperview()
+            topSwipeCard.autoSetDimensions(to: size)
             
-            view.addSubview(bottomSwipeCard)
+            view.insertSubview(bottomSwipeCard, belowSubview: topSwipeCard)
             bottomSwipeCard.autoCenterInSuperview()
-            
-            
+            bottomSwipeCard.autoSetDimensions(to: size)
             
             view.addSubview(infoButton)
             view.addSubview(passButton)
@@ -66,6 +71,11 @@ class SwipeLayout {
             passButton.autoPinEdge(toSuperviewEdge: .left, withInset: margin)
             nectButton.autoPinEdge(toSuperviewEdge: .right, withInset: margin)
             
+            view.addSubview(connectIcon)
+            connectIcon.alpha = 0
+            
+            view.addSubview(disconnectIcon)
+            disconnectIcon.alpha = 0
             
             // Layout the pass button at the bottom of the view for dismissing presented matches
             
