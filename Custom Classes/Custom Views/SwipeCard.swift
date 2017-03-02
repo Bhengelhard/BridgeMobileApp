@@ -92,17 +92,17 @@ class SwipeCard: UIView {
         }
         
         //Setting the user's ids
-        cardsUser1Id = user1Id
-        cardsUser2Id = user2Id
+        cardsUser1Id = bridgePairing.user1ID!
+        cardsUser2Id = bridgePairing.user2ID!
         
         //Setting the User's cities to inform suggestions for Reason for Connections
         
-        if let city = user1City {
-            cardsUser1City = city
-        }
-        if let city = user2City {
-            cardsUser2City = city
-        }
+//        if let city = user1City {
+//            cardsUser1City = city
+//        }
+//        if let city = user2City {
+//            cardsUser2City = city
+//        }
         
         overlay.frame = self.layer.frame
         overlay.frame.origin = CGPoint(x: 0, y: 0)
