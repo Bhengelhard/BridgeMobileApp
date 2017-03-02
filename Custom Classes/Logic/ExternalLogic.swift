@@ -10,7 +10,7 @@ import UIKit
 
 class ExternalLogic {
     
-    static func setFactsLabelText(label: UILabel, age: Int?, city: String?, school: String?) {
+    static func getFactsLabelTextAndNumberOfLines(age: Int?, city: String?, school: String?) -> (String, Int) {
         var labelText = String()
         
         var selectedFacts = [String]()
@@ -25,7 +25,7 @@ class ExternalLogic {
             selectedFacts.append("school")
         }
         
-        label.numberOfLines = max(1, selectedFacts.count)
+        let numberOfLines = max(1, selectedFacts.count)
         
         for i in 0..<selectedFacts.count {
             let fact = selectedFacts[i]
@@ -43,7 +43,7 @@ class ExternalLogic {
             }
         }
         
-        
+        return (labelText, numberOfLines)
         
     }
 }

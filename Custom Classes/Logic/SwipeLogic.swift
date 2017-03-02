@@ -9,7 +9,8 @@
 import UIKit
 
 class SwipeLogic {
-    static func isDragged(_ gesture: UIPanGestureRecognizer, vc: UIViewController, yCenter: CGFloat, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, didSwipe: @escaping () -> Void, checkIn: @escaping () -> Void) {
+    
+    static func isDragged(gesture: UIPanGestureRecognizer, vc: UIViewController, yCenter: CGFloat, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, didSwipe: @escaping () -> Void, checkIn: @escaping () -> Void) {
         let view = vc.view!
         let translation = gesture.translation(in: view)
         let swipeCard = gesture.view as! SwipeCard
@@ -126,7 +127,7 @@ class SwipeLogic {
                     checkIn()
                 }
             }
-                //User Swiped Right
+            // User Swiped Right
             else if swipeCard.center.x > 0.75*DisplayUtility.screenWidth {
                 UIView.animate(withDuration: 0.4, animations: {
                     swipeCard.center.x = 1.6*DisplayUtility.screenWidth
@@ -134,14 +135,13 @@ class SwipeLogic {
                     connectIcon.alpha = 0.0
                     swipeCard.overlay.opacity = 0.0
                 }, completion: { (success) in
-                    // FIXME: take to sweet nect page
+                    // FIXME: take to "Sweet 'Nect" page
                 })
                 removeCard = false
                 showReasonForConnection = true
             }
             
-            if removeCard
-            {
+            if removeCard {
                 swipeCard.removeFromSuperview()
                 
                 /*
@@ -152,11 +152,7 @@ class SwipeLogic {
                     bottomSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
                 }*/
                 
-            } else if showReasonForConnection {
-                
-            }
-            else
-            {
+            } else {
                 // Reset the cards
                 disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
                 disconnectIcon.alpha = 0.0
@@ -175,7 +171,7 @@ class SwipeLogic {
         }
     }
     
-    static func smallestSwipeCardFrame(swipeCard: SwipeCard) -> CGRect {
+    private static func smallestSwipeCardFrame(swipeCard: SwipeCard) -> CGRect {
         let maxFrame = swipeCard.swipeCardFrame()
         let percent = CGFloat(0.98)
         let inset = CGSize(width: maxFrame.size.width * percent,

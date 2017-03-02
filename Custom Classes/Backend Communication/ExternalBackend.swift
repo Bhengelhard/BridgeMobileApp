@@ -27,7 +27,9 @@ class ExternalBackend {
     
     func setFacts(label: UILabel) {
         User.get(withID: userID) { (user) in
-            ExternalLogic.setFactsLabelText(label: label, age: user.age, city: user.city, school: user.school)
+            let (text, numberOfLines) = ExternalLogic.getFactsLabelTextAndNumberOfLines(age: user.age, city: user.city, school: user.school)
+            label.text = text
+            label.numberOfLines = numberOfLines
         }
     }
     

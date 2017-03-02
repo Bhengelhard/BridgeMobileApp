@@ -86,13 +86,14 @@ class SwipeBackend {
                     }
                     
                     if let userID = user.id {
-                        if var shownTo = bridgePairing.shownTo {
+                        var shownTo: [String]
+                        if let bridgePairingShownTo = bridgePairing.shownTo {
+                            shownTo = bridgePairingShownTo
                             shownTo.append(userID)
-                            bridgePairing.shownTo = shownTo
                         } else {
-                            let shownTo = [userID]
-                            bridgePairing.shownTo = shownTo
+                            shownTo = [userID]
                         }
+                        bridgePairing.shownTo = shownTo
                     }
                     
                     bridgePairing.checkedOut = true
@@ -119,12 +120,13 @@ class SwipeBackend {
                     
                     let profilePictureFile1:String? = nil
                     let profilePictureFile2:String? = nil
-                    //                    if let ob = result["user1_profile_picture_url"] as? String {
-                    //                        profilePictureFile1 = ob
-                    //                    }
-                    //                    if let ob = result["user2_profile_picture_url"] as? String {
-                    //                        profilePictureFile2 = ob
-                    //                    }
+                    // Change this to profile picture id or image
+//                        if let ob = result["user1_profile_picture_url"] as? String {
+//                            profilePictureFile1 = ob
+//                        }
+//                        if let ob = result["user2_profile_picture_url"] as? String {
+//                            profilePictureFile2 = ob
+//                        }
                     bridgePairing.save()
                     
                     user1 = PairInfo(name:name1, mainProfilePicture: profilePictureFile1, profilePictures: nil,location: location1, bridgeStatus: bridgeStatus1, objectId: objectId1,  bridgeType: bridgeType1, userId: userId1, city: city1, savedProfilePicture: nil)
@@ -141,6 +143,7 @@ class SwipeBackend {
         }
     }
     
+    /// after swipe: move the bottom swipe card to the top; set up the bottom swipe card
     func moveBottomSwipeCardToTopAndResetBottom() {
         let oldTopSwipeCard = topSwipeCard
         topSwipeCard = bottomSwipeCard
@@ -148,7 +151,15 @@ class SwipeBackend {
         getNextBridgePairings(bottomSwipeCard: bottomSwipeCard)
     }
     
+    /// set up both swipe cards
     func setTopAndBottomSwipeCards() {
         getNextBridgePairings(topSwipeCard: topSwipeCard, bottomSwipeCard: bottomSwipeCard)
+    }
+    
+    func checkIn() {
+        if let topBridgePairing = topBridgePairing {
+            topBridgePairing.checkedOut = false
+            topBridgePairing.save()
+        }
     }
 }
