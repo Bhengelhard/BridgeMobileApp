@@ -137,7 +137,7 @@ class SwipeBackend {
                     localData.addPair(userInfoPair)
                     localData.synchronize()
                     
-                    swipeCard.initialize(user1Id: userId1, user1PhotoURL: profilePictureFile1, user1Name: name1, user1Status: bridgeStatus1, user1City: "", user2Id: userId2, user2PhotoURL: profilePictureFile2, user2Name: name2, user2Status: bridgeStatus2, user2City: "", connectionType: BridgeType.business.rawValue)
+                    swipeCard.initialize(bridgePairing: bridgePairing)
                 }
             }
         }
