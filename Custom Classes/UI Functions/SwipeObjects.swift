@@ -34,13 +34,23 @@ class SwipeObjects {
     
     class DecisionButton: UIButton {
         
+        let size = CGSize(width: 160, height: 40)
+        
         init(text: String) {
             super.init(frame: CGRect())
             self.setTitle(text, for: .normal)
             self.setTitleColor(UIColor.white, for: .normal)
-            self.layer.cornerRadius = 10
-            self.backgroundColor = UIColor.red
+            self.titleLabel?.font = Constants.Fonts.bold24
+            self.contentVerticalAlignment = UIControlContentVerticalAlignment.bottom
+            self.layer.cornerRadius = 18
+            self.backgroundColor = DisplayUtility.gradientColor(size: size)
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+            
+            if text == "NECT" {
+                self.backgroundColor = DisplayUtility.gradientColor(size: self.size)
+            } else {
+                self.backgroundColor = UIColor.lightGray
+            }
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -58,7 +68,7 @@ class SwipeObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.setImage(#imageLiteral(resourceName: "Profile_Unselected_Gray_Bubble"), for: .normal)
+            self.setImage(#imageLiteral(resourceName: "Profile_Selected_Gray_Bubble"), for: .normal)
         }
         
         required init?(coder aDecoder: NSCoder) {

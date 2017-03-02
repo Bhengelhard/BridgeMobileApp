@@ -12,6 +12,8 @@ class SettingsLayout {
     
     // MARK: Global Variables
     let navBar = SettingsObjects.NavBar()
+    let table = SettingsObjects.Table()
+    let websiteView = SettingsObjects.WebsiteView()
     
     // MARK: - Layout
     /// Sets the initial layout constraints
@@ -25,6 +27,21 @@ class SettingsLayout {
             navBar.autoPinEdge(toSuperviewEdge: .left)
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
+            
+            // Layout the website view pinned to the bottom of the page
+            view.addSubview(websiteView)
+            websiteView.autoPinEdge(toSuperviewEdge: .bottom)
+            websiteView.autoPinEdge(toSuperviewEdge: .left)
+            websiteView.autoPinEdge(toSuperviewEdge: .right)
+            websiteView.autoSetDimension(.height, toSize: 40)
+            websiteView.label.autoCenterInSuperview()
+            
+            // Layout the table below the navigation bar and above the websiteView
+            view.addSubview(table)
+            table.autoPinEdge(.top, to: .bottom, of: navBar)
+            table.autoPinEdge(.bottom, to: .top, of: websiteView)
+            table.autoPinEdge(toSuperviewEdge: .left)
+            table.autoPinEdge(toSuperviewEdge: .right)
             
         }
         
