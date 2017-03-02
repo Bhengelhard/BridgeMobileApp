@@ -41,6 +41,12 @@ class HalfSwipeCard: UIView {
 
     }
     
+    func setImage(image: UIImage) {
+        let photoView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
+        photoView.image = image
+        self.addSubview(photoView)
+    }
+    
     func layoutHalfCard(name: String, status: String, photoView: UIImageView, connectionType: String) {
         self.addSubview(photoView)
         

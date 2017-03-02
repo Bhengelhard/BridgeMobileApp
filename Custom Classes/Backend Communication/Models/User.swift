@@ -135,6 +135,10 @@ class User: NSObject {
             quickUpdate = parseQuickUpdate
         }
         
+        if let parsePictures = parseUser["pictures"] as? [String] {
+            pictureIDs = parsePictures
+        }
+        
         super.init()
     }
     
