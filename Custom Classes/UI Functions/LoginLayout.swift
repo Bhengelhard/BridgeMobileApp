@@ -16,6 +16,7 @@ class LoginLayout {
     let loginInformationLabel = LoginObjects.LoginInformationLabel()
     let seeMoreButton = LoginObjects.SeeMoreButton()
     let tutorialsPageViewController = LoginObjects.TutorialsPageViewController()
+    let transgradientView = LoginObjects.TransgradientView()
     
     // MARK: Layout Objects
     /// Sets the initial layout constraints
@@ -78,6 +79,12 @@ class LoginLayout {
             seeMoreButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             seeMoreButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20)
             seeMoreButton.autoPinEdge(.top, to: .bottom, of: loginInformationLabel, withOffset: 10)
+            
+            // Layout the transgradientView be pinned just above the bottom of the ViewController
+            view.insertSubview(transgradientView, belowSubview: fbLoginButton)
+            transgradientView.autoPinEdge(toSuperviewEdge: .left)
+            transgradientView.autoPinEdge(toSuperviewEdge: .right)
+            transgradientView.autoPinEdge(toSuperviewEdge: .bottom)
             
             // MARK: Add Targets
             fbLoginButton.addTarget(self, action: #selector(fbLoginButtonTapped(_:)), for: .touchUpInside)

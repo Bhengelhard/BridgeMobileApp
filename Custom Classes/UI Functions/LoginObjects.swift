@@ -105,7 +105,7 @@ class LoginObjects {
         
         init() {
             super.init(frame: CGRect())
-            self.text = "No need to get sour! We don't post to Facebook.\nBy signing in, you agree to our Terms of Service"
+            self.text = "No need to get sour! We don't post to Facebook.\nBy signing in, you agree to our Terms of Service."
             self.numberOfLines = 2
             self.textAlignment = NSTextAlignment.center
             self.font = Constants.Fonts.light14
@@ -122,7 +122,21 @@ class LoginObjects {
         
         init() {
             super.init(frame: CGRect())
-            self.setImage(#imageLiteral(resourceName: "Black_X"), for: .normal)
+            self.setImage(#imageLiteral(resourceName: "Carrot_Down"), for: .normal)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+    }
+    
+    /// Transgradient view is a colored asset that displays at the bottom of the LoginViewController
+    class TransgradientView: UIImageView {
+        
+        init() {
+            super.init(frame: CGRect())
+            self.image = #imageLiteral(resourceName: "Transgradient_View")
         }
         
         required init?(coder aDecoder: NSCoder) {
