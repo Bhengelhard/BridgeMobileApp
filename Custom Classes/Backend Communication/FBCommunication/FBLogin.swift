@@ -203,7 +203,8 @@ class FBLogin {
                                     if success == true {
                                         //self.activityIndicator.stopAnimating()
                                         UIApplication.shared.endIgnoringInteractionEvents()
-                                        vc.performSegue(withIdentifier: "showSignUp", sender: self)
+                                        //vc.performSegue(withIdentifier: "showSignUp", sender: self)
+                                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
                                     } else {
                                         print(error ?? "error")
                                     }
@@ -238,14 +239,14 @@ class FBLogin {
                             if hasSignedUp == true {
                                 vc.performSegue(withIdentifier: "showSwipe", sender: self)
                             } else {
-                                
                                 //If the user has already provided an access code, then do not display it again
                                 let hasProvidedAccessCode = localData.getHasProvidedAccessCode() ?? false
                                 if !hasProvidedAccessCode {
                                     localData.setHasProvidedAccessCode(true)
                                     localData.synchronize()
                                 }
-                                vc.performSegue(withIdentifier: "showSignUp", sender: self)
+                                //vc.performSegue(withIdentifier: "showSignUp", sender: self)
+                                vc.performSegue(withIdentifier: "showSwipe", sender: self)
                             }
                             
                         })

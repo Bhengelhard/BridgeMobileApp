@@ -52,6 +52,19 @@ class ExternalProfileObjects {
             super.init(arrayOfVCs: [profilePictureVC1, profilePictureVC2, profilePictureVC3, profilePictureVC4], startingIndex: 0)
         }
         
+        func setImages(images: [UIImage]) {
+            var arrayOfVCs = [ProfilePicturesViewController]()
+            for image in images {
+                arrayOfVCs.append(ProfilePicturesViewController(image: image))
+            }
+            print("arrayOfVCs contains (\(arrayOfVCs.count) VCs")
+            if arrayOfVCs.count > 0 {
+                super.arrayOfVCs = arrayOfVCs
+                super.pageControl.numberOfPages = arrayOfVCs.count
+                super.setViewControllers([arrayOfVCs[0]], direction: .forward, animated: true, completion: nil)
+            }
+        }
+        
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
@@ -60,11 +73,20 @@ class ExternalProfileObjects {
     }
     
     class ProfilePicturesViewController: UIViewController {
+        let imageView = UIImageView()
         
         init(color: UIColor) {
             super.init(nibName: nil, bundle: nil)
             
             self.view.backgroundColor = color
+        }
+        
+        init(image: UIImage) {
+            super.init(nibName: nil, bundle: nil)
+            
+            imageView.frame = view.bounds
+            imageView.image = image
+            view.addSubview(imageView)
         }
         
         required init?(coder aDecoder: NSCoder) {

@@ -58,31 +58,19 @@ class SwipeBackend {
         }
     }
     
-    private func getNextBridgePairings(topSwipeCard: SwipeCard? = nil, bottomSwipeCard: SwipeCard) {
+    private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, completion: (() -> Void)? = nil) {
+        if !top {
+            self.topBridgePairing = self.bottomBridgePairing
+        }
         User.getCurrent { (user) in
-            var limit = 1
-            if topSwipeCard != nil {
-                limit = 2
-            }
-            BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: limit, notCheckedOutOnly: true) { (bridgePairings) in
-                for i in 0..<bridgePairings.count {
-                    let bridgePairing = bridgePairings[i]
+            BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true) { (bridgePairings) in
+                if bridgePairings.count > 0 {
+                    let bridgePairing = bridgePairings[0]
                     
-                    var swipeCardIsBottom = true
-                    if i == 0 {
-                        if topSwipeCard != nil {
-                            swipeCardIsBottom = false
-                        }
-                    }
-                    
-                    var swipeCard = bottomSwipeCard
-                    if swipeCardIsBottom {
-                        self.bottomBridgePairing = bridgePairing
-                    } else {
-                        if let topSwipeCard = topSwipeCard {
-                            swipeCard = topSwipeCard
-                        }
+                    if top {
                         self.topBridgePairing = bridgePairing
+                    } else {
+                        self.bottomBridgePairing = bridgePairing
                     }
                     
                     if let userID = user.id {
@@ -138,23 +126,26 @@ class SwipeBackend {
                     localData.synchronize()
                     
                     swipeCard.initialize(bridgePairing: bridgePairing)
+                    if !top {
+                        swipeCard.addOverlay()
+                    }
+                }
+                if let completion = completion {
+                    completion()
                 }
             }
         }
     }
     
-    /// after swipe: move the bottom swipe card to the top; set up the bottom swipe card
-    func moveBottomSwipeCardToTopAndResetBottom() {
-        let oldTopSwipeCard = topSwipeCard
-        topSwipeCard = bottomSwipeCard
-        bottomSwipeCard = oldTopSwipeCard
-        getNextBridgePairings(bottomSwipeCard: bottomSwipeCard)
+    /// initialize the bottom swipe card
+    func setBottomSwipeCard(bottomSwipeCard: SwipeCard) {
+        getNextBridgePairing(swipeCard: bottomSwipeCard, top: false)
     }
     
-    /// set up both swipe cards
-    func setInitialTopAndBottomSwipeCards(topSwipeCard: SwipeCard, bottomSwipeCard: SwipeCard) {
-        getNextBridgePairings(topSwipeCard: topSwipeCard, bottomSwipeCard: bottomSwipeCard)
+    func setTopSwipeCard(topSwipeCard: SwipeCard, completion: (() -> Void)? = nil) {
+        getNextBridgePairing(swipeCard: topSwipeCard, top: true, completion: completion)
     }
+    
     
     func checkIn() {
         if let topBridgePairing = topBridgePairing {

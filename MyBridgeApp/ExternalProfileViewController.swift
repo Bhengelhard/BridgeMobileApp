@@ -13,6 +13,7 @@ class ExternalProfileViewController: UIViewController {
     // MARK: Global Variables
     let layout = ExternalProfileLayout()
     let transitionManager = TransitionManager()
+    var userID: String?
     
     var didSetupConstraints = false
     
@@ -46,6 +47,26 @@ class ExternalProfileViewController: UIViewController {
     // MARK: - Targets
     func dismissButtonTapped(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - Setters
+    func setUserID(userID: String?) {
+        self.userID = userID
+        
+        if let userID = userID {
+            User.get(withID: userID) { (user) in
+                var images = [UIImage]()
+                Picture.getAll(withUser: user, withBlock: { (pictures) in
+                    for picture in pictures {
+                        if let image = picture.image {
+                            images.append(image)
+                        }
+                    }
+                    print("!")
+                    self.layout.profilePicturesView.setImages(images: images)
+                })
+            }
+        }
     }
     
     // MARK: - Navigation

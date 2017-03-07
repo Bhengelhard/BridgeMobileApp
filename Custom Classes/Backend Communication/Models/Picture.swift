@@ -11,6 +11,7 @@ import UIKit
 
 class Picture: NSObject {
     typealias PictureBlock = (Picture) -> Void
+    typealias PicturesBlock = ([Picture]) -> Void
     
     private let parsePicture: PFObject
     
@@ -78,6 +79,32 @@ class Picture: NSObject {
                 let picture = Picture(parsePicture: parsePicture)
                 if let block = block {
                     block(picture)
+                }
+            }
+        }
+    }
+    
+    static func getAll(withUser user: User, withBlock block: PicturesBlock? = nil) {
+        if let userPictureIDs = user.pictureIDs {
+            getPictures(from: userPictureIDs, startingAtIndex: 0, soFar: [], withBlock: block)
+        }
+    }
+    
+    private static func getPictures(from pictureIDs: [String], startingAtIndex index: Int, soFar: [Picture], withBlock block: Picture.PicturesBlock? = nil) {
+        if index >= pictureIDs.count {
+            print("got \(soFar.count) pictures")
+            if let block = block {
+                block(soFar)
+            }
+        } else {
+            let query = PFQuery(className: "Pictures")
+            query.getObjectInBackground(withId: pictureIDs[index]) { (parsePicture, error) in
+                if let error = error {
+                    print("error getting picture - \(error)")
+                } else if let parsePicture = parsePicture {
+                    var newSoFar = soFar
+                    newSoFar.append(Picture(parsePicture: parsePicture))
+                    self.getPictures(from: pictureIDs, startingAtIndex: index+1, soFar: newSoFar, withBlock: block)
                 }
             }
         }

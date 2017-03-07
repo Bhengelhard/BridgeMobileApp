@@ -17,8 +17,8 @@ class SwipeCard: UIView {
     var cardsUser1City: String?
     var cardsUser2City: String?
     var cardsPredictedType: String?
-    let topHalf = HalfSwipeCard()
-    let bottomHalf = HalfSwipeCard()
+    var topHalf = HalfSwipeCard()
+    var bottomHalf = HalfSwipeCard()
 	var overlay = CALayer()
 	let defaultOverlayOpacity: Float = 0.75
     
@@ -39,6 +39,7 @@ class SwipeCard: UIView {
         
         cardsPredictedType = "Business"
         
+        topHalf = HalfSwipeCard()
         topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         topHalf.initialize(name: bridgePairing.user1Name!, status: "", photoURL: "", connectionType: "Business")
         bridgePairing.getUser1Picture { (picture) in
@@ -53,6 +54,7 @@ class SwipeCard: UIView {
         topHalfShape.path = maskPath.cgPath
         topHalf.layer.mask = topHalfShape
         
+        bottomHalf = HalfSwipeCard()
         bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         bottomHalf.initialize(name: bridgePairing.user2Name!, status: "", photoURL: "", connectionType: "Business")
         bridgePairing.getUser2Picture { (picture) in
@@ -101,13 +103,16 @@ class SwipeCard: UIView {
 //            cardsUser2City = city
 //        }
         
-        overlay.frame = self.layer.frame
-        overlay.frame.origin = CGPoint(x: 0, y: 0)
+    }
+    
+    func addOverlay() {
+        print("adding overlay")
+        overlay.frame = self.layer.bounds
+        //overlay.frame.origin = CGPoint(x: 0, y: 0)
         overlay.backgroundColor = UIColor.black.cgColor
         overlay.opacity = defaultOverlayOpacity
         
         layer.insertSublayer(overlay, at: UInt32.max)
-        
     }
     
     func swipeCardFrame () -> CGRect {

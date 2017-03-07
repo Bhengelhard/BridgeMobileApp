@@ -21,6 +21,9 @@ class MyProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let myProfileBackend = MyProfileBackend()
+        myProfileBackend.setProfilePicture(hexView: layout.profilePicture)
+        
         // Adding Targets and GestureRecognizers
         layout.editProfileButton.addTarget(self, action: #selector(editProfileButtonTapped(_:)), for: .touchUpInside)
         layout.settingsButton.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)
@@ -55,7 +58,11 @@ class MyProfileViewController: UIViewController {
     
     // Present ExternalUserViewController
     func profilePictureTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        present(ExternalProfileViewController(), animated: true, completion: nil)
+        User.getCurrent { (user) in
+            let externalProfileVC = ExternalProfileViewController()
+            externalProfileVC.setUserID(userID: user.id)
+            self.present(externalProfileVC, animated: true, completion: nil)
+        }
     }
     
     // Presents Message with text prepopulated

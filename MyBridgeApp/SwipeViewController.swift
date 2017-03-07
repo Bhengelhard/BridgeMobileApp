@@ -20,7 +20,6 @@ class SwipeViewController: UIViewController {
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func loadView() {
@@ -29,18 +28,20 @@ class SwipeViewController: UIViewController {
         
         view.setNeedsUpdateConstraints()
         
-        // Get the next swipeCards
-        let swipeBackend = SwipeBackend()
-        swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
-        
         // Add Targets
         layout.passButton.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
         
+        layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
         
-        layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeTopGesture(_:))))
+        layout.bottomSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
+        layout.bottomSwipeCard.isUserInteractionEnabled = false
         
-        //layout.bottomSwipeCard.addGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIGestureRecognizer#>)
-        
+        // Get the next swipeCards
+        let swipeBackend = SwipeBackend()
+        //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
+        swipeBackend.setTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
+            swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
+        }
     }
     
     
@@ -55,19 +56,27 @@ class SwipeViewController: UIViewController {
         
     }
     
-    func swipeTopGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
-        if gestureRecognizer.view == layout.topSwipeCard {
-            callIsDragged(gestureRecognizer: gestureRecognizer, bottomSwipeCard: layout.bottomSwipeCard)
-        } else {
-            callIsDragged(gestureRecognizer: gestureRecognizer, bottomSwipeCard: layout.topSwipeCard)
-        }
+    func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+        SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: didSwipe, reset: reset)
     }
-    func callIsDragged(gestureRecognizer: UIPanGestureRecognizer, bottomSwipeCard: SwipeCard) {
+    
+    func didSwipe(right: Bool) {
         let swipeBackend = SwipeBackend()
-        let moveBottomToTop = swipeBackend.moveBottomSwipeCardToTopAndResetBottom
-        let checkIn = swipeBackend.checkIn
         
-        SwipeLogic.isDragged(gesture: gestureRecognizer, vc: self, yCenter: self.view.center.y, bottomSwipeCard: bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: moveBottomToTop, checkIn: checkIn)
+        // if swiped left, check in bridge pairing
+        if !right {
+            swipeBackend.checkIn()
+        }
+        
+        layout.switchTopAndBottomCards()
+        layout.topSwipeCard.isUserInteractionEnabled = true
+        layout.bottomSwipeCard.isUserInteractionEnabled = false
+        layout.topSwipeCard.overlay.removeFromSuperlayer()
+        swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard)
+    }
+    
+    func reset() {
+        layout.recenterTopSwipeCard()
     }
     
     // MARK: - Navigation
