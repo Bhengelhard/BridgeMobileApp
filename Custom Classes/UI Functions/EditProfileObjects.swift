@@ -200,7 +200,7 @@ class EditProfileObjects {
             textView.isScrollEnabled = false
             
             self.addSubview(textView)
-            textView.autoPinEdgesToSuperviewEdges(with: .init(top: 10, left: 20, bottom: 10, right: 20))
+            textView.autoPinEdgesToSuperviewEdges(with: .init(top: 10, left: 10, bottom: 10, right: 10))
         }
         
         required init?(coder aDecoder: NSCoder) {
