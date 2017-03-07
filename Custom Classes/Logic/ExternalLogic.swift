@@ -44,6 +44,5 @@ class ExternalLogic {
         }
         
         return (labelText, numberOfLines)
-        
     }
 }

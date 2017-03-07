@@ -10,25 +10,25 @@ import UIKit
 
 class SwipeLogic {
     
-    static func isDragged(gesture: UIPanGestureRecognizer, vc: UIViewController, yCenter: CGFloat, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, didSwipe: @escaping () -> Void, checkIn: @escaping () -> Void) {
+    static func swipe(gesture: UIPanGestureRecognizer, layout: SwipeLayout, vc: UIViewController, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, didSwipe: @escaping (Bool) -> Void, reset: @escaping () -> Void) {
+        
         let view = vc.view!
+        
         let translation = gesture.translation(in: view)
         let swipeCard = gesture.view as! SwipeCard
-        swipeCard.center = CGPoint(x: DisplayUtility.screenWidth / 2 + translation.x, y: DisplayUtility.screenHeight / 2 + translation.y)
-        let xFromCenter = swipeCard.center.x - view.bounds.width / 2
-        let scale = min(CGFloat(1.0), 1)
-        var rotation = CGAffineTransform(rotationAngle: -xFromCenter / 1000)
-        var stretch = rotation.scaledBy(x: scale, y: scale)
-        swipeCard.transform = stretch
+        layout.updateTopSwipeCardHorizontalConstraint(translation: translation.x)
+        //let scale = min(CGFloat(1.0), 1)
+        //var rotation = CGAffineTransform(rotationAngle: -xFromCenter / 1000)
+        //var rotation = CGAffineTransform(rotationAngle: translation.x / 1000)
+        //var stretch = rotation.scaledBy(x: scale, y: scale)
+        //swipeCard.transform = stretch
         var removeCard = false
-        var showReasonForConnection = false
         
         //Displaying and Removing the connect and disconnect icons
         let disconnectIconX = max(min((-1.5*(swipeCard.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
         let connectIconX = max(min(((-2.0/3.0)*(swipeCard.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
         
         //Limiting Y axis of swipe
-        swipeCard.center.y = yCenter
         
         //animating connect and disconnect icons when card is positioned from 0.4% of DisplayUtility.screenWidth to 0.25% of DisplayUtility.screenWidth
         if swipeCard.center.x < 0.4*DisplayUtility.screenWidth {
@@ -54,8 +54,8 @@ class SwipeLogic {
         }
         
         if gesture.state == .began {
-            bottomSwipeCard.frame = smallestSwipeCardFrame(swipeCard: bottomSwipeCard)
-            bottomSwipeCard.center.x = view.center.x
+            //bottomSwipeCard.frame = smallestSwipeCardFrame(swipeCard: bottomSwipeCard)
+            //bottomSwipeCard.center.x = view.center.x
         }
         
         if gesture.state == .changed {
@@ -69,11 +69,11 @@ class SwipeLogic {
                                height: maxFrame.height * percent)
             let differential = CGSize(width: maxFrame.size.width - inset.width,
                                       height: maxFrame.size.height - inset.height)
-            
+            /*
             bottomSwipeCard.frame = CGRect(origin: CGPoint(x: max(maxFrame.origin.x + differential.width, maxFrame.origin.x),
                                                            y: max(maxFrame.origin.y + differential.height, maxFrame.origin.y)),
                                            size: CGSize(width: min(abs(maxFrame.width - (inset.width * 2)), maxFrame.width),
-                                                        height: min(abs(maxFrame.height - (inset.height * 2)), maxFrame.height)))
+                                                        height: min(abs(maxFrame.height - (inset.height * 2)), maxFrame.height)))*/
             
             let overlayMultiplier = CGFloat(bottomSwipeCard.defaultOverlayOpacity)
             var overlayPercent: CGFloat = 2.0 * (direction / screenMiddleX) - overlayMultiplier
@@ -96,19 +96,18 @@ class SwipeLogic {
                     let alert = UIAlertController(title: "Don't Connect?", message: "Dragging a pair of pictures to the left indicates you do not want to introduce the friends shown.", preferredStyle: UIAlertControllerStyle.alert)
                     //Create the actions
                     alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
-                        
+                        reset()
                     }))
                     alert.addAction(UIAlertAction(title: "Don't Connect", style: .default, handler: { (action) in
                         UIView.animate(withDuration: 0.2, animations: {
-                            swipeCard.center.x = -1.0*DisplayUtility.screenWidth
+                            //swipeCard.center.x = -1.0*DisplayUtility.screenWidth
                             disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                             disconnectIcon.alpha = 0.0
                             swipeCard.overlay.opacity = 0.0
                         }, completion: { (success) in
-                            didSwipe()
+                            didSwipe(false)
                         })
                         removeCard = true
-                        checkIn()
                     }))
                     vc.present(alert, animated: true, completion: nil)
                     
@@ -116,15 +115,13 @@ class SwipeLogic {
                     localData.synchronize()
                 } else {
                     UIView.animate(withDuration: 0.2, animations: {
-                        swipeCard.center.x = -1.0*DisplayUtility.screenWidth
                         disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                         disconnectIcon.alpha = 0.0
                         swipeCard.overlay.opacity = 0.0
                     }, completion: { (success) in
-                        didSwipe()
+                        didSwipe(false)
                     })
                     removeCard = true
-                    checkIn()
                 }
             }
             // User Swiped Right
@@ -135,22 +132,12 @@ class SwipeLogic {
                     connectIcon.alpha = 0.0
                     swipeCard.overlay.opacity = 0.0
                 }, completion: { (success) in
-                    // FIXME: take to "Sweet 'Nect" page
+                    didSwipe(true)
                 })
                 removeCard = false
-                showReasonForConnection = true
             }
             
             if removeCard {
-                swipeCard.removeFromSuperview()
-                
-                /*
-                if arrayOfCardsInDeck.count > 1
-                {
-                    swipeCard = arrayOfCardsInDeck[0]
-                    swipeCard.overlay.removeFromSuperlayer()
-                    bottomSwipeCard = arrayOfCardsInDeck.indices.contains(1) ? arrayOfCardsInDeck[1] : SwipeCard()
-                }*/
                 
             } else {
                 // Reset the cards
@@ -159,16 +146,25 @@ class SwipeLogic {
                 connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
                 connectIcon.alpha = 0.0
                 
+                reset()
+                
                 UIView.animate(withDuration: 0.7, delay: 0, options: .allowUserInteraction, animations: {
-                    rotation = CGAffineTransform(rotationAngle: 0)
-                    stretch = rotation.scaledBy(x: 1, y: 1)
-                    swipeCard.transform = stretch
+                    //rotation = CGAffineTransform(rotationAngle: 0)
+                    //stretch = rotation.scaledBy(x: 1, y: 1)
+                    //swipeCard.transform = stretch
+                    //swipeCard.center = CGPoint(x: view.bounds.width / 2, y: view.bounds.height / 2)
                     //swipeCard.frame = swipeCardFrame
-                    bottomSwipeCard.frame = smallestSwipeCardFrame(swipeCard: bottomSwipeCard)
-                    bottomSwipeCard.center.x = view.center.x
+                    //bottomSwipeCard.frame = smallestSwipeCardFrame(swipeCard: bottomSwipeCard)
+                    //bottomSwipeCard.center.x = view.center.x
                 }, completion: nil)
             }
         }
+    }
+    
+    enum Swipe: String {
+        case right
+        case left
+        case none
     }
     
     private static func smallestSwipeCardFrame(swipeCard: SwipeCard) -> CGRect {

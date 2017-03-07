@@ -11,19 +11,23 @@ import PureLayout
 class SwipeLayout {
     
     // MARK: Global Variables
+    var view = UIView()
     let navBar = SwipeObjects.NavBar()
-    let topSwipeCard = SwipeCard()
-    let bottomSwipeCard = SwipeCard()
+    var topSwipeCard = SwipeCard()
+    var bottomSwipeCard = SwipeCard()
     let passButton = SwipeObjects.DecisionButton(text: "PASS")
     let nectButton = SwipeObjects.DecisionButton(text: "NECT")
     let infoButton = SwipeObjects.InfoButton()
     let connectIcon = UIImageView(image: #imageLiteral(resourceName: "Necter_Icon"))
     let disconnectIcon = UIImageView(image: #imageLiteral(resourceName: "Disconnect_Icon"))
+    var topSwipeCardHorizontalConstraint: NSLayoutConstraint?
+    var bottomSwipeCardHorizontalConstraint: NSLayoutConstraint?
     
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
-        
+        print("initializing layout")
         if (!didSetupConstraints) {
+            self.view = view
             
             // MARK: Layout Objects
             let margin: CGFloat = 20
@@ -39,11 +43,17 @@ class SwipeLayout {
             let width = 300
             let size = CGSize(width: width, height: height)
             view.addSubview(topSwipeCard)
-            topSwipeCard.autoCenterInSuperview()
+            let topSwipeCardLocationConstraints = topSwipeCard.autoCenterInSuperview()
+            if topSwipeCardLocationConstraints.count >= 2 {
+                topSwipeCardHorizontalConstraint = topSwipeCardLocationConstraints[1]
+            }
             topSwipeCard.autoSetDimensions(to: size)
             
             view.insertSubview(bottomSwipeCard, belowSubview: topSwipeCard)
-            bottomSwipeCard.autoCenterInSuperview()
+            let bottomSwipeCardLocationConstraints = bottomSwipeCard.autoCenterInSuperview()
+            if bottomSwipeCardLocationConstraints.count >= 2 {
+                bottomSwipeCardHorizontalConstraint = bottomSwipeCardLocationConstraints[1]
+            }
             bottomSwipeCard.autoSetDimensions(to: size)
             
             view.addSubview(infoButton)
@@ -97,6 +107,39 @@ class SwipeLayout {
         }
         
         return true
+    }
+    
+    func updateTopSwipeCardHorizontalConstraint(translation: CGFloat) {
+        if let constraint = topSwipeCardHorizontalConstraint {
+            constraint.constant = constraint.constant + translation
+        }
+    }
+    
+    func recenterTopSwipeCard() {
+        if let constraint = topSwipeCardHorizontalConstraint {
+            constraint.constant = 0
+            UIView.animate(withDuration: 0.5, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
+    func switchTopAndBottomCards() {
+        print("switching top and bottom cards")
+        let oldTopSwipeCard = topSwipeCard
+        let oldTopSwipeCardHorizontalConstraint = topSwipeCardHorizontalConstraint
+        topSwipeCard = bottomSwipeCard
+        topSwipeCardHorizontalConstraint = bottomSwipeCardHorizontalConstraint
+        bottomSwipeCard = oldTopSwipeCard
+        bottomSwipeCardHorizontalConstraint = oldTopSwipeCardHorizontalConstraint
+        
+        if let constraint = bottomSwipeCardHorizontalConstraint {
+            constraint.constant = 0
+        }
+        
+        if let view = bottomSwipeCard.superview {
+            view.insertSubview(bottomSwipeCard, belowSubview: topSwipeCard)
+        }
     }
     
 }
