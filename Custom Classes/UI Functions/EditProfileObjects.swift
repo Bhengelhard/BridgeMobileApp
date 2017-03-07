@@ -86,7 +86,7 @@ class EditProfileObjects {
             
             switch(indexPath.row) {
             case 0:
-                cell = GrayTableCell(text: "This is where the Pictures go")
+                cell = EditProfilePicturesTableViewCell()
             case 1:
                 cell = GrayTableCell(text: "About Me")
             case 2:
@@ -133,10 +133,13 @@ class EditProfileObjects {
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             
-            deselectRow(at: indexPath, animated: true)
+            if indexPath.row != 0 {
+                deselectRow(at: indexPath, animated: true)
+                
+                // Notify EditProfileViewController to present the tappedTableCell
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "tableViewCellTapped"), object: indexPath.row)
+            }
             
-            // Notify EditProfileViewController to present the tappedTableCell
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "tableViewCellTapped"), object: indexPath.row)
         }
     }
     

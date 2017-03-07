@@ -49,7 +49,6 @@ class EditProfileViewController: UIViewController {
         print(notification.object)
         
         present(SettingsViewController(), animated: true, completion: nil)
-        
     }
     
     
