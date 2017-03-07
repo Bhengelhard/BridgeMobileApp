@@ -15,7 +15,7 @@ class PrivacyPolicyObjects {
     class ReturnToLoginButton: UIButton {
         init() {
             super.init(frame: CGRect())
-            self.setImage(#imageLiteral(resourceName: "Black_X"), for: .normal)
+            self.setImage(#imageLiteral(resourceName: "Carrot_Up"), for: .normal)
         }
         
         required init?(coder aDecoder: NSCoder) {

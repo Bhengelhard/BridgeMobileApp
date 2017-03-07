@@ -25,7 +25,7 @@ class LoginViewController: UIViewController {
         
         layout.seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped(_:)), for: .touchUpInside)
         layout.fbLoginButton.addTarget(self, action: #selector(loginWithFB(_:)), for: .touchUpInside)
-        
+                
     }
     
     override func loadView() {
@@ -45,7 +45,8 @@ class LoginViewController: UIViewController {
     // MARK: - Targets
     /// Segues to PrivacyInformationViewController to show more information about privacy while using the application
     func seeMoreButtonTapped(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "showPrivacyPolicy", sender: self)
+        present(PrivacyPolicyViewController(), animated: true, completion: nil)
+        //self.performSegue(withIdentifier: "showPrivacyPolicy", sender: self)
     }
     
     /// Authenticates user through Facebook Login
@@ -56,12 +57,12 @@ class LoginViewController: UIViewController {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination
-        let mirror = Mirror(reflecting: vc)
-        if mirror.subjectType == PrivacyPolicyViewController.self {
-            self.transitionManager.animationDirection = "Top"
-        }
-        //vc.transitioningDelegate = self.transitionManager
+//        let vc = segue.destination
+//        let mirror = Mirror(reflecting: vc)
+//        if mirror.subjectType == PrivacyPolicyViewController.self {
+//            self.transitionManager.animationDirection = "Top"
+//        }
+//        vc.transitioningDelegate = self.transitionManager
 
     }
 

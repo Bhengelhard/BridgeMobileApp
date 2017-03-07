@@ -26,7 +26,7 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
             let size = CGSize(width: sideLength, height: sideLength)
             autoSetDimensions(to: size)
             
-            backgroundColor = .lightGray
+            backgroundColor = UIColor(red: 223 / 255, green: 223 / 255, blue: 228 / 255, alpha: 1.0)
             layer.cornerRadius = cornerRadius
             clipsToBounds = true
             
@@ -83,6 +83,9 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
         self.parentVC = parentVC
         
         super.init(style: .default, reuseIdentifier: "")
+        
+        self.backgroundColor = Constants.Colors.necter.backgroundGray
+        self.selectionStyle = .none
         
         autoSetDimensions(to: CGSize(width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth))
         

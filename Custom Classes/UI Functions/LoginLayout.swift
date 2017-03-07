@@ -16,19 +16,37 @@ class LoginLayout {
     let loginInformationLabel = LoginObjects.LoginInformationLabel()
     let seeMoreButton = LoginObjects.SeeMoreButton()
     let tutorialsPageViewController = LoginObjects.TutorialsPageViewController()
+    let transgradientView = LoginObjects.TransgradientView()
     
+    // MARK: Layout Objects
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
         
         if (!didSetupConstraints) {
             
-            // MARK: Layout Objects
+            
+            
+//            if let tutorialVCs = tutorialsPageViewController.viewControllers as? [LoginObjects.TutorialViewController] {
+//                for tutorialVC in tutorialVCs {
+//                    print("set up tutorial VC")
+//                    
+//                    tutorialVC.view.addSubview(tutorialVC.label)
+//                    tutorialVC.label.autoPinEdge(toSuperviewEdge: .top, withInset: 60)
+//                    tutorialVC.label.autoAlignAxis(.vertical, toSameAxisOf: tutorialVC.view)
+//                    
+//                    tutorialVC.view.addSubview(tutorialVC.imageView)
+//                    tutorialVC.imageView.autoAlignAxis(.vertical, toSameAxisOf: tutorialVC.view)
+//                    tutorialVC.imageView.autoPinEdge(.top, to: .bottom, of: tutorialVC.label, withOffset: 20)
+//                    tutorialVC.imageView.autoSetDimension(.height, toSize: 350)
+//                    tutorialVC.imageView.autoSetDimension(.width, toSize: 300)
+//                }
+//            }
+            
             var tutorialsView = UIView()
             
             if let tView = tutorialsPageViewController.view {
                 tutorialsView = tView
             }
-            
             
             //Layout the tutorialsViewPageController at the top of the view so the user can swipe through the tutorial pages
             view.addSubview(tutorialsView)
@@ -38,10 +56,11 @@ class LoginLayout {
             
             // Set the pageControl of the tutorialsViewPageController
             tutorialsPageViewController.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
-            
+            tutorialsPageViewController.pageControl.autoPinEdge(.bottom, to: .bottom, of: tutorialsView)
+
             // Layout the fbLoginButton below the tutorialsViewController to the bottom with 80pt inset and dimensions of 300x40
             view.addSubview(fbLoginButton)
-            fbLoginButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
+            fbLoginButton.autoSetDimensions(to: CGSize(width: 250, height: 42.5))
             fbLoginButton.autoAlignAxis(toSuperviewAxis: .vertical)
             fbLoginButton.autoPinEdge(.top, to: .bottom, of: tutorialsView, withOffset: 35)
             
@@ -55,10 +74,16 @@ class LoginLayout {
             
             // Layout the seemMoreButton pinned just above the bottom of the ViewController
             view.addSubview(seeMoreButton)
-            seeMoreButton.autoSetDimensions(to: CGSize(width: 28, height: 9))
+            //seeMoreButton.autoSetDimensions(to: CGSize(width: 28, height: 9))
             seeMoreButton.autoAlignAxis(.vertical, toSameAxisOf: view)
-            seeMoreButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 26)
-            seeMoreButton.autoPinEdge(.top, to: .bottom, of: loginInformationLabel, withOffset: 17)
+            seeMoreButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20)
+            seeMoreButton.autoPinEdge(.top, to: .bottom, of: loginInformationLabel, withOffset: 10)
+            
+            // Layout the transgradientView be pinned just above the bottom of the ViewController
+            view.insertSubview(transgradientView, belowSubview: fbLoginButton)
+            transgradientView.autoPinEdge(toSuperviewEdge: .left)
+            transgradientView.autoPinEdge(toSuperviewEdge: .right)
+            transgradientView.autoPinEdge(toSuperviewEdge: .bottom)
             
             // MARK: Add Targets
             fbLoginButton.addTarget(self, action: #selector(fbLoginButtonTapped(_:)), for: .touchUpInside)

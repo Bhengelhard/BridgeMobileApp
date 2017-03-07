@@ -58,7 +58,7 @@ class ReusableObjects {
                 pageControl.numberOfPages = arrayOfVCs.count
                 pageControl.currentPage = 0
                 pageControl.pageIndicatorTintColor = UIColor.lightGray
-                pageControl.currentPageIndicatorTintColor = UIColor.black
+                pageControl.currentPageIndicatorTintColor = DisplayUtility.gradientColor(size: pageControl.frame.size)
                 
                 view.addSubview(pageControl)
             }

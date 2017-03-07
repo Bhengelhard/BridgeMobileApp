@@ -8,13 +8,11 @@
 
 import UIKit
 
-class EditProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class EditProfileViewController: UIViewController {
 
     // MARK: Global Variables
-    //let layout = EditProfileLayout()
+    let layout = EditProfileLayout()
     let transitionManager = TransitionManager()
-    let tableView = UITableView()
-    let cell = EditProfilePicturesTableViewCell()
     
     var didSetupConstraints = false
     
@@ -22,19 +20,12 @@ class EditProfileViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        //Listener for TableViewCell Tapped
+        NotificationCenter.default.addObserver(self, selector: #selector(tableViewCellTapped), name: NSNotification.Name(rawValue: "tableViewCellTapped"), object: nil)
         
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.frame = view.bounds
-        tableView.backgroundColor = .red
-        tableView.separatorStyle = .none
-        view.addSubview(tableView)
-        
-        tableView.reloadData()
+        layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
     }
     
-    /*
     override func loadView() {
         view = UIView()
         view.backgroundColor = UIColor.white
@@ -47,23 +38,17 @@ class EditProfileViewController: UIViewController, UITableViewDataSource, UITabl
         
         super.updateViewConstraints()
     }
-    */
     
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cell.frame.height
+    func tableViewCellTapped(_ notification: Notification) {
+        print("Table View Cell Tapped responding")
+        print(notification.object)
+        
+        present(SettingsViewController(), animated: true, completion: nil)
     }
     
     
