@@ -58,7 +58,6 @@ class LoginLayout {
             tutorialsPageViewController.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
             tutorialsPageViewController.pageControl.autoPinEdge(.bottom, to: .bottom, of: tutorialsView)
 
-            
             // Layout the fbLoginButton below the tutorialsViewController to the bottom with 80pt inset and dimensions of 300x40
             view.addSubview(fbLoginButton)
             fbLoginButton.autoSetDimensions(to: CGSize(width: 250, height: 42.5))
