@@ -20,6 +20,9 @@ class EditProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Listener for TableViewCell Tapped
+        NotificationCenter.default.addObserver(self, selector: #selector(tableViewCellTapped), name: NSNotification.Name(rawValue: "tableViewCellTapped"), object: nil)
+        
         layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
     }
     
@@ -39,6 +42,14 @@ class EditProfileViewController: UIViewController {
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func tableViewCellTapped(_ notification: Notification) {
+        print("Table View Cell Tapped responding")
+        print(notification.object)
+        
+        present(SettingsViewController(), animated: true, completion: nil)
+        
     }
     
     

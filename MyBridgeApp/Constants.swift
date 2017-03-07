@@ -13,6 +13,8 @@ struct Constants {
 		struct necter {
 			static let yellow = UIColor(red: 237 / 255, green: 203 / 255, blue: 116 / 255, alpha: 1.0)
 			static let gray = UIColor(red: 76 / 255, green: 76 / 255, blue: 77 / 255, alpha: 1.0)
+            static let backgroundGray = UIColor(red: 218 / 255, green: 223 / 255, blue: 240 / 255, alpha: 1.0)
+            static let textGray = UIColor(red: 22 / 255, green: 22 / 255, blue: 22 / 255, alpha: 1.0)
 		}
 
 		struct bridgeType {

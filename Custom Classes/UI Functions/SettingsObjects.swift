@@ -114,7 +114,7 @@ class SettingsObjects {
             
             self.textLabel?.text = text
             self.textLabel?.font = Constants.Fonts.bold16
-            self.backgroundColor = UIColor.lightGray
+            self.backgroundColor = Constants.Colors.necter.backgroundGray
         }
         
         required init?(coder aDecoder: NSCoder) {

@@ -12,6 +12,7 @@ class EditProfileLayout {
     
     // MARK: Global Variables
     let navBar = EditProfileObjects.NavBar()
+    let table = EditProfileObjects.Table()
     
     // MARK: - Layout
     /// Sets the initial layout constraints
@@ -26,6 +27,12 @@ class EditProfileLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
+            // Layout the Table below the navigation bar
+            view.addSubview(table)
+            table.autoPinEdge(.top, to: .bottom, of: navBar)
+            table.autoPinEdge(toSuperviewEdge: .left)
+            table.autoPinEdge(toSuperviewEdge: .right)
+            table.autoPinEdge(toSuperviewEdge: .bottom)
             
         }
         
