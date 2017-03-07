@@ -25,7 +25,7 @@ class LoginViewController: UIViewController {
         
         layout.seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped(_:)), for: .touchUpInside)
         layout.fbLoginButton.addTarget(self, action: #selector(loginWithFB(_:)), for: .touchUpInside)
-        
+                
     }
     
     override func loadView() {
