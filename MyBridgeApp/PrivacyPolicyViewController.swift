@@ -40,18 +40,19 @@ class PrivacyPolicyViewController: UIViewController {
     // MARK: - Targets
     /// Segues to Login
     func returnToLogin(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "showLogin", sender: self)
+        dismiss(animated: true, completion: nil)
+        //self.performSegue(withIdentifier: "showLogin", sender: self)
     }
     
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination
-        let mirror = Mirror(reflecting: vc)
-        if mirror.subjectType == LoginViewController.self {
-            self.transitionManager.animationDirection = "Bottom"
-        }
-        //vc.transitioningDelegate = self.transitionManager
+//        let vc = segue.destination
+//        let mirror = Mirror(reflecting: vc)
+//        if mirror.subjectType == LoginViewController.self {
+//            self.transitionManager.animationDirection = "Bottom"
+//        }
+//        vc.transitioningDelegate = self.transitionManager
     }
 
 }

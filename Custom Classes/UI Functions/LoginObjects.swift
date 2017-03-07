@@ -29,10 +29,10 @@ class LoginObjects {
     
     class TutorialsPageViewController: ReusableObjects.NecterPageViewController {
         
-        let initialVC = TutorialViewController(image: #imageLiteral(resourceName: "Initial_Tutorial"), text: "Make connections through your friends")
-        let swipeRightVC = TutorialViewController(image: #imageLiteral(resourceName: "Swipe_Right_Tutorial"), text: "Swipe right to introduce people you think would get along")
-        let swipeLeftVC = TutorialViewController(image: #imageLiteral(resourceName: "Swipe_Left_Tutorial"), text: "Swipe left to see the next pair")
-        let chatVC = TutorialViewController(image: #imageLiteral(resourceName: "Chat_Tutorial"), text: "Get to know the people your friends introduce you to")
+        let initialVC = TutorialViewController(image: #imageLiteral(resourceName: "Initial_Tutorial"), text: "Introduce friends that go well together.")
+        let swipeRightVC = TutorialViewController(image: #imageLiteral(resourceName: "Swipe_Right_Tutorial"), text: "Swipe right to introduce.")
+        let swipeLeftVC = TutorialViewController(image: #imageLiteral(resourceName: "Swipe_Left_Tutorial"), text: "Swipe left to see the next pair.")
+        let chatVC = TutorialViewController(image: #imageLiteral(resourceName: "Chat_Tutorial"), text: "Get to know the people your introduced to")
         
         init() {
             super.init(arrayOfVCs: [initialVC, swipeRightVC, swipeLeftVC, chatVC], startingIndex: 0)
@@ -58,22 +58,23 @@ class LoginObjects {
             label.text = text
             label.font = Constants.Fonts.bold24
             label.textColor = UIColor.lightGray
-            label.numberOfLines = 0
+            label.numberOfLines = 2
             label.textAlignment = NSTextAlignment.center
             
             view.addSubview(label)
-            label.autoPinEdge(toSuperviewEdge: .top, withInset: 60)
-            label.autoMatch(.width, to: .width, of: view, withOffset: -40)
-            label.autoAlignAxis(.vertical, toSameAxisOf: view)
+            label.autoPinEdge(toSuperviewEdge: .top, withInset: 40)
+            label.autoPinEdge(.left, to: .left, of: view, withOffset: 20)
+            label.autoPinEdge(.right, to: .right, of: view, withOffset: -20)
+            label.autoSetDimension(.height, toSize: 48)
             
             // initializing the imageView
             imageView.image = image
-            view.addSubview(imageView)
+            view.insertSubview(imageView, belowSubview: label)
             imageView.autoAlignAxis(.vertical, toSameAxisOf: view)
+            imageView.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: -30)
             imageView.autoPinEdge(.top, to: .bottom, of: label, withOffset: 20)
-            imageView.autoSetDimension(.height, toSize: 350)
-            imageView.autoSetDimension(.width, toSize: 300)
-            
+            imageView.autoMatch(.width, to: .height, of: imageView, withMultiplier: 0.9)
+
         }
         
         required init?(coder aDecoder: NSCoder) {

@@ -75,7 +75,7 @@ class LoginLayout {
             
             // Layout the seemMoreButton pinned just above the bottom of the ViewController
             view.addSubview(seeMoreButton)
-            seeMoreButton.autoSetDimensions(to: CGSize(width: 28, height: 9))
+            //seeMoreButton.autoSetDimensions(to: CGSize(width: 28, height: 9))
             seeMoreButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             seeMoreButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20)
             seeMoreButton.autoPinEdge(.top, to: .bottom, of: loginInformationLabel, withOffset: 10)
