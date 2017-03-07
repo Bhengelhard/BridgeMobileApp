@@ -58,8 +58,12 @@ class LoginObjects {
             label.text = text
             label.font = Constants.Fonts.bold24
             label.textColor = UIColor.lightGray
+            label.numberOfLines = 0
+            label.textAlignment = NSTextAlignment.center
+            
             view.addSubview(label)
             label.autoPinEdge(toSuperviewEdge: .top, withInset: 60)
+            label.autoMatch(.width, to: .width, of: view, withOffset: -40)
             label.autoAlignAxis(.vertical, toSameAxisOf: view)
             
             // initializing the imageView
