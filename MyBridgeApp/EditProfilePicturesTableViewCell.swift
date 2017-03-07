@@ -10,6 +10,8 @@ import UIKit
 
 class EditProfilePicturesTableViewCell: UITableViewCell {
     
+    let parentVC: UIViewController
+    
     var pictureBoxes = [PictureBox]()
     
     class PictureBox: UIImageView {
@@ -77,7 +79,9 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
     
     }
     
-    init() {
+    init(parentVC: UIViewController) {
+        self.parentVC = parentVC
+        
         super.init(style: .default, reuseIdentifier: "")
         
         autoSetDimensions(to: CGSize(width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth))
@@ -138,6 +142,23 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
             }
         }
         pictureBoxes[pictureBoxes.count-1].removeImage()
+    }
+    
+    func showDeleteImageMenu(_ sender: UIButton) {
+        let deleteImageMenu = UIAlertController(title: nil, message: "Delete This Image?", preferredStyle: .actionSheet)
+        
+        let deleteAction = UIAlertAction(title: "Yes", style: .default) { (alert) in
+            print("deleting")
+        }
+        
+        let cancelAction = UIAlertAction(title: "No", style: .default) { (alert) in
+            print("cancelling")
+        }
+        
+        deleteImageMenu.addAction(deleteAction)
+        deleteImageMenu.addAction(cancelAction)
+        
+        parentVC.present(deleteImageMenu, animated: true, completion: nil)
     }
 
 }
