@@ -39,23 +39,6 @@ class SwipeLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
-            let height = 450
-            let width = 300
-            let size = CGSize(width: width, height: height)
-            view.addSubview(topSwipeCard)
-            let topSwipeCardLocationConstraints = topSwipeCard.autoCenterInSuperview()
-            if topSwipeCardLocationConstraints.count >= 2 {
-                topSwipeCardHorizontalConstraint = topSwipeCardLocationConstraints[1]
-            }
-            topSwipeCard.autoSetDimensions(to: size)
-            
-            view.insertSubview(bottomSwipeCard, belowSubview: topSwipeCard)
-            let bottomSwipeCardLocationConstraints = bottomSwipeCard.autoCenterInSuperview()
-            if bottomSwipeCardLocationConstraints.count >= 2 {
-                bottomSwipeCardHorizontalConstraint = bottomSwipeCardLocationConstraints[1]
-            }
-            bottomSwipeCard.autoSetDimensions(to: size)
-            
             view.addSubview(infoButton)
             view.addSubview(passButton)
             view.addSubview(nectButton)
@@ -81,11 +64,34 @@ class SwipeLayout {
             passButton.autoPinEdge(toSuperviewEdge: .left, withInset: margin)
             nectButton.autoPinEdge(toSuperviewEdge: .right, withInset: margin)
             
+            // Layout top swipe card
+            view.addSubview(topSwipeCard)
+            topSwipeCard.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 15)
+            topSwipeCard.autoPinEdge(.bottom, to: .top, of: nectButton, withOffset: -10)
+            topSwipeCardHorizontalConstraint = topSwipeCard.autoAlignAxis(toSuperviewAxis: .vertical)
+            topSwipeCard.autoSetDimension(.width, toSize: view.frame.width - 30)
+            
+            // Layout bottom swipe card
+            view.insertSubview(bottomSwipeCard, belowSubview: topSwipeCard)
+            bottomSwipeCard.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 15)
+            bottomSwipeCard.autoPinEdge(.bottom, to: .top, of: nectButton, withOffset: -10)
+            bottomSwipeCardHorizontalConstraint = bottomSwipeCard.autoAlignAxis(toSuperviewAxis: .vertical)
+            bottomSwipeCard.autoSetDimension(.width, toSize: view.frame.width - 30)
+            
+            let iconDiameter = view.frame.width / 3
+            
             view.addSubview(connectIcon)
+            connectIcon.autoSetDimensions(to: CGSize(width: iconDiameter, height: iconDiameter))
+            connectIcon.autoAlignAxis(.vertical, toSameAxisOf: view, withOffset: -0.15*view.frame.width)
+            connectIcon.autoAlignAxis(.horizontal, toSameAxisOf: topSwipeCard)
             connectIcon.alpha = 0
             
             view.addSubview(disconnectIcon)
+            disconnectIcon.autoSetDimensions(to: CGSize(width: iconDiameter, height: iconDiameter))
+            disconnectIcon.autoAlignAxis(.vertical, toSameAxisOf: view, withOffset: -0.15*view.frame.width)
+            disconnectIcon.autoAlignAxis(.horizontal, toSameAxisOf: topSwipeCard)
             disconnectIcon.alpha = 0
+            
             
             // Layout the pass button at the bottom of the view for dismissing presented matches
             

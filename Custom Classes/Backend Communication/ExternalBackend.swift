@@ -21,12 +21,30 @@ class ExternalBackend {
         }
     }
     
+    /// set the name label to display the user's name
+    func setName(userID: String, label: UILabel) {
+        User.get(withID: userID) { (user) in
+            if let name = user.name {
+                label.text = name
+            }
+        }
+    }
+    
     /// set the facts label to display the user's facts
     func setFacts(userID: String, label: UILabel) {
         User.get(withID: userID) { (user) in
             let (text, numberOfLines) = ExternalLogic.getFactsLabelTextAndNumberOfLines(age: user.age, city: user.city, school: user.school)
             label.text = text
             label.numberOfLines = numberOfLines
+        }
+    }
+    
+    /// set the about me label to display a summary about the user
+    func setAboutMe(userID: String, label: UILabel) {
+        User.get(withID: userID) { (user) in
+            if let aboutMe = user.aboutMe {
+                label.text = aboutMe
+            }
         }
     }
     
