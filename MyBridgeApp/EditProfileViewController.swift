@@ -33,9 +33,6 @@ class EditProfileViewController: UIViewController {
         view.backgroundColor = UIColor.white
         
         view.setNeedsUpdateConstraints()
-        
-        let editProfileBackend = EditProfileBackend()
-        editProfileBackend.setQuickUpdate(textView: layout.table.aboutMeTextView)
     }
     
     override func updateViewConstraints() {

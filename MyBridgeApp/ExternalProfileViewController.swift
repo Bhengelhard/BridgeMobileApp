@@ -50,21 +50,20 @@ class ExternalProfileViewController: UIViewController {
     }
     
     // MARK: - Setters
+    
+    /// set user ID and get user's pictures
     func setUserID(userID: String?) {
         self.userID = userID
         
         if let userID = userID {
-            User.get(withID: userID) { (user) in
-                var images = [UIImage]()
-                Picture.getAll(withUser: user, withBlock: { (pictures) in
-                    for picture in pictures {
-                        if let image = picture.image {
-                            images.append(image)
-                        }
+            let externalBackend = ExternalBackend()
+            externalBackend.setPictures(userID: userID) { (pictures) in
+                for i in 0..<pictures.count {
+                    let picture = pictures[i]
+                    picture.getImage { (image) in
+                        self.layout.profilePicturesVC.addImage(image: image)
                     }
-                    print("!")
-                    self.layout.profilePicturesView.setImages(images: images)
-                })
+                }
             }
         }
     }

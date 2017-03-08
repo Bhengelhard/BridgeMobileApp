@@ -6,16 +6,16 @@
 //  Copyright © 2017 Parse. All rights reserved.
 //
 
-import UIKit
-
 class EditProfileBackend {
     
-    func setQuickUpdate(textView: UITextView) {
-        print("2")
+    func setPictures(withBlock block: Picture.PicturesBlock? = nil) {
         User.getCurrent { (user) in
-            if let quickUpdate = user.quickUpdate {
-                textView.text = quickUpdate
+            Picture.getAll(withUser: user) { (pictures) in
+                if let block = block {
+                    block(pictures)
+                }
             }
         }
     }
+    
 }

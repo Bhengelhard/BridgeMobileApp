@@ -11,6 +11,7 @@ import UIKit
 
 class HalfSwipeCard: UIView {
     var photo: UIImage?
+    let photoView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,42 +25,24 @@ class HalfSwipeCard: UIView {
         self.init(frame: CGRect.zero)
     }
     
-    func initialize(name: String, status: String, photoURL: String!, connectionType: String) {
+    func initialize(name: String) {
         self.layer.masksToBounds = true
         self.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
-        
-        //download Photo from URL
-        let photoView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
-        let downloader = Downloader()
-        if let photoURL = photoURL {
-            if let URL = URL(string: photoURL) {
-                downloader.imageFromURL(URL: URL, imageView: photoView, callBack: callbackToSetPhoto)
-            }
-        }
-        
-        layoutHalfCard(name: name, status: status, photoView: photoView, connectionType: connectionType)
+    
+        layoutHalfCard(name: name)
 
     }
     
     func setImage(image: UIImage) {
-        let photoView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
         photoView.image = image
-        self.addSubview(photoView)
     }
     
-    func layoutHalfCard(name: String, status: String, photoView: UIImageView, connectionType: String) {
-        self.addSubview(photoView)
+    func layoutHalfCard(name: String) {
+        addSubview(photoView)
+        photoView.autoPinEdgesToSuperviewEdges()
         
-        let connectionTypeIcon = UIImageView(frame: CGRect(x: 0.0257*self.frame.width, y: 0.68*self.frame.height, width: 0.081862*self.frame.width, height: 0.081862*self.frame.width))
-        let typeImageName = "\(connectionType)_Card_Icon"
-        connectionTypeIcon.image = UIImage(named: typeImageName)
-        connectionTypeIcon.layer.shadowOpacity = 0.5
-        connectionTypeIcon.layer.shadowRadius = 1
-        connectionTypeIcon.layer.shadowColor = UIColor.black.cgColor
-        connectionTypeIcon.layer.shadowOffset = CGSize(width: 1, height: 1)
-        self.addSubview(connectionTypeIcon)
-        
-        let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
+        let nameLabel = UILabel()
+        //let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
         nameLabel.text = DisplayUtility.firstNameLastNameInitial(name: name)
         nameLabel.textColor = UIColor.white
         nameLabel.font = UIFont(name: "BentonSans-Bold", size: 22)
@@ -70,26 +53,12 @@ class HalfSwipeCard: UIView {
         nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
         self.addSubview(nameLabel)
         
-        if status != "" {
-            //Setting StatusTextView with transparent background (not text) and height of status text
-            let statusTextView = UITextView(frame: CGRect(x: 0, y: connectionTypeIcon.frame.origin.y + connectionTypeIcon.frame.height, width: self.frame.width, height: 0.08*self.frame.height)) // this height needs to change based on text input
-            let displayUtility = DisplayUtility()
-            statusTextView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
-            statusTextView.textContainer.maximumNumberOfLines = 2
-            statusTextView.font = UIFont(name: "BentonSans-Light", size: 15)
-            statusTextView.textColor = UIColor.white
-            statusTextView.textAlignment = NSTextAlignment.center
-            statusTextView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4)
-            statusTextView.isUserInteractionEnabled = false
-            statusTextView.text = status
-            displayUtility.setViewHeightFromContent(view: statusTextView)
-            self.addSubview(statusTextView)
-        } else {
-            connectionTypeIcon.frame.origin.y = 0.83*self.frame.height
-        }
-        
         // Setting origin y value of nameLabel based on placement of connectionTypeIcon which is based on whether there is a status
-        nameLabel.center.y = connectionTypeIcon.center.y
+        //nameLabel.center.y = 0.83*self.frame.height
+        nameLabel.sizeToFit()
+        nameLabel.autoSetDimensions(to: nameLabel.frame.size)
+        nameLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: 10)
+        nameLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 10)
 
     }
     

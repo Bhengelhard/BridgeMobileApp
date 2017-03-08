@@ -6,8 +6,8 @@
 //  Copyright © 2017 Parse. All rights reserved.
 //
 
-enum Gender {
-    case male
-    case female
-    case other
+enum Gender: String {
+    case male = "Male"
+    case female = "Female"
+    case other = "Other"
 }

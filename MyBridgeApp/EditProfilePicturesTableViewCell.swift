@@ -37,7 +37,6 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
             
             addSubview(numberImageView)
             if let numberImage = UIImage(named: "Photo_Label_\(number)") {
-                print("got number image")
                 numberImageView.image = numberImage
                 // set size of number image view not to exceed max size in either direction
                 let numberImageWToHRatio = numberImage.size.width / numberImage.size.height
@@ -47,10 +46,9 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
                 } else { // height > width
                     size = CGSize(width: numberMaxSideLength * numberImageWToHRatio, height: numberMaxSideLength)
                 }
-                print("size = \(size)")
                 numberImageView.autoSetDimensions(to: size)
-                numberImageView.autoPinEdge(toSuperviewEdge: .top, withInset: 5)
-                numberImageView.autoPinEdge(toSuperviewEdge: .leading, withInset: 5)
+                numberImageView.autoPinEdge(toSuperviewEdge: .top, withInset: 10)
+                numberImageView.autoPinEdge(toSuperviewEdge: .leading, withInset: 10)
             }
             
             addSubview(pictureButton)
@@ -115,7 +113,7 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
         
         let cornerRadius = 30.0/449.0 * largeSideLength
         
-        let numberMaxSideLength = 46.0/449.0 * largeSideLength
+        let numberMaxSideLength = 41.0/449.0 * largeSideLength
         
         let pictureButtonDiameter = 69.0/449.0 * largeSideLength
         
@@ -160,6 +158,8 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
     func setImage(image: UIImage, atIndex index: Int) {
         if index < pictureBoxes.count {
             pictureBoxes[index].setImage(image: image)
+            pictureBoxes[index].pictureButton.removeTarget(self, action: #selector(showAddImageMenu(_:)), for: .touchUpInside)
+            pictureBoxes[index].pictureButton.addTarget(self, action: #selector(showDeleteImageMenu(_:)), for: .touchUpInside)
         }
     }
     

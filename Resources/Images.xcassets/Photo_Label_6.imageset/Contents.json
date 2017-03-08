@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Photo_Label_6.png",
+      "filename" : "PhotoLabel6.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Photo_Label_6@2x.png",
+      "filename" : "PhotoLabel6@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Photo_Label_6@3x.png",
+      "filename" : "PhotoLabel6@3x.png",
       "scale" : "3x"
     }
   ],

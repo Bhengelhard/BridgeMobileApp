@@ -89,7 +89,7 @@ class AcceptIgnoreView: UIView {
         profilePicShape.path = photoMaskPath.cgPath
         profilePicView.layer.mask = profilePicShape
         
-        halfCard.layoutHalfCard(name: name, status: newMatch.status, photoView: profilePicView, connectionType: newMatch.type)
+        halfCard.layoutHalfCard(name: name)
         //addSubview(halfCard)
         
         let cardBackground = UIView()

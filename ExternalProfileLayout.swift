@@ -15,7 +15,7 @@ class ExternalProfileLayout {
     let contentView = UIView.newAutoLayout()
     let dismissButton = ExternalProfileObjects.DismissButton()
     let reportButton = ExternalProfileObjects.ReportButton()
-    let profilePicturesView = ExternalProfileObjects.ProfilePicturesPageViewController()
+    let profilePicturesVC = ExternalProfileObjects.ProfilePicturesPageViewController()
     let profilePictures = [ExternalProfileObjects.Image()]
     let name = ExternalProfileObjects.Name()
     let factLabel = ExternalProfileObjects.FactLabel()
@@ -27,7 +27,6 @@ class ExternalProfileLayout {
     // MARK: - Layout
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
-        
         if (!didSetupConstraints) {
             
             // Setting the space between objects
@@ -46,17 +45,17 @@ class ExternalProfileLayout {
             contentView.backgroundColor = UIColor.clear
             
             // Set the profilePicturesView with the first picture displayed
-            scrollView.addSubview(profilePicturesView.view)
-            profilePicturesView.view.autoPinEdge(toSuperviewEdge: .left)
-            profilePicturesView.view.autoPinEdge(toSuperviewEdge: .top)
-            profilePicturesView.view.autoMatch(.width, to: .width, of: view)
-            profilePicturesView.view.autoMatch(.height, to: .width, of: view)
+            scrollView.addSubview(profilePicturesVC.view)
+            profilePicturesVC.view.autoPinEdge(toSuperviewEdge: .left)
+            profilePicturesVC.view.autoPinEdge(toSuperviewEdge: .top)
+            profilePicturesVC.view.autoMatch(.width, to: .width, of: view)
+            profilePicturesVC.view.autoMatch(.height, to: .width, of: view)
             
             /// Diameter of the dismissButton and reportButton
             let diameter:CGFloat = 29
             
             // Set the dismissButton to the top left above the profilePicturesView
-            scrollView.insertSubview(dismissButton, aboveSubview: profilePicturesView.view)
+            scrollView.insertSubview(dismissButton, aboveSubview: profilePicturesVC.view)
             dismissButton.autoPinEdge(toSuperviewEdge: .top, withInset: 2*buffer)
             dismissButton.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
             dismissButton.autoSetDimensions(to: CGSize(width: diameter, height: diameter))
@@ -64,7 +63,7 @@ class ExternalProfileLayout {
             dismissButton.backgroundColor = UIColor.green
             
             // Set the reportButton to display in the top right above the profilePicturesView
-            scrollView.insertSubview(reportButton, aboveSubview: profilePicturesView.view)
+            scrollView.insertSubview(reportButton, aboveSubview: profilePicturesVC.view)
             reportButton.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
             reportButton.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
             reportButton.autoSetDimensions(to: CGSize(width: diameter, height: diameter))
@@ -72,13 +71,13 @@ class ExternalProfileLayout {
             reportButton.backgroundColor = UIColor.blue
             
             // Set the pageControl of the profilePicturesPageViewController
-            profilePicturesView.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
-            profilePicturesView.pageControl.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
+            profilePicturesVC.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
+            profilePicturesVC.pageControl.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
             
             // Set the name below the profilePicturesView
             scrollView.addSubview(name)
             name.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
-            name.autoPinEdge(.top, to: .bottom, of: profilePicturesView.view, withOffset: buffer)
+            name.autoPinEdge(.top, to: .bottom, of: profilePicturesVC.view, withOffset: buffer)
             
             // Set the multi-line factsLabel below the name
             scrollView.addSubview(factLabel)
