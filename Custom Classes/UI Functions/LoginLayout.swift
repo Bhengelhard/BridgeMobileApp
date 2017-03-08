@@ -67,11 +67,6 @@ class LoginLayout {
             transgradientView.autoPinEdge(toSuperviewEdge: .right)
             transgradientView.autoPinEdge(toSuperviewEdge: .bottom)
             
-            let testNumber = UIImageView()
-            testNumber.image = #imageLiteral(resourceName: "Image")
-            view.addSubview(testNumber)
-            testNumber.autoCenterInSuperview()
-            
             // MARK: Add Targets
             fbLoginButton.addTarget(self, action: #selector(fbLoginButtonTapped(_:)), for: .touchUpInside)
            
