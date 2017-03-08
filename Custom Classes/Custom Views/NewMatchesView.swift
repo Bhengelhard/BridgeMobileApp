@@ -28,7 +28,8 @@ class NewMatchesView: UIScrollView {
         line = UIView()
         gradientLayer = DisplayUtility.gradientLayer()
         newMatchesTitle = UILabel()
-        super.init(frame: frameWithNoMatches)
+        //super.init(frame: frameWithNoMatches)
+        super.init(frame: CGRect())
         contentSize = frame.size
         line.backgroundColor = .clear
         line.layer.insertSublayer(gradientLayer, at: 0)
@@ -153,7 +154,7 @@ class NewMatchesView: UIScrollView {
     }
     
     func layoutUser(user: User, position: Int) {
-        frame = frameWithMatches
+        //frame = frameWithMatches
         contentSize = CGSize(width: max(DisplayUtility.screenWidth, CGFloat(position+1)*0.2243*DisplayUtility.screenWidth), height: 0.17*DisplayUtility.screenHeight)
         line.frame = CGRect(x: 0.0463*frame.width, y: 0.99*frame.height, width: 0.9205*contentSize.width, height: 1)
         gradientLayer.frame = line.bounds

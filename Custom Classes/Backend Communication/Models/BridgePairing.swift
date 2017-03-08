@@ -284,7 +284,7 @@ class BridgePairing: NSObject, NSCoding {
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             if bridgedOnly {
-                query.whereKey("bridges", equalTo: true)
+                query.whereKey("bridged", equalTo: true)
             }
             query.limit = limit
             
