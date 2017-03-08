@@ -93,9 +93,10 @@ class ReusableObjects {
                 if currIndex + 1 < arrayOfVCs.count {
                     return arrayOfVCs[currIndex + 1]
                 }
-                else if startingIndex == 0 {
-                    return arrayOfVCs.first
-                }
+                // Move to beginning of arrayOfVCs
+//                else if startingIndex == 0 {
+//                    return arrayOfVCs.first
+//                }
             }
             
             return nil
@@ -107,9 +108,10 @@ class ReusableObjects {
                 if currIndex - 1 >= 0 {
                     return arrayOfVCs[currIndex - 1]
                 }
-                else if startingIndex == 0 {
-                    return arrayOfVCs.last
-                }
+                // Move to end of arrayOfVCs
+//                else if startingIndex == 0 {
+//                    return arrayOfVCs.last
+//                }
             }
             return nil
         }

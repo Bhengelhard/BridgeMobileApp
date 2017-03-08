@@ -73,7 +73,7 @@ class LoginObjects {
             imageView.autoAlignAxis(.vertical, toSameAxisOf: view)
             imageView.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: -30)
             imageView.autoPinEdge(.top, to: .bottom, of: label, withOffset: 20)
-            imageView.autoMatch(.width, to: .height, of: imageView, withMultiplier: 0.9)
+            imageView.autoMatch(.width, to: .height, of: imageView, withMultiplier: 0.75)
 
         }
         
