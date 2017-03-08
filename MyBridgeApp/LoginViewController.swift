@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 /// The LoginViewController class defines the authentification and loggin process
 class LoginViewController: UIViewController {
@@ -25,7 +26,9 @@ class LoginViewController: UIViewController {
         
         layout.seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped(_:)), for: .touchUpInside)
         layout.fbLoginButton.addTarget(self, action: #selector(loginWithFB(_:)), for: .touchUpInside)
-                
+        
+        authenticateUser()
+        
     }
     
     override func loadView() {
@@ -53,6 +56,27 @@ class LoginViewController: UIViewController {
     func loginWithFB(_ sender: UIButton) {
         let fbLogin = FBLogin()
         fbLogin.initialize(vc: self)
+    }
+    
+    // MARK: - Backend Functions
+    // Update Facebook Friends and Return whether user is SignedIn
+    func authenticateUser() {
+        print("authenticating User")
+        
+        //Checking if user is already logged in
+        PFUser.current()?.fetchInBackground(block: { (object, error) in
+            //Updating the user's friends
+            let fbFunctions = FacebookFunctions()
+            fbFunctions.updateFacebookFriends()
+            
+            if (PFUser.current()!.objectId) != nil {
+                print("returning true")
+                self.performSegue(withIdentifier: "showSwipe", sender: self)
+            }
+            else {
+                print("returning false")
+            }
+        })
     }
 
     // MARK: - Navigation

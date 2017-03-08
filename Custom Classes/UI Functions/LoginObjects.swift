@@ -57,7 +57,7 @@ class LoginObjects {
             // initializing the title label
             label.text = text
             label.font = Constants.Fonts.bold24
-            label.textColor = UIColor.lightGray
+            label.textColor = Constants.Colors.necter.textGray
             label.numberOfLines = 2
             label.textAlignment = NSTextAlignment.center
             
@@ -93,21 +93,12 @@ class LoginObjects {
         init() {
             super.init(frame: CGRect())
             
-            //self.textColor = UIColor.black
-            
-//            let attributedString = NSMutableAttributedString(string: "String with a link", attributes: nil)
-//            let linkRange = NSRange(location: 14, length: 4)
-//            // for the word "link" in the string above
-//            let linkAttributes: [String: Any] = [NSForegroundColorAttributeName: UIColor(red: CGFloat(0.05), green: CGFloat(0.4), blue: CGFloat(0.65), alpha: CGFloat(1.0)), NSUnderlineStyleAttributeName: (NSUnderlineStyle.styleSingle)]
-//            attributedString.setAttributes(linkAttributes, range: linkRange)
-//            // Assign attributedText to UILabel
-//            self.attributedText = attributedString
-//
-            
             self.text = "No need to get sour! We don't post to Facebook.\nBy signing in, you agree to our Terms of Service."
-            self.numberOfLines = 2
+            self.textColor = Constants.Colors.necter.textGray
             self.textAlignment = NSTextAlignment.center
+            self.numberOfLines = 0
             self.font = Constants.Fonts.light14
+            
         }
         
         required init?(coder aDecoder: NSCoder) {

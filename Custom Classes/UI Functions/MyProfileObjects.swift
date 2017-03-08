@@ -16,7 +16,7 @@ class MyProfileObjects {
             super.init()
             
             // Setting Navigation Items
-            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar_Inactive")
             rightButton.setImage(rightIcon, for: .normal)
             
             let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")

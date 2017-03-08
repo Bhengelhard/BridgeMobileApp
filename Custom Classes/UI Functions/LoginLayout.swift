@@ -42,17 +42,16 @@ class LoginLayout {
 
             // Layout the fbLoginButton below the tutorialsViewController to the bottom with 80pt inset and dimensions of 300x40
             view.addSubview(fbLoginButton)
-            fbLoginButton.autoSetDimensions(to: CGSize(width: 250, height: 42.5))
+            fbLoginButton.autoSetDimensions(to: fbLoginButton.size)
             fbLoginButton.autoAlignAxis(toSuperviewAxis: .vertical)
-            fbLoginButton.autoPinEdge(.top, to: .bottom, of: tutorialsView, withOffset: 35)
+            fbLoginButton.autoPinEdge(.top, to: .bottom, of: tutorialsView, withOffset: 20)
             
             // Layout Objects Pinned to the Bottom
             // Layout the loginInformation Label just above the seeMoreButton to tell the user about necter's facebook posting policy and terms of service
             view.addSubview(loginInformationLabel)
             loginInformationLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
             loginInformationLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
-            loginInformationLabel.autoSetDimension(.height, toSize: 63.7/2)
-            loginInformationLabel.autoPinEdge(.top, to: .bottom, of: fbLoginButton, withOffset: 35)
+            loginInformationLabel.autoPinEdge(.top, to: .bottom, of: fbLoginButton, withOffset: 20)
             
             // Layout the seemMoreButton pinned just above the bottom of the ViewController
             view.addSubview(seeMoreButton)

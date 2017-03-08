@@ -13,15 +13,13 @@ class ReusableObjects {
     /// FBLoginButton is UIButton allowing user to log into the necter app using Facebook authentication
     class FBLoginButton: UIButton  {
         
+        let size = CGSize(width: 250, height: 42.5)
+        
         init() {
             super.init(frame: CGRect())
             
-            self.setTitle("CONNECT WITH FACEBOOK", for: .normal)
-            self.setTitleColor(UIColor.white, for: .normal)
-            self.setTitleColor(DisplayUtility.gradientColor(size: (self.titleLabel?.frame.size)!), for: .highlighted)
-            self.titleLabel?.font = Constants.Fonts.bold16
-            self.backgroundColor = UIColor(red: 66.0/255.0, green: 103.0/255.0, blue: 178.0/255.0, alpha: 1)
-            self.layer.cornerRadius = 12
+            self.setImage(#imageLiteral(resourceName: "FB_Login_Button"), for: .normal)
+            
         }
         
         required init?(coder aDecoder: NSCoder) {

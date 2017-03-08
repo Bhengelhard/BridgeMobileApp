@@ -37,13 +37,6 @@ class MyProfileLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
-//            // Layout the profilePictureBackground with the Profile Faded Hexagon Image
-//            view.addSubview(profilePictureBackground)
-//            profilePictureBackground.autoPinEdge(.top, to: .bottom, of: navBar)
-//            profilePictureBackground.autoPinEdge(.left, to: .left, of: view)
-//            profilePictureBackground.autoMatch(.width, to: .width, of: view)
-//            profilePictureBackground.autoMatch(.height, to: .width, of: profilePictureBackground)
-            
             // Layout the profilePicture with the current User's profile Picture
             view.addSubview(profilePicture)
             profilePicture.autoAlignAxis(.vertical, toSameAxisOf: view)
@@ -59,12 +52,6 @@ class MyProfileLayout {
             editProfileButton.autoPinEdge(.right, to: .right, of: profilePicture)
             editProfileButton.autoSetDimensions(to: CGSize(width: 70, height: 70))
             
-//            // Layout reputationScore below the profilePicture with the user's score
-//            view.addSubview(reputationScore)
-//            reputationScore.autoAlignAxis(.vertical, toSameAxisOf: view)
-//            reputationScore.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 8)
-//            reputationScore.autoSetDimensions(to: CGSize(width: 40, height: 40))
-//            
             // Layout reputationText below the reputationScore
             view.addSubview(name)
             name.autoAlignAxis(.vertical, toSameAxisOf: view)
@@ -84,7 +71,7 @@ class MyProfileLayout {
             // Layout inviteButton to center of the friendsImage
             view.addSubview(inviteButton)
             inviteButton.autoAlignAxis(.horizontal, toSameAxisOf: friendsImage)
-            inviteButton.autoAlignAxis(.vertical, toSameAxisOf: friendsImage)
+            inviteButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
             
         }

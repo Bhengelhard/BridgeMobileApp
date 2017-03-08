@@ -174,7 +174,7 @@ class SettingsObjects {
         var logoutButton = UIButton()
         var termsOfServiceButton = UIButton()
         let dividerLine = UIView()
-        let buttonSize = CGSize(width: 125, height: 35)
+        let buttonSize = CGSize(width: 130, height: 35)
         
         init() {
             super.init(style: .subtitle, reuseIdentifier: "MyNecterTableCell")
@@ -188,25 +188,36 @@ class SettingsObjects {
             setUpButton(button: logoutButton, text: "LOGOUT")
             setUpButton(button: termsOfServiceButton, text: "TERMS")
             
+            // Initialize divider
+            dividerLine.backgroundColor = Constants.Colors.necter.backgroundGray
+            
             // Layout buttons
+            let buffer: CGFloat = 20
+            
             self.addSubview(feedbackButton)
-            feedbackButton.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            feedbackButton.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
             feedbackButton.autoPinEdge(toSuperviewEdge: .top, withInset: 10)
             feedbackButton.autoSetDimensions(to: buttonSize)
             
             self.addSubview(privacyButton)
-            privacyButton.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
+            privacyButton.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
             privacyButton.autoPinEdge(toSuperviewEdge: .top, withInset: 10)
             privacyButton.autoSetDimensions(to: buttonSize)
             
+            self.addSubview(dividerLine)
+            dividerLine.autoPinEdge(.top, to: .bottom, of: feedbackButton, withOffset: buffer)
+            dividerLine.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
+            dividerLine.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
+            dividerLine.autoSetDimension(.height, toSize: 1)
+            
             self.addSubview(logoutButton)
             logoutButton.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
-            logoutButton.autoPinEdge(.top, to: .bottom, of: feedbackButton, withOffset: 20)
+            logoutButton.autoPinEdge(.top, to: .bottom, of: dividerLine, withOffset: buffer)
             logoutButton.autoSetDimensions(to: buttonSize)
             
             self.addSubview(termsOfServiceButton)
             termsOfServiceButton.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
-            termsOfServiceButton.autoPinEdge(.top, to: .bottom, of: privacyButton, withOffset: 20)
+            termsOfServiceButton.autoPinEdge(.top, to: .bottom, of: dividerLine, withOffset: buffer)
             termsOfServiceButton.autoSetDimensions(to: buttonSize)
             
             
