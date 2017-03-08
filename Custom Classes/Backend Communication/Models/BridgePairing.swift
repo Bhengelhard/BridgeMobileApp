@@ -650,3 +650,87 @@ class BridgePairing: NSObject, NSCoding {
     }
     
 }
+
+class LocalBridgePairings {
+    
+    // MARK: - Global Variables
+    /// Indicates whether the user has entered an access code
+    var bridgePairing1: BridgePairing? = nil
+    var bridgePairing2: BridgePairing? = nil
+    
+    // MARK: -
+    init(){
+        let userDefaults = UserDefaults.standard
+        if let decoded = userDefaults.object(forKey: "userInfo") {
+            if let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded as! Data) {
+                bridgePairing1 = (bridgePairings as! BridgePairings).bridgePairing1
+                bridgePairing2 = (bridgePairings as! BridgePairings).bridgePairing2
+            }
+        }    }
+    
+    // MARK: - Set and Get Functions
+    
+    //Saving bridgePairing 1
+    func setBridgePairing1(_ bridgePairing1: BridgePairing) {
+        self.bridgePairing1 = bridgePairing1
+    }
+    func getBridgePairing1() -> BridgePairing? {
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "bridgePairings"){
+            let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
+            let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
+            return bridgePairings.bridgePairing1
+        }
+        else{
+            return nil
+        }
+    }
+    
+    //Saving bridgePairing 2
+    func setBridgePairing2(_ bridgePairing1: BridgePairing) {
+        self.bridgePairing2 = bridgePairing1
+    }
+    func getBridgePairing2() -> BridgePairing? {
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "bridgePairings"){
+            let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
+            let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
+            return bridgePairings.bridgePairing2
+        }
+        else{
+            return nil
+        }
+    }
+    
+    // MARK: -
+    // This function saves the local data to the device
+    func synchronize(){
+        let bridgePairings: BridgePairings = BridgePairings(bridgePairing1: bridgePairing1, bridgePairing2: bridgePairing2)
+        let userDefaults = UserDefaults.standard
+        let encodedData = NSKeyedArchiver.archivedData(withRootObject: bridgePairings)
+        userDefaults.set(encodedData, forKey: "bridgePairings")
+        userDefaults.synchronize()
+    }
+    
+}
+
+class BridgePairings:NSObject, NSCoding {
+    var bridgePairing1: BridgePairing? = nil
+    var bridgePairing2: BridgePairing? = nil
+    
+    init(bridgePairing1: BridgePairing?, bridgePairing2: BridgePairing?) {
+        self.bridgePairing1 = bridgePairing1
+        self.bridgePairing2 = bridgePairing2
+    }
+    
+    required convenience init(coder aDecoder: NSCoder) {
+        let bridgePairing1 = aDecoder.decodeObject(forKey: "bridgePairing1") as! BridgePairing?
+        let bridgePairing2 = aDecoder.decodeObject(forKey: "bridgePairing2") as! BridgePairing?
+        self.init(bridgePairing1: bridgePairing1, bridgePairing2: bridgePairing2)
+    }
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(bridgePairing1, forKey: "bridgePairing1")
+        aCoder.encode(bridgePairing2, forKey: "bridgePairing2")
+    }
+    
+}
