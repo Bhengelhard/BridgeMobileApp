@@ -49,8 +49,8 @@ class LoginLayout {
             // Layout Objects Pinned to the Bottom
             // Layout the loginInformation Label just above the seeMoreButton to tell the user about necter's facebook posting policy and terms of service
             view.addSubview(loginInformationLabel)
-            loginInformationLabel.autoAlignAxis(.vertical, toSameAxisOf: view)
-            loginInformationLabel.autoMatch(.width, to: .width, of: view)
+            loginInformationLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            loginInformationLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
             loginInformationLabel.autoSetDimension(.height, toSize: 63.7/2)
             loginInformationLabel.autoPinEdge(.top, to: .bottom, of: fbLoginButton, withOffset: 35)
             
@@ -66,6 +66,11 @@ class LoginLayout {
             transgradientView.autoPinEdge(toSuperviewEdge: .left)
             transgradientView.autoPinEdge(toSuperviewEdge: .right)
             transgradientView.autoPinEdge(toSuperviewEdge: .bottom)
+            
+            let testNumber = UIImageView()
+            testNumber.image = #imageLiteral(resourceName: "Image")
+            view.addSubview(testNumber)
+            testNumber.autoCenterInSuperview()
             
             // MARK: Add Targets
             fbLoginButton.addTarget(self, action: #selector(fbLoginButtonTapped(_:)), for: .touchUpInside)
