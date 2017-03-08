@@ -53,7 +53,8 @@ class MyProfileViewController: UIViewController {
     
     // Present SettingsViewController
     func settingsButtonTapped(_ sender: UIButton) {
-        present(SettingsViewController(), animated: true, completion: nil)
+        performSegue(withIdentifier: "showSettings", sender: self)
+        //present(SettingsViewController(), animated: true, completion: nil)
     }
     
     // Present ExternalUserViewController
@@ -87,13 +88,13 @@ class MyProfileViewController: UIViewController {
     
     
     // MARK: - Navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let vc = segue.destination
-//        let mirror = Mirror(reflecting: vc)
-//        if mirror.subjectType == LoginViewController.self {
-//            self.transitionManager.animationDirection = "Bottom"
-//        }
-//        //vc.transitioningDelegate = self.transitionManager
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == SettingsViewController.self {
+            self.transitionManager.animationDirection = "top"
+        }
+        //vc.transitioningDelegate = self.transitionManager
+    }
 
 }

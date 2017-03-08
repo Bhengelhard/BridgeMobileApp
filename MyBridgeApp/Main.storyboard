@@ -55,12 +55,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9ld-lD-Zsd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-226" y="-2785"/>
+            <point key="canvasLocation" x="-34" y="-2785"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="SgD-tP-9oW">
             <objects>
-                <viewController id="Qv3-Na-w7J" customClass="LoginViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Qv3-Na-w7J" customClass="LoginViewController" customModule="MyBridgeApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HNo-fJ-WZG"/>
                         <viewControllerLayoutGuide type="bottom" id="lAO-fO-gnn"/>
@@ -197,11 +197,12 @@
                     </view>
                     <connections>
                         <segue destination="pCC-By-oJn" kind="show" identifier="showMyProfile" id="IIS-vx-IFZ"/>
+                        <segue destination="Qv3-Na-w7J" kind="show" identifier="showLogin" id="biK-0B-uC4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="roL-XG-ohh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2250" y="449"/>
+            <point key="canvasLocation" x="-2250" y="262"/>
         </scene>
         <!--Thread View Controller-->
         <scene sceneID="57B-UR-Tv1">
@@ -346,11 +347,12 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="0Mi-wm-mTu"/>
+        <segue reference="IIS-vx-IFZ"/>
         <segue reference="ORi-q2-txU"/>
         <segue reference="KhQ-jD-w9H"/>
         <segue reference="OnA-y9-bUb"/>
         <segue reference="0Jc-ZY-MLe"/>
-        <segue reference="JfE-Ru-J2n"/>
+        <segue reference="f6C-jp-D3w"/>
+        <segue reference="Zf9-Tg-H2E"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -8,17 +8,30 @@
 
 import UIKit
 
-class WebPrivacyPolicyViewController: UIViewController {
+class WebViewController: UIViewController {
 
     // Mark: - Global Variables
     var didSetupConstraints = false
     let webView = UIWebView()
     let navBar = NecterNavigationBar()
+    let urlString: String
+    let titleString: String
+    
+    init(title: String, url: String) {
+        self.titleString = title
+        self.urlString = url
+        super.init(nibName: nil, bundle: nil)
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let url: URL = NSURL(string: "http://www.necter.social/privacypolicy") as! URL
+        let url: URL = NSURL(string: urlString) as! URL
         let request: URLRequest = NSURLRequest(url: url) as URLRequest
         webView.loadRequest(request)
 
@@ -37,7 +50,7 @@ class WebPrivacyPolicyViewController: UIViewController {
         navBar.rightButton.sizeToFit()
         let gradientColor = DisplayUtility.gradientColor(size: navBar.rightButton.frame.size)
         navBar.rightButton.setTitleColor(gradientColor, for: .normal)
-        navBar.navItem.title = "Privacy Policy"
+        navBar.navItem.title = titleString
         navBar.rightButton.addTarget(self, action: #selector(doneTapped(_:)), for: .touchUpInside)
         
         view.setNeedsUpdateConstraints()

@@ -43,6 +43,8 @@ class SettingsLayout {
             table.autoPinEdge(toSuperviewEdge: .left)
             table.autoPinEdge(toSuperviewEdge: .right)
             
+            table.separatorStyle = .none
+            
         }
         
         return true

@@ -35,12 +35,12 @@ class SettingsObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.backgroundColor = UIColor.lightGray
+            self.backgroundColor = UIColor.white
 
             label.text = "WWW.NECTER.SOCIAL"
-            //label.textColor = UIColor.orange
             label.sizeToFit()
             label.font = Constants.Fonts.bold16
+            label.textColor = Constants.Colors.necter.textGray
             
             addSubview(label)
         }
@@ -58,8 +58,11 @@ class SettingsObjects {
             delegate = self
             dataSource = self
             
-            self.separatorStyle = .none
             self.isScrollEnabled = false
+            
+            self.estimatedRowHeight = 100
+            self.rowHeight = UITableViewAutomaticDimension
+
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -73,7 +76,7 @@ class SettingsObjects {
         }
          
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return 5
+            return 4
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -90,11 +93,7 @@ class SettingsObjects {
                 cell = GrayTableCell(text: "My Necter")
                 
             } else if indexPath.row == 3 {
-                cell = WhiteTableCell(text: "Feedback")
-                
-            } else if indexPath.row == 4 {
-                
-                cell = WhiteTableCell(text: "Logout")
+                cell = MyNecterTableCell()
             }
             
             return cell
@@ -102,7 +101,13 @@ class SettingsObjects {
         }
         
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 50
+            
+            if indexPath.row == 3 {
+                return 150
+            } else {
+                return 50
+            }
+            
         }
         
     }
@@ -115,6 +120,7 @@ class SettingsObjects {
             self.textLabel?.text = text
             self.textLabel?.font = Constants.Fonts.bold16
             self.backgroundColor = Constants.Colors.necter.backgroundGray
+            self.isUserInteractionEnabled = false
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -128,11 +134,12 @@ class SettingsObjects {
         let checkmarkButton = UIButton()
         
         init(text: String) {
-            super.init(style: .subtitle, reuseIdentifier: "GrayTableCell")
+            super.init(style: .subtitle, reuseIdentifier: "WhiteTableCell")
             
             self.textLabel?.text = text
             self.textLabel?.font = Constants.Fonts.light18
             self.backgroundColor = UIColor.white
+            self.selectionStyle = .none
             
             checkmarkButton.setImage(#imageLiteral(resourceName: "Gradient_Checkmark_Circle_Unselected"), for: .normal)
             checkmarkButton.setImage(#imageLiteral(resourceName: "Gradient_Checkmark_Circle_Selected"), for: .selected)
@@ -142,7 +149,7 @@ class SettingsObjects {
             addSubview(checkmarkButton)
             checkmarkButton.autoAlignAxis(toSuperviewAxis: .horizontal)
             checkmarkButton.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
-            checkmarkButton.autoSetDimensions(to: CGSize(width: 40, height: 40))
+            checkmarkButton.autoSetDimensions(to: CGSize(width: 60, height: 60))
             
         }
         
@@ -156,6 +163,104 @@ class SettingsObjects {
             } else {
                 checkmarkButton.isSelected = true
             }
+        }
+        
+    }
+    
+    class MyNecterTableCell: UITableViewCell {
+        
+        var feedbackButton = UIButton()
+        var privacyButton = UIButton()
+        var logoutButton = UIButton()
+        var termsOfServiceButton = UIButton()
+        let dividerLine = UIView()
+        let buttonSize = CGSize(width: 125, height: 35)
+        
+        init() {
+            super.init(style: .subtitle, reuseIdentifier: "MyNecterTableCell")
+            
+            self.backgroundColor = UIColor.white
+            self.selectionStyle = .none
+
+            // Initialize buttons
+            setUpButton(button: feedbackButton, text: "FEEDBACK")
+            setUpButton(button: privacyButton, text: "PRIVACY")
+            setUpButton(button: logoutButton, text: "LOGOUT")
+            setUpButton(button: termsOfServiceButton, text: "TERMS")
+            
+            // Layout buttons
+            self.addSubview(feedbackButton)
+            feedbackButton.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            feedbackButton.autoPinEdge(toSuperviewEdge: .top, withInset: 10)
+            feedbackButton.autoSetDimensions(to: buttonSize)
+            
+            self.addSubview(privacyButton)
+            privacyButton.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
+            privacyButton.autoPinEdge(toSuperviewEdge: .top, withInset: 10)
+            privacyButton.autoSetDimensions(to: buttonSize)
+            
+            self.addSubview(logoutButton)
+            logoutButton.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            logoutButton.autoPinEdge(.top, to: .bottom, of: feedbackButton, withOffset: 20)
+            logoutButton.autoSetDimensions(to: buttonSize)
+            
+            self.addSubview(termsOfServiceButton)
+            termsOfServiceButton.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
+            termsOfServiceButton.autoPinEdge(.top, to: .bottom, of: privacyButton, withOffset: 20)
+            termsOfServiceButton.autoSetDimensions(to: buttonSize)
+            
+            
+            // Add Targets
+            feedbackButton.addTarget(self, action: #selector(feedbackButtonTapped(_:)), for: .touchUpInside)
+            privacyButton.addTarget(self, action: #selector(privacyButtonTapped(_:)), for: .touchUpInside)
+            logoutButton.addTarget(self, action: #selector(logoutButtonTapped(_:)), for: .touchUpInside)
+            termsOfServiceButton.addTarget(self, action: #selector(termsOfServiceButtonTapped(_:)), for: .touchUpInside)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        // Helper Functions
+        func setUpButton(button: UIButton, text: String) {
+            let gradientColor = DisplayUtility.gradientColor(size: buttonSize)
+            button.backgroundColor = gradientColor
+            button.setTitle(text, for: .normal)
+            button.setTitleColor(UIColor.white, for: .normal)
+            button.titleLabel?.font = Constants.Fonts.bold16
+            button.layer.cornerRadius = 12
+        }
+        
+        // Targets
+        func feedbackButtonTapped(_ sender: UIButton) {
+            let subject = "Providing%20Feedback%20for%20the%20necter%20Team"
+            let encodedParams = "subject=\(subject)"
+            let email = "blake@necter.social"
+            let url = NSURL(string: "mailto:\(email)?\(encodedParams)")
+            
+            if UIApplication.shared.canOpenURL(url! as URL) {
+                UIApplication.shared.openURL(url! as URL)
+            } else {
+                // Let the user know if his/her device isn't able to send Emails
+                let errorAlert = UIAlertView(title: "Cannot Send Email", message: "Your device is not able to send emails.", delegate: self, cancelButtonTitle: "OK")
+                errorAlert.show()
+            }
+            
+        }
+        
+        // Notify SettingsViewController to display WebPrivacyViewController
+        func privacyButtonTapped(_ sender: UIButton) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "privacyButtonTapped"), object: nil)
+        }
+        
+        // Notify SettingsViewController to logout
+        func logoutButtonTapped(_ sender: UIButton) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "logoutTapped"), object: nil)
+        }
+        
+        // Notify SettingsViewController to logout
+        func termsOfServiceButtonTapped(_ sender: UIButton) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "termsOfServiceButtonTapped"), object: nil)
         }
         
     }

@@ -45,8 +45,8 @@ class LoginViewController: UIViewController {
     // MARK: - Targets
     /// Segues to PrivacyInformationViewController to show more information about privacy while using the application
     func seeMoreButtonTapped(_ sender: UIButton) {
-        present(PrivacyPolicyViewController(), animated: true, completion: nil)
-        //self.performSegue(withIdentifier: "showPrivacyPolicy", sender: self)
+//        present(PrivacyPolicyViewController(), animated: true, completion: nil)
+        performSegue(withIdentifier: "showPrivacyPolicy", sender: self)
     }
     
     /// Authenticates user through Facebook Login
