@@ -54,6 +54,13 @@ class EditProfileObjects {
     
     class Table: UITableView, UITableViewDelegate, UITableViewDataSource {
         
+        let editProfilePicturesCell = EditProfilePicturesTableViewCell()
+        let aboutMeTableCell = WhiteTextTableCell()
+        let lookingForTableCell = WhiteTextTableCell()
+        let workTableCell = WhiteTableCell()
+        let schoolTableCell = WhiteTableCell()
+        let genderTableCell = WhiteTableCell()
+        
         override init(frame: CGRect, style: UITableViewStyle) {
             super.init(frame: CGRect(), style: .plain)
             
@@ -86,33 +93,40 @@ class EditProfileObjects {
             
             switch(indexPath.row) {
             case 0:
-                cell = EditProfilePicturesTableViewCell()
+                cell = editProfilePicturesCell
             case 1:
                 cell = GrayTableCell(text: "About Me")
             case 2:
-                cell = WhiteTextTableCell(text: "Mobile Design / Wine + Spirits. Looking for some new friends in the local startup world to join me on a new venture!")
+                cell = aboutMeTableCell
+                //cell = WhiteTextTableCell(text: "Mobile Design / Wine + Spirits. Looking for some new friends in the local startup world to join me on a new venture!")
             case 3:
                 cell = GrayTableCell(text: "Looking For")
             case 4:
-                cell = WhiteTextTableCell(text: "Add Something you are Looking For")
+                //cell = WhiteTextTableCell(text: "Add Something you are Looking For")
+                cell = lookingForTableCell
             case 5:
                 cell = GrayTableCell(text: "Current Work")
             case 6:
-                cell = WhiteTableCell(text: "Add Work")
+                //cell = WhiteTableCell(text: "Add Work")
+                cell = workTableCell
             case 7:
                 cell = GrayTableCell(text: "School")
             case 8:
-                cell = WhiteTableCell(text: "Add Work")
+                //cell = WhiteTableCell(text: "Add Work")
+                cell = schoolTableCell
             case 9:
                 cell = GrayTableCell(text: "Gender")
             case 10:
-                cell = WhiteTableCell(text: "Add Gender")
+                //cell = WhiteTableCell(text: "Add Gender")
+                cell = genderTableCell
             case 11:
                 cell = GrayTableCell(text: "Relationship Status")
             case 12:
-                cell = WhiteTableCell(text: "Add Relationship Status")
+                //cell = WhiteTableCell(text: "Add Relationship Status")
+                cell = WhiteTextTableCell()
             default:
-                cell = WhiteTableCell(text: "")
+                //cell = WhiteTableCell(text: "")
+                cell = WhiteTextTableCell()
             }
             
             return cell
@@ -127,6 +141,10 @@ class EditProfileObjects {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "tableViewCellTapped"), object: indexPath.row)
             }
             
+        }
+        
+        func setParentVCOfEditProfilePicturesCell(parentVC: UIViewController) {
+            editProfilePicturesCell.setParentVC(parentVC: parentVC)
         }
     }
     
@@ -150,13 +168,12 @@ class EditProfileObjects {
     
     class WhiteTableCell: UITableViewCell {
         
-        init(text: String) {
-            super.init(style: .subtitle, reuseIdentifier: "GrayTableCell")
+        init() {
+            super.init(style: .subtitle, reuseIdentifier: "WhiteTableCell")
             
-            self.textLabel?.text = text
             self.textLabel?.font = Constants.Fonts.light18
             self.textLabel?.numberOfLines = 0
-            self.textLabel?.textColor = Constants.Colors.necter.textDarkGray
+            self.textLabel?.textColor = .black
             self.backgroundColor = UIColor.white
             
             self.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
@@ -173,7 +190,7 @@ class EditProfileObjects {
         let textView = UITextView()
 
         
-        init(text: String) {
+        init() {
             super.init(style: .subtitle, reuseIdentifier: "GrayTableCell")
             
             
@@ -181,7 +198,6 @@ class EditProfileObjects {
             self.backgroundColor = UIColor.white
             
             textView.delegate = self
-            textView.text = text
             textView.font = Constants.Fonts.light18
             textView.textColor = Constants.Colors.necter.textDarkGray
             textView.isScrollEnabled = false

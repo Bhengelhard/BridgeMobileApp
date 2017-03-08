@@ -27,6 +27,7 @@ class SwipeCard: UIView {
 
         self.frame = swipeCardFrame()
 		self.clipsToBounds = true
+        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -41,9 +42,9 @@ class SwipeCard: UIView {
         
         topHalf = HalfSwipeCard()
         topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
-        topHalf.initialize(name: bridgePairing.user1Name!, status: "", photoURL: "", connectionType: "Business")
+        topHalf.initialize(name: bridgePairing.user1Name!)
         bridgePairing.getUser1Picture { (picture) in
-            if let image = picture.image {
+            picture.getImage { (image) in
                 self.topHalf.setImage(image: image)
             }
         }
@@ -54,11 +55,19 @@ class SwipeCard: UIView {
         topHalfShape.path = maskPath.cgPath
         topHalf.layer.mask = topHalfShape
         
+        bridgePairing.getUser1 { (user) in
+            user.getMainPicture { (picture) in
+                picture.getImage { (image) in
+                    self.topHalf.setImage(image: image)
+                }
+            }
+        }
+        
         bottomHalf = HalfSwipeCard()
         bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
-        bottomHalf.initialize(name: bridgePairing.user2Name!, status: "", photoURL: "", connectionType: "Business")
+        bottomHalf.initialize(name: bridgePairing.user2Name!)
         bridgePairing.getUser2Picture { (picture) in
-            if let image = picture.image {
+            picture.getImage { (image) in
                 self.bottomHalf.setImage(image: image)
             }
         }
@@ -68,6 +77,14 @@ class SwipeCard: UIView {
         let bottomHalfShape = CAShapeLayer()
         bottomHalfShape.path = maskPath2.cgPath
         bottomHalf.layer.mask = bottomHalfShape
+        
+        bridgePairing.getUser2 { (user) in
+            user.getMainPicture { (picture) in
+                picture.getImage { (image) in
+                    self.bottomHalf.setImage(image: image)
+                }
+            }
+        }
         
         self.addSubview(topHalf)
         self.addSubview(bottomHalf)

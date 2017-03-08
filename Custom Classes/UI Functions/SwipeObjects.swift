@@ -42,7 +42,7 @@ class SwipeObjects {
             self.setTitleColor(UIColor.white, for: .normal)
             self.titleLabel?.font = Constants.Fonts.bold24
             self.contentVerticalAlignment = UIControlContentVerticalAlignment.bottom
-            self.layer.cornerRadius = 12
+            self.layer.cornerRadius = 15
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
             
             if text == "NECT" {

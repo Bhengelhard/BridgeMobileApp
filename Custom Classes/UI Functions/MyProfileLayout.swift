@@ -48,14 +48,14 @@ class MyProfileLayout {
             
             // Layout editProfileButton on the bottom right corner of the profilePictureBackground Hexagon
             view.addSubview(editProfileButton)
-            editProfileButton.autoPinEdge(.bottom, to: .bottom, of: profilePicture)
-            editProfileButton.autoPinEdge(.right, to: .right, of: profilePicture)
-            editProfileButton.autoSetDimensions(to: CGSize(width: 70, height: 70))
+            editProfileButton.autoPinEdge(.bottom, to: .bottom, of: profilePicture, withOffset: -20)
+            editProfileButton.autoPinEdge(.right, to: .right, of: profilePicture, withOffset: -7.5)
+            editProfileButton.autoSetDimensions(to: CGSize(width: 40, height: 40))
             
             // Layout reputationText below the reputationScore
             view.addSubview(name)
             name.autoAlignAxis(.vertical, toSameAxisOf: view)
-            name.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 12)
+            name.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 12) 
 
             // Layout settingsButton below the reputationText
             view.addSubview(settingsButton)

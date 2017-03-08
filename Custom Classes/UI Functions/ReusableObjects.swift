@@ -57,29 +57,48 @@ class ReusableObjects {
         
         var arrayOfVCs: [UIViewController]
         let pageControl = UIPageControl()
-        var startingIndex: Int
+        let startingIndex: Int
+        let withPageControl: Bool
+        let circular: Bool
         
-        init(arrayOfVCs: [UIViewController], startingIndex: Int) {
+        
+        init(arrayOfVCs: [UIViewController], startingIndex: Int, withPageControl: Bool, circular: Bool) {
             self.arrayOfVCs = arrayOfVCs
             self.startingIndex = startingIndex
+            self.withPageControl = withPageControl
+            self.circular = circular
             super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
             
             delegate = self
             dataSource = self
-                        
-            setViewControllers([arrayOfVCs[startingIndex]], direction: .forward, animated: true, completion: nil)
+            
+            if arrayOfVCs.count > 0 {
+                setViewControllers([arrayOfVCs[startingIndex]], direction: .forward, animated: true, completion: nil)
+                
+            }
             
             // Add pageControl for pageViewControllers that start at 0, i.e. not the MainPageViewController
-            if startingIndex == 0 {
+            if withPageControl {
                 // Setting PageController with the number of pages and tintColors
                 pageControl.numberOfPages = arrayOfVCs.count
-                pageControl.currentPage = 0
+                pageControl.currentPage = startingIndex
                 pageControl.pageIndicatorTintColor = UIColor.lightGray
                 pageControl.currentPageIndicatorTintColor = DisplayUtility.gradientColor(size: pageControl.frame.size)
                 
                 view.addSubview(pageControl)
             }
+
             
+        }
+        
+        func addVC(vc: UIViewController) {
+            arrayOfVCs.append(vc)
+            setViewControllers([arrayOfVCs[startingIndex]], direction: .forward, animated: false, completion: nil)
+            
+            if withPageControl {
+                pageControl.numberOfPages = arrayOfVCs.count
+                pageControl.currentPage = startingIndex
+            }
         }
         
         required init?(coder: NSCoder) {
@@ -92,9 +111,9 @@ class ReusableObjects {
                     return arrayOfVCs[currIndex + 1]
                 }
                 // Move to beginning of arrayOfVCs
-//                else if startingIndex == 0 {
-//                    return arrayOfVCs.first
-//                }
+                else if circular {
+                    return arrayOfVCs.first
+                }
             }
             
             return nil
@@ -107,9 +126,9 @@ class ReusableObjects {
                     return arrayOfVCs[currIndex - 1]
                 }
                 // Move to end of arrayOfVCs
-//                else if startingIndex == 0 {
-//                    return arrayOfVCs.last
-//                }
+                else if circular {
+                    return arrayOfVCs.last
+                }
             }
             return nil
         }

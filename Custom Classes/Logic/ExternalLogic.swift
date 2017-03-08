@@ -35,11 +35,17 @@ class ExternalLogic {
             }
             
             if fact == "age" {
-                labelText = "\(labelText)\(age) years old"
+                if let age = age {
+                    labelText = "\(labelText)\(age) years old"
+                }
             } else if fact == "city" {
-                labelText = "\(labelText)\(city)"
+                if let city = city {
+                    labelText = "\(labelText)\(city)"
+                }
             } else if fact == "school" {
-                labelText = "\(labelText)\(school)"
+                if let school = school {
+                    labelText = "\(labelText)\(school)"
+                }
             }
         }
         

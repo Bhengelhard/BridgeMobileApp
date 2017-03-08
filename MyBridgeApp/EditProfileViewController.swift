@@ -24,6 +24,8 @@ class EditProfileViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(tableViewCellTapped), name: NSNotification.Name(rawValue: "tableViewCellTapped"), object: nil)
         
         layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        
+        layout.table.setParentVCOfEditProfilePicturesCell(parentVC: self)
     }
     
     override func loadView() {

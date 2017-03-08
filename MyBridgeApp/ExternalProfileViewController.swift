@@ -22,6 +22,8 @@ class ExternalProfileViewController: UIViewController {
         super.viewDidLoad()
         
         layout.dismissButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
+        
+        let externalProfileBackend = ExternalBackend()
     }
     
     override func loadView() {
@@ -50,22 +52,32 @@ class ExternalProfileViewController: UIViewController {
     }
     
     // MARK: - Setters
+    
+    /// set user ID and get user's information
     func setUserID(userID: String?) {
         self.userID = userID
         
         if let userID = userID {
-            User.get(withID: userID) { (user) in
-                var images = [UIImage]()
-                Picture.getAll(withUser: user, withBlock: { (pictures) in
-                    for picture in pictures {
-                        if let image = picture.image {
-                            images.append(image)
-                        }
+            let externalBackend = ExternalBackend()
+            
+            // pictures
+            externalBackend.setPictures(userID: userID) { (pictures) in
+                for i in 0..<pictures.count {
+                    let picture = pictures[i]
+                    picture.getImage { (image) in
+                        self.layout.profilePicturesVC.addImage(image: image)
                     }
-                    print("!")
-                    self.layout.profilePicturesView.setImages(images: images)
-                })
+                }
             }
+            
+            // name
+            externalBackend.setName(userID: userID, label: layout.name)
+            
+            // facts label
+            externalBackend.setFacts(userID: userID, label: layout.factLabel)
+            
+            // about me
+            externalBackend.setAboutMe(userID: userID, label: layout.aboutMeLabel)
         }
     }
     

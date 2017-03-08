@@ -15,19 +15,17 @@ class ExternalProfileLayout {
     let contentView = UIView.newAutoLayout()
     let dismissButton = ExternalProfileObjects.DismissButton()
     let reportButton = ExternalProfileObjects.ReportButton()
-    let profilePicturesView = ExternalProfileObjects.ProfilePicturesPageViewController()
+    let profilePicturesVC = ExternalProfileObjects.ProfilePicturesPageViewController()
     let profilePictures = [ExternalProfileObjects.Image()]
     let name = ExternalProfileObjects.Name()
     let factLabel = ExternalProfileObjects.FactLabel()
     let dividerLine = ExternalProfileObjects.Line()
     let aboutMeLabel = ExternalProfileObjects.AboutMeLabel()
-    let reputationScore = ExternalProfileObjects.ReputationScore()
     let messageButton = ExternalProfileObjects.MessageButton()
     
     // MARK: - Layout
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
-        
         if (!didSetupConstraints) {
             
             // Setting the space between objects
@@ -46,51 +44,43 @@ class ExternalProfileLayout {
             contentView.backgroundColor = UIColor.clear
             
             // Set the profilePicturesView with the first picture displayed
-            scrollView.addSubview(profilePicturesView.view)
-            profilePicturesView.view.autoPinEdge(toSuperviewEdge: .left)
-            profilePicturesView.view.autoPinEdge(toSuperviewEdge: .top)
-            profilePicturesView.view.autoMatch(.width, to: .width, of: view)
-            profilePicturesView.view.autoMatch(.height, to: .width, of: view)
+            scrollView.addSubview(profilePicturesVC.view)
+            profilePicturesVC.view.autoPinEdge(toSuperviewEdge: .left)
+            profilePicturesVC.view.autoPinEdge(toSuperviewEdge: .top)
+            profilePicturesVC.view.autoMatch(.width, to: .width, of: view)
+            profilePicturesVC.view.autoMatch(.height, to: .width, of: view)
             
             /// Diameter of the dismissButton and reportButton
-            let diameter:CGFloat = 29
+            let diameter:CGFloat = 35
             
             // Set the dismissButton to the top left above the profilePicturesView
-            scrollView.insertSubview(dismissButton, aboveSubview: profilePicturesView.view)
+            scrollView.insertSubview(dismissButton, aboveSubview: profilePicturesVC.view)
             dismissButton.autoPinEdge(toSuperviewEdge: .top, withInset: 2*buffer)
-            dismissButton.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
+            dismissButton.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
             dismissButton.autoSetDimensions(to: CGSize(width: diameter, height: diameter))
             dismissButton.layer.cornerRadius = diameter / 2.0
-            dismissButton.backgroundColor = UIColor.green
             
-            // Set the reportButton to display in the top right above the profilePicturesView
-            scrollView.insertSubview(reportButton, aboveSubview: profilePicturesView.view)
-            reportButton.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
-            reportButton.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
-            reportButton.autoSetDimensions(to: CGSize(width: diameter, height: diameter))
-            reportButton.layer.cornerRadius = diameter / 2.0
-            reportButton.backgroundColor = UIColor.blue
+//            // Set the reportButton to display in the top right above the profilePicturesView
+//            scrollView.insertSubview(reportButton, aboveSubview: profilePicturesVC.view)
+//            reportButton.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
+//            reportButton.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
+//            reportButton.autoSetDimensions(to: CGSize(width: diameter, height: diameter))
+//            reportButton.layer.cornerRadius = diameter / 2.0
             
             // Set the pageControl of the profilePicturesPageViewController
-            profilePicturesView.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
-            profilePicturesView.pageControl.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
+            profilePicturesVC.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
+            profilePicturesVC.pageControl.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
             
             // Set the name below the profilePicturesView
             scrollView.addSubview(name)
             name.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
-            name.autoPinEdge(.top, to: .bottom, of: profilePicturesView.view, withOffset: buffer)
+            name.autoPinEdge(.top, to: .bottom, of: profilePicturesVC.view, withOffset: buffer)
             
             // Set the multi-line factsLabel below the name
             scrollView.addSubview(factLabel)
             factLabel.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
             factLabel.autoPinEdge(.top, to: .bottom, of: name, withOffset: buffer)
             factLabel.autoMatch(.width, to: .width, of: view, withOffset: 2*buffer)
-            
-            // Set the reputationScore pinned to the right of the screen in line with the factsLabel
-            scrollView.addSubview(reputationScore)
-            reputationScore.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
-            reputationScore.autoAlignAxis(.horizontal, toSameAxisOf: factLabel)
-            reputationScore.autoSetDimensions(to: CGSize(width: 40, height: 40))
             
             // Set the divider line below the factsLabel
             scrollView.addSubview(dividerLine)

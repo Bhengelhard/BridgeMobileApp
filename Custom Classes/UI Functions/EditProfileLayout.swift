@@ -17,7 +17,6 @@ class EditProfileLayout {
     // MARK: - Layout
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
-        
         if (!didSetupConstraints) {
             
             // Layout the navigation bar at the top of the view with a done button for dismissing the EditProfileViewController
@@ -34,6 +33,26 @@ class EditProfileLayout {
             table.autoPinEdge(toSuperviewEdge: .right)
             table.autoPinEdge(toSuperviewEdge: .bottom)
             
+            
+            EditProfileLogic.setAboutMe(textView: table.aboutMeTableCell.textView)
+            EditProfileLogic.setLookingFor(textView: table.lookingForTableCell.textView)
+            EditProfileLogic.setWork(label: table.workTableCell.textLabel!)
+            EditProfileLogic.setSchool(label: table.schoolTableCell.textLabel!)
+            
+            
+            let editProfileBackend = EditProfileBackend()
+            editProfileBackend.setPictures { (pictures) in
+                for i in 0..<pictures.count {
+                    if i >= 6 {
+                        break
+                    }
+                    print("i = \(i)")
+                    pictures[i].getImage { (image) in
+                        print(i)
+                        self.table.editProfilePicturesCell.setImage(image: image, atIndex: i)
+                    }
+                }
+            }
         }
         
         return true

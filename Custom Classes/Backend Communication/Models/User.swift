@@ -65,11 +65,17 @@ class User: NSObject {
     /// The city of the User
     var city: String?
     
+    /// The employer of the User
+    var work: String?
+    
     /// THe school of the User
     var school: String?
     
-    /// A quick update about the User
-    var quickUpdate: String?
+    /// A summary about the User
+    var aboutMe: String?
+    
+    /// A summary of what the User is looking for
+    var lookingFor: String?
     
     /// The objectIds of the User's Pictures
     var pictureIDs: [String]?
@@ -127,12 +133,20 @@ class User: NSObject {
             city = parseCity
         }
         
+        if let parseWork = parseUser["work"] as? String {
+            work = parseWork
+        }
+        
         if let parseSchool = parseUser["school"] as? String {
             school = parseSchool
         }
         
         if let parseQuickUpdate = parseUser["quick_update"] as? String {
-            quickUpdate = parseQuickUpdate
+            aboutMe = parseQuickUpdate
+        }
+        
+        if let parseLookingFor = parseUser["looking_for"] as? String {
+            lookingFor = parseLookingFor
         }
         
         if let parsePictures = parseUser["pictures"] as? [String] {
@@ -290,16 +304,28 @@ class User: NSObject {
             parseUser.remove(forKey: "city")
         }
         
+        if let work = work {
+            parseUser["work"] = work
+        } else {
+            parseUser.remove(forKey: "work")
+        }
+        
         if let school = school {
             parseUser["school"] = school
         } else {
             parseUser.remove(forKey: "school")
         }
                 
-        if let quickUpdate = quickUpdate {
-            parseUser["quick_update"] = quickUpdate
+        if let aboutMe = aboutMe {
+            parseUser["quick_update"] = aboutMe
         } else {
             parseUser.remove(forKey: "quick_update")
+        }
+        
+        if let lookingFor = lookingFor {
+            parseUser["looking_for"] = lookingFor
+        } else {
+            parseUser.remove(forKey: "looking_for")
         }
         
         if let pictureIDs = pictureIDs {

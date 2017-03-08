@@ -24,51 +24,33 @@ class SwipeLogic {
         //swipeCard.transform = stretch
         var removeCard = false
         
-        //Displaying and Removing the connect and disconnect icons
-        let disconnectIconX = max(min((-1.5*(swipeCard.center.x/DisplayUtility.screenWidth)+0.6)*DisplayUtility.screenWidth, 0.1*DisplayUtility.screenWidth), 0)
-        let connectIconX = max(min(((-2.0/3.0)*(swipeCard.center.x/DisplayUtility.screenWidth)+1.0)*DisplayUtility.screenWidth, 0.6*DisplayUtility.screenWidth), 0.5*DisplayUtility.screenWidth)
         
-        //Limiting Y axis of swipe
-        
-        //animating connect and disconnect icons when card is positioned from 0.4% of DisplayUtility.screenWidth to 0.25% of DisplayUtility.screenWidth
+        //animating connect and disconnect icons when card is positioned from 0.4% of DisplayUtility.screenWidth to border
         if swipeCard.center.x < 0.4*DisplayUtility.screenWidth {
-            
-            //fading in with swipe left from 0.4% of DisplayUtility.screenWidth to 0.25% of screen width
-            disconnectIcon.alpha = -6.66*(swipeCard.center.x/DisplayUtility.screenWidth)+2.66
-            disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
+            //fading in with swipe left from 0.4% of DisplayUtility.screenWidth to border
+            disconnectIcon.alpha = -2.5*(swipeCard.center.x/DisplayUtility.screenWidth)+1
             
         } else if swipeCard.center.x > 0.6*DisplayUtility.screenWidth {
-            
-            //fading in with swipe right from 0.6% of DisplayUtility.screenWidth to 0.75% of screen width
-            connectIcon.alpha = 6.66*(swipeCard.center.x/DisplayUtility.screenWidth)-4
-            connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
+            //fading in with swipe left from 0.6% of DisplayUtility.screenWidth to border
+            connectIcon.alpha = 2.5*(swipeCard.center.x/DisplayUtility.screenWidth)-1.5
             
         } else {
-            
-            disconnectIcon.alpha = -6.66*(swipeCard.center.x/DisplayUtility.screenWidth)+2.66
-            disconnectIcon.frame = CGRect(x: disconnectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
-            connectIcon.frame = CGRect(x: connectIconX, y: 0.33*DisplayUtility.screenHeight, width: 0.4*DisplayUtility.screenWidth, height: 0.4*DisplayUtility.screenWidth)
-            
-            connectIcon.alpha = 6.66*(swipeCard.center.x/DisplayUtility.screenWidth)-4
-            
-        }
-        
-        if gesture.state == .began {
-            //bottomSwipeCard.frame = smallestSwipeCardFrame(swipeCard: bottomSwipeCard)
-            //bottomSwipeCard.center.x = view.center.x
+            disconnectIcon.alpha = 0
+            connectIcon.alpha = 0
         }
         
         if gesture.state == .changed {
-            let multiplier = CGFloat(0.98)
+           // let multiplier = CGFloat(0.98)
             let cardCenterX = swipeCard.center.x
             let screenMiddleX = DisplayUtility.screenWidth / 2
             let direction: CGFloat = cardCenterX <= screenMiddleX ? screenMiddleX - cardCenterX : cardCenterX - screenMiddleX
-            let percent: CGFloat = min(max(0.05 * (direction / screenMiddleX) + multiplier, multiplier), 1.0)
-            let maxFrame = swipeCard.swipeCardFrame()
-            let inset = CGSize(width: maxFrame.width * percent,
-                               height: maxFrame.height * percent)
-            let differential = CGSize(width: maxFrame.size.width - inset.width,
-                                      height: maxFrame.size.height - inset.height)
+            
+//            let percent: CGFloat = min(max(0.05 * (direction / screenMiddleX) + multiplier, multiplier), 1.0)
+//            let maxFrame = swipeCard.swipeCardFrame()
+//            let inset = CGSize(width: maxFrame.width * percent,
+//                               height: maxFrame.height * percent)
+//            let differential = CGSize(width: maxFrame.size.width - inset.width,
+//                                      height: maxFrame.size.height - inset.height)
             /*
             bottomSwipeCard.frame = CGRect(origin: CGPoint(x: max(maxFrame.origin.x + differential.width, maxFrame.origin.x),
                                                            y: max(maxFrame.origin.y + differential.height, maxFrame.origin.y)),
@@ -101,7 +83,7 @@ class SwipeLogic {
                     alert.addAction(UIAlertAction(title: "Don't Connect", style: .default, handler: { (action) in
                         UIView.animate(withDuration: 0.2, animations: {
                             //swipeCard.center.x = -1.0*DisplayUtility.screenWidth
-                            disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
+                            //disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                             disconnectIcon.alpha = 0.0
                             swipeCard.overlay.opacity = 0.0
                         }, completion: { (success) in
@@ -115,7 +97,7 @@ class SwipeLogic {
                     localData.synchronize()
                 } else {
                     UIView.animate(withDuration: 0.2, animations: {
-                        disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
+                        //disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                         disconnectIcon.alpha = 0.0
                         swipeCard.overlay.opacity = 0.0
                     }, completion: { (success) in
@@ -141,7 +123,7 @@ class SwipeLogic {
                 
             } else {
                 // Reset the cards
-                disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
+                //disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
                 disconnectIcon.alpha = 0.0
                 connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
                 connectIcon.alpha = 0.0

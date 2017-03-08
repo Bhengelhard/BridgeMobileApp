@@ -12,14 +12,19 @@ import UIKit
 class Picture: NSObject {
     typealias PictureBlock = (Picture) -> Void
     typealias PicturesBlock = ([Picture]) -> Void
+    typealias ImageBlock = (UIImage) -> Void
     
     private let parsePicture: PFObject
     
     /// The objectId of the Picture
     let id: String?
     
+    private var imageFile: PFFile?
+    
     /// The full, uncropped image
-    var image: UIImage?
+    private var image: UIImage?
+    
+    private var croppedImageFile: PFFile?
     
     /// The cropped image
     var croppedImage: UIImage?
@@ -42,20 +47,28 @@ class Picture: NSObject {
         super.init()
         
         if let parseImageFile = parsePicture["image_file"] as? PFFile {
+            imageFile = parseImageFile
             setImage(fromFile: parseImageFile)
         }
         
         if let parseCroppedImageFile = parsePicture["cropped_image_file"] as? PFFile {
+            croppedImageFile = parseCroppedImageFile
             setImage(fromFile: parseCroppedImageFile)
         }
     }
     
-    private func setImage(fromFile parseImageFile: PFFile) {
+    private func setImage(fromFile parseImageFile: PFFile, withBlock block: ImageBlock? = nil) {
         parseImageFile.getDataInBackground { (data, error) in
             if let error = error {
                 print("error getting data for image - \(error)")
             } else if let data = data {
-                self.image = UIImage(data: data)
+                let image = UIImage(data: data)
+                self.image = image
+                if let image = image {
+                    if let block = block {
+                        block(image)
+                    }
+                }
             }
         }
     }
@@ -66,6 +79,18 @@ class Picture: NSObject {
                 print("error getting data for cropped image - \(error)")
             } else if let data = data {
                 self.croppedImage = UIImage(data: data)
+            }
+        }
+    }
+    
+    func getImage(withBlock block: ImageBlock? = nil) {
+        if let image = image {
+            if let block = block {
+                block(image)
+            }
+        } else {
+            if let imageFile = imageFile {
+                setImage(fromFile: imageFile, withBlock: block)
             }
         }
     }
@@ -92,7 +117,6 @@ class Picture: NSObject {
     
     private static func getPictures(from pictureIDs: [String], startingAtIndex index: Int, soFar: [Picture], withBlock block: Picture.PicturesBlock? = nil) {
         if index >= pictureIDs.count {
-            print("got \(soFar.count) pictures")
             if let block = block {
                 block(soFar)
             }
