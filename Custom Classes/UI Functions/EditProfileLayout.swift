@@ -17,7 +17,7 @@ class EditProfileLayout {
     // MARK: - Layout
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
-        
+        print("1")
         if (!didSetupConstraints) {
             
             // Layout the navigation bar at the top of the view with a done button for dismissing the EditProfileViewController

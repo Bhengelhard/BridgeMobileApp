@@ -54,6 +54,9 @@ class EditProfileObjects {
     
     class Table: UITableView, UITableViewDelegate, UITableViewDataSource {
         
+        let editProfilePicturesCell = EditProfilePicturesTableViewCell()
+        var aboutMeTextView = UITextView()
+        
         override init(frame: CGRect, style: UITableViewStyle) {
             super.init(frame: CGRect(), style: .plain)
             
@@ -86,11 +89,14 @@ class EditProfileObjects {
             
             switch(indexPath.row) {
             case 0:
-                cell = EditProfilePicturesTableViewCell()
+                cell = editProfilePicturesCell
             case 1:
                 cell = GrayTableCell(text: "About Me")
             case 2:
-                cell = WhiteTextTableCell(text: "Mobile Design / Wine + Spirits. Looking for some new friends in the local startup world to join me on a new venture!")
+                let whiteTextTableCell = WhiteTextTableCell(text: "")
+                cell = whiteTextTableCell
+                //cell = WhiteTextTableCell(text: "Mobile Design / Wine + Spirits. Looking for some new friends in the local startup world to join me on a new venture!")
+                aboutMeTextView = whiteTextTableCell.textView
             case 3:
                 cell = GrayTableCell(text: "Looking For")
             case 4:
@@ -140,6 +146,10 @@ class EditProfileObjects {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "tableViewCellTapped"), object: indexPath.row)
             }
             
+        }
+        
+        func setParentVCOfEditProfilePicturesCell(parentVC: UIViewController) {
+            editProfilePicturesCell.setParentVC(parentVC: parentVC)
         }
     }
     
