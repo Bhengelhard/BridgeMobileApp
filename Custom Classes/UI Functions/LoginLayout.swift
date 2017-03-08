@@ -24,24 +24,6 @@ class LoginLayout {
         
         if (!didSetupConstraints) {
             
-            
-            
-//            if let tutorialVCs = tutorialsPageViewController.viewControllers as? [LoginObjects.TutorialViewController] {
-//                for tutorialVC in tutorialVCs {
-//                    print("set up tutorial VC")
-//                    
-//                    tutorialVC.view.addSubview(tutorialVC.label)
-//                    tutorialVC.label.autoPinEdge(toSuperviewEdge: .top, withInset: 60)
-//                    tutorialVC.label.autoAlignAxis(.vertical, toSameAxisOf: tutorialVC.view)
-//                    
-//                    tutorialVC.view.addSubview(tutorialVC.imageView)
-//                    tutorialVC.imageView.autoAlignAxis(.vertical, toSameAxisOf: tutorialVC.view)
-//                    tutorialVC.imageView.autoPinEdge(.top, to: .bottom, of: tutorialVC.label, withOffset: 20)
-//                    tutorialVC.imageView.autoSetDimension(.height, toSize: 350)
-//                    tutorialVC.imageView.autoSetDimension(.width, toSize: 300)
-//                }
-//            }
-            
             var tutorialsView = UIView()
             
             if let tView = tutorialsPageViewController.view {
@@ -67,8 +49,8 @@ class LoginLayout {
             // Layout Objects Pinned to the Bottom
             // Layout the loginInformation Label just above the seeMoreButton to tell the user about necter's facebook posting policy and terms of service
             view.addSubview(loginInformationLabel)
-            loginInformationLabel.autoAlignAxis(.vertical, toSameAxisOf: view)
-            loginInformationLabel.autoMatch(.width, to: .width, of: view)
+            loginInformationLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            loginInformationLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
             loginInformationLabel.autoSetDimension(.height, toSize: 63.7/2)
             loginInformationLabel.autoPinEdge(.top, to: .bottom, of: fbLoginButton, withOffset: 35)
             

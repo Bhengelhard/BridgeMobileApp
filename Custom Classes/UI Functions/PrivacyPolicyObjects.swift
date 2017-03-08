@@ -25,22 +25,7 @@ class PrivacyPolicyObjects {
     }
     
     /// FBLoginButton is UIButton allowing user to log into the necter app using Facebook authentication
-    class FBLoginButton: UIButton  {
-        
-        init() {
-            super.init(frame: CGRect())
-            
-            self.setTitle("CONNECT WITH FACEBOOK", for: .normal)
-            self.setTitleColor(UIColor.white, for: .normal)
-            self.setTitleColor(DisplayUtility.gradientColor(size: (self.titleLabel?.frame.size)!), for: .highlighted)
-            self.titleLabel?.font = UIFont(name: "BentonSans-Light", size: 16)
-            self.backgroundColor = UIColor(red: 66.0/255.0, green: 103.0/255.0, blue: 178.0/255.0, alpha: 1)
-            self.layer.cornerRadius = 8
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+    class FBLoginButton: ReusableObjects.FBLoginButton  {
         
     }
     
@@ -50,6 +35,9 @@ class PrivacyPolicyObjects {
         init() {
             super.init(frame: CGRect())
             self.text = "We're serious about privacy"
+            self.font = Constants.Fonts.bold24
+            self.textColor = Constants.Colors.necter.textGray
+            self.textAlignment = NSTextAlignment.center
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -64,6 +52,9 @@ class PrivacyPolicyObjects {
             super.init(frame: CGRect())
             self.text = text
             self.numberOfLines = 0
+            self.font = Constants.Fonts.light18
+            self.textColor = Constants.Colors.necter.textGray
+            self.textAlignment = NSTextAlignment.center
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -77,10 +68,13 @@ class PrivacyPolicyObjects {
     /// PrivacyPolicyButton is a UIButton that allows the user to view the necter privacy policy from a web pop-up within the app
     class PrivacyPolicyButton: UIButton {
         
+        let webView = UIWebView()
+        
         init() {
             super.init(frame: CGRect())
             self.setTitle("Privacy Policy", for: .normal)
             self.setTitleColor(UIColor.red, for: .normal)
+            self.titleLabel?.font = Constants.Fonts.bold16
         }
         
         required init?(coder aDecoder: NSCoder) {

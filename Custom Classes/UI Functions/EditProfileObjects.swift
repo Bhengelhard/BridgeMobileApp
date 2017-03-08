@@ -161,7 +161,7 @@ class EditProfileObjects {
             self.textLabel?.text = text
             self.textLabel?.font = Constants.Fonts.bold16
             self.backgroundColor = Constants.Colors.necter.backgroundGray
-            self.textLabel?.textColor = Constants.Colors.necter.textGray
+            self.textLabel?.textColor = Constants.Colors.necter.textDarkGray
             self.isUserInteractionEnabled = false
         }
         
@@ -179,7 +179,7 @@ class EditProfileObjects {
             self.textLabel?.text = text
             self.textLabel?.font = Constants.Fonts.light18
             self.textLabel?.numberOfLines = 0
-            self.textLabel?.textColor = Constants.Colors.necter.textGray
+            self.textLabel?.textColor = Constants.Colors.necter.textDarkGray
             self.backgroundColor = UIColor.white
             
             self.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
@@ -206,11 +206,11 @@ class EditProfileObjects {
             textView.delegate = self
             textView.text = text
             textView.font = Constants.Fonts.light18
-            textView.textColor = Constants.Colors.necter.textGray
+            textView.textColor = Constants.Colors.necter.textDarkGray
             textView.isScrollEnabled = false
             
             self.addSubview(textView)
-            textView.autoPinEdgesToSuperviewEdges(with: .init(top: 10, left: 20, bottom: 10, right: 20))
+            textView.autoPinEdgesToSuperviewEdges(with: .init(top: 10, left: 10, bottom: 10, right: 10))
         }
         
         required init?(coder aDecoder: NSCoder) {
