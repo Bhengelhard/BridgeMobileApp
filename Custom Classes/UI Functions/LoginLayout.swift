@@ -24,24 +24,6 @@ class LoginLayout {
         
         if (!didSetupConstraints) {
             
-            
-            
-//            if let tutorialVCs = tutorialsPageViewController.viewControllers as? [LoginObjects.TutorialViewController] {
-//                for tutorialVC in tutorialVCs {
-//                    print("set up tutorial VC")
-//                    
-//                    tutorialVC.view.addSubview(tutorialVC.label)
-//                    tutorialVC.label.autoPinEdge(toSuperviewEdge: .top, withInset: 60)
-//                    tutorialVC.label.autoAlignAxis(.vertical, toSameAxisOf: tutorialVC.view)
-//                    
-//                    tutorialVC.view.addSubview(tutorialVC.imageView)
-//                    tutorialVC.imageView.autoAlignAxis(.vertical, toSameAxisOf: tutorialVC.view)
-//                    tutorialVC.imageView.autoPinEdge(.top, to: .bottom, of: tutorialVC.label, withOffset: 20)
-//                    tutorialVC.imageView.autoSetDimension(.height, toSize: 350)
-//                    tutorialVC.imageView.autoSetDimension(.width, toSize: 300)
-//                }
-//            }
-            
             var tutorialsView = UIView()
             
             if let tView = tutorialsPageViewController.view {

@@ -48,39 +48,44 @@ class PrivacyPolicyLayout {
             
             // Layout the fbLoginButton below the returnToLoginButton so the user can log in to the app
             view.addSubview(fbLoginButton)
+            fbLoginButton.autoSetDimensions(to: CGSize(width: 250, height: 42.5))
             fbLoginButton.autoPinEdge(.top, to: .bottom, of: returnToLoginButton, withOffset: 35)
             fbLoginButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             
             // Layout the privacyHeaderLabel below the fb LoginButton so the user can log in to the app
             view.addSubview(privacyHeaderLabel)
             privacyHeaderLabel.autoPinEdge(.top, to: .bottom, of: fbLoginButton, withOffset: 35)
-            privacyHeaderLabel.autoAlignAxis(.vertical, toSameAxisOf: view)
+            privacyHeaderLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            privacyHeaderLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
             
             // Layout the neverPostLabel below the privacy policy label
             view.addSubview(neverPostLabel)
             neverPostLabel.autoPinEdge(.top, to: .bottom, of: privacyHeaderLabel, withOffset: 35)
-            neverPostLabel.autoAlignAxis(.vertical, toSameAxisOf: view)
+            neverPostLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            neverPostLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
             
             // Layout the introducedByLabel below the neverPostLabel
             view.addSubview(introducedByLabel)
             introducedByLabel.autoPinEdge(.top, to: .bottom, of: neverPostLabel, withOffset: 35)
-            introducedByLabel.autoAlignAxis(.vertical, toSameAxisOf: view)
+            introducedByLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            introducedByLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
             
             // Layout the introductionControlLabel below the introducedByLabel
             view.addSubview(introductionControlLabel)
             introductionControlLabel.autoPinEdge(.top, to: .bottom, of: introducedByLabel, withOffset: 35)
-            introductionControlLabel.autoAlignAxis(.vertical, toSameAxisOf: view)
+            introductionControlLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            introductionControlLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
 
             // Layout the introducedByControlLabel below the introductionControlLabel
             view.addSubview(introducedByControlLabel)
             introducedByControlLabel.autoPinEdge(.top, to: .bottom, of: introductionControlLabel, withOffset: 35)
-            introducedByControlLabel.autoAlignAxis(.vertical, toSameAxisOf: view)
+            introducedByControlLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 20)
+            introducedByControlLabel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
             
             // Layout the privacyPolicyButton below the introducedByControlLabel
             view.addSubview(privacyPolicyButton)
             privacyPolicyButton.autoPinEdge(.top, to: .bottom, of: introducedByControlLabel, withOffset: 35)
             privacyPolicyButton.autoAlignAxis(.vertical, toSameAxisOf: view)
-            //privacyPolicyButton.autoSetDimensions(to: CGSize(width: 50, height: 100))
             
         }
         

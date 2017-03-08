@@ -22,6 +22,7 @@ class PrivacyPolicyViewController: UIViewController {
         super.viewDidLoad()
 
         layout.returnToLoginButton.addTarget(self, action: #selector(returnToLogin(_:)), for: .touchUpInside)
+        layout.privacyPolicyButton.addTarget(self, action: #selector(privacyPolicyButtonTapped(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -42,6 +43,12 @@ class PrivacyPolicyViewController: UIViewController {
     func returnToLogin(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
         //self.performSegue(withIdentifier: "showLogin", sender: self)
+    }
+    // Open URL with the Privacy Policy
+    func privacyPolicyButtonTapped(_ sender: UIButton) {
+        print("tapped")
+        present(WebPrivacyPolicyViewController(), animated: true, completion: nil)
+        
     }
     
 

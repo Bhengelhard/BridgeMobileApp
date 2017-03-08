@@ -83,22 +83,22 @@ class LoginObjects {
     }
     
     /// FBLoginButton is UIButton allowing user to log into the necter app using Facebook authentication
-    class FBLoginButton: UIButton  {
+    class FBLoginButton: ReusableObjects.FBLoginButton  {
         
-        init() {
-            super.init(frame: CGRect())
-            
-            self.setTitle("CONNECT WITH FACEBOOK", for: .normal)
-            self.setTitleColor(UIColor.white, for: .normal)
-            self.setTitleColor(DisplayUtility.gradientColor(size: (self.titleLabel?.frame.size)!), for: .highlighted)
-            self.titleLabel?.font = Constants.Fonts.bold16
-            self.backgroundColor = UIColor(red: 66.0/255.0, green: 103.0/255.0, blue: 178.0/255.0, alpha: 1)
-            self.layer.cornerRadius = 12
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+//        init() {
+//            super.init(frame: CGRect())
+//            
+//            self.setTitle("CONNECT WITH FACEBOOK", for: .normal)
+//            self.setTitleColor(UIColor.white, for: .normal)
+//            self.setTitleColor(DisplayUtility.gradientColor(size: (self.titleLabel?.frame.size)!), for: .highlighted)
+//            self.titleLabel?.font = Constants.Fonts.bold16
+//            self.backgroundColor = UIColor(red: 66.0/255.0, green: 103.0/255.0, blue: 178.0/255.0, alpha: 1)
+//            self.layer.cornerRadius = 12
+//        }
+//        
+//        required init?(coder aDecoder: NSCoder) {
+//            fatalError("init(coder:) has not been implemented")
+//        }
     }
     
     /// Displays label letting user know about privacy information and the necter terms of service
