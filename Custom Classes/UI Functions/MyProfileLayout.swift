@@ -65,12 +65,12 @@ class MyProfileLayout {
             // Layout friendsImage to pin to the bottom of the view
             view.addSubview(friendsImage)
             friendsImage.autoPinEdge(toSuperviewEdge: .left)
+            friendsImage.autoPinEdge(toSuperviewEdge: .right)
             friendsImage.autoPinEdge(toSuperviewEdge: .bottom)
-            friendsImage.autoMatch(.width, to: .width, of: view)
             
             // Layout inviteButton to center of the friendsImage
             view.addSubview(inviteButton)
-            inviteButton.autoAlignAxis(.horizontal, toSameAxisOf: friendsImage)
+            inviteButton.autoAlignAxis(.horizontal, toSameAxisOf: friendsImage, withOffset: 20)
             inviteButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
             
