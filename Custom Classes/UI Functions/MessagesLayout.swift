@@ -41,7 +41,7 @@ class MessagesLayout {
             newMatchesScrollView.autoPinEdge(.top, to: .bottom, of: newMatchesTitle, withOffset: 20)
             newMatchesScrollView.autoPinEdge(toSuperviewEdge: .left)
             newMatchesScrollView.autoMatch(.width, to: .width, of: view)
-            newMatchesScrollView.autoSetDimension(.height, toSize: 100)
+            newMatchesScrollView.autoSetDimension(.height, toSize: 80)
             
             // Layout the messagesTitle below the newMatchesScrollView
             view.addSubview(messagesTitle)

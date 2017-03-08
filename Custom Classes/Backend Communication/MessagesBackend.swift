@@ -103,10 +103,12 @@ class MessagesBackend {
     
     func loadNewMatches(newMatchesView: NewMatchesView) {
         User.getCurrent { (user) in
-            BridgePairing.getAll(withUser: user, bridgedOnly: true) { (bridgePairings) in
-                for bridgePairing in bridgePairings {
-                    bridgePairing.getNonCurrentUser { (user) in
-                        newMatchesView.addUser(user)
+            Message.getAll(withUser: user) { (messages) in
+                for message in messages {
+                    if message.lastSingleMessage == nil {
+                        message.getNonCurrentUser { (otherUser) in
+                            newMatchesView.addUser(otherUser)
+                        }
                     }
                 }
             }
@@ -125,6 +127,9 @@ class MessagesBackend {
         if let id = messagePositionToIDMapping[index] {
             if let snapshot = messageSnapshots[id] {
                 textView.text = snapshot
+            } else {
+                textView.text = "You've been 'nected! Get the conversation going!"
+                textView.textColor = .gray
             }
         }
     }
