@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class SettingsViewController: UIViewController {
 
@@ -21,6 +22,14 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        
+        //Listener for Logout Tapped
+        NotificationCenter.default.addObserver(self, selector: #selector(logoutTapped(_:)), name: NSNotification.Name(rawValue: "logoutTapped"), object: nil)
+        //Listener for Privacy Button Tapped
+        NotificationCenter.default.addObserver(self, selector: #selector(privacyButtonTapped(_:)), name: NSNotification.Name(rawValue: "privacyButtonTapped"), object: nil)
+        //Listener for Terms Button Tapped
+        NotificationCenter.default.addObserver(self, selector: #selector(termsOfServiceButtonTapped(_:)), name: NSNotification.Name(rawValue: "termsOfServiceButtonTapped"), object: nil)
+        
     }
     
     override func loadView() {
@@ -39,6 +48,19 @@ class SettingsViewController: UIViewController {
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func logoutTapped(_ notification: Notification) {
+        PFUser.logOut()
+        performSegue(withIdentifier: "showLogin", sender: self)
+    }
+    
+    func privacyButtonTapped(_ notification: Notification) {
+        present(WebViewController(title: "Privacy Policy", url: "http://www.necter.social/privacypolicy"), animated: true, completion: nil)
+    }
+    
+    func termsOfServiceButtonTapped(_ notification: Notification) {
+        present(WebViewController(title: "Terms of Service", url: "http://www.necter.social/termsofservice"), animated: true, completion: nil)
     }
     
     // MARK: - Navigation

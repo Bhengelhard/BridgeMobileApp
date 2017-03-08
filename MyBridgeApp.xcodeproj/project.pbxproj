@@ -75,7 +75,9 @@
 		30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */; };
 		30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */; };
 		30BFA0BD1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0BC1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift */; };
-		30D82B5C1E6F92E3000F7075 /* WebPrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B5B1E6F92E3000F7075 /* WebPrivacyPolicyViewController.swift */; };
+		30D82B5C1E6F92E3000F7075 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B5B1E6F92E3000F7075 /* WebViewController.swift */; };
+		30D82B601E6FC7E6000F7075 /* LoginBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */; };
+		30D82B621E6FCFC1000F7075 /* SwipedRightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B611E6FCFC1000F7075 /* SwipedRightView.swift */; };
 		30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */; };
 		30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */; };
 		30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */; };
@@ -205,7 +207,9 @@
 		30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLogin.swift; path = "Custom Classes/Backend Communication/FBCommunication/FBLogin.swift"; sourceTree = "<group>"; };
 		30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = Types/BridgeType.swift; sourceTree = "<group>"; };
 		30BFA0BC1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTitleTableViewCell.swift; path = MyBridgeApp/MessagesTitleTableViewCell.swift; sourceTree = SOURCE_ROOT; };
-		30D82B5B1E6F92E3000F7075 /* WebPrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebPrivacyPolicyViewController.swift; path = MyBridgeApp/WebPrivacyPolicyViewController.swift; sourceTree = SOURCE_ROOT; };
+		30D82B5B1E6F92E3000F7075 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebViewController.swift; path = MyBridgeApp/WebViewController.swift; sourceTree = SOURCE_ROOT; };
+		30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginBackend.swift; path = "Custom Classes/Backend Communication/LoginBackend.swift"; sourceTree = "<group>"; };
+		30D82B611E6FCFC1000F7075 /* SwipedRightView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipedRightView.swift; path = "Custom Classes/Custom Views/SwipedRightView.swift"; sourceTree = "<group>"; };
 		30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HalfSwipeCard.swift; path = "Custom Classes/Custom Views/HalfSwipeCard.swift"; sourceTree = "<group>"; };
 		30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
@@ -325,6 +329,7 @@
 				90CA09AA1E0B080100330646 /* HexagonView.swift */,
 				90CA09AE1E1B5D3400330646 /* AcceptIgnoreView.swift */,
 				9032B4531E311B0600136408 /* ProfilePicturesView.swift */,
+				30D82B611E6FCFC1000F7075 /* SwipedRightView.swift */,
 				9021CC431E3A539D00720260 /* ProfileViews */,
 				9028FA3D1E4D2CC7002CC80F /* ReportUserMenu.swift */,
 			);
@@ -342,6 +347,7 @@
 				90F5E3C21E5CDD5F001399F6 /* ExternalBackend.swift */,
 				90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */,
 				903477BA1E652CB8007E2CAE /* SwipeBackend.swift */,
+				30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */,
 				906383E91E6FB1E700D901EA /* EditProfileBackend.swift */,
 			);
 			name = "Backend Communication";
@@ -399,7 +405,7 @@
 				30BF70021E5BE2B20008C2B5 /* ExternalProfileViewController.swift */,
 				300A1D811E53F9EF0071FED7 /* LoginViewController.swift */,
 				302799D31E57684D00AFFB90 /* PrivacyPolicyViewController.swift */,
-				30D82B5B1E6F92E3000F7075 /* WebPrivacyPolicyViewController.swift */,
+				30D82B5B1E6F92E3000F7075 /* WebViewController.swift */,
 				30BF700A1E5C95C60008C2B5 /* SettingsViewController.swift */,
 			);
 			name = updated;
@@ -776,7 +782,7 @@
 				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
 				30BF6FEF1E5BDBA40008C2B5 /* MyProfileObjects.swift in Sources */,
 				30BF700D1E5C95F60008C2B5 /* SettingsLayout.swift in Sources */,
-				30D82B5C1E6F92E3000F7075 /* WebPrivacyPolicyViewController.swift in Sources */,
+				30D82B5C1E6F92E3000F7075 /* WebViewController.swift in Sources */,
 				302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */,
 				302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */,
 				30BF6FF11E5BDD860008C2B5 /* MessagesViewController.swift in Sources */,
@@ -852,6 +858,7 @@
 				302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				9043B77E1E56ABC100D76BCE /* User.swift in Sources */,
+				30D82B621E6FCFC1000F7075 /* SwipedRightView.swift in Sources */,
 				3030C0CF1DD54E8F0077F7AC /* modelName.swift in Sources */,
 				30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */,
 				302799D41E57684D00AFFB90 /* PrivacyPolicyViewController.swift in Sources */,
@@ -869,6 +876,7 @@
 				3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */,
 				907201431E41D96B00A77BC4 /* CropImageViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
+				30D82B601E6FC7E6000F7075 /* LoginBackend.swift in Sources */,
 				302799D61E5768E400AFFB90 /* PrivacyPolicyLayout.swift in Sources */,
 				30BF6FFB1E5BDEB40008C2B5 /* ThreadObjects.swift in Sources */,
 				90AD62281E2E259D001F1074 /* ProfilePicturesViewController.swift in Sources */,

@@ -16,6 +16,7 @@ struct Constants {
             static let backgroundGray = UIColor(red: 240 / 255, green: 240 / 255, blue: 245 / 255, alpha: 1.0)
             static let textDarkGray = UIColor(red: 22 / 255, green: 22 / 255, blue: 22 / 255, alpha: 1.0)
             static let textGray = UIColor(red: 159 / 255, green: 159 / 255, blue: 158 / 255, alpha: 1.0)
+            static let buttonGray = UIColor(red: 218 / 255, green: 223 / 255, blue: 240 / 255, alpha: 1.0)
 		}
 
 		struct bridgeType {

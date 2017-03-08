@@ -27,6 +27,7 @@ class SwipeCard: UIView {
 
         self.frame = swipeCardFrame()
 		self.clipsToBounds = true
+        
     }
     
     required init(coder aDecoder: NSCoder) {

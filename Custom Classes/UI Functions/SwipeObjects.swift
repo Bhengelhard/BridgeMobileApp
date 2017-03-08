@@ -16,13 +16,13 @@ class SwipeObjects {
             super.init()
             
             // Setting Navigation Items
-            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            let rightIcon = #imageLiteral(resourceName: "Messages_Navbar_Inactive")
             rightButton.setImage(rightIcon, for: .normal)
             
-            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            let leftIcon = #imageLiteral(resourceName: "Profile_Navbar_Inactive")
             leftButton.setImage(leftIcon, for: .normal)
             
-            let titleImage = #imageLiteral(resourceName: "All_Types_Icon_Colors")
+            let titleImage = #imageLiteral(resourceName: "Necter_Navbar_Active")
             titleImageView.image = titleImage
             navItem.titleView = titleImageView
         }
@@ -42,14 +42,13 @@ class SwipeObjects {
             self.setTitleColor(UIColor.white, for: .normal)
             self.titleLabel?.font = Constants.Fonts.bold24
             self.contentVerticalAlignment = UIControlContentVerticalAlignment.bottom
-            self.layer.cornerRadius = 18
-            self.backgroundColor = DisplayUtility.gradientColor(size: size)
+            self.layer.cornerRadius = 15
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
             
             if text == "NECT" {
                 self.backgroundColor = DisplayUtility.gradientColor(size: self.size)
             } else {
-                self.backgroundColor = UIColor.lightGray
+                self.backgroundColor = Constants.Colors.necter.buttonGray
             }
         }
         
@@ -68,7 +67,7 @@ class SwipeObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.setImage(#imageLiteral(resourceName: "Profile_Selected_Gray_Bubble"), for: .normal)
+            self.setImage(#imageLiteral(resourceName: "Information_Icon"), for: .normal)
         }
         
         required init?(coder aDecoder: NSCoder) {

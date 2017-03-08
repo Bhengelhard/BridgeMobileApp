@@ -92,6 +92,7 @@ class FacebookFunctions {
     // MARK: - Updating User's Friends
 
     func updateFacebookFriends () {
+        print("updating facebook friends")
         facebookFriends(withCursor: nil)
     }
 

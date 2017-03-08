@@ -16,7 +16,7 @@ class MessagesObjects {
             super.init()
             
             // Setting Navigation Items
-            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            let leftIcon = #imageLiteral(resourceName: "Necter_Navbar_Inactive")
             leftButton.setImage(leftIcon, for: .normal)
             
             let titleImage = #imageLiteral(resourceName: "Messages_Navbar_Active")

@@ -21,7 +21,6 @@ class ExternalProfileLayout {
     let factLabel = ExternalProfileObjects.FactLabel()
     let dividerLine = ExternalProfileObjects.Line()
     let aboutMeLabel = ExternalProfileObjects.AboutMeLabel()
-    let reputationScore = ExternalProfileObjects.ReputationScore()
     let messageButton = ExternalProfileObjects.MessageButton()
     
     // MARK: - Layout
@@ -52,23 +51,21 @@ class ExternalProfileLayout {
             profilePicturesVC.view.autoMatch(.height, to: .width, of: view)
             
             /// Diameter of the dismissButton and reportButton
-            let diameter:CGFloat = 29
+            let diameter:CGFloat = 35
             
             // Set the dismissButton to the top left above the profilePicturesView
             scrollView.insertSubview(dismissButton, aboveSubview: profilePicturesVC.view)
             dismissButton.autoPinEdge(toSuperviewEdge: .top, withInset: 2*buffer)
-            dismissButton.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
+            dismissButton.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
             dismissButton.autoSetDimensions(to: CGSize(width: diameter, height: diameter))
             dismissButton.layer.cornerRadius = diameter / 2.0
-            dismissButton.backgroundColor = UIColor.green
             
-            // Set the reportButton to display in the top right above the profilePicturesView
-            scrollView.insertSubview(reportButton, aboveSubview: profilePicturesVC.view)
-            reportButton.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
-            reportButton.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
-            reportButton.autoSetDimensions(to: CGSize(width: diameter, height: diameter))
-            reportButton.layer.cornerRadius = diameter / 2.0
-            reportButton.backgroundColor = UIColor.blue
+//            // Set the reportButton to display in the top right above the profilePicturesView
+//            scrollView.insertSubview(reportButton, aboveSubview: profilePicturesVC.view)
+//            reportButton.autoAlignAxis(.horizontal, toSameAxisOf: dismissButton)
+//            reportButton.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
+//            reportButton.autoSetDimensions(to: CGSize(width: diameter, height: diameter))
+//            reportButton.layer.cornerRadius = diameter / 2.0
             
             // Set the pageControl of the profilePicturesPageViewController
             profilePicturesVC.pageControl.autoAlignAxis(.vertical, toSameAxisOf: view)
@@ -84,12 +81,6 @@ class ExternalProfileLayout {
             factLabel.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
             factLabel.autoPinEdge(.top, to: .bottom, of: name, withOffset: buffer)
             factLabel.autoMatch(.width, to: .width, of: view, withOffset: 2*buffer)
-            
-            // Set the reputationScore pinned to the right of the screen in line with the factsLabel
-            scrollView.addSubview(reputationScore)
-            reputationScore.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
-            reputationScore.autoAlignAxis(.horizontal, toSameAxisOf: factLabel)
-            reputationScore.autoSetDimensions(to: CGSize(width: 40, height: 40))
             
             // Set the divider line below the factsLabel
             scrollView.addSubview(dividerLine)

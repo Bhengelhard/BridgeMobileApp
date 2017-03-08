@@ -38,6 +38,7 @@ class PrivacyPolicyObjects {
             self.font = Constants.Fonts.bold24
             self.textColor = Constants.Colors.necter.textGray
             self.textAlignment = NSTextAlignment.center
+            self.numberOfLines = 0
         }
         
         required init?(coder aDecoder: NSCoder) {

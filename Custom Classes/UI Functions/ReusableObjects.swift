@@ -13,15 +13,13 @@ class ReusableObjects {
     /// FBLoginButton is UIButton allowing user to log into the necter app using Facebook authentication
     class FBLoginButton: UIButton  {
         
+        let size = CGSize(width: 250, height: 42.5)
+        
         init() {
             super.init(frame: CGRect())
             
-            self.setTitle("CONNECT WITH FACEBOOK", for: .normal)
-            self.setTitleColor(UIColor.white, for: .normal)
-            self.setTitleColor(DisplayUtility.gradientColor(size: (self.titleLabel?.frame.size)!), for: .highlighted)
-            self.titleLabel?.font = Constants.Fonts.bold16
-            self.backgroundColor = UIColor(red: 66.0/255.0, green: 103.0/255.0, blue: 178.0/255.0, alpha: 1)
-            self.layer.cornerRadius = 12
+            self.setImage(#imageLiteral(resourceName: "FB_Login_Button"), for: .normal)
+            
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -111,7 +109,9 @@ class ReusableObjects {
             if let currIndex = arrayOfVCs.index(of: viewController) {
                 if currIndex + 1 < arrayOfVCs.count {
                     return arrayOfVCs[currIndex + 1]
-                } else if circular {
+                }
+                // Move to beginning of arrayOfVCs
+                else if circular {
                     return arrayOfVCs.first
                 }
             }
@@ -124,7 +124,9 @@ class ReusableObjects {
             if let currIndex = arrayOfVCs.index(of: viewController) {
                 if currIndex - 1 >= 0 {
                     return arrayOfVCs[currIndex - 1]
-                } else if circular {
+                }
+                // Move to end of arrayOfVCs
+                else if circular {
                     return arrayOfVCs.last
                 }
             }

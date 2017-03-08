@@ -37,13 +37,6 @@ class MyProfileLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
-//            // Layout the profilePictureBackground with the Profile Faded Hexagon Image
-//            view.addSubview(profilePictureBackground)
-//            profilePictureBackground.autoPinEdge(.top, to: .bottom, of: navBar)
-//            profilePictureBackground.autoPinEdge(.left, to: .left, of: view)
-//            profilePictureBackground.autoMatch(.width, to: .width, of: view)
-//            profilePictureBackground.autoMatch(.height, to: .width, of: profilePictureBackground)
-            
             // Layout the profilePicture with the current User's profile Picture
             view.addSubview(profilePicture)
             profilePicture.autoAlignAxis(.vertical, toSameAxisOf: view)
@@ -55,20 +48,14 @@ class MyProfileLayout {
             
             // Layout editProfileButton on the bottom right corner of the profilePictureBackground Hexagon
             view.addSubview(editProfileButton)
-            editProfileButton.autoPinEdge(.bottom, to: .bottom, of: profilePicture)
-            editProfileButton.autoPinEdge(.right, to: .right, of: profilePicture)
-            editProfileButton.autoSetDimensions(to: CGSize(width: 70, height: 70))
+            editProfileButton.autoPinEdge(.bottom, to: .bottom, of: profilePicture, withOffset: -20)
+            editProfileButton.autoPinEdge(.right, to: .right, of: profilePicture, withOffset: -7.5)
+            editProfileButton.autoSetDimensions(to: CGSize(width: 40, height: 40))
             
-//            // Layout reputationScore below the profilePicture with the user's score
-//            view.addSubview(reputationScore)
-//            reputationScore.autoAlignAxis(.vertical, toSameAxisOf: view)
-//            reputationScore.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 8)
-//            reputationScore.autoSetDimensions(to: CGSize(width: 40, height: 40))
-//            
             // Layout reputationText below the reputationScore
             view.addSubview(name)
             name.autoAlignAxis(.vertical, toSameAxisOf: view)
-            name.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 12)
+            name.autoPinEdge(.top, to: .bottom, of: profilePicture, withOffset: 12) 
 
             // Layout settingsButton below the reputationText
             view.addSubview(settingsButton)
@@ -78,13 +65,13 @@ class MyProfileLayout {
             // Layout friendsImage to pin to the bottom of the view
             view.addSubview(friendsImage)
             friendsImage.autoPinEdge(toSuperviewEdge: .left)
+            friendsImage.autoPinEdge(toSuperviewEdge: .right)
             friendsImage.autoPinEdge(toSuperviewEdge: .bottom)
-            friendsImage.autoMatch(.width, to: .width, of: view)
             
             // Layout inviteButton to center of the friendsImage
             view.addSubview(inviteButton)
-            inviteButton.autoAlignAxis(.horizontal, toSameAxisOf: friendsImage)
-            inviteButton.autoAlignAxis(.vertical, toSameAxisOf: friendsImage)
+            inviteButton.autoAlignAxis(.horizontal, toSameAxisOf: friendsImage, withOffset: 20)
+            inviteButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
             
         }

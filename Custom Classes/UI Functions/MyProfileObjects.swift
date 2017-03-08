@@ -16,7 +16,7 @@ class MyProfileObjects {
             super.init()
             
             // Setting Navigation Items
-            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar")
+            let rightIcon = #imageLiteral(resourceName: "Necter_Navbar_Inactive")
             rightButton.setImage(rightIcon, for: .normal)
             
             let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
@@ -68,6 +68,9 @@ class MyProfileObjects {
             
             self.setBackgroundImage(#imageLiteral(resourceName: "Profile_Edit_Button"), for: .normal)
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+            self.layer.shadowColor = UIColor.black.cgColor
+            self.layer.shadowOpacity = 0.4
+            self.layer.shadowOffset = .init(width: 1, height: 1)
             
         }
         
@@ -156,6 +159,9 @@ class MyProfileObjects {
             super.init(frame: CGRect())
             
             self.setImage(#imageLiteral(resourceName: "Profile_Invite_Button"), for: .normal)
+            self.layer.shadowColor = UIColor.black.cgColor
+            self.layer.shadowOpacity = 0.4
+            self.layer.shadowOffset = .init(width: 1, height: 1)
         }
         
         required init?(coder aDecoder: NSCoder) {

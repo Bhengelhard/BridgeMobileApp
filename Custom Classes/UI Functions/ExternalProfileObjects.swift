@@ -16,6 +16,9 @@ class ExternalProfileObjects {
             super.init(frame: CGRect())
             
             self.setImage(#imageLiteral(resourceName: "Down_Arrow"), for: .normal)
+            self.layer.shadowColor = UIColor.black.cgColor
+            self.layer.shadowOpacity = 0.4
+            self.layer.shadowOffset = .init(width: 1, height: 1)
         }
         
         required init?(coder: NSCoder) {
@@ -53,19 +56,6 @@ class ExternalProfileObjects {
             pageControl.numberOfPages = arrayOfVCs.count
             super.setViewControllers([arrayOfVCs[0]], direction: .forward, animated: true, completion: nil)
         }
-        
-//        func setImages(images: [UIImage]) {
-//            var arrayOfVCs = [ProfilePicturesViewController]()
-//            for image in images {
-//                arrayOfVCs.append(ProfilePicturesViewController(image: image))
-//            }
-//            print("arrayOfVCs contains (\(arrayOfVCs.count) VCs")
-//            if arrayOfVCs.count > 0 {
-//                super.arrayOfVCs = arrayOfVCs
-//                super.pageControl.numberOfPages = arrayOfVCs.count
-//                super.setViewControllers([arrayOfVCs[0]], direction: .forward, animated: true, completion: nil)
-//            }
-//        }
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
@@ -182,6 +172,9 @@ class ExternalProfileObjects {
             self.layer.cornerRadius = 18
             self.backgroundColor = DisplayUtility.gradientColor(size: size)
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+            self.layer.shadowColor = UIColor.black.cgColor
+            self.layer.shadowOpacity = 0.4
+            self.layer.shadowOffset = .init(width: 1, height: 1)
             
         }
         

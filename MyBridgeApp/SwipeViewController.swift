@@ -42,6 +42,7 @@ class SwipeViewController: UIViewController {
         swipeBackend.setTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
             swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
         }
+        
     }
     
     

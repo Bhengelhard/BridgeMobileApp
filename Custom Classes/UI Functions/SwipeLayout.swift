@@ -20,6 +20,7 @@ class SwipeLayout {
     let infoButton = SwipeObjects.InfoButton()
     let connectIcon = UIImageView(image: #imageLiteral(resourceName: "Necter_Icon"))
     let disconnectIcon = UIImageView(image: #imageLiteral(resourceName: "Disconnect_Icon"))
+    let swipeRightView = SwipedRightView(user1Image: UIImage(), user2Image: UIImage())
     var topSwipeCardHorizontalConstraint: NSLayoutConstraint?
     var bottomSwipeCardHorizontalConstraint: NSLayoutConstraint?
     
@@ -92,23 +93,9 @@ class SwipeLayout {
             disconnectIcon.autoAlignAxis(.horizontal, toSameAxisOf: topSwipeCard)
             disconnectIcon.alpha = 0
             
-            
-            // Layout the pass button at the bottom of the view for dismissing presented matches
-            
-            
-            // Layout nect button at the bottom of the view for connecting presented matches
-            
-            
-
-//            // Layout the secondSwipeCard in the center of the screen
-//            view.addSubview(secondSwipeCard)
-//            view.autoCenterInSuperview()
-            
-//            // Layout the firstSwipeCard in the center of the screen above the secondSwipeCard
-//            view.addSubview(firstSwipeCard)
-//            firstSwipeCard.autoCenterInSuperview()
-
-
+            // Layout swipeRightView full screen
+//            view.addSubview(swipeRightView)
+//            swipeRightView.autoPinEdgesToSuperviewEdges()
             
         }
         

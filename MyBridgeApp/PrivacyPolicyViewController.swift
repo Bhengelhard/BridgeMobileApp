@@ -23,6 +23,7 @@ class PrivacyPolicyViewController: UIViewController {
 
         layout.returnToLoginButton.addTarget(self, action: #selector(returnToLogin(_:)), for: .touchUpInside)
         layout.privacyPolicyButton.addTarget(self, action: #selector(privacyPolicyButtonTapped(_:)), for: .touchUpInside)
+        layout.fbLoginButton.addTarget(self, action: #selector(loginWithFB(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -44,11 +45,14 @@ class PrivacyPolicyViewController: UIViewController {
         dismiss(animated: true, completion: nil)
         //self.performSegue(withIdentifier: "showLogin", sender: self)
     }
-    // Open URL with the Privacy Policy
+    /// Open URL with the Privacy Policy
     func privacyPolicyButtonTapped(_ sender: UIButton) {
-        print("tapped")
-        present(WebPrivacyPolicyViewController(), animated: true, completion: nil)
-        
+        present(WebViewController(title: "Privacy Policy", url: "http://www.necter.social/privacypolicy"), animated: true, completion: nil)
+    }
+    /// Authenticates user through Facebook Login
+    func loginWithFB(_ sender: UIButton) {
+        let fbLogin = FBLogin()
+        fbLogin.initialize(vc: self)
     }
     
 
