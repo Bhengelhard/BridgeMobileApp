@@ -15,6 +15,7 @@ class NewMatchesView: UIScrollView {
     let frameWithMatches: CGRect
     var allNewMatches: [NewMatch]
     var displayedNewMatches: [NewMatch]
+    var users = [User]()
     let line: UIView
     var newMatchesTitle: UILabel
     let gradientLayer: CAGradientLayer
@@ -133,12 +134,13 @@ class NewMatchesView: UIScrollView {
     
     func handleTap(_ gesture: UIGestureRecognizer) {
         print("tapped")
+        /*
         let newMatchView = gesture.view!
         let acceptIgnoreView = AcceptIgnoreView(newMatch: displayedNewMatches[newMatchView.tag])
         if let vc = self.vc {
             acceptIgnoreView.setVC(vc: vc)
             vc.view.addSubview(acceptIgnoreView)
-        }
+        }*/
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -146,7 +148,50 @@ class NewMatchesView: UIScrollView {
     }
     
     func addUser(_ user: User) {
-        // FIXME: implement
+        users.append(user)
+        layoutUser(user: user, position: users.count-1)
+    }
+    
+    func layoutUser(user: User, position: Int) {
+        frame = frameWithMatches
+        contentSize = CGSize(width: max(DisplayUtility.screenWidth, CGFloat(position+1)*0.2243*DisplayUtility.screenWidth), height: 0.17*DisplayUtility.screenHeight)
+        line.frame = CGRect(x: 0.0463*frame.width, y: 0.99*frame.height, width: 0.9205*contentSize.width, height: 1)
+        gradientLayer.frame = line.bounds
+        line.isHidden = false
+        
+        newMatchesTitle.frame = CGRect(x: 0.0463*frame.width, y: self.frame.minY + 0.02*frame.height, width: 0.8*frame.width, height: 0.06*frame.width)
+        newMatchesTitle.isHidden = false
+        
+        let profilePicView = UIImageView()
+        profilePicView.frame = CGRect(x: CGFloat(position)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY + 0.05*DisplayUtility.screenHeight, width: 0.168*frame.width, height: 0.168*frame.width)
+        profilePicView.layer.cornerRadius = profilePicView.frame.height/2
+        profilePicView.layer.borderWidth = 2
+        profilePicView.layer.borderColor = UIColor.black.cgColor
+        profilePicView.clipsToBounds = true
+        profilePicView.tag = position
+        profilePicView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        addSubview(profilePicView)
+        
+        user.getMainPicture { (picture) in
+            picture.getImage { (image) in
+                profilePicView.image = image
+            }
+        }
+        
+        // add gesture recognizer
+        profilePicView.isUserInteractionEnabled = true
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        profilePicView.addGestureRecognizer(gesture)
+        
+        // add name
+        let nameLabel = UILabel(frame: CGRect(x: profilePicView.frame.minX, y: profilePicView.frame.maxY + 0.08*frame.height, width: 0, height: 0.2*frame.height))
+        addSubview(nameLabel)
+        
+        if let firstName = user.firstName {
+            nameLabel.text = firstName
+            nameLabel.sizeToFit()
+        }
+        
     }
     
     
