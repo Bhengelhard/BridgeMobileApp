@@ -36,12 +36,12 @@ class SwipeViewController: UIViewController {
         layout.bottomSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
         layout.bottomSwipeCard.isUserInteractionEnabled = false
         
-        // Get the next swipeCards
-        let swipeBackend = SwipeBackend()
-        //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
-        swipeBackend.setTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
-            swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
-        }
+//        // Get the next swipeCards
+//        let swipeBackend = SwipeBackend()
+//        //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
+//        swipeBackend.setTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
+//            swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
+//        }
         
     }
     

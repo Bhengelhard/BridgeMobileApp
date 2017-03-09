@@ -6,7 +6,7 @@
 //  Copyright © 2016 Parse. All rights reserved.
 //
 
-import UIKit
+import PureLayout
 
 class SwipeCard: UIView {
     
@@ -35,7 +35,7 @@ class SwipeCard: UIView {
     }
     
     func initialize(bridgePairing: BridgePairing) {
-        let swipCardCornerRadius: CGFloat = 9//13.379
+        let swipCardCornerRadius: CGFloat = 12//13.379
         self.layer.cornerRadius = swipCardCornerRadius
         
         cardsPredictedType = "Business"
