@@ -18,7 +18,7 @@ class Picture: NSObject {
     private let parsePicture: PFObject
     
     /// The objectId of the Picture
-    let id: String?
+    var id: String?
     
     private var imageFile: PFFile?
     
@@ -60,7 +60,7 @@ class Picture: NSObject {
     
     static func create(image: UIImage? = nil, croppedImage: UIImage? = nil, cropFrame: CGRect? = nil, withBlock block: PictureBlock? = nil) {
         
-        let parsePicture = PFObject(className: "Picture")
+        let parsePicture = PFObject(className: "Pictures")
         
         // set Pictures ACL
         let acl = PFACL()
@@ -153,7 +153,7 @@ class Picture: NSObject {
             let query = PFQuery(className: "Pictures")
             query.getObjectInBackground(withId: pictureIDs[index]) { (parsePicture, error) in
                 if let error = error {
-                    print("error getting picture - \(error)")
+                    print("error getting picture with id \(pictureIDs[index]) - \(error)")
                 } else if let parsePicture = parsePicture {
                     var newSoFar = soFar
                     newSoFar.append(Picture(parsePicture: parsePicture))
@@ -203,6 +203,7 @@ class Picture: NSObject {
             if let error = error {
                 print("error saving picture - \(error)")
             } else if succeeded {
+                self.id = self.parsePicture.objectId
                 if let block = block {
                     block(self)
                 }

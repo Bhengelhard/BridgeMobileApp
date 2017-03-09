@@ -17,7 +17,7 @@ class User: NSObject {
     private let parseUser: PFUser
     
     /// The objectId of the User
-    let id: String?
+    var id: String?
     
     /// The Facebook ID of the User
     var fbID: String?
@@ -338,6 +338,7 @@ class User: NSObject {
             if let error = error {
                 print("error saving user - \(error)")
             } else if succeeded {
+                self.id = self.parseUser.objectId
                 if let block = block {
                     block(self)
                 }

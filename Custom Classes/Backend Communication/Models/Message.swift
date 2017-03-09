@@ -16,7 +16,7 @@ class Message: NSObject {
     private let parseMessage: PFObject
     
     /// The objectId of the Message
-    let id: String?
+    var id: String?
     
     /// The objectId of the first user of the Message
     var user1ID: String?
@@ -356,6 +356,7 @@ class Message: NSObject {
             if let error = error {
                 print("error saving message - \(error)")
             } else if succeeded {
+                self.id = self.parseMessage.objectId
                 if let block = block {
                     block(self)
                 }

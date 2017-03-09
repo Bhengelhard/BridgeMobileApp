@@ -16,7 +16,7 @@ class BridgePairing: NSObject {
     private let parseBridgePairing: PFObject
     
     /// The objectId of the BridgePairing
-    let id: String?
+    var id: String?
     
     /// The objectId of the first user of the BridgePairing
     var user1ID: String?
@@ -508,6 +508,7 @@ class BridgePairing: NSObject {
             if let error = error {
                 print("error saving bridge pairing - \(error)")
             } else if succeeded {
+                self.id = self.parseBridgePairing.objectId
                 if let block = block {
                     block(self)
                 }

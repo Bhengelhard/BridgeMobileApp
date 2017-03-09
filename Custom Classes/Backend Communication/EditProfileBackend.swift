@@ -38,8 +38,8 @@ class EditProfileBackend {
         } else {
             let image = images[index]
             Picture.create(image: image) { (picture) in
-                picture.save { (picture) in
-                    if let pictureID = picture.id {
+                picture.save { (savedPicture) in
+                    if let pictureID = savedPicture.id {
                         var newSoFar = soFar
                         newSoFar.append(pictureID)
                         self.savePicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar)
