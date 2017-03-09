@@ -14,6 +14,7 @@ class SwipeViewController: UIViewController {
     // MARK: Global Variables
     let layout = SwipeLayout()
     let transitionManager = TransitionManager()
+    let swipeBackend = SwipeBackend()
     
     var didSetupConstraints = false
     
@@ -36,12 +37,11 @@ class SwipeViewController: UIViewController {
         layout.bottomSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
         layout.bottomSwipeCard.isUserInteractionEnabled = false
         
-//        // Get the next swipeCards
-//        let swipeBackend = SwipeBackend()
-//        //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
-//        swipeBackend.setTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
-//            swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
-//        }
+        // Get the next swipeCards
+        //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
+        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
+            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
+        }
         
     }
     
@@ -62,7 +62,6 @@ class SwipeViewController: UIViewController {
     }
     
     func didSwipe(right: Bool) {
-        let swipeBackend = SwipeBackend()
         
         // if swiped left, check in bridge pairing
         if !right {
