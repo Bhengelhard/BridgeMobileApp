@@ -11,6 +11,7 @@ import UIKit
 class MyProfileBackend {
     
     func setProfilePicture(hexView: HexagonView) {
+        /*
         var storedLocally = false
         let localData = LocalData()
         if let data = localData.getMainProfilePicture() {
@@ -20,14 +21,15 @@ class MyProfileBackend {
             }
         }
         if !storedLocally {
+        */
             User.getCurrent { (user) in
-                user.getMainPicture(withBlock: { (picture) in
-                    if let image = picture.croppedImage {
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
                         hexView.setBackgroundImage(image: image)
                     }
-                })
+                }
             }
-        }
+        //}
     }
     
     func setReputationScore(button: UIButton) {

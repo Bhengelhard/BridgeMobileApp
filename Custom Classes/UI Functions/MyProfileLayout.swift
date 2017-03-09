@@ -74,6 +74,9 @@ class MyProfileLayout {
             inviteButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
             
+            // Set profile picture
+            let myProfileBackend = MyProfileBackend()
+            myProfileBackend.setProfilePicture(hexView: profilePicture)
         }
         
         return true

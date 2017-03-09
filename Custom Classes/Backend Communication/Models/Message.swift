@@ -118,7 +118,7 @@ class Message: NSObject {
     }
     
     /// Creates a new Message object with the provided parameters and calls the given block on the result.
-    static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String?, user2PictureID: String?, lastSingleMessage: String? = nil, withBlock block: MessageBlock?) {
+    static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String? = nil, user2PictureID: String? = nil, lastSingleMessage: String? = nil, withBlock block: MessageBlock? = nil) {
         
         let parseMessage = PFObject(className: "Messages")
         
