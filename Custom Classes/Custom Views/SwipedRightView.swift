@@ -10,38 +10,25 @@ import PureLayout
 
 class SwipedRightView: UIView {
     
+    // MARK: - Global Variables
     let title = PopupViewObjects.Title(titleImage: #imageLiteral(resourceName: "Sweet_Nect"))
     let text = PopupViewObjects.Text(text: "We'll let you know when they start a conversation!")
-    let user1Hexagon: PopupViewObjects.HexagonWithImage
-    let user2Hexagon: PopupViewObjects.HexagonWithImage
+    let user1Hexagon: PopupViewObjects.HexagonWithUserId
+    let user2Hexagon: PopupViewObjects.HexagonWithUserId
     let messageButton = PopupViewObjects.MessageButton()
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
     
-
-    init(user1Image: UIImage?, user2Image: UIImage?) {
-        // initialize user1Hexagon with user1Image
-        if let image = user1Image {
-            user1Hexagon = PopupViewObjects.HexagonWithImage(image: image)
-        } else {
-            user1Hexagon = PopupViewObjects.HexagonWithImage(image: nil)
-        }
-        user1Hexagon.layer.masksToBounds = true
+    // MARK: - Init
+    init(user1Id: String?, user2Id: String?) {
         
-        // initialize user2Hexagon with user2Image
-        if let image = user2Image {
-            user2Hexagon = PopupViewObjects.HexagonWithImage(image: image)
-        } else {
-            user2Hexagon = PopupViewObjects.HexagonWithImage(image: nil)
-        }
-        user1Hexagon.clipsToBounds = true
+        self.user1Hexagon = PopupViewObjects.HexagonWithUserId(userId: user1Id)
+        self.user2Hexagon = PopupViewObjects.HexagonWithUserId(userId: user2Id)
         
         super.init(frame: CGRect())
         
         // MARK: - Add Targets
         keepSwipingButton.addTarget(self, action: #selector(keepSwipingTapped(_:)), for: .touchUpInside)
         messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
-        user1Hexagon.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(user1HexagonTapped(_:))))
-        user2Hexagon.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(user2HexagonTapped(_:))))
         
         // MARK: - Layout objects
         // Set background
@@ -121,13 +108,14 @@ class SwipedRightView: UIView {
         print("messageButtonTapped")
     }
     
-    // Present user1's ExternalProfile
-    func user1HexagonTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        print("user1HexagonTapped")
-    }
-    
-    // Present user2's ExternalProfile
-    func user2HexagonTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        print("user2HexagonTapped")
+    func setHexagonImages(user1Image: UIImage?, user2Image: UIImage?) {
+        // Set Hexagon Images
+        if let image = user1Image {
+            user1Hexagon.setBackgroundImage(image: image)
+        }
+        
+        if let image = user2Image {
+            user2Hexagon.setBackgroundImage(image: image)
+        }
     }
 }

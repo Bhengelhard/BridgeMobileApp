@@ -20,7 +20,6 @@ class SwipeLayout {
     let infoButton = SwipeObjects.InfoButton()
     let connectIcon = UIImageView(image: #imageLiteral(resourceName: "Necter_Icon"))
     let disconnectIcon = UIImageView(image: #imageLiteral(resourceName: "Disconnect_Icon"))
-    let swipeRightView = SwipedRightView(user1Image: nil, user2Image: nil)
     var topSwipeCardHorizontalConstraint: NSLayoutConstraint?
     var bottomSwipeCardHorizontalConstraint: NSLayoutConstraint?
     
@@ -92,10 +91,6 @@ class SwipeLayout {
             disconnectIcon.autoAlignAxis(.vertical, toSameAxisOf: view, withOffset: -0.15*view.frame.width)
             disconnectIcon.autoAlignAxis(.horizontal, toSameAxisOf: topSwipeCard)
             disconnectIcon.alpha = 0
-            
-            // Layout swipeRightView full screen
-            view.addSubview(swipeRightView)
-            swipeRightView.autoPinEdgesToSuperviewEdges()
             
         }
         

@@ -21,6 +21,7 @@ class SwipeCard: UIView {
     var bottomHalf = HalfSwipeCard()
 	var overlay = CALayer()
 	let defaultOverlayOpacity: Float = 0.75
+    var bridgePairing: BridgePairing?
     
     init () {
         super.init(frame: CGRect())
@@ -35,6 +36,8 @@ class SwipeCard: UIView {
     }
     
     func initialize(bridgePairing: BridgePairing) {
+        self.bridgePairing = bridgePairing
+        
         let swipCardCornerRadius: CGFloat = 12//13.379
         self.layer.cornerRadius = swipCardCornerRadius
         

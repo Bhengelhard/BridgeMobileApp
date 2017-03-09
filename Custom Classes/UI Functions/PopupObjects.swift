@@ -37,16 +37,14 @@ class PopupViewObjects {
         }
     }
     
-    class HexagonWithImage: HexagonView {
-        init(image: UIImage?) {
+    class HexagonWithUserId: HexagonView {
+        var userId: String?
+        
+        init(userId: String?) {
+            if let id = userId {
+                self.userId = id
+            }
             super.init()
-            
-            if let image = image {
-                self.setBackgroundImage(image: image)
-            }
-            else {
-                self.setBackgroundColor(color: Constants.Colors.necter.buttonGray)
-            }
             
             self.layer.shadowColor = UIColor.black.cgColor
             self.layer.shadowOpacity = 0.4
@@ -56,6 +54,7 @@ class PopupViewObjects {
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+        
     }
     
     class MessageButton: UIButton {

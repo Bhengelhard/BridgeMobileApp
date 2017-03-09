@@ -128,7 +128,7 @@ class MessagesBackend {
             if let snapshot = messageSnapshots[id] {
                 textView.text = snapshot
             } else {
-                textView.text = "You've been 'nected! Get the conversation going!"
+                textView.text = "You've been 'nected. Get the conversation going!"
                 textView.textColor = .gray
             }
         }
