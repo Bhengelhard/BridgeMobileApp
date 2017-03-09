@@ -49,10 +49,20 @@ class PopupViewObjects {
             self.layer.shadowColor = UIColor.black.cgColor
             self.layer.shadowOpacity = 0.4
             self.layer.shadowOffset = .init(width: 1, height: 1)
+            self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_:))))
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+        
+        func tapped(_ gestureRecognizer: UITapGestureRecognizer) {
+            if let hexagon = gestureRecognizer.view as? PopupViewObjects.HexagonWithUserId {
+                if let userId = hexagon.userId {
+                    // Notify EditProfileViewController to present the tappedTableCell
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userId)
+                }
+            }
         }
         
     }

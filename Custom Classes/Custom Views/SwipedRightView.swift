@@ -108,6 +108,7 @@ class SwipedRightView: UIView {
         print("messageButtonTapped")
     }
     
+    // MARK: - Functions
     func setHexagonImages(user1Image: UIImage?, user2Image: UIImage?) {
         // Set Hexagon Images
         if let image = user1Image {

@@ -21,6 +21,9 @@ class SwipeViewController: UIViewController {
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Listener for presentingExternalProfileVC
+        NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
     }
     
     override func loadView() {
@@ -79,6 +82,14 @@ class SwipeViewController: UIViewController {
         layout.recenterTopSwipeCard()
     }
     
+    func presentExternalProfileVC(_ notification: Notification) {
+        if let userId = notification.object as? String {
+            let externalProfileVC = ExternalProfileViewController()
+            externalProfileVC.setUserID(userID: userId)
+            self.present(externalProfileVC, animated: true, completion: nil)
+        }
+    }
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination
@@ -89,7 +100,6 @@ class SwipeViewController: UIViewController {
             self.transitionManager.animationDirection = "Right"
         }
         //vc.transitioningDelegate = self.transitionManager
-        
     }
     
 }
