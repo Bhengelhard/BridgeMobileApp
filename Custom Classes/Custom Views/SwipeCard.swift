@@ -38,16 +38,9 @@ class SwipeCard: UIView {
         let swipCardCornerRadius: CGFloat = 9//13.379
         self.layer.cornerRadius = swipCardCornerRadius
         
-        cardsPredictedType = "Business"
-        
         topHalf = HalfSwipeCard()
         topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         topHalf.initialize(name: bridgePairing.user1Name!)
-        bridgePairing.getUser1Picture { (picture) in
-            picture.getImage { (image) in
-                self.topHalf.setImage(image: image)
-            }
-        }
         
         //applying rounded corners to the topHalf
         let maskPath = UIBezierPath(roundedRect: topHalf.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: swipCardCornerRadius, height: swipCardCornerRadius))
@@ -66,11 +59,6 @@ class SwipeCard: UIView {
         bottomHalf = HalfSwipeCard()
         bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         bottomHalf.initialize(name: bridgePairing.user2Name!)
-        bridgePairing.getUser2Picture { (picture) in
-            picture.getImage { (image) in
-                self.bottomHalf.setImage(image: image)
-            }
-        }
         
         //applying rounded corners to the bottomHalf
         let maskPath2 = UIBezierPath(roundedRect: bottomHalf.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: swipCardCornerRadius, height: swipCardCornerRadius))
@@ -106,24 +94,9 @@ class SwipeCard: UIView {
             
             layer.insertSublayer(shadowLayer, below: nil)
         }
-        
-        //Setting the user's ids
-        cardsUser1Id = bridgePairing.user1ID!
-        cardsUser2Id = bridgePairing.user2ID!
-        
-        //Setting the User's cities to inform suggestions for Reason for Connections
-        
-//        if let city = user1City {
-//            cardsUser1City = city
-//        }
-//        if let city = user2City {
-//            cardsUser2City = city
-//        }
-        
     }
     
     func addOverlay() {
-        print("adding overlay")
         overlay.frame = self.layer.bounds
         //overlay.frame.origin = CGPoint(x: 0, y: 0)
         overlay.backgroundColor = UIColor.black.cgColor

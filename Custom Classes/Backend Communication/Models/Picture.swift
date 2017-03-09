@@ -146,6 +146,8 @@ class Picture: NSObject {
             if let imageFile = imageToPFFile(image: image) {
                 parsePicture["image_file"] = imageFile
             }
+        } else if let imageFile = imageFile {
+          parsePicture["image_file"] = imageFile
         } else {
             parsePicture.remove(forKey: "image_file")
         }
@@ -154,6 +156,8 @@ class Picture: NSObject {
             if let croppedImageFile = imageToPFFile(image: croppedImage) {
                 parsePicture["cropped_image_file"] = croppedImageFile
             }
+        } else if let croppedImageFile = croppedImageFile {
+            parsePicture["cropped_image_file"] = croppedImageFile
         } else {
             parsePicture.remove(forKey: "cropped_image_file")
         }

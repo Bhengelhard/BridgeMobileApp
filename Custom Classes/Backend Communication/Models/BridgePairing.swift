@@ -8,7 +8,7 @@
 
 import Parse
 
-class BridgePairing: NSObject, NSCoding {
+class BridgePairing: NSObject {
     
     typealias BridgePairingBlock = (BridgePairing) -> Void
     typealias BridgePairingsBlock = ([BridgePairing]) -> Void
@@ -261,7 +261,7 @@ class BridgePairing: NSObject, NSCoding {
     /// on the result.
     /// - parameter id: the objectId of the BridgePairing
     /// - parameter block: the block to call on the result
-    func get(withID id: String, withBlock block: BridgePairingBlock? = nil) {
+    static func get(withID id: String, withBlock block: BridgePairingBlock? = nil) {
         let query = PFQuery(className: "BridgePairings")
         query.getObjectInBackground(withId: id) { (parseObject, error) in
             if let error = error {
@@ -309,12 +309,9 @@ class BridgePairing: NSObject, NSCoding {
         
         if let userFriendList = user.friendList {
             
-            let subQuery1 = PFQuery(className: "BridgePairings")
-            subQuery1.whereKey("user_objectId1", containedIn: userFriendList)
-            let subQuery2 = PFQuery(className: "BridgePairings")
-            subQuery2.whereKey("user_objectId2", containedIn: userFriendList)
-            
-            let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            let query = PFQuery(className: "BridgePairings")
+            query.whereKey("user_objectId1", containedIn: userFriendList)
+            query.whereKey("user_objectId2", containedIn: userFriendList)
             query.limit = limit
             
             if notShownOnly {
@@ -430,7 +427,7 @@ class BridgePairing: NSObject, NSCoding {
         }
         
         if let user2ID = user2ID {
-            parseBridgePairing["user_objectId1"] = user2ID
+            parseBridgePairing["user_objectId2"] = user2ID
         } else {
             parseBridgePairing.remove(forKey: "user_objectId2")
         }
@@ -517,185 +514,53 @@ class BridgePairing: NSObject, NSCoding {
             }
         }
     }
-    
-    required convenience init(coder aDecoder: NSCoder) {
-        let user1ID = aDecoder.decodeObject(forKey: "user1ID") as! String?
-        let user2ID = aDecoder.decodeObject(forKey: "user2ID") as! String?
-        let connecterID = aDecoder.decodeObject(forKey: "connecterID") as! String?
-        let user1Name = aDecoder.decodeObject(forKey: "user1Name") as! String?
-        let user2Name = aDecoder.decodeObject(forKey: "user2Name") as! String?
-        let connecterName = aDecoder.decodeObject(forKey: "connecterName") as! String?
-        let user1PictureID = aDecoder.decodeObject(forKey: "user1PictureID") as! String?
-        let user2PictureID = aDecoder.decodeObject(forKey: "user2PictureID") as! String?
-        let connecterPictureID = aDecoder.decodeObject(forKey: "connecterPictureID") as! String?
-        let bridged = aDecoder.decodeObject(forKey: "bridged") as! Bool?
-        let user1Response = aDecoder.decodeObject(forKey: "user1Repsonse") as! Int?
-        let user2Response = aDecoder.decodeObject(forKey: "user2Response") as! Int?
-        let shownTo = aDecoder.decodeObject(forKey: "shownTo") as! [String]?
-        let checkedOut = aDecoder.decodeObject(forKey: "chekcedOut") as! Bool?
-        
-        let parseBridgePairing = PFObject(className: "BridgePairings")
-        
-        if let user1ID = user1ID {
-            parseBridgePairing["user_objectId1"] = user1ID
-        } else {
-            parseBridgePairing.remove(forKey: "user_objectId1")
-        }
-        
-        if let user2ID = user2ID {
-            parseBridgePairing["user_objectId1"] = user2ID
-        } else {
-            parseBridgePairing.remove(forKey: "user_objectId2")
-        }
-        
-        if let connecterID = connecterID {
-            parseBridgePairing["connecter_objectId"] = connecterID
-        } else {
-            parseBridgePairing.remove(forKey: "connecter_objectId")
-        }
-        
-        if let user1Name = user1Name {
-            parseBridgePairing["user1_name"] = user1Name
-        }  else {
-            parseBridgePairing.remove(forKey: "user1_name")
-        }
-        
-        if let user2Name = user2Name {
-            parseBridgePairing["user2_name"] = user2Name
-        } else {
-            parseBridgePairing.remove(forKey: "user2_name")
-        }
-        
-        if let connecterName = connecterName {
-            parseBridgePairing["connecter_name"] = connecterName
-        } else {
-            parseBridgePairing.remove(forKey: "connecter_name")
-        }
-        
-        if let user1PictureID = user1PictureID {
-            parseBridgePairing["user1_picture_objectId"] = user1PictureID
-        } else {
-            parseBridgePairing.remove(forKey: "user1_picture_objectId")
-        }
-        
-        if let user2PictureID = user2PictureID {
-            parseBridgePairing["user2_picture_objectId"] = user2PictureID
-        } else {
-            parseBridgePairing.remove(forKey: "user2_picture_objectId")
-        }
-        
-        if let connecterPictureID = connecterPictureID {
-            parseBridgePairing["connecter_picture_objectId"] = connecterPictureID
-        } else {
-            parseBridgePairing.remove(forKey: "connecter_picture_objectId")
-        }
-        
-        if let bridged = bridged {
-            parseBridgePairing["bridged"] = bridged
-        } else {
-            parseBridgePairing.remove(forKey: "bridged")
-        }
-        
-        if let user1Response = user1Response {
-            parseBridgePairing["user1_response"] = user1Response
-        } else {
-            parseBridgePairing.remove(forKey: "user1_response")
-        }
-        
-        if let user2Response = user2Response {
-            parseBridgePairing["user2_response"] = user2Response
-        } else {
-            parseBridgePairing.remove(forKey: "user2_response")
-        }
-        
-        if let shownTo = shownTo {
-            parseBridgePairing["shown_to"] = shownTo
-        } else {
-            parseBridgePairing.remove(forKey: "shown_to")
-        }
-        
-        if let checkedOut = checkedOut {
-            parseBridgePairing["checked_out"] = checkedOut
-        } else {
-            parseBridgePairing.remove(forKey: "checkedOut")
-        }
-        
-        self.init(parseBridgePairing: parseBridgePairing)
-    }
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(user1ID, forKey: "user1ID")
-        aCoder.encode(user2ID, forKey: "user2ID")
-        aCoder.encode(connecterID, forKey: "connecterID")
-        aCoder.encode(user1Name, forKey: "user1Name")
-        aCoder.encode(user2Name, forKey: "user2Name")
-        aCoder.encode(connecterName, forKey: "connecterName")
-        aCoder.encode(user1PictureID, forKey: "user1PictureID")
-        aCoder.encode(user2PictureID, forKey: "user2PictureID")
-        aCoder.encode(connecterPictureID, forKey: "connecterPictureID")
-        aCoder.encode(bridged, forKey: "bridged")
-        if let user1Response = user1Response {
-            aCoder.encode(user1Response.rawValue, forKey: "user1Respnse")
-        } else {
-            aCoder.encode(nil, forKey: "user1Respnse")
-        }
-        if let user2Response = user2Response {
-            aCoder.encode(user2Response.rawValue, forKey: "user2Respnse")
-        } else {
-            aCoder.encode(nil, forKey: "user2Respnse")
-        }
-        aCoder.encode(shownTo, forKey: "shownTo")
-        aCoder.encode(checkedOut, forKey: "checkedOut")
-        
-    }
-    
 }
 
 class LocalBridgePairings {
     
     // MARK: - Global Variables
     /// Indicates whether the user has entered an access code
-    var bridgePairing1: BridgePairing? = nil
-    var bridgePairing2: BridgePairing? = nil
+    var bridgePairing1ID: String?
+    var bridgePairing2ID: String?
     
     // MARK: -
     init(){
         let userDefaults = UserDefaults.standard
-        if let decoded = userDefaults.object(forKey: "userInfo") {
+        if let decoded = userDefaults.object(forKey: "bridgePairings") {
             if let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded as! Data) {
-                bridgePairing1 = (bridgePairings as! BridgePairings).bridgePairing1
-                bridgePairing2 = (bridgePairings as! BridgePairings).bridgePairing2
+                bridgePairing1ID = (bridgePairings as! BridgePairings).bridgePairing1ID
+                bridgePairing2ID = (bridgePairings as! BridgePairings).bridgePairing2ID
             }
         }    }
     
     // MARK: - Set and Get Functions
     
-    //Saving bridgePairing 1
-    func setBridgePairing1(_ bridgePairing1: BridgePairing?) {
-        self.bridgePairing1 = bridgePairing1
+    //Saving bridgePairing 1 ID
+    func setBridgePairing1ID(_ bridgePairing1ID: String?) {
+        self.bridgePairing1ID = bridgePairing1ID
     }
-    func getBridgePairing1() -> BridgePairing? {
+    func getBridgePairing1ID() -> String? {
         let userDefaults = UserDefaults.standard
         if let _ = userDefaults.object(forKey: "bridgePairings"){
             let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
             let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
-            return bridgePairings.bridgePairing1
+            return bridgePairings.bridgePairing1ID
         }
         else{
             return nil
         }
     }
     
-    //Saving bridgePairing 2
-    func setBridgePairing2(_ bridgePairing2: BridgePairing?) {
-        self.bridgePairing2 = bridgePairing2
+    //Saving bridgePairing 2 ID
+    func setBridgePairing2ID(_ bridgePairing2ID: String?) {
+        self.bridgePairing2ID = bridgePairing2ID
     }
-    func getBridgePairing2() -> BridgePairing? {
+    func getBridgePairing2ID() -> String? {
         let userDefaults = UserDefaults.standard
         if let _ = userDefaults.object(forKey: "bridgePairings"){
             let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
             let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
-            return bridgePairings.bridgePairing2
+            return bridgePairings.bridgePairing2ID
         }
         else{
             return nil
@@ -705,7 +570,7 @@ class LocalBridgePairings {
     // MARK: -
     // This function saves the local data to the device
     func synchronize(){
-        let bridgePairings: BridgePairings = BridgePairings(bridgePairing1: bridgePairing1, bridgePairing2: bridgePairing2)
+        let bridgePairings: BridgePairings = BridgePairings(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: bridgePairings)
         userDefaults.set(encodedData, forKey: "bridgePairings")
@@ -714,23 +579,24 @@ class LocalBridgePairings {
     
 }
 
+
 class BridgePairings:NSObject, NSCoding {
-    var bridgePairing1: BridgePairing? = nil
-    var bridgePairing2: BridgePairing? = nil
+    var bridgePairing1ID: String?
+    var bridgePairing2ID: String?
     
-    init(bridgePairing1: BridgePairing?, bridgePairing2: BridgePairing?) {
-        self.bridgePairing1 = bridgePairing1
-        self.bridgePairing2 = bridgePairing2
+    init(bridgePairing1ID: String?, bridgePairing2ID: String?) {
+        self.bridgePairing1ID = bridgePairing1ID
+        self.bridgePairing2ID = bridgePairing2ID
     }
     
     required convenience init(coder aDecoder: NSCoder) {
-        let bridgePairing1 = aDecoder.decodeObject(forKey: "bridgePairing1") as! BridgePairing?
-        let bridgePairing2 = aDecoder.decodeObject(forKey: "bridgePairing2") as! BridgePairing?
-        self.init(bridgePairing1: bridgePairing1, bridgePairing2: bridgePairing2)
+        let bridgePairing1ID = aDecoder.decodeObject(forKey: "bridgePairing1ID") as! String?
+        let bridgePairing2ID = aDecoder.decodeObject(forKey: "bridgePairing2ID") as! String?
+        self.init(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID)
     }
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(bridgePairing1, forKey: "bridgePairing1")
-        aCoder.encode(bridgePairing2, forKey: "bridgePairing2")
+        aCoder.encode(bridgePairing1ID, forKey: "bridgePairing1ID")
+        aCoder.encode(bridgePairing2ID, forKey: "bridgePairing2ID")
     }
     
 }
