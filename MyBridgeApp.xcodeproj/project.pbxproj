@@ -78,6 +78,7 @@
 		30D82B5C1E6F92E3000F7075 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B5B1E6F92E3000F7075 /* WebViewController.swift */; };
 		30D82B601E6FC7E6000F7075 /* LoginBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */; };
 		30D82B621E6FCFC1000F7075 /* SwipedRightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B611E6FCFC1000F7075 /* SwipedRightView.swift */; };
+		30D82B641E70D611000F7075 /* PopupObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B631E70D611000F7075 /* PopupObjects.swift */; };
 		30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */; };
 		30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */; };
 		30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */; };
@@ -210,6 +211,7 @@
 		30D82B5B1E6F92E3000F7075 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebViewController.swift; path = MyBridgeApp/WebViewController.swift; sourceTree = SOURCE_ROOT; };
 		30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginBackend.swift; path = "Custom Classes/Backend Communication/LoginBackend.swift"; sourceTree = "<group>"; };
 		30D82B611E6FCFC1000F7075 /* SwipedRightView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipedRightView.swift; path = "Custom Classes/Custom Views/SwipedRightView.swift"; sourceTree = "<group>"; };
+		30D82B631E70D611000F7075 /* PopupObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopupObjects.swift; path = "Custom Classes/UI Functions/PopupObjects.swift"; sourceTree = "<group>"; };
 		30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HalfSwipeCard.swift; path = "Custom Classes/Custom Views/HalfSwipeCard.swift"; sourceTree = "<group>"; };
 		30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 			isa = PBXGroup;
 			children = (
 				303139081E65D6E300F8D9BF /* ReusableObjects.swift */,
+				30D82B631E70D611000F7075 /* PopupObjects.swift */,
 				3030C0D01DD54E9C0077F7AC /* DisplayUtility.swift */,
 				3030C0D11DD54E9C0077F7AC /* TransitionManager.swift */,
 				300A1D7D1E53EB6C0071FED7 /* LoginLayout.swift */,
@@ -874,6 +877,7 @@
 				30E2AF781DDA2AB70023AA95 /* ReasonForConnection.swift in Sources */,
 				903477B91E60C3C4007E2CAE /* MessagesTableDelegate.swift in Sources */,
 				3030C0CD1DD54E8F0077F7AC /* CustomTimer.swift in Sources */,
+				30D82B641E70D611000F7075 /* PopupObjects.swift in Sources */,
 				907201431E41D96B00A77BC4 /* CropImageViewController.swift in Sources */,
 				CB5829481CAA26D900DC86C9 /* BridgeViewController.swift in Sources */,
 				30D82B601E6FC7E6000F7075 /* LoginBackend.swift in Sources */,
