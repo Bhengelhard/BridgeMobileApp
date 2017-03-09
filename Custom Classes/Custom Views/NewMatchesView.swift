@@ -15,6 +15,7 @@ class NewMatchesView: UIScrollView {
     let frameWithMatches: CGRect
     var allNewMatches: [NewMatch]
     var displayedNewMatches: [NewMatch]
+    var users = [User]()
     let line: UIView
     var newMatchesTitle: UILabel
     let gradientLayer: CAGradientLayer
@@ -27,7 +28,8 @@ class NewMatchesView: UIScrollView {
         line = UIView()
         gradientLayer = DisplayUtility.gradientLayer()
         newMatchesTitle = UILabel()
-        super.init(frame: frameWithNoMatches)
+        //super.init(frame: frameWithNoMatches)
+        super.init(frame: CGRect())
         contentSize = frame.size
         line.backgroundColor = .clear
         line.layer.insertSublayer(gradientLayer, at: 0)
@@ -40,7 +42,9 @@ class NewMatchesView: UIScrollView {
         newMatchesTitle.font = UIFont(name: "BentonSans-Light", size: 18)
         newMatchesTitle.textAlignment = NSTextAlignment.left
         newMatchesTitle.isHidden = true
-        addSubview(newMatchesTitle)
+        //addSubview(newMatchesTitle)
+        
+        bounces = false
         
     }
     
@@ -133,12 +137,13 @@ class NewMatchesView: UIScrollView {
     
     func handleTap(_ gesture: UIGestureRecognizer) {
         print("tapped")
+        /*
         let newMatchView = gesture.view!
         let acceptIgnoreView = AcceptIgnoreView(newMatch: displayedNewMatches[newMatchView.tag])
         if let vc = self.vc {
             acceptIgnoreView.setVC(vc: vc)
             vc.view.addSubview(acceptIgnoreView)
-        }
+        }*/
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -146,7 +151,64 @@ class NewMatchesView: UIScrollView {
     }
     
     func addUser(_ user: User) {
-        // FIXME: implement
+        users.append(user)
+        layoutUser(user: user, position: users.count-1)
+    }
+    
+    func layoutUser(user: User, position: Int) {
+        //frame = frameWithMatches
+        
+        //newMatchesTitle.frame = CGRect(x: 0.0463*frame.width, y: self.frame.minY + 0.02*frame.height, width: 0.8*frame.width, height: 0.06*frame.width)
+        //newMatchesTitle.isHidden = false
+        
+        let profilePicView = UIImageView()
+        //profilePicView.frame = CGRect(x: CGFloat(position)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY + 0.05*DisplayUtility.screenHeight, width: 0.168*frame.width, height: 0.168*frame.width)
+        addSubview(profilePicView)
+        let profilePicWidth = 0.6*frame.height
+        let profilePicHeight = profilePicWidth
+        let spaceBetweenProfilePics = 0.2*frame.height
+        profilePicView.autoSetDimensions(to: CGSize(width: profilePicWidth, height: profilePicHeight))
+        profilePicView.autoPinEdge(toSuperviewEdge: .top)
+        profilePicView.autoPinEdge(toSuperviewEdge: .leading, withInset: spaceBetweenProfilePics + CGFloat(position)*(profilePicWidth+spaceBetweenProfilePics))
+        profilePicView.layer.cornerRadius = profilePicHeight/2
+        profilePicView.layer.borderWidth = 2
+        profilePicView.layer.borderColor = UIColor.black.cgColor
+        profilePicView.clipsToBounds = true
+        profilePicView.tag = position
+        profilePicView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        
+        
+        user.getMainPicture { (picture) in
+            picture.getImage { (image) in
+                profilePicView.image = image
+            }
+        }
+        
+        // add gesture recognizer
+        profilePicView.isUserInteractionEnabled = true
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        profilePicView.addGestureRecognizer(gesture)
+        
+        // add name
+        //let nameLabel = UILabel(frame: CGRect(x: profilePicView.frame.minX, y: profilePicView.frame.maxY + 0.08*frame.height, width: 0, height: 0.2*frame.height))
+        let nameLabel = UILabel()
+        addSubview(nameLabel)
+        nameLabel.autoAlignAxis(.vertical, toSameAxisOf: profilePicView)
+        nameLabel.autoPinEdge(.top, to: .bottom, of: profilePicView, withOffset: 0.02*frame.height)
+        nameLabel.autoMatch(.width, to: .width, of: profilePicView)
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.textAlignment = .center
+        
+        if let firstName = user.firstName {
+            nameLabel.text = firstName
+        }
+        
+        contentSize = CGSize(width: max(DisplayUtility.screenWidth, spaceBetweenProfilePics + CGFloat(position+1)*(profilePicWidth+spaceBetweenProfilePics)), height: frame.height)
+        
+//        line.frame = CGRect(x: 0.0463*frame.width, y: frame.height-1, width: 0.9205*contentSize.width, height: 1)
+        line.frame = CGRect(x: 0, y: frame.height-1, width: contentSize.width, height: 1)
+        gradientLayer.frame = line.bounds
+        line.isHidden = false
     }
     
     

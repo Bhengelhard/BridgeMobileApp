@@ -284,7 +284,7 @@ class BridgePairing: NSObject, NSCoding {
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             if bridgedOnly {
-                query.whereKey("bridges", equalTo: true)
+                query.whereKey("bridged", equalTo: true)
             }
             query.limit = limit
             
@@ -671,7 +671,7 @@ class LocalBridgePairings {
     // MARK: - Set and Get Functions
     
     //Saving bridgePairing 1
-    func setBridgePairing1(_ bridgePairing1: BridgePairing) {
+    func setBridgePairing1(_ bridgePairing1: BridgePairing?) {
         self.bridgePairing1 = bridgePairing1
     }
     func getBridgePairing1() -> BridgePairing? {
@@ -687,8 +687,8 @@ class LocalBridgePairings {
     }
     
     //Saving bridgePairing 2
-    func setBridgePairing2(_ bridgePairing1: BridgePairing) {
-        self.bridgePairing2 = bridgePairing1
+    func setBridgePairing2(_ bridgePairing2: BridgePairing?) {
+        self.bridgePairing2 = bridgePairing2
     }
     func getBridgePairing2() -> BridgePairing? {
         let userDefaults = UserDefaults.standard

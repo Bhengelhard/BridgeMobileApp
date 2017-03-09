@@ -10,8 +10,6 @@ import UIKit
 
 class MessagesBackend {
     
-    let tableView: UITableView
-    
     // number of elements
     var totalElements: Int32 = 0
     let noOfElementsPerRefresher = 5
@@ -24,12 +22,11 @@ class MessagesBackend {
     var messageSnapshots = [String: String?]()
     var messageProfilePictures = [String: UIImage?]()
     
-    init(tableView: UITableView) {
-        self.tableView = tableView
+    init() {
     }
     
     // get rid of all stored messages and reload messages table from scratch
-    func reloadMessagesTable() {
+    func reloadMessagesTable(tableView: UITableView) {
         totalElements = 0
         noOfElementsFetched = 0
         noOfElementsProcessed = 0
@@ -41,7 +38,7 @@ class MessagesBackend {
         
         getTotalMessagesCount { (count) in
             self.totalElements = count
-            self.refreshMessagesTable()
+            self.refreshMessagesTable(tableView: tableView)
         }
     }
     
@@ -52,7 +49,7 @@ class MessagesBackend {
     }
     
     // get next batch of messages and add to messages table
-    func refreshMessagesTable() {
+    func refreshMessagesTable(tableView: UITableView) {
         User.getCurrent { (user) in
             Message.getAll(withUser: user, withLimit: self.noOfElementsPerRefresher, withSkip: self.noOfElementsFetched) { (messages) in
                 self.noOfElementsFetched += messages.count
@@ -84,6 +81,14 @@ class MessagesBackend {
                         
                         // save profile picture of other user in message
                         // FIXME: add user's cropped prof pic image to message, to avoid needing a query
+                        message.getNonCurrentUser { (otherUser) in
+                            otherUser.getMainPicture { (picture) in
+                                picture.getImage { (image) in
+                                    self.messageProfilePictures[messageID] = image
+                                    tableView.reloadData()
+                                }
+                            }
+                        }
                         
                         // save message snapshot
                         if let messageLastSingleMessage = message.lastSingleMessage {
@@ -91,19 +96,48 @@ class MessagesBackend {
                         }
                     }
                 }
-                self.tableView.reloadData()
+                tableView.reloadData()
             }
         }
     }
     
     func loadNewMatches(newMatchesView: NewMatchesView) {
         User.getCurrent { (user) in
-            BridgePairing.getAll(withUser: user, bridgedOnly: true) { (bridgePairings) in
-                for bridgePairing in bridgePairings {
-                    bridgePairing.getNonCurrentUser { (user) in
-                        newMatchesView.addUser(user)
+            Message.getAll(withUser: user) { (messages) in
+                for message in messages {
+                    if message.lastSingleMessage == nil {
+                        message.getNonCurrentUser { (otherUser) in
+                            newMatchesView.addUser(otherUser)
+                        }
                     }
                 }
+            }
+        }
+    }
+    
+    func setParticipantsLabel(index: Int, label: UILabel) {
+        if let id = messagePositionToIDMapping[index] {
+            if let name = messageNames[id] {
+                label.text = name
+            }
+        }
+    }
+    
+    func setSanpshotLabel(index: Int, textView: UITextView) {
+        if let id = messagePositionToIDMapping[index] {
+            if let snapshot = messageSnapshots[id] {
+                textView.text = snapshot
+            } else {
+                textView.text = "You've been 'nected! Get the conversation going!"
+                textView.textColor = .gray
+            }
+        }
+    }
+    
+    func setProfilePicture(index: Int, imageView: UIImageView) {
+        if let id = messagePositionToIDMapping[index] {
+            if let image = messageProfilePictures[id] {
+                imageView.image = image
             }
         }
     }

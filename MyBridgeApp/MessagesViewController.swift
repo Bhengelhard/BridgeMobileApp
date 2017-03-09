@@ -14,6 +14,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     // MARK: Global Variables
     let layout = MessagesLayout()
     let transitionManager = TransitionManager()
+    let messagesBackend = MessagesBackend()
     
     var didSetupConstraints = false
     
@@ -21,6 +22,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
+        messagesBackend.loadNewMatches(newMatchesView: layout.newMatchesScrollView)
     }
     
     override func loadView() {
@@ -46,7 +49,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return messagesBackend.messagePositionToIDMapping.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -56,11 +59,21 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = MessagesTableCell()
         cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
+        messagesBackend.setParticipantsLabel(index: indexPath.row, label: cell.participants)
+        messagesBackend.setSanpshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
+        messagesBackend.setProfilePicture(index: indexPath.row, imageView: cell.profilePic)
+        cell.notificationDot.alpha = 0
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == messagesBackend.messagePositionToIDMapping.count-1 && Int32(messagesBackend.noOfElementsFetched) < messagesBackend.totalElements {
+            messagesBackend.refreshMessagesTable(tableView: tableView)
+        }
     }
     
     // MARK: - Targets
