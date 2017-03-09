@@ -8,17 +8,23 @@
 
 import UIKit
 
-class EditProfilePicturesTableViewCell: UITableViewCell {
+class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var parentVC: UIViewController?
     
     var pictureBoxes = [PictureBox]()
+    
+    let imagePicker = UIImagePickerController()
+    var indexForNewImage: Int?
     
     class PictureBox: UIImageView {
         
         let number: Int
         let numberImageView = UIImageView()
         let pictureButton: PictureButton
+        var pictureID: String?
+        
+        var empty = true
         
         init(sideLength: CGFloat, cornerRadius: CGFloat, number: Int, numberMaxSideLength: CGFloat, pictureButtonDiameter: CGFloat) {
             self.number = number
@@ -61,14 +67,18 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
             fatalError("init(coder:) has not been implemented")
         }
         
-        func setImage(image: UIImage) {
+        func setImage(image: UIImage, pictureID: String?) {
             self.image = image
+            self.pictureID = pictureID
             pictureButton.setToDelete()
+            empty = false
         }
         
         func removeImage() {
             image = nil
+            pictureID = nil
             pictureButton.setToAdd()
+            empty = true
         }
     }
     
@@ -106,6 +116,9 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
         self.backgroundColor = Constants.Colors.necter.backgroundGray
         self.selectionStyle = .none
         
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        
         autoSetDimensions(to: CGSize(width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth))
         
         let largeSideLength = 0.97 * 2/3 * (frame.width - 40)
@@ -120,10 +133,12 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
         for i in 0...5 {
             let sideLength = i == 0 ? largeSideLength : smallSideLength
             let pictureBox = PictureBox(sideLength: sideLength, cornerRadius: cornerRadius, number: i+1,numberMaxSideLength: numberMaxSideLength,  pictureButtonDiameter: pictureButtonDiameter)
-            pictureBox.pictureButton.addTarget(self, action: #selector(showAddImageMenu(_:)), for: .touchUpInside)
             addSubview(pictureBox)
             pictureBoxes.append(pictureBox)
+
+            pictureBox.pictureButton.addTarget(self, action: #selector(showMenu(_:)), for: .touchUpInside)
             
+            // layout picture box
             if i == 0 {
                 pictureBox.autoPinEdge(toSuperviewEdge: .top, withInset: 20)
                 pictureBox.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
@@ -155,41 +170,57 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
         self.parentVC = parentVC
     }
     
-    func setImage(image: UIImage, atIndex index: Int) {
-        if index < pictureBoxes.count {
-            pictureBoxes[index].setImage(image: image)
-            pictureBoxes[index].pictureButton.removeTarget(self, action: #selector(showAddImageMenu(_:)), for: .touchUpInside)
-            pictureBoxes[index].pictureButton.addTarget(self, action: #selector(showDeleteImageMenu(_:)), for: .touchUpInside)
+    // set image at lowest available index
+    func addImage(image: UIImage, pictureID: String?) {
+        for pictureBox in pictureBoxes {
+            if pictureBox.empty {
+                pictureBox.setImage(image: image, pictureID: pictureID)
+                break
+            }
         }
     }
     
+    func addPicture(picture: Picture) {
+        for pictureBox in pictureBoxes {
+            if pictureBox.empty {
+                pictureBox.empty = false
+                picture.getImage { (image) in
+                    pictureBox.setImage(image: image, pictureID: picture.id)
+                }
+                break
+            }
+        }
+    }
+    
+    // delete image and move all remaining images to lowest available index
     func deleteImage(atIndex index: Int) {
         for i in index..<pictureBoxes.count-1 {
-            if let newImage = pictureBoxes[i+1].image {
-                pictureBoxes[i].setImage(image: newImage)
-                pictureBoxes[i].pictureButton.removeTarget(self, action: #selector(showDeleteImageMenu(_:)), for: .touchUpInside)
-                pictureBoxes[i].pictureButton.addTarget(self, action: #selector(showAddImageMenu(_:)), for: .touchUpInside)
-                
+            if let image = pictureBoxes[i+1].image {
+                pictureBoxes[i].setImage(image: image, pictureID: pictureBoxes[i+1].pictureID)
             } else {
                 pictureBoxes[i].removeImage()
-                pictureBoxes[i].pictureButton.removeTarget(self, action: #selector(showAddImageMenu(_:)), for: .touchUpInside)
-                pictureBoxes[i].pictureButton.addTarget(self, action: #selector(showDeleteImageMenu(_:)), for: .touchUpInside)
             }
         }
         pictureBoxes[pictureBoxes.count-1].removeImage()
-        pictureBoxes[pictureBoxes.count-1].pictureButton.removeTarget(self, action: #selector(showAddImageMenu(_:)), for: .touchUpInside)
-        pictureBoxes[pictureBoxes.count-1].pictureButton.addTarget(self, action: #selector(showDeleteImageMenu(_:)), for: .touchUpInside)
     }
     
-    func showAddImageMenu(_ sender: UIButton) {
-        print("showing add menu")
+    func showMenu(_ sender: UIButton) {
         if let pictureBox = sender.superview as? PictureBox {
-            print("number: \(pictureBox.number)")
+            if pictureBox.empty {
+                showAddImageMenu(index: pictureBox.number-1)
+            } else {
+                showDeleteImageMenu(index: pictureBox.number-1)
+            }
         }
+    }
+    
+    func showAddImageMenu(index: Int) {
         let addImageMenu = UIAlertController(title: nil, message: "Add Image From:", preferredStyle: .actionSheet)
         
         let cameraRollAction = UIAlertAction(title: "Camera Roll", style: .default) { (alert) in
-            print("adding from camera roll")
+            if let parentVC = self.parentVC {
+                parentVC.present(self.imagePicker, animated: true)
+            }
         }
         
         let facebookAction = UIAlertAction(title: "Facebook", style: .default) { (alert) in
@@ -197,7 +228,7 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in
-            print("cancelling")
+            addImageMenu.dismiss(animated: true, completion: nil)
         }
         
         addImageMenu.addAction(cameraRollAction)
@@ -209,16 +240,17 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
         }
     }
     
-    func showDeleteImageMenu(_ sender: UIButton) {
+    func showDeleteImageMenu(index: Int) {
         print("showing delete menu")
         let deleteImageMenu = UIAlertController(title: nil, message: "Delete This Image?", preferredStyle: .actionSheet)
         
+        // delete image
         let deleteAction = UIAlertAction(title: "Yes", style: .default) { (alert) in
-            print("deleting")
+            self.deleteImage(atIndex: index)
         }
         
+        // don't delete image
         let cancelAction = UIAlertAction(title: "No", style: .default) { (alert) in
-            print("cancelling")
         }
         
         deleteImageMenu.addAction(deleteAction)
@@ -227,6 +259,22 @@ class EditProfilePicturesTableViewCell: UITableViewCell {
         if let parentVC = parentVC {
             parentVC.present(deleteImageMenu, animated: true, completion: nil)
         }
+    }
+    
+    //update the UIImageView once an image has been picked
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            addImage(image: image, pictureID: nil)
+        }
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    
+    func savePictures() {
+        var pictureIDs = [String?]()
+        for pictureBox in pictureBoxes {
+            pictureIDs.append(pictureBox.pictureID)
+        }
+        let editProfileBackend = EditProfileBackend()
     }
 
 }

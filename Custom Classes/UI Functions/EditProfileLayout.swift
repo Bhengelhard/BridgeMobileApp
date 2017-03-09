@@ -42,15 +42,9 @@ class EditProfileLayout {
             
             let editProfileBackend = EditProfileBackend()
             editProfileBackend.setPictures { (pictures) in
-                for i in 0..<pictures.count {
-                    if i >= 6 {
-                        break
-                    }
-                    print("i = \(i)")
-                    pictures[i].getImage { (image) in
-                        print(i)
-                        self.table.editProfilePicturesCell.setImage(image: image, atIndex: i)
-                    }
+                for i in 0..<min(6, pictures.count) {
+                    let picture = pictures[i]
+                    self.table.editProfilePicturesCell.addPicture(picture: picture)
                 }
             }
         }

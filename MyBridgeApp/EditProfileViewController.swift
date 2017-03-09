@@ -43,6 +43,7 @@ class EditProfileViewController: UIViewController {
     
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
+        layout.table.editProfilePicturesCell.savePictures()
         dismiss(animated: true, completion: nil)
     }
     

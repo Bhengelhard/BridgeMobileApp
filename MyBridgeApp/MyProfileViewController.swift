@@ -20,10 +20,7 @@ class MyProfileViewController: UIViewController {
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let myProfileBackend = MyProfileBackend()
-        myProfileBackend.setProfilePicture(hexView: layout.profilePicture)
-        
+                
         // Adding Targets and GestureRecognizers
         layout.editProfileButton.addTarget(self, action: #selector(editProfileButtonTapped(_:)), for: .touchUpInside)
         layout.settingsButton.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)

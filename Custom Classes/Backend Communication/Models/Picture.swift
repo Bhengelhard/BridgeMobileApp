@@ -13,6 +13,7 @@ class Picture: NSObject {
     typealias PictureBlock = (Picture) -> Void
     typealias PicturesBlock = ([Picture]) -> Void
     typealias ImageBlock = (UIImage) -> Void
+    typealias ImagesBlock = ([UIImage]) -> Void
     
     private let parsePicture: PFObject
     
@@ -54,6 +55,34 @@ class Picture: NSObject {
         if let parseCroppedImageFile = parsePicture["cropped_image_file"] as? PFFile {
             croppedImageFile = parseCroppedImageFile
             setImage(fromFile: parseCroppedImageFile)
+        }
+    }
+    
+    static func create(image: UIImage? = nil, croppedImage: UIImage? = nil, cropFrame: CGRect? = nil, withBlock block: PictureBlock? = nil) {
+        
+        let parsePicture = PFObject(className: "Picture")
+        
+        // set Pictures ACL
+        let acl = PFACL()
+        acl.getPublicReadAccess = true
+        acl.getPublicWriteAccess = true
+        parsePicture.acl = acl
+        
+        if let image = image {
+            parsePicture["image_file"] = imageToPFFile(image: image)
+        }
+        
+        if let croppedImage = croppedImage {
+            parsePicture["cropped_image_file"] = imageToPFFile(image: croppedImage)
+        }
+        
+        if let cropFrame = cropFrame {
+            parsePicture["crop_frame"] = cropFrame.dictionaryRepresentation
+        }
+        
+        let picture = Picture(parsePicture: parsePicture)
+        if let block = block {
+            block(picture)
         }
     }
     
@@ -134,7 +163,7 @@ class Picture: NSObject {
         }
     }
     
-    private func imageToPFFile(image: UIImage) -> PFFile? {
+    private static func imageToPFFile(image: UIImage) -> PFFile? {
         if let data = UIImageJPEGRepresentation(image, 1.0) {
             return PFFile(data: data)
         }
@@ -143,7 +172,7 @@ class Picture: NSObject {
     
     func save(withBlock block: PictureBlock? = nil) {
         if let image = image {
-            if let imageFile = imageToPFFile(image: image) {
+            if let imageFile = Picture.imageToPFFile(image: image) {
                 parsePicture["image_file"] = imageFile
             }
         } else if let imageFile = imageFile {
@@ -153,7 +182,7 @@ class Picture: NSObject {
         }
         
         if let croppedImage = croppedImage {
-            if let croppedImageFile = imageToPFFile(image: croppedImage) {
+            if let croppedImageFile = Picture.imageToPFFile(image: croppedImage) {
                 parsePicture["cropped_image_file"] = croppedImageFile
             }
         } else if let croppedImageFile = croppedImageFile {
