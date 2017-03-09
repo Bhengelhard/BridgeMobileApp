@@ -8,14 +8,14 @@
 
 import UIKit
 
-class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FacebookImagePickerControllerDelegate {
     
     var parentVC: UIViewController?
     
     var pictureBoxes = [PictureBox]()
     
     let imagePicker = UIImagePickerController()
-    var indexForNewImage: Int?
+    let facebookImagePicker = FacebookImagePickerController()
     
     class PictureBox: UIImageView {
         
@@ -118,6 +118,7 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
+        facebookImagePicker.delegate = self
         
         autoSetDimensions(to: CGSize(width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth))
         
@@ -219,12 +220,14 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         
         let cameraRollAction = UIAlertAction(title: "Camera Roll", style: .default) { (alert) in
             if let parentVC = self.parentVC {
-                parentVC.present(self.imagePicker, animated: true)
+                parentVC.present(self.imagePicker, animated: true, completion: nil)
             }
         }
         
         let facebookAction = UIAlertAction(title: "Facebook", style: .default) { (alert) in
-            print("adding from facebook")
+            if let parentVC = self.parentVC {
+                parentVC.present(self.facebookImagePicker, animated: true, completion: nil)
+            }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in
@@ -266,15 +269,27 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             addImage(image: image, pictureID: nil)
         }
-        imagePicker.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func fbImagePickerController(_ picker: FacebookImagePickerController, didPickImage image: UIImage) {
+        addImage(image: image, pictureID: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
     
     func savePictures() {
         var pictureIDs = [String?]()
+        var images = [UIImage]()
         for pictureBox in pictureBoxes {
-            pictureIDs.append(pictureBox.pictureID)
+            if !pictureBox.empty {
+                if let image = pictureBox.image {
+                    pictureIDs.append(pictureBox.pictureID)
+                    images.append(image)
+                }
+            }
         }
         let editProfileBackend = EditProfileBackend()
+        editProfileBackend.savePicturesToUser(pictureIDs: pictureIDs, images: images)
     }
 
 }
