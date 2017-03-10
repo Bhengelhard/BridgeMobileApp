@@ -70,7 +70,6 @@ class SwipeLogic {
                 bottomSwipeCard.overlay.opacity = Float(overlayPercent)
             }
         }
-        
         if gesture.state == .ended {
             
             //User Swiped Left
