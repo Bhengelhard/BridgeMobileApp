@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import JSQMessagesViewController
 
 class ThreadObjects {
     
@@ -35,11 +36,7 @@ class ThreadObjects {
         }
         
     }
-    
-    class Table: UITableView {
         
-    }
-    
     class NameTableCell: UITableViewCell {
         
     }
