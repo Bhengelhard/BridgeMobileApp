@@ -85,7 +85,6 @@ class SwipedRightView: UIView {
         user2Hexagon.autoAlignAxis(.vertical, toSameAxisOf: self, withMultiplier: 1.4)
         user2Hexagon.autoPinEdge(.bottom, to: .top, of: messageButton, withOffset: -buffer)
         user2Hexagon.autoPinEdge(toSuperviewEdge: .right, withInset: margin)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
