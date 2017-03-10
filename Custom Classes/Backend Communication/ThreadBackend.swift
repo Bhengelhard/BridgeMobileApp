@@ -12,8 +12,6 @@ import UIKit
 class ThreadBackend {
     
     var jsqMessages = [JSQMessage]()
-    var senderID: String?
-    var senderName: String?
     
     func reloadSingleMessages(collectionView: UICollectionView, messageID: String?) {
         jsqMessages = [JSQMessage]()
@@ -34,14 +32,41 @@ class ThreadBackend {
     
     
     
-    func setSenderInfo(collectionView: UICollectionView, messageID: String?) {
+    func setSenderInfo(collectionView: UICollectionView, withBlock block: @escaping (String?, String?) -> Void) {
+        User.getCurrent { (user) in
+            block(user.id, user.name)
+            collectionView.reloadData()
+            collectionView.layoutIfNeeded()
+        }
+    }
+    
+    func getCurrentUserPicture(collectionView: UICollectionView, withBlock block: Picture.ImageBlock? = nil) {
+        User.getCurrent { (user) in
+            user.getMainPicture { (picture) in
+                picture.getImage { (image) in
+                    if let block = block {
+                        block(image)
+                    }
+                    collectionView.reloadData()
+                    collectionView.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
+    func getOtherUserInMessagePicture(collectionView: UICollectionView, messageID: String?, withBlock block: Picture.ImageBlock? = nil) {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
                 message.getNonCurrentUser { (user) in
-                    self.senderID = user.id
-                    self.senderName = user.name
-                    collectionView.reloadData()
-                    collectionView.layoutIfNeeded()
+                    user.getMainPicture { (picture) in
+                        picture.getImage { (image) in
+                            if let block = block {
+                                block(image)
+                            }
+                            collectionView.reloadData()
+                            collectionView.layoutIfNeeded()
+                        }
+                    }
                 }
             }
         }

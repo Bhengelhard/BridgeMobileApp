@@ -15,6 +15,8 @@ class ThreadViewController: JSQMessagesViewController {
     var messageID: String?
     var incomingBubble: JSQMessagesBubbleImage!
     var outgoingBubble: JSQMessagesBubbleImage!
+    var incomingAvatar: ThreadAvatar!
+    var outgoingAvatar: ThreadAvatar!
     fileprivate var displayName: String!
     
     var didSetupConstraints = false
@@ -28,8 +30,8 @@ class ThreadViewController: JSQMessagesViewController {
         
         // Bubbles with tails
         //incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleBlue())
-        incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: .yellow)
-        outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImage(with: .lightGray)
+        incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: Constants.Colors.singleMessages.incoming)
+        outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImage(with: Constants.Colors.singleMessages.outgoing)
         
         automaticallyScrollsToMostRecentMessage = true
         
@@ -44,7 +46,17 @@ class ThreadViewController: JSQMessagesViewController {
             collectionView.collectionViewLayout.springinessEnabled = false
             
             threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID)
-            threadBackend.setSenderInfo(collectionView: collectionView, messageID: messageID)
+            threadBackend.setSenderInfo(collectionView: collectionView) { (id, name) in
+                if let id = id {
+                    self.senderId = id
+                }
+                if let name = name {
+                    self.senderDisplayName = name
+                }
+            }
+            
+            incomingAvatar = ThreadAvatar(messageID: messageID, currentUser: false, collectionView: collectionView)
+            outgoingAvatar = ThreadAvatar(messageID: messageID, currentUser: true, collectionView: collectionView)
         }
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
@@ -89,11 +101,27 @@ class ThreadViewController: JSQMessagesViewController {
         if let cell = cell as? JSQMessagesCollectionViewCell {
             let message = threadBackend.jsqMessages[indexPath.item]
             
-            if message.senderId == threadBackend.senderID { // outgoing message
+            // set message text color
+            if message.senderId == senderId { // outgoing message
                 cell.textView.textColor = .white
             } else { // incoming message
                 cell.textView.textColor = .black
             }
+            
+            // make avatar circular
+            cell.avatarImageView.clipsToBounds = true
+            cell.avatarImageView.layer.cornerRadius = cell.avatarImageView.frame.height / 2
+            
+//            if threadBackend.jsqMessages[indexPath.item].senderId != threadBackend.senderID {
+//                for constraint in cell.messageBubbleImageView.constraints {
+//                    if constraint.firstItem as? NSObject == cell.avatarImageView || constraint.secondItem as? NSObject == cell.avatarImageView {
+//                        cell.messageBubbleImageView.removeConstraint(constraint)
+//                    }
+//                }
+//                cell.avatarImageView.autoPinEdge(.left, to: .right, of: cell.messageBubbleImageView, withOffset: 10)
+//            }
+//            
+//            cell.layoutIfNeeded()
         }
         return cell;
     }
@@ -103,12 +131,12 @@ class ThreadViewController: JSQMessagesViewController {
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, messageBubbleImageDataForItemAt indexPath: IndexPath) -> JSQMessageBubbleImageDataSource {
-        return threadBackend.jsqMessages[indexPath.item].senderId == threadBackend.senderID ? outgoingBubble : incomingBubble
+        return threadBackend.jsqMessages[indexPath.item].senderId == senderId ? outgoingBubble : incomingBubble
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, avatarImageDataForItemAt indexPath: IndexPath) -> JSQMessageAvatarImageDataSource? {
         //let message = messages[indexPath.item]
-        return nil
+        return threadBackend.jsqMessages[indexPath.item].senderId == senderId ? outgoingAvatar : incomingAvatar
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, attributedTextForCellTopLabelAt indexPath: IndexPath) -> NSAttributedString? {
@@ -151,6 +179,63 @@ class ThreadViewController: JSQMessagesViewController {
     
     func backButtonTapped(_ sender: UIButton) {
         dismiss(animated: false, completion: nil)
+    }
+    
+}
+
+class ThreadAvatar: NSObject, JSQMessageAvatarImageDataSource {
+    
+    let threadBackend = ThreadBackend()
+    var image = UIImage()
+    let collectionView: UICollectionView
+    
+    init(messageID: String?, currentUser: Bool, collectionView: UICollectionView) {
+        self.collectionView = collectionView
+        super.init()
+        
+        if currentUser {
+            threadBackend.getCurrentUserPicture(collectionView: collectionView) { (image) in
+                self.image = image
+            }
+        } else {
+            threadBackend.getOtherUserInMessagePicture(collectionView: collectionView, messageID: messageID) { (image) in
+                self.image = image
+            }
+        }
+    }
+    
+    /**
+     *  @return The avatar image for a regular display state.
+     *
+     *  @discussion You may return `nil` from this method while the image is being downloaded.
+     */
+    func avatarImage() -> UIImage! {
+        return image
+    }
+    
+    
+    /**
+     *  @return The avatar image for a highlighted display state.
+     *
+     *  @discussion You may return `nil` from this method if this does not apply.
+     */
+    func avatarHighlightedImage() -> UIImage! {
+        return UIImage()
+    }
+    
+    
+    /**
+     *  @return A placeholder avatar image to be displayed if avatarImage is not yet available, or `nil`.
+     *  For example, if avatarImage needs to be downloaded, this placeholder image
+     *  will be used until avatarImage is not `nil`.
+     *
+     *  @discussion If you do not need support for a placeholder image, that is, your images
+     *  are stored locally on the device, then you may simply return the same value as avatarImage here.
+     *
+     *  @warning You must not return `nil` from this method.
+     */
+    func avatarPlaceholderImage() -> UIImage! {
+        return UIImage()
     }
     
 }
