@@ -160,6 +160,12 @@ class SwipeLogic {
         }
     }
     
+    static func swipedLeft(swipeCard: SwipeCard) {
+    }
+    
+    static func swipedRight(swipeCard: SwipeCard) {
+    }
+    
     private static func smallestSwipeCardFrame(swipeCard: SwipeCard) -> CGRect {
         let maxFrame = swipeCard.swipeCardFrame()
         let percent = CGFloat(0.98)

@@ -43,7 +43,6 @@ class SwipeObjects {
             self.titleLabel?.font = Constants.Fonts.bold24
             self.contentVerticalAlignment = UIControlContentVerticalAlignment.bottom
             self.layer.cornerRadius = 15
-            self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
             
             if text == "NECT" {
                 self.backgroundColor = DisplayUtility.gradientColor(size: self.size)
@@ -55,11 +54,6 @@ class SwipeObjects {
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
-        func tapped (_ sender: UIButton) {
-            print("tapped")
-        }
-        
     }
     
     class InfoButton: UIButton {

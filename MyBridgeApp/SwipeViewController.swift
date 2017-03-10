@@ -29,6 +29,9 @@ class SwipeViewController: UIViewController {
         layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
         layout.bottomSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
         layout.bottomSwipeCard.isUserInteractionEnabled = false
+        layout.infoButton.addTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
+        layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
+        layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -53,12 +56,33 @@ class SwipeViewController: UIViewController {
     }
     
     // MARK: - Targets and GestureRecognizer
+    func passButtonTapped(_ sender: UIButton) {
+        print("pass tapped")
+        
+    }
+    
+    func nectButtonTapped(_ sender: UIButton) {
+        print("nect tapped")
+        if layout.topSwipeCard.isUserInteractionEnabled {
+            //SwipeLogic.swipedRight(swipeCard: layout.topSwipeCard)
+        } else {
+            //SwipeLogic.swipedRight(swipeCard: layout.bottomSwipeCard)
+        }
+    }
+    
+    func infoButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "How to NECT:", message: "Our algorithm pairs two of your friends.\nSwipe right to introduce them.\nSwipe left to see the next pair.", preferredStyle: UIAlertControllerStyle.alert)
+        //Create the actions
+        alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: didSwipe, reset: reset)
     }
     
     func didSwipe(right: Bool) {
-        
         // if swiped left, check in bridge pairing
         if !right {
             swipeBackend.checkIn()

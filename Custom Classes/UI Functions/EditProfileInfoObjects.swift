@@ -69,7 +69,6 @@ class EditProfileInfoObjects {
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             
-            
             return 13
         }
         
