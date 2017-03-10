@@ -115,17 +115,18 @@ class SwipeLogic {
                 // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
                 let user1Image = swipeCard.topHalf.photoView.image
                 let user2Image = swipeCard.bottomHalf.photoView.image
-                let swipeRightView = SwipedRightView(user1Id: swipeCard.bridgePairing?.user1ID, user2Id: swipeCard.bridgePairing?.user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"))
+                let swipeRightView = SwipedRightView(user1Id: swipeCard.bridgePairing?.user1ID, user2Id: swipeCard.bridgePairing?.user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
                 swipeRightView.alpha = 0
                 vc.view.addSubview(swipeRightView)
                 swipeRightView.autoPinEdgesToSuperviewEdges()
+                swipeRightView.layoutIfNeeded()
                 
                 // Set the hexagonImages
-                swipeRightView.setHexagonImages(user1Image: user1Image, user2Image: user2Image)
+                //swipeRightView.setHexagonImages(user1Image: user1Image, user2Image: user2Image)
                 
                 UIView.animate(withDuration: 0.4, animations: {
-                    swipeCard.center.x = 1.6*DisplayUtility.screenWidth
-                    connectIcon.center.x = 1.6*DisplayUtility.screenWidth
+                    //swipeCard.center.x = 1.6*DisplayUtility.screenWidth
+                    //connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                     connectIcon.alpha = 0.0
                     swipeCard.overlay.opacity = 0.0
                     swipeRightView.alpha = 1
@@ -141,7 +142,7 @@ class SwipeLogic {
                 // Reset the cards
                 //disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
                 disconnectIcon.alpha = 0.0
-                connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
+                //connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
                 connectIcon.alpha = 0.0
                 
                 reset()
@@ -157,12 +158,6 @@ class SwipeLogic {
                 }, completion: nil)
             }
         }
-    }
-    
-    enum Swipe: String {
-        case right
-        case left
-        case none
     }
     
     private static func smallestSwipeCardFrame(swipeCard: SwipeCard) -> CGRect {

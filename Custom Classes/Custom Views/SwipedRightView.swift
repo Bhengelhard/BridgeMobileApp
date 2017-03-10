@@ -15,16 +15,21 @@ class SwipedRightView: UIView {
     let text: PopupViewObjects.Text
     let user1Hexagon: PopupViewObjects.HexagonWithUserId
     let user2Hexagon: PopupViewObjects.HexagonWithUserId
+    let user1Image: UIImage?
+    let user2Image: UIImage?
     let messageButton = PopupViewObjects.MessageButton()
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
     
     // MARK: - Init
-    init(user1Id: String?, user2Id: String?, textString: String, titleImage: UIImage) {
+    init(user1Id: String?, user2Id: String?, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
         self.title = PopupViewObjects.Title(titleImage: titleImage)
         self.text = PopupViewObjects.Text(text: textString)
         
         self.user1Hexagon = PopupViewObjects.HexagonWithUserId(userId: user1Id)
         self.user2Hexagon = PopupViewObjects.HexagonWithUserId(userId: user2Id)
+        
+        self.user1Image = user1Image
+        self.user2Image = user2Image
         
         super.init(frame: CGRect())
         
@@ -78,7 +83,7 @@ class SwipedRightView: UIView {
         addSubview(middleOfUser1Hexagon)
         middleOfUser1Hexagon.autoSetDimension(.height, toSize: 2)
         middleOfUser1Hexagon.autoAlignAxis(.horizontal, toSameAxisOf: user1Hexagon)
-
+        
         // Layout user2Hexagon
         addSubview(user2Hexagon)
         user2Hexagon.autoMatch(.width, to: .width, of: user1Hexagon)
@@ -91,6 +96,18 @@ class SwipedRightView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if let image = user1Image {
+            user1Hexagon.setBackgroundImage(image: image)
+        }
+        
+        if let image = user2Image {
+            user2Hexagon.setBackgroundImage(image: image)
+        }
     }
     
     // MARK: - Targets
