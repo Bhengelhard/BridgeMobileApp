@@ -9,7 +9,7 @@
 import UIKit
 import JSQMessagesViewController
 
-class ChatViewController: JSQMessagesViewController {
+class ThreadViewController: JSQMessagesViewController {
     var threadBackend = ThreadBackend()
     let layout = ThreadLayout()
     var messageID: String?
@@ -34,7 +34,7 @@ class ChatViewController: JSQMessagesViewController {
         automaticallyScrollsToMostRecentMessage = true
         
         // remove attachment button
-        self.inputToolbar.contentView.leftBarButtonItem = nil
+        inputToolbar.contentView.leftBarButtonItem = nil
         
         if let collectionView = collectionView {
             collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: kJSQMessagesCollectionViewAvatarSizeDefault, height:kJSQMessagesCollectionViewAvatarSizeDefault)
@@ -46,6 +46,8 @@ class ChatViewController: JSQMessagesViewController {
             threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID)
             threadBackend.setSenderInfo(collectionView: collectionView, messageID: messageID)
         }
+        
+        layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -60,7 +62,7 @@ class ChatViewController: JSQMessagesViewController {
         didSetupConstraints = layout.initialize(view: view, didSetupConstraints: didSetupConstraints)
         
         if let collectionView = collectionView {
-            layout.layoutCollectionView(view: view, collectionView: collectionView)
+            layout.layoutCollectionViewAndInputToolbar(view: view, collectionView: collectionView, inputToolbar: inputToolbar)
         }
         
         super.updateViewConstraints()
@@ -110,12 +112,6 @@ class ChatViewController: JSQMessagesViewController {
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, attributedTextForCellTopLabelAt indexPath: IndexPath) -> NSAttributedString? {
-        /**
-         *  This logic should be consistent with what you return from `heightForCellTopLabelAtIndexPath:`
-         *  The other label text delegate methods should follow a similar pattern.
-         *
-         *  Show a timestamp for every 3rd message
-         */
         let message = threadBackend.jsqMessages[indexPath.item]
         return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
     }
@@ -124,40 +120,15 @@ class ChatViewController: JSQMessagesViewController {
         let message = threadBackend.jsqMessages[indexPath.item]
         
         // Displaying names above messages
-        //Mark: Removing Sender Display Name
-        /**
-         *  Example on showing or removing senderDisplayName based on user settings.
-         *  This logic should be consistent with what you return from `heightForCellTopLabelAtIndexPath:`
-         */
-        
         return NSAttributedString(string: message.senderDisplayName)
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout, heightForCellTopLabelAt indexPath: IndexPath) -> CGFloat {
-        /**
-         *  Each label in a cell has a `height` delegate method that corresponds to its text dataSource method
-         */
-        
-        /**
-         *  This logic should be consistent with what you return from `attributedTextForCellTopLabelAtIndexPath:`
-         *  The other label height delegate methods should follow similarly
-         *
-         *  Show a timestamp for every 3rd message
-         */
-        
         return kJSQMessagesCollectionViewCellLabelHeightDefault
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout, heightForMessageBubbleTopLabelAt indexPath: IndexPath) -> CGFloat {
         
-        /**
-         *  Example on showing or removing senderDisplayName based on user settings.
-         *  This logic should be consistent with what you return from `attributedTextForCellTopLabelAtIndexPath:`
-         */
-        
-        /**
-         *  iOS7-style sender name labels
-         */
         let currentMessage = threadBackend.jsqMessages[indexPath.item]
         
         if indexPath.item - 1 > 0 {
@@ -170,60 +141,16 @@ class ChatViewController: JSQMessagesViewController {
         return kJSQMessagesCollectionViewCellLabelHeightDefault;
     }
     
+    // MARK: Setters
+    
     func setMessageID(messageID: String?) {
         self.messageID = messageID
     }
     
-}
-
-class ThreadBackend {
+    // MARK: Targets
     
-    var jsqMessages = [JSQMessage]()
-    var senderID: String?
-    var senderName: String?
-    
-    func reloadSingleMessages(collectionView: UICollectionView, messageID: String?) {
-        jsqMessages = [JSQMessage]()
-        if let messageID = messageID {
-            Message.get(withID: messageID) { (message) in
-                SingleMessage.getAll(withMessage: message) { (singleMessages) in
-                    for singleMessage in singleMessages {
-                        if let jsqMessage = ThreadLogic.singleMessageToJSQMessage(singleMessage: singleMessage) {
-                            self.jsqMessages.append(jsqMessage)
-                        }
-                    }
-                    collectionView.reloadData()
-                    collectionView.layoutIfNeeded()
-                }
-            }
-        }
+    func backButtonTapped(_ sender: UIButton) {
+        dismiss(animated: false, completion: nil)
     }
     
-    
-    
-    func setSenderInfo(collectionView: UICollectionView, messageID: String?) {
-        if let messageID = messageID {
-            Message.get(withID: messageID) { (message) in
-                message.getNonCurrentUser { (user) in
-                    self.senderID = user.id
-                    self.senderName = user.name
-                    collectionView.reloadData()
-                    collectionView.layoutIfNeeded()
-                }
-            }
-        }
-    }
-    
-}
-
-class ThreadLogic {
-    static func singleMessageToJSQMessage(singleMessage: SingleMessage) -> JSQMessage? {
-        if let senderID = singleMessage.senderID,
-            let senderName = singleMessage.senderName,
-            let createdAt = singleMessage.createdAt,
-            let text = singleMessage.text {
-            return JSQMessage(senderId: senderID, senderDisplayName: senderName, date: createdAt, text: text)
-        }
-        return nil
-    }
 }

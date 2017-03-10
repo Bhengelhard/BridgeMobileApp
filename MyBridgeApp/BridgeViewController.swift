@@ -288,7 +288,6 @@ class BridgeViewController: UIViewController {
 	                      type: BridgeType, 
 	                      pairing: UserInfoPair) -> UIView
 	{
-        let connectionType = type.parseValue
         let swipeCardView = SwipeCard()
 
         //superDeckView.backgroundColor = UIColor.white.withAlphaComponent(1.0)

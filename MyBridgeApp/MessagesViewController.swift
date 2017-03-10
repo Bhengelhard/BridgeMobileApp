@@ -68,11 +68,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let chatVC = ChatViewController()
+        let threadVC = ThreadViewController()
         if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
-            chatVC.setMessageID(messageID: messageID)
+            threadVC.setMessageID(messageID: messageID)
         }
-        present(chatVC, animated: true, completion: nil)
+        present(threadVC, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
