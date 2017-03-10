@@ -97,7 +97,6 @@ class ExternalProfileObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.text = "Ethan Skaggs"
             self.font = Constants.Fonts.light24
             
         }
@@ -113,7 +112,6 @@ class ExternalProfileObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.text = "23 years old\nNewOrleans, Louisiana\nUniversity of Pennsylvania"
             self.numberOfLines = 0
             self.font = Constants.Fonts.light18
         }
@@ -144,7 +142,6 @@ class ExternalProfileObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.text = "UX Design / Wine + Spirits\nLooking for some new friends in the local startup world to join me on a new venture!"
             self.numberOfLines = 0
             self.font = Constants.Fonts.light18
         }

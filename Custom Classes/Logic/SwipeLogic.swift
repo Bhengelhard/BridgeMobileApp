@@ -10,7 +10,11 @@ import UIKit
 
 class SwipeLogic {
     
-    static func swipe(gesture: UIPanGestureRecognizer, layout: SwipeLayout, vc: UIViewController, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, didSwipe: @escaping (Bool) -> Void, reset: @escaping () -> Void) {
+    private static var vc: SwipeViewController?
+    
+    static func swipe(gesture: UIPanGestureRecognizer, layout: SwipeLayout, vc: SwipeViewController, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, didSwipe: @escaping (Bool) -> Void, reset: @escaping () -> Void) {
+        
+        self.vc = vc
         
         let view = vc.view!
         
@@ -108,11 +112,23 @@ class SwipeLogic {
             }
             // User Swiped Right
             else if swipeCard.center.x > 0.75*DisplayUtility.screenWidth {
+                // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
+                let user1Image = swipeCard.topHalf.photoView.image
+                let user2Image = swipeCard.bottomHalf.photoView.image
+                let swipeRightView = SwipedRightView(user1Id: swipeCard.bridgePairing?.user1ID, user2Id: swipeCard.bridgePairing?.user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"))
+                swipeRightView.alpha = 0
+                vc.view.addSubview(swipeRightView)
+                swipeRightView.autoPinEdgesToSuperviewEdges()
+                
+                // Set the hexagonImages
+                swipeRightView.setHexagonImages(user1Image: user1Image, user2Image: user2Image)
+                
                 UIView.animate(withDuration: 0.4, animations: {
                     swipeCard.center.x = 1.6*DisplayUtility.screenWidth
                     connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                     connectIcon.alpha = 0.0
                     swipeCard.overlay.opacity = 0.0
+                    swipeRightView.alpha = 1
                 }, completion: { (success) in
                     didSwipe(true)
                 })
@@ -160,5 +176,4 @@ class SwipeLogic {
                       width: maxFrame.size.width - (inset.width * 2),
                       height: maxFrame.size.height - (inset.height * 2))
     }
-
 }

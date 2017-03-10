@@ -21,6 +21,14 @@ class SwipeViewController: UIViewController {
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Listener for presentingExternalProfileVC
+        NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
+        
+        // Add Targets for Swipe Cards
+        layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
+        layout.bottomSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
+        layout.bottomSwipeCard.isUserInteractionEnabled = false
     }
     
     override func loadView() {
@@ -28,15 +36,7 @@ class SwipeViewController: UIViewController {
         view.backgroundColor = UIColor.white
         
         view.setNeedsUpdateConstraints()
-        
-        // Add Targets
-        layout.passButton.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
-        
-        layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
-        
-        layout.bottomSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
-        layout.bottomSwipeCard.isUserInteractionEnabled = false
-        
+
         // Get the next swipeCards
         //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
         swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
@@ -53,10 +53,6 @@ class SwipeViewController: UIViewController {
     }
     
     // MARK: - Targets and GestureRecognizer
-    func tapped(_ sender: UIButton) {
-        
-    }
-    
     func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: didSwipe, reset: reset)
     }
@@ -79,7 +75,16 @@ class SwipeViewController: UIViewController {
         layout.recenterTopSwipeCard()
     }
     
+    func presentExternalProfileVC(_ notification: Notification) {
+        if let userId = notification.object as? String {
+            let externalProfileVC = ExternalProfileViewController()
+            externalProfileVC.setUserID(userID: userId)
+            self.present(externalProfileVC, animated: true, completion: nil)
+        }
+    }
+    
     // MARK: - Navigation
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination
         let mirror = Mirror(reflecting: vc)
@@ -89,7 +94,6 @@ class SwipeViewController: UIViewController {
             self.transitionManager.animationDirection = "Right"
         }
         //vc.transitioningDelegate = self.transitionManager
-        
     }
     
 }

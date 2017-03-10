@@ -66,7 +66,6 @@ class MyProfileViewController: UIViewController {
     // Presents Message with text prepopulated
     func inviteButtonTapped(_ sender: UIButton) {
         
-        
         // Make sure the device can send text messages
         if (messageComposer.canSendText()) {
             // Obtain a configured MFMessageComposeViewController
