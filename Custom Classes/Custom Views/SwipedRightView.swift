@@ -11,15 +11,17 @@ import PureLayout
 class SwipedRightView: UIView {
     
     // MARK: - Global Variables
-    let title = PopupViewObjects.Title(titleImage: #imageLiteral(resourceName: "Sweet_Nect"))
-    let text = PopupViewObjects.Text(text: "We'll let you know when they start a conversation!")
+    let title: PopupViewObjects.Title
+    let text: PopupViewObjects.Text
     let user1Hexagon: PopupViewObjects.HexagonWithUserId
     let user2Hexagon: PopupViewObjects.HexagonWithUserId
     let messageButton = PopupViewObjects.MessageButton()
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
     
     // MARK: - Init
-    init(user1Id: String?, user2Id: String?) {
+    init(user1Id: String?, user2Id: String?, textString: String, titleImage: UIImage) {
+        self.title = PopupViewObjects.Title(titleImage: titleImage)
+        self.text = PopupViewObjects.Text(text: textString)
         
         self.user1Hexagon = PopupViewObjects.HexagonWithUserId(userId: user1Id)
         self.user2Hexagon = PopupViewObjects.HexagonWithUserId(userId: user2Id)
