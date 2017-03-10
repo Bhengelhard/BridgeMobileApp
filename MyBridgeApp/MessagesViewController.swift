@@ -23,7 +23,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         
         messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
-        messagesBackend.loadNewMatches(newMatchesView: layout.newMatchesScrollView)
+        //messagesBackend.loadNewMatches(newMatchesView: layout.newMatchesScrollView)
     }
     
     override func loadView() {

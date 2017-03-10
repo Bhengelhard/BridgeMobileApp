@@ -22,6 +22,7 @@ class MessagesObjects {
             let titleImage = #imageLiteral(resourceName: "Messages_Navbar_Active")
             titleImageView.image = titleImage
             navItem.titleView = titleImageView
+
         }
         
         required init?(coder aDecoder: NSCoder) {

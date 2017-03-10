@@ -115,7 +115,7 @@ class SwipeLogic {
                 // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
                 let user1Image = swipeCard.topHalf.photoView.image
                 let user2Image = swipeCard.bottomHalf.photoView.image
-                let swipeRightView = SwipedRightView(user1Id: swipeCard.bridgePairing?.user1ID, user2Id: swipeCard.bridgePairing?.user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"))
+                let swipeRightView = PopupView(user1Id: swipeCard.bridgePairing?.user1ID, user2Id: swipeCard.bridgePairing?.user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"))
                 swipeRightView.alpha = 0
                 vc.view.addSubview(swipeRightView)
                 swipeRightView.autoPinEdgesToSuperviewEdges()

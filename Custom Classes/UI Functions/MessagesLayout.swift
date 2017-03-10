@@ -12,9 +12,9 @@ class MessagesLayout {
     
     // MARK: Global Variables
     let navBar = MessagesObjects.NavBar()
-    let newMatchesTitle = MessagesObjects.NewMatchesTitle()
-    let newMatchesScrollView = MessagesObjects.NewMatchesScrollView()
-    let messagesTitle = MessagesObjects.MessagesTitle()
+    //let newMatchesTitle = MessagesObjects.NewMatchesTitle()
+    //let newMatchesScrollView = MessagesObjects.NewMatchesScrollView()
+//    let messagesTitle = MessagesObjects.MessagesTitle()
     let messagesTable = MessagesObjects.MessagesTable()
     let messagesTableCell = MessagesObjects.MessagesTableCell()
     
@@ -31,25 +31,25 @@ class MessagesLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
-            // Layout the newMatchesTitle below the navigation bar
-            view.addSubview(newMatchesTitle)
-            newMatchesTitle.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 12)
-            newMatchesTitle.autoPinEdge(.left, to: .left, of: view, withOffset: 20)
+//            // Layout the newMatchesTitle below the navigation bar
+//            view.addSubview(newMatchesTitle)
+//            newMatchesTitle.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 12)
+//            newMatchesTitle.autoPinEdge(.left, to: .left, of: view, withOffset: 20)
+//            
+//            // Layout the newMatchesScrollView below the newMatchesTitle
+//            view.addSubview(newMatchesScrollView)
+//            newMatchesScrollView.autoPinEdge(.top, to: .bottom, of: newMatchesTitle, withOffset: 20)
+//            newMatchesScrollView.autoPinEdge(toSuperviewEdge: .left)
+//            newMatchesScrollView.autoMatch(.width, to: .width, of: view)
+//            newMatchesScrollView.autoSetDimension(.height, toSize: 80)
             
-            // Layout the newMatchesScrollView below the newMatchesTitle
-            view.addSubview(newMatchesScrollView)
-            newMatchesScrollView.autoPinEdge(.top, to: .bottom, of: newMatchesTitle, withOffset: 20)
-            newMatchesScrollView.autoPinEdge(toSuperviewEdge: .left)
-            newMatchesScrollView.autoMatch(.width, to: .width, of: view)
-            newMatchesScrollView.autoSetDimension(.height, toSize: 80)
-            
-            // Layout the messagesTitle below the newMatchesScrollView
-            view.addSubview(messagesTitle)
-            messagesTitle.autoPinEdge(.left, to: .left, of: view, withOffset: 12)
-            messagesTitle.autoPinEdge(.top, to: .bottom, of: newMatchesScrollView, withOffset: 20)
+//            // Layout the messagesTitle below the newMatchesScrollView
+//            view.addSubview(messagesTitle)
+//            messagesTitle.autoPinEdge(.left, to: .left, of: view, withOffset: 20)
+//            messagesTitle.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 20)
             
             view.addSubview(messagesTable)
-            messagesTable.autoPinEdge(.top, to: .bottom, of: messagesTitle, withOffset: 20)
+            messagesTable.autoPinEdge(.top, to: .bottom, of: navBar)
             messagesTable.autoMatch(.width, to: .width, of: view)
             messagesTable.autoPinEdge(toSuperviewEdge: .bottom)
             

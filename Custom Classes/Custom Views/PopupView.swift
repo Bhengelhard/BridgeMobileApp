@@ -1,14 +1,14 @@
 //
-//  SwipedRightView.swift
+//  PopupView.swift
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 3/8/17.
-//  Copyright © 2017 Parse. All rights reserved.
+//  Copyright © 2017 BHE Ventures LLC. All rights reserved.
 //
 
 import PureLayout
 
-class SwipedRightView: UIView {
+class PopupView: UIView {
     
     // MARK: - Global Variables
     let title: PopupViewObjects.Title
