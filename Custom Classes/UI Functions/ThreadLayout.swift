@@ -12,7 +12,6 @@ class ThreadLayout {
     
     // MARK: Global Variables
     let navBar = ThreadObjects.navBar()
-    let table = ThreadObjects.Table()
     let keyboard = ThreadObjects.Keyboard()
     
     // MARK: - Layout
@@ -29,12 +28,23 @@ class ThreadLayout {
             navBar.autoPinEdge(toSuperviewEdge: .left)
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
+            print("navBar was laid out")
             
             // Layout the keyboard pinned to the bottom of the view
             
         }
         
         return true
+    }
+    
+    func layoutCollectionView(view: UIView, collectionView: UICollectionView) {
+
+        // Layout the collectionView
+        view.addSubview(collectionView)
+        collectionView.autoPinEdge(.top, to: .bottom, of: navBar)
+        collectionView.autoPinEdge(toSuperviewEdge: .left)
+        collectionView.autoPinEdge(toSuperviewEdge: .right)
+        collectionView.autoPinEdge(toSuperviewEdge: .bottom)
     }
     
 }

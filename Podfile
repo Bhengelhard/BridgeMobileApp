@@ -7,4 +7,5 @@ target 'MyBridgeApp' do
   use_frameworks!
 
   # Pods for MyBridgeApp
+  pod 'JSQMessagesViewController'
 end
