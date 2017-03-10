@@ -152,7 +152,11 @@ class NewMatchesView: UIScrollView {
     
     func addUser(_ user: User) {
         users.append(user)
-        layoutUser(user: user, position: users.count-1)
+        if users.count > 0 {
+            layoutUser(user: user, position: users.count-1)
+        } else {
+            layoutUser(user: user, position: 0)
+        }
     }
     
     func layoutUser(user: User, position: Int) {

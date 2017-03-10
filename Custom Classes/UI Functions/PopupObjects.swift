@@ -59,7 +59,7 @@ class PopupViewObjects {
         func tapped(_ gestureRecognizer: UITapGestureRecognizer) {
             if let hexagon = gestureRecognizer.view as? PopupViewObjects.HexagonWithUserId {
                 if let userId = hexagon.userId {
-                    // Notify EditProfileViewController to present the tappedTableCell
+                    // Notify SwipeViewController to present the tappedTableCell
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userId)
                 }
             }

@@ -96,6 +96,11 @@ class SwipeCard: UIView {
             shadowLayer.shouldRasterize = false
             
             layer.insertSublayer(shadowLayer, below: nil)
+            
+            // Add Targets
+            topHalf.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(topHalfCardtapped(_:))))
+            bottomHalf.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(bottomHalfCardtapped(_:))))
+            
         }
     }
     
@@ -118,5 +123,23 @@ class SwipeCard: UIView {
         
         return CGRect(x: originX, y: originY, width: width, height: height)
     }
-
+    
+    // MARK: - Targets
+    // Present External View Controller with ID of Top Half Card
+    func topHalfCardtapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        print("top half card tapped")
+        if let userId = bridgePairing?.user1ID {
+            // Notify SwipeViewController to present the tapped User
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userId)
+        }
+    }
+    
+    // Present External View Controller with ID of Bottom Half Card
+    func bottomHalfCardtapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        print("bottom half card tapped")
+        if let userId = bridgePairing?.user2ID {
+            // Notify SwipeViewController to present the tapped User
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userId)
+        }
+    }
 }
