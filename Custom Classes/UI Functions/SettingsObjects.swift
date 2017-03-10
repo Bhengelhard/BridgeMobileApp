@@ -110,6 +110,18 @@ class SettingsObjects {
             
         }
         
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            // Change Option Cell selected checkmark button
+            if let cell = cellForRow(at: indexPath) as? WhiteTableCell {
+                print("cell is OptionCell")
+                if cell.checkmarkButton.isSelected {
+                    cell.checkmarkButton.isSelected = false
+                } else {
+                    cell.checkmarkButton.isSelected = true
+                }
+            }
+        }
+        
     }
     
     class GrayTableCell: UITableViewCell {
@@ -144,25 +156,15 @@ class SettingsObjects {
             checkmarkButton.setImage(#imageLiteral(resourceName: "Gradient_Checkmark_Circle_Unselected"), for: .normal)
             checkmarkButton.setImage(#imageLiteral(resourceName: "Gradient_Checkmark_Circle_Selected"), for: .selected)
             checkmarkButton.isSelected = true
-            checkmarkButton.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
             
             addSubview(checkmarkButton)
             checkmarkButton.autoAlignAxis(toSuperviewAxis: .horizontal)
             checkmarkButton.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
-            checkmarkButton.autoSetDimensions(to: CGSize(width: 60, height: 60))
-            
+            checkmarkButton.autoSetDimensions(to: CGSize(width: 30, height: 30))
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
-        }
-        
-        func tapped(_ sender: UIButton) {
-            if checkmarkButton.isSelected {
-                checkmarkButton.isSelected = false
-            } else {
-                checkmarkButton.isSelected = true
-            }
         }
         
     }

@@ -1,31 +1,37 @@
 //
-//  new_EditProfileViewController.swift
+//  EditProfileInfoViewController.swift
 //  MyBridgeApp
 //
-//  Created by Blake Engelhard on 2/20/17.
-//  Copyright © 2017 BHE Ventures LLC. All rights reserved.
+//  Created by Blake Engelhard on 3/10/17.
+//  Copyright © 2017 Parse. All rights reserved.
 //
 
 import UIKit
 
-class EditProfileViewController: UIViewController {
+class EditProfileInfoViewController: UIViewController {
 
     // MARK: Global Variables
-    let layout = EditProfileLayout()
+    let layout: EditProfileInfoLayout
     let transitionManager = TransitionManager()
     
     var didSetupConstraints = false
+    
+    init(infoTitle: String) {
+        self.layout = EditProfileInfoLayout(infoTitle: infoTitle)
+        super.init(nibName: nil, bundle: nil)
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Listener for TableViewCell Tapped
-        NotificationCenter.default.addObserver(self, selector: #selector(tableViewCellTapped), name: NSNotification.Name(rawValue: "tableViewCellTapped"), object: nil)
-        
+        // Add targets
         layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
-        
-        layout.table.setParentVCOfEditProfilePicturesCell(parentVC: self)
     }
     
     override func loadView() {
@@ -43,22 +49,9 @@ class EditProfileViewController: UIViewController {
     
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
-        layout.table.editProfilePicturesCell.savePictures()
         dismiss(animated: true, completion: nil)
     }
-    
-    func tableViewCellTapped(_ notification: Notification) {
-        print("Table View Cell Tapped responding")
-        print(notification.object)
-        
-        if let cellTitleText = notification.object as? String {
-            let editProfileInfoVC = EditProfileInfoViewController(infoTitle: cellTitleText)
-            present(editProfileInfoVC, animated: true, completion: nil)
-        }
-        
-    }
-    
-    
+
     // MARK: - Navigation
     //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     //        let vc = segue.destination

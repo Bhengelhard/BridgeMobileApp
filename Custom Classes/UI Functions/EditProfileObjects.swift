@@ -137,8 +137,18 @@ class EditProfileObjects {
             if indexPath.row != 0 {
                 deselectRow(at: indexPath, animated: true)
                 
-                // Notify EditProfileViewController to present the tappedTableCell
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "tableViewCellTapped"), object: indexPath.row)
+                // Getting title of the selected row from the text in the previous row
+                let previousCellRow = indexPath.row - 1
+                let previousCellTitle = IndexPath(row: previousCellRow, section: 0)
+                if let cell = tableView.cellForRow(at: previousCellTitle) {
+                    if let cellTitleLabel = cell.textLabel {
+                        if let cellTitleText = cellTitleLabel.text {
+                            // Notify EditProfileViewController to present the tappedTableCell
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "tableViewCellTapped"), object: cellTitleText)
+                        }
+                    }
+                }
+                
             }
             
         }

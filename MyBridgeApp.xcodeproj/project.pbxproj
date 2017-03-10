@@ -66,7 +66,6 @@
 		30BF6FFF1E5BDF710008C2B5 /* EditProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */; };
 		30BF70011E5BDF820008C2B5 /* EditProfileObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */; };
 		30BF70031E5BE2B20008C2B5 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70021E5BE2B20008C2B5 /* ExternalProfileViewController.swift */; };
-		30BF70051E5BE2CF0008C2B5 /* ExternalProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70041E5BE2CF0008C2B5 /* ExternalProfileLayout.swift */; };
 		30BF70071E5BE2FD0008C2B5 /* ExternalProfileObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF70061E5BE2FD0008C2B5 /* ExternalProfileObjects.swift */; };
 		30BF700B1E5C95C60008C2B5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF700A1E5C95C60008C2B5 /* SettingsViewController.swift */; };
 		30BF700D1E5C95F60008C2B5 /* SettingsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BF700C1E5C95F60008C2B5 /* SettingsLayout.swift */; };
@@ -79,6 +78,10 @@
 		30D82B601E6FC7E6000F7075 /* LoginBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */; };
 		30D82B621E6FCFC1000F7075 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B611E6FCFC1000F7075 /* PopupView.swift */; };
 		30D82B641E70D611000F7075 /* PopupObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B631E70D611000F7075 /* PopupObjects.swift */; };
+		30D82B661E73306D000F7075 /* EditProfileInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B651E73306D000F7075 /* EditProfileInfoViewController.swift */; };
+		30D82B681E7330C6000F7075 /* EditProfileInfoObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B671E7330C6000F7075 /* EditProfileInfoObjects.swift */; };
+		30D82B6C1E73310A000F7075 /* EditProfileInfoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B6B1E73310A000F7075 /* EditProfileInfoLayout.swift */; };
+		30D82B6E1E733118000F7075 /* ExternalProfileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B6D1E733118000F7075 /* ExternalProfileLayout.swift */; };
 		30E2AF701DD644600023AA95 /* HalfSwipeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */; };
 		30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */; };
 		30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */; };
@@ -201,7 +204,6 @@
 		30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileLayout.swift; path = "Custom Classes/UI Functions/EditProfileLayout.swift"; sourceTree = "<group>"; };
 		30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileObjects.swift; path = "Custom Classes/UI Functions/EditProfileObjects.swift"; sourceTree = "<group>"; };
 		30BF70021E5BE2B20008C2B5 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalProfileViewController.swift; path = MyBridgeApp/ExternalProfileViewController.swift; sourceTree = SOURCE_ROOT; };
-		30BF70041E5BE2CF0008C2B5 /* ExternalProfileLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalProfileLayout.swift; sourceTree = "<group>"; };
 		30BF70061E5BE2FD0008C2B5 /* ExternalProfileObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalProfileObjects.swift; path = "Custom Classes/UI Functions/ExternalProfileObjects.swift"; sourceTree = "<group>"; };
 		30BF700A1E5C95C60008C2B5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = MyBridgeApp/SettingsViewController.swift; sourceTree = SOURCE_ROOT; };
 		30BF700C1E5C95F60008C2B5 /* SettingsLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsLayout.swift; path = "Custom Classes/UI Functions/SettingsLayout.swift"; sourceTree = "<group>"; };
@@ -214,6 +216,10 @@
 		30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginBackend.swift; path = "Custom Classes/Backend Communication/LoginBackend.swift"; sourceTree = "<group>"; };
 		30D82B611E6FCFC1000F7075 /* PopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopupView.swift; path = "Custom Classes/Custom Views/PopupView.swift"; sourceTree = "<group>"; };
 		30D82B631E70D611000F7075 /* PopupObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopupObjects.swift; path = "Custom Classes/UI Functions/PopupObjects.swift"; sourceTree = "<group>"; };
+		30D82B651E73306D000F7075 /* EditProfileInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileInfoViewController.swift; path = MyBridgeApp/EditProfileInfoViewController.swift; sourceTree = SOURCE_ROOT; };
+		30D82B671E7330C6000F7075 /* EditProfileInfoObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileInfoObjects.swift; path = "Custom Classes/UI Functions/EditProfileInfoObjects.swift"; sourceTree = SOURCE_ROOT; };
+		30D82B6B1E73310A000F7075 /* EditProfileInfoLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileInfoLayout.swift; path = "Custom Classes/UI Functions/EditProfileInfoLayout.swift"; sourceTree = "<group>"; };
+		30D82B6D1E733118000F7075 /* ExternalProfileLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalProfileLayout.swift; path = "Custom Classes/UI Functions/ExternalProfileLayout.swift"; sourceTree = "<group>"; };
 		30E2AF6F1DD644600023AA95 /* HalfSwipeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HalfSwipeCard.swift; path = "Custom Classes/Custom Views/HalfSwipeCard.swift"; sourceTree = "<group>"; };
 		30E2AF731DDA156C0023AA95 /* BentonSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Bold.otf"; sourceTree = "<group>"; };
 		30E2AF741DDA156C0023AA95 /* BentonSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BentonSans-Light.otf"; sourceTree = "<group>"; };
@@ -380,10 +386,12 @@
 				30BF6FFA1E5BDEB40008C2B5 /* ThreadObjects.swift */,
 				30BF6FFE1E5BDF710008C2B5 /* EditProfileLayout.swift */,
 				30BF70001E5BDF820008C2B5 /* EditProfileObjects.swift */,
-				30BF70041E5BE2CF0008C2B5 /* ExternalProfileLayout.swift */,
+				30D82B6D1E733118000F7075 /* ExternalProfileLayout.swift */,
 				30BF70061E5BE2FD0008C2B5 /* ExternalProfileObjects.swift */,
 				30BF700C1E5C95F60008C2B5 /* SettingsLayout.swift */,
 				30BF700E1E5C960C0008C2B5 /* SettingsObjects.swift */,
+				30D82B6B1E73310A000F7075 /* EditProfileInfoLayout.swift */,
+				30D82B671E7330C6000F7075 /* EditProfileInfoObjects.swift */,
 			);
 			name = "UI Functions";
 			sourceTree = "<group>";
@@ -409,6 +417,7 @@
 				30BF6FF01E5BDD860008C2B5 /* MessagesViewController.swift */,
 				30BF6FF61E5BDE7A0008C2B5 /* ThreadViewController.swift */,
 				30BF6FFC1E5BDF530008C2B5 /* EditProfileViewController.swift */,
+				30D82B651E73306D000F7075 /* EditProfileInfoViewController.swift */,
 				30BF70021E5BE2B20008C2B5 /* ExternalProfileViewController.swift */,
 				300A1D811E53F9EF0071FED7 /* LoginViewController.swift */,
 				302799D31E57684D00AFFB90 /* PrivacyPolicyViewController.swift */,
@@ -795,7 +804,6 @@
 				302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */,
 				302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */,
 				30BF6FF11E5BDD860008C2B5 /* MessagesViewController.swift in Sources */,
-				30BF70051E5BE2CF0008C2B5 /* ExternalProfileLayout.swift in Sources */,
 				30BF6FED1E5BDB8A0008C2B5 /* MyProfileLayout.swift in Sources */,
 				3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */,
 				3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */,
@@ -803,6 +811,7 @@
 				30AA7D651DDCD0CE00DD344D /* NewMatchesView.swift in Sources */,
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				306BD21F1E4416100020C4BA /* Reachability.swift in Sources */,
+				30D82B661E73306D000F7075 /* EditProfileInfoViewController.swift in Sources */,
 				90512CF21E26A8D900D293BD /* OldEditProfileViewController.swift in Sources */,
 				30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */,
 				303139091E65D6E300F8D9BF /* ReusableObjects.swift in Sources */,
@@ -857,12 +866,14 @@
 				E9D6DF091D78808900138A1F /* NewMessageTableCell.swift in Sources */,
 				90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */,
 				3030C0C51DD54E5E0077F7AC /* MissionControlView.swift in Sources */,
+				30D82B6E1E733118000F7075 /* ExternalProfileLayout.swift in Sources */,
 				90F5E3C61E5CE0F9001399F6 /* ExternalLogic.swift in Sources */,
 				30BFA0B21E4BBB9600A17F5E /* FacebookFunctions.swift in Sources */,
 				90CA09AF1E1B5D3500330646 /* AcceptIgnoreView.swift in Sources */,
 				30BFA0BD1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift in Sources */,
 				30BAE9A21E31B9210094070B /* MessagingFunctions.swift in Sources */,
 				9032B4541E311B0600136408 /* ProfilePicturesView.swift in Sources */,
+				30D82B6C1E73310A000F7075 /* EditProfileInfoLayout.swift in Sources */,
 				30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */,
 				302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
@@ -879,6 +890,7 @@
 				30BF6FF91E5BDEA50008C2B5 /* ThreadLayout.swift in Sources */,
 				3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */,
 				907201471E4316B500A77BC4 /* FacebookImagePickerController.swift in Sources */,
+				30D82B681E7330C6000F7075 /* EditProfileInfoObjects.swift in Sources */,
 				3079EB251E54FACD008AB6E5 /* LoginObjects.swift in Sources */,
 				30E2AF781DDA2AB70023AA95 /* ReasonForConnection.swift in Sources */,
 				903477B91E60C3C4007E2CAE /* MessagesTableDelegate.swift in Sources */,
