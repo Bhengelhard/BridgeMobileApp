@@ -22,6 +22,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        layout.messagesTable.delegate = self
+        layout.messagesTable.dataSource = self
+        
         messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
         messagesBackend.loadNewMatches(newMatchesView: layout.newMatchesScrollView)
     }
@@ -29,9 +32,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     override func loadView() {
         view = UIView()
         view.backgroundColor = UIColor.white
-        
-        layout.messagesTable.delegate = self
-        layout.messagesTable.dataSource = self
         
         view.setNeedsUpdateConstraints()
     }
@@ -72,7 +72,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
             threadVC.setMessageID(messageID: messageID)
         }
-        present(threadVC, animated: true, completion: nil)
+        present(threadVC, animated: true) {
+            tableView.deselectRow(at: indexPath, animated: false) // deselect the row
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

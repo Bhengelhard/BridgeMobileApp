@@ -24,7 +24,6 @@ class ThreadBackend {
                         }
                     }
                     collectionView.reloadData()
-                    collectionView.layoutIfNeeded()
                 }
             }
         }
@@ -36,7 +35,6 @@ class ThreadBackend {
         User.getCurrent { (user) in
             block(user.id, user.name)
             collectionView.reloadData()
-            collectionView.layoutIfNeeded()
         }
     }
     
@@ -70,6 +68,10 @@ class ThreadBackend {
                 }
             }
         }
+    }
+    
+    func jsqMessageToSingleMessage(jsqMessage: JSQMessage, messageID: String?, withBlock block: SingleMessage.SingleMessageBlock? = nil) {
+        SingleMessage.create(text: jsqMessage.text, senderID: jsqMessage.senderId, senderName: jsqMessage.senderDisplayName, messageID: messageID, withBlock: block)
     }
     
 }

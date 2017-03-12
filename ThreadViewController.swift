@@ -1,35 +1,72 @@
 //
-//  ChatViewController.swift
-//  SwiftExample
+//  ThreadViewController.swift
 //
-//  Created by Dan Leonard on 5/11/16.
+//  Created by Doug Dolitsky on 3/10/17.
+//  Copyright © 2017 MacMeDan. All rights reserved.
+//
+//  Some code taken from Dan Leonard from 5/11/16.
 //  Copyright © 2016 MacMeDan. All rights reserved.
 //
 
 import UIKit
 import JSQMessagesViewController
 
-class ThreadViewController: JSQMessagesViewController {
-    var threadBackend = ThreadBackend()
+class ThreadViewController: UIViewController {
+    var messagesVC = NecterJSQMessagesViewController()
     let layout = ThreadLayout()
-    var messageID: String?
-    var incomingBubble: JSQMessagesBubbleImage!
-    var outgoingBubble: JSQMessagesBubbleImage!
-    var incomingAvatar: ThreadAvatar!
-    var outgoingAvatar: ThreadAvatar!
-    fileprivate var displayName: String!
     
     var didSetupConstraints = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // background color
+        view.backgroundColor = .white
+        
+        layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+    }
+    
+    override func loadView() {
+        view = UIView()
+
+        view.setNeedsUpdateConstraints()
+    }
+    
+    
+    override func updateViewConstraints() {
+        didSetupConstraints = layout.initialize(view: view, messagesView: messagesVC.view, didSetupConstraints: didSetupConstraints)
+        
+        
+        super.updateViewConstraints()
+    }
+    
+    func setMessageID(messageID: String?) {
+        messagesVC.messageID = messageID
+    }
+    
+    func backButtonTapped(_ sender: UIButton) {
+        dismiss(animated: false, completion: nil)
+    }
+}
+
+class NecterJSQMessagesViewController: JSQMessagesViewController {
+    var threadBackend = ThreadBackend()
+    var messageID: String?
+    var incomingBubble: JSQMessagesBubbleImage!
+    var outgoingBubble: JSQMessagesBubbleImage!
+    var incomingAvatar: NecterJSQMessageAvatar!
+    var outgoingAvatar: NecterJSQMessageAvatar!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        print("messageID: \(messageID)")
+        
         // these must be non-nil
-        self.senderId = ""
-        self.senderDisplayName = ""
+        senderId = ""
+        senderDisplayName = ""
         
         // Bubbles with tails
-        //incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleBlue())
         incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: Constants.Colors.singleMessages.incoming)
         outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImage(with: Constants.Colors.singleMessages.outgoing)
         
@@ -39,8 +76,6 @@ class ThreadViewController: JSQMessagesViewController {
         inputToolbar.contentView.leftBarButtonItem = nil
         
         if let collectionView = collectionView {
-            collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: kJSQMessagesCollectionViewAvatarSizeDefault, height:kJSQMessagesCollectionViewAvatarSizeDefault)
-            collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: kJSQMessagesCollectionViewAvatarSizeDefault, height:kJSQMessagesCollectionViewAvatarSizeDefault)
             
             // This is a beta feature that mostly works but to make things more stable it is diabled.
             collectionView.collectionViewLayout.springinessEnabled = false
@@ -55,36 +90,22 @@ class ThreadViewController: JSQMessagesViewController {
                 }
             }
             
-            incomingAvatar = ThreadAvatar(messageID: messageID, currentUser: false, collectionView: collectionView)
-            outgoingAvatar = ThreadAvatar(messageID: messageID, currentUser: true, collectionView: collectionView)
+            incomingAvatar = NecterJSQMessageAvatar(messageID: messageID, currentUser: false, collectionView: collectionView)
+            outgoingAvatar = NecterJSQMessageAvatar(messageID: messageID, currentUser: true, collectionView: collectionView)
         }
-        
-        layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
     }
     
-    override func loadView() {
-        view = UIView()
-        view.backgroundColor = UIColor.white
-        
-        view.setNeedsUpdateConstraints()
-    }
-    
-
-    override func updateViewConstraints() {
-        didSetupConstraints = layout.initialize(view: view, didSetupConstraints: didSetupConstraints)
-        
-        if let collectionView = collectionView {
-            layout.layoutCollectionViewAndInputToolbar(view: view, collectionView: collectionView, inputToolbar: inputToolbar)
-        }
-        
-        super.updateViewConstraints()
-    }
     
     // MARK: JSQMessagesViewController method overrides
+    
     override func didPressSend(_ button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: Date) {
         
         if let message = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
             threadBackend.jsqMessages.append(message)
+            
+            threadBackend.jsqMessageToSingleMessage(jsqMessage: message, messageID: messageID) { (singleMessage) in
+                singleMessage.save()
+            }
             
             self.finishSendingMessage(animated: true)
         }
@@ -107,21 +128,6 @@ class ThreadViewController: JSQMessagesViewController {
             } else { // incoming message
                 cell.textView.textColor = .black
             }
-            
-            // make avatar circular
-            cell.avatarImageView.clipsToBounds = true
-            cell.avatarImageView.layer.cornerRadius = cell.avatarImageView.frame.height / 2
-            
-//            if threadBackend.jsqMessages[indexPath.item].senderId != threadBackend.senderID {
-//                for constraint in cell.messageBubbleImageView.constraints {
-//                    if constraint.firstItem as? NSObject == cell.avatarImageView || constraint.secondItem as? NSObject == cell.avatarImageView {
-//                        cell.messageBubbleImageView.removeConstraint(constraint)
-//                    }
-//                }
-//                cell.avatarImageView.autoPinEdge(.left, to: .right, of: cell.messageBubbleImageView, withOffset: 10)
-//            }
-//            
-//            cell.layoutIfNeeded()
         }
         return cell;
     }
@@ -135,7 +141,6 @@ class ThreadViewController: JSQMessagesViewController {
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, avatarImageDataForItemAt indexPath: IndexPath) -> JSQMessageAvatarImageDataSource? {
-        //let message = messages[indexPath.item]
         return threadBackend.jsqMessages[indexPath.item].senderId == senderId ? outgoingAvatar : incomingAvatar
     }
     
@@ -168,22 +173,9 @@ class ThreadViewController: JSQMessagesViewController {
         
         return kJSQMessagesCollectionViewCellLabelHeightDefault;
     }
-    
-    // MARK: Setters
-    
-    func setMessageID(messageID: String?) {
-        self.messageID = messageID
-    }
-    
-    // MARK: Targets
-    
-    func backButtonTapped(_ sender: UIButton) {
-        dismiss(animated: false, completion: nil)
-    }
-    
 }
 
-class ThreadAvatar: NSObject, JSQMessageAvatarImageDataSource {
+class NecterJSQMessageAvatar: NSObject, JSQMessageAvatarImageDataSource {
     
     let threadBackend = ThreadBackend()
     var image = UIImage()
@@ -210,7 +202,8 @@ class ThreadAvatar: NSObject, JSQMessageAvatarImageDataSource {
      *  @discussion You may return `nil` from this method while the image is being downloaded.
      */
     func avatarImage() -> UIImage! {
-        return image
+        //return image
+        return JSQMessagesAvatarImageFactory.circularAvatarImage(image, withDiameter: UInt(kJSQMessagesCollectionViewAvatarSizeDefault))
     }
     
     
@@ -220,7 +213,7 @@ class ThreadAvatar: NSObject, JSQMessageAvatarImageDataSource {
      *  @discussion You may return `nil` from this method if this does not apply.
      */
     func avatarHighlightedImage() -> UIImage! {
-        return UIImage()
+        return nil
     }
     
     
