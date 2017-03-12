@@ -24,6 +24,11 @@ class ThreadBackend {
                         }
                     }
                     collectionView.reloadData()
+                    
+                    // scroll to bottom
+                    if self.jsqMessages.count > 0 {
+                        collectionView.scrollToItem(at: IndexPath(item: self.jsqMessages.count-1, section: 0), at: .bottom, animated: true)
+                    }
                 }
             }
         }
@@ -46,7 +51,6 @@ class ThreadBackend {
                         block(image)
                     }
                     collectionView.reloadData()
-                    collectionView.layoutIfNeeded()
                 }
             }
         }
@@ -62,7 +66,6 @@ class ThreadBackend {
                                 block(image)
                             }
                             collectionView.reloadData()
-                            collectionView.layoutIfNeeded()
                         }
                     }
                 }
@@ -72,6 +75,15 @@ class ThreadBackend {
     
     func jsqMessageToSingleMessage(jsqMessage: JSQMessage, messageID: String?, withBlock block: SingleMessage.SingleMessageBlock? = nil) {
         SingleMessage.create(text: jsqMessage.text, senderID: jsqMessage.senderId, senderName: jsqMessage.senderDisplayName, messageID: messageID, withBlock: block)
+    }
+    
+    func updateMessageSnapshot(messageID: String?, snapshot: String) {
+        if let messageID = messageID {
+            Message.get(withID: messageID) { (message) in
+                message.lastSingleMessage = snapshot
+                message.save()
+            }
+        }
     }
     
 }

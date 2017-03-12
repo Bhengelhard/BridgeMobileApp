@@ -59,9 +59,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("messageID: \(messageID)")
-        
+                
         // these must be non-nil
         senderId = ""
         senderDisplayName = ""
@@ -80,7 +78,10 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             // This is a beta feature that mostly works but to make things more stable it is diabled.
             collectionView.collectionViewLayout.springinessEnabled = false
             
+            // reload collection view
             threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID)
+            
+            // set id and name of current user
             threadBackend.setSenderInfo(collectionView: collectionView) { (id, name) in
                 if let id = id {
                     self.senderId = id
@@ -89,6 +90,8 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                     self.senderDisplayName = name
                 }
             }
+            
+            //collectionView.backgroundColor = DisplayUtility.gradientColor(size: collectionView.frame.size)
             
             incomingAvatar = NecterJSQMessageAvatar(messageID: messageID, currentUser: false, collectionView: collectionView)
             outgoingAvatar = NecterJSQMessageAvatar(messageID: messageID, currentUser: true, collectionView: collectionView)
@@ -103,9 +106,15 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         if let message = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
             threadBackend.jsqMessages.append(message)
             
+            // save single message
             threadBackend.jsqMessageToSingleMessage(jsqMessage: message, messageID: messageID) { (singleMessage) in
                 singleMessage.save()
             }
+            
+            // save single message text as message snapshot
+            threadBackend.updateMessageSnapshot(messageID: messageID, snapshot: message.text)
+            
+            // FIXME: Add push notification to other user
             
             self.finishSendingMessage(animated: true)
         }
