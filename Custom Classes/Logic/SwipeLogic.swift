@@ -114,12 +114,16 @@ class SwipeLogic {
                 // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
                 let user1Image = swipeCard.topHalf.photoView.image
                 let user2Image = swipeCard.bottomHalf.photoView.image
-                let swipeRightView = PopupView(user1Id: swipeCard.bridgePairing?.user1ID, user2Id: swipeCard.bridgePairing?.user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
                 
-                swipeRightView.alpha = 0
-                vc.view.addSubview(swipeRightView)
-                swipeRightView.autoPinEdgesToSuperviewEdges()
-                swipeRightView.layoutIfNeeded()
+                var swipeRightView: PopupView?
+                
+                if let user1Id = swipeCard.bridgePairing?.user1ID, let user2Id = swipeCard.bridgePairing?.user2ID {
+                    swipeRightView = PopupView(user1Id: user1Id, user2Id: user2Id, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
+                    swipeRightView!.alpha = 0
+                    vc.view.addSubview(swipeRightView!)
+                    swipeRightView!.autoPinEdgesToSuperviewEdges()
+                    swipeRightView!.layoutIfNeeded()
+                }
                 
                 // Set the hexagonImages
                 //swipeRightView.setHexagonImages(user1Image: user1Image, user2Image: user2Image)
@@ -129,7 +133,9 @@ class SwipeLogic {
                     //connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                     connectIcon.alpha = 0.0
                     swipeCard.overlay.opacity = 0.0
-                    swipeRightView.alpha = 1
+                    if let srv = swipeRightView {
+                        srv.alpha = 1
+                    }
                 }, completion: { (success) in
                     didSwipe(true)
                 })

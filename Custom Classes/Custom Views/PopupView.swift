@@ -21,7 +21,7 @@ class PopupView: UIView {
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
     
     // MARK: - Init
-    init(user1Id: String?, user2Id: String?, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
+    init(user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
         self.title = PopupViewObjects.Title(titleImage: titleImage)
         self.text = PopupViewObjects.Text(text: textString)
         
@@ -34,36 +34,32 @@ class PopupView: UIView {
         super.init(frame: CGRect())
         
         if user1Image == nil {
-            if let id = user1Id {
-                User.get(withID: id) { (user) in
-                    user.getMainPicture { (picture) in
-                        picture.getImage { (image) in
-                            self.user1Image = image
-                            self.user1Hexagon.setBackgroundImage(image: image)
+            User.get(withID: user1Id) { (user) in
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.user1Image = image
+                        self.user1Hexagon.setBackgroundImage(image: image)
 
-                        }
                     }
                 }
             }
         }
         
         if user2Image == nil {
-            if let id = user2Id {
-                print("id = user2Id")
-
-                User.get(withID: id) { (user) in
-                    print("user2 user retrived")
-                    print(user.name)
+            print("id = user2Id")
+            
+            User.get(withID: user2Id) { (user) in
+                print("user2 user retrived")
+                print(user.name)
+                
+                user.getPicture(atIndex: 0, withBlock: { (picture) in
+                    picture.getImage(withBlock: { (image) in
+                        self.user2Image = image
+                        self.user2Hexagon.setBackgroundImage(image: image)
+                        print("got user2Image")
                     
-                    user.getPicture(atIndex: 0, withBlock: { (picture) in
-                        picture.getImage(withBlock: { (image) in
-                            self.user2Image = image
-                            self.user2Hexagon.setBackgroundImage(image: image)
-                            print("got user2Image")
-                        
-                        })
                     })
-                }
+                })
             }
         }
         

@@ -34,11 +34,10 @@ class SwipeViewController: UIViewController {
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
         
         // Check for New Matches
-        //Check for AcceptedConnectionNotification
+        //Check for Connections Conversed and for the current User's New Matches
         let dbRetrievingFunctions = DBRetrievingFunctions()
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
-        
-        // Check for Nects Conversed
+        dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
         
     }
     
