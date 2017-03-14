@@ -11,6 +11,48 @@ import Parse
 
 class DBRetrievingFunctions {
     
+    //Checking to see if user's nects have conversed for the first time
+    func queryForConnectionsConversed(vc: UIViewController) {
+        let connectionsConversedQuery = PFQuery(className: "Messages")
+        connectionsConversedQuery.whereKey("bridge_builder", equalTo: PFUser.current()?.objectId)
+        connectionsConversedQuery.whereKeyExists("last_single_message")
+        connectionsConversedQuery.whereKey("connection_conversed_notification_viewed", notEqualTo: true)
+        connectionsConversedQuery.findObjectsInBackground { (objects, error) in
+            if error != nil {
+                print(error ?? "There was an error in DBRetrievingFunctions.queryForConnectionsConversed")
+            } else {
+                print("query ran")
+                
+                if let objects = objects {
+                    print(" objects acquired")
+                    
+                    for object in objects {
+                        
+                        if let user1Name = object["user1_name"] as? String,
+                            let user1ObjectId = object["user1_objectId"] as? String,
+                            let user2Name = object["user2_name"] as? String,
+                            let user2ObjectId = object["user2_objectId"] as? String {
+                            print(user1Name)
+                            print(user1ObjectId)
+                            print(user2Name)
+                            print(user2ObjectId)
+                            
+                            let connectionsConversedPopup = PopupView(user1Id: user1ObjectId, user2Id: user2ObjectId, textString: "\(user1Name) and \(user2Name) conversed!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: nil, user2Image: nil)
+                            vc.view.addSubview(connectionsConversedPopup)
+                            connectionsConversedPopup.autoPinEdgesToSuperviewEdges()
+                            
+                            object["connection_conversed_notification_viewed"] = true
+                            object.saveInBackground()
+                            
+                        }
+                    
+                    }
+                
+                }
+            }
+        }
+    }
+    
     //Checking to see if user has any unviewed notifications that a connection they made has accepted
     func queryForAcceptedConnectionNotifications(vc: UIViewController) {
         let acceptedConnectionQuery = PFQuery(className: "BridgePairings")

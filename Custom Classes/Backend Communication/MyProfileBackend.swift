@@ -10,7 +10,7 @@ import UIKit
 
 class MyProfileBackend {
     
-    func setProfilePicture(hexView: HexagonView) {
+    func setProfilePictureAndName(hexView: HexagonView, label: UILabel) {
         /*
         var storedLocally = false
         let localData = LocalData()
@@ -23,11 +23,16 @@ class MyProfileBackend {
         if !storedLocally {
         */
             User.getCurrent { (user) in
+                // Setting the user's profile picture
                 user.getMainPicture { (picture) in
                     picture.getImage { (image) in
                         hexView.setBackgroundImage(image: image)
                     }
                 }
+                
+                // Setting the user's name
+                label.text = user.name
+                
             }
         //}
     }

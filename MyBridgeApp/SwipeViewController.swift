@@ -22,7 +22,7 @@ class SwipeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Listener for presentingExternalProfileVC
+        // Listener for presentingExternalProfileVC
         NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
         
         // Add Targets for Swipe Cards
@@ -32,6 +32,14 @@ class SwipeViewController: UIViewController {
         layout.infoButton.addTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
+        
+        // Check for New Matches
+        //Check for AcceptedConnectionNotification
+        let dbRetrievingFunctions = DBRetrievingFunctions()
+        dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
+        
+        // Check for Nects Conversed
+        
     }
     
     override func loadView() {

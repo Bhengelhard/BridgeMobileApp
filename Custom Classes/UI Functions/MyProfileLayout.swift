@@ -16,7 +16,7 @@ class MyProfileLayout {
     let profilePicture = MyProfileObjects.ProfilePicture()
     let editProfileButton = MyProfileObjects.EditProfileButton()
 //    let reputationScore = MyProfileObjects.ReputationScore()
-    let name = MyProfileObjects.ReputationText()
+    let name = MyProfileObjects.Name()
     let settingsButton = MyProfileObjects.SettingsButton()
     let friendsImage = MyProfileObjects.FriendsImage()
     let inviteButton = MyProfileObjects.InviteButton()
@@ -76,7 +76,7 @@ class MyProfileLayout {
             
             // Set profile picture
             let myProfileBackend = MyProfileBackend()
-            myProfileBackend.setProfilePicture(hexView: profilePicture)
+            myProfileBackend.setProfilePictureAndName(hexView: profilePicture, label: name)
         }
         
         return true

@@ -87,6 +87,22 @@ class MyProfileObjects {
         
     }
     
+    /// UILabel with user's name
+    class Name: UILabel {
+        init() {
+            super.init(frame: CGRect())
+            
+            self.textColor = Constants.Colors.necter.textGray
+            self.font = Constants.Fonts.light18
+            self.textAlignment = NSTextAlignment.center
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
     /// Greyed text giving explanation to the reputation score
     class ReputationText: UIButton {
         

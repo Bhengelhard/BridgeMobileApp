@@ -15,8 +15,8 @@ class PopupView: UIView {
     let text: PopupViewObjects.Text
     let user1Hexagon: PopupViewObjects.HexagonWithUserId
     let user2Hexagon: PopupViewObjects.HexagonWithUserId
-    let user1Image: UIImage?
-    let user2Image: UIImage?
+    var user1Image: UIImage?
+    var user2Image: UIImage?
     let messageButton = PopupViewObjects.MessageButton()
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
     
@@ -32,6 +32,41 @@ class PopupView: UIView {
         self.user2Image = user2Image
         
         super.init(frame: CGRect())
+        
+        if user1Image == nil {
+            if let id = user1Id {
+                User.get(withID: id) { (user) in
+                    user.getMainPicture { (picture) in
+                        picture.getImage { (image) in
+                            self.user1Image = image
+                            self.user1Hexagon.setBackgroundImage(image: image)
+
+                        }
+                    }
+                }
+            }
+        }
+        
+        if user2Image == nil {
+            if let id = user2Id {
+                print("id = user2Id")
+
+                User.get(withID: id) { (user) in
+                    print("user2 user retrived")
+                    print(user.name)
+                    
+                    user.getPicture(atIndex: 0, withBlock: { (picture) in
+                        picture.getImage(withBlock: { (image) in
+                            self.user2Image = image
+                            self.user2Hexagon.setBackgroundImage(image: image)
+                            print("got user2Image")
+                        
+                        })
+                    })
+                }
+            }
+        }
+        
         
         // MARK: - Add Targets
         keepSwipingButton.addTarget(self, action: #selector(keepSwipingTapped(_:)), for: .touchUpInside)
