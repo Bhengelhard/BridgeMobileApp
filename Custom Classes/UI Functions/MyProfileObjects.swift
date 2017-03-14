@@ -49,9 +49,7 @@ class MyProfileObjects {
         
         override init() {
             super.init()
-            
-            // ** Placeholder Image - delete Parse Import at top
-            self.setBackgroundImage(image: #imageLiteral(resourceName: "Example_User_Profile_Picture"))
+            self.setBackgroundColor(color: Constants.Colors.necter.backgroundGray)
         }
         
         required init?(coder aDecoder: NSCoder) {

@@ -45,9 +45,7 @@ class SwipeViewController: UIViewController {
         swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
             self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
         }
-        
     }
-    
     
     override func updateViewConstraints() {
         didSetupConstraints = layout.initialize(view: view, didSetupConstraints: didSetupConstraints)
