@@ -11,7 +11,7 @@ import JSQMessagesViewController
 
 class ThreadObjects {
     
-    class navBar: NecterNavigationBar {
+    class NavBar: NecterNavigationBar {
         
         override init() {
             super.init()

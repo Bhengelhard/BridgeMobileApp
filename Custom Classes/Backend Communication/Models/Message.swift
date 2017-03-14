@@ -303,7 +303,7 @@ class Message: NSObject {
         }
     }
     
-    func save(withBlock block: MessageBlock?) {
+    func save(withBlock block: MessageBlock? = nil) {
         if let user1ID = user1ID {
             parseMessage["user1_objectId"] = user1ID
         } else {

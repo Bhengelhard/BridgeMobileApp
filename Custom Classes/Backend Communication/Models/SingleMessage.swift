@@ -47,6 +47,37 @@ class SingleMessage {
         }
     }
     
+    static func create(text: String?, senderID: String?, senderName: String?, messageID: String?, withBlock block: SingleMessageBlock? = nil) {
+        
+        let parseSingleMessage = PFObject(className: "SingleMessages")
+        
+        // set SingleMessage's ACL
+        let acl = PFACL()
+        acl.getPublicReadAccess = true
+        parseSingleMessage.acl = acl
+        
+        if let text = text {
+            parseSingleMessage["message_text"] = text
+        }
+        
+        if let senderID = senderID {
+            parseSingleMessage["sender"] = senderID
+        }
+        
+        if let senderName = senderName {
+            parseSingleMessage["sender_name"] = senderName
+        }
+        
+        if let messageID = messageID {
+            parseSingleMessage["message_id"] = messageID
+        }
+        
+        let singleMessage = SingleMessage(parseSingleMessage: parseSingleMessage)
+        if let block = block {
+            block(singleMessage)
+        }
+    }
+    
     static func get(withID id: String, withBlock block: SingleMessageBlock? = nil) {
         let query = PFQuery(className: "SingleMessages")
         query.getObjectInBackground(withId: id) { (parseObject, error) in
@@ -65,6 +96,7 @@ class SingleMessage {
         if let messageID = message.id {
             let query = PFQuery(className: "SingleMessages")
             query.whereKey("message_id", equalTo: messageID)
+            query.order(byAscending: "createdAt")
             query.limit = 10000
             
             query.findObjectsInBackground { (parseSingleMessages, error) in

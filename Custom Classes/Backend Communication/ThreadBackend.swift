@@ -12,8 +12,6 @@ import UIKit
 class ThreadBackend {
     
     var jsqMessages = [JSQMessage]()
-    var senderID: String?
-    var senderName: String?
     
     func reloadSingleMessages(collectionView: UICollectionView, messageID: String?) {
         jsqMessages = [JSQMessage]()
@@ -26,7 +24,11 @@ class ThreadBackend {
                         }
                     }
                     collectionView.reloadData()
-                    collectionView.layoutIfNeeded()
+                    
+                    // scroll to bottom
+                    if self.jsqMessages.count > 0 {
+                        collectionView.scrollToItem(at: IndexPath(item: self.jsqMessages.count-1, section: 0), at: .bottom, animated: true)
+                    }
                 }
             }
         }
@@ -34,15 +36,52 @@ class ThreadBackend {
     
     
     
-    func setSenderInfo(collectionView: UICollectionView, messageID: String?) {
+    func setSenderInfo(collectionView: UICollectionView, withBlock block: @escaping (String?, String?) -> Void) {
+        User.getCurrent { (user) in
+            block(user.id, user.name)
+            collectionView.reloadData()
+        }
+    }
+    
+    func getCurrentUserPicture(collectionView: UICollectionView, withBlock block: Picture.ImageBlock? = nil) {
+        User.getCurrent { (user) in
+            user.getMainPicture { (picture) in
+                picture.getImage { (image) in
+                    if let block = block {
+                        block(image)
+                    }
+                    collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func getOtherUserInMessagePicture(collectionView: UICollectionView, messageID: String?, withBlock block: Picture.ImageBlock? = nil) {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
                 message.getNonCurrentUser { (user) in
-                    self.senderID = user.id
-                    self.senderName = user.name
-                    collectionView.reloadData()
-                    collectionView.layoutIfNeeded()
+                    user.getMainPicture { (picture) in
+                        picture.getImage { (image) in
+                            if let block = block {
+                                block(image)
+                            }
+                            collectionView.reloadData()
+                        }
+                    }
                 }
+            }
+        }
+    }
+    
+    func jsqMessageToSingleMessage(jsqMessage: JSQMessage, messageID: String?, withBlock block: SingleMessage.SingleMessageBlock? = nil) {
+        SingleMessage.create(text: jsqMessage.text, senderID: jsqMessage.senderId, senderName: jsqMessage.senderDisplayName, messageID: messageID, withBlock: block)
+    }
+    
+    func updateMessageSnapshot(messageID: String?, snapshot: String) {
+        if let messageID = messageID {
+            Message.get(withID: messageID) { (message) in
+                message.lastSingleMessage = snapshot
+                message.save()
             }
         }
     }

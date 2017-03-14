@@ -18,6 +18,11 @@ struct Constants {
             static let textGray = UIColor(red: 159 / 255, green: 159 / 255, blue: 158 / 255, alpha: 1.0)
             static let buttonGray = UIColor(red: 218 / 255, green: 223 / 255, blue: 240 / 255, alpha: 1.0)
 		}
+        
+        struct singleMessages {
+            static let outgoing = UIColor(red: 55 / 255, green: 56 / 255, blue: 56 / 255, alpha: 1.0)
+            static let incoming = UIColor(red: 216 / 255, green: 216 / 255, blue: 216 / 255, alpha: 1.0)
+        }
 
 		struct bridgeType {
 			/// Blue
