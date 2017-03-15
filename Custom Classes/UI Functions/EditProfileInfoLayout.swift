@@ -12,10 +12,11 @@ class EditProfileInfoLayout {
     
     // MARK: Global Variables
     let navBar: EditProfileInfoObjects.NavBar
-    let table = EditProfileInfoObjects.tableView()
+    let table: EditProfileInfoObjects.TableView
     
-    init(infoTitle: String) {
+    init(infoTitle: String, value: String) {
         self.navBar = EditProfileInfoObjects.NavBar(infoTitle: infoTitle)
+        self.table = EditProfileInfoObjects.TableView(infoTitle: infoTitle, value: value)
         
     }
     

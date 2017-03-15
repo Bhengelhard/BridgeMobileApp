@@ -16,8 +16,8 @@ class EditProfileInfoViewController: UIViewController {
     
     var didSetupConstraints = false
     
-    init(infoTitle: String) {
-        self.layout = EditProfileInfoLayout(infoTitle: infoTitle)
+    init(infoTitle: String, value: String) {
+        self.layout = EditProfileInfoLayout(infoTitle: infoTitle, value: value)
         super.init(nibName: nil, bundle: nil)
         
     }
