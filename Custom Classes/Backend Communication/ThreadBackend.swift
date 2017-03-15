@@ -43,20 +43,19 @@ class ThreadBackend {
         }
     }
     
-    func getCurrentUserPicture(collectionView: UICollectionView, withBlock block: Picture.ImageBlock? = nil) {
+    func getCurrentUserPicture(withBlock block: Picture.ImageBlock? = nil) {
         User.getCurrent { (user) in
             user.getMainPicture { (picture) in
                 picture.getImage { (image) in
                     if let block = block {
                         block(image)
                     }
-                    collectionView.reloadData()
                 }
             }
         }
     }
     
-    func getOtherUserInMessagePicture(collectionView: UICollectionView, messageID: String?, withBlock block: Picture.ImageBlock? = nil) {
+    func getOtherUserInMessagePicture(messageID: String?, withBlock block: Picture.ImageBlock? = nil) {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
                 message.getNonCurrentUser { (user) in
@@ -65,7 +64,6 @@ class ThreadBackend {
                             if let block = block {
                                 block(image)
                             }
-                            collectionView.reloadData()
                         }
                     }
                 }

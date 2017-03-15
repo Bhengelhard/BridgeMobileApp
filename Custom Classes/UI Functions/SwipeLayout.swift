@@ -68,21 +68,23 @@ class SwipeLayout {
             view.addSubview(topSwipeCard)
             topSwipeCard.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 15)
             topSwipeCard.autoPinEdge(.bottom, to: .top, of: nectButton, withOffset: -10)
+            topSwipeCard.autoSetDimension(.width, toSize: view.frame.width - 40)
             topSwipeCardHorizontalConstraint = topSwipeCard.autoAlignAxis(toSuperviewAxis: .vertical)
-            topSwipeCard.autoSetDimension(.width, toSize: view.frame.width - 30)
+            //topSwipeCardHorizontalConstraint = topSwipeCard.autoPinEdge(toSuperviewEdge: .left, withInset: view.frame.width/2 - topSwipeCard.frame.width/2)
             
             // Layout bottom swipe card
             view.insertSubview(bottomSwipeCard, belowSubview: topSwipeCard)
             bottomSwipeCard.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 15)
             bottomSwipeCard.autoPinEdge(.bottom, to: .top, of: nectButton, withOffset: -10)
+            bottomSwipeCard.autoSetDimension(.width, toSize: view.frame.width - 40)
             bottomSwipeCardHorizontalConstraint = bottomSwipeCard.autoAlignAxis(toSuperviewAxis: .vertical)
-            bottomSwipeCard.autoSetDimension(.width, toSize: view.frame.width - 30)
+            //bottomSwipeCardHorizontalConstraint = bottomSwipeCard.autoPinEdge(toSuperviewEdge: .left, withInset: view.frame.width/2 - bottomSwipeCard.frame.width/2)
             
             let iconDiameter = view.frame.width / 3
             
             view.addSubview(connectIcon)
             connectIcon.autoSetDimensions(to: CGSize(width: iconDiameter, height: iconDiameter))
-            connectIcon.autoAlignAxis(.vertical, toSameAxisOf: view, withOffset: -0.15*view.frame.width)
+            connectIcon.autoAlignAxis(.vertical, toSameAxisOf: view, withOffset: 0.15*view.frame.width)
             connectIcon.autoAlignAxis(.horizontal, toSameAxisOf: topSwipeCard)
             connectIcon.alpha = 0
             
@@ -97,9 +99,17 @@ class SwipeLayout {
         return true
     }
     
-    func updateTopSwipeCardHorizontalConstraint(translation: CGFloat) {
+//    func updateTopSwipeCardHorizontalConstraint(translation: CGFloat) {
+//        if let constraint = topSwipeCardHorizontalConstraint {
+//            constraint.constant = constraint.constant + translation
+//        }
+//    }
+    
+    func updateTopSwipeCardHorizontalConstraint(fromCenter: CGFloat) {
         if let constraint = topSwipeCardHorizontalConstraint {
-            constraint.constant = constraint.constant + translation
+            constraint.constant = fromCenter
+            
+            print("updating top with constant = \(constraint.constant)")
         }
     }
     
@@ -113,7 +123,6 @@ class SwipeLayout {
     }
     
     func switchTopAndBottomCards() {
-        print("switching top and bottom cards")
         let oldTopSwipeCard = topSwipeCard
         let oldTopSwipeCardHorizontalConstraint = topSwipeCardHorizontalConstraint
         topSwipeCard = bottomSwipeCard
@@ -122,6 +131,7 @@ class SwipeLayout {
         bottomSwipeCardHorizontalConstraint = oldTopSwipeCardHorizontalConstraint
         
         if let constraint = bottomSwipeCardHorizontalConstraint {
+            //constraint.constant = view.frame.width/2 - bottomSwipeCard.frame.width/2
             constraint.constant = 0
         }
         

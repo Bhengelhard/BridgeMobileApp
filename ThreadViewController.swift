@@ -14,6 +14,7 @@ import JSQMessagesViewController
 class ThreadViewController: UIViewController {
     var messagesVC = NecterJSQMessagesViewController()
     let layout = ThreadLayout()
+    let threadBackend = ThreadBackend()
     
     var didSetupConstraints = false
     
@@ -42,6 +43,11 @@ class ThreadViewController: UIViewController {
     
     func setMessageID(messageID: String?) {
         messagesVC.messageID = messageID
+        
+        threadBackend.getOtherUserInMessagePicture(messageID: messageID) { (image) in
+            let imageView = self.layout.navBar.titleImageView
+            imageView.image = image
+        }
     }
     
     func backButtonTapped(_ sender: UIButton) {
@@ -195,12 +201,14 @@ class NecterJSQMessageAvatar: NSObject, JSQMessageAvatarImageDataSource {
         super.init()
         
         if currentUser {
-            threadBackend.getCurrentUserPicture(collectionView: collectionView) { (image) in
+            threadBackend.getCurrentUserPicture { (image) in
                 self.image = image
+                self.collectionView.reloadData()
             }
         } else {
-            threadBackend.getOtherUserInMessagePicture(collectionView: collectionView, messageID: messageID) { (image) in
+            threadBackend.getOtherUserInMessagePicture(messageID: messageID) { (image) in
                 self.image = image
+                self.collectionView.reloadData()
             }
         }
     }
