@@ -62,12 +62,10 @@ class SwipeViewController: UIViewController {
     
     // MARK: - Targets and GestureRecognizer
     func passButtonTapped(_ sender: UIButton) {
-        print("pass tapped")
-        
+        didSwipe(right: false)
     }
     
     func nectButtonTapped(_ sender: UIButton) {
-        print("nect tapped")
         if layout.topSwipeCard.isUserInteractionEnabled {
             //SwipeLogic.swipedRight(swipeCard: layout.topSwipeCard)
         } else {

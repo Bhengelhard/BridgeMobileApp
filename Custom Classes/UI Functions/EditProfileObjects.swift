@@ -71,7 +71,7 @@ class EditProfileObjects {
             self.separatorStyle = .none
             
             self.estimatedRowHeight = 50
-            self.rowHeight = UITableViewAutomaticDimension
+            //self.rowHeight = UITableViewAutomaticDimension
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -161,6 +161,13 @@ class EditProfileObjects {
                 
             }
             
+        }
+        
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            if indexPath.row == 0 {
+                return DisplayUtility.screenWidth
+            }
+            return UITableViewAutomaticDimension
         }
         
         func setParentVCOfEditProfilePicturesCell(parentVC: UIViewController) {

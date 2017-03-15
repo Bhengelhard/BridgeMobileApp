@@ -120,10 +120,14 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         imagePicker.sourceType = .photoLibrary
         facebookImagePicker.delegate = self
         
-        autoSetDimensions(to: CGSize(width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth))
+        //autoSetDimensions(to: CGSize(width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth))
         
-        let largeSideLength = 0.97 * 2/3 * (frame.width - 40)
-        let smallSideLength = 212.0/449.0 * largeSideLength
+        let margin = CGFloat(20)
+        let smallSideLength = (frame.width - 4*margin)/3
+        let largeSideLength = 2*smallSideLength + margin
+        
+        //let largeSideLength = 0.97 * 2/3 * (frame.width - 40)
+        //let smallSideLength = 212.0/449.0 * largeSideLength
         
         let cornerRadius = 30.0/449.0 * largeSideLength
         
@@ -141,16 +145,16 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
             
             // layout picture box
             if i == 0 {
-                pictureBox.autoPinEdge(toSuperviewEdge: .top, withInset: 20)
-                pictureBox.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
+                pictureBox.autoPinEdge(toSuperviewEdge: .top, withInset: margin)
+                pictureBox.autoPinEdge(toSuperviewEdge: .leading, withInset: margin)
             } else if i == 1 {
                 pictureBox.autoAlignAxis(.firstBaseline, toSameAxisOf: pictureBoxes[0])
-                pictureBox.autoPinEdge(toSuperviewEdge: .trailing, withInset: 20)
+                pictureBox.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
             } else if i == 2 {
                 pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[0])
                 pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[1])
             } else if i == 3 {
-                pictureBox.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20)
+                pictureBox.autoPinEdge(toSuperviewEdge: .bottom, withInset: margin)
                 pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[2])
             } else if i == 4 {
                 pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[3])
@@ -159,8 +163,9 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
                 pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[4])
                 pictureBox.autoPinEdge(.leading, to: .leading, of: pictureBoxes[0])
             }
-            
         }
+        
+        layoutIfNeeded()
     }
     
     required init?(coder aDecoder: NSCoder) {

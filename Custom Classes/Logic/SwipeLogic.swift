@@ -11,6 +11,8 @@ import UIKit
 class SwipeLogic {
     
     private static var vc: SwipeViewController?
+    private static var originalLocation = CGPoint()
+
     
     static func swipe(gesture: UIPanGestureRecognizer, layout: SwipeLayout, vc: SwipeViewController, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, didSwipe: @escaping (Bool) -> Void, reset: @escaping () -> Void) {
         
@@ -18,9 +20,13 @@ class SwipeLogic {
         
         let view = vc.view!
         
-        let translation = gesture.translation(in: view)
+        
+//        let translation = gesture.translation(in: view)
+//        let swipeCard = gesture.view as! SwipeCard
+//        layout.updateTopSwipeCardHorizontalConstraint(translation: translation.x)
+        
         let swipeCard = gesture.view as! SwipeCard
-        layout.updateTopSwipeCardHorizontalConstraint(translation: translation.x)
+        
         //let scale = min(CGFloat(1.0), 1)
         //var rotation = CGAffineTransform(rotationAngle: -xFromCenter / 1000)
         //var rotation = CGAffineTransform(rotationAngle: translation.x / 1000)
@@ -43,7 +49,18 @@ class SwipeLogic {
             connectIcon.alpha = 0
         }
         
+        var location = CGPoint()
+        
+        if gesture.state == .began {
+            originalLocation = gesture.location(in: view)
+            print("original location x = \(originalLocation.x)")
+        }
+        
         if gesture.state == .changed {
+            location = gesture.location(in: view)
+            print("location x = \(location.x)")
+            layout.updateTopSwipeCardHorizontalConstraint(fromCenter: location.x - originalLocation.x)
+            
            // let multiplier = CGFloat(0.98)
             let cardCenterX = swipeCard.center.x
             let screenMiddleX = DisplayUtility.screenWidth / 2
@@ -84,11 +101,13 @@ class SwipeLogic {
                         reset()
                     }))
                     alert.addAction(UIAlertAction(title: "Don't Connect", style: .default, handler: { (action) in
-                        UIView.animate(withDuration: 0.2, animations: {
+                        UIView.animate(withDuration: 0.4, animations: {
                             //swipeCard.center.x = -1.0*DisplayUtility.screenWidth
                             //disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
                             disconnectIcon.alpha = 0.0
                             swipeCard.overlay.opacity = 0.0
+                            layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(view.frame.width/2 + swipeCard.frame.width/2))
+                            view.layoutIfNeeded()
                         }, completion: { (success) in
                             didSwipe(false)
                         })
@@ -99,10 +118,12 @@ class SwipeLogic {
                     localData.setFirstTimeSwipingLeft(false)
                     localData.synchronize()
                 } else {
-                    UIView.animate(withDuration: 0.2, animations: {
-                        //disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
+                    UIView.animate(withDuration: 0.4, animations: {
                         disconnectIcon.alpha = 0.0
                         swipeCard.overlay.opacity = 0.0
+                        view.layoutIfNeeded()
+                        layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(view.frame.width/2 + swipeCard.frame.width/2))
+                        view.layoutIfNeeded()
                     }, completion: { (success) in
                         didSwipe(false)
                     })
@@ -119,27 +140,30 @@ class SwipeLogic {
                 
                 if let user1Id = swipeCard.bridgePairing?.user1ID, let user2Id = swipeCard.bridgePairing?.user2ID {
                     swipeRightView = PopupView(user1Id: user1Id, user2Id: user2Id, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
-                    swipeRightView!.alpha = 0
-                    vc.view.addSubview(swipeRightView!)
-                    swipeRightView!.autoPinEdgesToSuperviewEdges()
-                    swipeRightView!.layoutIfNeeded()
+                    if let swipeRightView = swipeRightView {
+                        swipeRightView.alpha = 0
+                        vc.view.addSubview(swipeRightView)
+                        swipeRightView.autoPinEdgesToSuperviewEdges()
+                        swipeRightView.layoutIfNeeded()
+                    }
                 }
                 
                 // Set the hexagonImages
                 //swipeRightView.setHexagonImages(user1Image: user1Image, user2Image: user2Image)
                 
                 UIView.animate(withDuration: 0.4, animations: {
-                    //swipeCard.center.x = 1.6*DisplayUtility.screenWidth
-                    //connectIcon.center.x = 1.6*DisplayUtility.screenWidth
                     connectIcon.alpha = 0.0
                     swipeCard.overlay.opacity = 0.0
-                    if let srv = swipeRightView {
-                        srv.alpha = 1
+                    print("move swipe card all the way to right")
+                    layout.updateTopSwipeCardHorizontalConstraint(fromCenter: view.frame.width/2 + swipeCard.frame.width/2)
+                    view.layoutIfNeeded()
+                    if let swipeRightView = swipeRightView {
+                        //swipeRightView.alpha = 1
                     }
                 }, completion: { (success) in
                     didSwipe(true)
                 })
-                removeCard = false
+                removeCard = true
             }
             
             if removeCard {
