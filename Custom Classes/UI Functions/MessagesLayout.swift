@@ -17,7 +17,7 @@ class MessagesLayout {
 //    let messagesTitle = MessagesObjects.MessagesTitle()
     let messagesTable = MessagesObjects.MessagesTable()
     let messagesTableCell = MessagesObjects.MessagesTableCell()
-    
+
     // MARK: - Layout
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
@@ -52,7 +52,6 @@ class MessagesLayout {
             messagesTable.autoPinEdge(.top, to: .bottom, of: navBar)
             messagesTable.autoMatch(.width, to: .width, of: view)
             messagesTable.autoPinEdge(toSuperviewEdge: .bottom)
-            
         }
         
         return true

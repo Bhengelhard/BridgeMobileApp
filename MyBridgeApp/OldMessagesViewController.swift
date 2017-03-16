@@ -52,7 +52,8 @@ class OldMessagesViewController: UIViewController, UITableViewDataSource, UITabl
     let searchBarContainer = UIView()
     
     //new matches
-    var newMatchesView = NewMatchesView()
+    //var newMatchesView = NewMatchesView()
+    var newMatchesView = NewMatchesTableViewCell()
     
     //filter info
     var currentFilter = "All Types"
@@ -421,7 +422,8 @@ class OldMessagesViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func loadNewMatches() { // **BACKEND
-        newMatchesView = NewMatchesView()
+        //newMatchesView = NewMatchesView()
+        newMatchesView = NewMatchesTableViewCell()
         newMatchesView.setVC(vc: self)
         self.tableView.tableHeaderView = self.newMatchesView
         let query: PFQuery = PFQuery(className: "BridgePairings")

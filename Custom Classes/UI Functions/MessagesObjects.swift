@@ -47,9 +47,9 @@ class MessagesObjects {
         
     }
     
-    class NewMatchesScrollView: NewMatchesView {
-
-    }
+//    class NewMatchesScrollView: NewMatchesView {
+//
+//    }
     
     class MessagesTitle: UILabel {
         

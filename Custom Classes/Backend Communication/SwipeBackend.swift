@@ -59,7 +59,6 @@ class SwipeBackend {
     }
     
     private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, completion: (() -> Void)? = nil) {
-        print("getNextBridgePairing")
         let localBridgePairings = LocalBridgePairings()
 
         if !top {
@@ -73,12 +72,9 @@ class SwipeBackend {
         }
         User.getCurrent { (user) in
             BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true) { (bridgePairings) in
-                print("\(bridgePairings.count) bridge pairings")
                 if bridgePairings.count > 0 {
                     let bridgePairing = bridgePairings[0]
-                    
-                    print("bp names = \(bridgePairing.user1Name), \(bridgePairing.user2Name)")
-                    
+                                        
                     if top {
                         self.topBridgePairing = bridgePairing
                         

@@ -25,7 +25,6 @@ class SwipeLayout {
     
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
-        print("initializing layout")
         if (!didSetupConstraints) {
             self.view = view
             
@@ -108,8 +107,6 @@ class SwipeLayout {
     func updateTopSwipeCardHorizontalConstraint(fromCenter: CGFloat) {
         if let constraint = topSwipeCardHorizontalConstraint {
             constraint.constant = fromCenter
-            
-            print("updating top with constant = \(constraint.constant)")
         }
     }
     

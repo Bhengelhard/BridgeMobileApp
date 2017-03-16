@@ -53,12 +53,10 @@ class SwipeLogic {
         
         if gesture.state == .began {
             originalLocation = gesture.location(in: view)
-            print("original location x = \(originalLocation.x)")
         }
         
         if gesture.state == .changed {
             location = gesture.location(in: view)
-            print("location x = \(location.x)")
             layout.updateTopSwipeCardHorizontalConstraint(fromCenter: location.x - originalLocation.x)
             
            // let multiplier = CGFloat(0.98)
