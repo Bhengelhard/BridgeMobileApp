@@ -101,13 +101,27 @@ class MessagesBackend {
         }
     }
     
-    func loadNewMatches(newMatchesView: NewMatchesView) {
+//    func loadNewMatches(newMatchesView: NewMatchesView) {
+//        User.getCurrent { (user) in
+//            Message.getAll(withUser: user) { (messages) in
+//                for message in messages {
+//                    if message.lastSingleMessage == nil {
+//                        message.getNonCurrentUser { (otherUser) in
+//                            newMatchesView.addUser(otherUser)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+    func loadNewMatches(newMatchesTableViewCell: NewMatchesTableViewCell) {
         User.getCurrent { (user) in
             Message.getAll(withUser: user) { (messages) in
                 for message in messages {
                     if message.lastSingleMessage == nil {
                         message.getNonCurrentUser { (otherUser) in
-                            newMatchesView.addUser(otherUser)
+                            newMatchesTableViewCell.addUser(otherUser)
                         }
                     }
                 }

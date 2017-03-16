@@ -10,11 +10,13 @@ import UIKit
 
 class MessagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    // "You have no new matches"/"You have no messages"
 
     // MARK: Global Variables
     let layout = MessagesLayout()
     let transitionManager = TransitionManager()
     let messagesBackend = MessagesBackend()
+    let newMatchesTableViewCell = NewMatchesTableViewCell()
     
     var didSetupConstraints = false
     
@@ -24,8 +26,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         
         layout.messagesTable.delegate = self
         layout.messagesTable.dataSource = self
+        layout.messagesTable.separatorStyle = .none
         
         messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
+        messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
         //messagesBackend.loadNewMatches(newMatchesView: layout.newMatchesScrollView)
     }
     
@@ -53,15 +57,26 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
+        if indexPath.row == 0 {
+            return 100
+            //return UITableViewAutomaticDimension
+        }
+        
+        return 100
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0 {
+            return newMatchesTableViewCell
+        }
+        
+        let messageIndex = indexPath.row - 1
+        
         let cell = MessagesTableCell()
         cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
-        messagesBackend.setParticipantsLabel(index: indexPath.row, label: cell.participants)
-        messagesBackend.setSanpshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
-        messagesBackend.setProfilePicture(index: indexPath.row, imageView: cell.profilePic)
+        messagesBackend.setParticipantsLabel(index: messageIndex, label: cell.participants)
+        messagesBackend.setSanpshotLabel(index: messageIndex, textView: cell.messageSnapshot)
+        messagesBackend.setProfilePicture(index: messageIndex, imageView: cell.profilePic)
         cell.notificationDot.alpha = 0
         
         return cell
@@ -69,11 +84,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let threadVC = ThreadViewController()
-        if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
+        if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row - 1] {
             threadVC.setMessageID(messageID: messageID)
-        }
-        present(threadVC, animated: true) {
-            tableView.deselectRow(at: indexPath, animated: false) // deselect the row
+            present(threadVC, animated: true) {
+                tableView.deselectRow(at: indexPath, animated: false) // deselect the row
+            }
         }
     }
     
