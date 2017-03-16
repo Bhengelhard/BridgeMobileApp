@@ -141,12 +141,12 @@ class NewMatchesTableViewCell: UITableViewCell {
     func handleTap(_ gesture: UIGestureRecognizer) {
         print("tapped")
         /*
-        let newMatchView = gesture.view!
-        let acceptIgnoreView = AcceptIgnoreView(newMatch: displayedNewMatches[newMatchView.tag])
-        if let vc = self.vc {
-            acceptIgnoreView.setVC(vc: vc)
-            vc.view.addSubview(acceptIgnoreView)
-        }*/
+         let newMatchView = gesture.view!
+         let acceptIgnoreView = AcceptIgnoreView(newMatch: displayedNewMatches[newMatchView.tag])
+         if let vc = self.vc {
+         acceptIgnoreView.setVC(vc: vc)
+         vc.view.addSubview(acceptIgnoreView)
+         }*/
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -220,7 +220,7 @@ class NewMatchesTableViewCell: UITableViewCell {
         
         scrollView.contentSize = CGSize(width: max(DisplayUtility.screenWidth, spaceBetweenProfilePics + CGFloat(position+1)*(profilePicWidth+spaceBetweenProfilePics)), height: frame.height)
         
-//        line.frame = CGRect(x: 0.0463*frame.width, y: frame.height-1, width: 0.9205*contentSize.width, height: 1)
+        //        line.frame = CGRect(x: 0.0463*frame.width, y: frame.height-1, width: 0.9205*contentSize.width, height: 1)
         //line.frame = CGRect(x: 0, y: frame.height-1, width: contentSize.width, height: 1)
     }
     

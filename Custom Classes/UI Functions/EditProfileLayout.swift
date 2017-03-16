@@ -39,7 +39,6 @@ class EditProfileLayout {
             EditProfileLogic.setWork(label: table.workTableCell.textLabel!)
             EditProfileLogic.setSchool(label: table.schoolTableCell.textLabel!)
             
-            
             let editProfileBackend = EditProfileBackend()
             editProfileBackend.setPictures { (pictures) in
                 for i in 0..<min(6, pictures.count) {

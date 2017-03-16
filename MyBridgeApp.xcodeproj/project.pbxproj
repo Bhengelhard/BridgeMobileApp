@@ -44,12 +44,13 @@
 		307A7F5C1D46620C00858F96 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */; };
 		307A7F5E1D46763000858F96 /* ProfileTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */; };
 		3080202C1E6649080091E63D /* MainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3080202B1E6649080091E63D /* MainPageViewController.swift */; };
+		30A217DC1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A217DB1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift */; };
+		30A217DE1E7B442000CEBA80 /* EditProfileInfoBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A217DD1E7B442000CEBA80 /* EditProfileInfoBackend.swift */; };
 		30A726F21E2683850070B620 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F11E2683850070B620 /* Main.storyboard */; };
 		30A726FC1E27D9160070B620 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */; };
 		30A727041E293A9A0070B620 /* OldMessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727031E293A9A0070B620 /* OldMessagesViewController.swift */; };
 		30A727061E29540F0070B620 /* MessageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727051E29540F0070B620 /* MessageComposer.swift */; };
 		30A7270A1E2EF7550070B620 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727091E2EF7550070B620 /* SignupViewController.swift */; };
-		30AA7D651DDCD0CE00DD344D /* NewMatchesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AA7D641DDCD0CE00DD344D /* NewMatchesTableViewCell.swift */; };
 		30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */; };
 		30B8D9931E23FA4B00624D52 /* DBRetrievingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */; };
 		30BAE9A21E31B9210094070B /* MessagingFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BAE9A11E31B9210094070B /* MessagingFunctions.swift */; };
@@ -183,12 +184,13 @@
 		307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell.swift; path = MyBridgeApp/ProfileTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewCell2.swift; path = MyBridgeApp/ProfileTableViewCell2.swift; sourceTree = SOURCE_ROOT; };
 		3080202B1E6649080091E63D /* MainPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainPageViewController.swift; path = MyBridgeApp/MainPageViewController.swift; sourceTree = SOURCE_ROOT; };
+		30A217DB1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesTableViewCell.swift; path = MyBridgeApp/NewMatchesTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		30A217DD1E7B442000CEBA80 /* EditProfileInfoBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileInfoBackend.swift; path = "Custom Classes/Backend Communication/EditProfileInfoBackend.swift"; sourceTree = "<group>"; };
 		30A726F11E2683850070B620 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSettingsViewController.swift; path = MyBridgeApp/UserSettingsViewController.swift; sourceTree = SOURCE_ROOT; };
 		30A727031E293A9A0070B620 /* OldMessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OldMessagesViewController.swift; path = MyBridgeApp/OldMessagesViewController.swift; sourceTree = SOURCE_ROOT; };
 		30A727051E29540F0070B620 /* MessageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageComposer.swift; path = "Custom Classes/Custom Views/MessageComposer.swift"; sourceTree = "<group>"; };
 		30A727091E2EF7550070B620 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignupViewController.swift; path = MyBridgeApp/SignupViewController.swift; sourceTree = SOURCE_ROOT; };
-		30AA7D641DDCD0CE00DD344D /* NewMatchesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesTableViewCell.swift; path = MyBridgeApp/NewMatchesTableViewCell.swift; sourceTree = "<group>"; };
 		30B8D98E1E22F17D00624D52 /* AcceptedConnectionNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcceptedConnectionNotification.swift; path = "Custom Classes/Custom Views/AcceptedConnectionNotification.swift"; sourceTree = "<group>"; };
 		30B8D9921E23FA4B00624D52 /* DBRetrievingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBRetrievingFunctions.swift; path = "Custom Classes/Backend Communication/DBRetrievingFunctions.swift"; sourceTree = "<group>"; };
 		30BAE9A11E31B9210094070B /* MessagingFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagingFunctions.swift; path = "Custom Classes/Custom Functions/MessagingFunctions.swift"; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 				30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */,
 				906383E91E6FB1E700D901EA /* EditProfileBackend.swift */,
 				907F605E1E73427400CB1097 /* ThreadBackend.swift */,
+				30A217DD1E7B442000CEBA80 /* EditProfileInfoBackend.swift */,
 			);
 			name = "Backend Communication";
 			sourceTree = "<group>";
@@ -472,7 +475,7 @@
 			children = (
 				E9D6DF081D78808900138A1F /* NewMessageTableCell.swift */,
 				E9D6DF101D7880C400138A1F /* MessagesTableCell.swift */,
-				30AA7D641DDCD0CE00DD344D /* NewMatchesTableViewCell.swift */,
+				30A217DB1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift */,
 				30BFA0BC1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift */,
 				307A7F5B1D46620C00858F96 /* ProfileTableViewCell.swift */,
 				307A7F5D1D46763000858F96 /* ProfileTableViewCell2.swift */,
@@ -806,12 +809,12 @@
 				30D82B5C1E6F92E3000F7075 /* WebViewController.swift in Sources */,
 				302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */,
 				302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */,
+				30A217DE1E7B442000CEBA80 /* EditProfileInfoBackend.swift in Sources */,
 				30BF6FF11E5BDD860008C2B5 /* MessagesViewController.swift in Sources */,
 				30BF6FED1E5BDB8A0008C2B5 /* MyProfileLayout.swift in Sources */,
 				3059ABF21DEC72FB0010A81B /* TrendingView.swift in Sources */,
 				3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */,
 				30BF6FF51E5BDDBD0008C2B5 /* MessagesObjects.swift in Sources */,
-				30AA7D651DDCD0CE00DD344D /* NewMatchesTableViewCell.swift in Sources */,
 				1BB6AE311D5D24A800EC2E1B /* MessageContent.swift in Sources */,
 				306BD21F1E4416100020C4BA /* Reachability.swift in Sources */,
 				30D82B661E73306D000F7075 /* EditProfileInfoViewController.swift in Sources */,
@@ -880,6 +883,7 @@
 				30D82B6C1E73310A000F7075 /* EditProfileInfoLayout.swift in Sources */,
 				30B8D98F1E22F17D00624D52 /* AcceptedConnectionNotification.swift in Sources */,
 				302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */,
+				30A217DC1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,
 				9043B77E1E56ABC100D76BCE /* User.swift in Sources */,
 				30D82B621E6FCFC1000F7075 /* PopupView.swift in Sources */,

@@ -56,6 +56,9 @@ class User: NSObject {
     /// The gender of the User
     var gender: Gender?
     
+    /// The relationship status of the User
+    var relationshipStatus: Bool?
+    
     /// The User's birthday on Facebook
     var fbBirthday: Date?
     

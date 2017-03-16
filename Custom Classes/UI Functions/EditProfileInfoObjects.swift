@@ -29,6 +29,7 @@ class EditProfileInfoObjects {
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+        
     }
     
     class TableView: UITableView, UITableViewDelegate, UITableViewDataSource {
@@ -72,18 +73,37 @@ class EditProfileInfoObjects {
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             var cell: UITableViewCell
             
+            let editProfileInfoBackend = EditProfileInfoBackend()
+            let isSelected = editProfileInfoBackend.returnSelected(title: infoTitle)
+            
             switch(indexPath.row) {
             case 0:
                 cell = DescriptionCell(text: "")
             case 1:
-                cell = OptionCell(text: value)
+                cell = OptionCell(text: value, infoTitle: infoTitle)
+                if let cell = cell as? OptionCell {
+                    if isSelected {
+                        cell.checkmarkButton.isSelected = true
+                    } else {
+                        cell.checkmarkButton.isSelected = false
+                    }
+                }
+                
             case 2:
                 cell = DescriptionCell(text: "If your \(infoTitle) isn't shown, update it on Facebook.")
             case 3:
-                cell = OptionCell(text: "None")
+                cell = OptionCell(text: "None", infoTitle: infoTitle)
+                if let cell = cell as? OptionCell {
+                    if !isSelected {
+                        cell.checkmarkButton.isSelected = true
+                    } else {
+                        cell.checkmarkButton.isSelected = false
+                    }                }
             default:
                 cell = DescriptionCell(text: "")
             }
+            
+            
             
             return cell
         }
@@ -126,8 +146,10 @@ class EditProfileInfoObjects {
     
     class OptionCell: UITableViewCell {
         let checkmarkButton = UIButton()
+        let infoTitle: String
         
-        init(text: String) {
+        init(text: String, infoTitle: String) {
+            self.infoTitle = infoTitle
             super.init(style: .subtitle, reuseIdentifier: "OptionCell")
             
             self.textLabel?.text = text
@@ -137,13 +159,6 @@ class EditProfileInfoObjects {
             
             checkmarkButton.setImage(nil, for: .normal)
             checkmarkButton.setImage(#imageLiteral(resourceName: "Gradient_Checkmark_Circle_Selected"), for: .selected)
-            
-            // Find if value or none is selected
-            if text == "None" {
-                checkmarkButton.isSelected = true
-            } else {
-                checkmarkButton.isSelected = false
-            }
 
             addSubview(checkmarkButton)
             checkmarkButton.autoAlignAxis(toSuperviewAxis: .horizontal)
