@@ -16,7 +16,8 @@ class MessagingFunctions {
 //    var segueToSingleMessage = false
 //    var singleMessageTitle = ""
     var vc = UIViewController()
-
+    
+    
     func createDirectMessage(otherUserObjectId: String, otherUserName: String, otherUserProfilePictureURL: String, vc: UIViewController) {
         self.vc = vc
         

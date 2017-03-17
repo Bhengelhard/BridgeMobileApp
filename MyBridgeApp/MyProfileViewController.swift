@@ -59,6 +59,7 @@ class MyProfileViewController: UIViewController {
         User.getCurrent { (user) in
             let externalProfileVC = ExternalProfileViewController()
             externalProfileVC.setUserID(userID: user.id)
+            externalProfileVC.hideMessageButton()
             self.present(externalProfileVC, animated: true, completion: nil)
         }
     }
