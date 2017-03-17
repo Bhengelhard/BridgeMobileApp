@@ -17,6 +17,8 @@ class MessagesLayout {
 //    let messagesTitle = MessagesObjects.MessagesTitle()
     let messagesTable = MessagesObjects.MessagesTable()
     let messagesTableCell = MessagesObjects.MessagesTableCell()
+    let newMatchesLabelTableCell = MessagesObjects.TextTableViewCell(text: "New Matches")
+    let messagesLabelTableCell = MessagesObjects.TextTableViewCell(text: "Messages")
 
     // MARK: - Layout
     /// Sets the initial layout constraints

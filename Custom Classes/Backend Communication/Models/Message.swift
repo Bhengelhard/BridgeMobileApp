@@ -235,8 +235,8 @@ class Message: NSObject {
             }
         }
     }
-        
-    static func countAll(withUser user: User, withBlock block: ((Int32) -> Void)? = nil) {
+    
+    static func getAllUnstarted(withUser user: User, withLimit limit: Int = 10000, withSkip skip: Int = 0, withBlock block: MessagesBlock? = nil) {
         if let userID = user.id {
             let subQuery1 = PFQuery(className: "Messages")
             subQuery1.whereKey("user1_objectId", equalTo: userID)
@@ -244,6 +244,67 @@ class Message: NSObject {
             subQuery2.whereKey("user2_objectId", equalTo: userID)
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            query.whereKeyDoesNotExist("last_single_message")
+            query.order(byDescending: "lastSingleMessageAt")
+            query.limit = limit
+            query.skip = skip
+            
+            query.findObjectsInBackground { (parseMessages, error) in
+                if let error = error {
+                    print("error getting messages - \(error)")
+                } else if let parseMessages = parseMessages {
+                    var messages = [Message]()
+                    for parseMessage in parseMessages {
+                        let message = Message(parseMessage: parseMessage)
+                        messages.append(message)
+                    }
+                    if let block = block {
+                        block(messages)
+                    }
+                }
+            }
+        }
+    }
+    
+    static func getAllStarted(withUser user: User, withLimit limit: Int = 10000, withSkip skip: Int = 0, withBlock block: MessagesBlock? = nil) {
+        if let userID = user.id {
+            let subQuery1 = PFQuery(className: "Messages")
+            subQuery1.whereKey("user1_objectId", equalTo: userID)
+            let subQuery2 = PFQuery(className: "Messages")
+            subQuery2.whereKey("user2_objectId", equalTo: userID)
+            
+            let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            query.whereKeyExists("last_single_message")
+            query.order(byDescending: "lastSingleMessageAt")
+            query.limit = limit
+            query.skip = skip
+            
+            query.findObjectsInBackground { (parseMessages, error) in
+                if let error = error {
+                    print("error getting messages - \(error)")
+                } else if let parseMessages = parseMessages {
+                    var messages = [Message]()
+                    for parseMessage in parseMessages {
+                        let message = Message(parseMessage: parseMessage)
+                        messages.append(message)
+                    }
+                    if let block = block {
+                        block(messages)
+                    }
+                }
+            }
+        }
+    }
+        
+    static func countAllStarted(withUser user: User, withBlock block: ((Int32) -> Void)? = nil) {
+        if let userID = user.id {
+            let subQuery1 = PFQuery(className: "Messages")
+            subQuery1.whereKey("user1_objectId", equalTo: userID)
+            let subQuery2 = PFQuery(className: "Messages")
+            subQuery2.whereKey("user2_objectId", equalTo: userID)
+            
+            let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            query.whereKeyExists("last_single_message")
             query.countObjectsInBackground(block: { (count, error) in
                 if let error = error {
                     print("error counting messages - \(error)")

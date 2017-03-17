@@ -13,9 +13,16 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
     var parentVC: UIViewController?
     
     var pictureBoxes = [PictureBox]()
+    var containerViews = [UIView]()
+    
+    var smallSideLength = CGFloat(0)
+    var largeSideLength = CGFloat(0)
+    let margin = CGFloat(10)
     
     let imagePicker = UIImagePickerController()
     let facebookImagePicker = FacebookImagePickerController()
+    
+    var shouldUpdateConstraints = true
     
     class PictureBox: UIImageView {
         
@@ -26,16 +33,13 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         
         var empty = true
         
-        init(sideLength: CGFloat, cornerRadius: CGFloat, number: Int, numberMaxSideLength: CGFloat, pictureButtonDiameter: CGFloat) {
+        init(cornerRadius: CGFloat, number: Int, numberMaxSideLength: CGFloat, pictureButtonDiameter: CGFloat) {
             self.number = number
             pictureButton = PictureButton(diameter: pictureButtonDiameter)
             
             super.init(frame: CGRect())
             
             isUserInteractionEnabled = true
-            
-            let size = CGSize(width: sideLength, height: sideLength)
-            autoSetDimensions(to: size)
             
             backgroundColor = UIColor(red: 223 / 255, green: 223 / 255, blue: 228 / 255, alpha: 1.0)
             layer.cornerRadius = cornerRadius
@@ -122,12 +126,8 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         
         //autoSetDimensions(to: CGSize(width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth))
         
-        let margin = CGFloat(20)
-        let smallSideLength = (frame.width - 4*margin)/3
-        let largeSideLength = 2*smallSideLength + margin
-        
-        //let largeSideLength = 0.97 * 2/3 * (frame.width - 40)
-        //let smallSideLength = 212.0/449.0 * largeSideLength
+        smallSideLength = (frame.width - 4*margin)/3
+        largeSideLength = 2*smallSideLength + margin
         
         let cornerRadius = 30.0/449.0 * largeSideLength
         
@@ -136,33 +136,12 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         let pictureButtonDiameter = 69.0/449.0 * largeSideLength
         
         for i in 0...5 {
-            let sideLength = i == 0 ? largeSideLength : smallSideLength
-            let pictureBox = PictureBox(sideLength: sideLength, cornerRadius: cornerRadius, number: i+1,numberMaxSideLength: numberMaxSideLength,  pictureButtonDiameter: pictureButtonDiameter)
-            addSubview(pictureBox)
+            let pictureBox = PictureBox(cornerRadius: cornerRadius, number: i+1, numberMaxSideLength: numberMaxSideLength, pictureButtonDiameter: pictureButtonDiameter)
             pictureBoxes.append(pictureBox)
 
             pictureBox.pictureButton.addTarget(self, action: #selector(showMenu(_:)), for: .touchUpInside)
             
-            // layout picture box
-            if i == 0 {
-                pictureBox.autoPinEdge(toSuperviewEdge: .top, withInset: margin)
-                pictureBox.autoPinEdge(toSuperviewEdge: .leading, withInset: margin)
-            } else if i == 1 {
-                pictureBox.autoAlignAxis(.firstBaseline, toSameAxisOf: pictureBoxes[0])
-                pictureBox.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
-            } else if i == 2 {
-                pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[0])
-                pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[1])
-            } else if i == 3 {
-                pictureBox.autoPinEdge(toSuperviewEdge: .bottom, withInset: margin)
-                pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[2])
-            } else if i == 4 {
-                pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[3])
-                pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[0])
-            } else if i == 5 {
-                pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[4])
-                pictureBox.autoPinEdge(.leading, to: .leading, of: pictureBoxes[0])
-            }
+            containerViews.append(UIView())
         }
         
         layoutIfNeeded()
@@ -170,6 +149,77 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func updateConstraints() {
+        if shouldUpdateConstraints {            
+            for i in 0..<containerViews.count {
+                let containerView = containerViews[i]
+                
+                addSubview(containerView)
+                
+                if i == 0 {
+                    containerView.autoMatch(.width, to: .width, of: self, withMultiplier: 2/3)
+                } else {
+                    containerView.autoMatch(.width, to: .width, of: self, withMultiplier: 1/3)
+                }
+                
+                containerView.autoMatch(.height, to: .width, of: containerView)
+                
+                if i == 0 {
+                    containerView.autoPinEdge(toSuperviewEdge: .left)
+                    containerView.autoPinEdge(toSuperviewEdge: .top)
+                } else if i == 1 {
+                    containerView.autoPinEdge(toSuperviewEdge: .right)
+                    containerView.autoPinEdge(toSuperviewEdge: .top)
+                } else if i == 2 {
+                    containerView.autoPinEdge(toSuperviewEdge: .right)
+                    containerView.autoAlignAxis(toSuperviewAxis: .horizontal)
+                } else if i == 3 {
+                    containerView.autoPinEdge(toSuperviewEdge: .right)
+                    containerView.autoPinEdge(toSuperviewEdge: .bottom)
+                } else if i == 4 {
+                    containerView.autoAlignAxis(toSuperviewAxis: .vertical)
+                    containerView.autoPinEdge(toSuperviewEdge: .bottom)
+                } else if i == 5 {
+                    containerView.autoPinEdge(toSuperviewEdge: .left)
+                    containerView.autoPinEdge(toSuperviewEdge: .bottom)
+                }
+                
+                let pictureBox = pictureBoxes[i]
+                
+                containerView.addSubview(pictureBox)
+                let edgeInsets = UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
+                pictureBox.autoPinEdgesToSuperviewEdges(with: edgeInsets)
+                
+//                
+//                // layout picture box
+//                if i == 0 {
+//                    pictureBox.autoPinEdge(toSuperviewEdge: .top, withInset: margin)
+//                    pictureBox.autoPinEdge(toSuperviewEdge: .leading, withInset: margin)
+//                } else if i == 1 {
+//                    pictureBox.autoAlignAxis(.firstBaseline, toSameAxisOf: pictureBoxes[0])
+//                    pictureBox.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
+//                } else if i == 2 {
+//                    pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[0])
+//                    pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[1])
+//                } else if i == 3 {
+//                    pictureBox.autoPinEdge(toSuperviewEdge: .bottom, withInset: margin)
+//                    pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[2])
+//                } else if i == 4 {
+//                    pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[3])
+//                    pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[0])
+//                } else if i == 5 {
+//                    pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[4])
+//                    pictureBox.autoPinEdge(.leading, to: .leading, of: pictureBoxes[0])
+//                }
+            }
+            
+            shouldUpdateConstraints = false
+        }
+        
+        super.updateConstraints()
+        layoutIfNeeded()
     }
     
     func setParentVC(parentVC: UIViewController) {

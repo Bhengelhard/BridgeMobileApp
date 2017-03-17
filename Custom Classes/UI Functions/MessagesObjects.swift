@@ -77,4 +77,33 @@ class MessagesObjects {
         
     }
     
+    class TextTableViewCell: UITableViewCell {
+        let label = UILabel()
+        var shouldUpdateConstraints = true
+        
+        init(text: String) {
+            super.init(style: .default, reuseIdentifier: "text")
+            
+            label.text = text
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func updateConstraints() {
+            if shouldUpdateConstraints {
+                addSubview(label)
+                label.autoPinEdge(toSuperviewEdge: .left)
+                label.autoPinEdge(toSuperviewEdge: .top)
+                label.autoMatch(.width, to: .width, of: self)
+                
+                shouldUpdateConstraints = false
+            }
+            
+            super.updateConstraints()
+        }
+
+    }
+    
 }

@@ -32,7 +32,7 @@ class LoginObjects {
         let initialVC = TutorialViewController(image: #imageLiteral(resourceName: "Initial_Tutorial"), text: "Introduce friends that go well together.")
         let swipeRightVC = TutorialViewController(image: #imageLiteral(resourceName: "Swipe_Right_Tutorial"), text: "Swipe right to introduce.")
         let swipeLeftVC = TutorialViewController(image: #imageLiteral(resourceName: "Swipe_Left_Tutorial"), text: "Swipe left to see the next pair.")
-        let chatVC = TutorialViewController(image: #imageLiteral(resourceName: "Chat_Tutorial"), text: "Get to know the people your introduced to")
+        let chatVC = TutorialViewController(image: #imageLiteral(resourceName: "Chat_Tutorial"), text: "Get to know the people you're introduced to")
         
         init() {
             super.init(arrayOfVCs: [initialVC, swipeRightVC, swipeLeftVC, chatVC], startingIndex: 0, withPageControl: true, circular: true)
