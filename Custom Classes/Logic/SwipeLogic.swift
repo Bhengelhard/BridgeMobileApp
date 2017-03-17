@@ -136,14 +136,53 @@ class SwipeLogic {
                 
                 var swipeRightView: PopupView?
                 
-                if let user1Id = swipeCard.bridgePairing?.user1ID, let user2Id = swipeCard.bridgePairing?.user2ID {
-                    swipeRightView = PopupView(user1Id: user1Id, user2Id: user2Id, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
+                if let user1ID = swipeCard.bridgePairing?.user1ID, let user2ID = swipeCard.bridgePairing?.user2ID {
+                    // Initialize and display swipeRightView
+                    swipeRightView = PopupView(user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
                     if let swipeRightView = swipeRightView {
                         swipeRightView.alpha = 0
                         vc.view.addSubview(swipeRightView)
                         swipeRightView.autoPinEdgesToSuperviewEdges()
                         swipeRightView.layoutIfNeeded()
                     }
+                    
+                    if let user1Name = swipeCard.bridgePairing?.user1Name, let user2Name = swipeCard.bridgePairing?.user2Name {
+                        
+                        
+                        var connecterID = ""
+                        var connecterName = ""
+                        User.getCurrent(withBlock: { (user) in
+                            if let id = user.id {
+                                connecterID = id
+                            }
+                            
+                            if let name = user.name {
+                                connecterName = name
+                            }
+                        })
+                        
+                        let user1PictureID = swipeCard.bridgePairing?.user1PictureID
+                        let user2PictureID = swipeCard.bridgePairing?.user2PictureID
+
+                        // Create message with both of the retrieved users
+                        Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil) { (message, isNew) in
+                            if isNew {
+                                message.save(withBlock: { (message) in
+                                    if let messageID = message.id {
+                                        sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
+                                    }
+                                })
+                            } else {
+                                if let messageID = message.id {
+                                    sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
+                                }
+                            }
+                            
+                        }
+                    }
+                    
+                    
+                    
                 }
                 
                 // Set the hexagonImages
@@ -204,5 +243,20 @@ class SwipeLogic {
                       y: maxFrame.origin.y + inset.height,
                       width: maxFrame.size.width - (inset.width * 2),
                       height: maxFrame.size.height - (inset.height * 2))
+    }
+    
+    // Send Push Notifications to Users to let them know they've been connected
+    private static func sendNectedNotification(user1ID: String, user2ID: String, user1Name: String, user2Name: String, connecterName: String, messageID: String) {
+        let pfCloudFunctions = PFCloudFunctions()
+        
+        if !connecterName.isEmpty {
+            pfCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(connecterName) has 'nected you with \(user2Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+            pfCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"\(connecterName) has 'nected you with \(user1Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+        } else {
+            pfCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"You have been 'nected with \(user2Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+            pfCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"You have been 'nected with \(user1Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+        }
+        
+        
     }
 }
