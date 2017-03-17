@@ -51,7 +51,8 @@ class ThreadViewController: UIViewController {
     }
     
     func backButtonTapped(_ sender: UIButton) {
-        dismiss(animated: false, completion: nil)
+        performSegue(withIdentifier: "showMessages", sender: self)
+        //dismiss(animated: false, completion: nil)
     }
 }
 
