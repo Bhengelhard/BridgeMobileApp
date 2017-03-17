@@ -29,8 +29,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         layout.messagesTable.separatorStyle = .none
         
         messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
+        
+        newMatchesTableViewCell.parentVC = self
         messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
-        //messagesBackend.loadNewMatches(newMatchesView: layout.newMatchesScrollView)
     }
     
     override func loadView() {
@@ -49,52 +50,72 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     // MARK: - tableView Functions
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        }
         return messagesBackend.messagePositionToIDMapping.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
+        if indexPath.section == 0 {
             return 100
-            //return UITableViewAutomaticDimension
         }
         
         return 100
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        if indexPath.section == 0 {
             return newMatchesTableViewCell
         }
         
-        let messageIndex = indexPath.row - 1
-        
         let cell = MessagesTableCell()
         cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
-        messagesBackend.setParticipantsLabel(index: messageIndex, label: cell.participants)
-        messagesBackend.setSanpshotLabel(index: messageIndex, textView: cell.messageSnapshot)
-        messagesBackend.setProfilePicture(index: messageIndex, imageView: cell.profilePic)
+        messagesBackend.setParticipantsLabel(index: indexPath.row, label: cell.participants)
+        messagesBackend.setSanpshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
+        messagesBackend.setProfilePicture(index: indexPath.row, imageView: cell.profilePic)
         cell.notificationDot.alpha = 0
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let threadVC = ThreadViewController()
-        if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row - 1] {
-            threadVC.setMessageID(messageID: messageID)
-            present(threadVC, animated: true) {
-                tableView.deselectRow(at: indexPath, animated: false) // deselect the row
+        if indexPath.section == 1 {
+            let threadVC = ThreadViewController()
+            if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
+                threadVC.setMessageID(messageID: messageID)
+                present(threadVC, animated: true) {
+                    tableView.deselectRow(at: indexPath, animated: false) // deselect the row
+                }
             }
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == messagesBackend.messagePositionToIDMapping.count-1 && Int32(messagesBackend.noOfElementsFetched) < messagesBackend.totalElements {
-            messagesBackend.refreshMessagesTable(tableView: tableView)
+        if indexPath.section == 1 {
+            if indexPath.row == messagesBackend.messagePositionToIDMapping.count-1 && Int32(messagesBackend.noOfElementsFetched) < messagesBackend.totalElements {
+                messagesBackend.refreshMessagesTable(tableView: tableView)
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "New Matches"
+        }
+        
+        return "Messages"
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let view = view as? UITableViewHeaderFooterView {
+            if let backgroundView = view.backgroundView {
+                backgroundView.backgroundColor = .white
+            }
         }
     }
     

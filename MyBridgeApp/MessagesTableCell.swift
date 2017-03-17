@@ -23,13 +23,8 @@ class MessagesTableCell: UITableViewCell {
     var cellHeight:CGFloat?
     var setSeparator:Bool? {
         didSet{
-            //print("setSeparator")
             setNeedsLayout()
         }
-    }
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -41,15 +36,14 @@ class MessagesTableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.layoutMargins = .zero
         
-        contentView.backgroundColor = .white//UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        contentView.backgroundColor = .white
         cellWidth = cellWidth ?? contentView.frame.width
         cellHeight = cellHeight ?? contentView.frame.height
         participants = UILabel(frame: CGRect.zero)
         participants.font = UIFont(name: "BentonSans-Light", size: 18.5)
         
         profilePic = UIImageView()
-        profilePic.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)//.black
-        profilePic.layer.borderWidth = 2
+        profilePic.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         profilePic.clipsToBounds = true
         
         messageTimestamp = UILabel(frame:CGRect.zero)
@@ -82,15 +76,8 @@ class MessagesTableCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     override func layoutSubviews() {
-        cellWidth = bounds.size.width//cellWidth ?? contentView.frame.width
+        cellWidth = bounds.size.width
         cellHeight = cellHeight ?? contentView.frame.height
-        /*
-        if let _ = setSeparator {
-            // print("setSeparator")
-            line.frame = CGRect(x: 0.025*cellWidth! + 0.15*cellHeight!, y: 0, width: bounds.size.width, height: 1)
-            contentView.addSubview(line)
-        }
-        */
         
         profilePic.frame = CGRect(x: 0.0708*cellWidth!, y: 0.5*cellHeight!-0.168*cellWidth!/2, width: 0.168*cellWidth!, height: 0.168*cellWidth!)
         profilePic.layer.cornerRadius = profilePic.frame.height/2

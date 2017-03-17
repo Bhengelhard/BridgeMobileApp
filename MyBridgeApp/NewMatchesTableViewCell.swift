@@ -10,6 +10,7 @@ import UIKit
 
 class NewMatchesTableViewCell: UITableViewCell {
     
+    var parentVC: UIViewController?
     let allNewMatches = [NewMatch]()
     let scrollView = UIScrollView()
     var users = [User]()
@@ -32,16 +33,17 @@ class NewMatchesTableViewCell: UITableViewCell {
     }
     
     class NewMatchView: UIView {
+        let message: Message
         let profileImageView = UIImageView()
         let nameLabel = UILabel()
         var shouldSetUpConstraints = true
         
-        init() {
+        init(message: Message) {
+            self.message = message
             super.init(frame: CGRect())
             
             profileImageView.clipsToBounds = true
             
-            //nameLabel.adjustsFontSizeToFitWidth = true
             nameLabel.textAlignment = .center
         }
         
@@ -51,14 +53,15 @@ class NewMatchesTableViewCell: UITableViewCell {
         
         override func updateConstraints() {
             addSubview(profileImageView)
-            profileImageView.autoMatch(.height, to: .height, of: self, withMultiplier: 0.6)
-            profileImageView.autoMatch(.width, to: .height, of: profileImageView)
+            profileImageView.autoMatch(.width, to: .width, of: self)
+            profileImageView.autoMatch(.height, to: .width, of: profileImageView)
             profileImageView.autoPinEdge(toSuperviewEdge: .top)
             profileImageView.autoAlignAxis(toSuperviewAxis: .vertical)
             
             addSubview(nameLabel)
             nameLabel.autoAlignAxis(.vertical, toSameAxisOf: profileImageView)
-            nameLabel.autoPinEdge(.top, to: .bottom, of: profileImageView, withOffset: 0.02*frame.height)
+            //nameLabel.autoPinEdge(.top, to: .bottom, of: profileImageView, withOffset: 0.02*frame.height)
+            nameLabel.autoPinEdge(toSuperviewEdge: .bottom)
             nameLabel.autoMatch(.width, to: .width, of: profileImageView)
             
             super.updateConstraints()
@@ -94,13 +97,12 @@ class NewMatchesTableViewCell: UITableViewCell {
             let newMatchView = newMatchViews[i]
             
             newMatchViewMargin = 0.2*scrollView.frame.height
-            print("margin = \(newMatchViewMargin)")
             
             if newMatchView.shouldSetUpConstraints {
                 scrollView.addSubview(newMatchView)
-                newMatchView.autoMatch(.height, to: .height, of: scrollView)
-                newMatchView.autoMatch(.width, to: .height, of: newMatchView, withMultiplier: 0.7)
-                newMatchView.autoPinEdge(toSuperviewEdge: .top)
+                newMatchView.autoMatch(.height, to: .height, of: scrollView, withMultiplier: 0.9)
+                newMatchView.autoMatch(.width, to: .height, of: newMatchView, withMultiplier: 0.75)
+                newMatchView.autoAlignAxis(toSuperviewAxis: .horizontal)
                 if i == 0 {
                     newMatchView.autoPinEdge(toSuperviewEdge: .left, withInset: newMatchViewMargin)
                 } else {
@@ -125,8 +127,6 @@ class NewMatchesTableViewCell: UITableViewCell {
         } else {
             scrollView.contentSize = CGSize(width: 0, height: scrollView.frame.height)
         }
-        
-        print(newMatchViews.count, scrollView.contentSize)
     }
     
     func setVC(vc: OldMessagesViewController) {
@@ -138,91 +138,43 @@ class NewMatchesTableViewCell: UITableViewCell {
     func addNewMatch(newMatch: NewMatch) {
     }
     
-    func handleTap(_ gesture: UIGestureRecognizer) {
-        print("tapped")
-        /*
-        let newMatchView = gesture.view!
-        let acceptIgnoreView = AcceptIgnoreView(newMatch: displayedNewMatches[newMatchView.tag])
-        if let vc = self.vc {
-            acceptIgnoreView.setVC(vc: vc)
-            vc.view.addSubview(acceptIgnoreView)
-        }*/
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addUser(_ user: User) {
-        let newMatchView = NewMatchView()
+    func addUserInMessage(message: Message) {
+        let newMatchView = NewMatchView(message: message)
         newMatchViews.append(newMatchView)
         
-        user.getMainPicture { (picture) in
-            picture.getImage { (image) in
-                newMatchView.profileImageView.image = image
-            }
-        }
+        // add gesture recognizer to take to thread
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(takeToThread(_:)))
+        newMatchView.addGestureRecognizer(gesture)
         
-        if let firstName = user.firstName {
-            newMatchView.nameLabel.text = firstName
+        message.getNonCurrentUser { (user) in
+            user.getMainPicture { (picture) in
+                picture.getImage { (image) in
+                    newMatchView.profileImageView.image = image
+                }
+            }
+            
+            if let firstName = user.firstName {
+                newMatchView.nameLabel.text = firstName
+            }
         }
         
         setNeedsUpdateConstraints()
     }
     
-    func layoutUser(user: User, position: Int) {
-        //frame = frameWithMatches
-        
-        //newMatchesTitle.frame = CGRect(x: 0.0463*frame.width, y: self.frame.minY + 0.02*frame.height, width: 0.8*frame.width, height: 0.06*frame.width)
-        //newMatchesTitle.isHidden = false
-        
-        let profilePicView = UIImageView()
-        //profilePicView.frame = CGRect(x: CGFloat(position)*0.2243*frame.width + 0.0563*frame.width, y: self.frame.minY + 0.05*DisplayUtility.screenHeight, width: 0.168*frame.width, height: 0.168*frame.width)
-        scrollView.addSubview(profilePicView)
-        let profilePicWidth = 0.6*frame.height
-        let profilePicHeight = profilePicWidth
-        let spaceBetweenProfilePics = 0.2*frame.height
-        profilePicView.autoSetDimensions(to: CGSize(width: profilePicWidth, height: profilePicHeight))
-        profilePicView.autoPinEdge(toSuperviewEdge: .top)
-        profilePicView.autoPinEdge(toSuperviewEdge: .leading, withInset: spaceBetweenProfilePics + CGFloat(position)*(profilePicWidth+spaceBetweenProfilePics))
-        profilePicView.layer.cornerRadius = profilePicHeight/2
-        profilePicView.layer.borderWidth = 2
-        profilePicView.layer.borderColor = UIColor.black.cgColor
-        profilePicView.clipsToBounds = true
-        profilePicView.tag = position
-        profilePicView.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
-        
-        
-        user.getMainPicture { (picture) in
-            picture.getImage { (image) in
-                profilePicView.image = image
+    func takeToThread(_ gesture: UIGestureRecognizer) {
+        if let view = gesture.view {
+            if let newMatchView = view as? NewMatchView {
+                if let parentVC = parentVC {
+                    let threadVC = ThreadViewController()
+                    threadVC.setMessageID(messageID: newMatchView.message.id)
+                    parentVC.present(threadVC, animated: true, completion: nil)
+                }
             }
         }
-        
-        // add gesture recognizer
-        profilePicView.isUserInteractionEnabled = true
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        profilePicView.addGestureRecognizer(gesture)
-        
-        // add name
-        //let nameLabel = UILabel(frame: CGRect(x: profilePicView.frame.minX, y: profilePicView.frame.maxY + 0.08*frame.height, width: 0, height: 0.2*frame.height))
-        let nameLabel = UILabel()
-        scrollView.addSubview(nameLabel)
-        nameLabel.autoAlignAxis(.vertical, toSameAxisOf: profilePicView)
-        nameLabel.autoPinEdge(.top, to: .bottom, of: profilePicView, withOffset: 0.02*frame.height)
-        nameLabel.autoMatch(.width, to: .width, of: profilePicView)
-        nameLabel.adjustsFontSizeToFitWidth = true
-        nameLabel.textAlignment = .center
-        
-        if let firstName = user.firstName {
-            nameLabel.text = firstName
-        }
-        
-        scrollView.contentSize = CGSize(width: max(DisplayUtility.screenWidth, spaceBetweenProfilePics + CGFloat(position+1)*(profilePicWidth+spaceBetweenProfilePics)), height: frame.height)
-        
-//        line.frame = CGRect(x: 0.0463*frame.width, y: frame.height-1, width: 0.9205*contentSize.width, height: 1)
-        //line.frame = CGRect(x: 0, y: frame.height-1, width: contentSize.width, height: 1)
     }
-    
     
 }

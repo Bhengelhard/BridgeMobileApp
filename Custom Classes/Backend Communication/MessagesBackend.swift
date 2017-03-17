@@ -36,22 +36,18 @@ class MessagesBackend {
         messageSnapshots = [String: String?]()
         messageProfilePictures = [String: UIImage?]()
         
-        getTotalMessagesCount { (count) in
-            self.totalElements = count
-            self.refreshMessagesTable(tableView: tableView)
-        }
-    }
-    
-    private func getTotalMessagesCount(withBlock block: ((Int32) -> Void)? = nil) {
         User.getCurrent { (user) in
-            Message.countAll(withUser: user, withBlock: block)
+            Message.countAllStarted(withUser: user) { (count) in
+                self.totalElements = count
+                self.refreshMessagesTable(tableView: tableView)
+            }
         }
     }
     
     // get next batch of messages and add to messages table
     func refreshMessagesTable(tableView: UITableView) {
         User.getCurrent { (user) in
-            Message.getAll(withUser: user, withLimit: self.noOfElementsPerRefresher, withSkip: self.noOfElementsFetched) { (messages) in
+            Message.getAllStarted(withUser: user, withLimit: self.noOfElementsPerRefresher, withSkip: self.noOfElementsFetched) { (messages) in
                 self.noOfElementsFetched += messages.count
                 for message in messages {
                     if let messageID = message.id {
@@ -101,29 +97,11 @@ class MessagesBackend {
         }
     }
     
-//    func loadNewMatches(newMatchesView: NewMatchesView) {
-//        User.getCurrent { (user) in
-//            Message.getAll(withUser: user) { (messages) in
-//                for message in messages {
-//                    if message.lastSingleMessage == nil {
-//                        message.getNonCurrentUser { (otherUser) in
-//                            newMatchesView.addUser(otherUser)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     func loadNewMatches(newMatchesTableViewCell: NewMatchesTableViewCell) {
         User.getCurrent { (user) in
-            Message.getAll(withUser: user) { (messages) in
+            Message.getAllUnstarted(withUser: user) { (messages) in
                 for message in messages {
-                    if message.lastSingleMessage == nil {
-                        message.getNonCurrentUser { (otherUser) in
-                            newMatchesTableViewCell.addUser(otherUser)
-                        }
-                    }
+                    newMatchesTableViewCell.addUserInMessage(message: message)
                 }
             }
         }
