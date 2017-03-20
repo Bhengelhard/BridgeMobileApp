@@ -18,7 +18,6 @@ class NewMatchesTableViewCell: UITableViewCell {
     var newMatchesTitle = UILabel()
     let gradientLayer = DisplayUtility.gradientLayer()
     var newMatchViews = [NewMatchView]()
-    var newMatchViewMargin = CGFloat(0)
     var shouldSetUpConstraints = true
     
     init() {
@@ -45,6 +44,9 @@ class NewMatchesTableViewCell: UITableViewCell {
             profileImageView.clipsToBounds = true
             
             nameLabel.textAlignment = .center
+            
+            setNeedsUpdateConstraints()
+            setNeedsLayout()
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -96,19 +98,29 @@ class NewMatchesTableViewCell: UITableViewCell {
         for i in 0..<newMatchViews.count {
             let newMatchView = newMatchViews[i]
             
-            newMatchViewMargin = 0.2*scrollView.frame.height
+            //newMatchViewMargin = 0.2*scrollView.frame.height
+            
+            
             
             if newMatchView.shouldSetUpConstraints {
+                // add and layout margin view before new match
+                let marginView = UIView()
+                scrollView.addSubview(marginView)
+                marginView.autoMatch(.width, to: .height, of: scrollView, withMultiplier: 0.2)
+                marginView.autoSetDimension(.height, toSize: 0)
+                marginView.autoAlignAxis(toSuperviewAxis: .horizontal)
+                if i == 0 {
+                    marginView.autoPinEdge(toSuperviewEdge: .left)
+                } else {
+                    marginView.autoPinEdge(.left, to: .right, of: newMatchViews[i-1])
+                }
+                
+                // add and layout new match
                 scrollView.addSubview(newMatchView)
                 newMatchView.autoMatch(.height, to: .height, of: scrollView, withMultiplier: 0.9)
                 newMatchView.autoMatch(.width, to: .height, of: newMatchView, withMultiplier: 0.75)
                 newMatchView.autoAlignAxis(toSuperviewAxis: .horizontal)
-                if i == 0 {
-                    newMatchView.autoPinEdge(toSuperviewEdge: .left, withInset: newMatchViewMargin)
-                } else {
-                    let previosNewMatchView = newMatchViews[i-1]
-                    newMatchView.autoPinEdge(.left, to: .right, of: previosNewMatchView, withOffset:newMatchViewMargin)
-                }
+                newMatchView.autoPinEdge(.left, to: .right, of: marginView)
                 newMatchView.shouldSetUpConstraints = false
             }
         }
@@ -123,7 +135,7 @@ class NewMatchesTableViewCell: UITableViewCell {
         gradientLayer.frame = line.bounds
         
         if newMatchViews.count > 0 {
-            scrollView.contentSize = CGSize(width: newMatchViews[newMatchViews.count-1].frame.maxX + newMatchViewMargin, height: scrollView.frame.height)
+            scrollView.contentSize = CGSize(width: newMatchViews[newMatchViews.count-1].frame.maxX + 0.2*scrollView.frame.height, height: scrollView.frame.height)
         } else {
             scrollView.contentSize = CGSize(width: 0, height: scrollView.frame.height)
         }
