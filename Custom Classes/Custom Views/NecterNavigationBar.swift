@@ -29,8 +29,10 @@ class NecterNavigationBar: UINavigationBar {
         self.shadowImage = UIImage()
         
         // Setting the navigation Bar Title Image
-        titleImageView.frame.size = CGSize(width: 40, height: 40)
-        titleImageView.contentMode = .scaleAspectFit
+        //titleImageView.frame.size = CGSize(width: 40, height: 40)
+        //titleImageView.contentMode = .scaleAspectFit
+        titleImageView.contentMode = .scaleToFill
+        titleImageView.clipsToBounds = true
         
         // Setting the right Bar Button Item
         rightButton.titleLabel?.font = Constants.Fonts.bold16
@@ -45,7 +47,7 @@ class NecterNavigationBar: UINavigationBar {
         navItem.leftBarButtonItem = leftItem
         
         // Setting Title Font
-        titleTextAttributes = [NSFontAttributeName: Constants.Fonts.light24]
+        titleTextAttributes = [NSFontAttributeName: Constants.Fonts.light24!]
         
         // Adding the navigation items to the navigation bar
         self.setItems([navItem], animated: false)
@@ -53,6 +55,29 @@ class NecterNavigationBar: UINavigationBar {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func updateConstraints() {
+        addSubview(titleImageView)
+        titleImageView.autoAlignAxis(toSuperviewAxis: .vertical)
+        if let titleView = navItem.titleView {
+            titleImageView.autoAlignAxis(.horizontal, toSameAxisOf: titleView)
+        } else {
+            titleImageView.autoAlignAxis(toSuperviewAxis: .horizontal)
+        }
+        titleImageView.autoSetDimension(.width, toSize: 35)
+        titleImageView.autoMatch(.height, to: .width, of: titleImageView)
+        
+        print(titleImageView.constraints)
+        
+        super.updateConstraints()
+    }
+    
+    func setTitleImage(image: UIImage) {
+        titleImageView.image = image
+        navItem.titleView = UIView()
+        
+        setNeedsUpdateConstraints()
     }
     
 //    func dismissViewController(_ sender

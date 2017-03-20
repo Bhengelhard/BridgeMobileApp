@@ -44,14 +44,38 @@ class ThreadViewController: UIViewController {
     func setMessageID(messageID: String?) {
         messagesVC.messageID = messageID
         
+        let imageView = self.layout.navBar.titleImageView
+        
         threadBackend.getOtherUserInMessagePicture(messageID: messageID) { (image) in
-            let imageView = self.layout.navBar.titleImageView
             imageView.image = image
+            imageView.layer.cornerRadius = imageView.frame.height/2
+            imageView.clipsToBounds = true
         }
+        
+        let showProfileGR = UITapGestureRecognizer(target: self, action: #selector(self.showOtherUserProfile(_:)))
+        imageView.addGestureRecognizer(showProfileGR)
+        imageView.isUserInteractionEnabled = true
+
     }
+    
+    // MARK: Targets
     
     func backButtonTapped(_ sender: UIButton) {
         dismiss(animated: false, completion: nil)
+    }
+    
+    func showOtherUserProfile(_ gesture: UIGestureRecognizer) {
+        if let messageID = messagesVC.messageID {
+            Message.get(withID: messageID) { (message) in
+                message.getNonCurrentUser { (user) in
+                    if let userID = user.id {
+                        let externalProfileVC = ExternalProfileViewController()
+                        externalProfileVC.setUserID(userID: userID)
+                        self.present(externalProfileVC, animated: true, completion: nil)
+                    }
+                }
+            }
+        }
     }
 }
 

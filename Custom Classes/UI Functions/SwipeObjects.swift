@@ -23,8 +23,9 @@ class SwipeObjects {
             leftButton.setImage(leftIcon, for: .normal)
             
             let titleImage = #imageLiteral(resourceName: "Necter_Navbar_Active")
-            titleImageView.image = titleImage
-            navItem.titleView = titleImageView
+            //titleImageView.image = titleImage
+            setTitleImage(image: titleImage)
+            //navItem.titleView = titleImageView
         }
         
         required init?(coder aDecoder: NSCoder) {

@@ -21,8 +21,9 @@ class ThreadObjects {
             leftButton.setImage(leftIcon, for: .normal)
             
             let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
-            titleImageView.image = titleImage
-            navItem.titleView = titleImageView
+            //titleImageView.image = titleImage
+            setTitleImage(image: titleImage)
+            //navItem.titleView = titleImageView
             
             // Adding line at the bottom of the navigation bar
             self.setBackgroundImage(UIImage(), for: .default)
