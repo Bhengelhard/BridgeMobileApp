@@ -25,6 +25,7 @@ class ThreadViewController: UIViewController {
         view.backgroundColor = .white
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+        layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -50,9 +51,44 @@ class ThreadViewController: UIViewController {
         }
     }
     
+    // MARK: - Targets
     func backButtonTapped(_ sender: UIButton) {
         dismiss(animated: false, completion: nil)
     }
+    
+    func moreButtonTapped(_ sender: UIButton) {
+        
+        let moreOptions = MoreOptions()
+        moreOptions.displayMoreAlertController(vc: self)
+
+    }
+    
+//    func areTheyFriends() -> Bool {
+//        User.getCurrent { (user) in
+//            if let friendlist = user.friendList {
+//                Message.get(withID: self.messagesVC.messageID!, withBlock: { (message) in
+//                    message.getNonCurrentUser(withBlock: { (otherUser) in
+//                        if let otherUserID = otherUser.id {
+//                            if friendlist.contains(otherUserID) {
+//                                print("Users are already friends")
+//                                let followAction = UIAlertAction(title: "Unfollow", style: .destructive) { (alert) in
+//                                    print("follow")
+//                                }
+//                                addMoreMenu.addAction(followAction)
+//                                
+//                            } else {
+//                                let followAction = UIAlertAction(title: "Follow", style: .default) { (alert) in
+//                                    print("follow")
+//                                }
+//                                addMoreMenu.addAction(followAction)
+//                            }
+//                        }
+//                    })
+//                })
+//            }
+//        }
+//    }
+    
 }
 
 class NecterJSQMessagesViewController: JSQMessagesViewController {

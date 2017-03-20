@@ -46,7 +46,7 @@
 		3080202C1E6649080091E63D /* MainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3080202B1E6649080091E63D /* MainPageViewController.swift */; };
 		30A217DC1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A217DB1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift */; };
 		30A217DE1E7B442000CEBA80 /* EditProfileInfoBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A217DD1E7B442000CEBA80 /* EditProfileInfoBackend.swift */; };
-		30A217E01E801F7000CEBA80 /* ReusableBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A217DF1E801F7000CEBA80 /* ReusableBackend.swift */; };
+		30A217E01E801F7000CEBA80 /* MoreOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A217DF1E801F7000CEBA80 /* MoreOptions.swift */; };
 		30A726F21E2683850070B620 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30A726F11E2683850070B620 /* Main.storyboard */; };
 		30A726FC1E27D9160070B620 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */; };
 		30A727041E293A9A0070B620 /* OldMessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A727031E293A9A0070B620 /* OldMessagesViewController.swift */; };
@@ -187,7 +187,7 @@
 		3080202B1E6649080091E63D /* MainPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainPageViewController.swift; path = MyBridgeApp/MainPageViewController.swift; sourceTree = SOURCE_ROOT; };
 		30A217DB1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatchesTableViewCell.swift; path = MyBridgeApp/NewMatchesTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		30A217DD1E7B442000CEBA80 /* EditProfileInfoBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditProfileInfoBackend.swift; path = "Custom Classes/Backend Communication/EditProfileInfoBackend.swift"; sourceTree = "<group>"; };
-		30A217DF1E801F7000CEBA80 /* ReusableBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReusableBackend.swift; path = "Custom Classes/Backend Communication/ReusableBackend.swift"; sourceTree = "<group>"; };
+		30A217DF1E801F7000CEBA80 /* MoreOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoreOptions.swift; path = "Custom Classes/Backend Communication/MoreOptions.swift"; sourceTree = "<group>"; };
 		30A726F11E2683850070B620 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = MyBridgeApp/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		30A726FB1E27D9160070B620 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSettingsViewController.swift; path = MyBridgeApp/UserSettingsViewController.swift; sourceTree = SOURCE_ROOT; };
 		30A727031E293A9A0070B620 /* OldMessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OldMessagesViewController.swift; path = MyBridgeApp/OldMessagesViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -367,7 +367,7 @@
 				30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */,
 				906383E91E6FB1E700D901EA /* EditProfileBackend.swift */,
 				907F605E1E73427400CB1097 /* ThreadBackend.swift */,
-				30A217DF1E801F7000CEBA80 /* ReusableBackend.swift */,
+				30A217DF1E801F7000CEBA80 /* MoreOptions.swift */,
 				30A217DD1E7B442000CEBA80 /* EditProfileInfoBackend.swift */,
 			);
 			name = "Backend Communication";
@@ -901,7 +901,7 @@
 				30BF6FF91E5BDEA50008C2B5 /* ThreadLayout.swift in Sources */,
 				3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */,
 				907201471E4316B500A77BC4 /* FacebookImagePickerController.swift in Sources */,
-				30A217E01E801F7000CEBA80 /* ReusableBackend.swift in Sources */,
+				30A217E01E801F7000CEBA80 /* MoreOptions.swift in Sources */,
 				30D82B681E7330C6000F7075 /* EditProfileInfoObjects.swift in Sources */,
 				3079EB251E54FACD008AB6E5 /* LoginObjects.swift in Sources */,
 				30E2AF781DDA2AB70023AA95 /* ReasonForConnection.swift in Sources */,

@@ -23,7 +23,7 @@ class ThreadObjects {
             let rightIcon = #imageLiteral(resourceName: "More_Button")
             rightButton.setImage(rightIcon, for: .normal)
             rightButton.frame.size = CGSize(width: 50, height: 14)
-            
+
             let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
             titleImageView.image = titleImage
             navItem.titleView = titleImageView
