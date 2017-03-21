@@ -21,6 +21,7 @@ class MessagesBackend {
     var messageNames = [String: String?]()
     var messageSnapshots = [String: String?]()
     var messageProfilePictures = [String: UIImage?]()
+    var messageNotificationDots = [String: Bool?]()
     
     init() {
     }
@@ -76,7 +77,6 @@ class MessagesBackend {
                         }
                         
                         // save profile picture of other user in message
-                        // FIXME: add user's cropped prof pic image to message, to avoid needing a query
                         message.getNonCurrentUser { (otherUser) in
                             otherUser.getMainPicture { (picture) in
                                 picture.getImage { (image) in
@@ -89,6 +89,26 @@ class MessagesBackend {
                         // save message snapshot
                         if let messageLastSingleMessage = message.lastSingleMessage {
                             self.messageSnapshots[messageID] = messageLastSingleMessage
+                        }
+                        
+                        // save notification dot
+                        if let userID = user.id {
+                            if let messageUser1ID = message.user1ID {
+                                if messageUser1ID == userID { // current user is user1
+                                    // we want whether user1 has seen last single message
+                                    if let messageUser1HasSeenLastSingleMessage = message.user1HasSeenLastSingleMessage {
+                                        self.messageNotificationDots[messageID] = !messageUser1HasSeenLastSingleMessage
+                                    }
+                                }
+                            }
+                            if let messageUser2ID = message.user2ID {
+                                if messageUser2ID == userID { // current user is user2
+                                    // we want whether user2 has seen last single message
+                                    if let messageUser2HasSeenLastSingleMessage = message.user2HasSeenLastSingleMessage {
+                                        self.messageNotificationDots[messageID] = !messageUser2HasSeenLastSingleMessage
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -130,6 +150,22 @@ class MessagesBackend {
         if let id = messagePositionToIDMapping[index] {
             if let image = messageProfilePictures[id] {
                 imageView.image = image
+            }
+        }
+    }
+    
+    func setDotAlpha(index: Int, dot: UIView) {
+        if let id = messagePositionToIDMapping[index] {
+            if let notificationDot = messageNotificationDots[id] {
+                if let notificationDot = notificationDot {
+                    if notificationDot {
+                        dot.alpha = 1
+                    } else {
+                        dot.alpha = 0
+                    }
+                } else {
+                    dot.alpha = 0
+                }
             }
         }
     }

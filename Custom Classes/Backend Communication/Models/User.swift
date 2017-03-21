@@ -7,6 +7,7 @@
 //
 
 import Parse
+import Foundation
 
 /// a Necter User
 class User: NSObject {
@@ -56,20 +57,44 @@ class User: NSObject {
     /// The gender of the User
     var gender: Gender?
     
-    /// The User's birthday on Facebook
-    var fbBirthday: Date?
+    var displayGender: Bool?
+    
+    /// The User's birthday
+    var birthday: Date?
     
     /// The age of the User
-    var age: Int?
+    var age: Int? {
+        if let birthday = birthday {
+            //getting age from Birthday
+            let calendar: Calendar = Calendar.current
+            let now = Date()
+            if let age = ((calendar as NSCalendar).components(.year, from: birthday, to: now, options: [])).year {
+                return age
+            }
+        }
+        return nil
+    }
+    
+    var displayAge: Bool?
     
     /// The city of the User
     var city: String?
     
+    var displayCity: Bool?
+    
     /// The employer of the User
     var work: String?
     
-    /// THe school of the User
+    var displayWork: Bool?
+    
+    /// The school of the User
     var school: String?
+    
+    var displaySchool: Bool?
+    
+    var relationshipStatus: RelationshipStatus?
+    
+    var displayRelationshipStatus: Bool?
     
     /// A summary about the User
     var aboutMe: String?
@@ -121,24 +146,48 @@ class User: NSObject {
             }
         }
         
-        if let parseFBBirthday = parseUser["fb_birthday"] as? Date {
-            fbBirthday = parseFBBirthday
+        if let parseDisplayGender = parseUser["display_gender"] as? Bool {
+            displayGender = parseDisplayGender
         }
-
-        if let parseAge = parseUser["age"] as? Int {
-            age = parseAge
+        
+        if let parseFBBirthday = parseUser["fb_birthday"] as? Date {
+            birthday = parseFBBirthday
+        }
+        
+        if let parseDisplayAge = parseUser["display_age"] as? Bool {
+            displayAge = parseDisplayAge
         }
         
         if let parseCity = parseUser["city"] as? String {
             city = parseCity
         }
         
+        if let parseDisplayCity = parseUser["display_city"] as? Bool {
+            displayCity = parseDisplayCity
+        }
+        
         if let parseWork = parseUser["work"] as? String {
             work = parseWork
         }
         
+        if let parseDisplayWork = parseUser["display_work"] as? Bool {
+            displayWork = parseDisplayWork
+        }
+        
         if let parseSchool = parseUser["school"] as? String {
             school = parseSchool
+        }
+        
+        if let parseDisplaySchool = parseUser["display_school"] as? Bool {
+            displaySchool = parseDisplaySchool
+        }
+        
+        if let parseRelationshipStatus = parseUser["relationship_status"] as? String {
+            relationshipStatus = RelationshipStatus(rawValue: parseRelationshipStatus)
+        }
+        
+        if let parseDisplayRelationshipStatus = parseUser["display_relationship_status"] as? Bool {
+            displayRelationshipStatus = parseDisplayRelationshipStatus
         }
         
         if let parseQuickUpdate = parseUser["quick_update"] as? String {
@@ -288,16 +337,22 @@ class User: NSObject {
             parseUser.remove(forKey: "gender")
         }
         
-        if let fbBirthday = fbBirthday {
-            parseUser["fb_birthday"] = fbBirthday
+        if let displayGender = displayGender {
+            parseUser["display_gender"] = displayGender
+        } else {
+            parseUser.remove(forKey: "display_gender")
+        }
+        
+        if let birthday = birthday {
+            parseUser["fb_birthday"] = birthday
         } else {
             parseUser.remove(forKey: "fb_birthday")
         }
         
-        if let age = age {
-            parseUser["age"] = age
+        if let displayAge = displayAge {
+            parseUser["display_age"] = displayAge
         } else {
-            parseUser.remove(forKey: "age")
+            parseUser.remove(forKey: "display_age")
         }
         
         if let city = city {
@@ -306,10 +361,22 @@ class User: NSObject {
             parseUser.remove(forKey: "city")
         }
         
+        if let displayCity = displayCity {
+            parseUser["display_city"] = displayCity
+        } else {
+            parseUser.remove(forKey: "display_city")
+        }
+        
         if let work = work {
             parseUser["work"] = work
         } else {
             parseUser.remove(forKey: "work")
+        }
+        
+        if let displayWork = displayWork {
+            parseUser["display_work"] = displayWork
+        } else {
+            parseUser.remove(forKey: "display_work")
         }
         
         if let school = school {
@@ -317,7 +384,19 @@ class User: NSObject {
         } else {
             parseUser.remove(forKey: "school")
         }
-                
+        
+        if let displaySchool = displaySchool {
+            parseUser["display_school"] = displaySchool
+        } else {
+            parseUser.remove(forKey: "display_school")
+        }
+        
+        if let displayRelationshipStatus = displayRelationshipStatus {
+            parseUser["display_relationship_status"] = displayRelationshipStatus
+        } else {
+            parseUser.remove(forKey: "display_relationship_status")
+        }
+        
         if let aboutMe = aboutMe {
             parseUser["quick_update"] = aboutMe
         } else {

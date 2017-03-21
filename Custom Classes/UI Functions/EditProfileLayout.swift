@@ -36,8 +36,11 @@ class EditProfileLayout {
             
             EditProfileLogic.setAboutMe(textView: table.aboutMeTableCell.textView)
             EditProfileLogic.setLookingFor(textView: table.lookingForTableCell.textView)
+            EditProfileLogic.setAge(label: table.ageTableCell.textLabel!)
             EditProfileLogic.setWork(label: table.workTableCell.textLabel!)
             EditProfileLogic.setSchool(label: table.schoolTableCell.textLabel!)
+            EditProfileLogic.setGender(label: table.genderTableCell.textLabel!)
+            EditProfileLogic.setRelationshipStatus(label: table.relationshipStatusTableCell.textLabel!)
             
             
             let editProfileBackend = EditProfileBackend()

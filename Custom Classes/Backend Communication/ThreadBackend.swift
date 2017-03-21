@@ -75,11 +75,42 @@ class ThreadBackend {
         SingleMessage.create(text: jsqMessage.text, senderID: jsqMessage.senderId, senderName: jsqMessage.senderDisplayName, messageID: messageID, withBlock: block)
     }
     
-    func updateMessageSnapshot(messageID: String?, snapshot: String) {
+    func updateMessageAfterSingleMessageSent(messageID: String?, snapshot: String) {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
+                // update last single message
                 message.lastSingleMessage = snapshot
-                message.save()
+                
+                // update current user has posted and other user has seen last single message
+                User.getCurrent { (user) in
+                    if let userID = user.id {
+                        if userID == message.user1ID {
+                            message.user1HasPosted = true
+                            message.user2HasSeenLastSingleMessage = false
+                        } else if userID == message.user2ID {
+                            message.user2HasPosted = true
+                            message.user1HasSeenLastSingleMessage = false
+                        }
+                    }
+                    message.save()
+                }
+            }
+        }
+    }
+    
+    func updateHasSeenLastSingleMessage(messageID: String?) {
+        if let messageID = messageID {
+            Message.get(withID: messageID) { (message) in
+                User.getCurrent { (user) in
+                    if let userID = user.id {
+                        if userID == message.user1ID {
+                            message.user1HasSeenLastSingleMessage = true
+                        } else if userID == message.user2ID {
+                            message.user2HasSeenLastSingleMessage = true
+                        }
+                    }
+                    message.save()
+                }
             }
         }
     }

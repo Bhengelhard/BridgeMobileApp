@@ -44,6 +44,7 @@ class ThreadViewController: UIViewController {
     func setMessageID(messageID: String?) {
         messagesVC.messageID = messageID
         
+        // set nav bar image
         let imageView = self.layout.navBar.titleImageView
         
         threadBackend.getOtherUserInMessagePicture(messageID: messageID) { (image) in
@@ -52,9 +53,13 @@ class ThreadViewController: UIViewController {
             imageView.clipsToBounds = true
         }
         
+        // add target to bring to external profile
         let showProfileGR = UITapGestureRecognizer(target: self, action: #selector(self.showOtherUserProfile(_:)))
         imageView.addGestureRecognizer(showProfileGR)
         imageView.isUserInteractionEnabled = true
+        
+        // save user has seen last single message
+        threadBackend.updateHasSeenLastSingleMessage(messageID: messageID)
 
     }
     
@@ -141,8 +146,8 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                 singleMessage.save()
             }
             
-            // save single message text as message snapshot
-            threadBackend.updateMessageSnapshot(messageID: messageID, snapshot: message.text)
+            // update message's snapshot and info about user has sent and user has seen last single message
+            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: message.text)
             
             // FIXME: Add push notification to other user
             

@@ -114,6 +114,7 @@
 		907F605D1E7263B800CB1097 /* SingleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907F605C1E7263B800CB1097 /* SingleMessage.swift */; };
 		907F605F1E73427400CB1097 /* ThreadBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907F605E1E73427400CB1097 /* ThreadBackend.swift */; };
 		907F60611E73433100CB1097 /* ThreadLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907F60601E73433100CB1097 /* ThreadLogic.swift */; };
+		9085E3FD1E8197370097CADB /* RelationshipStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085E3FC1E8197370097CADB /* RelationshipStatus.swift */; };
 		90AB6B111E5E1BAE00EBEBC0 /* MessagesBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */; };
 		90AB6B131E60A01000EBEBC0 /* MessagesLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB6B121E60A01000EBEBC0 /* MessagesLogic.swift */; };
 		90AD62281E2E259D001F1074 /* ProfilePicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */; };
@@ -256,6 +257,7 @@
 		907F605C1E7263B800CB1097 /* SingleMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMessage.swift; sourceTree = "<group>"; };
 		907F605E1E73427400CB1097 /* ThreadBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadBackend.swift; path = "Custom Classes/Backend Communication/ThreadBackend.swift"; sourceTree = "<group>"; };
 		907F60601E73433100CB1097 /* ThreadLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadLogic.swift; sourceTree = "<group>"; };
+		9085E3FC1E8197370097CADB /* RelationshipStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelationshipStatus.swift; sourceTree = "<group>"; };
 		90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesBackend.swift; path = "Custom Classes/Backend Communication/MessagesBackend.swift"; sourceTree = "<group>"; };
 		90AB6B121E60A01000EBEBC0 /* MessagesLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesLogic.swift; sourceTree = "<group>"; };
 		90AD62271E2E259D001F1074 /* ProfilePicturesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfilePicturesViewController.swift; path = MyBridgeApp/ProfilePicturesViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -522,6 +524,7 @@
 			children = (
 				30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */,
 				90F5E3BE1E5CD376001399F6 /* Gender.swift */,
+				9085E3FC1E8197370097CADB /* RelationshipStatus.swift */,
 			);
 			name = Types;
 			sourceTree = "<group>";
@@ -799,6 +802,7 @@
 				30BF70071E5BE2FD0008C2B5 /* ExternalProfileObjects.swift in Sources */,
 				302799D81E5768F800AFFB90 /* PrivacyPolicyObjects.swift in Sources */,
 				903477BD1E653455007E2CAE /* SwipeLogic.swift in Sources */,
+				9085E3FD1E8197370097CADB /* RelationshipStatus.swift in Sources */,
 				E9D6DF571D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld in Sources */,
 				E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */,
 				30BF6FEF1E5BDBA40008C2B5 /* MyProfileObjects.swift in Sources */,

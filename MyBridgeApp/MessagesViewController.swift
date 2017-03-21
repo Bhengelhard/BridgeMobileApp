@@ -78,7 +78,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         messagesBackend.setParticipantsLabel(index: indexPath.row, label: cell.participants)
         messagesBackend.setSanpshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
         messagesBackend.setProfilePicture(index: indexPath.row, imageView: cell.profilePic)
-        cell.notificationDot.alpha = 0
+        messagesBackend.setDotAlpha(index: indexPath.row, dot: cell.notificationDot)
         
         return cell
     }

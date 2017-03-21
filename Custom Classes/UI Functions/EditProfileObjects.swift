@@ -57,9 +57,11 @@ class EditProfileObjects {
         let editProfilePicturesCell = EditProfilePicturesTableViewCell()
         let aboutMeTableCell = WhiteTextTableCell()
         let lookingForTableCell = WhiteTextTableCell()
+        let ageTableCell = WhiteTableCell()
         let workTableCell = WhiteTableCell()
         let schoolTableCell = WhiteTableCell()
         let genderTableCell = WhiteTableCell()
+        let relationshipStatusTableCell = WhiteTableCell()
         
         override init(frame: CGRect, style: UITableViewStyle) {
             super.init(frame: CGRect(), style: .plain)
@@ -84,7 +86,7 @@ class EditProfileObjects {
         }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return 13
+            return 15
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -98,34 +100,31 @@ class EditProfileObjects {
                 cell = GrayTableCell(text: "About Me")
             case 2:
                 cell = aboutMeTableCell
-                //cell = WhiteTextTableCell(text: "Mobile Design / Wine + Spirits. Looking for some new friends in the local startup world to join me on a new venture!")
             case 3:
                 cell = GrayTableCell(text: "Looking For")
             case 4:
-                //cell = WhiteTextTableCell(text: "Add Something you are Looking For")
                 cell = lookingForTableCell
             case 5:
-                cell = GrayTableCell(text: "Current Work")
+                cell = GrayTableCell(text: "Age")
             case 6:
-                //cell = WhiteTableCell(text: "Add Work")
-                cell = workTableCell
+                cell = ageTableCell
             case 7:
-                cell = GrayTableCell(text: "School")
+                cell = GrayTableCell(text: "Current Work")
             case 8:
-                //cell = WhiteTableCell(text: "Add Work")
-                cell = schoolTableCell
+                cell = workTableCell
             case 9:
-                cell = GrayTableCell(text: "Gender")
+                cell = GrayTableCell(text: "School")
             case 10:
-                //cell = WhiteTableCell(text: "Add Gender")
-                cell = genderTableCell
+                cell = schoolTableCell
             case 11:
-                cell = GrayTableCell(text: "Relationship Status")
+                cell = GrayTableCell(text: "Gender")
             case 12:
-                //cell = WhiteTableCell(text: "Add Relationship Status")
-                cell = WhiteTextTableCell()
+                cell = genderTableCell
+            case 13:
+                cell = GrayTableCell(text: "Relationship Status")
+            case 14:
+                cell = relationshipStatusTableCell
             default:
-                //cell = WhiteTableCell(text: "")
                 cell = WhiteTextTableCell()
             }
             
