@@ -20,8 +20,9 @@ class MessagesObjects {
             leftButton.setImage(leftIcon, for: .normal)
             
             let titleImage = #imageLiteral(resourceName: "Messages_Navbar_Active")
-            titleImageView.image = titleImage
-            navItem.titleView = titleImageView
+            //titleImageView.image = titleImage
+            setTitleImage(image: titleImage)
+            //navItem.titleView = titleImageView
 
         }
         

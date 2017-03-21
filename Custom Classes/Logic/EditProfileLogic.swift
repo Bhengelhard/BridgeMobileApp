@@ -30,32 +30,67 @@ class EditProfileLogic {
         }
     }
     
+    static func setAge(label: UILabel) {
+        User.getCurrent { (user) in
+            label.text = "Add Age"
+            if let displaySchool = user.displaySchool {
+                if displaySchool {
+                    if let school = user.school {
+                        label.text = school
+                    }
+                }
+            }
+        }
+    }
+    
     static func setSchool(label: UILabel) {
         User.getCurrent { (user) in
-            if let school = user.school {
-                label.text = school
-            } else {
-                label.text = "Add School"
+            label.text = "Add School"
+            if let displayAge = user.displayAge {
+                if displayAge {
+                    if let age = user.age {
+                        label.text = "\(age)"
+                    }
+                }
             }
         }
     }
     
     static func setWork(label: UILabel) {
         User.getCurrent { (user) in
-            if let work = user.work {
-                label.text = work
-            } else {
-                label.text = "Add Work"
+            label.text = "Add Work"
+            if let displayWork = user.displayWork {
+                if displayWork {
+                    if let work = user.work {
+                        label.text = work
+                    }
+                }
             }
         }
     }
     
     static func setGender(label: UILabel) {
         User.getCurrent { (user) in
-            if let gender = user.gender {
-                label.text = gender.rawValue
-            } else {
-                label.text = "Add Gender"
+            label.text = "Add Gender"
+            if let displayGender = user.displayGender {
+                if displayGender {
+                    if let gender = user.gender {
+                        label.text = gender.rawValue
+                    }
+                }
+            }
+        }
+    }
+    
+    static func setRelationshipStatus(label: UILabel) {
+        User.getCurrent { (user) in
+            label.text = "Add Relationship Status"
+            if let displayRelationshipStatus = user.displayRelationshipStatus {
+                if displayRelationshipStatus {
+                    if let relationshipStatus = user.relationshipStatus {
+                        label.text = relationshipStatus.rawValue
+                    }
+                }
             }
         }
     }

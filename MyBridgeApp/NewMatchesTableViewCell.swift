@@ -18,7 +18,7 @@ class NewMatchesTableViewCell: UITableViewCell {
     var newMatchesTitle = UILabel()
     let gradientLayer = DisplayUtility.gradientLayer()
     var newMatchViews = [NewMatchView]()
-    var newMatchViewMargin = CGFloat(0)
+    var tableView: UITableView?
     var shouldSetUpConstraints = true
     
     init() {
@@ -46,6 +46,9 @@ class NewMatchesTableViewCell: UITableViewCell {
             profileImageView.backgroundColor = Constants.Colors.necter.backgroundGray
             
             nameLabel.textAlignment = .center
+            
+            setNeedsUpdateConstraints()
+            setNeedsLayout()
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -97,19 +100,29 @@ class NewMatchesTableViewCell: UITableViewCell {
         for i in 0..<newMatchViews.count {
             let newMatchView = newMatchViews[i]
             
-            newMatchViewMargin = 0.2*scrollView.frame.height
+            //newMatchViewMargin = 0.2*scrollView.frame.height
+            
+            
             
             if newMatchView.shouldSetUpConstraints {
+                // add and layout margin view before new match
+                let marginView = UIView()
+                scrollView.addSubview(marginView)
+                marginView.autoMatch(.width, to: .height, of: scrollView, withMultiplier: 0.2)
+                marginView.autoSetDimension(.height, toSize: 0)
+                marginView.autoAlignAxis(toSuperviewAxis: .horizontal)
+                if i == 0 {
+                    marginView.autoPinEdge(toSuperviewEdge: .left)
+                } else {
+                    marginView.autoPinEdge(.left, to: .right, of: newMatchViews[i-1])
+                }
+                
+                // add and layout new match
                 scrollView.addSubview(newMatchView)
                 newMatchView.autoMatch(.height, to: .height, of: scrollView, withMultiplier: 0.9)
                 newMatchView.autoMatch(.width, to: .height, of: newMatchView, withMultiplier: 0.75)
                 newMatchView.autoAlignAxis(toSuperviewAxis: .horizontal)
-                if i == 0 {
-                    newMatchView.autoPinEdge(toSuperviewEdge: .left, withInset: newMatchViewMargin)
-                } else {
-                    let previosNewMatchView = newMatchViews[i-1]
-                    newMatchView.autoPinEdge(.left, to: .right, of: previosNewMatchView, withOffset:newMatchViewMargin)
-                }
+                newMatchView.autoPinEdge(.left, to: .right, of: marginView)
                 newMatchView.shouldSetUpConstraints = false
             }
         }
@@ -124,10 +137,19 @@ class NewMatchesTableViewCell: UITableViewCell {
         gradientLayer.frame = line.bounds
         
         if newMatchViews.count > 0 {
-            scrollView.contentSize = CGSize(width: newMatchViews[newMatchViews.count-1].frame.maxX + newMatchViewMargin, height: scrollView.frame.height)
+            scrollView.contentSize = CGSize(width: newMatchViews[newMatchViews.count-1].frame.maxX + 0.2*scrollView.frame.height, height: scrollView.frame.height)
         } else {
             scrollView.contentSize = CGSize(width: 0, height: scrollView.frame.height)
         }
+    }
+    
+    func reset() {
+        for newMatchView in newMatchViews {
+            newMatchView.alpha = 0
+        }
+        
+        newMatchViews = [NewMatchView]()
+        layoutIfNeeded()
     }
     
     func setVC(vc: OldMessagesViewController) {
@@ -139,31 +161,16 @@ class NewMatchesTableViewCell: UITableViewCell {
     func addNewMatch(newMatch: NewMatch) {
     }
     
-//<<<<<<< HEAD
-//    func handleTap(_ gesture: UIGestureRecognizer) {
-//        print("tapped")
-//        /*
-//         let newMatchView = gesture.view!
-//         let acceptIgnoreView = AcceptIgnoreView(newMatch: displayedNewMatches[newMatchView.tag])
-//         if let vc = self.vc {
-//         acceptIgnoreView.setVC(vc: vc)
-//         vc.view.addSubview(acceptIgnoreView)
-//         }*/
-//    }
-//    
-//=======
-//>>>>>>> wiredFrame
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addUserInMessage(message: Message) {
+    func addUserInMessage(message: Message, gestureRecognizer: UIGestureRecognizer) {
         let newMatchView = NewMatchView(message: message)
         newMatchViews.append(newMatchView)
         
         // add gesture recognizer to take to thread
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(takeToThread(_:)))
-        newMatchView.addGestureRecognizer(gesture)
+        newMatchView.addGestureRecognizer(gestureRecognizer)
         
         message.getNonCurrentUser { (user) in
             user.getMainPicture { (picture) in
@@ -179,44 +186,4 @@ class NewMatchesTableViewCell: UITableViewCell {
         
         setNeedsUpdateConstraints()
     }
-    
-    func takeToThread(_ gesture: UIGestureRecognizer) {
-        if let view = gesture.view {
-            if let newMatchView = view as? NewMatchView {
-                if let parentVC = parentVC {
-                    let threadVC = ThreadViewController()
-                    threadVC.setMessageID(messageID: newMatchView.message.id)
-                    parentVC.present(threadVC, animated: true, completion: nil)
-                }
-            }
-        }
-//<<<<<<< HEAD
-//        
-//        // add gesture recognizer
-//        profilePicView.isUserInteractionEnabled = true
-//        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-//        profilePicView.addGestureRecognizer(gesture)
-//        
-//        // add name
-//        //let nameLabel = UILabel(frame: CGRect(x: profilePicView.frame.minX, y: profilePicView.frame.maxY + 0.08*frame.height, width: 0, height: 0.2*frame.height))
-//        let nameLabel = UILabel()
-//        scrollView.addSubview(nameLabel)
-//        nameLabel.autoAlignAxis(.vertical, toSameAxisOf: profilePicView)
-//        nameLabel.autoPinEdge(.top, to: .bottom, of: profilePicView, withOffset: 0.02*frame.height)
-//        nameLabel.autoMatch(.width, to: .width, of: profilePicView)
-//        nameLabel.adjustsFontSizeToFitWidth = true
-//        nameLabel.textAlignment = .center
-//        
-//        if let firstName = user.firstName {
-//            nameLabel.text = firstName
-//        }
-//        
-//        scrollView.contentSize = CGSize(width: max(DisplayUtility.screenWidth, spaceBetweenProfilePics + CGFloat(position+1)*(profilePicWidth+spaceBetweenProfilePics)), height: frame.height)
-//        
-//        //        line.frame = CGRect(x: 0.0463*frame.width, y: frame.height-1, width: 0.9205*contentSize.width, height: 1)
-//        //line.frame = CGRect(x: 0, y: frame.height-1, width: contentSize.width, height: 1)
-//=======
-//>>>>>>> wiredFrame
-    }
-    
 }

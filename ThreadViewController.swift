@@ -16,6 +16,11 @@ class ThreadViewController: UIViewController {
     let layout = ThreadLayout()
     let threadBackend = ThreadBackend()
     
+    var messagesBackend: MessagesBackend?
+    var messagesTableView: UITableView?
+    var newMatchesTableViewCell: NewMatchesTableViewCell?
+    var gestureRecognizer: UIGestureRecognizer?
+    
     var didSetupConstraints = false
     
     override func viewDidLoad() {
@@ -45,14 +50,36 @@ class ThreadViewController: UIViewController {
     func setMessageID(messageID: String?) {
         messagesVC.messageID = messageID
         
+        // set nav bar image
+        let imageView = self.layout.navBar.titleImageView
+        
         threadBackend.getOtherUserInMessagePicture(messageID: messageID) { (image) in
-            let imageView = self.layout.navBar.titleImageView
             imageView.image = image
+            imageView.layer.cornerRadius = imageView.frame.height/2
+            imageView.clipsToBounds = true
         }
+        
+        // add target to bring to external profile
+        let showProfileGR = UITapGestureRecognizer(target: self, action: #selector(self.showOtherUserProfile(_:)))
+        imageView.addGestureRecognizer(showProfileGR)
+        imageView.isUserInteractionEnabled = true
+        
+        // save user has seen last single message
+        threadBackend.updateHasSeenLastSingleMessage(messageID: messageID)
     }
     
-    // MARK: - Targets
+
+    // MARK: Targets
     func backButtonTapped(_ sender: UIButton) {
+        if let messagesBackend = messagesBackend, let messagesTableView = messagesTableView {
+            print("reloading messages table")
+            messagesBackend.reloadMessagesTable(tableView: messagesTableView)
+            
+            if let newMatchesTableViewCell = newMatchesTableViewCell, let gestureRecognizer = gestureRecognizer {
+                print("loading new matches")
+                messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell, gestureRecognizer: gestureRecognizer)
+            }
+        }
         dismiss(animated: false, completion: nil)
     }
     
@@ -89,6 +116,19 @@ class ThreadViewController: UIViewController {
 //        }
 //    }
     
+    func showOtherUserProfile(_ gesture: UIGestureRecognizer) {
+        if let messageID = messagesVC.messageID {
+            Message.get(withID: messageID) { (message) in
+                message.getNonCurrentUser { (user) in
+                    if let userID = user.id {
+                        let externalProfileVC = ExternalProfileViewController()
+                        externalProfileVC.setUserID(userID: userID)
+                        self.present(externalProfileVC, animated: true, completion: nil)
+                    }
+                }
+            }
+        }
+    }
 }
 
 class NecterJSQMessagesViewController: JSQMessagesViewController {
@@ -145,16 +185,24 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: Date) {
         
-        if let message = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
-            threadBackend.jsqMessages.append(message)
+        if let jsqMessage = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
+            threadBackend.jsqMessages.append(jsqMessage)
             
             // save single message
-            threadBackend.jsqMessageToSingleMessage(jsqMessage: message, messageID: messageID) { (singleMessage) in
+            threadBackend.jsqMessageToSingleMessage(jsqMessage: jsqMessage, messageID: messageID) { (singleMessage) in
                 singleMessage.save()
             }
             
-            // save single message text as message snapshot
-            threadBackend.updateMessageSnapshot(messageID: messageID, snapshot: message.text)
+            // update message's snapshot and info about user has sent and user has seen last single message
+            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: {
+                // BOTH HAVE POSTED FOR FIRST TIME
+                
+                // Send Push notification to connecter to let them know the conversation has begun
+                
+                // Add user's to eachother's friendlists
+                
+                // Show notification that user's are now friends and can introduce eachother if they want
+            })
             
             // FIXME: Add push notification to other user
             

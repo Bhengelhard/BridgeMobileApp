@@ -75,6 +75,14 @@ class Message: NSObject {
     /// The text of the last single message in the Message's thread
     var lastSingleMessage: String?
     
+    var user1HasSeenLastSingleMessage: Bool?
+    
+    var user2HasSeenLastSingleMessage: Bool?
+    
+    var user1HasPosted: Bool?
+    
+    var user2HasPosted: Bool?
+    
     private var userIDsToUsers = [String: User]()
     private var pictureIDsToPictures = [String: Picture]()
     
@@ -115,11 +123,27 @@ class Message: NSObject {
             lastSingleMessage = parseLastSingleMessage
         }
         
+        if let parseUser1HasSeenLastSingleMessage = parseMessage["user1_has_seen_last_single_message"] as? Bool {
+            user1HasSeenLastSingleMessage = parseUser1HasSeenLastSingleMessage
+        }
+        
+        if let parseUser2HasSeenLastSingleMessage = parseMessage["user2_has_seen_last_single_message"] as? Bool {
+            user2HasSeenLastSingleMessage = parseUser2HasSeenLastSingleMessage
+        }
+        
+        if let parseUser1HasPosted = parseMessage["user1_has_posted"] as? Bool {
+            user1HasPosted = parseUser1HasPosted
+        }
+        
+        if let parseUser2HasPosted = parseMessage["user2_has_posted"] as? Bool {
+            user2HasPosted = parseUser2HasPosted
+        }
+        
         super.init()
     }
     
     /// Creates a new Message object with the provided parameters and calls the given block on the result.
-    static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String? = nil, user2PictureID: String? = nil, lastSingleMessage: String? = nil, withBlock block: MessageCreateBlock? = nil) {
+    static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String? = nil, user2PictureID: String? = nil, lastSingleMessage: String? = nil, user1HasSeenLastSingleMessage: Bool?, user2HasSeenLastSingleMessage: Bool?, user1HasPosted: Bool?, user2HasPosted: Bool?, withBlock block: MessageCreateBlock? = nil) {
         
         
         // Checking if the users are already in a message
@@ -176,7 +200,24 @@ class Message: NSObject {
                     parseMessage["last_single_message"] = lastSingleMessage
                 }
                 
+                if let user1HasSeenLastSingleMessage = user1HasSeenLastSingleMessage {
+                    parseMessage["user1_has_seen_last_single_message"] = user1HasSeenLastSingleMessage
+                }
+                
+                if let user2HasSeenLastSingleMessage = user2HasSeenLastSingleMessage {
+                    parseMessage["user2_has_seen_last_single_message"] = user2HasSeenLastSingleMessage
+                }
+                
+                if let user1HasPosted = user1HasPosted {
+                    parseMessage["user1_has_posted"] = user1HasPosted
+                }
+                
+                if let user2HasPosted = user2HasPosted {
+                    parseMessage["user2_has_posted"] = user2HasPosted
+                }
+                
                 let message = Message(parseMessage: parseMessage)
+                                
                 let isNew = true
                 
                 if let block = block {
@@ -184,8 +225,6 @@ class Message: NSObject {
                 }
             }
         })
-        
-        
         
     }
     
@@ -435,6 +474,30 @@ class Message: NSObject {
             parseMessage["last_single_message"] = lastSingleMessage
         } else {
             parseMessage.remove(forKey: "last_single_message")
+        }
+        
+        if let user1HasSeenLastSingleMessage = user1HasSeenLastSingleMessage {
+            parseMessage["user1_has_seen_last_single_message"] = user1HasSeenLastSingleMessage
+        } else {
+            parseMessage.remove(forKey: "user1_has_seen_last_single_message")
+        }
+        
+        if let user2HasSeenLastSingleMessage = user2HasSeenLastSingleMessage {
+            parseMessage["user2_has_seen_last_single_message"] = user2HasSeenLastSingleMessage
+        } else {
+            parseMessage.remove(forKey: "user2_has_seen_last_single_message")
+        }
+        
+        if let user1HasPosted = user1HasPosted {
+            parseMessage["user1_has_posted"] = user1HasPosted
+        } else {
+            parseMessage.remove(forKey: "user1_has_posted")
+        }
+        
+        if let user2HasPosted = user2HasPosted {
+            parseMessage["user2_has_posted"] = user2HasPosted
+        } else {
+            parseMessage.remove(forKey: "user2_has_posted")
         }
         
         parseMessage.saveInBackground { (succeeded, error) in

@@ -19,6 +19,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     let newMatchesTableViewCell = NewMatchesTableViewCell()
     var messageSelectedID = ""
     
+    var newMatchGR: UITapGestureRecognizer?
+    
     var didSetupConstraints = false
     
     // MARK: - Override Functions
@@ -32,7 +34,12 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
         
         newMatchesTableViewCell.parentVC = self
-        messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
+        newMatchesTableViewCell.tableView = layout.messagesTable
+        
+        newMatchGR = UITapGestureRecognizer(target: self, action: #selector(goToThread(_:)))
+        if let newMatchGR = newMatchGR {
+            messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell, gestureRecognizer: newMatchGR)
+        }
     }
     
     override func loadView() {
@@ -79,7 +86,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         messagesBackend.setParticipantsLabel(index: indexPath.row, label: cell.participants)
         messagesBackend.setSanpshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
         messagesBackend.setProfilePicture(index: indexPath.row, imageView: cell.profilePic)
-        cell.notificationDot.alpha = 0
+        messagesBackend.setDotAlpha(index: indexPath.row, dot: cell.notificationDot)
         
         return cell
     }
@@ -102,10 +109,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         if indexPath.section == 1 {
             let threadVC = ThreadViewController()
             if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
-                threadVC.setMessageID(messageID: messageID)
-                present(threadVC, animated: true) {
-                    tableView.deselectRow(at: indexPath, animated: false) // deselect the row
-                }
+                goToThread(messageID: messageID)
             }
         }
     }
@@ -132,6 +136,24 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
                 backgroundView.backgroundColor = .white
             }
         }
+    }
+    
+    func goToThread(_ gesture: UIGestureRecognizer) {
+        if let view = gesture.view {
+            if let newMatchView = view as? NewMatchesTableViewCell.NewMatchView {
+                goToThread(messageID: newMatchView.message.id)
+            }
+        }
+    }
+    
+    func goToThread(messageID: String?) {
+        let threadVC = ThreadViewController()
+        threadVC.setMessageID(messageID: messageID)
+        threadVC.messagesBackend = messagesBackend
+        threadVC.messagesTableView = layout.messagesTable
+        threadVC.newMatchesTableViewCell = newMatchesTableViewCell
+        threadVC.gestureRecognizer = newMatchGR
+        present(threadVC, animated: true, completion: nil)
     }
     
     // MARK: - Targets

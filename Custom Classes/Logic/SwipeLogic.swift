@@ -166,7 +166,7 @@ class SwipeLogic {
                             let user2PictureID = swipeCard.bridgePairing?.user2PictureID
 
                             // Create message with both of the retrieved users
-                            Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil) { (message, isNew) in
+                            Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil, withBlock: { (message, isNew) in
                                 if isNew {
                                     message.save(withBlock: { (message) in
                                         if let messageID = message.id {
@@ -179,7 +179,7 @@ class SwipeLogic {
                                     }
                                 }
                                 
-                            }
+                            })
                         }
                         
                         
