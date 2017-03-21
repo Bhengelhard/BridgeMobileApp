@@ -67,9 +67,7 @@ class NecterNavigationBar: UINavigationBar {
         }
         titleImageView.autoSetDimension(.width, toSize: 35)
         titleImageView.autoMatch(.height, to: .width, of: titleImageView)
-        
-        print(titleImageView.constraints)
-        
+                
         super.updateConstraints()
     }
     

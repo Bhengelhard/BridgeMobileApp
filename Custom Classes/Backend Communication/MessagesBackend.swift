@@ -117,11 +117,12 @@ class MessagesBackend {
         }
     }
     
-    func loadNewMatches(newMatchesTableViewCell: NewMatchesTableViewCell) {
+    func loadNewMatches(newMatchesTableViewCell: NewMatchesTableViewCell, gestureRecognizer: UIGestureRecognizer) {
+        newMatchesTableViewCell.reset()
         User.getCurrent { (user) in
             Message.getAllUnstarted(withUser: user) { (messages) in
                 for message in messages {
-                    newMatchesTableViewCell.addUserInMessage(message: message)
+                    newMatchesTableViewCell.addUserInMessage(message: message, gestureRecognizer: gestureRecognizer)
                 }
             }
         }

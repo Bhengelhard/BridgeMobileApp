@@ -18,6 +18,7 @@ class NewMatchesTableViewCell: UITableViewCell {
     var newMatchesTitle = UILabel()
     let gradientLayer = DisplayUtility.gradientLayer()
     var newMatchViews = [NewMatchView]()
+    var tableView: UITableView?
     var shouldSetUpConstraints = true
     
     init() {
@@ -141,6 +142,15 @@ class NewMatchesTableViewCell: UITableViewCell {
         }
     }
     
+    func reset() {
+        for newMatchView in newMatchViews {
+            newMatchView.alpha = 0
+        }
+        
+        newMatchViews = [NewMatchView]()
+        layoutIfNeeded()
+    }
+    
     func setVC(vc: OldMessagesViewController) {
     }
     
@@ -154,13 +164,12 @@ class NewMatchesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addUserInMessage(message: Message) {
+    func addUserInMessage(message: Message, gestureRecognizer: UIGestureRecognizer) {
         let newMatchView = NewMatchView(message: message)
         newMatchViews.append(newMatchView)
         
         // add gesture recognizer to take to thread
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(takeToThread(_:)))
-        newMatchView.addGestureRecognizer(gesture)
+        newMatchView.addGestureRecognizer(gestureRecognizer)
         
         message.getNonCurrentUser { (user) in
             user.getMainPicture { (picture) in
@@ -175,18 +184,6 @@ class NewMatchesTableViewCell: UITableViewCell {
         }
         
         setNeedsUpdateConstraints()
-    }
-    
-    func takeToThread(_ gesture: UIGestureRecognizer) {
-        if let view = gesture.view {
-            if let newMatchView = view as? NewMatchView {
-                if let parentVC = parentVC {
-                    let threadVC = ThreadViewController()
-                    threadVC.setMessageID(messageID: newMatchView.message.id)
-                    parentVC.present(threadVC, animated: true, completion: nil)
-                }
-            }
-        }
     }
     
 }

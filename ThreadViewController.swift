@@ -16,6 +16,11 @@ class ThreadViewController: UIViewController {
     let layout = ThreadLayout()
     let threadBackend = ThreadBackend()
     
+    var messagesBackend: MessagesBackend?
+    var messagesTableView: UITableView?
+    var newMatchesTableViewCell: NewMatchesTableViewCell?
+    var gestureRecognizer: UIGestureRecognizer?
+    
     var didSetupConstraints = false
     
     override func viewDidLoad() {
@@ -60,12 +65,20 @@ class ThreadViewController: UIViewController {
         
         // save user has seen last single message
         threadBackend.updateHasSeenLastSingleMessage(messageID: messageID)
-
     }
     
     // MARK: Targets
     
     func backButtonTapped(_ sender: UIButton) {
+        if let messagesBackend = messagesBackend, let messagesTableView = messagesTableView {
+            print("reloading messages table")
+            messagesBackend.reloadMessagesTable(tableView: messagesTableView)
+            
+            if let newMatchesTableViewCell = newMatchesTableViewCell, let gestureRecognizer = gestureRecognizer {
+                print("loading new matches")
+                messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell, gestureRecognizer: gestureRecognizer)
+            }
+        }
         dismiss(animated: false, completion: nil)
     }
     
