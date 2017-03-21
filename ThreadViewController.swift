@@ -151,16 +151,18 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: Date) {
         
-        if let message = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
-            threadBackend.jsqMessages.append(message)
+        if let jsqMessage = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
+            threadBackend.jsqMessages.append(jsqMessage)
             
             // save single message
-            threadBackend.jsqMessageToSingleMessage(jsqMessage: message, messageID: messageID) { (singleMessage) in
+            threadBackend.jsqMessageToSingleMessage(jsqMessage: jsqMessage, messageID: messageID) { (singleMessage) in
                 singleMessage.save()
             }
             
             // update message's snapshot and info about user has sent and user has seen last single message
-            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: message.text)
+            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: {
+                // BOTH HAVE POSTED FOR FIRST TIME
+            })
             
             // FIXME: Add push notification to other user
             
