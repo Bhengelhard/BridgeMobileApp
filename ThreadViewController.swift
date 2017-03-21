@@ -19,7 +19,6 @@ class ThreadViewController: UIViewController {
     var messagesBackend: MessagesBackend?
     var messagesTableView: UITableView?
     var newMatchesTableViewCell: NewMatchesTableViewCell?
-    var gestureRecognizer: UIGestureRecognizer?
     
     var didSetupConstraints = false
     
@@ -70,15 +69,16 @@ class ThreadViewController: UIViewController {
     // MARK: Targets
     
     func backButtonTapped(_ sender: UIButton) {
+        // reload messages table
         if let messagesBackend = messagesBackend, let messagesTableView = messagesTableView {
-            print("reloading messages table")
             messagesBackend.reloadMessagesTable(tableView: messagesTableView)
-            
-            if let newMatchesTableViewCell = newMatchesTableViewCell, let gestureRecognizer = gestureRecognizer {
-                print("loading new matches")
-                messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell, gestureRecognizer: gestureRecognizer)
-            }
         }
+        
+        // reload new matches view
+        if let messagesBackend = messagesBackend, let newMatchesTableViewCell = newMatchesTableViewCell {
+            messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
+        }
+        
         dismiss(animated: false, completion: nil)
     }
     

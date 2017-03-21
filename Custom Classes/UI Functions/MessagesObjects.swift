@@ -69,11 +69,9 @@ class MessagesObjects {
     }
     
     class MessagesTable: UITableView {
-        
-        
-        
+        let noMessagesLabel = UILabel()
     }
-    
+        
     class MessagesTableCell: UITableViewCell {
         
     }

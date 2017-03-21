@@ -18,6 +18,7 @@ class NewMatchesTableViewCell: UITableViewCell {
     var newMatchesTitle = UILabel()
     let gradientLayer = DisplayUtility.gradientLayer()
     var newMatchViews = [NewMatchView]()
+    var noNewMatchesLabel = UILabel()
     var tableView: UITableView?
     var shouldSetUpConstraints = true
     
@@ -26,6 +27,8 @@ class NewMatchesTableViewCell: UITableViewCell {
         
         line.backgroundColor = .clear
         line.layer.insertSublayer(gradientLayer, at: 0)
+        
+        noNewMatchesLabel.text = "You have no new matches."
         
         scrollView.bounces = false
         
@@ -87,6 +90,9 @@ class NewMatchesTableViewCell: UITableViewCell {
             line.autoAlignAxis(toSuperviewAxis: .vertical)
             line.autoMatch(.width, to: .width, of: self, withMultiplier: 0.9)
             
+            addSubview(noNewMatchesLabel)
+            noNewMatchesLabel.autoCenterInSuperview()
+            
             addSubview(scrollView)
             scrollView.autoPinEdge(toSuperviewEdge: .top)
             scrollView.autoPinEdge(toSuperviewEdge: .left)
@@ -146,8 +152,10 @@ class NewMatchesTableViewCell: UITableViewCell {
         for newMatchView in newMatchViews {
             newMatchView.alpha = 0
         }
-        
         newMatchViews = [NewMatchView]()
+        
+        noNewMatchesLabel.alpha = 1
+        
         layoutIfNeeded()
     }
     
@@ -164,14 +172,18 @@ class NewMatchesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addUserInMessage(message: Message, gestureRecognizer: UIGestureRecognizer) {
+    func addUserInMessage(message: Message) {
+        noNewMatchesLabel.alpha = 0
+        
         let newMatchView = NewMatchView(message: message)
         newMatchViews.append(newMatchView)
         
         // add gesture recognizer to take to thread
-        newMatchView.addGestureRecognizer(gestureRecognizer)
+        let newMatchGR = UITapGestureRecognizer(target: self, action: #selector(goToThread(_:)))
+        newMatchView.addGestureRecognizer(newMatchGR)
         
         message.getNonCurrentUser { (user) in
+            print(user.name!, newMatchView.gestureRecognizers!)
             user.getMainPicture { (picture) in
                 picture.getImage { (image) in
                     newMatchView.profileImageView.image = image
@@ -184,6 +196,17 @@ class NewMatchesTableViewCell: UITableViewCell {
         }
         
         setNeedsUpdateConstraints()
+    }
+    
+    func goToThread(_ gesture: UIGestureRecognizer) {
+        if let messagesVC = parentVC as? MessagesViewController {
+            if let view = gesture.view {
+                if let newMatchView = view as? NewMatchView {
+                    messagesVC.goToThread(messageID: newMatchView.message.id)
+
+                }
+            }
+        }
     }
     
 }

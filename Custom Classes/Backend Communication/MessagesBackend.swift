@@ -40,6 +40,16 @@ class MessagesBackend {
         User.getCurrent { (user) in
             Message.countAllStarted(withUser: user) { (count) in
                 self.totalElements = count
+                
+                // get rid of no messages label, if applicable
+                if let messagesTableView = tableView as? MessagesObjects.MessagesTable {
+                    if count == 0 {
+                        messagesTableView.noMessagesLabel.alpha = 1
+                    } else {
+                        messagesTableView.noMessagesLabel.alpha = 0
+                    }
+                }
+                
                 self.refreshMessagesTable(tableView: tableView)
             }
         }
@@ -117,12 +127,12 @@ class MessagesBackend {
         }
     }
     
-    func loadNewMatches(newMatchesTableViewCell: NewMatchesTableViewCell, gestureRecognizer: UIGestureRecognizer) {
+    func loadNewMatches(newMatchesTableViewCell: NewMatchesTableViewCell) {
         newMatchesTableViewCell.reset()
         User.getCurrent { (user) in
             Message.getAllUnstarted(withUser: user) { (messages) in
                 for message in messages {
-                    newMatchesTableViewCell.addUserInMessage(message: message, gestureRecognizer: gestureRecognizer)
+                    newMatchesTableViewCell.addUserInMessage(message: message)
                 }
             }
         }

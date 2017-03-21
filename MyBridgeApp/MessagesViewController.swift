@@ -18,7 +18,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     let messagesBackend = MessagesBackend()
     let newMatchesTableViewCell = NewMatchesTableViewCell()
     
-    var newMatchGR: UITapGestureRecognizer?
+    var newMatchSelector: Selector?
     
     var didSetupConstraints = false
     
@@ -35,10 +35,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         newMatchesTableViewCell.parentVC = self
         newMatchesTableViewCell.tableView = layout.messagesTable
         
-        newMatchGR = UITapGestureRecognizer(target: self, action: #selector(goToThread(_:)))
-        if let newMatchGR = newMatchGR {
-            messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell, gestureRecognizer: newMatchGR)
-        }
+        messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
     }
     
     override func loadView() {
@@ -92,7 +89,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            let threadVC = ThreadViewController()
             if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
                 goToThread(messageID: messageID)
             }
@@ -123,21 +119,12 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func goToThread(_ gesture: UIGestureRecognizer) {
-        if let view = gesture.view {
-            if let newMatchView = view as? NewMatchesTableViewCell.NewMatchView {
-                goToThread(messageID: newMatchView.message.id)
-            }
-        }
-    }
-    
     func goToThread(messageID: String?) {
         let threadVC = ThreadViewController()
         threadVC.setMessageID(messageID: messageID)
         threadVC.messagesBackend = messagesBackend
         threadVC.messagesTableView = layout.messagesTable
         threadVC.newMatchesTableViewCell = newMatchesTableViewCell
-        threadVC.gestureRecognizer = newMatchGR
         present(threadVC, animated: true, completion: nil)
     }
     
