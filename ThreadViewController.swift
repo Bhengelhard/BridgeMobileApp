@@ -191,6 +191,14 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             // save single message
             threadBackend.jsqMessageToSingleMessage(jsqMessage: jsqMessage, messageID: messageID) { (singleMessage) in
                 singleMessage.save()
+                
+                let user1ID = singleMessage.senderID
+                let messageID = singleMessage.messageID
+                let messageText = singleMessage.text
+                let pfCloudFunctions = PFCloudFunctions()
+                pfCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(messageText)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                
+                print("push should have happened")
             }
             
             // update message's snapshot and info about user has sent and user has seen last single message

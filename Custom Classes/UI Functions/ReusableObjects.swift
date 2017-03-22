@@ -111,9 +111,9 @@ class ReusableObjects {
                     return arrayOfVCs[currIndex + 1]
                 }
                 // Move to beginning of arrayOfVCs
-                else if circular {
-                    return arrayOfVCs.first
-                }
+//                else if circular {
+//                    return arrayOfVCs.first
+//                }
             }
             
             return nil
@@ -126,9 +126,9 @@ class ReusableObjects {
                     return arrayOfVCs[currIndex - 1]
                 }
                 // Move to end of arrayOfVCs
-                else if circular {
-                    return arrayOfVCs.last
-                }
+//                else if circular {
+//                    return arrayOfVCs.last
+//                }
             }
             return nil
         }
