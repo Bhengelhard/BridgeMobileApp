@@ -23,17 +23,12 @@ class ThreadObjects {
             let rightIcon = #imageLiteral(resourceName: "More_Button")
             rightButton.setImage(rightIcon, for: .normal)
             rightButton.frame.size = CGSize(width: 50, height: 14)
-
-            let titleImage = #imageLiteral(resourceName: "Background_Gray_Circle")
-            titleImageView.image = titleImage
-            navItem.titleView = titleImageView
-            //navItem.titleView?.layer.cornerRadius = (navItem.titleView?.frame.height)!/2
-            //navItem.titleView?.clipsToBounds = true
-           // navItem.titleView?.backgroundColor = Constants.Colors.necter.backgroundGray
+            
+            setTitleImage(image: #imageLiteral(resourceName: "Background_Gray_Circle"))
             
             // Adding line at the bottom of the navigation bar
-            self.setBackgroundImage(UIImage(), for: .default)
-            self.shadowImage = nil
+            setBackgroundImage(UIImage(), for: .default)
+            shadowImage = nil
         }
         
         required init?(coder aDecoder: NSCoder) {
