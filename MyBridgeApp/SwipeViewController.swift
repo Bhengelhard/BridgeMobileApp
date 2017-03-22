@@ -23,7 +23,7 @@ class SwipeViewController: UIViewController {
         super.viewDidLoad()
         
         // Listener for presentingExternalProfileVC
-        NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
+       // NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
         
         // Add Targets for Swipe Cards
         layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
@@ -39,6 +39,8 @@ class SwipeViewController: UIViewController {
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
         dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
         
+        
+        
     }
     
     override func loadView() {
@@ -52,6 +54,7 @@ class SwipeViewController: UIViewController {
         swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
             self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
         }
+        
     }
     
     override func updateViewConstraints() {

@@ -152,9 +152,6 @@ class NewMatchesTableViewCell: UITableViewCell {
         layoutIfNeeded()
     }
     
-    func setVC(vc: OldMessagesViewController) {
-    }
-    
     func filterBy(type: String) {
     }
     

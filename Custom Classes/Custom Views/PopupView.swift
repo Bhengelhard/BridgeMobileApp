@@ -19,10 +19,11 @@ class PopupView: UIView {
     var user2Image: UIImage?
     let messageButton = PopupViewObjects.MessageButton()
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
-    let vc: UIViewController
+    var user1Name: String?
+    var user2Name: String?
     
     // MARK: - Init
-    init(user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?, vc: UIViewController) {
+    init(user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
         self.title = PopupViewObjects.Title(titleImage: titleImage)
         self.text = PopupViewObjects.Text(text: textString)
         
@@ -31,18 +32,16 @@ class PopupView: UIView {
         
         self.user1Image = user1Image
         self.user2Image = user2Image
-        
-        self.vc = vc
-        
+                
         super.init(frame: CGRect())
         
         if user1Image == nil {
             User.get(withID: user1Id) { (user) in
+                self.user1Name = user.name
                 user.getMainPicture { (picture) in
                     picture.getImage { (image) in
                         self.user1Image = image
                         self.user1Hexagon.setBackgroundImage(image: image)
-
                     }
                 }
             }
@@ -53,7 +52,7 @@ class PopupView: UIView {
             
             User.get(withID: user2Id) { (user) in
                 print("user2 user retrived")
-                print(user.name)
+                self.user2Name = user.name
                 
                 user.getPicture(atIndex: 0, withBlock: { (picture) in
                     picture.getImage(withBlock: { (image) in
@@ -157,73 +156,12 @@ class PopupView: UIView {
     
     // Create Direct Message with both of the users in the message
     func messageButtonTapped (_ sender: UIButton) {
-        print("messageButtonTapped")
-        let reasonForConnectionView = UIView()
-        self.addSubview(reasonForConnectionView)
+        //displayReasonForConnection()
+        let reasonForConnectionView = ReasonForConnection(user1Name: user1Name, user2Name: user2Name)
+        addSubview(reasonForConnectionView)
         reasonForConnectionView.autoPinEdgesToSuperviewEdges(with: .init(top: 80, left: 40, bottom: 280, right: 40))
-        
-        reasonForConnectionView.backgroundColor = UIColor.white
-        reasonForConnectionView.layer.cornerRadius = 8
-        reasonForConnectionView.layer.borderColor = DisplayUtility.gradientColor(size: reasonForConnectionView.frame.size).cgColor
-        reasonForConnectionView.layer.borderWidth = 3
-        
-        let reasonForConnectionLabel = UILabel()
-        reasonForConnectionLabel.text = "You're message will go out to ____ and ____ in their conversation"
-        reasonForConnectionLabel.font = Constants.Fonts.bold16
-        reasonForConnectionLabel.numberOfLines = 0
-        reasonForConnectionLabel.textColor = Constants.Colors.necter.textDarkGray
-        reasonForConnectionLabel.textAlignment = NSTextAlignment.center
-        reasonForConnectionView.addSubview(reasonForConnectionLabel)
-        reasonForConnectionLabel.autoPinEdgesToSuperviewEdges(with: .init(top: 20, left: 20, bottom: 20, right: 20), excludingEdge: .bottom)
-        
-        let dividerLine = UIView()
-        dividerLine.backgroundColor = Constants.Colors.necter.textDarkGray
-        dividerLine.autoSetDimension(.height, toSize: 3)
-        reasonForConnectionView.addSubview(dividerLine)
-        dividerLine.autoPinEdge(toSuperviewEdge: .left)
-        dividerLine.autoPinEdge(toSuperviewEdge: .right)
-        dividerLine.autoPinEdge(.top, to: .bottom, of: reasonForConnectionLabel, withOffset: 20)
-        
-        let reasonForConnectionTextView = UITextView()
-        reasonForConnectionView.addSubview(reasonForConnectionTextView)
-        reasonForConnectionTextView.autoPinEdgesToSuperviewEdges(with: .init(top: 20, left: 10, bottom: 20, right: 10), excludingEdge: .top)
-        reasonForConnectionTextView.autoPinEdge(.top, to: .bottom, of: dividerLine)
-        
-        reasonForConnectionTextView.font = Constants.Fonts.light14
-        reasonForConnectionTextView.becomeFirstResponder()
-        
-        let dividerLine2 = UIView()
-        dividerLine2.autoSetDimension(.height, toSize: 3)
-        reasonForConnectionView.addSubview(dividerLine2)
-        dividerLine2.autoPinEdge(toSuperviewEdge: .left)
-        dividerLine2.autoPinEdge(toSuperviewEdge: .right)
-        dividerLine2.autoPinEdge(.top, to: .bottom, of: reasonForConnectionLabel, withOffset: 20)
-        dividerLine2.backgroundColor = DisplayUtility.gradientColor(size: dividerLine2.frame.size)
-        
-        let midDivider = UIView()
-        reasonForConnectionView.addSubview(midDivider)
-        midDivider.autoPinEdge(.top, to: .bottom, of: dividerLine2)
-        midDivider.autoPinEdge(toSuperviewEdge: .bottom)
-        midDivider.autoAlignAxis(toSuperviewAxis: .vertical)
-        midDivider.autoSetDimension(.width, toSize: 3)
-        
-        
-        let cancelButton = UIButton()
-        cancelButton.setTitle("Cancel", for: .normal)
-        reasonForConnectionView.addSubview(cancelButton)
-        cancelButton.autoPinEdge(toSuperviewEdge: .left)
-        cancelButton.autoPinEdge(toSuperviewEdge: .bottom)
-        cancelButton.autoSetDimension(.height, toSize: 50)
-        cancelButton.autoPinEdge(.right, to: .left, of: midDivider)
-        
-        let sendButton = UIButton()
-        sendButton.setTitle("Send", for: .normal)
-        reasonForConnectionView.addSubview(sendButton)
-        sendButton.autoPinEdge(toSuperviewEdge: .right)
-        sendButton.autoPinEdge(toSuperviewEdge: .bottom)
-        cancelButton.autoSetDimension(.height, toSize: 50)
-        cancelButton.autoPinEdge(.left, to: .right, of: midDivider)
-        
+        print("messageButtonTapped")
+
     }
     
     // MARK: - Functions

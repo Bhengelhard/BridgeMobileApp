@@ -26,6 +26,7 @@ class MyProfileViewController: UIViewController {
         layout.settingsButton.addTarget(self, action: #selector(settingsButtonTapped(_:)), for: .touchUpInside)
         layout.profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profilePictureTapped(_:))))
         layout.inviteButton.addTarget(self, action: #selector(inviteButtonTapped(_:)), for: .touchUpInside)
+        
     }
     
     override func loadView() {

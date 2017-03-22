@@ -41,20 +41,4 @@ class ThreadObjects {
         }
         
     }
-        
-    class NameTableCell: UITableViewCell {
-        
-    }
-    
-    class MessageTableCell: UITableViewCell {
-        
-    }
-    
-    class NotificationTableCell: UITableViewCell {
-        
-    }
-    
-    class Keyboard: CustomKeyboard {
-        
-    }
 }
