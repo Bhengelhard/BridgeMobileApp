@@ -58,10 +58,13 @@ class SettingsObjects {
             delegate = self
             dataSource = self
             
+            self.backgroundColor = Constants.Colors.necter.backgroundGray
+
             self.isScrollEnabled = false
             
             self.estimatedRowHeight = 100
             self.rowHeight = UITableViewAutomaticDimension
+            
 
         }
         
@@ -76,33 +79,44 @@ class SettingsObjects {
         }
          
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return 4
+            return 2
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             
+//            var cell = UITableViewCell()
+//            
+//            if indexPath.row == 0 {
+//                cell = GrayTableCell(text: "Notification")
+//                
+//            } else if indexPath.row == 1 {
+//                cell = WhiteTableCell(text: "Necter Newsletter")
+//                
+//            } else if indexPath.row == 2 {
+//                cell = GrayTableCell(text: "My Necter")
+//                
+//            } else if indexPath.row == 3 {
+//                cell = MyNecterTableCell()
+//            }
+            
             var cell = UITableViewCell()
             
             if indexPath.row == 0 {
-                cell = GrayTableCell(text: "Notification")
-                
+                cell = GrayTableCell(text: "")
             } else if indexPath.row == 1 {
-                cell = WhiteTableCell(text: "Necter Newsletter")
-                
-            } else if indexPath.row == 2 {
-                cell = GrayTableCell(text: "My Necter")
-                
-            } else if indexPath.row == 3 {
                 cell = MyNecterTableCell()
             }
             
             return cell
+
             
         }
         
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
             
-            if indexPath.row == 3 {
+            if indexPath.row == 0 {
+                return 20
+            } else if indexPath.row == 1 {
                 return 150
             } else {
                 return 50

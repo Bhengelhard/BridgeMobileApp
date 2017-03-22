@@ -142,8 +142,17 @@ class EditProfileObjects {
                 if let cell = tableView.cellForRow(at: previousCellTitle) {
                     if let cellTitleLabel = cell.textLabel {
                         if let cellTitleText = cellTitleLabel.text {
-                            // Notify EditProfileViewController to present the tappedTableCell
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "tableViewCellTapped"), object: cellTitleText)
+                            
+                            if let currentCell = cellForRow(at: indexPath) {
+                                if let currentCellTextLabel  = currentCell.textLabel {
+                                    if let currentCellText = currentCellTextLabel.text {
+                                        let object = [cellTitleText, currentCellText]
+                                        // Notify EditProfileViewController to present the tappedTableCell
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "tableViewCellTapped"), object: object)
+                                    }
+                                }
+                            }
+                            
                         }
                     }
                 }

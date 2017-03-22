@@ -46,6 +46,7 @@ class NewMatchesTableViewCell: UITableViewCell {
             super.init(frame: CGRect())
             
             profileImageView.clipsToBounds = true
+            profileImageView.backgroundColor = Constants.Colors.necter.backgroundGray
             
             nameLabel.textAlignment = .center
             
@@ -159,9 +160,6 @@ class NewMatchesTableViewCell: UITableViewCell {
         layoutIfNeeded()
     }
     
-    func setVC(vc: OldMessagesViewController) {
-    }
-    
     func filterBy(type: String) {
     }
     
@@ -196,7 +194,7 @@ class NewMatchesTableViewCell: UITableViewCell {
         
         setNeedsUpdateConstraints()
     }
-    
+
     func goToThread(_ gesture: UIGestureRecognizer) {
         if let messagesVC = parentVC as? MessagesViewController {
             if let view = gesture.view {

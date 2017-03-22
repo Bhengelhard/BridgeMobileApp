@@ -49,10 +49,12 @@ class EditProfileViewController: UIViewController {
     
     func tableViewCellTapped(_ notification: Notification) {
         print("Table View Cell Tapped responding")
-        print(notification.object)
         
-        if let cellTitleText = notification.object as? String {
-            let editProfileInfoVC = EditProfileInfoViewController(infoTitle: cellTitleText)
+        if let cellObject = notification.object as? [String] {
+            let infoTitle = cellObject[0]
+            let value = cellObject[1]
+            let editProfileInfoVC = EditProfileInfoViewController(infoTitle: infoTitle, value: value)
+    
             present(editProfileInfoVC, animated: true, completion: nil)
         }
         

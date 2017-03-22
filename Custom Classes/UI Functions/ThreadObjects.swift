@@ -20,37 +20,20 @@ class ThreadObjects {
             let leftIcon = #imageLiteral(resourceName: "Back_Button")
             leftButton.setImage(leftIcon, for: .normal)
             
-            let titleImage = #imageLiteral(resourceName: "Profile_Navbar_Active")
-            //titleImageView.image = titleImage
-            setTitleImage(image: titleImage)
-            //navItem.titleView = titleImageView
+            let rightIcon = #imageLiteral(resourceName: "More_Button")
+            rightButton.setImage(rightIcon, for: .normal)
+            rightButton.frame.size = CGSize(width: 50, height: 14)
+            
+            setTitleImage(image: #imageLiteral(resourceName: "Background_Gray_Circle"))
             
             // Adding line at the bottom of the navigation bar
-            self.setBackgroundImage(UIImage(), for: .default)
-            self.shadowImage = nil
-            
-            
+            setBackgroundImage(UIImage(), for: .default)
+            shadowImage = nil
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
-    }
-        
-    class NameTableCell: UITableViewCell {
-        
-    }
-    
-    class MessageTableCell: UITableViewCell {
-        
-    }
-    
-    class NotificationTableCell: UITableViewCell {
-        
-    }
-    
-    class Keyboard: CustomKeyboard {
         
     }
 }

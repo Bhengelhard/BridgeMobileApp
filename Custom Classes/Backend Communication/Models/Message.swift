@@ -12,6 +12,7 @@ import Parse
 class Message: NSObject {
     typealias MessageBlock = (Message) -> Void
     typealias MessagesBlock = ([Message]) -> Void
+    typealias MessageCreateBlock = (Message, Bool) -> Void
     
     private let parseMessage: PFObject
     
@@ -142,67 +143,88 @@ class Message: NSObject {
     }
     
     /// Creates a new Message object with the provided parameters and calls the given block on the result.
-    static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String? = nil, user2PictureID: String? = nil, lastSingleMessage: String? = nil, user1HasSeenLastSingleMessage: Bool? = nil, user2HasSeenLastSingleMessage: Bool? = nil, user1HasPosted: Bool? = nil, user2HasPosted: Bool? = nil, withBlock block: MessageBlock? = nil) {
+    static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String? = nil, user2PictureID: String? = nil, lastSingleMessage: String? = nil, user1HasSeenLastSingleMessage: Bool?, user2HasSeenLastSingleMessage: Bool?, user1HasPosted: Bool?, user2HasPosted: Bool?, withBlock block: MessageCreateBlock? = nil) {
+
+        // Checking if the users are already in a message
+        let optionsForIdsInMessage = [[user1ID, user2ID], [user2ID, user1ID]]
+        let query = PFQuery(className: "Messages")
+        query.whereKey("ids_in_message", containedIn: optionsForIdsInMessage)
+        query.getFirstObjectInBackground(block: { (object, error) in
+            // The users are already in a message together
+            if let object = object {
+                let message = Message(parseMessage: object)
+                let isNew = false
+
+                if let block = block {
+                    block(message, isNew)
+                }
+            }
+            // The users are not yet in a message together, so create a new one
+            else {
+                
+                let parseMessage = PFObject(className: "Messages")
+
+                // set Message's ACL
+                let acl = PFACL()
+                acl.getPublicReadAccess = true
+                parseMessage.acl = acl
+                
+                if let user1ID = user1ID, let user2ID = user2ID {
+                    parseMessage["user1_objectId"] = user1ID
+                    parseMessage["user2_objectId"] = user2ID
+                    parseMessage["ids_in_message"] = [user1ID, user2ID]
+                }
+                
+                if let connecterID = connecterID {
+                    parseMessage["bridge_builder"] = connecterID
+                }
+                
+                if let user1Name = user1Name {
+                    parseMessage["user1_name"] = user1Name
+                }
+                
+                if let user2Name = user2Name {
+                    parseMessage["user2_name"] = user2Name
+                }
+                
+                if let user1PictureID = user1PictureID {
+                    parseMessage["user1_picture_objectId"] = user1PictureID
+                }
+                
+                if let user2PictureID = user2PictureID {
+                    parseMessage["user2_picture_objectId"] = user2PictureID
+                }
+                
+                if let lastSingleMessage = lastSingleMessage {
+                    parseMessage["last_single_message"] = lastSingleMessage
+                }
+                
+                if let user1HasSeenLastSingleMessage = user1HasSeenLastSingleMessage {
+                    parseMessage["user1_has_seen_last_single_message"] = user1HasSeenLastSingleMessage
+                }
+                
+                if let user2HasSeenLastSingleMessage = user2HasSeenLastSingleMessage {
+                    parseMessage["user2_has_seen_last_single_message"] = user2HasSeenLastSingleMessage
+                }
+                
+                if let user1HasPosted = user1HasPosted {
+                    parseMessage["user1_has_posted"] = user1HasPosted
+                }
+                
+                if let user2HasPosted = user2HasPosted {
+                    parseMessage["user2_has_posted"] = user2HasPosted
+                }
+                
+                let message = Message(parseMessage: parseMessage)
+                                
+                let isNew = true
+                
+                if let block = block {
+                    block(message, isNew)
+                }
+            }
+        })
         
-        let parseMessage = PFObject(className: "Messages")
-        
-        // set Message's ACL
-        let acl = PFACL()
-        acl.getPublicReadAccess = true
-        parseMessage.acl = acl
-        
-        if let user1ID = user1ID {
-            parseMessage["user1_objectId"] = user1ID
-        }
-        
-        if let user2ID = user2ID {
-            parseMessage["user2_objectId"] = user2ID
-        }
-        
-        if let connecterID = connecterID {
-            parseMessage["bridge_builder"] = connecterID
-        }
-        
-        if let user1Name = user1Name {
-            parseMessage["user1_name"] = user1Name
-        }
-        
-        if let user2Name = user2Name {
-            parseMessage["user2_name"] = user2Name
-        }
-        
-        if let user1PictureID = user1PictureID {
-            parseMessage["user1_picture_objectId"] = user1PictureID
-        }
-        
-        if let user2PictureID = user2PictureID {
-            parseMessage["user2_picture_objectId"] = user2PictureID
-        }
-        
-        if let lastSingleMessage = lastSingleMessage {
-            parseMessage["last_single_message"] = lastSingleMessage
-        }
-        
-        if let user1HasSeenLastSingleMessage = user1HasSeenLastSingleMessage {
-            parseMessage["user1_has_seen_last_single_message"] = user1HasSeenLastSingleMessage
-        }
-        
-        if let user2HasSeenLastSingleMessage = user2HasSeenLastSingleMessage {
-            parseMessage["user2_has_seen_last_single_message"] = user2HasSeenLastSingleMessage
-        }
-        
-        if let user1HasPosted = user1HasPosted {
-            parseMessage["user1_has_posted"] = user1HasPosted
-        }
-        
-        if let user2HasPosted = user2HasPosted {
-            parseMessage["user2_has_posted"] = user2HasPosted
-        }
-        
-        let message = Message(parseMessage: parseMessage)
-        if let block = block {
-            block(message)
-        }
     }
     
     /// Gets the Message object with the provided objectId and calls the given block on

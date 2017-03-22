@@ -19,6 +19,8 @@ class PopupView: UIView {
     var user2Image: UIImage?
     let messageButton = PopupViewObjects.MessageButton()
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
+    var user1Name: String?
+    var user2Name: String?
     
     // MARK: - Init
     init(user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
@@ -30,16 +32,16 @@ class PopupView: UIView {
         
         self.user1Image = user1Image
         self.user2Image = user2Image
-        
+                
         super.init(frame: CGRect())
         
         if user1Image == nil {
             User.get(withID: user1Id) { (user) in
+                self.user1Name = user.name
                 user.getMainPicture { (picture) in
                     picture.getImage { (image) in
                         self.user1Image = image
                         self.user1Hexagon.setBackgroundImage(image: image)
-
                     }
                 }
             }
@@ -50,7 +52,7 @@ class PopupView: UIView {
             
             User.get(withID: user2Id) { (user) in
                 print("user2 user retrived")
-                print(user.name)
+                self.user2Name = user.name
                 
                 user.getPicture(atIndex: 0, withBlock: { (picture) in
                     picture.getImage(withBlock: { (image) in
@@ -154,7 +156,12 @@ class PopupView: UIView {
     
     // Create Direct Message with both of the users in the message
     func messageButtonTapped (_ sender: UIButton) {
+        //displayReasonForConnection()
+        let reasonForConnectionView = ReasonForConnection(user1Name: user1Name, user2Name: user2Name)
+        addSubview(reasonForConnectionView)
+        reasonForConnectionView.autoPinEdgesToSuperviewEdges(with: .init(top: 80, left: 40, bottom: 280, right: 40))
         print("messageButtonTapped")
+
     }
     
     // MARK: - Functions

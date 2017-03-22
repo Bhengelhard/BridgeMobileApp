@@ -29,6 +29,7 @@ class ThreadViewController: UIViewController {
         view.backgroundColor = .white
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
+        layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
     }
     
     override func loadView() {
@@ -66,8 +67,8 @@ class ThreadViewController: UIViewController {
         threadBackend.updateHasSeenLastSingleMessage(messageID: messageID)
     }
     
+
     // MARK: Targets
-    
     func backButtonTapped(_ sender: UIButton) {
         // reload messages table
         if let messagesBackend = messagesBackend, let messagesTableView = messagesTableView {
@@ -81,6 +82,39 @@ class ThreadViewController: UIViewController {
         
         dismiss(animated: false, completion: nil)
     }
+    
+    func moreButtonTapped(_ sender: UIButton) {
+        
+        let moreOptions = MoreOptions()
+        moreOptions.displayMoreAlertController(vc: self)
+
+    }
+    
+//    func areTheyFriends() -> Bool {
+//        User.getCurrent { (user) in
+//            if let friendlist = user.friendList {
+//                Message.get(withID: self.messagesVC.messageID!, withBlock: { (message) in
+//                    message.getNonCurrentUser(withBlock: { (otherUser) in
+//                        if let otherUserID = otherUser.id {
+//                            if friendlist.contains(otherUserID) {
+//                                print("Users are already friends")
+//                                let followAction = UIAlertAction(title: "Unfollow", style: .destructive) { (alert) in
+//                                    print("follow")
+//                                }
+//                                addMoreMenu.addAction(followAction)
+//                                
+//                            } else {
+//                                let followAction = UIAlertAction(title: "Follow", style: .default) { (alert) in
+//                                    print("follow")
+//                                }
+//                                addMoreMenu.addAction(followAction)
+//                            }
+//                        }
+//                    })
+//                })
+//            }
+//        }
+//    }
     
     func showOtherUserProfile(_ gesture: UIGestureRecognizer) {
         if let messageID = messagesVC.messageID {
@@ -188,6 +222,12 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             // update message's snapshot and info about user has sent and user has seen last single message
             threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: {
                 // BOTH HAVE POSTED FOR FIRST TIME
+                
+                // Send Push notification to connecter to let them know the conversation has begun
+                
+                // Add user's to eachother's friendlists
+                
+                // Show notification that user's are now friends and can introduce eachother if they want
             })
             
             // FIXME: Add push notification to other user

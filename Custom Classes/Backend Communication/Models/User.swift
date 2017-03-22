@@ -57,10 +57,14 @@ class User: NSObject {
     /// The gender of the User
     var gender: Gender?
     
+    /// The User's birthday on Facebook
+    var fbBirthday: Date?
+
     var displayGender: Bool?
     
     /// The User's birthday
     var birthday: Date?
+
     
     /// The age of the User
     var age: Int? {
@@ -92,6 +96,7 @@ class User: NSObject {
     
     var displaySchool: Bool?
     
+    /// The relationship status of the User
     var relationshipStatus: RelationshipStatus?
     
     var displayRelationshipStatus: Bool?
@@ -279,8 +284,6 @@ class User: NSObject {
                     }
                 }
             }
-        } else {
-            print("picture ID's were not retrieved")
         }
     }
     

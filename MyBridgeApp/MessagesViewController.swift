@@ -17,6 +17,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     let transitionManager = TransitionManager()
     let messagesBackend = MessagesBackend()
     let newMatchesTableViewCell = NewMatchesTableViewCell()
+    var messageSelectedID = ""
     
     var newMatchSelector: Selector?
     
@@ -88,6 +89,20 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//<<<<<<< HEAD
+//        let threadVC = ThreadViewController()
+//        if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row - 1] {
+//            //threadVC.setMessageID(messageID: messageID)
+//            
+//            self.messageSelectedID = messageID
+//            
+//            tableView.deselectRow(at: indexPath, animated: false) // deselect the row
+//            performSegue(withIdentifier: "showThread", sender: self)
+//            
+////            present(threadVC, animated: true) {
+////                
+////            }
+//=======
         if indexPath.section == 1 {
             if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
                 goToThread(messageID: messageID)
@@ -132,13 +147,17 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     // MARK: - Navigation
-    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //        let vc = segue.destination
-    //        let mirror = Mirror(reflecting: vc)
-    //        if mirror.subjectType == LoginViewController.self {
-    //            self.transitionManager.animationDirection = "Bottom"
-    //        }
-    //        //vc.transitioningDelegate = self.transitionManager
-    //    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination
+        let mirror = Mirror(reflecting: vc)
+        if mirror.subjectType == ThreadViewController.self {
+            if let threadVC = vc as? ThreadViewController {
+                threadVC.setMessageID(messageID: messageSelectedID)
+            }
+            
+            self.transitionManager.animationDirection = "Right"
+        }
+        //vc.transitioningDelegate = self.transitionManager
+    }
 
 }

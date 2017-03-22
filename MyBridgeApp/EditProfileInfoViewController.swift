@@ -16,8 +16,8 @@ class EditProfileInfoViewController: UIViewController {
     
     var didSetupConstraints = false
     
-    init(infoTitle: String) {
-        self.layout = EditProfileInfoLayout(infoTitle: infoTitle)
+    init(infoTitle: String, value: String) {
+        self.layout = EditProfileInfoLayout(infoTitle: infoTitle, value: value)
         super.init(nibName: nil, bundle: nil)
         
     }
@@ -49,6 +49,15 @@ class EditProfileInfoViewController: UIViewController {
     
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
+        
+        let valueIndexPath = IndexPath(row: 1, section: 0)
+        if let valueCell = layout.table.cellForRow(at: valueIndexPath) as? EditProfileInfoObjects.OptionCell {
+            let editProfileInfoBackend = EditProfileInfoBackend()
+            editProfileInfoBackend.setSelected(title: valueCell.infoTitle, isSelected: valueCell.isSelected)
+        }
+        
+        
+        
         dismiss(animated: true, completion: nil)
     }
 

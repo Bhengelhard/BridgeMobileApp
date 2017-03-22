@@ -42,7 +42,6 @@ class EditProfileLayout {
             EditProfileLogic.setGender(label: table.genderTableCell.textLabel!)
             EditProfileLogic.setRelationshipStatus(label: table.relationshipStatusTableCell.textLabel!)
             
-            
             let editProfileBackend = EditProfileBackend()
             editProfileBackend.setPictures { (pictures) in
                 for i in 0..<min(6, pictures.count) {
