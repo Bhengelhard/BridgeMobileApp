@@ -144,8 +144,7 @@ class Message: NSObject {
     
     /// Creates a new Message object with the provided parameters and calls the given block on the result.
     static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String? = nil, user2PictureID: String? = nil, lastSingleMessage: String? = nil, user1HasSeenLastSingleMessage: Bool?, user2HasSeenLastSingleMessage: Bool?, user1HasPosted: Bool?, user2HasPosted: Bool?, withBlock block: MessageCreateBlock? = nil) {
-        
-        
+
         // Checking if the users are already in a message
         let optionsForIdsInMessage = [[user1ID, user2ID], [user2ID, user1ID]]
         let query = PFQuery(className: "Messages")

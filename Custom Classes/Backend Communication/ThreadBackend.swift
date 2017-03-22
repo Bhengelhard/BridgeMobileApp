@@ -36,10 +36,19 @@ class ThreadBackend {
     
     
     
-    func setSenderInfo(collectionView: UICollectionView, withBlock block: @escaping (String?, String?) -> Void) {
+    func setSenderInfo(withBlock block: @escaping (String?, String?) -> Void) {
         User.getCurrent { (user) in
             block(user.id, user.name)
-            collectionView.reloadData()
+        }
+    }
+    
+    func setOtherInfo(messageID: String?, withBlock block: @escaping (String?, String?) -> Void) {
+        if let messageID = messageID {
+            Message.get(withID: messageID) { (message) in
+                message.getNonCurrentUser { (user) in
+                    block(user.id, user.name)
+                }
+            }
         }
     }
     

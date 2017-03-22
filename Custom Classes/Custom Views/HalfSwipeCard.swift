@@ -28,6 +28,11 @@ class HalfSwipeCard: UIView {
     func initialize(name: String) {
         self.layer.masksToBounds = true
         self.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        
+        photoView.contentMode = .scaleAspectFill
+        photoView.clipsToBounds = true
+        
+        photoView.image = nil
     
         layoutHalfCard(name: name)
 

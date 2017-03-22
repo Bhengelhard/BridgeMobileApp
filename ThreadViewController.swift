@@ -19,7 +19,6 @@ class ThreadViewController: UIViewController {
     var messagesBackend: MessagesBackend?
     var messagesTableView: UITableView?
     var newMatchesTableViewCell: NewMatchesTableViewCell?
-    var gestureRecognizer: UIGestureRecognizer?
     
     var didSetupConstraints = false
     
@@ -71,15 +70,16 @@ class ThreadViewController: UIViewController {
 
     // MARK: Targets
     func backButtonTapped(_ sender: UIButton) {
+        // reload messages table
         if let messagesBackend = messagesBackend, let messagesTableView = messagesTableView {
-            print("reloading messages table")
             messagesBackend.reloadMessagesTable(tableView: messagesTableView)
-            
-            if let newMatchesTableViewCell = newMatchesTableViewCell, let gestureRecognizer = gestureRecognizer {
-                print("loading new matches")
-                messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell, gestureRecognizer: gestureRecognizer)
-            }
         }
+        
+        // reload new matches view
+        if let messagesBackend = messagesBackend, let newMatchesTableViewCell = newMatchesTableViewCell {
+            messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
+        }
+        
         dismiss(animated: false, completion: nil)
     }
     
@@ -164,7 +164,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID)
             
             // set id and name of current user
-            threadBackend.setSenderInfo(collectionView: collectionView) { (id, name) in
+            threadBackend.setSenderInfo { (id, name) in
                 if let id = id {
                     self.senderId = id
                 }

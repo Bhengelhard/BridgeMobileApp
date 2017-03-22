@@ -284,8 +284,6 @@ class User: NSObject {
                     }
                 }
             }
-        } else {
-            print("picture ID's were not retrieved")
         }
     }
     

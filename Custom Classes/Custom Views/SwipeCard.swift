@@ -38,7 +38,7 @@ class SwipeCard: UIView {
     func initialize(bridgePairing: BridgePairing) {
         self.bridgePairing = bridgePairing
         
-        let swipCardCornerRadius: CGFloat = 12//13.379
+        let swipCardCornerRadius: CGFloat = 12
         self.layer.cornerRadius = swipCardCornerRadius
         
         topHalf = HalfSwipeCard()

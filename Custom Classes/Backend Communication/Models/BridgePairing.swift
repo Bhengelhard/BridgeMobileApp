@@ -126,12 +126,19 @@ class BridgePairing: NSObject {
         
         id = parseBridgePairing.objectId
         
-        if let parseUserObjectId1 = parseBridgePairing["user_objectId1"] as? String {
-            user1ID = parseUserObjectId1
-        }
+//        if let parseUserObjectId1 = parseBridgePairing["user_objectId1"] as? String {
+//            user1ID = parseUserObjectId1
+//        }
+//        
+//        if let parseUserObjectId2 = parseBridgePairing["user_objectId2"] as? String {
+//            user2ID = parseUserObjectId2
+//        }
         
-        if let parseUserObjectId2 = parseBridgePairing["user_objectId2"] as? String {
-            user2ID = parseUserObjectId2
+        if let parseUserObjectIds = parseBridgePairing["user_objectIds"] as? [String] {
+            if parseUserObjectIds.count == 2 {
+                user1ID = parseUserObjectIds[0]
+                user2ID = parseUserObjectIds[1]
+            }
         }
         
         if let parseConnecterObjectId = parseBridgePairing["connecter_objectId"] as? String {
@@ -371,18 +378,18 @@ class BridgePairing: NSObject {
     }
     
     private func getUser(withID id: String, withBlock block: User.UserBlock? = nil) {
-        if let user = userIDsToUsers[id] {
-            if let block = block {
-                block(user)
-            }
-        } else {
+//        if let user = userIDsToUsers[id] {
+//            if let block = block {
+//                block(user)
+//            }
+//        } else {
             User.get(withID: id) { (user) in
                 self.userIDsToUsers[id] = user
                 if let block = block {
                     block(user)
                 }
             }
-        }
+        //}
     }
     
     func getUser1Picture(withBlock block: Picture.PictureBlock? = nil) {

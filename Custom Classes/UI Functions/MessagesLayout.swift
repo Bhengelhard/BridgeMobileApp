@@ -54,6 +54,12 @@ class MessagesLayout {
             messagesTable.autoPinEdge(.top, to: .bottom, of: navBar)
             messagesTable.autoMatch(.width, to: .width, of: view)
             messagesTable.autoPinEdge(toSuperviewEdge: .bottom)
+            
+            let noMessagesLabel = messagesTable.noMessagesLabel
+            noMessagesLabel.text = "You have no messages."
+            messagesTable.addSubview(noMessagesLabel)
+            noMessagesLabel.autoCenterInSuperview()
+            
         }
         
         return true
