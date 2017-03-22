@@ -17,7 +17,7 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
     
     var smallSideLength = CGFloat(0)
     var largeSideLength = CGFloat(0)
-    let margin = CGFloat(10)
+    let margin = CGFloat(7)
     
     let imagePicker = UIImagePickerController()
     let facebookImagePicker = FacebookImagePickerController()
@@ -38,6 +38,9 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
             pictureButton = PictureButton(diameter: pictureButtonDiameter)
             
             super.init(frame: CGRect())
+            
+            self.contentMode = .scaleAspectFill
+            self.clipsToBounds = true
             
             isUserInteractionEnabled = true
             
@@ -124,8 +127,6 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         imagePicker.sourceType = .photoLibrary
         facebookImagePicker.delegate = self
         
-        //autoSetDimensions(to: CGSize(width: DisplayUtility.screenWidth, height: DisplayUtility.screenWidth))
-        
         smallSideLength = (frame.width - 4*margin)/3
         largeSideLength = 2*smallSideLength + margin
         
@@ -191,28 +192,6 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
                 containerView.addSubview(pictureBox)
                 let edgeInsets = UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
                 pictureBox.autoPinEdgesToSuperviewEdges(with: edgeInsets)
-                
-//                
-//                // layout picture box
-//                if i == 0 {
-//                    pictureBox.autoPinEdge(toSuperviewEdge: .top, withInset: margin)
-//                    pictureBox.autoPinEdge(toSuperviewEdge: .leading, withInset: margin)
-//                } else if i == 1 {
-//                    pictureBox.autoAlignAxis(.firstBaseline, toSameAxisOf: pictureBoxes[0])
-//                    pictureBox.autoPinEdge(toSuperviewEdge: .trailing, withInset: margin)
-//                } else if i == 2 {
-//                    pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[0])
-//                    pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[1])
-//                } else if i == 3 {
-//                    pictureBox.autoPinEdge(toSuperviewEdge: .bottom, withInset: margin)
-//                    pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[2])
-//                } else if i == 4 {
-//                    pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[3])
-//                    pictureBox.autoPinEdge(.trailing, to: .trailing, of: pictureBoxes[0])
-//                } else if i == 5 {
-//                    pictureBox.autoPinEdge(.bottom, to: .bottom, of: pictureBoxes[4])
-//                    pictureBox.autoPinEdge(.leading, to: .leading, of: pictureBoxes[0])
-//                }
             }
             
             shouldUpdateConstraints = false

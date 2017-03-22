@@ -64,17 +64,23 @@ class LoginViewController: UIViewController {
         print("authenticating User")
         
         //Checking if user is already logged in
-        PFUser.current()?.fetchInBackground(block: { (object, error) in
+        PFUser.current()?.fetchInBackground(block: { (currentUser, error) in
             //Updating the user's friends
             let fbFunctions = FacebookFunctions()
             fbFunctions.updateFacebookFriends()
             
-            if (PFUser.current()!.objectId) != nil {
-                print("returning true")
-                self.performSegue(withIdentifier: "showSwipe", sender: self)
-            }
-            else {
-                print("returning false")
+            if let currentUser = currentUser as? PFUser {
+                if currentUser.objectId != nil {
+                    if let hasLoggedIn = currentUser["has_logged_in"] as? Bool {
+                        if hasLoggedIn {
+                            self.performSegue(withIdentifier: "showSwipe", sender: self)
+                        } else {
+                            PFUser.logOutInBackground()
+                        }
+                    } else {
+                        PFUser.logOutInBackground()
+                    }
+                }
             }
         })
     }
