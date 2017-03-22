@@ -62,32 +62,27 @@ class SwipeBackend {
         let localBridgePairings = LocalBridgePairings()
 
         if !top {
+            print("old bottom was nil? \(bottomBridgePairing == nil)")
+            
             topBridgePairing = bottomBridgePairing
             
             // store bridge pairing locally
             if let bridgePairing = topBridgePairing {
                 localBridgePairings.setBridgePairing1ID(bridgePairing.id)
-                localBridgePairings.synchronize()
+            } else {
+                localBridgePairings.setBridgePairing1ID(nil)
             }
+            localBridgePairings.synchronize()
         }
         User.getCurrent { (user) in
             BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true) { (bridgePairings) in
                 if bridgePairings.count > 0 {
-                    let bridgePairing = bridgePairings[0]
-                                        
                     if top {
-                        self.topBridgePairing = bridgePairing
-                        
-                        // store bridge pairing locally
-                        localBridgePairings.setBridgePairing1ID(bridgePairing.id)
+                        print("got top from parse")
                     } else {
-                        self.bottomBridgePairing = bridgePairing
-                        
-                        // store bridge pairing locally
-                        localBridgePairings.setBridgePairing2ID(bridgePairing.id)
+                        print("got bottom from parse")
                     }
-                    
-                    localBridgePairings.synchronize()
+                    let bridgePairing = bridgePairings[0]
                     
                     if let userID = user.id {
                         var shownTo: [String]
@@ -98,16 +93,79 @@ class SwipeBackend {
                             shownTo = [userID]
                         }
                         bridgePairing.shownTo = shownTo
+                        bridgePairing.save()
                     }
                     
-                    bridgePairing.checkedOut = true
-                    
-                    bridgePairing.save()
-                    
-                    swipeCard.initialize(bridgePairing: bridgePairing)
-                    if !top {
-                        swipeCard.addOverlay()
+                    bridgePairing.getUser1 { (user1) in
+                        if let user1PictureIDs = user1.pictureIDs {
+                            if user1PictureIDs.count > 0 { // user1 pic exists
+                                bridgePairing.getUser2 { (user2) in
+                                    if let user2PictureIDs = user2.pictureIDs {
+                                        if user2PictureIDs.count > 0 { // user2 pic exists
+                                            if top {
+                                                self.topBridgePairing = bridgePairing
+                                                
+                                                // store bridge pairing locally
+                                                localBridgePairings.setBridgePairing1ID(bridgePairing.id)
+                                            } else {
+                                                self.bottomBridgePairing = bridgePairing
+                                                
+                                                // store bridge pairing locally
+                                                localBridgePairings.setBridgePairing2ID(bridgePairing.id)
+                                            }
+                                            
+                                            localBridgePairings.synchronize()
+                                            
+                                            bridgePairing.checkedOut = true
+                                            
+                                            bridgePairing.save()
+                                            
+                                            swipeCard.alpha = 1
+                                            
+                                            swipeCard.initialize(bridgePairing: bridgePairing)
+                                            if !top {
+                                                swipeCard.addOverlay()
+                                            }
+                                        } else {
+                                            self.getNextBridgePairing(swipeCard: swipeCard, top: top, completion: completion)
+                                        }
+                                    } else {
+                                        self.getNextBridgePairing(swipeCard: swipeCard, top: top, completion: completion)
+                                    }
+                                }
+                            } else {
+                                self.getNextBridgePairing(swipeCard: swipeCard, top: top, completion: completion)
+                            }
+                        } else {
+                            self.getNextBridgePairing(swipeCard: swipeCard, top: top, completion: completion)
+                        }
                     }
+                    
+                    
+                } else { // no more bridge pairings
+                    swipeCard.alpha = 0
+                    
+                    if top {
+                        print("did not get top from parse")
+                    } else {
+                        print("did not get bottom from parse")
+                    }
+                    
+                    if top {
+                        self.topBridgePairing = nil
+                        
+                        // store bridge pairing locally
+                        localBridgePairings.setBridgePairing1ID(nil)
+                    } else {
+                        self.bottomBridgePairing = nil
+                        
+                        // store bridge pairing locally
+                        localBridgePairings.setBridgePairing2ID(nil)
+                    }
+                    
+                    localBridgePairings.synchronize()
+                    
+                    // NO MORE SWIPE CARDS
                 }
                 if let completion = completion {
                     completion()
@@ -135,7 +193,7 @@ class SwipeBackend {
                 }
             }
         } else {
-            print("not stored locally")
+            print("top not stored locally")
             getNextBridgePairing(swipeCard: topSwipeCard, top: true, completion: completion)
         }
     }
@@ -150,6 +208,7 @@ class SwipeBackend {
                 bottomSwipeCard.initialize(bridgePairing: bridgePairing)
             }
         } else {
+            print("bottom not stored locally")
             getNextBridgePairing(swipeCard: bottomSwipeCard, top: false)
         }
     }

@@ -213,6 +213,19 @@ class FBLogin {
                         }
                         
                     } else {
+                        
+                        if let hasLoggedIn = user["has_logged_in"] as? Bool {
+                            if !hasLoggedIn {
+                                fbFunctions.getProfilePictures()
+                                user["has_logged_in"] = true
+                                user.saveInBackground()
+                            }
+                        } else {
+                            fbFunctions.getProfilePictures()
+                            user["has_logged_in"] = true
+                            user.saveInBackground()
+                        }
+                        
                         //spinner
                         //update user and friends
                         //use while access token is nil instead of delay

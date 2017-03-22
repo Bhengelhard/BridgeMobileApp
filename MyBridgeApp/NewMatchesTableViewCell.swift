@@ -124,7 +124,7 @@ class NewMatchesTableViewCell: UITableViewCell {
                 
                 // add and layout new match
                 scrollView.addSubview(newMatchView)
-                newMatchView.autoMatch(.height, to: .height, of: scrollView, withMultiplier: 0.9)
+                newMatchView.autoMatch(.height, to: .height, of: scrollView, withMultiplier: 0.8)
                 newMatchView.autoMatch(.width, to: .height, of: newMatchView, withMultiplier: 0.75)
                 newMatchView.autoAlignAxis(toSuperviewAxis: .horizontal)
                 newMatchView.autoPinEdge(.left, to: .right, of: marginView)
@@ -183,7 +183,6 @@ class NewMatchesTableViewCell: UITableViewCell {
         newMatchView.addGestureRecognizer(newMatchGR)
         
         message.getNonCurrentUser { (user) in
-            print(user.name!, newMatchView.gestureRecognizers!)
             user.getMainPicture { (picture) in
                 picture.getImage { (image) in
                     newMatchView.profileImageView.image = image

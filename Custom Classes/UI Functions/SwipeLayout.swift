@@ -127,8 +127,8 @@ class SwipeLayout {
         bottomSwipeCard = oldTopSwipeCard
         bottomSwipeCardHorizontalConstraint = oldTopSwipeCardHorizontalConstraint
         
+        bottomSwipeCard.alpha = 0
         if let constraint = bottomSwipeCardHorizontalConstraint {
-            //constraint.constant = view.frame.width/2 - bottomSwipeCard.frame.width/2
             constraint.constant = 0
         }
         

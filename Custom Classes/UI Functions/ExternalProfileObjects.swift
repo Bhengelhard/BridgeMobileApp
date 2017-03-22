@@ -78,6 +78,8 @@ class ExternalProfileObjects {
             
             view.addSubview(imageView)
             imageView.autoPinEdgesToSuperviewEdges()
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
             imageView.image = image
         }
         

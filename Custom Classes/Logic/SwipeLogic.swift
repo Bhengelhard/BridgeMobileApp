@@ -156,7 +156,7 @@ class SwipeLogic {
                     layout.updateTopSwipeCardHorizontalConstraint(fromCenter: view.frame.width/2 + swipeCard.frame.width/2)
                     view.layoutIfNeeded()
                     if let swipeRightView = swipeRightView {
-                        //swipeRightView.alpha = 1
+                        swipeRightView.alpha = 1
                     }
                 }, completion: { (success) in
                     didSwipe(true)

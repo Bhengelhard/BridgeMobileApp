@@ -130,7 +130,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID)
             
             // set id and name of current user
-            threadBackend.setSenderInfo(collectionView: collectionView) { (id, name) in
+            threadBackend.setSenderInfo { (id, name) in
                 if let id = id {
                     self.senderId = id
                 }

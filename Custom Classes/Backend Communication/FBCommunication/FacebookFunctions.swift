@@ -66,6 +66,12 @@ class FacebookFunctions {
                     }
                 }
             }
+            
+            PFUser.current()?["pictures"] = []
+            PFUser.current()?.saveInBackground()
+            
+            self.addPicturesToCurrentUser(from: imageFiles, soFar: [], startingWithIndex: 0)
+            
             PFUser.current()?["profile_pictures"] = imageFiles
             PFUser.current()?.saveInBackground(block: { (success, error) in
                 if error != nil {
@@ -88,6 +94,32 @@ class FacebookFunctions {
         })
         
     }
+    
+    private func addPicturesToCurrentUser(from imageFiles: [PFFile], soFar: [String], startingWithIndex index: Int) {
+        if index >= imageFiles.count {
+            PFUser.current()?["pictures"] = soFar
+            PFUser.current()?.saveInBackground()
+        } else {
+            let imageFile = imageFiles[index]
+            imageFile.getDataInBackground { (data, error) in
+                if let error = error {
+                    print("error getting data for image - \(error)")
+                } else if let data = data {
+                    let image = UIImage(data: data)
+                    Picture.create(image: image, croppedImage: nil, cropFrame: nil) { (picture) in
+                        picture.save { (picture) in
+                            if let pictureID = picture.id {
+                                var newSoFar = soFar
+                                newSoFar.append(pictureID)
+                                self.addPicturesToCurrentUser(from: imageFiles, soFar: newSoFar, startingWithIndex: index+1)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     
     // MARK: - Updating User's Friends
 
