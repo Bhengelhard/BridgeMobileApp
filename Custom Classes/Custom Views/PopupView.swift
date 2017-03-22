@@ -19,9 +19,10 @@ class PopupView: UIView {
     var user2Image: UIImage?
     let messageButton = PopupViewObjects.MessageButton()
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
+    let vc: UIViewController
     
     // MARK: - Init
-    init(user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
+    init(user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?, vc: UIViewController) {
         self.title = PopupViewObjects.Title(titleImage: titleImage)
         self.text = PopupViewObjects.Text(text: textString)
         
@@ -30,6 +31,8 @@ class PopupView: UIView {
         
         self.user1Image = user1Image
         self.user2Image = user2Image
+        
+        self.vc = vc
         
         super.init(frame: CGRect())
         

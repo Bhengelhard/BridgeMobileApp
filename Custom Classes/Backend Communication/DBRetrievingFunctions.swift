@@ -64,7 +64,7 @@ class DBRetrievingFunctions {
                         connecterName = name
                     }
                     
-                    let connectionsConversedPopup = PopupView(user1Id: currentUserObjectId, user2Id: otherUserObjectId, textString: "\(connecterName) nected you with \(otherUserName)! Get the conversation started!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
+                    let connectionsConversedPopup = PopupView(user1Id: currentUserObjectId, user2Id: otherUserObjectId, textString: "\(connecterName) nected you with \(otherUserName)! Get the conversation started!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil, vc: vc)
                     vc.view.addSubview(connectionsConversedPopup)
                     connectionsConversedPopup.autoPinEdgesToSuperviewEdges()
                     
@@ -104,7 +104,7 @@ class DBRetrievingFunctions {
                             print(user2Name)
                             print(user2ObjectId)
                             
-                            let connectionsConversedPopup = PopupView(user1Id: user1ObjectId, user2Id: user2ObjectId, textString: "\(user1Name) and \(user2Name) conversed!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: nil, user2Image: nil)
+                            let connectionsConversedPopup = PopupView(user1Id: user1ObjectId, user2Id: user2ObjectId, textString: "\(user1Name) and \(user2Name) conversed!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: nil, user2Image: nil, vc: vc)
                             vc.view.addSubview(connectionsConversedPopup)
                             connectionsConversedPopup.autoPinEdgesToSuperviewEdges()
                             

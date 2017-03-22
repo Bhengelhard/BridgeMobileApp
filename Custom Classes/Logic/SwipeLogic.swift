@@ -139,7 +139,7 @@ class SwipeLogic {
                 if let user1ID = swipeCard.bridgePairing?.user1ID {
                     if let user2ID = swipeCard.bridgePairing?.user2ID {
                         // Initialize and display swipeRightView
-                        swipeRightView = PopupView(user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
+                        swipeRightView = PopupView(user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image, vc: vc)
                         if let swipeRightView = swipeRightView {
                             swipeRightView.alpha = 0
                             vc.view.addSubview(swipeRightView)
