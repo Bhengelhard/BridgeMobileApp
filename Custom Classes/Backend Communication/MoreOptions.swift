@@ -57,6 +57,7 @@ class MoreOptions {
     func follow() {
         // Code that adds otherUser to currentUser's friendlist after making sure they have not been blocked
         
+        
         let firstName = "test"//DisplayUtility.firstNameLastNameInitial(name: userName)
         
         let alert = UIAlertController(title: "You followed \(firstName)", message: "You can now 'nect \(firstName) with your friends.", preferredStyle: UIAlertControllerStyle.alert)
