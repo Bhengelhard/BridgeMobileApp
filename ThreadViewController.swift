@@ -185,8 +185,6 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: Date) {
         
-        print("pressed send")
-        
         if let jsqMessage = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
             threadBackend.jsqMessages.append(jsqMessage)
             
@@ -197,16 +195,12 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             }
             print("jsqMessage")
             
-            // update message's snapshot and info about user has sent and user has seen last single message
-            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: { 
-                
-                
-            })
+            var otherUserID: String?
             
             if let id = messageID {
                 Message.get(withID: id, withBlock: { (message) in
                     // Getting information for push notification
-                    var otherUserID: String?
+                    
                     if senderId == message.user1ID {
                         otherUserID = message.user2ID
                     } else {
@@ -214,13 +208,25 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                     }
                     
                     // Push notification to other user
-                    let pfCloudFunctions = PFCloudFunctions()
-                    pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
+                    PFCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
                     
                     print("sent the push notification")
                     
                 })
             }
+            
+            // update message's snapshot and info about user has sent and user has seen last single message
+            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: { 
+                if let userObjectId2 = otherUserID {
+                    PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1":senderId, "userObjectId2": userObjectId2])
+                    
+                    SingleMessage.create(text: "You both conversed and can now NECT eachother!", senderID: "", senderName: "", messageID: self.messageID)
+                    
+                    print("added introduced users to eachothers friend lists")
+                }
+            })
+            
+            
             
             
             

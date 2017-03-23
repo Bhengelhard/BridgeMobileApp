@@ -88,7 +88,7 @@ class PFCloudFunctions {
     }
     
     //This function adds the users to eachother's friend lists
-    func addIntroducedUsersToEachothersFriendLists(parameters: [AnyHashable: Any]?) {
+    static func addIntroducedUsersToEachothersFriendLists(parameters: [AnyHashable: Any]?) {
         PFCloud.callFunction(inBackground: "addIntroducedUsersToEachothersFriendLists", withParameters: parameters, block: { (response: Any?, error: Error?) in
             if error == nil {
                 if let response = response as? String {
@@ -109,7 +109,7 @@ class PFCloudFunctions {
         })
     }
     
-    func pushNotification(parameters: [AnyHashable: Any]?) {
+    static func pushNotification(parameters: [AnyHashable: Any]?) {
         print("push notification called")
         PFCloud.callFunction(inBackground: "pushNotification", withParameters: parameters, block: {
             (response: Any?, error: Error?) in

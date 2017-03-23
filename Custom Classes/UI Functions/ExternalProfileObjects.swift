@@ -186,4 +186,26 @@ class ExternalProfileObjects {
         }
     }
     
+    /// More Button for adding, blocking, and reporting
+    class MoreButton: UIButton {
+        
+        init() {
+            super.init(frame: CGRect())
+            
+            let rightIcon = #imageLiteral(resourceName: "More_Button")
+            self.setImage(rightIcon, for: .normal)
+            self.frame.size = CGSize(width: 50, height: 14)
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        func tapped(_ sender: UIButton) {
+            
+        }
+        
+    }
+    
 }
