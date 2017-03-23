@@ -141,10 +141,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = mainPageViewController
                 
+                // FIXME: Push notification directly to thread commented out because myProfileVC currently shows up blank when this is done
                 //Scroll to MessagesVC
                 //mainPageViewController.setViewControllers([arrayOfVCs[2]], direction: .forward, animated: true, completion: nil)
                 
-                // Present SingleMessageViewController
+                // Present ThreadViewController
                 //let threadVC = ThreadViewController()
                 //threadVC.setMessageID(messageID: messageId)
                 //arrayOfVCs[2].present(threadVC, animated: true, completion: nil)
