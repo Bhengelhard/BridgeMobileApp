@@ -195,36 +195,51 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             }
             print("jsqMessage")
             
-            var otherUserID: String?
+            
             
             if let id = messageID {
                 Message.get(withID: id, withBlock: { (message) in
                     // Getting information for push notification
+                    var otherUserID: String?
+                    var otherUserName: String?
+                    var connecterID = message.connecterID
                     
                     if senderId == message.user1ID {
                         otherUserID = message.user2ID
+                        otherUserName = message.user2Name
                     } else {
                         otherUserID = message.user1ID
+                        otherUserName = message.user1Name
                     }
+                    
                     
                     // Push notification to other user
                     PFCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
                     
                     print("sent the push notification")
                     
+                    // update message's snapshot and info about user has sent and user has seen last single message
+                    self.threadBackend.updateMessageAfterSingleMessageSent(messageID: self.messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: {
+                        if let userObjectId2 = otherUserID {
+                            // Run Cloud function that makes conversed users friends with eachother
+                            PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1":senderId, "userObjectId2": userObjectId2])
+                            
+                            // Send push notification to connecter letting them know they're connections just conversed
+                            if let otherUserName = otherUserName {
+                                PFCloudFunctions.pushNotification(parameters: ["userObjectId": connecterID,"alert":"\(senderDisplayName) and \(otherUserName) have conversed! Way to create a friendship!", "badge": "Increment",  "messageType" : "ConnecterNotification", "messageId": ""])
+                            }
+                            
+                            
+                            SingleMessage.create(text: "You both conversed and can now NECT eachother!", senderID: "", senderName: "", messageID: self.messageID)
+                            
+                            print("added introduced users to eachothers friend lists")
+                        }
+                    })
+                    
                 })
             }
             
-            // update message's snapshot and info about user has sent and user has seen last single message
-            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: { 
-                if let userObjectId2 = otherUserID {
-                    PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1":senderId, "userObjectId2": userObjectId2])
-                    
-                    SingleMessage.create(text: "You both conversed and can now NECT eachother!", senderID: "", senderName: "", messageID: self.messageID)
-                    
-                    print("added introduced users to eachothers friend lists")
-                }
-            })
+            
             
             
             

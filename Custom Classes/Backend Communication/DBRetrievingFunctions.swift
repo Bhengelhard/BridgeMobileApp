@@ -59,12 +59,12 @@ class DBRetrievingFunctions {
                         }
                     }
                     
-                    var connecterName = ""
-                    if let name = result["connecter_name"] as? String {
-                        connecterName = name
-                    }
+                    //var connecterName = ""
+                    //if let name = result["connecter_name"] as? String {
+                    //    connecterName = name
+                    //}
                     
-                    let connectionsConversedPopup = PopupView(user1Id: currentUserObjectId, user2Id: otherUserObjectId, textString: "\(connecterName) nected you with \(otherUserName)! Get the conversation started!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
+                    let connectionsConversedPopup = PopupView(user1Id: currentUserObjectId, user2Id: otherUserObjectId, textString: "\(otherUserName) and \(otherUserName) conversed! Way to create a friendship!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
                     vc.view.addSubview(connectionsConversedPopup)
                     connectionsConversedPopup.autoPinEdgesToSuperviewEdges()
                     
