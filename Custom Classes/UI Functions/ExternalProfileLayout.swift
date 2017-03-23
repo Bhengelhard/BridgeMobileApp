@@ -46,7 +46,7 @@ class ExternalProfileLayout {
             // Set the profilePicturesView with the first picture displayed
             scrollView.addSubview(profilePicturesVC.view)
             profilePicturesVC.view.autoPinEdge(toSuperviewEdge: .left)
-            profilePicturesVC.view.autoPinEdge(toSuperviewEdge: .top, withInset: 20)
+            profilePicturesVC.view.autoPinEdge(toSuperviewEdge: .top)
             profilePicturesVC.view.autoMatch(.width, to: .width, of: view)
             profilePicturesVC.view.autoMatch(.height, to: .width, of: view)
             

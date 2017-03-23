@@ -185,6 +185,8 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: Date) {
         
+        print("pressed send")
+        
         if let jsqMessage = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
             threadBackend.jsqMessages.append(jsqMessage)
             
@@ -192,27 +194,45 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             threadBackend.jsqMessageToSingleMessage(jsqMessage: jsqMessage, messageID: messageID) { (singleMessage) in
                 singleMessage.save()
                 
-                let user1ID = singleMessage.senderID
-                let messageID = singleMessage.messageID
-                let messageText = singleMessage.text
-                let pfCloudFunctions = PFCloudFunctions()
-                pfCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(messageText)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
-                
-                print("push should have happened")
             }
+            print("jsqMessage")
             
             // update message's snapshot and info about user has sent and user has seen last single message
-            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: {
-                // BOTH HAVE POSTED FOR FIRST TIME
+            threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: { 
                 
-                // Send Push notification to connecter to let them know the conversation has begun
                 
-                // Add user's to eachother's friendlists
-                
-                // Show notification that user's are now friends and can introduce eachother if they want
             })
             
-            // FIXME: Add push notification to other user
+            if let id = messageID {
+                Message.get(withID: id, withBlock: { (message) in
+                    // Getting information for push notification
+                    var otherUserID: String?
+                    if senderId == message.user1ID {
+                        otherUserID = message.user2ID
+                    } else {
+                        otherUserID = message.user1ID
+                    }
+                    
+                    // Push notification to other user
+                    let pfCloudFunctions = PFCloudFunctions()
+                    pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
+                    
+                    print("sent the push notification")
+                    
+                })
+            }
+            
+            
+            
+            
+            
+                        // BOTH HAVE POSTED FOR FIRST TIME
+            
+            // Send Push notification to connecter to let them know the conversation has begun
+            
+            // Add user's to eachother's friendlists
+            
+            // Show notification that user's are now friends and can introduce eachother if they want
             
             self.finishSendingMessage(animated: true)
         }

@@ -130,13 +130,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
          else if messageId != nil {
             //Segue to SingleMessageViewController
-            let vc: ThreadViewController = storyboard.instantiateViewController(withIdentifier: "ThreadViewController") as! ThreadViewController
+            let mainPageViewController: MainPageViewController = storyboard.instantiateViewController(withIdentifier: "MainPageViewController") as! MainPageViewController
+            mainPageViewController.setUpArrayofVCs()
+            
+            let arrayOfVCs = mainPageViewController.arrayOfVCs
+            
+            //let vc: ThreadViewController = storyboard.instantiateViewController(withIdentifier: "ThreadViewController") as! ThreadViewController
+            
             // vc.newMessageId = messageId!
-            if application.applicationState == UIApplicationState.inactive {
+            if application.applicationState == UIApplicationState.inactive || application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Inactive but ")
-                self.window?.rootViewController = vc
-            }else if application.applicationState == UIApplicationState.background {
-                print("UIApplicationState.Background")
+                self.window?.rootViewController = mainPageViewController
+                
+                //Scroll to MessagesVC
+                mainPageViewController.setViewControllers([arrayOfVCs[2]], direction: .forward, animated: true, completion: nil)
+                
+                let threadVC = ThreadViewController()
+                threadVC.setMessageID(messageID: messageId)
+                
+                arrayOfVCs[2].present(threadVC, animated: true, completion: nil)
+
+//            }else if application.applicationState == UIApplicationState.background {
+//                print("UIApplicationState.Background")
             }else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
             }

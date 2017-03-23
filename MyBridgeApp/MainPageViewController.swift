@@ -18,6 +18,16 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
         delegate = self
         dataSource = self
         
+        setUpArrayofVCs()
+    
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func setUpArrayofVCs() {
         let sb = storyboard!
         let myProfileViewController = sb.instantiateViewController(withIdentifier: "MyProfileViewController") as! MyProfileViewController
         myProfileViewController.layout.navBar.rightButton.addTarget(self, action: #selector(myProfileRightButtonTapped(_:)), for: .touchUpInside)
@@ -31,16 +41,10 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
         let messagesViewController = sb.instantiateViewController(withIdentifier: "MessagesViewController") as! MessagesViewController
         messagesViewController.layout.navBar.leftButton.addTarget(self, action: #selector(messagesLeftButtonTapped(_:)), for: .touchUpInside)
         arrayOfVCs.append(messagesViewController)
-                
+        
         self.view.backgroundColor = UIColor.white
         
         setViewControllers([arrayOfVCs[1]], direction: .forward, animated: true, completion: nil)
-    
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - PageViewController Functions
