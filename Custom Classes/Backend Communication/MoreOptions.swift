@@ -26,22 +26,22 @@ class MoreOptions {
         //
         //        }
         
-        let followAction = UIAlertAction(title: "Follow", style: .default) { (alert) in
-            self.follow()
+        let followAction = UIAlertAction(title: "ADD FOR NECTING", style: .default) { (alert) in
+            self.add()
         }
         
         // Check if user has blocked the other user
-        let blockAction = UIAlertAction(title: "Block", style: .destructive) { (alert) in
+        let blockAction = UIAlertAction(title: "BLOCK", style: .destructive) { (alert) in
             self.block()
         }
         
         // Check if user has reported the other user
-        let reportAction = UIAlertAction(title: "Report", style: .destructive) { (alert) in
+        let reportAction = UIAlertAction(title: "REPORT", style: .destructive) { (alert) in
             self.report()
         }
         
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in
+        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel) { (alert) in
             addMoreMenu.dismiss(animated: true, completion: nil)
         }
         
@@ -54,7 +54,7 @@ class MoreOptions {
         
     }
     
-    func follow() {
+    func add() {
         // Code that adds otherUser to currentUser's friendlist after making sure they have not been blocked
         
         
@@ -69,7 +69,7 @@ class MoreOptions {
         vc?.present(alert, animated: true, completion: nil)
     }
     
-    func unfollow() {
+    func remove() {
         // Code that removes otherUser from currentUser's friendlist
         
         let firstName = "test"//DisplayUtility.firstNameLastNameInitial(name: userName)
@@ -84,7 +84,7 @@ class MoreOptions {
     }
     
     func block() {
-        // Code that removes current user from otherUser's friendlist
+        // Code that removes both user's from eachother's friendlists and disables messaging between them
         let firstName = "test"//DisplayUtility.firstNameLastNameInitial(name: userName)
         
         let alert = UIAlertController(title: "You blocked \(firstName)", message: "\(firstName) is no longer be able to introduce you.", preferredStyle: UIAlertControllerStyle.alert)
