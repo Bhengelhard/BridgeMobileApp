@@ -203,7 +203,11 @@ class FBLogin {
                                     if success == true {
                                         //self.activityIndicator.stopAnimating()
                                         UIApplication.shared.endIgnoringInteractionEvents()
-                                        //vc.performSegue(withIdentifier: "showSignUp", sender: self)
+                                        
+                                        // Upon Signup, the user should be added to the BridgePairingsTable
+                                        let pfCloudFunctions = PFCloudFunctions()
+                                        pfCloudFunctions.updateBridgePairingsTable(parameters: [:])
+                                        
                                         vc.performSegue(withIdentifier: "showSwipe", sender: self)
                                     } else {
                                         print(error ?? "error")
@@ -258,7 +262,6 @@ class FBLogin {
                                     localData.setHasProvidedAccessCode(true)
                                     localData.synchronize()
                                 }
-                                //vc.performSegue(withIdentifier: "showSignUp", sender: self)
                                 vc.performSegue(withIdentifier: "showSwipe", sender: self)
                             }
                             

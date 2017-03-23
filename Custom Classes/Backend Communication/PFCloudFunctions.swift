@@ -26,7 +26,7 @@ class PFCloudFunctions {
         })
     }
     
-    // updating the Pictures Table to include the current user's photos
+    /// updating the Pictures Table to include the current user's photos
     func scriptToSetUpPicturesTable(parameters: [AnyHashable: Any]?) {
         PFCloud.callFunction(inBackground: "scriptToSetUpPicturesTable", withParameters: parameters, block: {
             (response: Any?, error: Error?) in
@@ -40,7 +40,7 @@ class PFCloudFunctions {
         })
     }
     
-    // updating the bridgePairings Table to include the current user upon signUp
+    /// updating the bridgePairings Table to include the current user upon signUp
     func updateBridgePairingsTable(parameters: [AnyHashable: Any]?) {
         PFCloud.callFunction(inBackground: "updateBridgePairingsTable", withParameters: parameters, block: {
             (response: Any?, error: Error?) in
@@ -54,7 +54,7 @@ class PFCloudFunctions {
         })
     }
     
-    //running app metrics scraper
+    /// running app metrics scraper
     func getMainAppMetrics(parameters: [AnyHashable: Any]?) {
         PFCloud.callFunction(inBackground: "getMainAppMetrics", withParameters: parameters, block: {
             (response: Any?, error: Error?) in
@@ -209,17 +209,20 @@ class PFCloudFunctions {
             }
         })
     }
-    func updateBridgePairingsTableToHaveURLS(parameters: [AnyHashable: Any]?) {
-        PFCloud.callFunction(inBackground: "updateBridgePairingsTableToHaveURLS", withParameters: [:], block: {
+    
+    // Add a user to the currentUser's friendList
+    func addOtherUserToFriendList(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "addOtherUserToFriendList", withParameters: [:], block: {
             (response:Any?, error: Error?) in
             if error == nil {
                 if let response = response as? String {
-                    print("updateBridgePairingsTableToHaveURLS")
+                    print("addOtherUserToFriendList")
                     print(response)
                 }
             }
         })
     }
+    
     func addProfilePicturesBackForUser2(parameters: [AnyHashable: Any]?) {
         PFCloud.callFunction(inBackground: "addProfilePicturesBackForUser2", withParameters: [:], block: {
             (response:Any?, error: Error?) in

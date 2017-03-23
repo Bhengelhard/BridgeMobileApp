@@ -18,13 +18,17 @@ class MoreOptions {
         let addMoreMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         
-        // Check if user follows the other user
+        // Check if user are in eachother's friendlists the other user
         //        if areFriends {
         //
         //        } else {
         //
         //
         //        }
+        // If blocked then add does not appear
+        // If blocked then message disappears
+        // If the currentUser is blocked then they get popup with title "Message Not Sent" and messgae "This person isn't receiveing messages right now." and button "OK"
+        // If the currentUser is the blocker then they get popup with title: "Message Not Sent" and message "Unblock to send messages"
         
         let followAction = UIAlertAction(title: "ADD FOR NECTING", style: .default) { (alert) in
             self.add()
