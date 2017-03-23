@@ -20,9 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.enableLocalDatastore()
         
         let parseConfiguration = ParseClientConfiguration(block: { (ParseMutableClientConfiguration) -> Void in
-            ParseMutableClientConfiguration.applicationId = "mybridgeapp3498735421846jhlkjsdhf23d"
-            ParseMutableClientConfiguration.clientKey = "euchnfbe73723ndn77sdkj3763"
+            ParseMutableClientConfiguration.applicationId = "mybridgeapp230sd80sdfasjhfasjh3j39d893j2129djm4"
+            ParseMutableClientConfiguration.clientKey = "kekdk39ds92j3ls0dk3947kk332"
             ParseMutableClientConfiguration.server = "https://mybridgeapp.herokuapp.com/parse"
+//            ParseMutableClientConfiguration.applicationId = "mybridgeapp3498735421846jhlkjsdhf23d"
+//            ParseMutableClientConfiguration.clientKey = "euchnfbe73723ndn77sdkj3763"
+//            ParseMutableClientConfiguration.server = "https://mybridgeapp.herokuapp.com/parse"
         })
         
         Parse.initialize(with: parseConfiguration)
@@ -127,13 +130,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
          else if messageId != nil {
             //Segue to SingleMessageViewController
-            let vc: ThreadViewController = storyboard.instantiateViewController(withIdentifier: "ThreadViewController") as! ThreadViewController
+            let mainPageViewController: MainPageViewController = storyboard.instantiateViewController(withIdentifier: "MainPageViewController") as! MainPageViewController
+            mainPageViewController.setUpArrayofVCs()
+            
+            let arrayOfVCs = mainPageViewController.arrayOfVCs
+            
+            //let vc: ThreadViewController = storyboard.instantiateViewController(withIdentifier: "ThreadViewController") as! ThreadViewController
+            
             // vc.newMessageId = messageId!
-            if application.applicationState == UIApplicationState.inactive {
+            if application.applicationState == UIApplicationState.inactive || application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Inactive but ")
-                self.window?.rootViewController = vc
-            }else if application.applicationState == UIApplicationState.background {
-                print("UIApplicationState.Background")
+                self.window?.rootViewController = mainPageViewController
+                
+                //Scroll to MessagesVC
+                mainPageViewController.setViewControllers([arrayOfVCs[2]], direction: .forward, animated: true, completion: nil)
+                
+                let threadVC = ThreadViewController()
+                threadVC.setMessageID(messageID: messageId)
+                
+                arrayOfVCs[2].present(threadVC, animated: true, completion: nil)
+
+//            }else if application.applicationState == UIApplicationState.background {
+//                print("UIApplicationState.Background")
             }else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
             }

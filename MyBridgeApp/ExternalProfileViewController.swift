@@ -24,7 +24,12 @@ class ExternalProfileViewController: UIViewController {
         layout.dismissButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
         layout.messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
         
-        let externalProfileBackend = ExternalBackend()
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    // Hide the status bar
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     
     override func loadView() {
@@ -46,6 +51,8 @@ class ExternalProfileViewController: UIViewController {
         let contentSize = CGSize(width: layout.scrollView.frame.width, height: layout.messageButton.frame.maxY + 20)
         layout.scrollView.contentSize = contentSize
     }
+    
+    
     
     // MARK: - Targets
     func dismissButtonTapped(_ sender: UIButton) {
