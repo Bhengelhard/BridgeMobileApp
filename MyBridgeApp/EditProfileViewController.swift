@@ -13,12 +13,15 @@ class EditProfileViewController: UIViewController {
     // MARK: Global Variables
     let layout = EditProfileLayout()
     let transitionManager = TransitionManager()
+    var myProfileVC: MyProfileViewController?
     
     var didSetupConstraints = false
     
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        layout.table.backgroundColor = Constants.Colors.necter.backgroundGray
         
         //Listener for TableViewCell Tapped
         NotificationCenter.default.addObserver(self, selector: #selector(tableViewCellTapped), name: NSNotification.Name(rawValue: "tableViewCellTapped"), object: nil)
@@ -43,6 +46,11 @@ class EditProfileViewController: UIViewController {
     
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
+        if let myProfileVC = myProfileVC {
+            if let image = layout.table.editProfilePicturesCell.pictureBoxes[0].image {
+                myProfileVC.layout.profilePicture.setBackgroundImage(image: image)
+            }
+        }
         layout.table.editProfilePicturesCell.savePictures()
         dismiss(animated: true, completion: nil)
     }

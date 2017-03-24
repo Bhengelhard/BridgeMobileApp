@@ -19,7 +19,7 @@ class MyProfileLayout {
     let name = MyProfileObjects.Name()
     let settingsButton = MyProfileObjects.SettingsButton()
     let friendsImage = MyProfileObjects.FriendsImage()
-    let inviteButton = MyProfileObjects.InviteButton()
+    let inviteButton = ReusableObjects.InviteButton()
     
     // MARK: - Layout
     /// Sets the initial layout constraints

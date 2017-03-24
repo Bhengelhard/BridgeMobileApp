@@ -24,7 +24,7 @@ class DBRetrievingFunctions {
                 print("refresh findObjectsInBackgroundWithBlock error - \(error)")
             }
             else if let results = results {
-                print(results.count)
+                //print(results.count)
             
                 for result in results {
                     
@@ -38,13 +38,13 @@ class DBRetrievingFunctions {
                     
                     
                     var otherUserObjectId = ""
-                    if let user1_objectId = result["user_objectId1"] as? String {
+                    if let user1_objectId = result["user1_objectId"] as? String {
                         if user1_objectId != currentUserObjectId {
                             otherUserNum = "user1"
                             otherUserObjectId = user1_objectId
                         }
                     }
-                    if let user2_objectId = result["user_objectId2"] as? String {
+                    if let user2_objectId = result["user2_objectId"] as? String {
                         if user2_objectId != currentUserObjectId {
                             otherUserNum = "user2"
                             otherUserObjectId = user2_objectId
@@ -88,10 +88,10 @@ class DBRetrievingFunctions {
             if error != nil {
                 print(error ?? "There was an error in DBRetrievingFunctions.queryForConnectionsConversed")
             } else {
-                print("query ran")
+                //print("query ran")
                 
                 if let objects = objects {
-                    print(" objects acquired")
+                    //print(" objects acquired")
                     
                     for object in objects {
                         

@@ -36,6 +36,7 @@ class ThreadViewController: UIViewController {
         view = UIView()
 
         view.setNeedsUpdateConstraints()
+        
     }
     
     
@@ -136,9 +137,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     var messageID: String?
     var incomingBubble: JSQMessagesBubbleImage!
     var outgoingBubble: JSQMessagesBubbleImage!
-    var incomingAvatar: NecterJSQMessageAvatar!
-    var outgoingAvatar: NecterJSQMessageAvatar!
-    
+
     var otherId = String()
     var otherDisplayName = String()
     
@@ -153,7 +152,6 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: Constants.Colors.singleMessages.incoming)
         outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImage(with: Constants.Colors.singleMessages.outgoing)
         
-        automaticallyScrollsToMostRecentMessage = true
         
         // remove attachment button
         inputToolbar.contentView.leftBarButtonItem = nil
@@ -164,7 +162,9 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             collectionView.collectionViewLayout.springinessEnabled = false
             
             // reload collection view
-            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID)
+            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
+                self.scrollToBottom(animated: true)
+            }
             
             // set id and name of current user
             threadBackend.setSenderInfo { (id, name) in
@@ -188,21 +188,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                 
                 collectionView.reloadData()
             }
-            
             //collectionView.backgroundColor = DisplayUtility.gradientColor(size: collectionView.frame.size)
-            incomingAvatar = NecterJSQMessageAvatar(collectionView: collectionView)
-            outgoingAvatar = NecterJSQMessageAvatar(collectionView: collectionView)
-            if let messageID = messageID {
-                Message.get(withID: messageID) { (message) in
-                    message.getNonCurrentUser { (user) in
-                        self.incomingAvatar.setUserID(userID: user.id)
-                    }
-                }
-            }
-            
-            User.getCurrent { (user) in
-                self.outgoingAvatar.setUserID(userID: user.id)
-            }
         }
     }
     
@@ -281,6 +267,15 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             } else { // incoming message
                 cell.textView.textColor = .black
             }
+            
+            if message.senderId == "" {
+                cell.cellBottomLabel.textColor = .black
+                cell.cellBottomLabel.textAlignment = .center
+                cell.messageBubbleImageView.image = nil
+                cell.textView.text = ""
+            }
+            
+            //cell.cellBottomLabel.textAlignment = .center
         }
         return cell;
     }
@@ -296,17 +291,8 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     override func collectionView(_ collectionView: JSQMessagesCollectionView, avatarImageDataForItemAt indexPath: IndexPath) -> JSQMessageAvatarImageDataSource? {
         let message = threadBackend.jsqMessages[indexPath.item]
         
-        if message.senderId == senderId {
-            return outgoingAvatar
-        }
-        if message.senderId == otherId {
-            return incomingAvatar
-        }
-        if message.senderId != "" {
-            print(message.senderId)
-            let avatar = NecterJSQMessageAvatar(collectionView: collectionView)
-            avatar.setUserID(userID: message.senderId)
-            return avatar
+        if let image = threadBackend.avatarImagesDict[message.senderId] {
+            return NecterJSQMessageAvatar(image: image)
         }
         return nil
     }
@@ -316,12 +302,18 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
     }
     
+    
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAt indexPath: IndexPath!) -> NSAttributedString! {
+        
+        // if sender is not in thread, put in label
         let message = threadBackend.jsqMessages[indexPath.item]
         if message.senderId != senderId && message.senderId != otherId && message.senderId != "" {
             if let senderDisplayName = message.senderDisplayName {
-                return NSAttributedString(string: "*\(senderDisplayName) cannot see this thread.")
+                let firstName = DisplayUtility.firstName(name: senderDisplayName)
+                return NSAttributedString(string: "*\(firstName) cannot view this thread.")
             }
+        } else if message.senderId == "" {
+            return NSAttributedString(string: message.text)
         }
         return NSAttributedString()
     }
@@ -334,6 +326,21 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout, heightForCellTopLabelAt indexPath: IndexPath) -> CGFloat {
+        let currentMessage = threadBackend.jsqMessages[indexPath.item]
+        
+        if currentMessage.senderId == "" {
+            return 0.0
+        }
+        
+        // don't display timestamp if less than 3 minutes have elapsed since previous message
+        if indexPath.item > 0 {
+            let previousMessage = threadBackend.jsqMessages[indexPath.item - 1]
+            
+            if currentMessage.date.timeIntervalSince(previousMessage.date) < 180 {
+                return 0.0
+            }
+        }
+        
         return kJSQMessagesCollectionViewCellLabelHeightDefault
     }
     
@@ -341,7 +348,11 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         
         let currentMessage = threadBackend.jsqMessages[indexPath.item]
         
-        if indexPath.item - 1 > 0 {
+        if currentMessage.senderId == "" {
+            return 0.0
+        }
+        
+        if indexPath.item > 0 {
             let previousMessage = threadBackend.jsqMessages[indexPath.item - 1]
             if previousMessage.senderId == currentMessage.senderId {
                 return 0.0
@@ -353,35 +364,23 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout, heightForCellBottomLabelAt indexPath: IndexPath) -> CGFloat {
         let message = threadBackend.jsqMessages[indexPath.item]
-        
         if message.senderId != senderId && message.senderId != otherId && message.senderId != "" {
+            if message.senderDisplayName != nil {
+                return kJSQMessagesCollectionViewCellLabelHeightDefault
+            }
+        } else if message.senderId == "" {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
-        } else {
-            return 0.0
         }
+        return 0.0
     }
-}
-
-class NecterNotificationCollectionViewCell: UICollectionViewCell {
-    
 }
 
 class NecterJSQMessageAvatar: NSObject, JSQMessageAvatarImageDataSource {
     
-    let threadBackend = ThreadBackend()
-    var image = UIImage()
-    let collectionView: UICollectionView
+    let image: UIImage
     
-    init(collectionView: UICollectionView) {
-        self.collectionView = collectionView
-        super.init()
-    }
-    
-    func setUserID(userID: String?) {
-        threadBackend.getUserPicture(userID: userID) { (image) in
-            self.image = image
-            self.collectionView.reloadData()
-        }
+    init(image: UIImage) {
+        self.image = image
     }
     
     /**

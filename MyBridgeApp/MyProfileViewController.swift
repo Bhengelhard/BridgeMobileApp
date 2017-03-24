@@ -46,7 +46,9 @@ class MyProfileViewController: UIViewController {
     
     // Present EditProfileViewController
     func editProfileButtonTapped(_ sender: UIButton) {
-        present(EditProfileViewController(), animated: true, completion: nil)
+        let editProfileVC = EditProfileViewController()
+        editProfileVC.myProfileVC = self
+        present(editProfileVC, animated: true, completion: nil)
     }
     
     // Present SettingsViewController

@@ -12,8 +12,9 @@ import UIKit
 class ThreadBackend {
     
     var jsqMessages = [JSQMessage]()
+    var avatarImagesDict = [String: UIImage]()
     
-    func reloadSingleMessages(collectionView: UICollectionView, messageID: String?) {
+    func reloadSingleMessages(collectionView: UICollectionView, messageID: String?, withBlock block: (() -> Void)? = nil) {
         jsqMessages = [JSQMessage]()
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
@@ -22,19 +23,26 @@ class ThreadBackend {
                         if let jsqMessage = ThreadLogic.singleMessageToJSQMessage(singleMessage: singleMessage) {
                             self.jsqMessages.append(jsqMessage)
                         }
+                        if let senderID = singleMessage.senderID {
+                            User.get(withID: senderID) { (user) in
+                                user.getMainPicture { (picture) in
+                                    picture.getImage { (image) in
+                                        self.avatarImagesDict[senderID] = image
+                                        collectionView.reloadData()
+                                    }
+                                }
+                            }
+                        }
                     }
                     collectionView.reloadData()
                     
-                    // scroll to bottom
-                    if self.jsqMessages.count > 0 {
-                        collectionView.scrollToItem(at: IndexPath(item: self.jsqMessages.count-1, section: 0), at: .bottom, animated: true)
+                    if let block = block {
+                        block()
                     }
                 }
             }
         }
     }
-    
-    
     
     func setSenderInfo(withBlock block: @escaping (String?, String?) -> Void) {
         User.getCurrent { (user) in

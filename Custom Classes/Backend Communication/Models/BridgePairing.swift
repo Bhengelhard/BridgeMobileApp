@@ -126,19 +126,12 @@ class BridgePairing: NSObject {
         
         id = parseBridgePairing.objectId
         
-//        if let parseUserObjectId1 = parseBridgePairing["user_objectId1"] as? String {
-//            user1ID = parseUserObjectId1
-//        }
-//        
-//        if let parseUserObjectId2 = parseBridgePairing["user_objectId2"] as? String {
-//            user2ID = parseUserObjectId2
-//        }
+        if let parseUserObjectId1 = parseBridgePairing["user1_objectId"] as? String {
+            user1ID = parseUserObjectId1
+        }
         
-        if let parseUserObjectIds = parseBridgePairing["user_objectIds"] as? [String] {
-            if parseUserObjectIds.count == 2 {
-                user1ID = parseUserObjectIds[0]
-                user2ID = parseUserObjectIds[1]
-            }
+        if let parseUserObjectId2 = parseBridgePairing["user2_objectId"] as? String {
+            user2ID = parseUserObjectId2
         }
         
         if let parseConnecterObjectId = parseBridgePairing["connecter_objectId"] as? String {
@@ -203,11 +196,11 @@ class BridgePairing: NSObject {
         parseBridgePairing.acl = acl
         
         if let user1ID = user1ID {
-            parseBridgePairing["user_objectId1"] = user1ID
+            parseBridgePairing["user1_objectId"] = user1ID
         }
         
         if let user2ID = user2ID {
-            parseBridgePairing["user_objectId2"] = user2ID
+            parseBridgePairing["user2_objectId"] = user2ID
         }
         
         if let connecterID = connecterID {
@@ -285,9 +278,9 @@ class BridgePairing: NSObject {
     static func getAll(withUser user: User, bridgedOnly: Bool = false, withLimit limit: Int = 10000, withBlock block: BridgePairingsBlock? = nil) {
         if let userID = user.id {
             let subQuery1 = PFQuery(className: "BridgePairings")
-            subQuery1.whereKey("user_objectId1", equalTo: userID)
+            subQuery1.whereKey("user1_objectId", equalTo: userID)
             let subQuery2 = PFQuery(className: "BridgePairings")
-            subQuery2.whereKey("user_objectId2", equalTo: userID)
+            subQuery2.whereKey("user2_objectId", equalTo: userID)
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             if bridgedOnly {
@@ -312,13 +305,16 @@ class BridgePairing: NSObject {
         }
     }
     
-    static func getAllWithFriends(ofUser user: User, notShownOnly: Bool = false, withLimit limit: Int = 10000, notCheckedOutOnly: Bool = false, withBlock block: BridgePairingsBlock? = nil) {
+    static func getAllWithFriends(ofUser user: User, notShownOnly: Bool = false, withLimit limit: Int = 10000, notCheckedOutOnly: Bool = false, exceptFriend1WithID friend1ID: String? = nil, exceptFriend2WithID friend2ID: String? = nil, withBlock block: BridgePairingsBlock? = nil) {
+        
+        print("friend1ID = \(friend1ID == nil ? "nil" : friend1ID!)")
+        print("friend2ID = \(friend2ID == nil ? "nil" : friend2ID!)")
         
         if let userFriendList = user.friendList {
             
             let query = PFQuery(className: "BridgePairings")
-            query.whereKey("user_objectId1", containedIn: userFriendList)
-            query.whereKey("user_objectId2", containedIn: userFriendList)
+            query.whereKey("user1_objectId", containedIn: userFriendList)
+            query.whereKey("user2_objectId", containedIn: userFriendList)
             query.limit = limit
             
             if notShownOnly {
@@ -329,6 +325,14 @@ class BridgePairing: NSObject {
             
             if notCheckedOutOnly {
                 query.whereKey("checked_out", equalTo: false)
+            }
+            
+            if let friend1ID = friend1ID {
+                query.whereKey("user1_objectId", notEqualTo: friend1ID)
+            }
+            
+            if let friend2ID = friend2ID {
+                query.whereKey("user2_objectId", notEqualTo: friend2ID)
             }
             
             query.findObjectsInBackground { (parseBridgePairings, error) in
@@ -428,15 +432,15 @@ class BridgePairing: NSObject {
     /// Saves the BridgePairing object in the background and run the given block on it
     func save(withBlock block: BridgePairingBlock? = nil) {
         if let user1ID = user1ID {
-            parseBridgePairing["user_objectId1"] = user1ID
+            parseBridgePairing["user1_objectId"] = user1ID
         } else {
-            parseBridgePairing.remove(forKey: "user_objectId1")
+            parseBridgePairing.remove(forKey: "user1_objectId")
         }
         
         if let user2ID = user2ID {
-            parseBridgePairing["user_objectId2"] = user2ID
+            parseBridgePairing["user2_objectId"] = user2ID
         } else {
-            parseBridgePairing.remove(forKey: "user_objectId2")
+            parseBridgePairing.remove(forKey: "user2_objectId")
         }
         
         if let connecterID = connecterID {
@@ -532,24 +536,26 @@ class LocalBridgePairings {
     var bridgePairing2ID: String?
     
     // MARK: -
-    init(){
+    init() {
         let userDefaults = UserDefaults.standard
         if let decoded = userDefaults.object(forKey: "bridgePairings") {
             if let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded as! Data) {
                 bridgePairing1ID = (bridgePairings as! BridgePairings).bridgePairing1ID
                 bridgePairing2ID = (bridgePairings as! BridgePairings).bridgePairing2ID
             }
-        }    }
+        }
+    }
     
     // MARK: - Set and Get Functions
     
     //Saving bridgePairing 1 ID
     func setBridgePairing1ID(_ bridgePairing1ID: String?) {
+        print("saving top locally with id: \(bridgePairing1ID == nil ? "nil" : bridgePairing1ID!)")
         self.bridgePairing1ID = bridgePairing1ID
     }
     func getBridgePairing1ID() -> String? {
         let userDefaults = UserDefaults.standard
-        if let _ = userDefaults.object(forKey: "bridgePairings"){
+        if let _ = userDefaults.object(forKey: "bridgePairings") {
             let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
             let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
             return bridgePairings.bridgePairing1ID
@@ -561,11 +567,12 @@ class LocalBridgePairings {
     
     //Saving bridgePairing 2 ID
     func setBridgePairing2ID(_ bridgePairing2ID: String?) {
+        print("saving bottom locally with id: \(bridgePairing2ID == nil ? "nil" : bridgePairing2ID!)")
         self.bridgePairing2ID = bridgePairing2ID
     }
     func getBridgePairing2ID() -> String? {
         let userDefaults = UserDefaults.standard
-        if let _ = userDefaults.object(forKey: "bridgePairings"){
+        if let _ = userDefaults.object(forKey: "bridgePairings") {
             let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
             let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
             return bridgePairings.bridgePairing2ID
@@ -578,6 +585,7 @@ class LocalBridgePairings {
     // MARK: -
     // This function saves the local data to the device
     func synchronize(){
+        print("synchronizing")
         let bridgePairings: BridgePairings = BridgePairings(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: bridgePairings)

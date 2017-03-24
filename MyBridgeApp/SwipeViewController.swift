@@ -15,6 +15,7 @@ class SwipeViewController: UIViewController {
     let layout = SwipeLayout()
     let transitionManager = TransitionManager()
     let swipeBackend = SwipeBackend()
+    let messageComposer = MessageComposer()
     
     var didSetupConstraints = false
     
@@ -32,6 +33,11 @@ class SwipeViewController: UIViewController {
         layout.infoButton.addTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
+        layout.inviteButton.addTarget(self, action: #selector(inviteButtonTapped(_:)), for: .touchUpInside)
+        
+        // Make no more bridge pairing objects invisible
+        layout.noMoreBridgePairingsLabel.alpha = 0
+        layout.inviteButton.alpha = 0
         
         // Check for New Matches
         //Check for Connections Conversed and for the current User's New Matches
@@ -51,8 +57,8 @@ class SwipeViewController: UIViewController {
 
         // Get the next swipeCards
         //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
-        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard) {
-            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard)
+        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
+            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
         }
         
     }
@@ -84,9 +90,38 @@ class SwipeViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    // Presents Message with text prepopulated
+    func inviteButtonTapped(_ sender: UIButton) {
+        
+        // Make sure the device can send text messages
+        if (messageComposer.canSendText()) {
+            // Obtain a configured MFMessageComposeViewController
+            let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+            // Present the configured MFMessageComposeViewController instance
+            // Note that the dismissal of the VC will be handled by the messageComposer instance,
+            // since it implements the appropriate delegate call-back
+            present(messageComposeVC, animated: true, completion: nil)
+        } else {
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = UIAlertView(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", delegate: self, cancelButtonTitle: "OK")
+            errorAlert.show()
+        }
+    }
+
+    
     func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: didSwipe, reset: reset)
     }
+    
+    func presentExternalProfileVC(_ notification: Notification) {
+        if let userId = notification.object as? String {
+            let externalProfileVC = ExternalProfileViewController()
+            externalProfileVC.setUserID(userID: userId)
+            self.present(externalProfileVC, animated: true, completion: nil)
+        }
+    }
+    
+    // MARK: - Functions to pass
     
     func didSwipe(right: Bool) {
         // if swiped left, check in bridge pairing
@@ -98,19 +133,16 @@ class SwipeViewController: UIViewController {
         layout.topSwipeCard.isUserInteractionEnabled = true
         layout.bottomSwipeCard.isUserInteractionEnabled = false
         layout.topSwipeCard.overlay.removeFromSuperlayer()
-        swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard)
+        swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings)
     }
     
     func reset() {
         layout.recenterTopSwipeCard()
     }
     
-    func presentExternalProfileVC(_ notification: Notification) {
-        if let userId = notification.object as? String {
-            let externalProfileVC = ExternalProfileViewController()
-            externalProfileVC.setUserID(userID: userId)
-            self.present(externalProfileVC, animated: true, completion: nil)
-        }
+    func noMoreBridgePairings() {
+        layout.noMoreBridgePairingsLabel.alpha = 1
+        layout.inviteButton.alpha = 1
     }
     
     // MARK: - Navigation
