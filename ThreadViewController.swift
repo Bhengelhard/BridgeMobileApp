@@ -30,6 +30,7 @@ class ThreadViewController: UIViewController {
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
+        messagesVC.layout = layout
     }
     
     override func loadView() {
@@ -41,7 +42,7 @@ class ThreadViewController: UIViewController {
     
     
     override func updateViewConstraints() {
-        didSetupConstraints = layout.initialize(view: view, messagesView: messagesVC.view, didSetupConstraints: didSetupConstraints)
+        didSetupConstraints = layout.initialize(view: view, messagesVC: messagesVC, didSetupConstraints: didSetupConstraints)
         
         
         super.updateViewConstraints()
@@ -137,6 +138,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     var messageID: String?
     var incomingBubble: JSQMessagesBubbleImage!
     var outgoingBubble: JSQMessagesBubbleImage!
+    var layout: ThreadLayout?
 
     var otherId = String()
     var otherDisplayName = String()
@@ -164,6 +166,11 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             // reload collection view
             threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
                 self.scrollToBottom(animated: true)
+                if self.threadBackend.jsqMessages.count > 0 {
+                    if let layout = self.layout {
+                        layout.noMessagesView.alpha = 0
+                    }
+                }
             }
             
             // set id and name of current user
@@ -198,6 +205,10 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     override func didPressSend(_ button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: Date) {
         
         print("pressed send")
+        
+        if let layout = layout {
+            layout.noMessagesView.alpha = 0
+        }
         
         if let jsqMessage = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
             threadBackend.jsqMessages.append(jsqMessage)

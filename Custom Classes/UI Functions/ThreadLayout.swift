@@ -13,10 +13,11 @@ class ThreadLayout {
     
     // MARK: Global Variables
     let navBar = ThreadObjects.NavBar()
+    let noMessagesView = ThreadObjects.NoMessagesView()
     
     // MARK: - Layout
     /// Sets the initial layout constraints
-    func initialize(view: UIView, messagesView: UIView, didSetupConstraints: Bool) -> Bool {
+    func initialize(view: UIView, messagesVC: JSQMessagesViewController, didSetupConstraints: Bool) -> Bool {
         if (!didSetupConstraints) {
             
             // MARK: Layout Objects
@@ -29,11 +30,16 @@ class ThreadLayout {
             navBar.autoSetDimension(.height, toSize: 64)
             
             // Layout messages view
-            view.addSubview(messagesView)
-            messagesView.autoPinEdge(.top, to: .bottom, of: navBar)
-            messagesView.autoPinEdge(toSuperviewEdge: .left)
-            messagesView.autoMatch(.width, to: .width, of: view)
-            messagesView.autoPinEdge(toSuperviewEdge: .bottom)
+            view.addSubview(messagesVC.view)
+            messagesVC.view.autoPinEdge(.top, to: .bottom, of: navBar)
+            messagesVC.view.autoPinEdge(toSuperviewEdge: .left)
+            messagesVC.view.autoMatch(.width, to: .width, of: view)
+            messagesVC.view.autoPinEdge(toSuperviewEdge: .bottom)
+            
+            messagesVC.collectionView.addSubview(noMessagesView)
+            noMessagesView.autoCenterInSuperview()
+            noMessagesView.autoMatch(.width, to: .width, of: view, withMultiplier: 0.6)
+            noMessagesView.autoMatch(.height, to: .width, of: noMessagesView, withMultiplier: 0.5)
             
         }
         

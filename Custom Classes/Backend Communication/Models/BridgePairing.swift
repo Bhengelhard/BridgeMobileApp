@@ -324,9 +324,6 @@ class BridgePairing: NSObject {
                 query.whereKey("checked_out", equalTo: false)
             }
             
-            print("friend1ID = \(friend1ID == nil ? "nil" : friend1ID!)")
-            print("friend2ID = \(friend2ID == nil ? "nil" : friend2ID!)")
-            
             if let friend1ID = friend1ID, let friend2ID = friend2ID {
                 query.whereKey("user1_objectId", notContainedIn: [friend1ID, friend2ID])
                 query.whereKey("user2_objectId", notContainedIn: [friend1ID, friend2ID])

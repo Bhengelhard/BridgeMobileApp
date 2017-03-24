@@ -34,6 +34,16 @@ class ThreadObjects {
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+    }
+    
+    class NoMessagesView: UIView {
+        init() {
+            super.init(frame: CGRect())
+            backgroundColor = .green
+        }
         
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
     }
 }
