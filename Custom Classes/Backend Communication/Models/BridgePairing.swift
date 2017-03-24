@@ -307,9 +307,6 @@ class BridgePairing: NSObject {
     
     static func getAllWithFriends(ofUser user: User, notShownOnly: Bool = false, withLimit limit: Int = 10000, notCheckedOutOnly: Bool = false, exceptFriend1WithID friend1ID: String? = nil, exceptFriend2WithID friend2ID: String? = nil, withBlock block: BridgePairingsBlock? = nil) {
         
-        print("friend1ID = \(friend1ID == nil ? "nil" : friend1ID!)")
-        print("friend2ID = \(friend2ID == nil ? "nil" : friend2ID!)")
-        
         if let userFriendList = user.friendList {
             
             let query = PFQuery(className: "BridgePairings")
@@ -327,12 +324,12 @@ class BridgePairing: NSObject {
                 query.whereKey("checked_out", equalTo: false)
             }
             
-            if let friend1ID = friend1ID {
-                query.whereKey("user1_objectId", notEqualTo: friend1ID)
-            }
+            print("friend1ID = \(friend1ID == nil ? "nil" : friend1ID!)")
+            print("friend2ID = \(friend2ID == nil ? "nil" : friend2ID!)")
             
-            if let friend2ID = friend2ID {
-                query.whereKey("user2_objectId", notEqualTo: friend2ID)
+            if let friend1ID = friend1ID, let friend2ID = friend2ID {
+                query.whereKey("user1_objectId", notContainedIn: [friend1ID, friend2ID])
+                query.whereKey("user2_objectId", notContainedIn: [friend1ID, friend2ID])
             }
             
             query.findObjectsInBackground { (parseBridgePairings, error) in
