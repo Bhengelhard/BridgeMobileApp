@@ -139,7 +139,7 @@ class SwipeLogic {
                 if let user1ID = swipeCard.bridgePairing?.user1ID {
                     if let user2ID = swipeCard.bridgePairing?.user2ID {
                         // Initialize and display swipeRightView
-                        swipeRightView = PopupView(user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
+                        swipeRightView = PopupView(includesCurrentUser: false, user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
                         if let swipeRightView = swipeRightView {
                             swipeRightView.alpha = 0
                             vc.view.addSubview(swipeRightView)
@@ -251,11 +251,11 @@ class SwipeLogic {
     private static func sendNectedNotification(user1ID: String, user2ID: String, user1Name: String, user2Name: String, connecterName: String, messageID: String) {
         
         if !connecterName.isEmpty {
-            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(connecterName) has 'nected you with \(user2Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
-            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"\(connecterName) has 'nected you with \(user1Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(connecterName) 'nected you with \(user2Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"\(connecterName) 'nected you with \(user1Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
         } else {
-            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"You have been 'nected with \(user2Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
-            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"You have been 'nected with \(user1Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"You were 'nected with \(user2Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"You were 'nected with \(user1Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
         }
         
         

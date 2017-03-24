@@ -68,7 +68,6 @@ class LoginLayout {
             
             // MARK: Add Targets
             fbLoginButton.addTarget(self, action: #selector(fbLoginButtonTapped(_:)), for: .touchUpInside)
-           
             
         }
         

@@ -22,8 +22,11 @@ class SwipeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Listeners
         // Listener for presentingExternalProfileVC
-        NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC(_:)), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
+        // Listener for presentingThreadVC
+        NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "presentThreadVC"), object: nil)
         
         // Add Targets for Swipe Cards
         layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
@@ -38,8 +41,6 @@ class SwipeViewController: UIViewController {
         let dbRetrievingFunctions = DBRetrievingFunctions()
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
         dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
-        
-        
         
     }
     
@@ -110,6 +111,14 @@ class SwipeViewController: UIViewController {
             let externalProfileVC = ExternalProfileViewController()
             externalProfileVC.setUserID(userID: userId)
             self.present(externalProfileVC, animated: true, completion: nil)
+        }
+    }
+    
+    func presentThreadVC(_ notification: Notification) {
+        if let messageID = notification.object as? String {
+            let threadVC = ThreadViewController()
+            threadVC.setMessageID(messageID: messageID)
+            self.present(threadVC, animated: true, completion: nil)
         }
     }
     

@@ -17,13 +17,16 @@ class PopupView: UIView {
     let user2Hexagon: PopupViewObjects.HexagonWithUserId
     var user1Image: UIImage?
     var user2Image: UIImage?
-    let messageButton = PopupViewObjects.MessageButton()
+    let messageButton: PopupViewObjects.MessageButton
     let keepSwipingButton = PopupViewObjects.KeepSwipingButton()
     var user1Name: String?
     var user2Name: String?
+    var user1ID: String
+    var user2ID: String
+    let includesCurrentUser: Bool
     
     // MARK: - Init
-    init(user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
+    init(includesCurrentUser: Bool, user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
         self.title = PopupViewObjects.Title(titleImage: titleImage)
         self.text = PopupViewObjects.Text(text: textString)
         
@@ -32,12 +35,23 @@ class PopupView: UIView {
         
         self.user1Image = user1Image
         self.user2Image = user2Image
+        
+        self.user1ID = user1Id
+        self.user2ID = user2Id
+        
+        self.includesCurrentUser = includesCurrentUser
+        
+        if includesCurrentUser {
+            self.messageButton = PopupViewObjects.MessageButton(title: "MESSAGE")
+        } else {
+            self.messageButton = PopupViewObjects.MessageButton(title: "MESSAGE BOTH")
+        }
                 
         super.init(frame: CGRect())
         
-        if user1Image == nil {
-            User.get(withID: user1Id) { (user) in
-                self.user1Name = user.name
+        User.get(withID: user1Id) { (user) in
+            self.user1Name = user.name
+            if user1Image == nil {
                 user.getMainPicture { (picture) in
                     picture.getImage { (image) in
                         self.user1Image = image
@@ -47,13 +61,13 @@ class PopupView: UIView {
             }
         }
         
-        if user2Image == nil {
+        
             print("id = user2Id")
             
-            User.get(withID: user2Id) { (user) in
-                print("user2 user retrived")
-                self.user2Name = user.name
-                
+        User.get(withID: user2Id) { (user) in
+            print("user2 user retrived")
+            self.user2Name = user.name
+            if user2Image == nil {
                 user.getPicture(atIndex: 0, withBlock: { (picture) in
                     picture.getImage(withBlock: { (image) in
                         self.user2Image = image
@@ -157,10 +171,68 @@ class PopupView: UIView {
     // Create Direct Message with both of the users in the message
     func messageButtonTapped (_ sender: UIButton) {
         //displayReasonForConnection()
-        let reasonForConnectionView = ReasonForConnection(user1Name: user1Name, user2Name: user2Name)
-        addSubview(reasonForConnectionView)
-        reasonForConnectionView.autoPinEdgesToSuperviewEdges(with: .init(top: 80, left: 40, bottom: 280, right: 40))
-        print("messageButtonTapped")
+        
+        // If messaging two people then popup the reason for connect textView
+        if !includesCurrentUser {
+            let reasonForConnectionView = ReasonForConnection(user1Name: user1Name, user2Name: user2Name)
+            addSubview(reasonForConnectionView)
+            reasonForConnectionView.autoPinEdgesToSuperviewEdges(with: .init(top: 40, left: 20, bottom: 280, right: 20))
+            print("messageButtonTapped")
+        }
+        // If messaging one person then create or open ThreadViewController with the conversation between the current user and the person they're messaging
+        else {
+            //var user1ID = String()
+            //var user2ID = userID
+            //var connecterID = String()
+            //var user1Name = String()
+            //var user2Name = String()
+            
+            // Find out whether current user is 1 or 2 and then set user1PictureID and user2PictureID accordingly
+            var user1PictureID = String()
+            var user2PictureID = String()
+            
+            // Set picID of currentUser
+            User.getCurrent { (user1) in
+                print("user1.id: \(user1.id)")
+                
+                if let picIDs1 = user1.pictureIDs {
+                    if let picID1 = picIDs1[0] as? String {
+                        user1PictureID = picID1
+                    }
+                }
+                
+                
+            }
+            
+            // Set picID of otherUser
+            User.get(withID: user2ID, withBlock: { (user2) in
+                print("user2.id: \(user2.id)")
+                if let picIDs2 = user2.pictureIDs {
+                    if let picID2 = picIDs2[0] as? String {
+                        user2PictureID = picID2
+                    }
+                }
+                
+                // Create message with both of the retrieved users
+                Message.create(user1ID: self.user1ID, user2ID: self.user2ID, connecterID: nil, user1Name: self.user1Name, user2Name: self.user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil) { (message, isNew) in
+                    if isNew {
+                        message.save(withBlock: { (message) in
+                            if let messageID = message.id {
+                                print("messageId: \(messageID)")
+                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "presentThreadVC"), object: messageID)
+                            }
+                        })
+                    } else {
+                        if let messageID = message.id {
+                            print("messageId: \(messageID)")
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentThreadVC"), object: messageID)
+                        }
+                    }
+                    
+                }
+            })
+        }
+        
 
     }
     

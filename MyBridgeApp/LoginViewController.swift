@@ -29,7 +29,6 @@ class LoginViewController: UIViewController {
         
         authenticateUser()
         
-        
     }
     
     override func loadView() {

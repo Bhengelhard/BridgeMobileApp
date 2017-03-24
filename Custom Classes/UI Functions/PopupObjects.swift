@@ -1,5 +1,5 @@
 //
-//  PopupObjects.swift
+//  PopupViewObjects.swift
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 3/8/17.
@@ -70,10 +70,10 @@ class PopupViewObjects {
     class MessageButton: UIButton {
         let size = CGSize(width: 200, height: 40)
         
-        init() {
+        init(title: String) {
             super.init(frame: CGRect())
             
-            self.setTitle("MESSAGE BOTH", for: .normal)
+            self.setTitle(title, for: .normal)
             self.setTitleColor(UIColor.white, for: .normal)
             self.titleLabel?.font = Constants.Fonts.bold16
             self.backgroundColor = DisplayUtility.gradientColor(size: size)

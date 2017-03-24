@@ -27,7 +27,9 @@ class ReasonForConnection: UIView, UITextViewDelegate {
         let reasonForConnectionLabel = UILabel()
         
         if let name1 = user1Name, let name2 = user2Name {
-            reasonForConnectionLabel.text = "This message sends to \(name1) and \(name2)'s conversation."
+            if let firstName1 = name1.components(separatedBy: " ").first, let firstName2 = name2.components(separatedBy: " ").first {
+                reasonForConnectionLabel.text = "This message sends to \(firstName1) and \(firstName2)'s conversation."
+            }
         } else {
             reasonForConnectionLabel.text = "This message sends to your friends' conversation."
         }
@@ -37,8 +39,8 @@ class ReasonForConnection: UIView, UITextViewDelegate {
         reasonForConnectionLabel.textColor = Constants.Colors.necter.textDarkGray
         reasonForConnectionLabel.textAlignment = NSTextAlignment.center
         addSubview(reasonForConnectionLabel)
-        reasonForConnectionLabel.autoPinEdgesToSuperviewEdges(with: .init(top: 20, left: 20, bottom: 10, right: 20), excludingEdge: .bottom)
-        reasonForConnectionLabel.autoSetDimension(.height, toSize: 40)
+        reasonForConnectionLabel.autoPinEdgesToSuperviewEdges(with: .init(top: 10, left: 10, bottom: 10, right: 10), excludingEdge: .bottom)
+        reasonForConnectionLabel.autoSetDimension(.height, toSize: 60)
         
         let dividerLine = UIView()
         dividerLine.backgroundColor = Constants.Colors.necter.textDarkGray
@@ -46,7 +48,7 @@ class ReasonForConnection: UIView, UITextViewDelegate {
         addSubview(dividerLine)
         dividerLine.autoPinEdge(toSuperviewEdge: .left)
         dividerLine.autoPinEdge(toSuperviewEdge: .right)
-        dividerLine.autoPinEdge(.top, to: .bottom, of: reasonForConnectionLabel, withOffset: 20)
+        dividerLine.autoPinEdge(.top, to: .bottom, of: reasonForConnectionLabel)
         
         let midDivider = UIView()
         midDivider.backgroundColor = Constants.Colors.necter.textDarkGray
