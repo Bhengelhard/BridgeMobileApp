@@ -20,8 +20,11 @@ class SwipeLayout {
     let infoButton = SwipeObjects.InfoButton()
     let connectIcon = UIImageView(image: #imageLiteral(resourceName: "Necter_Icon"))
     let disconnectIcon = UIImageView(image: #imageLiteral(resourceName: "Disconnect_Icon"))
-    let inviteButton = ReusableObjects.InviteButton()
     let noMoreBridgePairingsLabel = SwipeObjects.NoMoreBridgePairingsLabel()
+    let orLabel1 = SwipeObjects.OrLabel()
+    let inviteButton = ReusableObjects.InviteButton()
+    let orLabel2 = SwipeObjects.OrLabel()
+    let refreshButton = SwipeObjects.RefreshButton()
     var topSwipeCardHorizontalConstraint: NSLayoutConstraint?
     var bottomSwipeCardHorizontalConstraint: NSLayoutConstraint?
     
@@ -40,17 +43,31 @@ class SwipeLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
+            // Layout invite friends button
+            view.addSubview(inviteButton)
+            inviteButton.autoCenterInSuperview()
+            inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
+            
+            // Layout first or label
+            view.addSubview(orLabel1)
+            orLabel1.autoAlignAxis(toSuperviewAxis: .vertical)
+            orLabel1.autoPinEdge(.bottom, to: .top, of: inviteButton, withOffset: -25)
+            
             // Layout no more bridge pairings label
             view.addSubview(noMoreBridgePairingsLabel)
             noMoreBridgePairingsLabel.autoAlignAxis(toSuperviewAxis: .vertical)
-            noMoreBridgePairingsLabel.autoAlignAxis(.horizontal, toSameAxisOf: view, withMultiplier: 0.75)
+            noMoreBridgePairingsLabel.autoPinEdge(.bottom, to: .top, of: orLabel1, withOffset: -25)
             noMoreBridgePairingsLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
             
-            // Layout invite friends button
-            view.addSubview(inviteButton)
-            inviteButton.autoAlignAxis(.vertical, toSameAxisOf: noMoreBridgePairingsLabel)
-            inviteButton.autoPinEdge(.top, to: .bottom, of: noMoreBridgePairingsLabel, withOffset: 25)
-            inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
+            // Layout second or label
+            view.addSubview(orLabel2)
+            orLabel2.autoAlignAxis(toSuperviewAxis: .vertical)
+            orLabel2.autoPinEdge(.top, to: .bottom, of: inviteButton, withOffset: 25)
+            
+            // Layout refresh button
+            view.addSubview(refreshButton)
+            refreshButton.autoAlignAxis(toSuperviewAxis: .vertical)
+            refreshButton.autoPinEdge(.top, to: .bottom, of: orLabel2, withOffset: 25)
             
             view.addSubview(infoButton)
             view.addSubview(passButton)

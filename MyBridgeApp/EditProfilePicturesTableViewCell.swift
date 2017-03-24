@@ -311,7 +311,7 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func savePictures() {
+    func savePictures(withBlock block: (() -> Void)? = nil) {
         var pictureIDs = [String?]()
         var images = [UIImage]()
         for pictureBox in pictureBoxes {
