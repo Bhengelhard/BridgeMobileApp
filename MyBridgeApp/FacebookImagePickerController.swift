@@ -50,8 +50,10 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
         // add cancel button to nav bar
         navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel(_:))), animated: true)
         let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        layout.itemSize = CGSize(width: 0.27*DisplayUtility.screenWidth, height:  0.3*DisplayUtility.screenWidth)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: 0.25*(DisplayUtility.screenWidth-6), height: 0.25*(DisplayUtility.screenWidth-6))
+        layout.minimumLineSpacing = 2
+        layout.minimumInteritemSpacing = 2
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         if let collectionView = collectionView {
             collectionView.backgroundColor = .white
