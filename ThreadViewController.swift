@@ -32,8 +32,6 @@ class ThreadViewController: UIViewController {
         layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
         messagesVC.layout = layout
         
-        // Listener for updating thread when new messages come in
-        //        NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "pushNotification"), object: nil)
     }
     
     override func loadView() {
@@ -95,32 +93,6 @@ class ThreadViewController: UIViewController {
 
     }
     
-//    func areTheyFriends() -> Bool {
-//        User.getCurrent { (user) in
-//            if let friendlist = user.friendList {
-//                Message.get(withID: self.messagesVC.messageID!, withBlock: { (message) in
-//                    message.getNonCurrentUser(withBlock: { (otherUser) in
-//                        if let otherUserID = otherUser.id {
-//                            if friendlist.contains(otherUserID) {
-//                                print("Users are already friends")
-//                                let followAction = UIAlertAction(title: "Unfollow", style: .destructive) { (alert) in
-//                                    print("follow")
-//                                }
-//                                addMoreMenu.addAction(followAction)
-//                                
-//                            } else {
-//                                let followAction = UIAlertAction(title: "Follow", style: .default) { (alert) in
-//                                    print("follow")
-//                                }
-//                                addMoreMenu.addAction(followAction)
-//                            }
-//                        }
-//                    })
-//                })
-//            }
-//        }
-//    }
-    
     func showOtherUserProfile(_ gesture: UIGestureRecognizer) {
         if let messageID = messagesVC.messageID {
             Message.get(withID: messageID) { (message) in
@@ -134,6 +106,8 @@ class ThreadViewController: UIViewController {
             }
         }
     }
+    
+    
 }
 
 class NecterJSQMessagesViewController: JSQMessagesViewController {
@@ -148,6 +122,9 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Listener for updating thread when new messages come in
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadThread), name: NSNotification.Name(rawValue: "reloadTheThread"), object: nil)
                 
         // these must be non-nil
         senderId = ""
@@ -408,6 +385,25 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
         }
         return 0.0
+    }
+    
+    // MARK: Notifications
+    func reloadThread(_ notification: Notification) {
+        
+        print("reload the thread notification called")
+        
+        if let collectionView = collectionView {
+            
+            // reload collection view
+            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
+                self.scrollToBottom(animated: true)
+                if self.threadBackend.jsqMessages.count > 0 {
+                    if let layout = self.layout {
+                        layout.noMessagesView.alpha = 0
+                    }
+                }
+            }
+        }
     }
 }
 

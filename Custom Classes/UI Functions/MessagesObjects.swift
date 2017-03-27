@@ -82,7 +82,6 @@ class MessagesObjects {
             fatalError("init(coder:) has not been implemented")
         }
         
-        
     }
         
     class MessagesTableCell: UITableViewCell {
