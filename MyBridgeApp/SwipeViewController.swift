@@ -127,10 +127,30 @@ class SwipeViewController: UIViewController {
     // MARK: - Functions to pass
     
     func didSwipe(right: Bool) {
-        // if swiped left, check in bridge pairing
+        let swipeCard: SwipeCard
+        if layout.bottomSwipeCard.isUserInteractionEnabled {
+            swipeCard = layout.bottomSwipeCard
+        } else {
+            swipeCard = layout.topSwipeCard
+        }
+        
+        // if swiped left, check in bridge pairing and animate left swipe
         if !right {
             swipeBackend.checkIn()
+            UIView.animate(withDuration: 0.4, animations: {
+                self.layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(self.view.frame.width/2 + swipeCard.frame.width/2))
+                self.view.layoutIfNeeded()
+            })
         }
+        // if swiped right, animate card swiped right
+        else {
+            UIView.animate(withDuration: 0.4, animations: {
+                self.layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(self.view.frame.width/2 + swipeCard.frame.width/2))
+                self.view.layoutIfNeeded()
+            })
+        }
+        
+        
         
         layout.switchTopAndBottomCards()
         layout.topSwipeCard.isUserInteractionEnabled = true
