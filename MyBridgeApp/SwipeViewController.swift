@@ -80,11 +80,12 @@ class SwipeViewController: UIViewController {
     }
     
     func nectButtonTapped(_ sender: UIButton) {
-        if layout.topSwipeCard.isUserInteractionEnabled {
-            //SwipeLogic.swipedRight(swipeCard: layout.topSwipeCard)
-        } else {
-            //SwipeLogic.swipedRight(swipeCard: layout.bottomSwipeCard)
-        }
+//        if layout.topSwipeCard.isUserInteractionEnabled {
+//            //SwipeLogic.swipedRight(swipeCard: layout.topSwipeCard)
+//        } else {
+//            //SwipeLogic.swipedRight(swipeCard: layout.bottomSwipeCard)
+//        }
+        didSwipe(right: true)
     }
     
     func infoButtonTapped(_ sender: UIButton) {
@@ -138,6 +139,7 @@ class SwipeViewController: UIViewController {
     // MARK: - Functions to pass as parameters
     
     func didSwipe(right: Bool) {
+        print("didSwipe")
         let swipeCard: SwipeCard
         if layout.bottomSwipeCard.isUserInteractionEnabled {
             swipeCard = layout.bottomSwipeCard
@@ -147,27 +149,38 @@ class SwipeViewController: UIViewController {
         
         // if swiped left, check in bridge pairing and animate left swipe
         if !right {
+            print("swiped left")
             swipeBackend.checkIn()
-            UIView.animate(withDuration: 0.4, animations: {
+            UIView.animate(withDuration: 0.4, animations: { 
+                print("animation happened")
                 self.layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(self.view.frame.width/2 + swipeCard.frame.width/2))
                 self.view.layoutIfNeeded()
+            }, completion: { (success) in
+                self.layout.switchTopAndBottomCards()
+                self.layout.topSwipeCard.isUserInteractionEnabled = true
+                self.layout.bottomSwipeCard.isUserInteractionEnabled = false
+                self.layout.topSwipeCard.overlay.removeFromSuperlayer()
+                self.swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
             })
         }
         // if swiped right, animate card swiped right
         else {
             UIView.animate(withDuration: 0.4, animations: {
-                self.layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(self.view.frame.width/2 + swipeCard.frame.width/2))
+                print("animation happened")
+                self.layout.updateTopSwipeCardHorizontalConstraint(fromCenter: (self.view.frame.width/2 + swipeCard.frame.width/2))
                 self.view.layoutIfNeeded()
+            }, completion: { (success) in
+                self.layout.switchTopAndBottomCards()
+                self.layout.topSwipeCard.isUserInteractionEnabled = true
+                self.layout.bottomSwipeCard.isUserInteractionEnabled = false
+                self.layout.topSwipeCard.overlay.removeFromSuperlayer()
+                self.swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
             })
         }
         
         
         
-        layout.switchTopAndBottomCards()
-        layout.topSwipeCard.isUserInteractionEnabled = true
-        layout.bottomSwipeCard.isUserInteractionEnabled = false
-        layout.topSwipeCard.overlay.removeFromSuperlayer()
-        swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings)
+        
     }
     
     func reset() {
