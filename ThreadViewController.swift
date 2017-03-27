@@ -388,12 +388,9 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     }
     
     // MARK: Notifications
+    // Reloads the thread when the user recieves a push notification with a new message
     func reloadThread(_ notification: Notification) {
-        
-        print("reload the thread notification called")
-        
         if let collectionView = collectionView {
-            
             // reload collection view
             threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
                 self.scrollToBottom(animated: true)
