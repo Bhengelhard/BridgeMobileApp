@@ -143,4 +143,20 @@ class ReusableObjects {
         
     }
     
+    class InviteButton: UIButton {
+        
+        init() {
+            super.init(frame: CGRect())
+            
+            self.setImage(#imageLiteral(resourceName: "Profile_Invite_Button"), for: .normal)
+            self.layer.shadowColor = UIColor.black.cgColor
+            self.layer.shadowOpacity = 0.4
+            self.layer.shadowOffset = .init(width: 1, height: 1)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
 }

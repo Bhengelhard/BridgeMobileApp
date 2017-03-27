@@ -34,6 +34,28 @@ class ThreadObjects {
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+    }
+    
+    class NoMessagesView: UIView {
         
+        
+        init() {
+            super.init(frame: CGRect())
+                        
+            let label = UILabel()
+            label.text = "\"All of life is rooted in relationships\"\n\n-Lee A. Harris"
+            label.textColor = Constants.Colors.necter.textGray
+            label.font = Constants.Fonts.bold24
+            label.numberOfLines = 0
+            label.textAlignment = NSTextAlignment.center
+            
+            addSubview(label)
+            label.autoPinEdgesToSuperviewEdges()
+            
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
     }
 }

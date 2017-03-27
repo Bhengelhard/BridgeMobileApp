@@ -37,6 +37,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         newMatchesTableViewCell.tableView = layout.messagesTable
         
         messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
+        
+        // Listener for updating inbox when new messages come in
+        //        NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "pushNotification"), object: nil)
     }
     
     override func loadView() {

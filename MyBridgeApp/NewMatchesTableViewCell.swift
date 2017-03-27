@@ -29,6 +29,8 @@ class NewMatchesTableViewCell: UITableViewCell {
         line.layer.insertSublayer(gradientLayer, at: 0)
         
         noNewMatchesLabel.text = "You have no new matches."
+        noNewMatchesLabel.textColor = Constants.Colors.necter.textGray
+        noNewMatchesLabel.font = Constants.Fonts.light18
         
         scrollView.bounces = false
         
@@ -85,11 +87,11 @@ class NewMatchesTableViewCell: UITableViewCell {
     override func updateConstraints() {
         if shouldSetUpConstraints {
             
-            addSubview(line)
-            line.autoSetDimension(.height, toSize: 1)
-            line.autoPinEdge(toSuperviewEdge: .bottom)
-            line.autoAlignAxis(toSuperviewAxis: .vertical)
-            line.autoMatch(.width, to: .width, of: self, withMultiplier: 0.9)
+            //addSubview(line)
+            //line.autoSetDimension(.height, toSize: 1)
+            //line.autoPinEdge(toSuperviewEdge: .bottom)
+            //line.autoAlignAxis(toSuperviewAxis: .vertical)
+            //line.autoMatch(.width, to: .width, of: self, withMultiplier: 0.9)
             
             addSubview(noNewMatchesLabel)
             noNewMatchesLabel.autoCenterInSuperview()
@@ -98,7 +100,7 @@ class NewMatchesTableViewCell: UITableViewCell {
             scrollView.autoPinEdge(toSuperviewEdge: .top)
             scrollView.autoPinEdge(toSuperviewEdge: .left)
             scrollView.autoPinEdge(toSuperviewEdge: .right)
-            scrollView.autoPinEdge(.bottom, to: .top, of: line)
+            scrollView.autoPinEdge(toSuperviewEdge: .bottom)
             
             shouldSetUpConstraints = false
         }

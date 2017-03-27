@@ -210,6 +210,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("applicationDidBecomeActive")
         
+        // Set app badge to 0
+        application.applicationIconBadgeNumber = 0
+        
 //        //Checking Reachability of internet access
 //        let reachability = Reachability()
 //        let isconnectedToNetwork = reachability.connectedToNetwork()

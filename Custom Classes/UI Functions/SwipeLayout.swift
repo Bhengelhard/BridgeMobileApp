@@ -20,6 +20,8 @@ class SwipeLayout {
     let infoButton = SwipeObjects.InfoButton()
     let connectIcon = UIImageView(image: #imageLiteral(resourceName: "Necter_Icon"))
     let disconnectIcon = UIImageView(image: #imageLiteral(resourceName: "Disconnect_Icon"))
+    let inviteButton = ReusableObjects.InviteButton()
+    let noMoreBridgePairingsLabel = SwipeObjects.NoMoreBridgePairingsLabel()
     var topSwipeCardHorizontalConstraint: NSLayoutConstraint?
     var bottomSwipeCardHorizontalConstraint: NSLayoutConstraint?
     
@@ -37,6 +39,18 @@ class SwipeLayout {
             navBar.autoPinEdge(toSuperviewEdge: .left)
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
+            
+            // Layout no more bridge pairings label
+            view.addSubview(noMoreBridgePairingsLabel)
+            noMoreBridgePairingsLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+            noMoreBridgePairingsLabel.autoAlignAxis(.horizontal, toSameAxisOf: view, withMultiplier: 0.75)
+            noMoreBridgePairingsLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+            
+            // Layout invite friends button
+            view.addSubview(inviteButton)
+            inviteButton.autoAlignAxis(.vertical, toSameAxisOf: noMoreBridgePairingsLabel)
+            inviteButton.autoPinEdge(.top, to: .bottom, of: noMoreBridgePairingsLabel, withOffset: 25)
+            inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
             
             view.addSubview(infoButton)
             view.addSubview(passButton)
@@ -81,18 +95,19 @@ class SwipeLayout {
             
             let iconDiameter = view.frame.width / 3
             
+            // Layout connect icon
             view.addSubview(connectIcon)
             connectIcon.autoSetDimensions(to: CGSize(width: iconDiameter, height: iconDiameter))
             connectIcon.autoAlignAxis(.vertical, toSameAxisOf: view, withOffset: 0.15*view.frame.width)
             connectIcon.autoAlignAxis(.horizontal, toSameAxisOf: topSwipeCard)
             connectIcon.alpha = 0
             
+            // Layout disconnect icon
             view.addSubview(disconnectIcon)
             disconnectIcon.autoSetDimensions(to: CGSize(width: iconDiameter, height: iconDiameter))
             disconnectIcon.autoAlignAxis(.vertical, toSameAxisOf: view, withOffset: -0.15*view.frame.width)
             disconnectIcon.autoAlignAxis(.horizontal, toSameAxisOf: topSwipeCard)
             disconnectIcon.alpha = 0
-            
         }
         
         return true

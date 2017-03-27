@@ -70,4 +70,31 @@ class SwipeObjects {
         }
     }
     
+    class NoMoreBridgePairingsLabel: UILabel {
+        init() {
+            super.init(frame: CGRect())
+            
+            text = "You have no more pairs to NECT. Please check back tomorrow or…"
+            textAlignment = .center
+            font = UIFont(name: "BentonSans-Light", size: 22)
+            numberOfLines = 0
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    class RefreshButton: UIButton {
+        init() {
+            super.init(frame: CGRect())
+            
+            setTitle("Refresh", for: .normal)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
 }

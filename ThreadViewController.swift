@@ -30,17 +30,22 @@ class ThreadViewController: UIViewController {
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
+        messagesVC.layout = layout
+        
+        // Listener for updating thread when new messages come in
+        //        NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "pushNotification"), object: nil)
     }
     
     override func loadView() {
         view = UIView()
 
         view.setNeedsUpdateConstraints()
+        
     }
     
     
     override func updateViewConstraints() {
-        didSetupConstraints = layout.initialize(view: view, messagesView: messagesVC.view, didSetupConstraints: didSetupConstraints)
+        didSetupConstraints = layout.initialize(view: view, messagesVC: messagesVC, didSetupConstraints: didSetupConstraints)
         
         
         super.updateViewConstraints()
@@ -136,8 +141,10 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     var messageID: String?
     var incomingBubble: JSQMessagesBubbleImage!
     var outgoingBubble: JSQMessagesBubbleImage!
-    var incomingAvatar: NecterJSQMessageAvatar!
-    var outgoingAvatar: NecterJSQMessageAvatar!
+    var layout: ThreadLayout?
+
+    var otherId = String()
+    var otherDisplayName = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -150,7 +157,6 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: Constants.Colors.singleMessages.incoming)
         outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImage(with: Constants.Colors.singleMessages.outgoing)
         
-        automaticallyScrollsToMostRecentMessage = true
         
         // remove attachment button
         inputToolbar.contentView.leftBarButtonItem = nil
@@ -161,7 +167,14 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             collectionView.collectionViewLayout.springinessEnabled = false
             
             // reload collection view
-            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID)
+            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
+                self.scrollToBottom(animated: true)
+                if self.threadBackend.jsqMessages.count > 0 {
+                    if let layout = self.layout {
+                        layout.noMessagesView.alpha = 0
+                    }
+                }
+            }
             
             // set id and name of current user
             threadBackend.setSenderInfo { (id, name) in
@@ -171,12 +184,21 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                 if let name = name {
                     self.senderDisplayName = name
                 }
+                
+                collectionView.reloadData()
             }
             
+            threadBackend.setOtherInfo(messageID: messageID) { (id, name) in
+                if let id = id {
+                    self.otherId = id
+                }
+                if let name = name {
+                    self.otherDisplayName = name
+                }
+                
+                collectionView.reloadData()
+            }
             //collectionView.backgroundColor = DisplayUtility.gradientColor(size: collectionView.frame.size)
-            
-            incomingAvatar = NecterJSQMessageAvatar(messageID: messageID, currentUser: false, collectionView: collectionView)
-            outgoingAvatar = NecterJSQMessageAvatar(messageID: messageID, currentUser: true, collectionView: collectionView)
         }
     }
     
@@ -184,6 +206,11 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     // MARK: JSQMessagesViewController method overrides
     
     override func didPressSend(_ button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: Date) {
+        print("pressed send")
+        
+        if let layout = layout {
+            layout.noMessagesView.alpha = 0
+        }
         
         if let jsqMessage = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
             threadBackend.jsqMessages.append(jsqMessage)
@@ -276,6 +303,15 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             } else { // incoming message
                 cell.textView.textColor = .black
             }
+            
+            if message.senderId == "" {
+                cell.cellBottomLabel.textColor = .black
+                cell.cellBottomLabel.textAlignment = .center
+                cell.messageBubbleImageView.image = nil
+                cell.textView.text = ""
+            }
+            
+            //cell.cellBottomLabel.textAlignment = .center
         }
         return cell;
     }
@@ -289,12 +325,33 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, avatarImageDataForItemAt indexPath: IndexPath) -> JSQMessageAvatarImageDataSource? {
-        return threadBackend.jsqMessages[indexPath.item].senderId == senderId ? outgoingAvatar : incomingAvatar
+        let message = threadBackend.jsqMessages[indexPath.item]
+        
+        if let image = threadBackend.avatarImagesDict[message.senderId] {
+            return NecterJSQMessageAvatar(image: image)
+        }
+        return nil
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, attributedTextForCellTopLabelAt indexPath: IndexPath) -> NSAttributedString? {
         let message = threadBackend.jsqMessages[indexPath.item]
         return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
+    }
+    
+    
+    override func collectionView(_ collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAt indexPath: IndexPath!) -> NSAttributedString! {
+        
+        // if sender is not in thread, put in label
+        let message = threadBackend.jsqMessages[indexPath.item]
+        if message.senderId != senderId && message.senderId != otherId && message.senderId != "" {
+            if let senderDisplayName = message.senderDisplayName {
+                let firstName = DisplayUtility.firstName(name: senderDisplayName)
+                return NSAttributedString(string: "*\(firstName) cannot view this thread.")
+            }
+        } else if message.senderId == "" {
+            return NSAttributedString(string: message.text)
+        }
+        return NSAttributedString()
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, attributedTextForMessageBubbleTopLabelAt indexPath: IndexPath) -> NSAttributedString? {
@@ -305,6 +362,21 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout, heightForCellTopLabelAt indexPath: IndexPath) -> CGFloat {
+        let currentMessage = threadBackend.jsqMessages[indexPath.item]
+        
+        if currentMessage.senderId == "" {
+            return 0.0
+        }
+        
+        // don't display timestamp if less than 3 minutes have elapsed since previous message
+        if indexPath.item > 0 {
+            let previousMessage = threadBackend.jsqMessages[indexPath.item - 1]
+            
+            if currentMessage.date.timeIntervalSince(previousMessage.date) < 180 {
+                return 0.0
+            }
+        }
+        
         return kJSQMessagesCollectionViewCellLabelHeightDefault
     }
     
@@ -312,7 +384,11 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         
         let currentMessage = threadBackend.jsqMessages[indexPath.item]
         
-        if indexPath.item - 1 > 0 {
+        if currentMessage.senderId == "" {
+            return 0.0
+        }
+        
+        if indexPath.item > 0 {
             let previousMessage = threadBackend.jsqMessages[indexPath.item - 1]
             if previousMessage.senderId == currentMessage.senderId {
                 return 0.0
@@ -321,29 +397,26 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         
         return kJSQMessagesCollectionViewCellLabelHeightDefault;
     }
+    
+    override func collectionView(_ collectionView: JSQMessagesCollectionView, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout, heightForCellBottomLabelAt indexPath: IndexPath) -> CGFloat {
+        let message = threadBackend.jsqMessages[indexPath.item]
+        if message.senderId != senderId && message.senderId != otherId && message.senderId != "" {
+            if message.senderDisplayName != nil {
+                return kJSQMessagesCollectionViewCellLabelHeightDefault
+            }
+        } else if message.senderId == "" {
+            return kJSQMessagesCollectionViewCellLabelHeightDefault
+        }
+        return 0.0
+    }
 }
 
 class NecterJSQMessageAvatar: NSObject, JSQMessageAvatarImageDataSource {
     
-    let threadBackend = ThreadBackend()
-    var image = UIImage()
-    let collectionView: UICollectionView
+    let image: UIImage
     
-    init(messageID: String?, currentUser: Bool, collectionView: UICollectionView) {
-        self.collectionView = collectionView
-        super.init()
-        
-        if currentUser {
-            threadBackend.getCurrentUserPicture { (image) in
-                self.image = image
-                self.collectionView.reloadData()
-            }
-        } else {
-            threadBackend.getOtherUserInMessagePicture(messageID: messageID) { (image) in
-                self.image = image
-                self.collectionView.reloadData()
-            }
-        }
+    init(image: UIImage) {
+        self.image = image
     }
     
     /**
