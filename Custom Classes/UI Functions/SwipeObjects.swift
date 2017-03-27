@@ -74,9 +74,10 @@ class SwipeObjects {
         init() {
             super.init(frame: CGRect())
             
-            text = "You have no more pairs to NECT. Please check back tomorrow or…"
+            text = "You have no more pairs to NECT. Please check back tomorrow"
+            textColor = Constants.Colors.necter.textGray
             textAlignment = .center
-            font = UIFont(name: "BentonSans-Light", size: 22)
+            font = UIFont(name: "BentonSans-Bold", size: 22)
             numberOfLines = 0
         }
         
@@ -85,11 +86,48 @@ class SwipeObjects {
         }
     }
     
+    class OrLabel: UILabel {
+        init() {
+            super.init(frame: CGRect())
+            
+            text = "or"
+            textColor = Constants.Colors.necter.textGray
+            textAlignment = .center
+            font = UIFont(name: "BentonSans-Bold", size: 22)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    /*
+    var attrs = [
+        NSFontAttributeName : UIFont.systemFontOfSize(19.0),
+        NSForegroundColorAttributeName : UIColor.redColor(),
+        NSUnderlineStyleAttributeName : 1]
+    
+    var attributedString = NSMutableAttributedString(string:"")
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let buttonTitleStr = NSMutableAttributedString(string:"My Button", attributes:attrs)
+        attributedString.appendAttributedString(buttonTitleStr)
+        yourButton.setAttributedTitle(attributedString, forState: .Normal)
+    }
+*/
+    
     class RefreshButton: UIButton {
         init() {
             super.init(frame: CGRect())
             
-            setTitle("Refresh", for: .normal)
+            let attributes: [String: Any] = [
+                NSFontAttributeName: Constants.Fonts.light18 ?? UIFont(),
+                NSForegroundColorAttributeName: Constants.Colors.necter.yellow,
+                NSUnderlineStyleAttributeName: 1]
+            let attributedString = NSAttributedString(string: "click here to refresh", attributes: attributes)
+            
+            setAttributedTitle(attributedString, for: .normal)
         }
         
         required init?(coder aDecoder: NSCoder) {

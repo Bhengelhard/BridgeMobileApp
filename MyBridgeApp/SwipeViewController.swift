@@ -39,17 +39,19 @@ class SwipeViewController: UIViewController {
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
         layout.inviteButton.addTarget(self, action: #selector(inviteButtonTapped(_:)), for: .touchUpInside)
+        layout.refreshButton.addTarget(self, action: #selector(refreshButtonTapped(_:)), for: .touchUpInside)
         
         // Make no more bridge pairing objects invisible
-        layout.noMoreBridgePairingsLabel.alpha = 0
-        layout.inviteButton.alpha = 0
+        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
+            view.alpha = 0
+        }
         
         // Check for New Matches
         //Check for Connections Conversed and for the current User's New Matches
         let dbRetrievingFunctions = DBRetrievingFunctions()
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
         dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
-        
+
     }
     
     override func loadView() {
@@ -111,6 +113,15 @@ class SwipeViewController: UIViewController {
         }
     }
 
+    func refreshButtonTapped( _ sender: UIButton) {
+        // Make no more bridge pairing objects invisible
+        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
+            view.alpha = 0
+        }
+        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
+            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
+        }
+    }
     
     func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: didSwipe, reset: reset)
@@ -124,7 +135,7 @@ class SwipeViewController: UIViewController {
         }
     }
     
-    // MARK: - Functions to pass
+    // MARK: - Functions to pass as parameters
     
     func didSwipe(right: Bool) {
         let swipeCard: SwipeCard
@@ -164,8 +175,9 @@ class SwipeViewController: UIViewController {
     }
     
     func noMoreBridgePairings() {
-        layout.noMoreBridgePairingsLabel.alpha = 1
-        layout.inviteButton.alpha = 1
+        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
+            view.alpha = 1
+        }
     }
     
     func presentThreadVC(_ notification: Notification) {
