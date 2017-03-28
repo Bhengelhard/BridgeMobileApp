@@ -14,7 +14,7 @@ class SwipeLogic {
     private static var originalLocation = CGPoint()
 
     
-    static func swipe(gesture: UIPanGestureRecognizer, layout: SwipeLayout, vc: SwipeViewController, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, didSwipe: @escaping (Bool) -> Void, reset: @escaping () -> Void) {
+    static func swipe(gesture: UIPanGestureRecognizer, layout: SwipeLayout, vc: SwipeViewController, bottomSwipeCard: SwipeCard, connectIcon: UIImageView, disconnectIcon: UIImageView, reset: @escaping () -> Void) {
         
         self.vc = vc
         
@@ -107,7 +107,7 @@ class SwipeLogic {
                             layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(view.frame.width/2 + swipeCard.frame.width/2))
                             view.layoutIfNeeded()
                         }, completion: { (success) in
-                            didSwipe(false)
+                            SwipeLogic.didSwipe(right: false, vc: vc)
                         })
                         removeCard = true
                     }))
@@ -123,7 +123,7 @@ class SwipeLogic {
                         layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(view.frame.width/2 + swipeCard.frame.width/2))
                         view.layoutIfNeeded()
                     }, completion: { (success) in
-                        didSwipe(false)
+                        SwipeLogic.didSwipe(right: false, vc: vc)
                     })
                     removeCard = true
                 }
@@ -134,21 +134,11 @@ class SwipeLogic {
                 let user1Image = swipeCard.topHalf.photoView.image
                 let user2Image = swipeCard.bottomHalf.photoView.image
                 
-                var swipeRightView: PopupView?
                 
                 if let user1ID = swipeCard.bridgePairing?.user1ID {
                     if let user2ID = swipeCard.bridgePairing?.user2ID {
-                        // Initialize and display swipeRightView
-                        swipeRightView = PopupView(includesCurrentUser: false, user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
-                        if let swipeRightView = swipeRightView {
-                            swipeRightView.alpha = 0
-                            vc.view.addSubview(swipeRightView)
-                            swipeRightView.autoPinEdgesToSuperviewEdges()
-                            swipeRightView.layoutIfNeeded()
-                        }
                         
                         if let user1Name = swipeCard.bridgePairing?.user1Name, let user2Name = swipeCard.bridgePairing?.user2Name {
-                            
                             
                             var connecterID = ""
                             var connecterName = ""
@@ -196,11 +186,8 @@ class SwipeLogic {
                     print("move swipe card all the way to right")
                     layout.updateTopSwipeCardHorizontalConstraint(fromCenter: view.frame.width/2 + swipeCard.frame.width/2)
                     view.layoutIfNeeded()
-                    if let swipeRightView = swipeRightView {
-                        swipeRightView.alpha = 1
-                    }
                 }, completion: { (success) in
-                    didSwipe(true)
+                    SwipeLogic.didSwipe(right: true, vc: vc)
                 })
                 removeCard = true
             }
@@ -229,10 +216,100 @@ class SwipeLogic {
         }
     }
     
-    static func swipedLeft(swipeCard: SwipeCard) {
-    }
-    
-    static func swipedRight(swipeCard: SwipeCard) {
+    // Animate swiping and replace
+    static func didSwipe(right: Bool, vc: SwipeViewController) {
+        
+        let view = vc.view!
+        let swipeBackend = vc.swipeBackend
+        let layout = vc.layout
+        let noMoreBridgePairings: () -> Void  = vc.noMoreBridgePairings
+        
+        print("didSwipe")
+        let swipeCard: SwipeCard
+        if layout.bottomSwipeCard.isUserInteractionEnabled {
+            swipeCard = layout.bottomSwipeCard
+        } else {
+            swipeCard = layout.topSwipeCard
+        }
+        
+        print("swiped left")
+        swipeBackend.checkIn()
+        UIView.animate(withDuration: 0.4, animations: {
+            print("animation happened")
+            // if swiped left, check in bridge pairing and animate left swipe
+            if right {
+                layout.updateTopSwipeCardHorizontalConstraint(fromCenter: (view.frame.width/2 + swipeCard.frame.width/2))
+            }
+            // if swiped right, animate card swiped right
+            else {
+                layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(view.frame.width/2 + swipeCard.frame.width/2))
+            }
+            view.layoutIfNeeded()
+        }, completion: { (success) in
+            layout.switchTopAndBottomCards()
+            layout.topSwipeCard.isUserInteractionEnabled = true
+            layout.bottomSwipeCard.isUserInteractionEnabled = false
+            layout.topSwipeCard.overlay.removeFromSuperlayer()
+            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings)
+            
+            if right {
+                if let user1ID = swipeCard.bridgePairing?.user1ID {
+                    // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
+                    let user1Image = swipeCard.topHalf.photoView.image
+                    let user2Image = swipeCard.bottomHalf.photoView.image
+                    
+                    if let user2ID = swipeCard.bridgePairing?.user2ID {
+                        // Initialize and display swipeRightView
+                        let swipeRightView = PopupView(includesCurrentUser: false, user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
+                        swipeRightView.alpha = 0
+                        vc.view.addSubview(swipeRightView)
+                        swipeRightView.autoPinEdgesToSuperviewEdges()
+                        swipeRightView.layoutIfNeeded()
+                        
+                        UIView.animate(withDuration: 0.4, animations: {
+                            swipeRightView.alpha = 1
+                        })
+                        
+
+                        
+                        if let user1Name = swipeCard.bridgePairing?.user1Name, let user2Name = swipeCard.bridgePairing?.user2Name {
+                            
+                            
+                            var connecterID = ""
+                            var connecterName = ""
+                            User.getCurrent(withBlock: { (user) in
+                                if let id = user.id {
+                                    connecterID = id
+                                }
+                                
+                                if let name = user.name {
+                                    connecterName = name
+                                }
+                            })
+                            
+                            let user1PictureID = swipeCard.bridgePairing?.user1PictureID
+                            let user2PictureID = swipeCard.bridgePairing?.user2PictureID
+                            
+                            // Create message with both of the retrieved users
+                            Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil, withBlock: { (message, isNew) in
+                                if isNew {
+                                    message.save(withBlock: { (message) in
+                                        if let messageID = message.id {
+                                            sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
+                                        }
+                                    })
+                                } else {
+                                    if let messageID = message.id {
+                                        sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
+                                    }
+                                }
+                                
+                            })
+                        }
+                    }
+                }
+            }
+        })
     }
     
     private static func smallestSwipeCardFrame(swipeCard: SwipeCard) -> CGRect {
@@ -257,7 +334,5 @@ class SwipeLogic {
             PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"You were 'nected with \(user2Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
             PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"You were 'nected with \(user1Name)! Get the conversation started!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
         }
-        
-        
     }
 }

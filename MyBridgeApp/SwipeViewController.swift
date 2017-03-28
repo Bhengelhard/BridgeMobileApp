@@ -61,7 +61,6 @@ class SwipeViewController: UIViewController {
         view.setNeedsUpdateConstraints()
 
         // Get the next swipeCards
-        //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
         swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
             self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
         }
@@ -76,16 +75,11 @@ class SwipeViewController: UIViewController {
     
     // MARK: - Targets and GestureRecognizer
     func passButtonTapped(_ sender: UIButton) {
-        didSwipe(right: false)
+        SwipeLogic.didSwipe(right: false, vc: self)
     }
     
     func nectButtonTapped(_ sender: UIButton) {
-//        if layout.topSwipeCard.isUserInteractionEnabled {
-//            //SwipeLogic.swipedRight(swipeCard: layout.topSwipeCard)
-//        } else {
-//            //SwipeLogic.swipedRight(swipeCard: layout.bottomSwipeCard)
-//        }
-        didSwipe(right: true)
+        SwipeLogic.didSwipe(right: true, vc: self)
     }
     
     func infoButtonTapped(_ sender: UIButton) {
@@ -125,7 +119,7 @@ class SwipeViewController: UIViewController {
     }
     
     func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
-        SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: didSwipe, reset: reset)
+        SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, reset: reset)
     }
     
     func presentExternalProfileVC(_ notification: Notification) {
@@ -137,52 +131,6 @@ class SwipeViewController: UIViewController {
     }
     
     // MARK: - Functions to pass as parameters
-    
-    func didSwipe(right: Bool) {
-        print("didSwipe")
-        let swipeCard: SwipeCard
-        if layout.bottomSwipeCard.isUserInteractionEnabled {
-            swipeCard = layout.bottomSwipeCard
-        } else {
-            swipeCard = layout.topSwipeCard
-        }
-        
-        // if swiped left, check in bridge pairing and animate left swipe
-        if !right {
-            print("swiped left")
-            swipeBackend.checkIn()
-            UIView.animate(withDuration: 0.4, animations: { 
-                print("animation happened")
-                self.layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(self.view.frame.width/2 + swipeCard.frame.width/2))
-                self.view.layoutIfNeeded()
-            }, completion: { (success) in
-                self.layout.switchTopAndBottomCards()
-                self.layout.topSwipeCard.isUserInteractionEnabled = true
-                self.layout.bottomSwipeCard.isUserInteractionEnabled = false
-                self.layout.topSwipeCard.overlay.removeFromSuperlayer()
-                self.swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
-            })
-        }
-        // if swiped right, animate card swiped right
-        else {
-            UIView.animate(withDuration: 0.4, animations: {
-                print("animation happened")
-                self.layout.updateTopSwipeCardHorizontalConstraint(fromCenter: (self.view.frame.width/2 + swipeCard.frame.width/2))
-                self.view.layoutIfNeeded()
-            }, completion: { (success) in
-                self.layout.switchTopAndBottomCards()
-                self.layout.topSwipeCard.isUserInteractionEnabled = true
-                self.layout.bottomSwipeCard.isUserInteractionEnabled = false
-                self.layout.topSwipeCard.overlay.removeFromSuperlayer()
-                self.swipeBackend.setBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
-            })
-        }
-        
-        
-        
-        
-    }
-    
     func reset() {
         layout.recenterTopSwipeCard()
     }
