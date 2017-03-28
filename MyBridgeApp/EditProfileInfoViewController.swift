@@ -15,11 +15,13 @@ class EditProfileInfoViewController: UIViewController {
     let transitionManager = TransitionManager()
     let editProfileInfoBackend = EditProfileInfoBackend()
     let field: UserInfoField
+    let fieldTableCell: EditProfileObjects.WhiteFieldTableCell
     
     var didSetupConstraints = false
     
-    init(field: UserInfoField) {
-        self.field = field
+    init(fieldTableCell: EditProfileObjects.WhiteFieldTableCell) {
+        self.fieldTableCell = fieldTableCell
+        field = fieldTableCell.field
         layout = EditProfileInfoLayout(field: field)
         
         super.init(nibName: nil, bundle: nil)
@@ -67,11 +69,15 @@ class EditProfileInfoViewController: UIViewController {
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
         
-        if let value = layout.table.value {
-            editProfileInfoBackend.setSelected(title: value, isSelected: layout.table.valueCell.isSelected)
+        if layout.table.shouldDisplay {
+            fieldTableCell.textLabel?.text = layout.table.valueCell.textLabel?.text
+        } else {
+            fieldTableCell.textLabel?.text = "Add \(field.rawValue)"
         }
         
-        dismiss(animated: true, completion: nil)
+        editProfileInfoBackend.setAndSaveShouldDisplay(field: field, shouldDisplay: layout.table.shouldDisplay) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     // MARK: - Navigation

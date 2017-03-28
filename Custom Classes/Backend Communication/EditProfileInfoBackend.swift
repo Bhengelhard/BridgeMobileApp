@@ -94,13 +94,34 @@ class EditProfileInfoBackend {
         }
     }
     
-    func setSelected(title: String, isSelected: Bool) {
-        if let user = PFUser.current() {
-            let fieldTitle = title.lowercased()
-            let fieldName = "display_\(fieldTitle)"
-            user[fieldName] = isSelected
-            user.saveInBackground()
+    func setAndSaveShouldDisplay(field: UserInfoField, shouldDisplay: Bool, withBlock block: (() -> Void)? = nil) {
+        User.getCurrent { (user) in
             
+            switch field {
+            case .age:
+                user.displayAge = shouldDisplay
+            
+            case .city:
+                user.displayCity = shouldDisplay
+                
+            case .work:
+                user.displayWork = shouldDisplay
+                
+            case .school:
+                user.displaySchool = shouldDisplay
+                
+            case .gender:
+                user.displayGender = shouldDisplay
+                
+            case .relationshipStatus:
+                user.displayRelationshipStatus = shouldDisplay
+            }
+            
+            user.save { (_) in
+                if let block = block {
+                    block()
+                }
+            }
         }
     }
     

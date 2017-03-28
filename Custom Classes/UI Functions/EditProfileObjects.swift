@@ -213,7 +213,7 @@ class EditProfileObjects {
         init(field: UserInfoField) {
             self.field = field
             
-            super.init(style: .subtitle, reuseIdentifier: "WhiteTableCell")
+            super.init(style: .subtitle, reuseIdentifier: "WhiteFieldTableCell")
             
             textLabel?.font = Constants.Fonts.light18
             textLabel?.numberOfLines = 0

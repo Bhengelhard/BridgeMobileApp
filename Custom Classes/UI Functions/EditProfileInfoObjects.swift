@@ -21,9 +21,12 @@ class EditProfileInfoObjects {
             let gradientColor = DisplayUtility.gradientColor(size: rightButton.frame.size)
             rightButton.setTitleColor(gradientColor, for: .normal)
             
-            self.shadowImage = nil
-            
+            shadowImage = nil
+                        
             navItem.title = infoTitle
+            if let titleLabel = navItem.titleView as? UILabel {
+                titleLabel.adjustsFontSizeToFitWidth = true
+            }
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -108,16 +111,17 @@ class EditProfileInfoObjects {
             
             // Change Option Cell selected checkmark button
             if let cell = cellForRow(at: indexPath) {
-                
                 if cell == noneCell {
                     if !noneCell.checked {
-                        noneCell.toggleChecked()
-                        valueCell.toggleChecked()
+                        shouldDisplay = false
+                        noneCell.setChecked(checked: true)
+                        valueCell.setChecked(checked: false)
                     }
                 } else if cell == valueCell {
                     if !valueCell.checked {
-                        noneCell.toggleChecked()
-                        valueCell.toggleChecked()
+                        shouldDisplay = true
+                        noneCell.setChecked(checked: false)
+                        valueCell.setChecked(checked: true)
                     }
                 }
             }
@@ -154,10 +158,6 @@ class EditProfileInfoObjects {
         func setChecked(checked: Bool) {
             self.checked = checked
             checkmarkButton.isSelected = checked
-        }
-        
-        func toggleChecked() {
-            setChecked(checked: !checked)
         }
     }
     

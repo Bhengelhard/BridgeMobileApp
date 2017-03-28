@@ -66,7 +66,7 @@ class EditProfileViewController: UIViewController {
     func editInfo(_ gesture: UITapGestureRecognizer) {
         if let view = gesture.view {
             if let fieldTableCell = view as? EditProfileObjects.WhiteFieldTableCell {
-                let editProfileInfoVC = EditProfileInfoViewController(field: fieldTableCell.field)
+                let editProfileInfoVC = EditProfileInfoViewController(fieldTableCell: fieldTableCell)
                 present(editProfileInfoVC, animated: true, completion: nil)
             }
         }
