@@ -280,7 +280,6 @@ class FBLogin {
     }
     
     func showSwipe() {
-        print("show swipe")
         //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
         let hasSignedUp = localData.getHasSignedUp() ?? false
         localData.setHasSignedUp(hasSignedUp)

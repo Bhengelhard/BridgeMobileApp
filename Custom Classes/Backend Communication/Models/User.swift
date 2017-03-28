@@ -115,6 +115,8 @@ class User: NSObject {
     /// The objectIds of the User's Pictures
     var pictureIDs: [String]?
     
+    var reportedList: [String]?
+    
     private var pictureIDsToPictures = [String: Picture]()
     
     private init(parseUser: PFUser) {
@@ -210,6 +212,10 @@ class User: NSObject {
         
         if let parsePictures = parseUser["pictures"] as? [String] {
             pictureIDs = parsePictures
+        }
+        
+        if let parseReportedList = parseUser["reported_list"] as? [String] {
+            reportedList = parseReportedList
         }
         
         super.init()
@@ -421,6 +427,12 @@ class User: NSObject {
             parseUser["pictures"] = pictureIDs
         } else {
             parseUser.remove(forKey: "pictures")
+        }
+        
+        if let reportedList = reportedList {
+            parseUser["reported_list"] = reportedList
+        } else {
+            parseUser.remove(forKey: "reported_list")
         }
         
         parseUser.saveInBackground { (succeeded, error) in

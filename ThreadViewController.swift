@@ -29,7 +29,6 @@ class ThreadViewController: UIViewController {
         view.backgroundColor = .white
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-        layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
         messagesVC.layout = layout
     }
     
@@ -50,6 +49,8 @@ class ThreadViewController: UIViewController {
     
     func setMessageID(messageID: String?) {
         messagesVC.messageID = messageID
+        
+        layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
         
         // set nav bar image
         let imageView = self.layout.navBar.titleImageView
@@ -88,7 +89,7 @@ class ThreadViewController: UIViewController {
     func moreButtonTapped(_ sender: UIButton) {
         
         let moreOptions = MoreOptions()
-        moreOptions.displayMoreAlertController(vc: self)
+        moreOptions.displayMoreAlertController(vc: self, messageID: messagesVC.messageID)
 
     }
     
