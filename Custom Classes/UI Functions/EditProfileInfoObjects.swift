@@ -36,23 +36,9 @@ class EditProfileInfoObjects {
         let field: UserInfoField
         var value: String?
         var shouldDisplay = false
-        var valueCell = OptionCell()
-        
-        init(infoTitle: String, value: String) {
-            field = .age
-            super.init(frame: CGRect(), style: .plain)
-            
-            delegate = self
-            dataSource = self
-            
-            self.separatorStyle = .none
-            self.isScrollEnabled = false
-            
-            self.backgroundColor = Constants.Colors.necter.backgroundGray
-            
-            self.estimatedRowHeight = 50
-            self.rowHeight = UITableViewAutomaticDimension
-        }
+        let noneCell = OptionCell()
+        let valueCell = OptionCell()
+        var noneSelected = true
         
         init(field: UserInfoField) {
             self.field = field
@@ -70,6 +56,8 @@ class EditProfileInfoObjects {
             rowHeight = UITableViewAutomaticDimension
             
             tableFooterView = UIView()
+            
+            noneCell.textLabel?.text = "None"
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -91,56 +79,19 @@ class EditProfileInfoObjects {
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             var cell: UITableViewCell
             
-            let editProfileInfoBackend = EditProfileInfoBackend()
-            //let isSelected = editProfileInfoBackend.returnSelected(title: infoTitle)
-            
             switch(indexPath.row) {
-                /*
-            case 0:
-                cell = DescriptionCell(text: "")
-            case 1:
-                cell = OptionCell(text: value, infoTitle: infoTitle)
-                if let cell = cell as? OptionCell {
-                    if isSelected {
-                        cell.checkmarkButton.isSelected = true
-                    } else {
-                        cell.checkmarkButton.isSelected = false
-                    }
-                }
-                
-            case 2:
-                cell = DescriptionCell(text: "If your \(infoTitle) isn't shown, update it on Facebook.")
-            case 3:
-                cell = OptionCell(text: "None", infoTitle: infoTitle)
-                if let cell = cell as? OptionCell {
-                    if !isSelected {
-                        cell.checkmarkButton.isSelected = true
-                    } else {
-                        cell.checkmarkButton.isSelected = false
-                    }                
-                 }
-            */
             case 0:
                 cell = DescriptionCell(text: "If your \(field.rawValue.lowercased()) isn't shown, update it on Facebook.")
             case 1:
-                cell = OptionCell()
-                if let cell = cell as? OptionCell {
-                    cell.textLabel?.text = "None"
-                    /*
-                    if !isSelected {
-                        cell.checkmarkButton.isSelected = true
-                    } else {
-                        cell.checkmarkButton.isSelected = false
-                    }*/
-                }
+                cell = noneCell
+                noneCell.setChecked(checked: !shouldDisplay)
             case 2:
                 cell = valueCell
+                valueCell.setChecked(checked: shouldDisplay)
             
             default:
                 cell = DescriptionCell(text: "")
             }
-            
-            
             
             return cell
         }
@@ -154,26 +105,20 @@ class EditProfileInfoObjects {
         }
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            
             // Change Option Cell selected checkmark button
-            if let cell = cellForRow(at: indexPath) as? OptionCell {
-                print("cell is OptionCell")
+            if let cell = cellForRow(at: indexPath) {
                 
-                let noneIndexPath = IndexPath(row: 1, section: 0)
-                let valueIndexPath = IndexPath(row: 2, section: 0)
-                
-                let cell2: OptionCell
-                if indexPath == valueIndexPath {
-                    cell2 = cellForRow(at: noneIndexPath) as! EditProfileInfoObjects.OptionCell
-                } else {
-                    cell2 = cellForRow(at: valueIndexPath) as! EditProfileInfoObjects.OptionCell
-                }
-                
-                if cell.checkmarkButton.isSelected {
-                    cell.checkmarkButton.isSelected = false
-                    cell2.checkmarkButton.isSelected = true
-                } else {
-                    cell.checkmarkButton.isSelected = true
-                    cell2.checkmarkButton.isSelected = false
+                if cell == noneCell {
+                    if !noneCell.checked {
+                        noneCell.toggleChecked()
+                        valueCell.toggleChecked()
+                    }
+                } else if cell == valueCell {
+                    if !valueCell.checked {
+                        noneCell.toggleChecked()
+                        valueCell.toggleChecked()
+                    }
                 }
             }
         }
@@ -182,6 +127,7 @@ class EditProfileInfoObjects {
     
     class OptionCell: UITableViewCell {
         let checkmarkButton = UIButton()
+        var checked = false
         
         init() {
             super.init(style: .subtitle, reuseIdentifier: "OptionCell")
@@ -192,6 +138,8 @@ class EditProfileInfoObjects {
             
             checkmarkButton.setImage(nil, for: .normal)
             checkmarkButton.setImage(#imageLiteral(resourceName: "Gradient_Checkmark_Circle_Selected"), for: .selected)
+            
+            checkmarkButton.isUserInteractionEnabled = false
 
             addSubview(checkmarkButton)
             checkmarkButton.autoAlignAxis(toSuperviewAxis: .horizontal)
@@ -201,6 +149,15 @@ class EditProfileInfoObjects {
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+        
+        func setChecked(checked: Bool) {
+            self.checked = checked
+            checkmarkButton.isSelected = checked
+        }
+        
+        func toggleChecked() {
+            setChecked(checked: !checked)
         }
     }
     

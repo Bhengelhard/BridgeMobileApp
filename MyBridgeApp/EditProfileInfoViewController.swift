@@ -40,9 +40,13 @@ class EditProfileInfoViewController: UIViewController {
             editProfileInfoBackend.setFieldValueLabel(field: field, label: textLabel) { (fieldValueExists) in
                 if fieldValueExists {
                     self.layout.table.value = textLabel.text
-                    print(textLabel.text)
                     self.layout.table.reloadData()
                 }
+            }
+            
+            editProfileInfoBackend.shouldDisplay(field: field) { (shouldDisplay) in
+                self.layout.table.shouldDisplay = shouldDisplay
+                self.layout.table.reloadData()
             }
         }
     }
