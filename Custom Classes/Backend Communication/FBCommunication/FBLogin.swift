@@ -19,9 +19,7 @@ class FBLogin {
     // MARK: -
     
     //Login User after they click the login with facebook button
-    func initialize (vc: UIViewController){
-        
-        var global_name:String = ""
+    func initialize (vc: UIViewController) {
         
         let fbFunctions = FacebookFunctions()
         let localData = LocalData()
@@ -38,7 +36,7 @@ class FBLogin {
         localData.synchronize()
         
         //Log user in with permissions public_profile, email and user_friends
-        let permissions = ["public_profile", "email", "user_friends", "user_photos", "user_birthday"]
+        let permissions = ["public_profile", "email", "user_friends", "user_photos", "user_birthday", "user_location", "user_education_history", "user_work_history", "user_relationships"]
         PFFacebookUtils.logInInBackground(withReadPermissions: permissions) { (user, error) in
             if let error = error {
                 print(error)
@@ -46,10 +44,11 @@ class FBLogin {
             } else {
                 if let user = user {
                     /* Check if the global variable geoPoint has been set to the user's location. If so, store it in Parse. Extremely important since the location would be used to get the user's current city in LocalUtility().getBridgePairings() which is indeed called in SignupViewController - cIgAr 08/18/16 */
+                    /*
                     if let geoPoint = self.geoPoint {
-                        PFUser.current()?["location"] = geoPoint
-                        PFUser.current()?.saveInBackground()
-                    }
+                        user["location"] = geoPoint
+                        user.saveInBackground()
+                    }*/
                     // identify user id with the device
                     let installation = PFInstallation.current()
                     //installation.setDeviceTokenFromData(deviceToken)
@@ -60,49 +59,66 @@ class FBLogin {
                     LocalStorageUtility().getUserFriends()
                     
                     // get necessary facebook fields
-                    let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, birthday, location"])
+                    let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, birthday, location, education, work, relationship_status"], tokenString: FBSDKAccessToken.current().tokenString, version: nil, httpMethod: "GET")
                     graphRequest!.start { (connection, result, error) -> Void in
                         if error != nil {
                             
                             print(error!)
                             print("got error")
                             
-                        } else if let result = result as? [String: AnyObject]{
+                        } else if let result = result as? [String: AnyObject] {
+                            
                             // saves these to parse at every login
-                            //setting main name and names for Bridge Types to Facebook name
-                            if let name = result["name"] {
-                                global_name = name as! String
-                                // Store the name in core data 06/09
-                                localData.setUsername(global_name)
-                                PFUser.current()?["fb_name"] = name
-                                PFUser.current()?["name"] = name
-                                //PFUser.current()?["business_name"] = name
-                                //PFUser.current()?["love_name"] = name
-                                //PFUser.current()?["friendship_name"] = name
+                            
+                            // name
+                            if let name = result["name"] as? String {
+                                user["name"] = name
                             }
-                            if let email = result["email"] {
+                            
+                            // email
+                            if let email = result["email"] as? String {
                                 PFUser.current()?["email"] = email
                             }
                             
+                            // birthday (used for age)
                             if let birthday = result["birthday"] as? String {
-                                //getting birthday from Facebook and calculating age
-                                PFUser.current()?["fb_birthday"] = birthday
-                                
-                                //getting age from Birthday
-                                let formatter = DateFormatter()
-                                
-                                //formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
-                                formatter.locale = Locale(identifier: "en_US_POSIX")
-                                formatter.dateFormat = "MM/dd/yyyy"
-                                
-                                if let NSbirthday = formatter.date(from: birthday) {
-                                    let calendar: Calendar = Calendar.current
-                                    let now = Date()
-                                    //calendar.component(.year, from: NSbirthday)
-                                    //let secondsInYear = 365*24*60*60
-                                    //let age = Int(now.timeIntervalSince(NSbirthday)) / secondsInYear
-                                    if let age = ((calendar as NSCalendar).components(.year, from: NSbirthday, to: now, options: [])).year {
-                                        PFUser.current()?["age"] = age
+                                user["birthday"] = birthday
+                            }
+                            
+                            // gender
+                            if let gender = result["gender"] as? String {
+                                user["gender"] = gender
+                            }
+                            
+                            // city
+                            if let location = result["location"] as? [String: AnyObject] {
+                                if let locationName = location["name"] as? String {
+                                    user["city"] = locationName
+                                }
+                            }
+                            
+                            // school
+                            if let educationHistory = result["education"] as? [AnyObject] {
+                                if let education = educationHistory.last {
+                                    if let education = education as? [String: AnyObject] {
+                                        if let school = education["school"] as? [String: AnyObject] {
+                                            if let schoolName = school["name"] as? String {
+                                                user["school"] = schoolName
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            // work
+                            if let workHistory = result["work"] as? [AnyObject] {
+                                if let work = workHistory.last {
+                                    if let work = work as? [String: AnyObject] {
+                                        if let employer = work["employer"] as? [String: AnyObject] {
+                                            if let employerName = employer["name"] as? String {
+                                                user["work"] = employerName
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -144,22 +160,8 @@ class FBLogin {
                                     hasInterestedIn = true
                                 }
                                 
-                                
-                                if let gender: String = result["gender"]! as? String {
-                                    PFUser.current()?["gender"] = gender
-                                    PFUser.current()?["fb_gender"] = gender
-                                    //saves a guess at the gender the current user is interested in if it doesn't already exist
-                                    if hasInterestedIn == false {
-                                        if gender == "male" {
-                                            PFUser.current()?["interested_in"] = "female"
-                                        } else if gender == "female" {
-                                            PFUser.current()?["interested_in"] = "male"
-                                        }
-                                    }
-                                }
-                                
                                 if let id = result["id"] {
-                                    PFUser.current()?["fb_id"] =  id
+                                    user["fb_id"] = id
                                 }
                                 
 //                                //Getting user friends from facebook and then updating the friend_list
@@ -181,19 +183,19 @@ class FBLogin {
 //                                }
                                 
                                 
-                                PFUser.current()?["distance_interest"] = 100
-                                PFUser.current()?["new_message_push_notifications"] = true
+                                user["distance_interest"] = 100
+                                user["new_message_push_notifications"] = true
                                 localData.setNewMessagesPushNotifications(true)
-                                PFUser.current()?["new_bridge_push_notifications"] = true
+                                user["new_bridge_push_notifications"] = true
                                 localData.setNewBridgesPushNotifications(true)
-                                PFUser.current()?["built_bridges"] = []
-                                PFUser.current()?["rejected_bridges"] = []
-                                PFUser.current()?["interested_in_business"] = true
-                                PFUser.current()?["interested_in_love"] = true
-                                PFUser.current()?["interested_in_friendship"] = true
-                                PFUser.current()?["ran_out_of_pairs"] = 0
+                                user["built_bridges"] = []
+                                user["rejected_bridges"] = []
+                                user["interested_in_business"] = true
+                                user["interested_in_love"] = true
+                                user["interested_in_friendship"] = true
+                                user["ran_out_of_pairs"] = 0
                                 
-                                PFUser.current()?.saveInBackground()
+                                user.saveInBackground()
                                 
                                 //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
                                 localData.setHasSignedUp(false)

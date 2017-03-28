@@ -118,12 +118,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = vc
-            }else if application.applicationState == UIApplicationState.background {
+            } else if application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Background")
-            }else if application.applicationState == UIApplicationState.active {
+            } else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
-            }
-            else{
+            } else {
                 print("None")
             }
 

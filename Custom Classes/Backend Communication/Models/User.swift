@@ -160,8 +160,8 @@ class User: NSObject {
             displayGender = parseDisplayGender
         }
         
-        if let parseFBBirthday = parseUser["fb_birthday"] as? String {
-            birthday = parseFBBirthday
+        if let parseBirthday = parseUser["birthday"] as? String {
+            birthday = parseBirthday
         }
         
         if let parseDisplayAge = parseUser["display_age"] as? Bool {
@@ -352,9 +352,9 @@ class User: NSObject {
         }
         
         if let birthday = birthday {
-            parseUser["fb_birthday"] = birthday
+            parseUser["birthday"] = birthday
         } else {
-            parseUser.remove(forKey: "fb_birthday")
+            parseUser.remove(forKey: "birthday")
         }
         
         if let displayAge = displayAge {
