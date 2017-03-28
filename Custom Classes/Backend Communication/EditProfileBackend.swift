@@ -21,17 +21,20 @@ class EditProfileBackend {
         }
     }
     
-    func setPicturesToUser(user: User, pictureIDs: [String?], images: [UIImage]) {
-        setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: 0, soFar: [])
+    func setPicturesToUser(user: User, pictureIDs: [String?], images: [UIImage], completion: (() -> Void)? = nil) {
+        setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: 0, soFar: [], completion: completion)
     }
     
-    private func setPicturesToUser(user: User, pictureIDs: [String?], images: [UIImage], index: Int, soFar: [String]) {
+    private func setPicturesToUser(user: User, pictureIDs: [String?], images: [UIImage], index: Int, soFar: [String], completion: (() -> Void)? = nil) {
         if index >= pictureIDs.count || index >= images.count {
             user.pictureIDs = soFar
+            if let completion = completion {
+                completion()
+            }
         } else if let pictureID = pictureIDs[index] {
             var newSoFar = soFar
             newSoFar.append(pictureID)
-            setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar)
+            setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar, completion: completion)
         } else {
             let image = images[index]
             Picture.create(image: image) { (picture) in
@@ -39,7 +42,7 @@ class EditProfileBackend {
                     if let pictureID = savedPicture.id {
                         var newSoFar = soFar
                         newSoFar.append(pictureID)
-                        self.setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar)
+                        self.setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar, completion: completion)
                     }
                 }
             }

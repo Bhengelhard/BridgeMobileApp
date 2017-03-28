@@ -64,11 +64,12 @@ class EditProfileViewController: UIViewController {
             }
         }
         User.getCurrent { (user) in
-            self.layout.table.editProfilePicturesCell.setPicturesToUser(user: user)
-            user.aboutMe = self.layout.table.aboutMeTableCell.textView.text
-            user.lookingFor = self.layout.table.lookingForTableCell.textView.text
-            user.save { (_) in
-                self.dismiss(animated: true, completion: nil)
+            self.layout.table.editProfilePicturesCell.setPicturesToUser(user: user) {
+                user.aboutMe = self.layout.table.aboutMeTableCell.textView.text
+                user.lookingFor = self.layout.table.lookingForTableCell.textView.text
+                user.save { (_) in
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
         }
         
@@ -89,7 +90,6 @@ class EditProfileViewController: UIViewController {
     
     // scroll scroll view when keyboard shows
     func keyboardWillShow(_ notification:NSNotification) {
-        print("keyboard will show")
         if let userInfo = notification.userInfo {
             // get keyboard frame
             var keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
