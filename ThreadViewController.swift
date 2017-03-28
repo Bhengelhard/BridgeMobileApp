@@ -275,11 +275,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                         
                                     })
                                 }
-                                
-                                
-                                
-                                
-                                
+                                                                
                                 // BOTH HAVE POSTED FOR FIRST TIME
                                 
                                 // Send Push notification to connecter to let them know the conversation has begun
