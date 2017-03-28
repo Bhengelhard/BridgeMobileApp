@@ -63,17 +63,22 @@ class User: NSObject {
     var displayGender: Bool?
     
     /// The User's birthday
-    var birthday: Date?
+    var birthday: String?
 
-    
     /// The age of the User
     var age: Int? {
         if let birthday = birthday {
-            //getting age from Birthday
-            let calendar: Calendar = Calendar.current
-            let now = Date()
-            if let age = ((calendar as NSCalendar).components(.year, from: birthday, to: now, options: [])).year {
-                return age
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.dateFormat = "MM/dd/yyyy"
+            
+            if let birthdayDate = formatter.date(from: birthday) {
+                //getting age from Birthday
+                let calendar: Calendar = Calendar.current
+                let now = Date()
+                if let age = ((calendar as NSCalendar).components(.year, from: birthdayDate, to: now, options: [])).year {
+                    return age
+                }
             }
         }
         return nil
@@ -155,7 +160,7 @@ class User: NSObject {
             displayGender = parseDisplayGender
         }
         
-        if let parseFBBirthday = parseUser["fb_birthday"] as? Date {
+        if let parseFBBirthday = parseUser["fb_birthday"] as? String {
             birthday = parseFBBirthday
         }
         

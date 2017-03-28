@@ -35,6 +35,7 @@ class EditProfileInfoObjects {
     class TableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         let value: String
         let infoTitle: String
+        var shouldDisplay = false
         
         init(infoTitle: String, value: String) {
             self.value = value
@@ -52,8 +53,26 @@ class EditProfileInfoObjects {
             
             self.estimatedRowHeight = 50
             self.rowHeight = UITableViewAutomaticDimension
+        }
+        
+        init(field: UserInfoField) {
+            value = ""
+            infoTitle = ""
             
+            super.init(frame: CGRect(), style: .plain)
             
+            delegate = self
+            dataSource = self
+            
+            separatorStyle = .singleLine
+            isScrollEnabled = false
+            
+            backgroundColor = Constants.Colors.necter.backgroundGray
+            
+            estimatedRowHeight = 50
+            rowHeight = UITableViewAutomaticDimension
+            
+            tableFooterView = UIView()
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -66,8 +85,7 @@ class EditProfileInfoObjects {
         }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            
-            return 5
+            return 3
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -77,6 +95,7 @@ class EditProfileInfoObjects {
             let isSelected = editProfileInfoBackend.returnSelected(title: infoTitle)
             
             switch(indexPath.row) {
+                /*
             case 0:
                 cell = DescriptionCell(text: "")
             case 1:
@@ -98,7 +117,30 @@ class EditProfileInfoObjects {
                         cell.checkmarkButton.isSelected = true
                     } else {
                         cell.checkmarkButton.isSelected = false
-                    }                }
+                    }                
+                 }
+            */
+            case 0:
+                cell = DescriptionCell(text: "If your \(infoTitle) isn't shown, update it on Facebook.")
+            case 1:
+                cell = OptionCell(text: "None", infoTitle: infoTitle)
+                if let cell = cell as? OptionCell {
+                    if !isSelected {
+                        cell.checkmarkButton.isSelected = true
+                    } else {
+                        cell.checkmarkButton.isSelected = false
+                    }
+                }
+            case 2:
+                cell = OptionCell(text: "", infoTitle: infoTitle)
+                if let cell = cell as? OptionCell {
+                    if !isSelected {
+                        cell.checkmarkButton.isSelected = true
+                    } else {
+                        cell.checkmarkButton.isSelected = false
+                    }
+                }
+            
             default:
                 cell = DescriptionCell(text: "")
             }
@@ -110,9 +152,9 @@ class EditProfileInfoObjects {
         
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
             
-            if indexPath.row == 0 {
-                return 20
-            }
+            //if indexPath.row == 0 {
+            //    return 20
+            //}
             return 50
         }
         
@@ -121,9 +163,8 @@ class EditProfileInfoObjects {
             if let cell = cellForRow(at: indexPath) as? OptionCell {
                 print("cell is OptionCell")
                 
-                
-                let valueIndexPath = IndexPath(row: 1, section: 0)
-                let noneIndexPath = IndexPath(row: 3, section: 0)
+                let noneIndexPath = IndexPath(row: 1, section: 0)
+                let valueIndexPath = IndexPath(row: 2, section: 0)
                 
                 let cell2: OptionCell
                 if indexPath == valueIndexPath {

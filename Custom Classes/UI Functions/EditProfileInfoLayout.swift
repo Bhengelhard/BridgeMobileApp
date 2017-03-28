@@ -20,6 +20,11 @@ class EditProfileInfoLayout {
         
     }
     
+    init(field: UserInfoField) {
+        navBar = EditProfileInfoObjects.NavBar(infoTitle: field.rawValue)
+        table = EditProfileInfoObjects.TableView(field: field)
+    }
+    
     // MARK: - Layout
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {

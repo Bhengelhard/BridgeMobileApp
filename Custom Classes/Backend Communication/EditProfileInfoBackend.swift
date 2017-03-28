@@ -34,6 +34,28 @@ class EditProfileInfoBackend {
         }
     }
     
+    func shouldDisplay(title: String, withBlock block: (Bool) -> Void) {
+        User.getCurrent { (user) in
+            let fieldTitle = title.lowercased()
+            var fieldValue: Bool?
+            
+            switch fieldTitle {
+            case "age":
+                fieldValue = user.displayAge
+            case "work":
+                fieldValue = user.displayWork
+            case "school":
+                fieldValue = user.displaySchool
+            case "gender":
+                fieldValue = user.displayGender
+            case "relationship status":
+                fieldValue = user.displayRelationshipStatus
+            default:
+                fieldValue = nil
+            }
+        }
+    }
+    
     func setSelected(title: String, isSelected: Bool) {
         if let user = PFUser.current() {
             let fieldTitle = title.lowercased()

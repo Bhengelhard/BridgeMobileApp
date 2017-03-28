@@ -14,6 +14,7 @@ class EditProfileViewController: UIViewController {
     let layout = EditProfileLayout()
     let transitionManager = TransitionManager()
     var myProfileVC: MyProfileViewController?
+    let editProfileBackend = EditProfileBackend()
     
     var didSetupConstraints = false
     
@@ -24,11 +25,18 @@ class EditProfileViewController: UIViewController {
         layout.table.backgroundColor = Constants.Colors.necter.backgroundGray
         
         //Listener for TableViewCell Tapped
-        NotificationCenter.default.addObserver(self, selector: #selector(tableViewCellTapped), name: NSNotification.Name(rawValue: "tableViewCellTapped"), object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(tableViewCellTapped), name: NSNotification.Name(rawValue: "tableViewCellTapped"), object: nil)
         
         layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
         layout.table.setParentVCOfEditProfilePicturesCell(parentVC: self)
         
+        for fieldTableCell in [layout.table.ageTableCell, layout.table.cityTableCell, layout.table.workTableCell, layout.table.schoolTableCell, layout.table.genderTableCell, layout.table.relationshipStatusTableCell] {
+            if let textLabel = fieldTableCell.textLabel {
+                editProfileBackend.setFieldLabel(field: fieldTableCell.field, label: textLabel)
+            }
+            let editInfoGR = UITapGestureRecognizer(target: self, action: #selector(editInfo(_:)))
+            fieldTableCell.addGestureRecognizer(editInfoGR)
+        }
     }
     
     override func loadView() {
@@ -55,6 +63,16 @@ class EditProfileViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    func editInfo(_ gesture: UITapGestureRecognizer) {
+        if let view = gesture.view {
+            if let fieldTableCell = view as? EditProfileObjects.WhiteFieldTableCell {
+                let editProfileInfoVC = EditProfileInfoViewController(field: fieldTableCell.field)
+                present(editProfileInfoVC, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    /*
     func tableViewCellTapped(_ notification: Notification) {
         print("Table View Cell Tapped responding")
         
@@ -66,7 +84,7 @@ class EditProfileViewController: UIViewController {
             present(editProfileInfoVC, animated: true, completion: nil)
         }
         
-    }
+    }*/
     
     
     // MARK: - Navigation
