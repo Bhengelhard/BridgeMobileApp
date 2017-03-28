@@ -38,7 +38,7 @@ class EditProfileLayout {
             EditProfileLogic.setLookingFor(textView: table.lookingForTableCell.textView)
             
             let editProfileBackend = EditProfileBackend()
-            editProfileBackend.setPictures { (pictures) in
+            editProfileBackend.loadCurrentUserPictures { (pictures) in
                 for i in 0..<min(6, pictures.count) {
                     let picture = pictures[i]
                     self.table.editProfilePicturesCell.addPicture(picture: picture)

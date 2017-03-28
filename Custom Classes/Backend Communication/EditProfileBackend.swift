@@ -10,7 +10,7 @@ import UIKit
 
 class EditProfileBackend {
     
-    func setPictures(withBlock block: Picture.PicturesBlock? = nil) {
+    func loadCurrentUserPictures(withBlock block: Picture.PicturesBlock? = nil) {
         User.getCurrent { (user) in
             Picture.getAll(withUser: user) { (pictures) in
                 if let block = block {
@@ -21,20 +21,17 @@ class EditProfileBackend {
         }
     }
     
-    func savePicturesToUser(pictureIDs: [String?], images: [UIImage]) {
-        User.getCurrent { (user) in
-            self.savePicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: 0, soFar: [])
-        }
+    func setPicturesToUser(user: User, pictureIDs: [String?], images: [UIImage]) {
+        setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: 0, soFar: [])
     }
     
-    private func savePicturesToUser(user: User, pictureIDs: [String?], images: [UIImage], index: Int, soFar: [String]) {
+    private func setPicturesToUser(user: User, pictureIDs: [String?], images: [UIImage], index: Int, soFar: [String]) {
         if index >= pictureIDs.count || index >= images.count {
             user.pictureIDs = soFar
-            user.save()
         } else if let pictureID = pictureIDs[index] {
             var newSoFar = soFar
             newSoFar.append(pictureID)
-            savePicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar)
+            setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar)
         } else {
             let image = images[index]
             Picture.create(image: image) { (picture) in
@@ -42,7 +39,7 @@ class EditProfileBackend {
                     if let pictureID = savedPicture.id {
                         var newSoFar = soFar
                         newSoFar.append(pictureID)
-                        self.savePicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar)
+                        self.setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: index+1, soFar: newSoFar)
                     }
                 }
             }
