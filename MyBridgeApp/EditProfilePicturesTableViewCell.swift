@@ -142,6 +142,9 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
 
             pictureBox.pictureButton.addTarget(self, action: #selector(showMenu(_:)), for: .touchUpInside)
             
+            let showMenuFromDragGR = UIPanGestureRecognizer(target: self, action: #selector(showMenuFromDrag(_:)))
+            pictureBox.addGestureRecognizer(showMenuFromDragGR)
+            
             containerViews.append(UIView())
         }
         
@@ -239,8 +242,27 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         pictureBoxes[pictureBoxes.count-1].removeImage()
     }
     
+    func switchImage(atIndex index1: Int, withIndex index2: Int) {
+        if let image1 = pictureBoxes[index1].image, let image2 = pictureBoxes[index2].image {
+            let pictureBox1PictureID = pictureBoxes[index1].pictureID
+            let pictureBox2PictureID = pictureBoxes[index2].pictureID
+            pictureBoxes[index1].setImage(image: image2, pictureID: pictureBox2PictureID)
+            pictureBoxes[index2].setImage(image: image1, pictureID: pictureBox1PictureID)
+        }
+    }
+    
     func showMenu(_ sender: UIButton) {
         if let pictureBox = sender.superview as? PictureBox {
+            if pictureBox.empty {
+                showAddImageMenu(index: pictureBox.number-1)
+            } else {
+                showDeleteImageMenu(index: pictureBox.number-1)
+            }
+        }
+    }
+    
+    func showMenuFromDrag(_ gesture: UIGestureRecognizer) {
+        if let pictureBox = gesture.view as? PictureBox {
             if pictureBox.empty {
                 showAddImageMenu(index: pictureBox.number-1)
             } else {
@@ -278,19 +300,38 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
     }
     
     func showDeleteImageMenu(index: Int) {
-        print("showing delete menu")
-        let deleteImageMenu = UIAlertController(title: nil, message: "Delete This Image?", preferredStyle: .actionSheet)
+        let deleteImageMenu = UIAlertController(title: nil, message: "What would you like to do with this image?", preferredStyle: .actionSheet)
         
         // delete image
-        let deleteAction = UIAlertAction(title: "Yes", style: .default) { (alert) in
+        let deleteAction = UIAlertAction(title: "Delete", style: .default) { (alert) in
             self.deleteImage(atIndex: index)
         }
         
-        // don't delete image
-        let cancelAction = UIAlertAction(title: "No", style: .default) { (alert) in
+        // move image up by 1 box
+        let moveUpAction = UIAlertAction(title: "Move Up", style: .default) { (alert) in
+            self.switchImage(atIndex: index, withIndex: index-1)
+        }
+        
+        // move image down by 1 box
+        let moveDownAction = UIAlertAction(title: "Move Down", style: .default) { (alert) in
+            self.switchImage(atIndex: index, withIndex: index+1)
+        }
+        
+        // don't do anything
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in
+            deleteImageMenu.dismiss(animated: true, completion: nil)
         }
         
         deleteImageMenu.addAction(deleteAction)
+        
+        if index > 0 {
+            deleteImageMenu.addAction(moveUpAction)
+        }
+        
+        if index < pictureBoxes.count && !pictureBoxes[index+1].empty {
+            deleteImageMenu.addAction(moveDownAction)
+        }
+        
         deleteImageMenu.addAction(cancelAction)
         
         if let parentVC = parentVC {
@@ -311,7 +352,7 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func savePictures(withBlock block: (() -> Void)? = nil) {
+    func setPicturesToUser(user: User, completion: (() -> Void)? = nil) {
         var pictureIDs = [String?]()
         var images = [UIImage]()
         for pictureBox in pictureBoxes {
@@ -323,7 +364,7 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
             }
         }
         let editProfileBackend = EditProfileBackend()
-        editProfileBackend.savePicturesToUser(pictureIDs: pictureIDs, images: images)
+        editProfileBackend.setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, completion: completion)
     }
 
 }

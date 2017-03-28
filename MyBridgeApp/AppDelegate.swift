@@ -122,10 +122,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window?.rootViewController = mainPageViewController
             }else if application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Background")
-            }else if application.applicationState == UIApplicationState.active {
+            } else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
-            }
-            else{
+            } else {
                 print("None")
             }
 

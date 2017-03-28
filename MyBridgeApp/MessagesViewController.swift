@@ -97,7 +97,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 1 {
             if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
-                goToThread(messageID: messageID)
+                goToThread(messageID: messageID) {
+                    tableView.deselectRow(at: indexPath, animated: false) // deselect the row
+                }
             }
         }
     }
@@ -126,13 +128,13 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func goToThread(messageID: String?) {
+    func goToThread(messageID: String?, completion: (() -> Void)? = nil) {
         let threadVC = ThreadViewController()
         threadVC.setMessageID(messageID: messageID)
         threadVC.messagesBackend = messagesBackend
         threadVC.messagesTableView = layout.messagesTable
         threadVC.newMatchesTableViewCell = newMatchesTableViewCell
-        present(threadVC, animated: true, completion: nil)
+        present(threadVC, animated: true, completion: completion)
     }
     
     // MARK: - Targets

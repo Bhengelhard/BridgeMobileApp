@@ -57,11 +57,12 @@ class EditProfileObjects {
         let editProfilePicturesCell = EditProfilePicturesTableViewCell()
         let aboutMeTableCell = WhiteTextTableCell()
         let lookingForTableCell = WhiteTextTableCell()
-        let ageTableCell = WhiteTableCell()
-        let workTableCell = WhiteTableCell()
-        let schoolTableCell = WhiteTableCell()
-        let genderTableCell = WhiteTableCell()
-        let relationshipStatusTableCell = WhiteTableCell()
+        let ageTableCell = WhiteFieldTableCell(field: .age)
+        let cityTableCell = WhiteFieldTableCell(field: .city)
+        let workTableCell = WhiteFieldTableCell(field: .work)
+        let schoolTableCell = WhiteFieldTableCell(field: .school)
+        let genderTableCell = WhiteFieldTableCell(field: .gender)
+        let relationshipStatusTableCell = WhiteFieldTableCell(field: .relationshipStatus)
         
         override init(frame: CGRect, style: UITableViewStyle) {
             super.init(frame: CGRect(), style: .plain)
@@ -72,7 +73,7 @@ class EditProfileObjects {
             self.separatorStyle = .none
             
             self.estimatedRowHeight = 50
-            //self.rowHeight = UITableViewAutomaticDimension
+            //self.rowHeight = UITableViewAutomaticDimension            
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -86,7 +87,7 @@ class EditProfileObjects {
         }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return 15
+            return 17
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -105,24 +106,28 @@ class EditProfileObjects {
             case 4:
                 cell = lookingForTableCell
             case 5:
-                cell = GrayTableCell(text: "Age")
+                cell = GrayTableCell(field: .age)
             case 6:
                 cell = ageTableCell
             case 7:
-                cell = GrayTableCell(text: "Current Work")
+                cell = GrayTableCell(field: .city)
             case 8:
-                cell = workTableCell
+                cell = cityTableCell
             case 9:
-                cell = GrayTableCell(text: "School")
+                cell = GrayTableCell(field: .work)
             case 10:
-                cell = schoolTableCell
+                cell = workTableCell
             case 11:
-                cell = GrayTableCell(text: "Gender")
+                cell = GrayTableCell(field: .school)
             case 12:
-                cell = genderTableCell
+                cell = schoolTableCell
             case 13:
-                cell = GrayTableCell(text: "Relationship Status")
+                cell = GrayTableCell(field: .gender)
             case 14:
+                cell = genderTableCell
+            case 15:
+                cell = GrayTableCell(field: .relationshipStatus)
+            case 16:
                 cell = relationshipStatusTableCell
             default:
                 cell = WhiteTextTableCell()
@@ -179,16 +184,48 @@ class EditProfileObjects {
             super.init(style: .subtitle, reuseIdentifier: "GrayTableCell")
             
             self.textLabel?.text = text
-            self.textLabel?.font = Constants.Fonts.bold16
-            self.backgroundColor = Constants.Colors.necter.backgroundGray
-            self.textLabel?.textColor = Constants.Colors.necter.textDarkGray
-            self.isUserInteractionEnabled = false
+            formatLabel()
+        }
+        
+        init(field: UserInfoField) {
+            super.init(style: .subtitle, reuseIdentifier: "GrayTableCell")
+            
+            self.textLabel?.text = field.rawValue
+            formatLabel()
+        }
+        
+        func formatLabel() {
+            textLabel?.font = Constants.Fonts.bold16
+            backgroundColor = Constants.Colors.necter.backgroundGray
+            textLabel?.textColor = Constants.Colors.necter.textDarkGray
+            isUserInteractionEnabled = false
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
+    }
+    
+    class WhiteFieldTableCell: UITableViewCell {
+        let field: UserInfoField
+        
+        init(field: UserInfoField) {
+            self.field = field
+            
+            super.init(style: .subtitle, reuseIdentifier: "WhiteFieldTableCell")
+            
+            textLabel?.font = Constants.Fonts.light18
+            textLabel?.numberOfLines = 0
+            textLabel?.textColor = .black
+            backgroundColor = UIColor.white
+            
+            accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
     }
     
     class WhiteTableCell: UITableViewCell {
@@ -217,8 +254,6 @@ class EditProfileObjects {
         
         init() {
             super.init(style: .subtitle, reuseIdentifier: "GrayTableCell")
-            
-            
             
             self.backgroundColor = UIColor.white
             

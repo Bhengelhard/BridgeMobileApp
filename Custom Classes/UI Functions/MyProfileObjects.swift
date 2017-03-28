@@ -66,7 +66,6 @@ class MyProfileObjects {
             super.init(frame: CGRect())
             
             self.setBackgroundImage(#imageLiteral(resourceName: "Profile_Edit_Button"), for: .normal)
-            self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
             self.layer.shadowColor = UIColor.black.cgColor
             self.layer.shadowOpacity = 0.4
             self.layer.shadowOffset = .init(width: 1, height: 1)
@@ -76,11 +75,6 @@ class MyProfileObjects {
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
-        func tapped(_ sender: UIButton) {
-            print("EditProfileButton tapped")
-        }
-        
     }
     
     /// Rounded Rectangle Button that displays the user's reputation score

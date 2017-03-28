@@ -14,10 +14,9 @@ class EditProfileInfoLayout {
     let navBar: EditProfileInfoObjects.NavBar
     let table: EditProfileInfoObjects.TableView
     
-    init(infoTitle: String, value: String) {
-        self.navBar = EditProfileInfoObjects.NavBar(infoTitle: infoTitle)
-        self.table = EditProfileInfoObjects.TableView(infoTitle: infoTitle, value: value)
-        
+    init(field: UserInfoField) {
+        navBar = EditProfileInfoObjects.NavBar(infoTitle: field.rawValue)
+        table = EditProfileInfoObjects.TableView(field: field)
     }
     
     // MARK: - Layout

@@ -93,6 +93,7 @@
 		907F605D1E7263B800CB1097 /* SingleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907F605C1E7263B800CB1097 /* SingleMessage.swift */; };
 		907F605F1E73427400CB1097 /* ThreadBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907F605E1E73427400CB1097 /* ThreadBackend.swift */; };
 		907F60611E73433100CB1097 /* ThreadLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907F60601E73433100CB1097 /* ThreadLogic.swift */; };
+		9080E82A1E88D25900334650 /* UserInfoField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9080E8291E88D25900334650 /* UserInfoField.swift */; };
 		9085E3FD1E8197370097CADB /* RelationshipStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085E3FC1E8197370097CADB /* RelationshipStatus.swift */; };
 		90AB6B111E5E1BAE00EBEBC0 /* MessagesBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */; };
 		90AB6B131E60A01000EBEBC0 /* MessagesLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB6B121E60A01000EBEBC0 /* MessagesLogic.swift */; };
@@ -206,6 +207,7 @@
 		907F605C1E7263B800CB1097 /* SingleMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMessage.swift; sourceTree = "<group>"; };
 		907F605E1E73427400CB1097 /* ThreadBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadBackend.swift; path = "Custom Classes/Backend Communication/ThreadBackend.swift"; sourceTree = "<group>"; };
 		907F60601E73433100CB1097 /* ThreadLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadLogic.swift; sourceTree = "<group>"; };
+		9080E8291E88D25900334650 /* UserInfoField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserInfoField.swift; path = Types/UserInfoField.swift; sourceTree = "<group>"; };
 		9085E3FC1E8197370097CADB /* RelationshipStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelationshipStatus.swift; sourceTree = "<group>"; };
 		90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesBackend.swift; path = "Custom Classes/Backend Communication/MessagesBackend.swift"; sourceTree = "<group>"; };
 		90AB6B121E60A01000EBEBC0 /* MessagesLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesLogic.swift; sourceTree = "<group>"; };
@@ -430,6 +432,7 @@
 				30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */,
 				90F5E3BE1E5CD376001399F6 /* Gender.swift */,
 				9085E3FC1E8197370097CADB /* RelationshipStatus.swift */,
+				9080E8291E88D25900334650 /* UserInfoField.swift */,
 			);
 			name = Types;
 			sourceTree = "<group>";
@@ -743,6 +746,7 @@
 				30BFA0BD1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift in Sources */,
 				907F60611E73433100CB1097 /* ThreadLogic.swift in Sources */,
 				30D82B6C1E73310A000F7075 /* EditProfileInfoLayout.swift in Sources */,
+				9080E82A1E88D25900334650 /* UserInfoField.swift in Sources */,
 				302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */,
 				30A217DC1E7B3CFB00CEBA80 /* NewMatchesTableViewCell.swift in Sources */,
 				CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */,

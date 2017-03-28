@@ -21,9 +21,12 @@ class EditProfileInfoObjects {
             let gradientColor = DisplayUtility.gradientColor(size: rightButton.frame.size)
             rightButton.setTitleColor(gradientColor, for: .normal)
             
-            self.shadowImage = nil
-            
+            shadowImage = nil
+                        
             navItem.title = infoTitle
+            if let titleLabel = navItem.titleView as? UILabel {
+                titleLabel.adjustsFontSizeToFitWidth = true
+            }
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -33,27 +36,31 @@ class EditProfileInfoObjects {
     }
     
     class TableView: UITableView, UITableViewDelegate, UITableViewDataSource {
-        let value: String
-        let infoTitle: String
+        let field: UserInfoField
+        var value: String?
+        var shouldDisplay = false
+        let noneCell = OptionCell()
+        let valueCell = OptionCell()
+        var noneSelected = true
         
-        init(infoTitle: String, value: String) {
-            self.value = value
-            self.infoTitle = infoTitle
-            
+        init(field: UserInfoField) {
+            self.field = field
             super.init(frame: CGRect(), style: .plain)
             
             delegate = self
             dataSource = self
             
-            self.separatorStyle = .none
-            self.isScrollEnabled = false
+            separatorStyle = .singleLine
+            isScrollEnabled = false
             
-            self.backgroundColor = Constants.Colors.necter.backgroundGray
+            backgroundColor = Constants.Colors.necter.backgroundGray
             
-            self.estimatedRowHeight = 50
-            self.rowHeight = UITableViewAutomaticDimension
+            estimatedRowHeight = 50
+            rowHeight = UITableViewAutomaticDimension
             
+            tableFooterView = UIView()
             
+            noneCell.textLabel?.text = "None"
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -66,78 +73,56 @@ class EditProfileInfoObjects {
         }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            
-            return 5
+            if value != nil {
+                return 3
+            }
+            return 2
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             var cell: UITableViewCell
             
-            let editProfileInfoBackend = EditProfileInfoBackend()
-            let isSelected = editProfileInfoBackend.returnSelected(title: infoTitle)
-            
             switch(indexPath.row) {
             case 0:
-                cell = DescriptionCell(text: "")
+                cell = DescriptionCell(text: "If your \(field.rawValue.lowercased()) isn't shown, update it on Facebook.")
             case 1:
-                cell = OptionCell(text: value, infoTitle: infoTitle)
-                if let cell = cell as? OptionCell {
-                    if isSelected {
-                        cell.checkmarkButton.isSelected = true
-                    } else {
-                        cell.checkmarkButton.isSelected = false
-                    }
-                }
-                
+                cell = noneCell
+                noneCell.setChecked(checked: !shouldDisplay)
             case 2:
-                cell = DescriptionCell(text: "If your \(infoTitle) isn't shown, update it on Facebook.")
-            case 3:
-                cell = OptionCell(text: "None", infoTitle: infoTitle)
-                if let cell = cell as? OptionCell {
-                    if !isSelected {
-                        cell.checkmarkButton.isSelected = true
-                    } else {
-                        cell.checkmarkButton.isSelected = false
-                    }                }
+                cell = valueCell
+                valueCell.setChecked(checked: shouldDisplay)
+            
             default:
                 cell = DescriptionCell(text: "")
             }
-            
-            
             
             return cell
         }
         
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
             
-            if indexPath.row == 0 {
-                return 20
-            }
+            //if indexPath.row == 0 {
+            //    return 20
+            //}
             return 50
         }
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            
             // Change Option Cell selected checkmark button
-            if let cell = cellForRow(at: indexPath) as? OptionCell {
-                print("cell is OptionCell")
-                
-                
-                let valueIndexPath = IndexPath(row: 1, section: 0)
-                let noneIndexPath = IndexPath(row: 3, section: 0)
-                
-                let cell2: OptionCell
-                if indexPath == valueIndexPath {
-                    cell2 = cellForRow(at: noneIndexPath) as! EditProfileInfoObjects.OptionCell
-                } else {
-                    cell2 = cellForRow(at: valueIndexPath) as! EditProfileInfoObjects.OptionCell
-                }
-                
-                if cell.checkmarkButton.isSelected {
-                    cell.checkmarkButton.isSelected = false
-                    cell2.checkmarkButton.isSelected = true
-                } else {
-                    cell.checkmarkButton.isSelected = true
-                    cell2.checkmarkButton.isSelected = false
+            if let cell = cellForRow(at: indexPath) {
+                if cell == noneCell {
+                    if !noneCell.checked {
+                        shouldDisplay = false
+                        noneCell.setChecked(checked: true)
+                        valueCell.setChecked(checked: false)
+                    }
+                } else if cell == valueCell {
+                    if !valueCell.checked {
+                        shouldDisplay = true
+                        noneCell.setChecked(checked: false)
+                        valueCell.setChecked(checked: true)
+                    }
                 }
             }
         }
@@ -146,19 +131,19 @@ class EditProfileInfoObjects {
     
     class OptionCell: UITableViewCell {
         let checkmarkButton = UIButton()
-        let infoTitle: String
+        var checked = false
         
-        init(text: String, infoTitle: String) {
-            self.infoTitle = infoTitle
+        init() {
             super.init(style: .subtitle, reuseIdentifier: "OptionCell")
             
-            self.textLabel?.text = text
             self.textLabel?.font = Constants.Fonts.light18
             self.backgroundColor = UIColor.white
             self.selectionStyle = .none
             
             checkmarkButton.setImage(nil, for: .normal)
             checkmarkButton.setImage(#imageLiteral(resourceName: "Gradient_Checkmark_Circle_Selected"), for: .selected)
+            
+            checkmarkButton.isUserInteractionEnabled = false
 
             addSubview(checkmarkButton)
             checkmarkButton.autoAlignAxis(toSuperviewAxis: .horizontal)
@@ -168,6 +153,11 @@ class EditProfileInfoObjects {
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+        
+        func setChecked(checked: Bool) {
+            self.checked = checked
+            checkmarkButton.isSelected = checked
         }
     }
     

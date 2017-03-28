@@ -13,13 +13,18 @@ class EditProfileInfoViewController: UIViewController {
     // MARK: Global Variables
     let layout: EditProfileInfoLayout
     let transitionManager = TransitionManager()
+    let editProfileInfoBackend = EditProfileInfoBackend()
+    let field: UserInfoField
+    let fieldTableCell: EditProfileObjects.WhiteFieldTableCell
     
     var didSetupConstraints = false
     
-    init(infoTitle: String, value: String) {
-        self.layout = EditProfileInfoLayout(infoTitle: infoTitle, value: value)
-        super.init(nibName: nil, bundle: nil)
+    init(fieldTableCell: EditProfileObjects.WhiteFieldTableCell) {
+        self.fieldTableCell = fieldTableCell
+        field = fieldTableCell.field
+        layout = EditProfileInfoLayout(field: field)
         
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -32,6 +37,20 @@ class EditProfileInfoViewController: UIViewController {
         
         // Add targets
         layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        
+        if let textLabel = layout.table.valueCell.textLabel {
+            editProfileInfoBackend.setFieldValueLabel(field: field, label: textLabel) { (fieldValueExists) in
+                if fieldValueExists {
+                    self.layout.table.value = textLabel.text
+                    self.layout.table.reloadData()
+                }
+            }
+            
+            editProfileInfoBackend.shouldDisplay(field: field) { (shouldDisplay) in
+                self.layout.table.shouldDisplay = shouldDisplay
+                self.layout.table.reloadData()
+            }
+        }
     }
     
     override func loadView() {
@@ -50,15 +69,15 @@ class EditProfileInfoViewController: UIViewController {
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
         
-        let valueIndexPath = IndexPath(row: 1, section: 0)
-        if let valueCell = layout.table.cellForRow(at: valueIndexPath) as? EditProfileInfoObjects.OptionCell {
-            let editProfileInfoBackend = EditProfileInfoBackend()
-            editProfileInfoBackend.setSelected(title: valueCell.infoTitle, isSelected: valueCell.isSelected)
+        if layout.table.shouldDisplay {
+            fieldTableCell.textLabel?.text = layout.table.valueCell.textLabel?.text
+        } else {
+            fieldTableCell.textLabel?.text = "Add \(field.rawValue)"
         }
         
-        
-        
-        dismiss(animated: true, completion: nil)
+        editProfileInfoBackend.setAndSaveShouldDisplay(field: field, shouldDisplay: layout.table.shouldDisplay) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     // MARK: - Navigation
