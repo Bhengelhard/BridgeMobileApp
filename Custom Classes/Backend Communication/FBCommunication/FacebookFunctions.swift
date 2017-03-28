@@ -20,7 +20,7 @@ class FacebookFunctions {
     
     // MARK: -
     
-    func getProfilePictures() {
+    func getProfilePictures(completion: (() -> Void)? = nil) {
         var sources = [String]()
         
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "albums{name, photos.order(reverse_chronological).limit(4){images}}"])
@@ -61,8 +61,9 @@ class FacebookFunctions {
             for source in sources {
                 if let url = URL(string: source) {
                     if let data = try? Data(contentsOf: url) {
-                        let imageFile = PFFile(data: data)!
-                        imageFiles.append(imageFile)
+                        if let imageFile = PFFile(data: data) {
+                            imageFiles.append(imageFile)
+                        }
                     }
                 }
             }
@@ -70,35 +71,18 @@ class FacebookFunctions {
             PFUser.current()?["pictures"] = []
             PFUser.current()?.saveInBackground()
             
-            self.addPicturesToCurrentUser(from: imageFiles, soFar: [], startingWithIndex: 0)
-            
-            PFUser.current()?["profile_pictures"] = imageFiles
-            PFUser.current()?.saveInBackground(block: { (success, error) in
-                if error != nil {
-                    print("error - saving profile pictures - \(error)")
-                }
-                if success {
-                    //Saving profilePicture url
-                    if let profilePictureFiles = PFUser.current()?["profile_pictures"] as? [PFFile] {
-                        var profilePicturesURLs = [String]()
-                        for profilePictureFile in profilePictureFiles {
-                            if let url = profilePictureFile.url {
-                                profilePicturesURLs.append(url)
-                            }
-                        }
-                        PFUser.current()?["profile_pictures_urls"] = profilePicturesURLs
-                        PFUser.current()?.signUpInBackground()
-                    }
-                }
-            })
+            self.addPicturesToCurrentUser(from: imageFiles, soFar: [], startingWithIndex: 0, completion: completion)
         })
         
     }
     
-    private func addPicturesToCurrentUser(from imageFiles: [PFFile], soFar: [String], startingWithIndex index: Int) {
+    private func addPicturesToCurrentUser(from imageFiles: [PFFile], soFar: [String], startingWithIndex index: Int, completion: (() -> Void)? = nil) {
         if index >= imageFiles.count {
             PFUser.current()?["pictures"] = soFar
             PFUser.current()?.saveInBackground()
+            if let completion = completion {
+                completion()
+            }
         } else {
             let imageFile = imageFiles[index]
             imageFile.getDataInBackground { (data, error) in
@@ -111,7 +95,7 @@ class FacebookFunctions {
                             if let pictureID = picture.id {
                                 var newSoFar = soFar
                                 newSoFar.append(pictureID)
-                                self.addPicturesToCurrentUser(from: imageFiles, soFar: newSoFar, startingWithIndex: index+1)
+                                self.addPicturesToCurrentUser(from: imageFiles, soFar: newSoFar, startingWithIndex: index+1, completion: completion)
                             }
                         }
                     }
