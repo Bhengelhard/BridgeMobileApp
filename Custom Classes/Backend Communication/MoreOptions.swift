@@ -19,7 +19,6 @@ class MoreOptions {
         
         let addMoreMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        
         // Check if user follows the other user
         //        if areFriends {
         //
@@ -41,17 +40,20 @@ class MoreOptions {
                 
                 // Check if user has blocked the other user
                 let blockAction = UIAlertAction(title: "Block", style: .destructive) { (_) in
-                    self.block()
+                    self.block(message: message)
                 }
                 
                 let unblockAction = UIAlertAction(title: "Unblock", style: .default) { (_) in
-                    self.unblock()
+                    self.unblock(message: message)
                 }
                 
                 // Check if user has reported the other user
                 let reportAction = UIAlertAction(title: "Report", style: .destructive) { (_) in
                     self.report(message: message)
                 }
+                
+                let reportedAction = UIAlertAction(title: "Reported", style: .destructive)
+                reportedAction.isEnabled = false
                 
                 
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
@@ -60,18 +62,39 @@ class MoreOptions {
                 
                 User.getCurrent { (currentUser) in
                     message.getNonCurrentUser { (otherUser) in
-                        if let otherUserID = otherUser.id, let currentUserFriendList = currentUser.friendList {
-                            if currentUserFriendList.contains(otherUserID) {
-                                addMoreMenu.addAction(unfollowAction)
+                        if let otherUserID = otherUser.id {
+                            if let currentUserFriendList = currentUser.friendList {
+                                if currentUserFriendList.contains(otherUserID) {
+                                    addMoreMenu.addAction(unfollowAction)
+                                } else {
+                                    addMoreMenu.addAction(followAction)
+                                }
                             } else {
                                 addMoreMenu.addAction(followAction)
                             }
-                            addMoreMenu.addAction(blockAction)
-                            addMoreMenu.addAction(reportAction)
-                            addMoreMenu.addAction(cancelAction)
                             
-                            vc.present(addMoreMenu, animated: true, completion: nil)
+                            if let currentUserBlockingList = currentUser.blockingList {
+                                if currentUserBlockingList.contains(otherUserID) {
+                                    addMoreMenu.addAction(unblockAction)
+                                } else {
+                                    addMoreMenu.addAction(blockAction)
+                                }
+                            } else {
+                                addMoreMenu.addAction(blockAction)
+                            }
+                            
+                            if let currentUserReportedList = currentUser.reportedList {
+                                if currentUserReportedList.contains(otherUserID) {
+                                    addMoreMenu.addAction(reportedAction)
+                                } else {
+                                    addMoreMenu.addAction(reportAction)
+                                }
+                            } else {
+                                addMoreMenu.addAction(reportAction)
+                            }
                         }
+                        addMoreMenu.addAction(cancelAction)
+                        vc.present(addMoreMenu, animated: true, completion: nil)
                     }
                 }
             }
@@ -119,8 +142,6 @@ class MoreOptions {
                                 currentUserFriendList.remove(at: index)
                                 currentUser.friendList = currentUserFriendList
                             }
-                        } else {
-                            currentUser.friendList = [otherUserID]
                         }
                     }
                     currentUser.save { (_) in
@@ -133,30 +154,88 @@ class MoreOptions {
         }
     }
     
-    func block() {
-        // Code that removes current user from otherUser's friendlist
-        let firstName = "test"//DisplayUtility.firstNameLastNameInitial(name: userName)
-        
-        let alert = UIAlertController(title: "You blocked \(firstName)", message: "\(firstName) is no longer be able to introduce you.", preferredStyle: UIAlertControllerStyle.alert)
-        
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: { (action) in
-            
-        }))
-        
-        vc?.present(alert, animated: true, completion: nil)
+    func block(message: Message) {
+        // block both users from introducing and messaging
+        message.getNonCurrentUser { (otherUser) in
+            if let firstName = otherUser.firstName {
+                let alert = UIAlertController(title: "Block \(firstName)?", message: "You and \(firstName) will no longer be able to introduce or message each other.", preferredStyle: UIAlertControllerStyle.alert)
+                
+                alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { (_) in
+                    User.getCurrent { (currentUser) in
+                        if let otherUserID = otherUser.id {
+                            if var currentUserBlockingList = currentUser.blockingList {
+                                if !currentUserBlockingList.contains(otherUserID) {
+                                    currentUserBlockingList.append(otherUserID)
+                                    currentUser.blockingList = currentUserBlockingList
+                                }
+                            } else {
+                                currentUser.blockingList = [otherUserID]
+                            }
+                            currentUser.save()
+                            
+                            BridgePairing.getAll(withUser: currentUser) { (bridgePairings) in
+                                for bridgePairing in bridgePairings {
+                                    if var blockedList = bridgePairing.blockedList {
+                                        if !blockedList.contains(otherUserID) {
+                                            blockedList.append(otherUserID)
+                                            bridgePairing.blockedList = blockedList
+                                        }
+                                    } else {
+                                        bridgePairing.blockedList = [otherUserID]
+                                    }
+                                    bridgePairing.save()
+                                }
+                            }
+                        }
+                    }
+                })
+                    
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                        
+                if let vc = self.vc {
+                    vc.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
     }
     
-    func unblock() {
-        // add current user to other user's friendlist
-        let firstName = "test"//DisplayUtility.firstNameLastNameInitial(name: userName)
-        
-        let alert = UIAlertController(title: "You Unblocked \(firstName)", message: "\(firstName) is now able to introduce you.", preferredStyle: UIAlertControllerStyle.alert)
-        
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: { (action) in
-            
-        }))
-        
-        vc?.present(alert, animated: true, completion: nil)
+    func unblock(message: Message) {
+        // unblock both users from introducing and messaging
+        message.getNonCurrentUser { (otherUser) in
+            if let firstName = otherUser.firstName {
+                let alert = UIAlertController(title: "You unblocked \(firstName)", message: "You and \(firstName) are now able to introduce and message each other.", preferredStyle: UIAlertControllerStyle.alert)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                
+                User.getCurrent { (currentUser) in
+                    if let otherUserID = otherUser.id {
+                        if var currentUserBlockingList = currentUser.blockingList {
+                            if  let index = currentUserBlockingList.index(of: otherUserID) {
+                                currentUserBlockingList.remove(at: index)
+                                currentUser.blockingList = currentUserBlockingList
+                            }
+                        }
+                        currentUser.save { (_) in
+                            if let vc = self.vc {
+                                vc.present(alert, animated: true, completion: nil)
+                            }
+                        }
+                        
+                        BridgePairing.getAll(withUser: currentUser) { (bridgePairings) in
+                            for bridgePairing in bridgePairings {
+                                if var blockedList = bridgePairing.blockedList {
+                                    if  let index = blockedList.index(of: otherUserID) {
+                                        blockedList.remove(at: index)
+                                        bridgePairing.blockedList = blockedList
+                                    }
+                                }
+                                bridgePairing.save()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func report(message: Message) {
