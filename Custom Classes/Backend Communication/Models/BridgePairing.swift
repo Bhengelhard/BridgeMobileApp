@@ -96,27 +96,13 @@ class BridgePairing: NSObject {
     /// Whether the two users of the BridgePairing have been connected
     var bridged: Bool?
     
-    /// Whether the first user of the BridgePairing has accepted or rejected the
-    /// connection or neither
-    var user1Response: UserResponse?
-    
-    /// Whether the second user of the BridgePairing has accepted or rejected the
-    /// connection or neither
-    var user2Response: UserResponse?
-    
-    /// Whether a user in a BridgePairing has accepted or rejected a connection, or if
-    /// their response is still pending
-    enum UserResponse: Int {
-        case pending = 0
-        case accepted = 1
-        case ignored = 2
-    }
-    
     /// The objectIds of the users that have been shown a card with the BridgePairing
     var shownTo: [String]?
     
     /// Whether the card with the BirdgePairing is currently in use
     var checkedOut: Bool?
+    
+    var blockedList: [String]?
     
     private var userIDsToUsers = [String: User]()
     private var pictureIDsToPictures = [String: Picture]()
@@ -166,14 +152,6 @@ class BridgePairing: NSObject {
             bridged = parseBridged
         }
         
-        if let parseUser1Response = parseBridgePairing["user1_response"] as? Int {
-            user1Response = UserResponse(rawValue: parseUser1Response)
-        }
-        
-        if let parseUser2Response = parseBridgePairing["user2_response"] as? Int {
-            user2Response = UserResponse(rawValue: parseUser2Response)
-        }
-        
         if let parseShownTo = parseBridgePairing["shown_to"] as? [String] {
             shownTo = parseShownTo
         }
@@ -182,11 +160,15 @@ class BridgePairing: NSObject {
             checkedOut = parseChekcedOut
         }
         
+        if let parseBlockedList = parseBridgePairing["blocked_list"] as? [String] {
+            blockedList = parseBlockedList
+        }
+        
     }
     
     /// Creates a new BridgePairing object with the provided parameters and calls the given block
     /// on the result.
-    static func create(user1ID: String?, user2ID: String?, connecterID: String?, user1Name: String?, user2Name: String?, connecterName: String?, user1PictureID: String?, user2PictureID: String?, connecterPictureID: String?, bridged: Bool?, user1Response: UserResponse?, user2Response: UserResponse?, shownTo: [String]?, checkedOut: Bool?, block: BridgePairingBlock? = nil) {
+    static func create(user1ID: String?, user2ID: String?, connecterID: String?, user1Name: String?, user2Name: String?, connecterName: String?, user1PictureID: String?, user2PictureID: String?, connecterPictureID: String?, bridged: Bool?, shownTo: [String]?, checkedOut: Bool?, blockedList: [String]?, block: BridgePairingBlock? = nil) {
         
         let parseBridgePairing = PFObject(className: "BridgePairing")
         
@@ -235,20 +217,16 @@ class BridgePairing: NSObject {
             parseBridgePairing["bridged"] = bridged
         }
         
-        if let user1Response = user1Response {
-            parseBridgePairing["user1_response"] = user1Response.rawValue
-        }
-        
-        if let user2Response = user2Response {
-            parseBridgePairing["user2_response"] = user2Response.rawValue
-        }
-        
         if let shownTo = shownTo {
             parseBridgePairing["shown_to"] = shownTo
         }
         
         if let checkedOut = checkedOut {
             parseBridgePairing["checked_out"] = checkedOut
+        }
+        
+        if let blockedList = blockedList {
+            parseBridgePairing["blocked_list"] = blockedList
         }
         
         let bridgePairing = BridgePairing(parseBridgePairing: parseBridgePairing)
@@ -305,13 +283,38 @@ class BridgePairing: NSObject {
         }
     }
     
-    static func getAllWithFriends(ofUser user: User, notShownOnly: Bool = false, withLimit limit: Int = 10000, notCheckedOutOnly: Bool = false, exceptFriend1WithID friend1ID: String? = nil, exceptFriend2WithID friend2ID: String? = nil, withBlock block: BridgePairingsBlock? = nil) {
+    static func getAllWithFriends(ofUser user: User, notShownOnly: Bool = false, withLimit limit: Int = 10000, notCheckedOutOnly: Bool = false, exceptFriend1WithID friend1ID: String? = nil, exceptFriend2WithID friend2ID: String? = nil, exceptForBlocked: Bool = false, withBlock block: BridgePairingsBlock? = nil) {
         
         if let userFriendList = user.friendList {
             
             let query = PFQuery(className: "BridgePairings")
-            query.whereKey("user1_objectId", containedIn: userFriendList)
-            query.whereKey("user2_objectId", containedIn: userFriendList)
+            
+            if exceptForBlocked {
+                
+                // hide bridge pairings containing blockee from blocker
+                var nonBlockedFriendList = [String]()
+                if let blockingList = user.blockingList {
+                    for friend in userFriendList {
+                        if !blockingList.contains(friend) {
+                            nonBlockedFriendList.append(friend)
+                        }
+                    }
+                } else {
+                    nonBlockedFriendList = userFriendList
+                }
+                
+                query.whereKey("user1_objectId", containedIn: nonBlockedFriendList)
+                query.whereKey("user2_objectId", containedIn: nonBlockedFriendList)
+                
+                // hide bridge pairings containing blocker from blockee
+                if let id = user.id {
+                    query.whereKey("blocked_list", notEqualTo: id)
+                }
+            } else {
+                query.whereKey("user1_objectId", containedIn: userFriendList)
+                query.whereKey("user2_objectId", containedIn: userFriendList)
+            }
+            
             query.limit = limit
             
             if notShownOnly {
@@ -485,18 +488,6 @@ class BridgePairing: NSObject {
             parseBridgePairing.remove(forKey: "bridged")
         }
         
-        if let user1Response = user1Response {
-            parseBridgePairing["user1_response"] = user1Response.rawValue
-        } else {
-            parseBridgePairing.remove(forKey: "user1_response")
-        }
-        
-        if let user2Response = user2Response {
-            parseBridgePairing["user2_response"] = user2Response.rawValue
-        } else {
-            parseBridgePairing.remove(forKey: "user2_response")
-        }
-        
         if let shownTo = shownTo {
             parseBridgePairing["shown_to"] = shownTo
         } else {
@@ -507,6 +498,12 @@ class BridgePairing: NSObject {
             parseBridgePairing["checked_out"] = checkedOut
         } else {
             parseBridgePairing.remove(forKey: "checkedOut")
+        }
+        
+        if let blockedList = blockedList {
+            parseBridgePairing["blocked_list"] = blockedList
+        } else {
+            parseBridgePairing.remove(forKey: "blocked_list")
         }
         
         parseBridgePairing.saveInBackground { (succeeded, error) in

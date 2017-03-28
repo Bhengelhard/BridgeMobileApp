@@ -153,63 +153,6 @@ class FBLogin {
                                         self.localData.setInterestedIn(interested_in as! String)
                                         PFUser.current()?["interested_in"] = interested_in
                                     }
-//<<<<<<< HEAD
-//                                }
-//                                
-//                                if let id = result["id"] {
-//                                    PFUser.current()?["fb_id"] =  id
-//                                }
-//                                
-////                                //Getting user friends from facebook and then updating the friend_list
-////                                if let friends = result["friends"]! as? NSDictionary {
-////                                    let friendsData : NSArray = friends.object(forKey: "data") as! NSArray
-////                                    var fbFriendIds = [String]()
-////                                    for friend in friendsData {
-////                                        let valueDict : NSDictionary = friend as! NSDictionary
-////                                        fbFriendIds.append(valueDict.object(forKey: "id") as! String)
-////                                    }
-////                                    PFUser.current()?["fb_friends"] = fbFriendIds
-////                                    PFUser.current()?.saveInBackground(block: { (success, error) in
-////                                        if error != nil {
-////                                            print(error!)
-////                                        } else {
-////                                            fbFunctions.updateFriendList()
-////                                        }
-////                                    })
-////                                }
-//                                
-//                                
-//                                PFUser.current()?["distance_interest"] = 100
-//                                PFUser.current()?["new_message_push_notifications"] = true
-//                                localData.setNewMessagesPushNotifications(true)
-//                                PFUser.current()?["new_bridge_push_notifications"] = true
-//                                localData.setNewBridgesPushNotifications(true)
-//                                PFUser.current()?["built_bridges"] = []
-//                                PFUser.current()?["rejected_bridges"] = []
-//                                PFUser.current()?["interested_in_business"] = true
-//                                PFUser.current()?["interested_in_love"] = true
-//                                PFUser.current()?["interested_in_friendship"] = true
-//                                PFUser.current()?["ran_out_of_pairs"] = 0
-//                                
-//                                PFUser.current()?.saveInBackground()
-//                                
-//                                //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
-//                                localData.setHasSignedUp(false)
-//                                localData.synchronize()
-//                                
-//                                PFUser.current()?.saveInBackground(block: { (success, error) in
-//                                    if success == true {
-//                                        //self.activityIndicator.stopAnimating()
-//                                        UIApplication.shared.endIgnoringInteractionEvents()
-//                                        
-//                                        // Upon Signup, the user should be added to the BridgePairingsTable
-//                                        let pfCloudFunctions = PFCloudFunctions()
-//                                        pfCloudFunctions.updateBridgePairingsTable(parameters: [:])
-//                                        
-//                                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
-//                                    } else {
-//                                        print(error ?? "error")
-//=======
                                     
                                     if let id = result["id"] {
                                         user["fb_id"] = id
