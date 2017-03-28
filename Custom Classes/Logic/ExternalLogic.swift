@@ -10,42 +10,70 @@ import UIKit
 
 class ExternalLogic {
     
-    static func getFactsLabelTextAndNumberOfLines(age: Int?, city: String?, school: String?) -> (String, Int) {
+    static func getFactsLabelTextAndNumberOfLines(age: String?, city: String?, work: String?, school: String?, gender: String?, relationshipStatus: String?) -> (String, Int) {
         var labelText = String()
         
-        var selectedFacts = [String]()
+        var selectedFields = [UserInfoField]()
         
         if age != nil {
-            selectedFacts.append("age")
+            selectedFields.append(.age)
         }
         if city != nil {
-            selectedFacts.append("city")
+            selectedFields.append(.city)
+        }
+        if work != nil {
+            selectedFields.append(.work)
         }
         if school != nil {
-            selectedFacts.append("school")
+            selectedFields.append(.school)
+        }
+        if gender != nil {
+            selectedFields.append(.gender)
+        }
+        if relationshipStatus != nil {
+            selectedFields.append(.relationshipStatus)
         }
         
-        let numberOfLines = max(1, selectedFacts.count)
+        let numberOfLines = max(1, selectedFields.count)
         
-        for i in 0..<selectedFacts.count {
-            let fact = selectedFacts[i]
+        for i in 0..<selectedFields.count {
+            let field = selectedFields[i]
             
             if i > 0 {
                 labelText = "\(labelText)\n" // go to next line
             }
             
-            if fact == "age" {
+            switch field {
+            case .age:
                 if let age = age {
                     labelText = "\(labelText)\(age) years old"
                 }
-            } else if fact == "city" {
+            
+            case .city:
                 if let city = city {
                     labelText = "\(labelText)\(city)"
                 }
-            } else if fact == "school" {
+                
+            case .work:
+                if let work = work {
+                    labelText = "\(labelText)\(work)"
+                }
+                
+            case .school:
                 if let school = school {
                     labelText = "\(labelText)\(school)"
                 }
+            
+            case .gender:
+                if let gender = gender {
+                    labelText = "\(labelText)\(gender)"
+                }
+            
+            case .relationshipStatus:
+                if let relationshipStatus = relationshipStatus {
+                    labelText = "\(labelText)\(relationshipStatus)"
+                }
+                
             }
         }
         
