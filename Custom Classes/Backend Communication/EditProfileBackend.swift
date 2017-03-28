@@ -50,7 +50,6 @@ class EditProfileBackend {
     }
     
     func setFieldLabel(field: UserInfoField, label: UILabel) {
-        print("field: \(field.rawValue)")
         User.getCurrent { (user) in
             label.text = "Add \(field.rawValue)"
 

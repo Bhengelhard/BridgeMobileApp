@@ -33,14 +33,13 @@ class EditProfileInfoObjects {
     }
     
     class TableView: UITableView, UITableViewDelegate, UITableViewDataSource {
-        let value: String
-        let infoTitle: String
+        let field: UserInfoField
+        var value: String?
         var shouldDisplay = false
+        var valueCell = OptionCell()
         
         init(infoTitle: String, value: String) {
-            self.value = value
-            self.infoTitle = infoTitle
-            
+            field = .age
             super.init(frame: CGRect(), style: .plain)
             
             delegate = self
@@ -56,9 +55,7 @@ class EditProfileInfoObjects {
         }
         
         init(field: UserInfoField) {
-            value = ""
-            infoTitle = ""
-            
+            self.field = field
             super.init(frame: CGRect(), style: .plain)
             
             delegate = self
@@ -85,14 +82,17 @@ class EditProfileInfoObjects {
         }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return 3
+            if value != nil {
+                return 3
+            }
+            return 2
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             var cell: UITableViewCell
             
             let editProfileInfoBackend = EditProfileInfoBackend()
-            let isSelected = editProfileInfoBackend.returnSelected(title: infoTitle)
+            //let isSelected = editProfileInfoBackend.returnSelected(title: infoTitle)
             
             switch(indexPath.row) {
                 /*
@@ -121,25 +121,20 @@ class EditProfileInfoObjects {
                  }
             */
             case 0:
-                cell = DescriptionCell(text: "If your \(infoTitle) isn't shown, update it on Facebook.")
+                cell = DescriptionCell(text: "If your \(field.rawValue.lowercased()) isn't shown, update it on Facebook.")
             case 1:
-                cell = OptionCell(text: "None", infoTitle: infoTitle)
+                cell = OptionCell()
                 if let cell = cell as? OptionCell {
+                    cell.textLabel?.text = "None"
+                    /*
                     if !isSelected {
                         cell.checkmarkButton.isSelected = true
                     } else {
                         cell.checkmarkButton.isSelected = false
-                    }
+                    }*/
                 }
             case 2:
-                cell = OptionCell(text: "", infoTitle: infoTitle)
-                if let cell = cell as? OptionCell {
-                    if !isSelected {
-                        cell.checkmarkButton.isSelected = true
-                    } else {
-                        cell.checkmarkButton.isSelected = false
-                    }
-                }
+                cell = valueCell
             
             default:
                 cell = DescriptionCell(text: "")
@@ -187,13 +182,10 @@ class EditProfileInfoObjects {
     
     class OptionCell: UITableViewCell {
         let checkmarkButton = UIButton()
-        let infoTitle: String
         
-        init(text: String, infoTitle: String) {
-            self.infoTitle = infoTitle
+        init() {
             super.init(style: .subtitle, reuseIdentifier: "OptionCell")
             
-            self.textLabel?.text = text
             self.textLabel?.font = Constants.Fonts.light18
             self.backgroundColor = UIColor.white
             self.selectionStyle = .none

@@ -13,16 +13,13 @@ class EditProfileInfoViewController: UIViewController {
     // MARK: Global Variables
     let layout: EditProfileInfoLayout
     let transitionManager = TransitionManager()
+    let editProfileInfoBackend = EditProfileInfoBackend()
+    let field: UserInfoField
     
     var didSetupConstraints = false
     
-    init(infoTitle: String, value: String) {
-        self.layout = EditProfileInfoLayout(infoTitle: infoTitle, value: value)
-        super.init(nibName: nil, bundle: nil)
-        
-    }
-    
     init(field: UserInfoField) {
+        self.field = field
         layout = EditProfileInfoLayout(field: field)
         
         super.init(nibName: nil, bundle: nil)
@@ -38,6 +35,16 @@ class EditProfileInfoViewController: UIViewController {
         
         // Add targets
         layout.navBar.rightButton.addTarget(self, action: #selector(rightBarButtonTapped(_:)), for: .touchUpInside)
+        
+        if let textLabel = layout.table.valueCell.textLabel {
+            editProfileInfoBackend.setFieldValueLabel(field: field, label: textLabel) { (fieldValueExists) in
+                if fieldValueExists {
+                    self.layout.table.value = textLabel.text
+                    print(textLabel.text)
+                    self.layout.table.reloadData()
+                }
+            }
+        }
     }
     
     override func loadView() {
@@ -56,13 +63,9 @@ class EditProfileInfoViewController: UIViewController {
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
         
-        let valueIndexPath = IndexPath(row: 1, section: 0)
-        if let valueCell = layout.table.cellForRow(at: valueIndexPath) as? EditProfileInfoObjects.OptionCell {
-            let editProfileInfoBackend = EditProfileInfoBackend()
-            editProfileInfoBackend.setSelected(title: valueCell.infoTitle, isSelected: valueCell.isSelected)
+        if let value = layout.table.value {
+            editProfileInfoBackend.setSelected(title: value, isSelected: layout.table.valueCell.isSelected)
         }
-        
-        
         
         dismiss(animated: true, completion: nil)
     }
