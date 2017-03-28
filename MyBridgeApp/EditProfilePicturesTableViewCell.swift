@@ -142,6 +142,9 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
 
             pictureBox.pictureButton.addTarget(self, action: #selector(showMenu(_:)), for: .touchUpInside)
             
+            let showMenuFromDragGR = UIPanGestureRecognizer(target: self, action: #selector(showMenuFromDrag(_:)))
+            pictureBox.addGestureRecognizer(showMenuFromDragGR)
+            
             containerViews.append(UIView())
         }
         
@@ -250,6 +253,16 @@ class EditProfilePicturesTableViewCell: UITableViewCell, UIImagePickerController
     
     func showMenu(_ sender: UIButton) {
         if let pictureBox = sender.superview as? PictureBox {
+            if pictureBox.empty {
+                showAddImageMenu(index: pictureBox.number-1)
+            } else {
+                showDeleteImageMenu(index: pictureBox.number-1)
+            }
+        }
+    }
+    
+    func showMenuFromDrag(_ gesture: UIGestureRecognizer) {
+        if let pictureBox = gesture.view as? PictureBox {
             if pictureBox.empty {
                 showAddImageMenu(index: pictureBox.number-1)
             } else {
