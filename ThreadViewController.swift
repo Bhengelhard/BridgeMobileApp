@@ -354,7 +354,6 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     }
     
     // MARK: JSQMessages CollectionView DataSource
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return threadBackend.jsqMessages.count
     }
