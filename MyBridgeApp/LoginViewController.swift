@@ -20,6 +20,8 @@ class LoginViewController: UIViewController {
 
     var didSetupConstraints = false
     
+    var userIsNew = false
+    
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,6 +90,10 @@ class LoginViewController: UIViewController {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? MainPageViewController {
+            vc.userIsNew = userIsNew
+        }
+        
 //        let vc = segue.destination
 //        let mirror = Mirror(reflecting: vc)
 //        if mirror.subjectType == PrivacyPolicyViewController.self {

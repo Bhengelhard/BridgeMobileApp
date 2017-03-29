@@ -125,11 +125,11 @@ class FBLogin {
                             if let accessVC = vc as? LoginViewController {
                                 //Checking if user had to enter an access code -> i.e. HasSignedUp was false before they logged in
                                 if !accessVC.accessCode.isEmpty {
-                                    PFUser.current()?.addUniqueObject(accessVC.accessCode, forKey: "access_codes")
+                                    user.addUniqueObject(accessVC.accessCode, forKey: "access_codes")
                                 }
                             }
                             
-                            PFUser.current()?.saveInBackground()
+                            user.saveInBackground()
                         }
                     }
                     
@@ -198,6 +198,11 @@ class FBLogin {
                                             //self.activityIndicator.stopAnimating()
                                             UIApplication.shared.endIgnoringInteractionEvents()
                                             //vc.performSegue(withIdentifier: "showSignUp", sender: self)
+                                            if let loginVC = vc as? LoginViewController {
+                                                loginVC.userIsNew = true
+                                            } else if let privacyPolicyVC = vc as? PrivacyPolicyViewController {
+                                                privacyPolicyVC.userIsNew = true
+                                            }
                                             vc.performSegue(withIdentifier: "showSwipe", sender: self)
                                         } else {
                                             print(error ?? "error")

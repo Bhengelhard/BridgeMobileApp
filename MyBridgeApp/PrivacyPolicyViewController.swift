@@ -15,6 +15,8 @@ class PrivacyPolicyViewController: UIViewController {
     let layout = PrivacyPolicyLayout()
     let transitionManager = TransitionManager()
     
+    var userIsNew = false
+    
     var didSetupConstraints = false
 
     // MARK: - Override Functions
@@ -58,6 +60,10 @@ class PrivacyPolicyViewController: UIViewController {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? MainPageViewController {
+            vc.userIsNew = userIsNew
+        }
+        
 //        let vc = segue.destination
 //        let mirror = Mirror(reflecting: vc)
 //        if mirror.subjectType == LoginViewController.self {
