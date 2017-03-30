@@ -22,6 +22,18 @@ class EditProfileBackend {
     }
     
     func setPicturesToUser(user: User, pictureIDs: [String?], images: [UIImage], completion: (() -> Void)? = nil) {
+        // delete unneeded pictures
+        if let originalPictureIDs = user.pictureIDs {
+            for pictureID in originalPictureIDs {
+                if !pictureIDs.contains { (element) in
+                    return element == pictureID
+                } {
+                    Picture.get(withID: pictureID) { (picture) in
+                        picture.delete()
+                    }
+                }
+            }
+        }
         setPicturesToUser(user: user, pictureIDs: pictureIDs, images: images, index: 0, soFar: [], completion: completion)
     }
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class EditProfileViewController: UIViewController {
 
@@ -58,6 +59,8 @@ class EditProfileViewController: UIViewController {
     
     // MARK: - Targets
     func rightBarButtonTapped(_ sender: UIButton) {
+        let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        hud.label.text = "Saving..."
         if let myProfileVC = myProfileVC {
             if let image = layout.table.editProfilePicturesCell.pictureBoxes[0].image {
                 myProfileVC.layout.profilePicture.setBackgroundImage(image: image)
@@ -72,7 +75,6 @@ class EditProfileViewController: UIViewController {
                 }
             }
         }
-        
     }
     
     func editInfo(_ gesture: UIGestureRecognizer) {

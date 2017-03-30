@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 /// The SwipeViewController class displays and handles swiping for introductions
 class SwipeViewController: UIViewController {
-
+        
     // MARK: Global Variables
     let layout = SwipeLayout()
     let transitionManager = TransitionManager()
@@ -36,10 +37,7 @@ class SwipeViewController: UIViewController {
         layout.inviteButton.addTarget(self, action: #selector(inviteButtonTapped(_:)), for: .touchUpInside)
         layout.refreshButton.addTarget(self, action: #selector(refreshButtonTapped(_:)), for: .touchUpInside)
         
-        // Make no more bridge pairing objects invisible
-        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
-            view.alpha = 0
-        }
+        getBridgePairings()
         
         // Check for New Matches
         //Check for Connections Conversed and for the current User's New Matches
@@ -48,18 +46,32 @@ class SwipeViewController: UIViewController {
         dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
     }
     
+    func getBridgePairings() {
+        // Make no more bridge pairing objects invisible
+        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
+            view.alpha = 0
+        }
+        
+        let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        hud.label.text = "Finding Best\nPotential Friends..."
+        hud.label.numberOfLines = 0
+        
+        // 2 second delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            // Get the first swipeCards
+            self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
+                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                }
+            }
+        }
+    }
+    
     override func loadView() {
         view = UIView()
         view.backgroundColor = UIColor.white
         
         view.setNeedsUpdateConstraints()
-
-        // Get the next swipeCards
-        //swipeBackend.setInitialTopAndBottomSwipeCards(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard)
-        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
-            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
-        }
-        
     }
     
     override func updateViewConstraints() {
@@ -108,13 +120,7 @@ class SwipeViewController: UIViewController {
     }
 
     func refreshButtonTapped( _ sender: UIButton) {
-        // Make no more bridge pairing objects invisible
-        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
-            view.alpha = 0
-        }
-        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
-            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
-        }
+        getBridgePairings()
     }
     
     func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {

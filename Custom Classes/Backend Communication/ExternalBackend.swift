@@ -10,13 +10,26 @@ import UIKit
 
 class ExternalBackend {
     
-    /// get user's pictures and add them to the page control view controllers
-    func setPictures(userID: String, withBlock block: Picture.PicturesBlock? = nil) {
+    /// get user's images
+    func getImages(userID: String, withBlock block: Picture.ImagesBlock? = nil) {
         User.get(withID: userID) { (user) in
             Picture.getAll(withUser: user) { (pictures) in
-                if let block = block {
-                    block(pictures)
-                }
+                self.getImages(pictures: pictures, imagesSoFar: [], index: 0, withBlock: block)
+            }
+        }
+    }
+    
+    func getImages(pictures: [Picture], imagesSoFar: [UIImage], index: Int, withBlock block: Picture.ImagesBlock? = nil) {
+        if index >= pictures.count {
+            if let block = block {
+                block(imagesSoFar)
+            }
+        } else {
+            let picture = pictures[index]
+            picture.getImage { (image) in
+                var newImagesSoFar = imagesSoFar
+                newImagesSoFar.append(image)
+                self.getImages(pictures: pictures, imagesSoFar: newImagesSoFar, index: index+1, withBlock: block)
             }
         }
     }

@@ -59,7 +59,7 @@ class SwipeBackend {
         }
     }
     
-    private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: @escaping () -> Void, completion: (() -> Void)? = nil) {
+    private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         User.getCurrent { (user) in
             if top {
                 BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
@@ -102,7 +102,7 @@ class SwipeBackend {
         }
     }
     
-    private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: @escaping () -> Void, completion: (() -> Void)?) {
+    private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         if top {
             print("got top from parse")
         } else {
@@ -170,10 +170,12 @@ class SwipeBackend {
         }
     }
     
-    private func gotNoBridgePairings(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: @escaping () -> Void, completion: (() -> Void)?) {
+    private func gotNoBridgePairings(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         swipeCard.alpha = 0
         
-        noMoreBridgePairings()
+        if let noMoreBridgePairings = noMoreBridgePairings {
+            noMoreBridgePairings()
+        }
         
         if top {
             print("did not get top from parse")
@@ -204,7 +206,7 @@ class SwipeBackend {
     }
     
     /// set the bottom swipe card
-    func setBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: @escaping () -> Void) {
+    func setBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?) {
         
         // store old bottom as top locally
         topBridgePairing = bottomBridgePairing
@@ -223,7 +225,7 @@ class SwipeBackend {
     }
     
     /// set the top swipe card upon opening app
-    func setInitialTopSwipeCard(topSwipeCard: SwipeCard, noMoreBridgePairings: @escaping () -> Void, completion: (() -> Void)? = nil) {
+    func setInitialTopSwipeCard(topSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         if let bridgePairingID = localBridgePairings.getBridgePairing1ID() { // bridge pairing ID stored locally
             print("got top locally")
             BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
@@ -240,7 +242,7 @@ class SwipeBackend {
     }
     
     /// set the bottom swipe card upon opening app
-    func setInitialBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: @escaping () -> Void) {
+    func setInitialBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         if let bridgePairingID = localBridgePairings.getBridgePairing2ID() { // bridge pairing ID stored locally
             print("got bottom locally")
             BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
@@ -249,7 +251,7 @@ class SwipeBackend {
             }
         } else {
             print("bottom not stored locally")
-            getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, noMoreBridgePairings: noMoreBridgePairings)
+            getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
         }
     }
     

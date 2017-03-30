@@ -213,6 +213,7 @@
 		90AB6B121E60A01000EBEBC0 /* MessagesLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesLogic.swift; sourceTree = "<group>"; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
 		90CA09AA1E0B080100330646 /* HexagonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexagonView.swift; path = "Custom Classes/Custom Views/HexagonView.swift"; sourceTree = "<group>"; };
+		90CD18BB1E8C328C00864519 /* MyBridgeApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyBridgeApp-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		90F5E3BE1E5CD376001399F6 /* Gender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Gender.swift; path = Types/Gender.swift; sourceTree = "<group>"; };
 		90F5E3C01E5CD5FA001399F6 /* MyProfileBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileBackend.swift; path = "Custom Classes/Backend Communication/MyProfileBackend.swift"; sourceTree = "<group>"; };
 		90F5E3C21E5CDD5F001399F6 /* ExternalBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalBackend.swift; path = "Custom Classes/Backend Communication/ExternalBackend.swift"; sourceTree = "<group>"; };
@@ -343,7 +344,17 @@
 			name = "Custom Functions";
 			sourceTree = "<group>";
 		};
-		30BF70081E5C95920008C2B5 /* updated */ = {
+		30BFA0AF1E4BBB6600A17F5E /* FB Communication */ = {
+			isa = PBXGroup;
+			children = (
+				30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */,
+				30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */,
+				907201461E4316B500A77BC4 /* FacebookImagePickerController.swift */,
+			);
+			name = "FB Communication";
+			sourceTree = "<group>";
+		};
+		30BFA0B61E4CCC3900A17F5E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				3080202B1E6649080091E63D /* MainPageViewController.swift */,
@@ -358,24 +369,6 @@
 				30D82B5B1E6F92E3000F7075 /* WebViewController.swift */,
 				30BF700A1E5C95C60008C2B5 /* SettingsViewController.swift */,
 				907F605A1E724EEB00CB1097 /* ThreadViewController.swift */,
-			);
-			name = updated;
-			sourceTree = "<group>";
-		};
-		30BFA0AF1E4BBB6600A17F5E /* FB Communication */ = {
-			isa = PBXGroup;
-			children = (
-				30BFA0B01E4BBB9600A17F5E /* FacebookFunctions.swift */,
-				30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */,
-				907201461E4316B500A77BC4 /* FacebookImagePickerController.swift */,
-			);
-			name = "FB Communication";
-			sourceTree = "<group>";
-		};
-		30BFA0B61E4CCC3900A17F5E /* View Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				30BF70081E5C95920008C2B5 /* updated */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -452,6 +445,7 @@
 		81BA813C1A49DA1800E65899 = {
 			isa = PBXGroup;
 			children = (
+				90CD18BB1E8C328C00864519 /* MyBridgeApp-Bridging-Header.h */,
 				67AD26D51E31353400252575 /* Constants.swift */,
 				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
 				67AD26D71E31353D00252575 /* Types */,
@@ -875,6 +869,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyBridgeApp/MyBridgeApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -888,6 +883,7 @@
 				PRODUCT_NAME = MyBridgeApp;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "MyBridgeApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -903,6 +899,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyBridgeApp/MyBridgeApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7Y7JRS85QB;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -915,6 +912,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = social.necter;
 				PRODUCT_NAME = MyBridgeApp;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "MyBridgeApp-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

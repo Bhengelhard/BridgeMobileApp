@@ -8,9 +8,10 @@
 
 import UIKit
 import FBSDKCoreKit
+import MBProgressHUD
 
 class FacebookImagePickerController: UINavigationController {
-    
+
     weak var imageDelegate: FacebookImagePickerControllerDelegate?
     
     override weak var delegate: UINavigationControllerDelegate? {
@@ -19,14 +20,11 @@ class FacebookImagePickerController: UINavigationController {
         }
     }
     
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
         let fbImagesVC = FacebookImagesViewController()
         pushViewController(fbImagesVC, animated: false)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -72,6 +70,9 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
     }
     
     func getPhotos() {
+        let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        hud.label.text = "Loading..."
+        
         let connection = FBSDKGraphRequestConnection()
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "albums{name, photos.order(reverse_chronological){images}}"])
         connection.add(graphRequest) { (_, result, error) in
@@ -83,7 +84,6 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
                                 if let name = album["name"] as? String {
                                     if name == "Profile Pictures" {
                                         if let id = album["id"] as? String {
-                                            print("album id = \(id)")
                                             self.getPhotosFromAlbum(id: id, nextCursor: nil)
                                         }
                                     }
@@ -105,9 +105,7 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
         let connection = FBSDKGraphRequestConnection()
         let graphRequest = FBSDKGraphRequest(graphPath: "/\(id)/photos", parameters: params)
         connection.add(graphRequest) { (_, result, error) in
-            print(result ?? "no result")
             if let result = result as? [String:AnyObject] {
-                print(result)
                 if let data = result["data"] as? [AnyObject] {
                     for picture in data {
                         if let picture = picture as? [String:AnyObject] {
@@ -125,6 +123,9 @@ class FacebookImagesViewController: UIViewController, UICollectionViewDataSource
                         }
                     }
                 }
+                
+                MBProgressHUD.hide(for: self.view, animated: true)
+                
                 // check for more pages
                 if let paging = result["paging"] as? [String:AnyObject] {
                     if paging["next"] != nil { // there are more pages

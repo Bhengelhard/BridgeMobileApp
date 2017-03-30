@@ -210,4 +210,8 @@ class Picture: NSObject {
             }
         }
     }
+    
+    func delete() {
+        parsePicture.deleteInBackground()
+    }
 }

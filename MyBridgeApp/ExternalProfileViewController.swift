@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class ExternalProfileViewController: UIViewController {
 
@@ -52,8 +53,6 @@ class ExternalProfileViewController: UIViewController {
         layout.scrollView.contentSize = contentSize
     }
     
-    
-    
     // MARK: - Targets
     func dismissButtonTapped(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
@@ -68,14 +67,22 @@ class ExternalProfileViewController: UIViewController {
         if let userID = userID {
             let externalBackend = ExternalBackend()
             
+            let hud = MBProgressHUD.showAdded(to: layout.profilePicturesVC.view, animated: true)
+            hud.label.text = "Loading..."
+            
             // pictures
-            externalBackend.setPictures(userID: userID) { (pictures) in
-                for i in 0..<pictures.count {
-                    let picture = pictures[i]
-                    picture.getImage { (image) in
-                        self.layout.profilePicturesVC.addImage(image: image)
-                    }
+            externalBackend.getImages(userID: userID) { (images) in
+                for image in images {
+                    self.layout.profilePicturesVC.addImage(image: image)
                 }
+                
+                if images.count <= 1 {
+                    self.layout.profilePicturesVC.pageControl.alpha = 0
+                } else {
+                    self.layout.profilePicturesVC.pageControl.alpha = 1
+                }
+                
+                MBProgressHUD.hide(for: self.layout.profilePicturesVC.view, animated: true)
             }
             
             // name
