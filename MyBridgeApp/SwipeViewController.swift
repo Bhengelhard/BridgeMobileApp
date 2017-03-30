@@ -62,7 +62,7 @@ class SwipeViewController: UIViewController {
         let hud = MBProgressHUD.showAdded(to: view, animated: true)
         hud.mode = .customView
         hud.customView = layout.loadingView
-        hud.label.text = "Finding Best\nPotential Friends..."
+        hud.label.text = "Finding best\npairs to 'nect..."
         hud.label.numberOfLines = 0
         
         // 2 second delay

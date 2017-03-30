@@ -869,10 +869,8 @@
 				CODE_SIGN_ENTITLEMENTS = MyBridgeApp/MyBridgeApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
-
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
