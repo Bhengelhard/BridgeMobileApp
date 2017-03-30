@@ -8,6 +8,8 @@
 
 import UIKit
 import Parse
+import Foundation
+import MBProgressHUD
 
 /// The LoginViewController class defines the authentification and loggin process
 class LoginViewController: UIViewController {
@@ -19,6 +21,8 @@ class LoginViewController: UIViewController {
     let transitionManager = TransitionManager()
 
     var didSetupConstraints = false
+    
+    var userIsNew = false
     
     // MARK: - Override Functions
     override func viewDidLoad() {
@@ -54,6 +58,9 @@ class LoginViewController: UIViewController {
     
     /// Authenticates user through Facebook Login
     func loginWithFB(_ sender: UIButton) {
+        let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        hud.label.text = "Loading..."
+
         let fbLogin = FBLogin()
         fbLogin.initialize(vc: self)
     }
@@ -87,13 +94,11 @@ class LoginViewController: UIViewController {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let vc = segue.destination
-//        let mirror = Mirror(reflecting: vc)
-//        if mirror.subjectType == PrivacyPolicyViewController.self {
-//            self.transitionManager.animationDirection = "Top"
-//        }
-//        vc.transitioningDelegate = self.transitionManager
-
+        MBProgressHUD.hide(for: view, animated: true)
+        
+        if let vc = segue.destination as? MainPageViewController {
+            vc.userIsNew = userIsNew
+        }
     }
 
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class SwipeObjects {
     
@@ -132,6 +133,33 @@ class SwipeObjects {
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    class LoadingBridgePairingsView: UIView {
+        let activityIndicatorView: NVActivityIndicatorView
+        
+        init() {
+            activityIndicatorView = NVActivityIndicatorView(frame: CGRect(), type: .ballZigZag, color: Constants.Colors.necter.yellow, padding: 0)
+            super.init(frame: CGRect(x: 0, y: 0, width: 37, height: 37))
+            activityIndicatorView.frame = self.frame
+            addSubview(activityIndicatorView)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override var intrinsicContentSize: CGSize {
+            return CGSize(width: 37, height: 37)
+        }
+        
+        func startAnimating() {
+            activityIndicatorView.startAnimating()
+        }
+        
+        func stopAnimating() {
+            activityIndicatorView.stopAnimating()
         }
     }
     

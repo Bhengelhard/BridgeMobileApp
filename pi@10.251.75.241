@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "clean-can-1",
+  "private_key_id": "8870a15ed179bc0c7e3ebda19f19dc5442930183",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDv38WarJCHAxwW\n2WXmFBQGz2kYQiW6jVM8u2gFkBDhY3JI5BP9x7rts8vzscV42wdkokMvugKf8iQC\nnDqwnlHJwHJKMv6D0VU+x4KC1qF0qDMpinqMVAU1C89TF6vBaBAfs99HHulzkpQj\njyJR8ffgwkTMNgNCGCoFEgUPJfeo5Wzdkh6D1wTOX6EJnKiBAloeGZyDIvAaXoK2\n0/6VVENSoCWzeBpbSxuP55rP14Ml91JzJEoL920Z8h6kLWzVCJc02eaFlYYpZSD0\n2U+GDZ9W4RH0b2tzuJWVkOAd03cFRbUri4rzi/TZr7zRqfTOwHI79Fl23HGXn4kK\neK2OarmrAgMBAAECggEAQMjK8a9RiWVJnNIyNyWNExnJZIfY8L1ikbB7s6TpKjZV\nk2ImFBBxZ+l7V+HXV4CwSnmYc7dlJhWbrCjNoQ3hQP/83hVPsAJFZ6MymGunR351\n8u43ktbOYTlDUUm/VYjpceZ+kxLCMjiQUdpChqc3LzjIo+6iiqNEFgJ74095x99I\n1RJQNP+FoAHLRnGgrjrvVSYaoxUxWUDUJ1vegFr92i6PQBp9FHKSCkPMB2dKg9ds\nvN7Z4sNjBy4WqrToFVO7VtCJyiXWF0Vj2CiWZLkb1ZoFTOdVJe/EZOM8F85rLAF8\nM9EfNHN1U1FzkELO8k2xJC12P9mscKYnLgjD74YZQQKBgQD+YlqHuDopmkbi0XtP\nIILkpiKkhRPG7pCzEwPxx1ARpcmVt8Qrkgy0Qpc+tF1YoB9qIYnURznQ9yYcQXXX\nIMZ93LhJYPeOxV6AFW1oK6ljFYRr1p2BBH1gU9A+1pQLPvsUgLdhTnQEq4sNLtcR\nxX0bQNo5YSOkPU+eVzekLUkVswKBgQDxZdLn+SWkE4ikLpJKgsCi/2+YdbOwVqRA\nkQKWM9/FwxsKMDVVQmSqkrYISiysTMWs5jvjYHZ7hwpKV+ee0AfF/7vInBbRbE5v\n2UhnIbPkGxgb3PUeXkRfeuqszhEnPc54yaUzOcuasOi1ZYXlVY/jMJQaOQNtsCDx\nSvIYtNDAKQKBgGfrnBo3u6MFQJImi95eZLqt2BcnulWZXgmZ6hGan+4lsT11jjFS\nf9ggIBNgsYWkHFFKFDlhQ5BHdw0x/Mb+v7fpNGvdriRoItvmZQSaWZ99ydQYH832\nHJX+h2M0W9RgTUgp8UBSQXkq7ypaiUfcSuiYTM4GDf5pgZ4o+TUbvvCbAoGANya5\nWdBdXjAsTr5pI+bdlh/f4ig6Bna1Dh9TRPfTDz61Jc2/0ZvanfHo7tnrfO4JV6g+\nVIOMbkp6+mM9Ataqf/0ebQXkXLJu9TTiStWzYNEj3/HKesa0vk+54AMwfhOr4YLI\nYHy63LvAXvkz7yJuPkyx+Y+/Dcdor1gdGbHt44kCgYB718cP2bO5uRs6EmhyBSQi\nWOO1Yd2vYq0HIU22YDjGJdo2+iuXMboRhoT5vO9O+UCSUVaItwkO46gEEL4tW3Vp\nl5FDwMzlhTQvtAqjErFLsRSD8WDv8eVND49nCX3JrkZouxc1ezLLkhfqUZs2Lga5\nPVlJO0bK3rf1jg20IwEKSw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "cleancanserviceaccount@clean-can-1.iam.gserviceaccount.com",
+  "client_id": "111948452196434729188",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cleancanserviceaccount%40clean-can-1.iam.gserviceaccount.com"
+}

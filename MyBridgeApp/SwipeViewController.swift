@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 /// The SwipeViewController class displays and handles swiping for introductions
 class SwipeViewController: UIViewController {
-
+        
     // MARK: Global Variables
     let layout = SwipeLayout()
     let transitionManager = TransitionManager()
@@ -41,10 +42,7 @@ class SwipeViewController: UIViewController {
         layout.inviteButton.addTarget(self, action: #selector(inviteButtonTapped(_:)), for: .touchUpInside)
         layout.refreshButton.addTarget(self, action: #selector(refreshButtonTapped(_:)), for: .touchUpInside)
         
-        // Make no more bridge pairing objects invisible
-        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
-            view.alpha = 0
-        }
+        getBridgePairings()
         
         // Check for New Matches
         //Check for Connections Conversed and for the current User's New Matches
@@ -54,17 +52,45 @@ class SwipeViewController: UIViewController {
 
     }
     
+    func getBridgePairings() {
+        // Make no more bridge pairing objects invisible
+        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
+            view.alpha = 0
+        }
+        
+        layout.loadingView.startAnimating()
+        let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        hud.mode = .customView
+        hud.customView = layout.loadingView
+        hud.label.text = "Finding Best\nPotential Friends..."
+        hud.label.numberOfLines = 0
+        
+        // 2 second delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            // Get the first swipeCards
+            self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
+                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    self.layout.loadingView.stopAnimating()
+                }
+            }
+        }
+    }
+    
     override func loadView() {
         view = UIView()
         view.backgroundColor = UIColor.white
         
         view.setNeedsUpdateConstraints()
-
-        // Get the next swipeCards
-        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
-            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
-        }
-        
+//<<<<<<< HEAD
+//
+//        // Get the next swipeCards
+//        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
+//            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
+//        }
+//        
+//=======
+//>>>>>>> wiredFrame
     }
     
     override func updateViewConstraints() {
@@ -94,28 +120,29 @@ class SwipeViewController: UIViewController {
     func inviteButtonTapped(_ sender: UIButton) {
         
         // Make sure the device can send text messages
-        if (messageComposer.canSendText()) {
+        if messageComposer.canSendText() {
+            let hud = MBProgressHUD.showAdded(to: view, animated: true)
+            hud.label.text = "Loading..."
+            
             // Obtain a configured MFMessageComposeViewController
             let messageComposeVC = messageComposer.configuredMessageComposeViewController()
             // Present the configured MFMessageComposeViewController instance
             // Note that the dismissal of the VC will be handled by the messageComposer instance,
             // since it implements the appropriate delegate call-back
             present(messageComposeVC, animated: true, completion: nil)
+            
+            MBProgressHUD.hide(for: view, animated: true)
         } else {
             // Let the user know if his/her device isn't able to send text messages
             let errorAlert = UIAlertView(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", delegate: self, cancelButtonTitle: "OK")
             errorAlert.show()
+            
+            MBProgressHUD.hide(for: view, animated: true)
         }
     }
 
     func refreshButtonTapped( _ sender: UIButton) {
-        // Make no more bridge pairing objects invisible
-        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
-            view.alpha = 0
-        }
-        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
-            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
-        }
+        getBridgePairings()
     }
     
     func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {

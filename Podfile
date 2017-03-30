@@ -2,10 +2,12 @@
 # platform :ios, '9.0'
 
 target 'MyBridgeApp' do
-  pod 'PureLayout', '~> 3.0'
   
   use_frameworks!
 
   # Pods for MyBridgeApp
+  pod 'PureLayout', '~> 3.0'
   pod 'JSQMessagesViewController'
+  pod 'MBProgressHUD', '~> 1.0.0'
+  pod 'NVActivityIndicatorView'
 end

@@ -12,6 +12,8 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
     
     var arrayOfVCs = [UIViewController]()
     
+    var userIsNew = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,7 +21,6 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
         dataSource = self
         
         setUpArrayofVCs()
-    
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,6 +46,20 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
         self.view.backgroundColor = UIColor.white
         
         setViewControllers([arrayOfVCs[1]], direction: .forward, animated: true, completion: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if userIsNew {
+            let alert = UIAlertController(title: "How to NECT:", message: "Our algorithm pairs two of your friends.\nSwipe right to introduce them.\nSwipe left to see the next pair.", preferredStyle: UIAlertControllerStyle.alert)
+            //Create the actions
+            alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in
+            }))
+            self.present(alert, animated: true, completion: nil)
+            
+            userIsNew = false
+        }
     }
     
     // MARK: - PageViewController Functions

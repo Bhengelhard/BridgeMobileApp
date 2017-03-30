@@ -25,6 +25,7 @@ class SwipeLayout {
     let inviteButton = ReusableObjects.InviteButton()
     let orLabel2 = SwipeObjects.OrLabel()
     let refreshButton = SwipeObjects.RefreshButton()
+    let loadingView = SwipeObjects.LoadingBridgePairingsView()
     var topSwipeCardHorizontalConstraint: NSLayoutConstraint?
     var bottomSwipeCardHorizontalConstraint: NSLayoutConstraint?
     
