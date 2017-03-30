@@ -52,7 +52,10 @@ class SwipeViewController: UIViewController {
             view.alpha = 0
         }
         
+        layout.loadingView.startAnimating()
         let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        hud.mode = .customView
+        hud.customView = layout.loadingView
         hud.label.text = "Finding Best\nPotential Friends..."
         hud.label.numberOfLines = 0
         
@@ -62,6 +65,7 @@ class SwipeViewController: UIViewController {
             self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
                 self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
                     MBProgressHUD.hide(for: self.view, animated: true)
+                    self.layout.loadingView.stopAnimating()
                 }
             }
         }

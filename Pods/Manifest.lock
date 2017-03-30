@@ -3,19 +3,22 @@ PODS:
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - MBProgressHUD (1.0.0)
+  - NVActivityIndicatorView (3.5.1)
   - PureLayout (3.0.2)
 
 DEPENDENCIES:
   - JSQMessagesViewController
   - MBProgressHUD (~> 1.0.0)
+  - NVActivityIndicatorView
   - PureLayout (~> 3.0)
 
 SPEC CHECKSUMS:
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  NVActivityIndicatorView: 075563b3547445ebcff840e3297ce9dd4a23731f
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
 
-PODFILE CHECKSUM: 5d41862d8cb28d61da245d5233000b2b50b31936
+PODFILE CHECKSUM: f7926d0f745b4d541495d3184d0f53754d7193e9
 
 COCOAPODS: 1.2.0

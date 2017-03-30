@@ -8,5 +8,6 @@ target 'MyBridgeApp' do
   # Pods for MyBridgeApp
   pod 'PureLayout', '~> 3.0'
   pod 'JSQMessagesViewController'
-  pod 'MBProgressHUD', '~> 1.0.0'  
+  pod 'MBProgressHUD', '~> 1.0.0'
+  pod 'NVActivityIndicatorView'
 end
