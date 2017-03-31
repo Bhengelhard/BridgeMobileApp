@@ -419,6 +419,22 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                 if self.threadBackend.jsqMessages.count > 0 {
                     if let layout = self.layout {
                         layout.noMessagesView.alpha = 0
+                        
+                        // Update Current User to have seen the message for notification dot display in messages
+                        if let id = self.messageID {
+                            Message.get(withID: id, withBlock: { (message) in
+                                User.getCurrent { (currentUser) in
+                                    if currentUser.id == message.user1ID {
+                                        message.user1HasSeenLastSingleMessage = true
+                                        message.save()
+                                    } else {
+                                        message.user2HasSeenLastSingleMessage = true
+                                        message.save()
+                                    }
+                                }
+                            })
+                        }
+                        
                     }
                 }
             }

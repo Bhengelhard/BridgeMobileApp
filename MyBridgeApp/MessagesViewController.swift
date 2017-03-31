@@ -142,8 +142,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
         messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
     }
-
-    
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
