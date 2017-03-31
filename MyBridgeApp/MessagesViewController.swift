@@ -85,7 +85,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = MessagesTableCell()
         cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
         messagesBackend.setParticipantsLabel(index: indexPath.row, label: cell.participants)
-        messagesBackend.setSanpshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
+        messagesBackend.setSnapshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
         messagesBackend.setProfilePicture(index: indexPath.row, imageView: cell.profilePic)
         messagesBackend.setDotAlpha(index: indexPath.row, dot: cell.notificationDot)
         

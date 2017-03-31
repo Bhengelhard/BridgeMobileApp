@@ -105,6 +105,11 @@ class DBRetrievingFunctions {
                             print(user2ObjectId)
                             
                             let connectionsConversedPopup = PopupView(includesCurrentUser: false, user1Id: user1ObjectId, user2Id: user2ObjectId, textString: "\(user1Name) and \(user2Name) conversed!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: nil, user2Image: nil)
+                            
+                            if let id = object.objectId {
+                                connectionsConversedPopup.setMessageID(messageID: id)
+                            }
+                            
                             vc.view.addSubview(connectionsConversedPopup)
                             connectionsConversedPopup.autoPinEdgesToSuperviewEdges()
                             

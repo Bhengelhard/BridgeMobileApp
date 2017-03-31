@@ -86,9 +86,13 @@ class SwipeLogic {
             }
         }
         if gesture.state == .ended {
+            // Remove Icons
+            disconnectIcon.alpha = 0.0
+            connectIcon.alpha = 0.0
             
             //User Swiped Left
             if swipeCard.center.x < 0.25*DisplayUtility.screenWidth {
+                // If this is the user's first time swiping left then display pop-up
                 let localData = LocalData()
                 let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
                 if isFirstTimeSwipedLeft {
@@ -99,16 +103,8 @@ class SwipeLogic {
                         reset()
                     }))
                     alert.addAction(UIAlertAction(title: "Don't Connect", style: .default, handler: { (action) in
-                        UIView.animate(withDuration: 0.4, animations: {
-                            //swipeCard.center.x = -1.0*DisplayUtility.screenWidth
-                            //disconnectIcon.center.x = -1.0*DisplayUtility.screenWidth
-                            disconnectIcon.alpha = 0.0
-                            swipeCard.overlay.opacity = 0.0
-                            layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(view.frame.width/2 + swipeCard.frame.width/2))
-                            view.layoutIfNeeded()
-                        }, completion: { (success) in
-                            SwipeLogic.didSwipe(right: false, vc: vc)
-                        })
+                        SwipeLogic.didSwipe(right: false, vc: vc)
+                        
                         removeCard = true
                     }))
                     vc.present(alert, animated: true, completion: nil)
@@ -116,102 +112,19 @@ class SwipeLogic {
                     localData.setFirstTimeSwipingLeft(false)
                     localData.synchronize()
                 } else {
-                    UIView.animate(withDuration: 0.4, animations: {
-                        disconnectIcon.alpha = 0.0
-                        swipeCard.overlay.opacity = 0.0
-                        view.layoutIfNeeded()
-                        layout.updateTopSwipeCardHorizontalConstraint(fromCenter: -(view.frame.width/2 + swipeCard.frame.width/2))
-                        view.layoutIfNeeded()
-                    }, completion: { (success) in
-                        SwipeLogic.didSwipe(right: false, vc: vc)
-                    })
+                    SwipeLogic.didSwipe(right: false, vc: vc)
                     removeCard = true
                 }
             }
             // User Swiped Right
             else if swipeCard.center.x > 0.75*DisplayUtility.screenWidth {
-                // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
-                let user1Image = swipeCard.topHalf.photoView.image
-                let user2Image = swipeCard.bottomHalf.photoView.image
                 
-                
-                if let user1ID = swipeCard.bridgePairing?.user1ID {
-                    if let user2ID = swipeCard.bridgePairing?.user2ID {
-                        
-                        if let user1Name = swipeCard.bridgePairing?.user1Name, let user2Name = swipeCard.bridgePairing?.user2Name {
-                            
-                            var connecterID = ""
-                            var connecterName = ""
-                            User.getCurrent(withBlock: { (user) in
-                                if let id = user.id {
-                                    connecterID = id
-                                }
-                                
-                                if let name = user.name {
-                                    connecterName = name
-                                }
-                            })
-                            
-                            let user1PictureID = swipeCard.bridgePairing?.user1PictureID
-                            let user2PictureID = swipeCard.bridgePairing?.user2PictureID
-
-                            // Create message with both of the retrieved users
-                            Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil, withBlock: { (message, isNew) in
-                                if isNew {
-                                    message.save(withBlock: { (message) in
-                                        if let messageID = message.id {
-                                            sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
-                                        }
-                                    })
-                                } else {
-                                    if let messageID = message.id {
-                                        sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
-                                    }
-                                }
-                                
-                            })
-                        }
-                        
-                        
-                        
-                    }
-                }
-                
-                // Set the hexagonImages
-                //swipeRightView.setHexagonImages(user1Image: user1Image, user2Image: user2Image)
-                
-                UIView.animate(withDuration: 0.4, animations: {
-                    connectIcon.alpha = 0.0
-                    swipeCard.overlay.opacity = 0.0
-                    print("move swipe card all the way to right")
-                    layout.updateTopSwipeCardHorizontalConstraint(fromCenter: view.frame.width/2 + swipeCard.frame.width/2)
-                    view.layoutIfNeeded()
-                }, completion: { (success) in
-                    SwipeLogic.didSwipe(right: true, vc: vc)
-                })
+                SwipeLogic.didSwipe(right: true, vc: vc)
                 removeCard = true
             }
-            
-            if removeCard {
-                
-            } else {
-                // Reset the cards
-                //disconnectIcon.center.x = -1.0 * DisplayUtility.screenWidth
-                disconnectIcon.alpha = 0.0
-                //connectIcon.center.x = 1.6 * DisplayUtility.screenWidth
-                connectIcon.alpha = 0.0
-                
+            // Reset the cards
+            else {
                 reset()
-                
-                UIView.animate(withDuration: 0.7, delay: 0, options: .allowUserInteraction, animations: {
-                    //rotation = CGAffineTransform(rotationAngle: 0)
-                    //stretch = rotation.scaledBy(x: 1, y: 1)
-                    //swipeCard.transform = stretch
-                    //swipeCard.center = CGPoint(x: view.bounds.width / 2, y: view.bounds.height / 2)
-                    //swipeCard.frame = swipeCardFrame
-                    //bottomSwipeCard.frame = smallestSwipeCardFrame(swipeCard: bottomSwipeCard)
-                    //bottomSwipeCard.center.x = view.center.x
-                }, completion: nil)
             }
         }
     }
@@ -232,10 +145,8 @@ class SwipeLogic {
             swipeCard = layout.topSwipeCard
         }
         
-        print("swiped left")
-        swipeBackend.checkIn()
         UIView.animate(withDuration: 0.4, animations: {
-            print("animation happened")
+            
             // if swiped left, check in bridge pairing and animate left swipe
             if right {
                 layout.updateTopSwipeCardHorizontalConstraint(fromCenter: (view.frame.width/2 + swipeCard.frame.width/2))
@@ -267,8 +178,6 @@ class SwipeLogic {
                             swipeRightView.alpha = 1
                         })
                         
-
-                        
                         if let user1Name = swipeCard.bridgePairing?.user1Name, let user2Name = swipeCard.bridgePairing?.user2Name {
                             
                             
@@ -292,11 +201,18 @@ class SwipeLogic {
                                 if isNew {
                                     message.save(withBlock: { (message) in
                                         if let messageID = message.id {
+                                            // Set messageID for SwipeRightView's message both button
+                                            swipeRightView.setMessageID(messageID: messageID)
+                                            
+                                            //Send notification that user's have been 'nected
                                             sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
                                         }
                                     })
                                 } else {
                                     if let messageID = message.id {
+                                        // Set messageID for SwipeRightView's message both button
+                                        swipeRightView.setMessageID(messageID: messageID)
+                                        //Send notification that user's have been 'nected
                                         sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
                                     }
                                 }
@@ -305,6 +221,11 @@ class SwipeLogic {
                         }
                     }
                 }
+            }
+            // Swiped Left
+            else {
+                // Only check back in if user swiped left
+                swipeBackend.checkIn()
             }
             
             layout.switchTopAndBottomCards()

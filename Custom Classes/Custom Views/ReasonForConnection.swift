@@ -14,8 +14,20 @@ class ReasonForConnection: UIView, UITextViewDelegate {
     let placeholderTextColor = Constants.Colors.necter.textGray
     var updatedText = ""
     let sendButton = UIButton()
+    let reasonForConnectionTextView = UITextView()
+    let messageID: String?
+    let user1Name: String?
+    let user2Name: String?
+    let user1ID: String?
+    let user2ID: String?
     
-    init(user1Name: String?, user2Name: String?) {
+    init(user1Name: String?, user2Name: String?, user1ID: String?, user2ID: String?, messageID: String?) {
+        self.messageID = messageID
+        self.user1Name = user1Name
+        self.user2Name = user2Name
+        self.user1ID = user1ID
+        self.user2ID = user2ID
+        
         super.init(frame: CGRect())
         
         self.backgroundColor = Constants.Colors.necter.backgroundGray
@@ -92,7 +104,6 @@ class ReasonForConnection: UIView, UITextViewDelegate {
         dividerLine2.autoPinEdge(toSuperviewEdge: .right)
         dividerLine2.autoPinEdge(.bottom, to: .top, of: midDivider)
         
-        let reasonForConnectionTextView = UITextView()
         reasonForConnectionTextView.delegate = self
         reasonForConnectionTextView.text = placeholderText
         reasonForConnectionTextView.textColor = placeholderTextColor
@@ -118,6 +129,34 @@ class ReasonForConnection: UIView, UITextViewDelegate {
     
     func sendButtonTapped(_ sender: UIButton) {
         print("Add sending of the message as a notificatio")
+        
+        // Get the current user's information and create a message from the current user to send to the other user's in a message
+        User.getCurrent { (user) in
+            let id = user.id
+            let name = user.name
+            if let text = self.reasonForConnectionTextView.text {
+                SingleMessage.create(text: text, senderID: id, senderName: name, messageID: self.messageID, withBlock: { (singleMessage) in
+                    singleMessage.save()
+                    
+                    
+                    if let messageID = self.messageID {
+                        if let user2ID = self.user2ID, let user2Name = self.user2Name {
+                            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"\(name) has sent you and \(user2Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                        }
+                        
+                        if let user1ID = self.user1ID, let user1Name = self.user1Name{
+                            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(name) has sent you and \(user1Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                        }
+                        
+                    }
+                    
+                })
+            }
+
+            
+        }
+        
+        
         self.removeFromSuperview()
     }
     
@@ -157,6 +196,61 @@ class ReasonForConnection: UIView, UITextViewDelegate {
     func textViewDidChangeSelection(_ textView: UITextView) {
         if sendButton.isSelected == false {
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+        }
+    }
+    
+    
+    func updateMessageAfterSingleMessageSent(messageID: String?, snapshot: String, withBothHavePostedForFirstTimeBlock block: (() -> Void)? = nil) {
+        if let messageID = messageID {
+            Message.get(withID: messageID) { (message) in
+                // update last single message
+                message.lastSingleMessage = snapshot
+                
+                // update current user has posted and other user has seen last single message
+                User.getCurrent { (user) in
+                    var shouldCallBlock = false
+                    if let userID = user.id {
+                        if userID == message.user1ID {
+                            // check if both have posted for the first time
+                            if let user2HasPosted = message.user2HasPosted {
+                                if user2HasPosted { // user 2 has already posted
+                                    if let user1HasPosted = message.user1HasPosted {
+                                        if !user1HasPosted { // this is user 1's first post
+                                            shouldCallBlock = true
+                                        }
+                                    } else { // user1HasPosted == nil -> this is user 1's first post
+                                        shouldCallBlock = true
+                                    }
+                                }
+                            }
+                            message.user1HasPosted = true
+                            message.user2HasSeenLastSingleMessage = false
+                        } else if userID == message.user2ID {
+                            // check if both have posted for the first time
+                            if let user1HasPosted = message.user1HasPosted {
+                                if user1HasPosted { // user 1 has already posted
+                                    if let user2HasPosted = message.user2HasPosted {
+                                        if !user2HasPosted { // this is user 2's first post
+                                            shouldCallBlock = true
+                                        }
+                                    } else { // user2HasPosted == nil -> this is user 2's first post
+                                        shouldCallBlock = true
+                                    }
+                                }
+                            }
+                            message.user2HasPosted = true
+                            message.user1HasSeenLastSingleMessage = false
+                        }
+                    }
+                    message.save { (message) in
+                        if shouldCallBlock {
+                            if let block = block {
+                                block()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     

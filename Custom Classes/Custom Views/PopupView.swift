@@ -24,6 +24,7 @@ class PopupView: UIView {
     var user1ID: String
     var user2ID: String
     let includesCurrentUser: Bool
+    var messageID: String?
     
     // MARK: - Init
     init(includesCurrentUser: Bool, user1Id: String, user2Id: String, textString: String, titleImage: UIImage, user1Image: UIImage?, user2Image: UIImage?) {
@@ -174,7 +175,7 @@ class PopupView: UIView {
         
         // If messaging two people then popup the reason for connect textView
         if !includesCurrentUser {
-            let reasonForConnectionView = ReasonForConnection(user1Name: user1Name, user2Name: user2Name)
+            let reasonForConnectionView = ReasonForConnection(user1Name: user1Name, user2Name: user2Name, user1ID: user1ID, user2ID: user2ID, messageID: messageID)
             addSubview(reasonForConnectionView)
             reasonForConnectionView.autoPinEdgesToSuperviewEdges(with: .init(top: 40, left: 20, bottom: 280, right: 20))
             print("messageButtonTapped")
@@ -246,5 +247,9 @@ class PopupView: UIView {
         if let image = user2Image {
             user2Hexagon.setBackgroundImage(image: image)
         }
+    }
+    
+    func setMessageID(messageID: String) {
+        self.messageID = messageID
     }
 }

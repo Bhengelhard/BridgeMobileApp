@@ -146,7 +146,7 @@ class MessagesBackend {
         }
     }
     
-    func setSanpshotLabel(index: Int, textView: UITextView) {
+    func setSnapshotLabel(index: Int, textView: UITextView) {
         if let id = messagePositionToIDMapping[index] {
             if let snapshot = messageSnapshots[id] {
                 textView.text = snapshot

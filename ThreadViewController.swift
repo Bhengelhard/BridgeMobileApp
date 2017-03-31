@@ -236,15 +236,18 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                 
                                 // save single message
                                 self.threadBackend.jsqMessageToSingleMessage(jsqMessage: jsqMessage, messageID: messageID) { (singleMessage) in
-                                    singleMessage.save()
+                                    singleMessage.save(withBlock: { (singleMessage) in
+                                        let lastSingleMessageAt = singleMessage.createdAt
+                                        // update message's snapshot and info about user has sent and user has seen last single message
+                                        self.threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, lastSingleMessageAt: lastSingleMessageAt, withBothHavePostedForFirstTimeBlock: {
+                                            
+                                            
+                                        })
+                                    })
                                     
                                 }
                                 
-                                // update message's snapshot and info about user has sent and user has seen last single message
-                                self.threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: {
-                                    
-                                    
-                                })
+                                
                                 
                                 if let id = self.messageID {
                                     Message.get(withID: id, withBlock: { (message) in
