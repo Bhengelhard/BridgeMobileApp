@@ -63,10 +63,9 @@ class SwipeViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             // Get the first swipeCards
             self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
-                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                    self.layout.loadingView.stopAnimating()
-                }
+                MBProgressHUD.hide(for: self.view, animated: true)
+                self.layout.loadingView.stopAnimating()
+                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
             }
         }
     }
@@ -156,6 +155,7 @@ class SwipeViewController: UIViewController {
         layout.topSwipeCard.isUserInteractionEnabled = true
         layout.bottomSwipeCard.isUserInteractionEnabled = false
         layout.topSwipeCard.overlay.removeFromSuperlayer()
+        layout.bottomSwipeCard.addOverlay()
         swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings)
     }
     
