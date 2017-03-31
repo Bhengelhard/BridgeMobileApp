@@ -45,6 +45,7 @@ class MessagesTableCell: UITableViewCell {
         profilePic = UIImageView()
         profilePic.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         profilePic.clipsToBounds = true
+        profilePic.contentMode = .scaleAspectFill
         
         messageTimestamp = UILabel(frame:CGRect.zero)
         messageTimestamp.font = UIFont(name: "BentonSans-Light", size: 18.5)
