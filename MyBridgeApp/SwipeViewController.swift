@@ -69,10 +69,9 @@ class SwipeViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             // Get the first swipeCards
             self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
-                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                    self.layout.loadingView.stopAnimating()
-                }
+                MBProgressHUD.hide(for: self.view, animated: true)
+                self.layout.loadingView.stopAnimating()
+                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
             }
         }
     }
@@ -82,15 +81,7 @@ class SwipeViewController: UIViewController {
         view.backgroundColor = UIColor.white
         
         view.setNeedsUpdateConstraints()
-//<<<<<<< HEAD
-//
-//        // Get the next swipeCards
-//        swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
-//            self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
-//        }
-//        
-//=======
-//>>>>>>> wiredFrame
+
     }
     
     override func updateViewConstraints() {

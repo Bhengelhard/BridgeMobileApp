@@ -31,7 +31,7 @@ class NecterNavigationBar: UINavigationBar {
         // Setting the navigation Bar Title Image
         //titleImageView.frame.size = CGSize(width: 40, height: 40)
         //titleImageView.contentMode = .scaleAspectFit
-        titleImageView.contentMode = .scaleToFill
+        titleImageView.contentMode = .scaleAspectFill
         titleImageView.clipsToBounds = true
         
         // Setting the right Bar Button Item

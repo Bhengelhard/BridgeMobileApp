@@ -246,19 +246,16 @@ class SwipeLogic {
             }
             view.layoutIfNeeded()
         }, completion: { (success) in
-            layout.switchTopAndBottomCards()
-            layout.topSwipeCard.isUserInteractionEnabled = true
-            layout.bottomSwipeCard.isUserInteractionEnabled = false
-            layout.topSwipeCard.overlay.removeFromSuperlayer()
-            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings)
             
             if right {
                 if let user1ID = swipeCard.bridgePairing?.user1ID {
+                    print("got user1ID")
                     // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
                     let user1Image = swipeCard.topHalf.photoView.image
                     let user2Image = swipeCard.bottomHalf.photoView.image
                     
                     if let user2ID = swipeCard.bridgePairing?.user2ID {
+                        print("got user2ID")
                         // Initialize and display swipeRightView
                         let swipeRightView = PopupView(includesCurrentUser: false, user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
                         swipeRightView.alpha = 0
@@ -309,6 +306,12 @@ class SwipeLogic {
                     }
                 }
             }
+            
+            layout.switchTopAndBottomCards()
+            layout.topSwipeCard.isUserInteractionEnabled = true
+            layout.bottomSwipeCard.isUserInteractionEnabled = false
+            layout.topSwipeCard.overlay.removeFromSuperlayer()
+            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings)
         })
     }
     

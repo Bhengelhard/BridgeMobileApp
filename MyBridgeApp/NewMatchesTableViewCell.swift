@@ -48,6 +48,7 @@ class NewMatchesTableViewCell: UITableViewCell {
             super.init(frame: CGRect())
             
             profileImageView.clipsToBounds = true
+            profileImageView.contentMode = .scaleAspectFill
             profileImageView.backgroundColor = Constants.Colors.necter.backgroundGray
             
             nameLabel.textAlignment = .center

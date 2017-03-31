@@ -148,9 +148,9 @@ class SwipeBackend {
                                 swipeCard.alpha = 1
                                 
                                 swipeCard.initialize(bridgePairing: bridgePairing)
-                                if !top {
-                                    swipeCard.addOverlay()
-                                }
+                                //if !top {
+                                //    swipeCard.addOverlay()
+                                //}
                                 if let completion = completion {
                                     completion()
                                 }
