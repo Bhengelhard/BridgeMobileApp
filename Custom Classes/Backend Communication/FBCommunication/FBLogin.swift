@@ -188,6 +188,7 @@ class FBLogin {
                                     user["interested_in_love"] = true
                                     user["interested_in_friendship"] = true
                                     user["ran_out_of_pairs"] = 0
+                                    user["friend_list"] = []
                                     
                                     //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
                                     self.localData.setHasSignedUp(false)
@@ -195,6 +196,10 @@ class FBLogin {
                                     
                                     user.saveInBackground(block: { (success, error) in
                                         if success == true {
+                                            // Update BridgePairings Table to include new user
+                                            let pfCloudFunctions = PFCloudFunctions()
+                                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                                            
                                             //self.activityIndicator.stopAnimating()
                                             UIApplication.shared.endIgnoringInteractionEvents()
                                             //vc.performSegue(withIdentifier: "showSignUp", sender: self)
