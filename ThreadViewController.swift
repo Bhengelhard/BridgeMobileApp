@@ -51,6 +51,7 @@ class ThreadViewController: UIViewController {
     
     func setMessageID(messageID: String?) {
         messagesVC.messageID = messageID
+        layout.noMessagesView.setNectedByLabel(messageID: messageID)
         
         layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
         

@@ -37,9 +37,9 @@ class ThreadLayout {
             messagesVC.view.autoPinEdge(toSuperviewEdge: .bottom)
             
             messagesVC.collectionView.addSubview(noMessagesView)
-            noMessagesView.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 120)
+            noMessagesView.autoPinEdge(.top, to: .bottom, of: navBar)
             noMessagesView.autoAlignAxis(toSuperviewAxis: .vertical)
-            noMessagesView.autoMatch(.width, to: .width, of: view, withOffset: -40)
+            noMessagesView.autoMatch(.width, to: .width, of: view)
             noMessagesView.autoMatch(.height, to: .width, of: noMessagesView, withMultiplier: 0.5)
             
         }

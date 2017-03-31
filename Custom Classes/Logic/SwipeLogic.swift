@@ -206,14 +206,17 @@ class SwipeLogic {
                                             
                                             //Send notification that user's have been 'nected
                                             sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
+                                            
                                         }
                                     })
                                 } else {
                                     if let messageID = message.id {
                                         // Set messageID for SwipeRightView's message both button
                                         swipeRightView.setMessageID(messageID: messageID)
+                                        
                                         //Send notification that user's have been 'nected
                                         sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
+                                        
                                     }
                                 }
                                 
