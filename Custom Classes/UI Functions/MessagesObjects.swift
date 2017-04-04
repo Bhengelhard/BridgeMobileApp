@@ -70,6 +70,18 @@ class MessagesObjects {
     
     class MessagesTable: UITableView {
         let noMessagesLabel = UILabel()
+        
+        init() {
+            super.init(frame: CGRect(), style: .plain)
+            
+            noMessagesLabel.textColor = Constants.Colors.necter.textGray
+            noMessagesLabel.font = Constants.Fonts.light18
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
     }
         
     class MessagesTableCell: UITableViewCell {

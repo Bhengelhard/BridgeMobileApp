@@ -75,6 +75,9 @@ class Message: NSObject {
     /// The text of the last single message in the Message's thread
     var lastSingleMessage: String?
     
+    /// The last updatedAt time of the last single message in the Message's thread
+    var lastSingleMessageAt: Date?
+    
     var user1HasSeenLastSingleMessage: Bool?
     
     var user2HasSeenLastSingleMessage: Bool?
@@ -123,6 +126,10 @@ class Message: NSObject {
             lastSingleMessage = parseLastSingleMessage
         }
         
+        if let parseLastSingleMessageAt = parseMessage["lastSingleMessageAt"] as? Date {
+            lastSingleMessageAt = parseLastSingleMessageAt
+        }
+        
         if let parseUser1HasSeenLastSingleMessage = parseMessage["user1_has_seen_last_single_message"] as? Bool {
             user1HasSeenLastSingleMessage = parseUser1HasSeenLastSingleMessage
         }
@@ -167,6 +174,7 @@ class Message: NSObject {
                 // set Message's ACL
                 let acl = PFACL()
                 acl.getPublicReadAccess = true
+                acl.getPublicWriteAccess = true
                 parseMessage.acl = acl
                 
                 if let user1ID = user1ID, let user2ID = user2ID {
@@ -283,7 +291,7 @@ class Message: NSObject {
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             query.whereKeyDoesNotExist("last_single_message")
-            query.order(byDescending: "lastSingleMessageAt")
+            query.order(byDescending: "updatedAt")
             query.limit = limit
             query.skip = skip
             
@@ -473,6 +481,12 @@ class Message: NSObject {
             parseMessage["last_single_message"] = lastSingleMessage
         } else {
             parseMessage.remove(forKey: "last_single_message")
+        }
+        
+        if let lastSingleMessageAt = lastSingleMessageAt {
+            parseMessage["lastSingleMessageAt"] = lastSingleMessageAt
+        } else {
+            parseMessage.remove(forKey: "lastSingleMessageAt")
         }
         
         if let user1HasSeenLastSingleMessage = user1HasSeenLastSingleMessage {

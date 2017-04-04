@@ -64,9 +64,9 @@ class DBRetrievingFunctions {
                         connecterName = name
                     }
                     
-                    let connectionsConversedPopup = PopupView(user1Id: currentUserObjectId, user2Id: otherUserObjectId, textString: "\(connecterName) nected you with \(otherUserName)! Get the conversation started!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
-                    vc.view.addSubview(connectionsConversedPopup)
-                    connectionsConversedPopup.autoPinEdgesToSuperviewEdges()
+                    let youMatchedPopUp = PopupView(includesCurrentUser: true, user1Id: currentUserObjectId, user2Id: otherUserObjectId, textString: "\(connecterName) 'nected you with \(otherUserName)!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
+                    vc.view.addSubview(youMatchedPopUp)
+                    youMatchedPopUp.autoPinEdgesToSuperviewEdges()
                     
                     result["you_matched_notification_viewed"] = true
                     result.saveInBackground()
@@ -104,7 +104,12 @@ class DBRetrievingFunctions {
                             print(user2Name)
                             print(user2ObjectId)
                             
-                            let connectionsConversedPopup = PopupView(user1Id: user1ObjectId, user2Id: user2ObjectId, textString: "\(user1Name) and \(user2Name) conversed!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: nil, user2Image: nil)
+                            let connectionsConversedPopup = PopupView(includesCurrentUser: false, user1Id: user1ObjectId, user2Id: user2ObjectId, textString: "\(user1Name) and \(user2Name) conversed!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: nil, user2Image: nil)
+                            
+                            if let id = object.objectId {
+                                connectionsConversedPopup.setMessageID(messageID: id)
+                            }
+                            
                             vc.view.addSubview(connectionsConversedPopup)
                             connectionsConversedPopup.autoPinEdgesToSuperviewEdges()
                             

@@ -31,6 +31,7 @@ class ThreadViewController: UIViewController {
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         messagesVC.layout = layout
+        
     }
     
     override func loadView() {
@@ -50,6 +51,7 @@ class ThreadViewController: UIViewController {
     
     func setMessageID(messageID: String?) {
         messagesVC.messageID = messageID
+        layout.noMessagesView.setNectedByLabel(messageID: messageID)
         
         layout.navBar.rightButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
         
@@ -94,32 +96,6 @@ class ThreadViewController: UIViewController {
 
     }
     
-//    func areTheyFriends() -> Bool {
-//        User.getCurrent { (user) in
-//            if let friendlist = user.friendList {
-//                Message.get(withID: self.messagesVC.messageID!, withBlock: { (message) in
-//                    message.getNonCurrentUser(withBlock: { (otherUser) in
-//                        if let otherUserID = otherUser.id {
-//                            if friendlist.contains(otherUserID) {
-//                                print("Users are already friends")
-//                                let followAction = UIAlertAction(title: "Unfollow", style: .destructive) { (alert) in
-//                                    print("follow")
-//                                }
-//                                addMoreMenu.addAction(followAction)
-//                                
-//                            } else {
-//                                let followAction = UIAlertAction(title: "Follow", style: .default) { (alert) in
-//                                    print("follow")
-//                                }
-//                                addMoreMenu.addAction(followAction)
-//                            }
-//                        }
-//                    })
-//                })
-//            }
-//        }
-//    }
-    
     func showOtherUserProfile(_ gesture: UIGestureRecognizer) {
         if let messageID = messagesVC.messageID {
             Message.get(withID: messageID) { (message) in
@@ -133,6 +109,8 @@ class ThreadViewController: UIViewController {
             }
         }
     }
+    
+    
 }
 
 class NecterJSQMessagesViewController: JSQMessagesViewController {
@@ -147,6 +125,9 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Listener for updating thread when new messages come in
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadThread), name: NSNotification.Name(rawValue: "reloadTheThread"), object: nil)
                 
         // these must be non-nil
         senderId = ""
@@ -256,15 +237,18 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                 
                                 // save single message
                                 self.threadBackend.jsqMessageToSingleMessage(jsqMessage: jsqMessage, messageID: messageID) { (singleMessage) in
-                                    singleMessage.save()
+                                    singleMessage.save(withBlock: { (singleMessage) in
+                                        let lastSingleMessageAt = singleMessage.createdAt
+                                        // update message's snapshot and info about user has sent and user has seen last single message
+                                        self.threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, lastSingleMessageAt: lastSingleMessageAt, withBothHavePostedForFirstTimeBlock: {
+                                            
+                                            
+                                        })
+                                    })
                                     
                                 }
                                 
-                                // update message's snapshot and info about user has sent and user has seen last single message
-                                self.threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, withBothHavePostedForFirstTimeBlock: {
-                                    
-                                    
-                                })
+                                
                                 
                                 if let id = self.messageID {
                                     Message.get(withID: id, withBlock: { (message) in
@@ -277,8 +261,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                         }
                                         
                                         // Push notification to other user
-                                        let pfCloudFunctions = PFCloudFunctions()
-                                        pfCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
+                                        PFCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
                                         
                                         print("sent the push notification")
                                         
@@ -305,7 +288,6 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
     }
     
     // MARK: JSQMessages CollectionView DataSource
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return threadBackend.jsqMessages.count
     }
@@ -426,6 +408,38 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
         }
         return 0.0
+    }
+    
+    // MARK: Notifications
+    // Reloads the thread when the user recieves a push notification with a new message
+    func reloadThread(_ notification: Notification) {
+        if let collectionView = collectionView {
+            // reload collection view
+            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
+                self.scrollToBottom(animated: true)
+                if self.threadBackend.jsqMessages.count > 0 {
+                    if let layout = self.layout {
+                        layout.noMessagesView.alpha = 0
+                        
+                        // Update Current User to have seen the message for notification dot display in messages
+                        if let id = self.messageID {
+                            Message.get(withID: id, withBlock: { (message) in
+                                User.getCurrent { (currentUser) in
+                                    if currentUser.id == message.user1ID {
+                                        message.user1HasSeenLastSingleMessage = true
+                                        message.save()
+                                    } else {
+                                        message.user2HasSeenLastSingleMessage = true
+                                        message.save()
+                                    }
+                                }
+                            })
+                        }
+                        
+                    }
+                }
+            }
+        }
     }
 }
 

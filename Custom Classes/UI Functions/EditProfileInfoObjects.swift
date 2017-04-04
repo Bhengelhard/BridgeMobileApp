@@ -60,7 +60,7 @@ class EditProfileInfoObjects {
             
             tableFooterView = UIView()
             
-            noneCell.textLabel?.text = "None"
+            noneCell.textLabel?.text = "Do Not Display"
         }
         
         required init?(coder aDecoder: NSCoder) {

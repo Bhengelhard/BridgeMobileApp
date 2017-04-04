@@ -35,8 +35,12 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         
         newMatchesTableViewCell.parentVC = self
         newMatchesTableViewCell.tableView = layout.messagesTable
-        
+
         messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
+        
+        // Listener for updating thread when new messages come in
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
+
     }
     
     override func loadView() {
@@ -81,7 +85,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = MessagesTableCell()
         cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
         messagesBackend.setParticipantsLabel(index: indexPath.row, label: cell.participants)
-        messagesBackend.setSanpshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
+        messagesBackend.setSnapshotLabel(index: indexPath.row, textView: cell.messageSnapshot)
         messagesBackend.setProfilePicture(index: indexPath.row, imageView: cell.profilePic)
         messagesBackend.setDotAlpha(index: indexPath.row, dot: cell.notificationDot)
         
@@ -89,20 +93,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//<<<<<<< HEAD
-//        let threadVC = ThreadViewController()
-//        if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row - 1] {
-//            //threadVC.setMessageID(messageID: messageID)
-//            
-//            self.messageSelectedID = messageID
-//            
-//            tableView.deselectRow(at: indexPath, animated: false) // deselect the row
-//            performSegue(withIdentifier: "showThread", sender: self)
-//            
-////            present(threadVC, animated: true) {
-////                
-////            }
-//=======
+        
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 1 {
             if let messageID = messagesBackend.messagePositionToIDMapping[indexPath.row] {
                 goToThread(messageID: messageID) {
@@ -146,7 +138,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     // MARK: - Targets
-    
+    func reloadMessageTable(_ notification: Notification) {
+        messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
+        messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
+    }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

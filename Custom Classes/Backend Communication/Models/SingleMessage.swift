@@ -49,6 +49,8 @@ class SingleMessage {
     
     static func create(text: String?, senderID: String?, senderName: String?, messageID: String?, withBlock block: SingleMessageBlock? = nil) {
         
+        print("creating")
+        
         let parseSingleMessage = PFObject(className: "SingleMessages")
         
         // set SingleMessage's ACL

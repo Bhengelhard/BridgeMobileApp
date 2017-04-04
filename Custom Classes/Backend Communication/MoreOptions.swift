@@ -33,7 +33,12 @@ class MoreOptions {
         //
         //
         //        }
+        // If blocked then add does not appear
+        // If blocked then message disappears
+        // If the currentUser is blocked then they get popup with title "Message Not Sent" and messgae "This person isn't receiveing messages right now." and button "OK"
+        // If the currentUser is the blocker then they get popup with title: "Message Not Sent" and message "Unblock to send messages"
         
+
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
         
@@ -111,6 +116,7 @@ class MoreOptions {
         
     }
     
+
     func follow(message: Message) {
         // add otherUser to currentUser's friend list
         message.getNonCurrentUser { (otherUser) in
@@ -173,6 +179,7 @@ class MoreOptions {
         }
     }
     
+
     func block(message: Message) {
         // block both users from introducing and messaging
         message.getNonCurrentUser { (otherUser) in

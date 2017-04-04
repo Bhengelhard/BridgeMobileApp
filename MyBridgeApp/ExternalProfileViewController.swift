@@ -116,7 +116,7 @@ class ExternalProfileViewController: UIViewController {
         // Get 1st user
         User.getCurrent { (user1) in
             print("user1.id: \(user1.id)")
-            if let id1 = user1.id {
+            if let id1 = user1.id { 
                 user1ID = id1
                 connecterID = id1
             }

@@ -106,11 +106,14 @@ class ThreadBackend {
         SingleMessage.create(text: jsqMessage.text, senderID: jsqMessage.senderId, senderName: jsqMessage.senderDisplayName, messageID: messageID, withBlock: block)
     }
     
-    func updateMessageAfterSingleMessageSent(messageID: String?, snapshot: String, withBothHavePostedForFirstTimeBlock block: (() -> Void)? = nil) {
+    func updateMessageAfterSingleMessageSent(messageID: String?, snapshot: String, lastSingleMessageAt: Date?, withBothHavePostedForFirstTimeBlock block: (() -> Void)? = nil) {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
                 // update last single message
                 message.lastSingleMessage = snapshot
+                if let lastSingleMessageAt = lastSingleMessageAt {
+                    message.lastSingleMessageAt = lastSingleMessageAt
+                }
                 
                 // update current user has posted and other user has seen last single message
                 User.getCurrent { (user) in
@@ -146,6 +149,7 @@ class ThreadBackend {
                             }
                             message.user2HasPosted = true
                             message.user1HasSeenLastSingleMessage = false
+                            
                         }
                     }
                     message.save { (message) in

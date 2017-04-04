@@ -113,12 +113,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let messageId = userInfo["messageId"] as? String
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         if messageType == "ConnecterNotification" {
-            //Segue to SingleMessageViewController
-            let vc: SwipeViewController = storyboard.instantiateViewController(withIdentifier: "SwipeViewController") as! SwipeViewController
+            // Initialize MainPageViewController
+            let mainPageViewController: MainPageViewController = storyboard.instantiateViewController(withIdentifier: "MainPageViewController") as! MainPageViewController
+            mainPageViewController.viewDidLoad()
+            
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
-                self.window?.rootViewController = vc
-            } else if application.applicationState == UIApplicationState.background {
+                self.window?.rootViewController = mainPageViewController
+            }else if application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Background")
             } else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
@@ -128,26 +130,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         }
          else if messageId != nil {
-            //Segue to SingleMessageViewController
+            // Initialize MainPageViewController
             let mainPageViewController: MainPageViewController = storyboard.instantiateViewController(withIdentifier: "MainPageViewController") as! MainPageViewController
-            mainPageViewController.setUpArrayofVCs()
+            mainPageViewController.viewDidLoad()
             
             let arrayOfVCs = mainPageViewController.arrayOfVCs
             
-            //let vc: ThreadViewController = storyboard.instantiateViewController(withIdentifier: "ThreadViewController") as! ThreadViewController
-            
-            // vc.newMessageId = messageId!
             if application.applicationState == UIApplicationState.inactive || application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = mainPageViewController
                 
+                // FIXME: Push notification directly to thread commented out because myProfileVC currently shows up blank when this is done
                 //Scroll to MessagesVC
-                mainPageViewController.setViewControllers([arrayOfVCs[2]], direction: .forward, animated: true, completion: nil)
+                //mainPageViewController.setViewControllers([arrayOfVCs[2]], direction: .forward, animated: true, completion: nil)
                 
-                let threadVC = ThreadViewController()
-                threadVC.setMessageID(messageID: messageId)
-                
-                arrayOfVCs[2].present(threadVC, animated: true, completion: nil)
+                // Present ThreadViewController
+                //let threadVC = ThreadViewController()
+                //threadVC.setMessageID(messageID: messageId)
+                //arrayOfVCs[2].present(threadVC, animated: true, completion: nil)
 
 //            }else if application.applicationState == UIApplicationState.background {
 //                print("UIApplicationState.Background")
@@ -158,11 +158,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("None")
             }
         } else {
-            //Segue to MessagesViewController -> this should be accept/ignore
-            let vc: MessagesViewController = storyboard.instantiateViewController(withIdentifier: "MessagesViewController") as! MessagesViewController
+            // Initialize MainPageViewController
+            let mainPageViewController: MainPageViewController = storyboard.instantiateViewController(withIdentifier: "MainPageViewController") as! MainPageViewController
+            mainPageViewController.viewDidLoad()
+            
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
-                self.window?.rootViewController = vc
+                self.window?.rootViewController = mainPageViewController
             }else if application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Background")
             }else if application.applicationState == UIApplicationState.active {
@@ -206,6 +208,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBSDKAppEvents.activateApp()
         
         print("applicationDidBecomeActive")
+        
+        // Set app badge to 0
+        application.applicationIconBadgeNumber = 0
         
 //        //Checking Reachability of internet access
 //        let reachability = Reachability()

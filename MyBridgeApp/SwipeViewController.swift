@@ -24,8 +24,13 @@ class SwipeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Listeners
         // Listener for presentingExternalProfileVC
-        NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC(_:)), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
+        // Listener for presentingThreadVC
+        NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "presentThreadVC"), object: nil)
+        // Listener for updating inbox Icon
+//        NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "pushNotification"), object: nil)
         
         // Add Targets for Swipe Cards
         layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
@@ -45,6 +50,7 @@ class SwipeViewController: UIViewController {
         let dbRetrievingFunctions = DBRetrievingFunctions()
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
         dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
+
     }
     
     func getBridgePairings() {
@@ -57,7 +63,7 @@ class SwipeViewController: UIViewController {
         let hud = MBProgressHUD.showAdded(to: view, animated: true)
         hud.mode = .customView
         hud.customView = layout.loadingView
-        hud.label.text = "Finding Best\nPotential Friends..."
+        hud.label.text = "Finding best\npairs to 'nect..."
         hud.label.numberOfLines = 0
         
         // 2 second delay
@@ -76,6 +82,7 @@ class SwipeViewController: UIViewController {
         view.backgroundColor = UIColor.white
         
         view.setNeedsUpdateConstraints()
+
     }
     
     override func updateViewConstraints() {
@@ -86,15 +93,11 @@ class SwipeViewController: UIViewController {
     
     // MARK: - Targets and GestureRecognizer
     func passButtonTapped(_ sender: UIButton) {
-        didSwipe(right: false)
+        SwipeLogic.didSwipe(right: false, vc: self)
     }
     
     func nectButtonTapped(_ sender: UIButton) {
-        if layout.topSwipeCard.isUserInteractionEnabled {
-            //SwipeLogic.swipedRight(swipeCard: layout.topSwipeCard)
-        } else {
-            //SwipeLogic.swipedRight(swipeCard: layout.bottomSwipeCard)
-        }
+        SwipeLogic.didSwipe(right: true, vc: self)
     }
     
     func infoButtonTapped(_ sender: UIButton) {
@@ -105,12 +108,40 @@ class SwipeViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+<<<<<<< HEAD
+=======
+    // Presents Message with text prepopulated
+    func inviteButtonTapped(_ sender: UIButton) {
+        
+        // Make sure the device can send text messages
+        if messageComposer.canSendText() {
+            let hud = MBProgressHUD.showAdded(to: view, animated: true)
+            hud.label.text = "Loading..."
+            
+            // Obtain a configured MFMessageComposeViewController
+            let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+            // Present the configured MFMessageComposeViewController instance
+            // Note that the dismissal of the VC will be handled by the messageComposer instance,
+            // since it implements the appropriate delegate call-back
+            present(messageComposeVC, animated: true, completion: nil)
+            
+            MBProgressHUD.hide(for: view, animated: true)
+        } else {
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = UIAlertView(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", delegate: self, cancelButtonTitle: "OK")
+            errorAlert.show()
+            
+            MBProgressHUD.hide(for: view, animated: true)
+        }
+    }
+
+>>>>>>> fc6fef0894409f529c4cb172945844f882bd7721
     func refreshButtonTapped( _ sender: UIButton) {
         getBridgePairings()
     }
     
     func swipeGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
-        SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, didSwipe: didSwipe, reset: reset)
+        SwipeLogic.swipe(gesture: gestureRecognizer, layout: layout, vc: self, bottomSwipeCard: layout.bottomSwipeCard, connectIcon: layout.connectIcon, disconnectIcon: layout.disconnectIcon, reset: reset)
     }
     
     func presentExternalProfileVC(_ notification: Notification) {
@@ -122,21 +153,6 @@ class SwipeViewController: UIViewController {
     }
     
     // MARK: - Functions to pass as parameters
-    
-    func didSwipe(right: Bool) {
-        // if swiped left, check in bridge pairing
-        if !right {
-            swipeBackend.checkIn()
-        }
-        
-        layout.switchTopAndBottomCards()
-        layout.topSwipeCard.isUserInteractionEnabled = true
-        layout.bottomSwipeCard.isUserInteractionEnabled = false
-        layout.topSwipeCard.overlay.removeFromSuperlayer()
-        layout.bottomSwipeCard.addOverlay()
-        swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings)
-    }
-    
     func reset() {
         layout.recenterTopSwipeCard()
     }
@@ -144,6 +160,14 @@ class SwipeViewController: UIViewController {
     func noMoreBridgePairings() {
         for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
             view.alpha = 1
+        }
+    }
+    
+    func presentThreadVC(_ notification: Notification) {
+        if let messageID = notification.object as? String {
+            let threadVC = ThreadViewController()
+            threadVC.setMessageID(messageID: messageID)
+            self.present(threadVC, animated: true, completion: nil)
         }
     }
     
