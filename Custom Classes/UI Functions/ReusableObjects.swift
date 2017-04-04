@@ -55,13 +55,14 @@ class ReusableObjects {
     // PageViewController is a class which initializes with the viewControllers involved in a PageViewController and handles the page transitions between them
     class NecterPageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
         
+        // MARK: - Global Variables
         var arrayOfVCs: [UIViewController]
         let pageControl = UIPageControl()
         let startingIndex: Int
         let withPageControl: Bool
         let circular: Bool
         
-        
+        // MARK: -
         init(arrayOfVCs: [UIViewController], startingIndex: Int, withPageControl: Bool, circular: Bool) {
             self.arrayOfVCs = arrayOfVCs
             self.startingIndex = startingIndex
@@ -87,10 +88,14 @@ class ReusableObjects {
                 
                 view.addSubview(pageControl)
             }
-
-            
         }
         
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        // MARK: - Functions
+        // Adding view controllers to the PageViewController
         func addVC(vc: UIViewController) {
             arrayOfVCs.append(vc)
             setViewControllers([arrayOfVCs[startingIndex]], direction: .forward, animated: false, completion: nil)
@@ -101,10 +106,7 @@ class ReusableObjects {
             }
         }
         
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
+        // Swiping the PageViewController to the right
         func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
             if let currIndex = arrayOfVCs.index(of: viewController) {
                 if currIndex + 1 < arrayOfVCs.count {
@@ -119,6 +121,7 @@ class ReusableObjects {
             return nil
         }
         
+        // Swiping the PageViewController to the left
         func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
             
             if let currIndex = arrayOfVCs.index(of: viewController) {
@@ -133,6 +136,7 @@ class ReusableObjects {
             return nil
         }
         
+        // Setting the pageControl to the correct index once the animation to the new index has completed
         func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
             if let currentVC = viewControllers?.first {
                 if let currentIndex = arrayOfVCs.index(of: currentVC) {
