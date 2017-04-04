@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class ReusableObjects {
     
@@ -144,18 +145,50 @@ class ReusableObjects {
     }
     
     class InviteButton: UIButton {
+        var vc: UIViewController?
+        let messageComposer = MessageComposer()
         
         init() {
             super.init(frame: CGRect())
             
-            self.setImage(#imageLiteral(resourceName: "Profile_Invite_Button"), for: .normal)
-            self.layer.shadowColor = UIColor.black.cgColor
-            self.layer.shadowOpacity = 0.4
-            self.layer.shadowOffset = .init(width: 1, height: 1)
+            setImage(#imageLiteral(resourceName: "Profile_Invite_Button"), for: .normal)
+            layer.shadowColor = UIColor.black.cgColor
+            layer.shadowOpacity = 0.4
+            layer.shadowOffset = .init(width: 1, height: 1)
+            
+            addTarget(self, action: #selector(inviteButtonTapped(_:)), for: .touchUpInside)
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+        
+        func setVC(vc: UIViewController) {
+            self.vc = vc
+        }
+        
+        // Presents Message with text prepopulated
+        func inviteButtonTapped(_ sender: UIButton) {
+            if let vc = vc {
+                // Make sure the device can send text messages
+                if messageComposer.canSendText() {
+                    let hud = MBProgressHUD.showAdded(to: vc.view, animated: true)
+                    hud.label.text = "Loading..."
+                    
+                    // Obtain a configured MFMessageComposeViewController
+                    let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+                    // Present the configured MFMessageComposeViewController instance
+                    // Note that the dismissal of the VC will be handled by the messageComposer instance,
+                    // since it implements the appropriate delegate call-back
+                    vc.present(messageComposeVC, animated: true, completion: nil)
+                    
+                    MBProgressHUD.hide(for: vc.view, animated: true)
+                } else {
+                    // Let the user know if his/her device isn't able to send text messages
+                    let errorAlert = UIAlertView(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
+                }
+            }
         }
     }
     
