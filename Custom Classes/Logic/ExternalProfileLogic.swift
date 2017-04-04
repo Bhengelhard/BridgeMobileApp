@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ExternalLogic {
+class ExternalProfileLogic {
     
     static func getFactsLabelTextAndNumberOfLines(age: String?, city: String?, work: String?, school: String?, gender: String?, relationshipStatus: String?) -> (String, Int) {
         var labelText = String()
@@ -51,17 +51,17 @@ class ExternalLogic {
             
             case .city:
                 if let city = city {
-                    labelText = "\(labelText)\(city)"
+                    labelText = "\(labelText)Lives in \(city)"
                 }
                 
             case .work:
                 if let work = work {
-                    labelText = "\(labelText)\(work)"
+                    labelText = "\(labelText)Works at \(work)"
                 }
                 
             case .school:
                 if let school = school {
-                    labelText = "\(labelText)\(school)"
+                    labelText = "\(labelText)Goes to \(school)"
                 }
             
             case .gender:

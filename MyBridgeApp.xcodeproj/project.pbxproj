@@ -101,8 +101,8 @@
 		90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AA1E0B080100330646 /* HexagonView.swift */; };
 		90F5E3BF1E5CD376001399F6 /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3BE1E5CD376001399F6 /* Gender.swift */; };
 		90F5E3C11E5CD5FA001399F6 /* MyProfileBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3C01E5CD5FA001399F6 /* MyProfileBackend.swift */; };
-		90F5E3C31E5CDD5F001399F6 /* ExternalBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3C21E5CDD5F001399F6 /* ExternalBackend.swift */; };
-		90F5E3C61E5CE0F9001399F6 /* ExternalLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3C51E5CE0F9001399F6 /* ExternalLogic.swift */; };
+		90F5E3C31E5CDD5F001399F6 /* ExternalProfileBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3C21E5CDD5F001399F6 /* ExternalProfileBackend.swift */; };
+		90F5E3C61E5CE0F9001399F6 /* ExternalProfileLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3C51E5CE0F9001399F6 /* ExternalProfileLogic.swift */; };
 		CB5829471CAA26D900DC86C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5829441CAA26D900DC86C9 /* AppDelegate.swift */; };
 		E9D6DF111D7880C400138A1F /* MessagesTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D6DF101D7880C400138A1F /* MessagesTableCell.swift */; };
 		E9D6DF151D7880EA00138A1F /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D6DF141D7880EA00138A1F /* Bolts.framework */; };
@@ -216,8 +216,8 @@
 		90CD18BB1E8C328C00864519 /* MyBridgeApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyBridgeApp-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		90F5E3BE1E5CD376001399F6 /* Gender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Gender.swift; path = Types/Gender.swift; sourceTree = "<group>"; };
 		90F5E3C01E5CD5FA001399F6 /* MyProfileBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileBackend.swift; path = "Custom Classes/Backend Communication/MyProfileBackend.swift"; sourceTree = "<group>"; };
-		90F5E3C21E5CDD5F001399F6 /* ExternalBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalBackend.swift; path = "Custom Classes/Backend Communication/ExternalBackend.swift"; sourceTree = "<group>"; };
-		90F5E3C51E5CE0F9001399F6 /* ExternalLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalLogic.swift; sourceTree = "<group>"; };
+		90F5E3C21E5CDD5F001399F6 /* ExternalProfileBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExternalProfileBackend.swift; path = "Custom Classes/Backend Communication/ExternalProfileBackend.swift"; sourceTree = "<group>"; };
+		90F5E3C51E5CE0F9001399F6 /* ExternalProfileLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalProfileLogic.swift; sourceTree = "<group>"; };
 		A406D97A77270C2F8022759D /* Pods-MyBridgeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyBridgeApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyBridgeApp/Pods-MyBridgeApp.release.xcconfig"; sourceTree = "<group>"; };
 		CB5829441CAA26D900DC86C9 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyBridgeApp/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		E713802418DFAB7F52236C40 /* Pods_MyBridgeApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyBridgeApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -291,7 +291,7 @@
 				30BFA0BB1E4CCDC900A17F5E /* Server-Side Functions */,
 				30BFA0BA1E4CCDBB00A17F5E /* Database Communication */,
 				90F5E3C01E5CD5FA001399F6 /* MyProfileBackend.swift */,
-				90F5E3C21E5CDD5F001399F6 /* ExternalBackend.swift */,
+				90F5E3C21E5CDD5F001399F6 /* ExternalProfileBackend.swift */,
 				90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */,
 				903477BA1E652CB8007E2CAE /* SwipeBackend.swift */,
 				30D82B5F1E6FC7E6000F7075 /* LoginBackend.swift */,
@@ -521,7 +521,7 @@
 		90F5E3C41E5CE080001399F6 /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				90F5E3C51E5CE0F9001399F6 /* ExternalLogic.swift */,
+				90F5E3C51E5CE0F9001399F6 /* ExternalProfileLogic.swift */,
 				90AB6B121E60A01000EBEBC0 /* MessagesLogic.swift */,
 				903477BC1E653454007E2CAE /* SwipeLogic.swift */,
 				9067C8491E6F969B00465276 /* EditProfileLogic.swift */,
@@ -732,10 +732,10 @@
 				3030C0C31DD54E5E0077F7AC /* NecterNavigationBar.swift in Sources */,
 				9043B77D1E56ABC100D76BCE /* Picture.swift in Sources */,
 				90F5E3BF1E5CD376001399F6 /* Gender.swift in Sources */,
-				90F5E3C31E5CDD5F001399F6 /* ExternalBackend.swift in Sources */,
+				90F5E3C31E5CDD5F001399F6 /* ExternalProfileBackend.swift in Sources */,
 				90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */,
 				30D82B6E1E733118000F7075 /* ExternalProfileLayout.swift in Sources */,
-				90F5E3C61E5CE0F9001399F6 /* ExternalLogic.swift in Sources */,
+				90F5E3C61E5CE0F9001399F6 /* ExternalProfileLogic.swift in Sources */,
 				30BFA0B21E4BBB9600A17F5E /* FacebookFunctions.swift in Sources */,
 				30BFA0BD1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift in Sources */,
 				907F60611E73433100CB1097 /* ThreadLogic.swift in Sources */,

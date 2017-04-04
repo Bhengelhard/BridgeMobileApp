@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ExternalBackend {
+class ExternalProfileBackend {
     
     /// get user's images
     func getImages(userID: String, withBlock block: Picture.ImagesBlock? = nil) {
@@ -124,7 +124,7 @@ class ExternalBackend {
                 }
             }
             
-            let (text, numberOfLines) = ExternalLogic.getFactsLabelTextAndNumberOfLines(age: age, city: city, work: work, school: school, gender: gender, relationshipStatus: relationshipStatus)
+            let (text, numberOfLines) = ExternalProfileLogic.getFactsLabelTextAndNumberOfLines(age: age, city: city, work: work, school: school, gender: gender, relationshipStatus: relationshipStatus)
             label.text = text
             label.numberOfLines = numberOfLines
         }

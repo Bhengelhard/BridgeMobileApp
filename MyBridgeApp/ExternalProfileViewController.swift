@@ -65,13 +65,13 @@ class ExternalProfileViewController: UIViewController {
         self.userID = userID
         
         if let userID = userID {
-            let externalBackend = ExternalBackend()
+            let externalProfileBackend = ExternalProfileBackend()
             
             let hud = MBProgressHUD.showAdded(to: layout.profilePicturesVC.view, animated: true)
             hud.label.text = "Loading..."
             
             // pictures
-            externalBackend.getImages(userID: userID) { (images) in
+            externalProfileBackend.getImages(userID: userID) { (images) in
                 for image in images {
                     self.layout.profilePicturesVC.addImage(image: image)
                 }
@@ -86,13 +86,13 @@ class ExternalProfileViewController: UIViewController {
             }
             
             // name
-            externalBackend.setName(userID: userID, label: layout.name)
+            externalProfileBackend.setName(userID: userID, label: layout.name)
             
             // facts label
-            externalBackend.setFacts(userID: userID, label: layout.factLabel)
+            externalProfileBackend.setFacts(userID: userID, label: layout.factLabel)
             
             // about me
-            externalBackend.setAboutMe(userID: userID, label: layout.aboutMeLabel)
+            externalProfileBackend.setAboutMe(userID: userID, label: layout.aboutMeLabel)
         }
     }
     
