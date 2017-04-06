@@ -16,7 +16,6 @@ import FBSDKLoginKit
 class FacebookFunctions {
     
     var geoPoint:PFGeoPoint?
-    var fbFriendIds = [String]()
     
     // MARK: -
     
@@ -107,12 +106,12 @@ class FacebookFunctions {
     
     // MARK: - Updating User's Friends
 
-    func updateFacebookFriends () {
+    func updateFacebookFriends(withBlock block: (() -> Void)? = nil) {
         print("updating facebook friends")
-        facebookFriends(withCursor: nil)
+        facebookFriends(withCursor: nil, fbFriendIDs: [], withBlock: block)
     }
 
-    func facebookFriends (withCursor after: String?){
+    func facebookFriends(withCursor after: String?, fbFriendIDs: [String], withBlock block: (() -> Void)?) {
         var parameters = ["fields": ""]
 
         if after != nil {
@@ -126,11 +125,13 @@ class FacebookFunctions {
                 print(error!)
             }
             else if let dictionary = result as? Dictionary<String, AnyObject> {
+                var updatedFBFriendIDs = fbFriendIDs // new friend list
+                
                 //if let friends = dictionary["friends"] as? Dictionary<String, AnyObject> {
                 if let data = dictionary["data"] as? [Dictionary<String, AnyObject>] {
                     for friend in data {
                         if let id = friend["id"] as? String {
-                            self.fbFriendIds.append(id)
+                            updatedFBFriendIDs.append(id)
                         }
                         
                     }
@@ -139,32 +140,30 @@ class FacebookFunctions {
                 if let paging = dictionary["paging"] as? Dictionary<String, AnyObject> {
                     if let _ = paging["next"] {
                         if let cursors = paging["cursors"] as? Dictionary<String, AnyObject> {
-                            if let cursor = cursors["after"] as? String
-                            {
-                                return self.facebookFriends(withCursor: cursor)
+                            if let cursor = cursors["after"] as? String {
+                                return self.facebookFriends(withCursor: cursor, fbFriendIDs: updatedFBFriendIDs, withBlock: block)
                             }
                         }
-                    } else {
-                        // After paging through the whole list, save the fbids to the fbFriends
-                        PFUser.current()?["fb_friends"] = self.fbFriendIds
-                        PFUser.current()?.saveInBackground(block: { (success, error) in
-                            if error != nil {
-                                print(error!)
-                            } else {
-                                // Convert fbIds to parse objectIds
-                                self.updateFriendList()
-                            }
-                        })
-                        
                     }
                 }
+                
+                // After paging through the whole list, save the fbids to the fbFriends
+                PFUser.current()?["fb_friends"] = updatedFBFriendIDs
+                PFUser.current()?.saveInBackground(block: { (success, error) in
+                    if error != nil {
+                        print(error!)
+                    } else {
+                        // Convert fbIds to parse objectIds
+                        self.updateFriendList(withBlock: block)
+                    }
+                })
             }
         }
         
     }
     
     // Update the user's friendList in the User Table with objectIds corresponding to the User's FaceBook Friends
-    func updateFriendList() {
+    func updateFriendList(withBlock block: (() -> Void)? = nil) {
         //add graph request to update users fb_friends
         //query to find and save fb_friends
         let currentUserFbFriends = PFUser.current()!["fb_friends"] as? [String] ?? [String]()
@@ -187,7 +186,15 @@ class FacebookFunctions {
                             }
                         }
                     }
-                    PFUser.current()?.saveInBackground()
+                    PFUser.current()?.saveInBackground(block: { (success, error) in
+                        if error != nil {
+                            print(error!)
+                        } else {
+                            if let block = block {
+                                block()
+                            }
+                        }
+                    })
                 })
             }
         })
