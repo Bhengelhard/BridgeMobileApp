@@ -162,6 +162,10 @@ class FBLogin {
                             }
                             
                             user.saveInBackground(block: { (success, error) in
+                                //Updating the user's friends
+                                let fbFunctions = FacebookFunctions()
+                                fbFunctions.updateFacebookFriends()
+                                
                                 if user.isNew {
                                     if success == true {
                                         // Update BridgePairings Table to include new user
@@ -180,9 +184,7 @@ class FBLogin {
                                     }
                                 }
                                 
-                                //Updating the user's friends
-                                let fbFunctions = FacebookFunctions()
-                                fbFunctions.updateFacebookFriends()
+                                
                             })
                         }
                     }
