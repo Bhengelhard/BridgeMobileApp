@@ -26,10 +26,7 @@ class MyProfileLayout {
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
         
         if (!didSetupConstraints) {
-            
-            print(DisplayUtility.screenWidth)
-            print(DisplayUtility.screenHeight)
-            
+                        
             // Layout the navigation bar with title image and right bar button items
             view.addSubview(navBar)
             navBar.autoPinEdge(toSuperviewEdge: .top)

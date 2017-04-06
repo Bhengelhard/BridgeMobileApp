@@ -66,7 +66,7 @@ class User: NSObject {
     var birthday: String?
 
     /// The age of the User
-    var age: Int? {
+    var age: String? {
         if let birthday = birthday {
             let formatter = DateFormatter()
             formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -77,7 +77,7 @@ class User: NSObject {
                 let calendar: Calendar = Calendar.current
                 let now = Date()
                 if let age = ((calendar as NSCalendar).components(.year, from: birthdayDate, to: now, options: [])).year {
-                    return age
+                    return String(age)
                 }
             }
         }

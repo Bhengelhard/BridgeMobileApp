@@ -99,7 +99,7 @@ class ExternalProfileObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.font = Constants.Fonts.light24
+            font = Constants.Fonts.light24
             
         }
         
@@ -107,6 +107,138 @@ class ExternalProfileObjects {
             fatalError("init(coder:) has not been implemented")
         }
         
+    }
+    
+    class NameAndAgeLabel: UILabel {
+        init() {
+            super.init(frame: CGRect())
+            
+            font = Constants.Fonts.light24
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    class FactsTable: UITableView, UITableViewDelegate, UITableViewDataSource {
+        let fieldsOrder: [UserInfoField] = [.city, .work, .school, .gender, .relationshipStatus]
+        var fieldsToCells = [UserInfoField: FactCell]()
+        
+        override init(frame: CGRect, style: UITableViewStyle) {
+            super.init(frame: CGRect(), style: .plain)
+            
+            delegate = self
+            dataSource = self
+            
+            self.separatorStyle = .none
+            
+            self.estimatedRowHeight = 50
+            //self.rowHeight = UITableViewAutomaticDimension
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        // MARK: - Table view data source
+        
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            print("number of rows = \(fieldsToCells.count)")
+            return fieldsToCells.count
+        }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            print("cell for row at: \(indexPath.row)")
+            var i = 0
+            for field in fieldsOrder {
+                if let cell = fieldsToCells[field] {
+                    if i == indexPath.row {
+                        return cell
+                    }
+                    i += 1
+                }
+            }
+            return FactCell()
+        }
+        
+        
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            print("height for row at: \(indexPath.row) = 50")
+            return 50
+        }
+        
+        func addFactCell(forField field: UserInfoField, withIcon icon: UIImage, withFactText factText: String) {
+            fieldsToCells[field] = FactCell(icon: icon, factText: factText)
+            reloadData()
+        }
+        
+    }
+    
+    class FactCell: UITableViewCell {
+        
+        init() {
+            super.init(style: .default, reuseIdentifier: "FactCell")
+        }
+        
+        init(icon: UIImage, factText: String) {
+            super.init(style: .default, reuseIdentifier: "FactCell")
+            imageView?.image = icon
+            textLabel?.text = factText
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    class FactsView: UIView {
+        var cityView: FactView?
+        var workView: FactView?
+        var schoolView: FactView?
+        var genderView: FactView?
+        var relationshipStatusView: FactView?
+        
+        class FactView: UIView {
+            let iconImageView = UIImageView()
+            let factLabel = UILabel()
+            let sizeReferenceLabel = UILabel()
+            
+            init(icon: UIImage, factText: String) {
+                super.init(frame: CGRect())
+                
+                factLabel.font = Constants.Fonts.light18
+                factLabel.numberOfLines = 0
+                
+                // used only for calculating height of single line
+                sizeReferenceLabel.font = factLabel.font
+                sizeReferenceLabel.numberOfLines = 1
+                sizeReferenceLabel.text = "A"
+                sizeReferenceLabel.sizeToFit()
+                
+                iconImageView.image = icon
+                addSubview(iconImageView)
+                
+                factLabel.text = factText
+                //factLabel.sizeToFit()
+                addSubview(factLabel)
+            }
+            
+            required init?(coder aDecoder: NSCoder) {
+                fatalError("init(coder:) has not been implemented")
+            }
+        }
+        
+        func activeFactViews() -> [FactView] {
+            var activeFactViews = [FactView]()
+            for factView in [cityView, workView, schoolView, genderView, relationshipStatusView] {
+                if let factView = factView {
+                    activeFactViews.append(factView)
+                }
+            }
+            return activeFactViews
+        }
+
     }
     
     class FactLabel: UILabel {

@@ -88,6 +88,18 @@ class ExternalProfileViewController: UIViewController {
             // name
             externalProfileBackend.setName(userID: userID, label: layout.name)
             
+            /*
+            externalProfileBackend.getFieldShouldDisplayAndValue(userID: userID, field: .city) { (shouldDisplay, value) in
+                if shouldDisplay {
+                    if let city = value {
+                        self.layout.factsTable.addFactCell(forField: .city, withIcon: #imageLiteral(resourceName: "Profile_Unselected_Work_Icon"), withFactText: "Lives in \(city)")
+                    }
+                }
+                //self.layout.layoutFactViews()
+                self.view.setNeedsLayout()
+                self.view.layoutIfNeeded()
+            }*/
+            
             // facts label
             externalProfileBackend.setFacts(userID: userID, label: layout.factLabel)
             

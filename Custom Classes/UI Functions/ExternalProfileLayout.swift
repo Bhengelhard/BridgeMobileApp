@@ -22,12 +22,13 @@ class ExternalProfileLayout {
     let dividerLine = ExternalProfileObjects.Line()
     let aboutMeLabel = ExternalProfileObjects.AboutMeLabel()
     let messageButton = ExternalProfileObjects.MessageButton()
+    let factsView = ExternalProfileObjects.FactsView()
+    let factsTable = ExternalProfileObjects.FactsTable()
     
     // MARK: - Layout
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
         if (!didSetupConstraints) {
-            
             // Setting the space between objects
             let buffer: CGFloat = 20
             
@@ -76,16 +77,31 @@ class ExternalProfileLayout {
             name.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
             name.autoPinEdge(.top, to: .bottom, of: profilePicturesVC.view, withOffset: buffer)
             
+            /*
+            scrollView.addSubview(factsTable)
+            factsTable.autoPinEdge(.top, to: .bottom, of: name, withOffset: buffer)
+            factsTable.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
+            factsTable.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
+            */
+            
             // Set the multi-line factsLabel below the name
             scrollView.addSubview(factLabel)
             factLabel.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
             factLabel.autoPinEdge(.top, to: .bottom, of: name, withOffset: buffer)
             factLabel.autoMatch(.width, to: .width, of: view, withOffset: 2*buffer)
+            /*
+            scrollView.addSubview(factsView)
+            factsView.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
+            factsView.autoPinEdge(toSuperviewEdge: .right, withInset: buffer)
+            factsView.autoPinEdge(.top, to: .bottom, of: name, withOffset: buffer)
+            //layoutFactViews()*/
             
             // Set the divider line below the factsLabel
             scrollView.addSubview(dividerLine)
             dividerLine.autoPinEdge(toSuperviewEdge: .left)
             dividerLine.autoPinEdge(.top, to: .bottom, of: factLabel, withOffset: buffer)
+            //dividerLine.autoPinEdge(.top, to: .bottom, of: factsView, withOffset: buffer)
+            //dividerLine.autoPinEdge(.top, to: .bottom, of: factsTable, withOffset: buffer)
             dividerLine.autoMatch(.width, to: .width, of: view)
             dividerLine.autoSetDimension(.height, toSize: dividerLine.height)
             
@@ -127,6 +143,40 @@ class ExternalProfileLayout {
         }
         
         return true
+    }
+    
+    func layoutFactViews() {
+        let activeFactViews = factsView.activeFactViews()
+        for i in 0..<activeFactViews.count {
+            let factView = activeFactViews[i]
+            
+            factsView.addSubview(factView)
+            
+            factView.autoPinEdge(toSuperviewEdge: .left)
+            factView.autoPinEdge(toSuperviewEdge: .right)
+            if i == 0 {
+                factView.autoPinEdge(toSuperviewEdge: .top)
+            } else {
+                factView.autoPinEdge(.top, to: .bottom, of: activeFactViews[i-1], withOffset: 5)
+            }
+            if i == activeFactViews.count - 1 {
+                factView.autoPinEdge(toSuperviewEdge: .bottom)
+            }
+            // layout icon image view
+            factView.iconImageView.autoPinEdge(toSuperviewEdge: .top)
+            factView.iconImageView.autoPinEdge(toSuperviewEdge: .left)
+            factView.iconImageView.autoMatch(.height, to: .height, of: factView.factLabel)
+            factView.iconImageView.autoMatch(.width, to: .height, of: factView.iconImageView)
+            // layout fact label
+            factView.factLabel.autoPinEdge(toSuperviewEdge: .top)
+            factView.factLabel.autoPinEdge(.left, to: .right, of: factView.iconImageView, withOffset: 3)
+            factView.factLabel.autoPinEdge(toSuperviewEdge: .right)
+            factView.factLabel.autoPinEdge(toSuperviewEdge: .bottom)
+            print("factLabel constraints:")
+            print(factView.factLabel.constraints)
+            
+            //factView.autoMatch(.height, to: .height, of: factView.factLabel, withOffset: 10)
+        }
     }
     
 }

@@ -132,7 +132,7 @@ class EditProfileInfoBackend {
             switch field {
             case .age:
                 if let age = user.age {
-                    label.text = String(age)
+                    label.text = age
                     fieldValueExists = true
                 }
                 

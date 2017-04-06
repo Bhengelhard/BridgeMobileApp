@@ -50,12 +50,12 @@ class ExternalProfileBackend {
             if let displayAge = user.displayAge {
                 if displayAge {
                     if let userAge = user.age {
-                        age = String(userAge)
+                        age = userAge
                     }
                 }
             } else {
                 if let userAge = user.age {
-                    age = String(userAge)
+                    age = userAge
                 }
             }
             
@@ -127,6 +127,65 @@ class ExternalProfileBackend {
             let (text, numberOfLines) = ExternalProfileLogic.getFactsLabelTextAndNumberOfLines(age: age, city: city, work: work, school: school, gender: gender, relationshipStatus: relationshipStatus)
             label.text = text
             label.numberOfLines = numberOfLines
+        }
+    }
+    
+    func getFieldShouldDisplayAndValue(userID: String, field: UserInfoField, completion: @escaping (Bool, String?) -> Void) {
+        User.get(withID: userID) { (user) in
+            switch field {
+            case .age:
+                if let displayAge = user.displayAge {
+                    completion(displayAge, user.age)
+                } else {
+                    completion(true, user.age)
+                }
+            case .city:
+                if let displayCity = user.displayCity {
+                    completion(displayCity, user.city)
+                } else {
+                    completion(true, user.city)
+                }
+            case .work:
+                if let displayWork = user.displayWork {
+                    completion(displayWork, user.work)
+                } else {
+                    completion(true, user.work)
+                }
+            case .school:
+                if let displaySchool = user.displaySchool {
+                    completion(displaySchool, user.school)
+                } else {
+                    completion(true, user.school)
+                }
+            case .gender:
+                if let displayGender = user.displayGender {
+                    if let gender = user.gender {
+                        completion(displayGender, gender.rawValue)
+                    } else {
+                        completion(displayGender, nil)
+                    }
+                } else {
+                    if let gender = user.gender {
+                        completion(true, gender.rawValue)
+                    } else {
+                        completion(true, nil)
+                    }
+                }
+            case .relationshipStatus:
+                if let displayRelationshipStatus = user.displayRelationshipStatus {
+                    if let relationshipStatus = user.relationshipStatus {
+                        completion(displayRelationshipStatus, relationshipStatus.rawValue)
+                    } else {
+                        completion(displayRelationshipStatus, nil)
+                    }
+                } else {
+                    if let relationshipStatus = user.relationshipStatus {
+                        completion(true, relationshipStatus.rawValue)
+                    } else {
+                        completion(true, nil)
+                    }
+                }
+            }
         }
     }
     

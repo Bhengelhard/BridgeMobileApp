@@ -32,8 +32,6 @@ class SwipeLogic {
         //var rotation = CGAffineTransform(rotationAngle: translation.x / 1000)
         //var stretch = rotation.scaledBy(x: scale, y: scale)
         //swipeCard.transform = stretch
-        var removeCard = false
-        
         
         //animating connect and disconnect icons when card is positioned from 0.4% of DisplayUtility.screenWidth to border
         if swipeCard.center.x < 0.4*DisplayUtility.screenWidth {
@@ -103,9 +101,7 @@ class SwipeLogic {
                         reset()
                     }))
                     alert.addAction(UIAlertAction(title: "Don't Connect", style: .default, handler: { (action) in
-                        SwipeLogic.didSwipe(right: false, vc: vc)
-                        
-                        removeCard = true
+                        SwipeLogic.didSwipe(right: false, vc: vc)                        
                     }))
                     vc.present(alert, animated: true, completion: nil)
                     
@@ -113,14 +109,12 @@ class SwipeLogic {
                     localData.synchronize()
                 } else {
                     SwipeLogic.didSwipe(right: false, vc: vc)
-                    removeCard = true
                 }
             }
             // User Swiped Right
             else if swipeCard.center.x > 0.75*DisplayUtility.screenWidth {
                 
                 SwipeLogic.didSwipe(right: true, vc: vc)
-                removeCard = true
             }
             // Reset the cards
             else {
@@ -137,7 +131,6 @@ class SwipeLogic {
         let layout = vc.layout
         let noMoreBridgePairings: () -> Void  = vc.noMoreBridgePairings
         
-        print("didSwipe")
         let swipeCard: SwipeCard
         if layout.bottomSwipeCard.isUserInteractionEnabled {
             swipeCard = layout.bottomSwipeCard
@@ -159,47 +152,59 @@ class SwipeLogic {
         }, completion: { (success) in
             
             if right {
-                if let user1ID = swipeCard.bridgePairing?.user1ID {
-                    print("got user1ID")
-                    // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
-                    let user1Image = swipeCard.topHalf.photoView.image
-                    let user2Image = swipeCard.bottomHalf.photoView.image
+                if let bridgePairing = swipeCard.bridgePairing {
+                    // set bridged to true
+                    bridgePairing.bridged = true
+                    bridgePairing.save()
                     
-                    if let user2ID = swipeCard.bridgePairing?.user2ID {
-                        print("got user2ID")
-                        // Initialize and display swipeRightView
-                        let swipeRightView = PopupView(includesCurrentUser: false, user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
-                        swipeRightView.alpha = 0
-                        vc.view.addSubview(swipeRightView)
-                        swipeRightView.autoPinEdgesToSuperviewEdges()
-                        swipeRightView.layoutIfNeeded()
-                        
-                        UIView.animate(withDuration: 0.4, animations: {
-                            swipeRightView.alpha = 1
-                        })
-                        
-                        if let user1Name = swipeCard.bridgePairing?.user1Name, let user2Name = swipeCard.bridgePairing?.user2Name {
+                    if let user1ID = bridgePairing.user1ID {
+                        print("got user1ID")
+                        // Layout swipeRightView full screen with user's images and ids for presenting ExternalProfiles if clicked
+                        let user1Image = swipeCard.topHalf.photoView.image
+                        let user2Image = swipeCard.bottomHalf.photoView.image
+                        if let user2ID = bridgePairing.user2ID {
+                            print("got user2ID")
+                            // Initialize and display swipeRightView
+                            let swipeRightView = PopupView(includesCurrentUser: false, user1Id: user1ID, user2Id: user2ID, textString: "We'll let you know when they start a conversation!", titleImage: #imageLiteral(resourceName: "Sweet_Nect"), user1Image: user1Image, user2Image: user2Image)
+                            swipeRightView.alpha = 0
+                            vc.view.addSubview(swipeRightView)
+                            swipeRightView.autoPinEdgesToSuperviewEdges()
+                            swipeRightView.layoutIfNeeded()
                             
-                            
-                            var connecterID = ""
-                            var connecterName = ""
-                            User.getCurrent(withBlock: { (user) in
-                                if let id = user.id {
-                                    connecterID = id
-                                }
-                                
-                                if let name = user.name {
-                                    connecterName = name
-                                }
+                            UIView.animate(withDuration: 0.4, animations: {
+                                swipeRightView.alpha = 1
                             })
                             
-                            let user1PictureID = swipeCard.bridgePairing?.user1PictureID
-                            let user2PictureID = swipeCard.bridgePairing?.user2PictureID
-                            
-                            // Create message with both of the retrieved users
-                            Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil, withBlock: { (message, isNew) in
-                                if isNew {
-                                    message.save(withBlock: { (message) in
+                            if let user1Name = bridgePairing.user1Name, let user2Name = bridgePairing.user2Name {
+                                var connecterID = ""
+                                var connecterName = ""
+                                User.getCurrent(withBlock: { (user) in
+                                    if let id = user.id {
+                                        connecterID = id
+                                    }
+                                    
+                                    if let name = user.name {
+                                        connecterName = name
+                                    }
+                                })
+                                
+                                let user1PictureID = bridgePairing.user1PictureID
+                                let user2PictureID = bridgePairing.user2PictureID
+                                
+                                // Create message with both of the retrieved users
+                                Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil, withBlock: { (message, isNew) in
+                                    if isNew {
+                                        message.save(withBlock: { (message) in
+                                            if let messageID = message.id {
+                                                // Set messageID for SwipeRightView's message both button
+                                                swipeRightView.setMessageID(messageID: messageID)
+                                                
+                                                //Send notification that user's have been 'nected
+                                                sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
+                                                
+                                            }
+                                        })
+                                    } else {
                                         if let messageID = message.id {
                                             // Set messageID for SwipeRightView's message both button
                                             swipeRightView.setMessageID(messageID: messageID)
@@ -208,22 +213,14 @@ class SwipeLogic {
                                             sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
                                             
                                         }
-                                    })
-                                } else {
-                                    if let messageID = message.id {
-                                        // Set messageID for SwipeRightView's message both button
-                                        swipeRightView.setMessageID(messageID: messageID)
-                                        
-                                        //Send notification that user's have been 'nected
-                                        sendNectedNotification(user1ID: user1ID, user2ID: user2ID, user1Name: user1Name, user2Name: user2Name, connecterName: connecterName, messageID: messageID)
-                                        
                                     }
-                                }
-                                
-                            })
+                                    
+                                })
+                            }
                         }
                     }
                 }
+                
             }
             // Swiped Left
             else {

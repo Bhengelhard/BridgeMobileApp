@@ -70,14 +70,14 @@ class EditProfileBackend {
                 if let displayAge = user.displayAge {
                     if displayAge {
                         if let age = user.age {
-                            label.text = String(age)
+                            label.text = age
                         }
                     }
                 } else {
                     user.displayAge = true
                     user.save()
                     if let age = user.age {
-                        label.text = String(age)
+                        label.text = age
                     }
                 }
                 
