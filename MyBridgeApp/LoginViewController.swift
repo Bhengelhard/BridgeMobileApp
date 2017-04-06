@@ -72,14 +72,15 @@ class LoginViewController: UIViewController {
         
         //Checking if user is already logged in
         PFUser.current()?.fetchInBackground(block: { (currentUser, error) in
-            //Updating the user's friends
-            let fbFunctions = FacebookFunctions()
-            fbFunctions.updateFacebookFriends()
-            
             if let currentUser = currentUser as? PFUser {
                 if currentUser.objectId != nil {
                     if let hasLoggedIn = currentUser["has_logged_in"] as? Bool {
                         if hasLoggedIn {
+                            //Updating the user's friends
+                            let fbFunctions = FacebookFunctions()
+                            fbFunctions.updateFacebookFriends()
+                            
+                            // Segue to SwipeViewController
                             self.performSegue(withIdentifier: "showSwipe", sender: self)
                         } else {
                             PFUser.logOutInBackground()

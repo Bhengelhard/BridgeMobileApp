@@ -176,16 +176,22 @@ class FacebookFunctions {
             if error != nil {
                 print(error!)
             } else if let objects = objects {
+                
+                // If the user does not yet have any friends, set the friend_list to an empty array
+                if PFUser.current()?["friend_list"] == nil {
+                    PFUser.current()?["friend_list"] = []
+                }
+                
                 PFUser.current()?.fetchInBackground(block: { (success, error) in
                     for object in objects {
                         if let friendsObjectId = object.objectId {
-                            
                             // Do not include users the current user has unmatched
                             if !currentUserUnmatchedList.contains(friendsObjectId) {
                                 PFUser.current()?.addUniqueObject(friendsObjectId, forKey: "friend_list")
                             }
                         }
                     }
+                    
                     PFUser.current()?.saveInBackground(block: { (success, error) in
                         if error != nil {
                             print(error!)
