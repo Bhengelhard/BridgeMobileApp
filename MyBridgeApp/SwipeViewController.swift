@@ -49,7 +49,30 @@ class SwipeViewController: UIViewController {
         //Check for Connections Conversed and for the current User's New Matches
         let dbRetrievingFunctions = DBRetrievingFunctions()
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
-        dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
+        //dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
+        
+        swipeBackend.getCurrentUserUnviewedMacthes { (bridgePairings) in
+            User.getCurrent { (currentUser) in
+                for bridgePairing in bridgePairings {
+                    // create poppup view
+                    bridgePairing.getNonCurrentUser { (otherUser) in
+                        if let currentUserID = currentUser.id, let otherUserID = otherUser.id, let connecterName = bridgePairing.connecterName, let otherUserName = otherUser.name {
+                            let youMatchedPopUp = PopupView(includesCurrentUser: true, user1Id: currentUserID, user2Id: otherUserID, textString: "\(connecterName) 'nected you with \(otherUserName)!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
+                            self.view.addSubview(youMatchedPopUp)
+                            youMatchedPopUp.autoPinEdgesToSuperviewEdges()
+                        }
+                    }
+                    
+                    // set viewed notification to true
+                    if currentUser.id == bridgePairing.user1ID {
+                        bridgePairing.youMatchedNotificationViewedUser1 = true
+                    } else {
+                        bridgePairing.youMatchedNotificationViewedUser2 = true
+                    }
+                    bridgePairing.save()
+                }
+            }
+        }
 
     }
     

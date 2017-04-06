@@ -104,6 +104,10 @@ class BridgePairing: NSObject {
     
     var blockedList: [String]?
     
+    var youMatchedNotificationViewedUser1: Bool?
+    
+    var youMatchedNotificationViewedUser2: Bool?
+    
     private var userIDsToUsers = [String: User]()
     private var pictureIDsToPictures = [String: Picture]()
     
@@ -164,11 +168,19 @@ class BridgePairing: NSObject {
             blockedList = parseBlockedList
         }
         
+        if let parseYouMatchedNotificationViewedUser1 = parseBridgePairing["you_matched_notification_viewed_user1"] as? Bool {
+            youMatchedNotificationViewedUser1 = parseYouMatchedNotificationViewedUser1
+        }
+        
+        if let parseYouMatchedNotificationViewedUser2 = parseBridgePairing["you_matched_notification_viewed_user2"] as? Bool {
+            youMatchedNotificationViewedUser2 = parseYouMatchedNotificationViewedUser2
+        }
+        
     }
     
     /// Creates a new BridgePairing object with the provided parameters and calls the given block
     /// on the result.
-    static func create(user1ID: String?, user2ID: String?, connecterID: String?, user1Name: String?, user2Name: String?, connecterName: String?, user1PictureID: String?, user2PictureID: String?, connecterPictureID: String?, bridged: Bool?, shownTo: [String]?, checkedOut: Bool?, blockedList: [String]?, block: BridgePairingBlock? = nil) {
+    static func create(user1ID: String?, user2ID: String?, connecterID: String?, user1Name: String?, user2Name: String?, connecterName: String?, user1PictureID: String?, user2PictureID: String?, connecterPictureID: String?, bridged: Bool?, shownTo: [String]?, checkedOut: Bool?, blockedList: [String]?, youMatchedNotificationViewedUser1: Bool?, youMatchedNotificationViewedUser2: Bool?, block: BridgePairingBlock? = nil) {
         
         let parseBridgePairing = PFObject(className: "BridgePairing")
         
@@ -229,6 +241,14 @@ class BridgePairing: NSObject {
             parseBridgePairing["blocked_list"] = blockedList
         }
         
+        if let youMatchedNotificationViewedUser1 = youMatchedNotificationViewedUser1 {
+            parseBridgePairing["you_matched_notification_viewed_user1"] = youMatchedNotificationViewedUser1
+        }
+        
+        if let youMatchedNotificationViewedUser2 = youMatchedNotificationViewedUser2 {
+            parseBridgePairing["you_matched_notification_viewed_user2"] = youMatchedNotificationViewedUser2
+        }
+        
         let bridgePairing = BridgePairing(parseBridgePairing: parseBridgePairing)
         if let block = block {
             block(bridgePairing)
@@ -253,12 +273,21 @@ class BridgePairing: NSObject {
         }
     }
     
-    static func getAll(withUser user: User, bridgedOnly: Bool = false, withLimit limit: Int = 10000, withBlock block: BridgePairingsBlock? = nil) {
+    static func getAll(withUser user: User, bridgedOnly: Bool = false, withLimit limit: Int = 10000, whereUserHasNotViewedNotificationOnly: Bool = false, withBlock block: BridgePairingsBlock? = nil) {
         if let userID = user.id {
             let subQuery1 = PFQuery(className: "BridgePairings")
             subQuery1.whereKey("user1_objectId", equalTo: userID)
+            
+            if whereUserHasNotViewedNotificationOnly {
+                subQuery1.whereKey("you_matched_notification_viewed_user1", notEqualTo: true)
+            }
+            
             let subQuery2 = PFQuery(className: "BridgePairings")
             subQuery2.whereKey("user2_objectId", equalTo: userID)
+            
+            if whereUserHasNotViewedNotificationOnly {
+                subQuery2.whereKey("you_matched_notification_viewed_user2", notEqualTo: true)
+            }
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             if bridgedOnly {
@@ -504,6 +533,18 @@ class BridgePairing: NSObject {
             parseBridgePairing["blocked_list"] = blockedList
         } else {
             parseBridgePairing.remove(forKey: "blocked_list")
+        }
+        
+        if let youMatchedNotificationViewedUser1 = youMatchedNotificationViewedUser1 {
+            parseBridgePairing["you_matched_notification_viewed_user1"] = youMatchedNotificationViewedUser1
+        } else {
+            parseBridgePairing.remove(forKey: "you_matched_notification_viewed_user1")
+        }
+        
+        if let youMatchedNotificationViewedUser2 = youMatchedNotificationViewedUser2 {
+            parseBridgePairing["you_matched_notification_viewed_user2"] = youMatchedNotificationViewedUser2
+        } else {
+            parseBridgePairing.remove(forKey: "you_matched_notification_viewed_user2")
         }
         
         parseBridgePairing.saveInBackground { (succeeded, error) in

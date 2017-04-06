@@ -63,9 +63,7 @@ class PrivacyPolicyViewController: UIViewController {
     
 
     // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        MBProgressHUD.hide(for: view, animated: true)
-        
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {        
         if let vc = segue.destination as? MainPageViewController {
             vc.userIsNew = userIsNew
         }

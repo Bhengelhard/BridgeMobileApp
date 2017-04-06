@@ -76,7 +76,6 @@ class DBRetrievingFunctions {
             }
         })
     }
-
     
     //Checking to see if user's nects have conversed for the first time
     func queryForConnectionsConversed(vc: UIViewController) {

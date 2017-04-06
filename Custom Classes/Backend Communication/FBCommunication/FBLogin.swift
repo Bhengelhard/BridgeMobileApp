@@ -9,6 +9,7 @@
 import Foundation
 import FBSDKCoreKit
 import ParseFacebookUtilsV4
+import MBProgressHUD
 
 /// This class handles functions related to the Facebook api
 class FBLogin {
@@ -284,6 +285,7 @@ class FBLogin {
                     UIApplication.shared.endIgnoringInteractionEvents()
                 }
             }
+            MBProgressHUD.hide(for: vc.view, animated: true)
         }
         
     }
