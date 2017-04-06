@@ -138,6 +138,19 @@ class SwipeLogic {
             swipeCard = layout.topSwipeCard
         }
         
+        // create and save swipe
+        var bridgePairingID: String?
+        if let bridgePairing = swipeCard.bridgePairing {
+            bridgePairingID = bridgePairing.id
+        }
+        User.getCurrent { (user) in
+            Swipe.create(bridgePairingID: bridgePairingID, swiperID: user.id, swipedRight: right) { (swipe) in
+                swipe.save()
+            }
+        }
+        
+
+        
         UIView.animate(withDuration: 0.4, animations: {
             
             // if swiped left, check in bridge pairing and animate left swipe

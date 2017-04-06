@@ -97,6 +97,7 @@
 		9085E3FD1E8197370097CADB /* RelationshipStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085E3FC1E8197370097CADB /* RelationshipStatus.swift */; };
 		90AB6B111E5E1BAE00EBEBC0 /* MessagesBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */; };
 		90AB6B131E60A01000EBEBC0 /* MessagesLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB6B121E60A01000EBEBC0 /* MessagesLogic.swift */; };
+		90B3BF6E1E96C2E00020175A /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B3BF6D1E96C2E00020175A /* Swipe.swift */; };
 		90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C931021DF9BAEE00D25740 /* FilterInfo.swift */; };
 		90CA09AB1E0B080100330646 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CA09AA1E0B080100330646 /* HexagonView.swift */; };
 		90F5E3BF1E5CD376001399F6 /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5E3BE1E5CD376001399F6 /* Gender.swift */; };
@@ -211,6 +212,7 @@
 		9085E3FC1E8197370097CADB /* RelationshipStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelationshipStatus.swift; sourceTree = "<group>"; };
 		90AB6B101E5E1BAE00EBEBC0 /* MessagesBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesBackend.swift; path = "Custom Classes/Backend Communication/MessagesBackend.swift"; sourceTree = "<group>"; };
 		90AB6B121E60A01000EBEBC0 /* MessagesLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesLogic.swift; sourceTree = "<group>"; };
+		90B3BF6D1E96C2E00020175A /* Swipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
 		90C931021DF9BAEE00D25740 /* FilterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterInfo.swift; path = "Custom Classes/Data Storage/FilterInfo.swift"; sourceTree = "<group>"; };
 		90CA09AA1E0B080100330646 /* HexagonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HexagonView.swift; path = "Custom Classes/Custom Views/HexagonView.swift"; sourceTree = "<group>"; };
 		90CD18BB1E8C328C00864519 /* MyBridgeApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyBridgeApp-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
@@ -513,6 +515,7 @@
 				9043B7791E56ABC100D76BCE /* Picture.swift */,
 				9043B77A1E56ABC100D76BCE /* User.swift */,
 				907F605C1E7263B800CB1097 /* SingleMessage.swift */,
+				90B3BF6D1E96C2E00020175A /* Swipe.swift */,
 			);
 			name = Models;
 			path = "Custom Classes/Backend Communication/Models";
@@ -723,6 +726,7 @@
 				9067C8481E6F51DF00465276 /* EditProfilePicturesTableViewCell.swift in Sources */,
 				3030C0D21DD54E9C0077F7AC /* DisplayUtility.swift in Sources */,
 				906383EA1E6FB1E700D901EA /* EditProfileBackend.swift in Sources */,
+				90B3BF6E1E96C2E00020175A /* Swipe.swift in Sources */,
 				3030C0D31DD54E9C0077F7AC /* TransitionManager.swift in Sources */,
 				304FEBDD1DDE413500B3A8A7 /* DBSavingFunctions.swift in Sources */,
 				30BF700B1E5C95C60008C2B5 /* SettingsViewController.swift in Sources */,
