@@ -20,7 +20,8 @@ class ExternalProfileLayout {
     let name = ExternalProfileObjects.Name()
     let factLabel = ExternalProfileObjects.FactLabel()
     let dividerLine = ExternalProfileObjects.Line()
-    let aboutMeLabel = ExternalProfileObjects.AboutMeLabel()
+    let aboutMeLabel = ExternalProfileObjects.InfoLabel()
+    let lookingForLabel = ExternalProfileObjects.InfoLabel()
     let messageButton = ExternalProfileObjects.MessageButton()
     let factsView = ExternalProfileObjects.FactsView()
     let factsTable = ExternalProfileObjects.FactsTable()
@@ -112,13 +113,20 @@ class ExternalProfileLayout {
 //            aboutMeLabel.autoMatch(.width, to: .width, of: view, withOffset: 2*buffer)
             aboutMeLabel.autoSetDimension(.width, toSize: view.frame.width - 2*buffer)
             
+            // Set the multi-line lookingForLabel
+            scrollView.addSubview(lookingForLabel)
+            lookingForLabel.autoPinEdge(toSuperviewEdge: .left, withInset: buffer)
+            lookingForLabel.autoPinEdge(.top, to: .bottom, of: aboutMeLabel, withOffset: buffer)
+            lookingForLabel.autoSetDimension(.width, toSize: view.frame.width - 2*buffer)
+            
             // Decide whether to display the report button or the edit button (If currentUser profile display edit button and no message button, otherwise display reportButton and message button)
             
             
             // Set the messageButton below the aboutMeLabel
             scrollView.addSubview(messageButton)
             messageButton.autoAlignAxis(.vertical, toSameAxisOf: view)
-            messageButton.autoPinEdge(.top, to: .bottom, of: aboutMeLabel, withOffset: buffer)
+            //messageButton.autoPinEdge(.top, to: .bottom, of: aboutMeLabel, withOffset: buffer)
+            messageButton.autoPinEdge(.top, to: .bottom, of: lookingForLabel, withOffset: buffer)
             messageButton.autoSetDimensions(to: messageButton.size)
             
 //            

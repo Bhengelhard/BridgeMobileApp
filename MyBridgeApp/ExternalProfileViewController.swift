@@ -105,6 +105,9 @@ class ExternalProfileViewController: UIViewController {
             
             // about me
             externalProfileBackend.setAboutMe(userID: userID, label: layout.aboutMeLabel)
+            
+            // looking for
+            externalProfileBackend.setLookingFor(userID: userID, label: layout.lookingForLabel)
         }
     }
     
@@ -141,48 +144,48 @@ class ExternalProfileViewController: UIViewController {
                 }
             }
             
-            
-        }
-        
-        // Get 2nd user
-        if let id = user2ID {
-            User.get(withID: id, withBlock: { (user2) in
-                print("user2.id: \(user2.id)")
-                if let id2 = user2.id {
-                    user2ID = id2
-                }
-                if let name2 = user2.name {
-                    user2Name = name2
-                }
-                if let picIDs2 = user2.pictureIDs {
-                    if let picID2 = picIDs2[0] as? String {
-                        user2PictureID = picID2
+            // Get 2nd user
+            if let id = user2ID {
+                User.get(withID: id, withBlock: { (user2) in
+                    print("user2.id: \(user2.id)")
+                    if let id2 = user2.id {
+                        user2ID = id2
                     }
-                }
-                
-                // Create message with both of the retrieved users
-                Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil) { (message, isNew) in
-                    if isNew {
-                        message.save(withBlock: { (message) in
+                    if let name2 = user2.name {
+                        user2Name = name2
+                    }
+                    if let picIDs2 = user2.pictureIDs {
+                        if let picID2 = picIDs2[0] as? String {
+                            user2PictureID = picID2
+                        }
+                    }
+                    
+                    // Create message with both of the retrieved users
+                    Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil) { (message, isNew) in
+                        if isNew {
+                            message.save(withBlock: { (message) in
+                                if let messageId = message.id {
+                                    print("messageId: \(messageId)")
+                                    let threadVC = ThreadViewController()
+                                    threadVC.setMessageID(messageID: messageId)
+                                    self.present(threadVC, animated: true, completion: nil)
+                                }
+                            })
+                        } else {
                             if let messageId = message.id {
                                 print("messageId: \(messageId)")
                                 let threadVC = ThreadViewController()
                                 threadVC.setMessageID(messageID: messageId)
                                 self.present(threadVC, animated: true, completion: nil)
                             }
-                        })
-                    } else {
-                        if let messageId = message.id {
-                            print("messageId: \(messageId)")
-                            let threadVC = ThreadViewController()
-                            threadVC.setMessageID(messageID: messageId)
-                            self.present(threadVC, animated: true, completion: nil)
                         }
+                        
                     }
-                    
-                }
-            })
+                })
+            }
         }
+        
+
         
         
         

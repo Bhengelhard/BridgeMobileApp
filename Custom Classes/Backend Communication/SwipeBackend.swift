@@ -173,10 +173,6 @@ class SwipeBackend {
     private func gotNoBridgePairings(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         swipeCard.alpha = 0
         
-        if let noMoreBridgePairings = noMoreBridgePairings {
-            noMoreBridgePairings()
-        }
-        
         if top {
             print("did not get top from parse")
         } else {
@@ -199,6 +195,10 @@ class SwipeBackend {
         }
         
         self.localBridgePairings.synchronize()
+        
+        if let noMoreBridgePairings = noMoreBridgePairings {
+            noMoreBridgePairings()
+        }
         
         if let completion = completion {
             completion()
