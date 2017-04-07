@@ -120,48 +120,11 @@ class ExternalProfileViewController: UIViewController {
     func messageButtonTapped(_ sender: UIButton) {
         print("messageButtonTapped")
         
-        var user1ID = String()
-        var user2ID = userID
-        var connecterID = String()
-        var user1Name = String()
-        var user2Name = String()
-        var user1PictureID = String()
-        var user2PictureID = String()
-        
-        // Get 1st user
-        User.getCurrent { (user1) in
-            print("user1.id: \(user1.id)")
-            if let id1 = user1.id { 
-                user1ID = id1
-                connecterID = id1
-            }
-            if let name1 = user1.name {
-                user1Name = name1
-            }
-            if let picIDs1 = user1.pictureIDs {
-                if let picID1 = picIDs1[0] as? String {
-                    user1PictureID = picID1
-                }
-            }
-            
-            // Get 2nd user
-            if let id = user2ID {
-                User.get(withID: id, withBlock: { (user2) in
-                    print("user2.id: \(user2.id)")
-                    if let id2 = user2.id {
-                        user2ID = id2
-                    }
-                    if let name2 = user2.name {
-                        user2Name = name2
-                    }
-                    if let picIDs2 = user2.pictureIDs {
-                        if let picID2 = picIDs2[0] as? String {
-                            user2PictureID = picID2
-                        }
-                    }
-                    
+        User.getCurrent { (currentUser) in
+            if let userID = self.userID {
+                User.get(withID: userID) { (otherUser) in
                     // Create message with both of the retrieved users
-                    Message.create(user1ID: user1ID, user2ID: user2ID, connecterID: connecterID, user1Name: user1Name, user2Name: user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil) { (message, isNew) in
+                    Message.create(user1ID: currentUser.id, user2ID: otherUser.id, connecterID: nil, user1Name: currentUser.name, user2Name: otherUser.name, user1PictureID: nil, user2PictureID: nil, lastSingleMessage: nil, user1HasSeenLastSingleMessage: true, user2HasSeenLastSingleMessage: false, user1HasPosted: false, user2HasPosted: false) { (message, isNew) in
                         if isNew {
                             message.save(withBlock: { (message) in
                                 if let messageId = message.id {
@@ -181,13 +144,9 @@ class ExternalProfileViewController: UIViewController {
                         }
                         
                     }
-                })
+                }
             }
         }
-        
-
-        
-        
         
         // Create new object in Messages table with users information
         // In the block after that is saved Open Thread with setMessageID. That should be all
