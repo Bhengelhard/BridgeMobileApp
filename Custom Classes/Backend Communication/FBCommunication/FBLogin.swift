@@ -80,16 +80,19 @@ class FBLogin {
                             }
                             
                             // birthday (used for age)
+                            user.remove(forKey: "birthday")
                             if let birthday = result["birthday"] as? String {
                                 user["birthday"] = birthday
                             }
                             
                             // gender
+                            user.remove(forKey: "gender")
                             if let gender = result["gender"] as? String {
                                 user["gender"] = gender
                             }
                             
                             // city
+                            user.remove(forKey: "city")
                             if let location = result["location"] as? [String: AnyObject] {
                                 if let locationName = location["name"] as? String {
                                     user["city"] = locationName
@@ -97,6 +100,7 @@ class FBLogin {
                             }
                             
                             // school
+                            user.remove(forKey: "school")
                             if let educationHistory = result["education"] as? [AnyObject] {
                                 if let education = educationHistory.last {
                                     if let education = education as? [String: AnyObject] {
@@ -110,6 +114,7 @@ class FBLogin {
                             }
                             
                             // work
+                            user.remove(forKey: "work")
                             if let workHistory = result["work"] as? [AnyObject] {
                                 if let work = workHistory.last {
                                     if let work = work as? [String: AnyObject] {
@@ -163,15 +168,15 @@ class FBLogin {
                             }
                             
                             user.saveInBackground(block: { (success, error) in
-                                //Updating the user's friends
                                 let fbFunctions = FacebookFunctions()
-                                fbFunctions.updateFacebookFriends()
-                                
+
                                 if user.isNew {
                                     if success == true {
-                                        // Update BridgePairings Table to include new user
-                                        let pfCloudFunctions = PFCloudFunctions()
-                                        pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                                        fbFunctions.updateFacebookFriends(withBlock: { 
+                                            // Update BridgePairings Table to include new user
+                                            let pfCloudFunctions = PFCloudFunctions()
+                                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                                        })
                                         
                                         if let loginVC = vc as? LoginViewController {
                                             loginVC.userIsNew = true
@@ -183,6 +188,9 @@ class FBLogin {
                                     } else {
                                         print(error ?? "error")
                                     }
+                                } else {
+                                    //Updating the user's friends
+                                    fbFunctions.updateFacebookFriends()
                                 }
                                 
                                 

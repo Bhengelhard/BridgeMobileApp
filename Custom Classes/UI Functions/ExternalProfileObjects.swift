@@ -271,7 +271,7 @@ class ExternalProfileObjects {
         }
     }
     
-    class AboutMeLabel: UILabel {
+    class InfoLabel: UILabel {
         
         init() {
             super.init(frame: CGRect())

@@ -153,22 +153,38 @@ class Message: NSObject {
     static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String? = nil, user2PictureID: String? = nil, lastSingleMessage: String? = nil, user1HasSeenLastSingleMessage: Bool?, user2HasSeenLastSingleMessage: Bool?, user1HasPosted: Bool?, user2HasPosted: Bool?, withBlock block: MessageCreateBlock? = nil) {
 
         // Checking if the users are already in a message
+        let query1 = PFQuery(className: "Messages")
+        if let user1ID = user1ID, let user2ID = user2ID {
+            query1.whereKey("user1_objectId", equalTo: user1ID)
+            query1.whereKey("user2_objectId", equalTo: user2ID)
+        }
+        
+        let query2 = PFQuery(className: "Messages")
+        if let user1ID = user1ID, let user2ID = user2ID {
+            query2.whereKey("user1_objectId", equalTo: user2ID)
+            query1.whereKey("user2_objectId", equalTo: user1ID)
+        }
+        
+        let query = PFQuery.orQuery(withSubqueries: [query1, query2])
+        
+        /*
         let optionsForIdsInMessage = [[user1ID, user2ID], [user2ID, user1ID]]
         let query = PFQuery(className: "Messages")
         query.whereKey("ids_in_message", containedIn: optionsForIdsInMessage)
+        */
+        
         query.getFirstObjectInBackground(block: { (object, error) in
             // The users are already in a message together
-            if let object = object {
-                let message = Message(parseMessage: object)
-                let isNew = false
+            if user1ID != nil && user2ID != nil && object != nil {
+                if let object = object {
+                    let message = Message(parseMessage: object)
+                    let isNew = false
 
-                if let block = block {
-                    block(message, isNew)
+                    if let block = block {
+                        block(message, isNew)
+                    }
                 }
-            }
-            // The users are not yet in a message together, so create a new one
-            else {
-                
+            } else { // The users are not yet in a message together, so create a new one
                 let parseMessage = PFObject(className: "Messages")
 
                 // set Message's ACL

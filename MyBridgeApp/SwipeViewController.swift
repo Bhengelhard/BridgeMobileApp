@@ -82,6 +82,12 @@ class SwipeViewController: UIViewController {
             view.alpha = 0
         }
         
+        // Make nect buttons visible
+        for view in [layout.passButton, layout.infoButton, layout.nectButton] {
+            view.alpha = 1
+        }
+
+        
         layout.loadingView.startAnimating()
         let hud = MBProgressHUD.showAdded(to: view, animated: true)
         hud.mode = .customView
@@ -95,6 +101,7 @@ class SwipeViewController: UIViewController {
             self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 self.layout.loadingView.stopAnimating()
+                
                 self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
             }
         }
@@ -155,6 +162,13 @@ class SwipeViewController: UIViewController {
     func noMoreBridgePairings() {
         for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
             view.alpha = 1
+        }
+        
+        // both cards gone
+        if swipeBackend.topBridgePairing == nil && swipeBackend.bottomBridgePairing == nil {
+            for view in [layout.passButton, layout.infoButton, layout.nectButton] {
+                view.alpha = 0
+            }
         }
     }
     
