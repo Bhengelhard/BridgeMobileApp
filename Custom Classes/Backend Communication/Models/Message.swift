@@ -152,20 +152,49 @@ class Message: NSObject {
     /// Creates a new Message object with the provided parameters and calls the given block on the result.
     static func create(user1ID: String? = nil, user2ID: String? = nil, connecterID: String? = nil, user1Name: String? = nil, user2Name: String? = nil, user1PictureID: String? = nil, user2PictureID: String? = nil, lastSingleMessage: String? = nil, user1HasSeenLastSingleMessage: Bool?, user2HasSeenLastSingleMessage: Bool?, user1HasPosted: Bool?, user2HasPosted: Bool?, withBlock block: MessageCreateBlock? = nil) {
 
+        print("ids: \(user1ID) & \(user2ID)")
+        
         // Checking if the users are already in a message
+        /*
         let query1 = PFQuery(className: "Messages")
-        if let user1ID = user1ID, let user2ID = user2ID {
+        if let user1ID = user1ID {
             query1.whereKey("user1_objectId", equalTo: user1ID)
+        } else {
+            query1.whereKeyDoesNotExist("user1_objectId")
+        }
+        if let user2ID = user2ID {
             query1.whereKey("user2_objectId", equalTo: user2ID)
+        } else {
+            query1.whereKeyDoesNotExist("user2_objectId")
         }
         
         let query2 = PFQuery(className: "Messages")
-        if let user1ID = user1ID, let user2ID = user2ID {
-            query2.whereKey("user1_objectId", equalTo: user2ID)
+        if let user1ID = user1ID {
             query1.whereKey("user2_objectId", equalTo: user1ID)
+        } else {
+            query1.whereKeyDoesNotExist("user2_objectId")
+        }
+        if let user2ID = user2ID {
+            query1.whereKey("user1_objectId", equalTo: user2ID)
+        } else {
+            query1.whereKeyDoesNotExist("user1_objectId")
         }
         
-        let query = PFQuery.orQuery(withSubqueries: [query1, query2])
+        let query = PFQuery.orQuery(withSubqueries: [query1, query2])*/
+        
+        var userIDs = [String]()
+        
+        if let user1ID = user1ID {
+            userIDs.append(user1ID)
+        }
+        
+        if let user2ID = user2ID {
+            userIDs.append(user2ID)
+        }
+        
+        let query = PFQuery(className: "Messages")
+        query.whereKey("user1_objectId", containedIn: userIDs)
+        query.whereKey("user2_objectId", containedIn: userIDs)
         
         /*
         let optionsForIdsInMessage = [[user1ID, user2ID], [user2ID, user1ID]]
@@ -173,20 +202,27 @@ class Message: NSObject {
         query.whereKey("ids_in_message", containedIn: optionsForIdsInMessage)
         */
         
-        query.getFirstObjectInBackground(block: { (object, error) in
-            // The users are already in a message together
-            if user1ID != nil && user2ID != nil && object != nil {
-                if let object = object {
-                    let message = Message(parseMessage: object)
-                    let isNew = false
-
+        //query.getFirstObjectInBackground(block: { (object, error) in
+        query.findObjectsInBackground { (parseMessages, error) in
+            var isNew = true
+            if let parseMessages = parseMessages {
+                if parseMessages.count > 0 {
+                    print("message exists")
+                    
+                    isNew = true
+                    let parseMessage = parseMessages[0]
+                    let message = Message(parseMessage: parseMessage)
+                    print("ids: \(message.user1ID) & \(message.user2ID)")
+                    
                     if let block = block {
                         block(message, isNew)
                     }
                 }
-            } else { // The users are not yet in a message together, so create a new one
+            }
+            
+            if !isNew {
                 let parseMessage = PFObject(className: "Messages")
-
+                
                 // set Message's ACL
                 let acl = PFACL()
                 acl.getPublicReadAccess = true
@@ -240,14 +276,12 @@ class Message: NSObject {
                 }
                 
                 let message = Message(parseMessage: parseMessage)
-                                
-                let isNew = true
                 
                 if let block = block {
                     block(message, isNew)
                 }
             }
-        })
+        }
         
     }
     

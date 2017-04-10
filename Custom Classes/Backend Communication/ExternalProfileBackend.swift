@@ -193,7 +193,9 @@ class ExternalProfileBackend {
     func setAboutMe(userID: String, label: UILabel) {
         User.get(withID: userID) { (user) in
             if let aboutMe = user.aboutMe {
-                label.text = "About Me: \(aboutMe)"
+                if aboutMe != "" {
+                    label.text = "About Me: \(aboutMe)"
+                }
             }
         }
     }
@@ -202,7 +204,9 @@ class ExternalProfileBackend {
     func setLookingFor(userID: String, label: UILabel) {
         User.get(withID: userID) { (user) in
             if let lookingFor = user.lookingFor {
-                label.text = "Looking For: \(lookingFor)"
+                if lookingFor != "" {
+                    label.text = "Looking For: \(lookingFor)"
+                }
             }
         }
     }
