@@ -251,7 +251,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                             }
                                             
                                             // Add user's to eachother's friendlists
-                                            PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: [])
+                                            //PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: [])
                                             
                                             // Show notification that user's are now friends and can introduce eachother if they want
                                             SingleMessage.create(text: "You have conversed with each other and are now friends", senderID: "", senderName: "", messageID: self.messageID) { (singleMessage) in
