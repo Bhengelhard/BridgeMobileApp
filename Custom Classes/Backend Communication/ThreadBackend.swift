@@ -106,7 +106,7 @@ class ThreadBackend {
         SingleMessage.create(text: jsqMessage.text, senderID: jsqMessage.senderId, senderName: jsqMessage.senderDisplayName, messageID: messageID, withBlock: block)
     }
     
-    func updateMessageAfterSingleMessageSent(messageID: String?, snapshot: String, lastSingleMessageAt: Date?, withBothHavePostedForFirstTimeBlock block: (() -> Void)? = nil) {
+    func updateMessageAfterSingleMessageSent(messageID: String?, snapshot: String, lastSingleMessageAt: Date?, withBothHavePostedForFirstTimeAndWereNotFriendsBlock block: (() -> Void)? = nil) {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
                 // update last single message
@@ -116,46 +116,59 @@ class ThreadBackend {
                 }
                 
                 // update current user has posted and other user has seen last single message
-                User.getCurrent { (user) in
-                    var shouldCallBlock = false
-                    if let userID = user.id {
-                        if userID == message.user1ID {
-                            // check if both have posted for the first time
-                            if let user2HasPosted = message.user2HasPosted {
-                                if user2HasPosted { // user 2 has already posted
-                                    if let user1HasPosted = message.user1HasPosted {
-                                        if !user1HasPosted { // this is user 1's first post
+                User.getCurrent { (currentUser) in
+                    message.getNonCurrentUser { (otherUser) in
+                        var shouldCallBlock = false
+                        if let currentUserID = currentUser.id, let otherUserID = otherUser.id {
+                            if currentUserID == message.user1ID {
+                                // check if both have posted for the first time
+                                if let user2HasPosted = message.user2HasPosted {
+                                    if user2HasPosted { // user 2 has already posted
+                                        if let user1HasPosted = message.user1HasPosted {
+                                            if !user1HasPosted { // this is user 1's first post
+                                                shouldCallBlock = true
+                                            }
+                                        } else { // user1HasPosted == nil -> this is user 1's first post
                                             shouldCallBlock = true
                                         }
-                                    } else { // user1HasPosted == nil -> this is user 1's first post
-                                        shouldCallBlock = true
                                     }
                                 }
-                            }
-                            message.user1HasPosted = true
-                            message.user2HasSeenLastSingleMessage = false
-                        } else if userID == message.user2ID {
-                            // check if both have posted for the first time
-                            if let user1HasPosted = message.user1HasPosted {
-                                if user1HasPosted { // user 1 has already posted
-                                    if let user2HasPosted = message.user2HasPosted {
-                                        if !user2HasPosted { // this is user 2's first post
+                                message.user1HasPosted = true
+                                message.user2HasSeenLastSingleMessage = false
+                            } else if currentUserID == message.user2ID {
+                                // check if both have posted for the first time
+                                if let user1HasPosted = message.user1HasPosted {
+                                    if user1HasPosted { // user 1 has already posted
+                                        if let user2HasPosted = message.user2HasPosted {
+                                            if !user2HasPosted { // this is user 2's first post
+                                                shouldCallBlock = true
+                                            }
+                                        } else { // user2HasPosted == nil -> this is user 2's first post
                                             shouldCallBlock = true
                                         }
-                                    } else { // user2HasPosted == nil -> this is user 2's first post
-                                        shouldCallBlock = true
                                     }
                                 }
+                                message.user2HasPosted = true
+                                message.user1HasSeenLastSingleMessage = false
+                                
                             }
-                            message.user2HasPosted = true
-                            message.user1HasSeenLastSingleMessage = false
                             
+                            if let currentUserFriendList = currentUser.friendList {
+                                if currentUserFriendList.contains(otherUserID) {
+                                    if let otherUserFriendList = otherUser.friendList {
+                                        if otherUserFriendList.contains(currentUserID) {
+                                            shouldCallBlock = false
+                                        }
+                                    }
+                                }
+                            }
+
                         }
-                    }
-                    message.save { (message) in
-                        if shouldCallBlock {
-                            if let block = block {
-                                block()
+                        message.save { (message) in
+                            if shouldCallBlock {
+                                if let block = block {
+                                    block()
+                                }
                             }
                         }
                     }

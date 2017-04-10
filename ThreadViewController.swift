@@ -240,8 +240,25 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                     singleMessage.save(withBlock: { (singleMessage) in
                                         let lastSingleMessageAt = singleMessage.createdAt
                                         // update message's snapshot and info about user has sent and user has seen last single message
-                                        self.threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, lastSingleMessageAt: lastSingleMessageAt, withBothHavePostedForFirstTimeBlock: {
+                                        self.threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, lastSingleMessageAt: lastSingleMessageAt, withBothHavePostedForFirstTimeAndWereNotFriendsBlock: {
+                                            // BOTH HAVE POSTED FOR FIRST TIME AND WERE NOT FRIENDS
                                             
+                                            // Send Push notification to connecter to let them know the conversation has begun
+                                            Message.get(withID: messageID) { (message) in
+                                                if let connecterID = message.connecterID {
+                                                    //PFCloudFunctions.pushNotification(parameters: ["userObjectId": connecterID, "alert": "\(senderDisplayName) and \(self.otherDisplayName) have conversed and are now friends!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
+                                                }
+                                            }
+                                            
+                                            // Add user's to eachother's friendlists
+                                            //PFCloudFunctions.addProfilePicturesBackForUser2()
+                                            
+                                            // Show notification that user's are now friends and can introduce eachother if they want
+                                            SingleMessage.create(text: "You have conversed with each other and are now friends", senderID: "", senderName: "", messageID: self.messageID) { (singleMessage) in
+                                                singleMessage.save { (singleMessage) in
+                                                    self.collectionView.reloadData()
+                                                }
+                                            }
                                             
                                         })
                                     })
@@ -267,14 +284,6 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                         
                                     })
                                 }
-                                
-                                // BOTH HAVE POSTED FOR FIRST TIME
-                                
-                                // Send Push notification to connecter to let them know the conversation has begun
-                                
-                                // Add user's to eachother's friendlists
-                                
-                                // Show notification that user's are now friends and can introduce eachother if they want
                                 
                                 self.finishSendingMessage(animated: true)
                             }
