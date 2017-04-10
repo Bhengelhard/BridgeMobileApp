@@ -21,6 +21,9 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
         dataSource = self
         
         setUpArrayofVCs()
+        
+        // Listener for updating thread when new messages come in
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -105,7 +108,15 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
     func messagesLeftButtonTapped(_ sender: UIButton) {
         setViewControllers([arrayOfVCs[1]], direction: .reverse, animated: true, completion: nil)
     }
-
+    
+    // Reload the messages table upon push notification
+    func reloadMessageTable(_ notification: Notification) {
+        if let messagesVC = arrayOfVCs[2] as? MessagesViewController {
+            messagesVC.messagesBackend.reloadMessagesTable(tableView: messagesVC.layout.messagesTable)
+            messagesVC.messagesBackend.loadNewMatches(newMatchesTableViewCell: messagesVC.newMatchesTableViewCell)
+        }
+    }
+        
     /*
     // MARK: - Navigation
 
