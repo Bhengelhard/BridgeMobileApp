@@ -206,7 +206,7 @@ class SwipeBackend {
     }
     
     /// set the bottom swipe card
-    func setBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?) {
+    func setBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         
         // store old bottom as top locally
         topBridgePairing = bottomBridgePairing
@@ -221,7 +221,7 @@ class SwipeBackend {
         }
         localBridgePairings.synchronize()
         
-        getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, noMoreBridgePairings: noMoreBridgePairings)
+        getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
     }
     
     /// set the top swipe card upon opening app
