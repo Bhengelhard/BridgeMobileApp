@@ -181,26 +181,27 @@ class FacebookFunctions {
                 if PFUser.current()?["friend_list"] == nil {
                     PFUser.current()?["friend_list"] = []
                 }
-                
-                PFUser.current()?.fetchInBackground(block: { (success, error) in
-                    for object in objects {
-                        if let friendsObjectId = object.objectId {
-                            // Do not include users the current user has unmatched
-                            if !currentUserUnmatchedList.contains(friendsObjectId) {
-                                PFUser.current()?.addUniqueObject(friendsObjectId, forKey: "friend_list")
+                PFUser.current()?.fetchInBackground(block: { (user, error) in
+                    if let user = user {
+                        for object in objects {
+                            if let friendsObjectId = object.objectId {
+                                // Do not include users the current user has unmatched
+                                if !currentUserUnmatchedList.contains(friendsObjectId) {
+                                    user.addUniqueObject(friendsObjectId, forKey: "friend_list")
+                                }
                             }
                         }
+                        
+                        user.saveInBackground(block: { (success, error) in
+                            if error != nil {
+                                print(error!)
+                            } else {
+                                if let block = block {
+                                    block()
+                                }
+                            }
+                        })
                     }
-                    
-                    PFUser.current()?.saveInBackground(block: { (success, error) in
-                        if error != nil {
-                            print(error!)
-                        } else {
-                            if let block = block {
-                                block()
-                            }
-                        }
-                    })
                 })
             }
         })
