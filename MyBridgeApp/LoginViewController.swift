@@ -76,6 +76,7 @@ class LoginViewController: UIViewController {
                 if currentUser.objectId != nil {
                     if let hasLoggedIn = currentUser["has_logged_in"] as? Bool {
                         if hasLoggedIn {
+                            print("has logged in")
                             //Updating the user's friends
                             let fbFunctions = FacebookFunctions()
                             fbFunctions.updateFacebookFriends()

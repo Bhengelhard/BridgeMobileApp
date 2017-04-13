@@ -186,7 +186,7 @@ class Message: NSObject {
                 }
             } else { // The users are not yet in a message together, so create a new one
                 let parseMessage = PFObject(className: "Messages")
-
+                "
                 // set Message's ACL
                 let acl = PFACL()
                 acl.getPublicReadAccess = true
@@ -308,6 +308,8 @@ class Message: NSObject {
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             query.whereKeyDoesNotExist("last_single_message")
+            
+            // Make sure message is one that came from an introduction and not from a direct message
             //query.whereKey("connecterID", notContainedIn: "ids_in_message")
             query.order(byDescending: "updatedAt")
             query.limit = limit

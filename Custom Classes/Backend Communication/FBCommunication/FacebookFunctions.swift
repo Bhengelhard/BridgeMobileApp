@@ -108,7 +108,10 @@ class FacebookFunctions {
 
     func updateFacebookFriends(withBlock block: (() -> Void)? = nil) {
         print("updating facebook friends")
-        facebookFriends(withCursor: nil, fbFriendIDs: [], withBlock: block)
+        facebookFriends(withCursor: nil, fbFriendIDs: [], withBlock: {
+            // Convert fbIds to parse objectIds
+            self.updateFriendList(withBlock: block)
+        })
     }
 
     func facebookFriends(withCursor after: String?, fbFriendIDs: [String], withBlock block: (() -> Void)?) {
@@ -153,8 +156,7 @@ class FacebookFunctions {
                     if error != nil {
                         print(error!)
                     } else {
-                        // Convert fbIds to parse objectIds
-                        self.updateFriendList(withBlock: block)
+                        
                     }
                 })
             }
