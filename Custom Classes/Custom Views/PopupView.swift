@@ -220,7 +220,7 @@ class PopupView: UIView {
                         message.save(withBlock: { (message) in
                             if let messageID = message.id {
                                 print("messageId: \(messageID)")
-                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "presentThreadVC"), object: messageID)
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentThreadVC"), object: messageID)
                             }
                         })
                     } else {

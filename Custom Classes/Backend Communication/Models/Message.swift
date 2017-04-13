@@ -339,8 +339,10 @@ class Message: NSObject {
             let subQuery2 = PFQuery(className: "Messages")
             subQuery2.whereKey("user2_objectId", equalTo: userID)
             
+            
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             query.whereKeyDoesNotExist("last_single_message")
+            //query.whereKey("connecterID", notContainedIn: "ids_in_message")
             query.order(byDescending: "updatedAt")
             query.limit = limit
             query.skip = skip

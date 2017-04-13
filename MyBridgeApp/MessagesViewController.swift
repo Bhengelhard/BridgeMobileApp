@@ -37,9 +37,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         newMatchesTableViewCell.tableView = layout.messagesTable
 
         messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
-        
-        // Listener for updating thread when new messages come in
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadMessageTable), name: NSNotification.Name(rawValue: "reloadTheMessageTable"), object: nil)
 
     }
     
@@ -138,10 +135,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     // MARK: - Targets
-    func reloadMessageTable(_ notification: Notification) {
-        messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
-        messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
-    }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

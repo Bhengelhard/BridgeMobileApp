@@ -78,12 +78,16 @@ class ThreadObjects {
         
         func setNectedByLabel(messageID: String?) {
             // Displaying connecter info
-            if let id = messageID {
-                Message.get(withID: id) { (message) in
-                    if let id = message.connecterID {
-                        User.get(withID: id, withBlock: { (user) in
+            if let messageID = messageID {
+                Message.get(withID: messageID) { (message) in
+                    if let connecterID = message.connecterID {
+                        User.get(withID: connecterID, withBlock: { (user) in
                             if let name = user.name {
-                                self.nectedByLabel.text = "You were 'nected by \(name)."
+                                if connecterID == message.user1ID || connecterID == message.user2ID {
+                                    self.nectedByLabel.text = "This conversation was started by \(name)."
+                                } else {
+                                    self.nectedByLabel.text = "You were 'nected by \(name)."
+                                }
                                 self.nectedByLabel.alpha = 1
                             }
                         })
