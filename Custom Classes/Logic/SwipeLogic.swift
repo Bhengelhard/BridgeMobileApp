@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class SwipeLogic {
     
@@ -131,12 +132,26 @@ class SwipeLogic {
         let layout = vc.layout
         let noMoreBridgePairings: () -> Void  = vc.noMoreBridgePairings
         
+        /*
         let swipeCard: SwipeCard
         if layout.bottomSwipeCard.isUserInteractionEnabled {
             swipeCard = layout.bottomSwipeCard
         } else {
             swipeCard = layout.topSwipeCard
+        }*/
+        
+        let swipeCard = layout.topSwipeCard
+        
+        if vc.swipeBackend.bottomBridgePairing == nil {
+            layout.loadingView.startAnimating()
+            let hud = MBProgressHUD.showAdded(to: vc.view, animated: true)
+            hud.mode = .customView
+            hud.customView = layout.loadingView
+            hud.label.text = "Finding best\npairs to 'nect..."
+            hud.label.numberOfLines = 0
         }
+        
+        
         
         // create and save swipe
         var bridgePairingID: String?
@@ -245,7 +260,9 @@ class SwipeLogic {
             layout.topSwipeCard.isUserInteractionEnabled = true
             layout.bottomSwipeCard.isUserInteractionEnabled = false
             layout.topSwipeCard.overlay.removeFromSuperlayer()
-            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings)
+            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
+                MBProgressHUD.hide(for: vc.view, animated: true)
+            }
         })
     }
     

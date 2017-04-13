@@ -152,7 +152,6 @@ class ThreadBackend {
                                 message.user1HasSeenLastSingleMessage = false
                                 
                             }
-                            
                             if let currentUserFriendList = currentUser.friendList {
                                 if currentUserFriendList.contains(otherUserID) {
                                     if let otherUserFriendList = otherUser.friendList {

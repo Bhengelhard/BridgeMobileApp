@@ -40,6 +40,7 @@ class NewMatchesTableViewCell: UITableViewCell {
     class NewMatchView: UIView {
         let message: Message
         let profileImageView = UIImageView()
+        let notificationDot = UIView()
         let nameLabel = UILabel()
         var shouldSetUpConstraints = true
         
@@ -50,6 +51,8 @@ class NewMatchesTableViewCell: UITableViewCell {
             profileImageView.clipsToBounds = true
             profileImageView.contentMode = .scaleAspectFill
             profileImageView.backgroundColor = Constants.Colors.necter.backgroundGray
+            
+            notificationDot.clipsToBounds = true
             
             nameLabel.textAlignment = .center
             
@@ -68,9 +71,14 @@ class NewMatchesTableViewCell: UITableViewCell {
             profileImageView.autoPinEdge(toSuperviewEdge: .top)
             profileImageView.autoAlignAxis(toSuperviewAxis: .vertical)
             
+            addSubview(notificationDot)
+            notificationDot.autoMatch(.width, to: .width, of: profileImageView, withMultiplier: 0.2)
+            notificationDot.autoMatch(.height, to: .width, of: notificationDot)
+            notificationDot.autoPinEdge(.top, to: .top, of: profileImageView)
+            notificationDot.autoPinEdge(.right, to: .right, of: profileImageView)
+            
             addSubview(nameLabel)
             nameLabel.autoAlignAxis(.vertical, toSameAxisOf: profileImageView)
-            //nameLabel.autoPinEdge(.top, to: .bottom, of: profileImageView, withOffset: 0.02*frame.height)
             nameLabel.autoPinEdge(toSuperviewEdge: .bottom)
             nameLabel.autoMatch(.width, to: .width, of: profileImageView)
             
@@ -82,17 +90,14 @@ class NewMatchesTableViewCell: UITableViewCell {
             super.layoutSubviews()
             
             profileImageView.layer.cornerRadius = profileImageView.frame.height/2
+            
+            notificationDot.layer.cornerRadius = notificationDot.frame.height/2
+            notificationDot.backgroundColor = DisplayUtility.gradientColor(size: notificationDot.frame.size)
         }
     }
     
     override func updateConstraints() {
         if shouldSetUpConstraints {
-            
-            //addSubview(line)
-            //line.autoSetDimension(.height, toSize: 1)
-            //line.autoPinEdge(toSuperviewEdge: .bottom)
-            //line.autoAlignAxis(toSuperviewAxis: .vertical)
-            //line.autoMatch(.width, to: .width, of: self, withMultiplier: 0.9)
             
             addSubview(noNewMatchesLabel)
             noNewMatchesLabel.autoCenterInSuperview()
@@ -192,6 +197,20 @@ class NewMatchesTableViewCell: UITableViewCell {
             
             if let firstName = user.firstName {
                 newMatchView.nameLabel.text = firstName
+            }
+            
+            if user.id == message.user1ID { // user is user1; you are user2
+                if let hasSeenLastSingleMessage = message.user2HasSeenLastSingleMessage {
+                    if hasSeenLastSingleMessage {
+                        newMatchView.notificationDot.alpha = 0
+                    }
+                }
+            } else { // user is user2; you are user1
+                if let hasSeenLastSingleMessage = message.user1HasSeenLastSingleMessage {
+                    if hasSeenLastSingleMessage {
+                        newMatchView.notificationDot.alpha = 0
+                    }
+                }
             }
         }
         
