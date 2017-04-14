@@ -345,8 +345,9 @@ class Message: NSObject {
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
             query.whereKeyDoesNotExist("last_single_message")
             
-            // Make sure message is one that came from an introduction and not from a direct message
-            //query.whereKey("connecterID", notContainedIn: "ids_in_message")
+            // Do not include any messages that are direct messages -> DMs that are unstarted will not display in New Matches view or messages table
+            query.whereKeyExists("bridge_builder")
+            
             query.order(byDescending: "updatedAt")
             query.limit = limit
             query.skip = skip
