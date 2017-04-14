@@ -13,8 +13,8 @@ import Parse
 class PFCloudFunctions {
     
     // updating the User Table to addUnique photos from the Pictures table to the User's pictures array
-    func scriptAddPictureIdToPicturesArrayInUserTable(parameters: [AnyHashable: Any]?) {
-        PFCloud.callFunction(inBackground: "scriptAddPictureIdToPicturesArrayInUserTable", withParameters: parameters, block: {
+    func setMatchesNotificationToViewed(parameters: [AnyHashable: Any]?) {
+        PFCloud.callFunction(inBackground: "setMatchesNotificationToViewed", withParameters: parameters, block: {
             (response: Any?, error: Error?) in
             if error == nil {
                 if let response = response as? String {
