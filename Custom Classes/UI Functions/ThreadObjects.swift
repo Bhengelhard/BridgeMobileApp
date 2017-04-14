@@ -81,7 +81,7 @@ class ThreadObjects {
             if let messageID = messageID {
                 Message.get(withID: messageID) { (message) in
                     if let connecterID = message.connecterID {
-                        User.get(withID: connecterID, withBlock: { (user) in
+                        User.get(withID: connecterID) { (user) in
                             if let name = user.name {
                                 if connecterID == message.user1ID || connecterID == message.user2ID {
                                     self.nectedByLabel.text = "This conversation was started by \(name)."
@@ -90,7 +90,7 @@ class ThreadObjects {
                                 }
                                 self.nectedByLabel.alpha = 1
                             }
-                        })
+                        }
                     }
                 }
             }

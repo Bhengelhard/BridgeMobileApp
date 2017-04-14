@@ -88,20 +88,6 @@ class ThreadBackend {
         }
     }
     
-    func getUserPicture(userID: String?, withBlock block: Picture.ImageBlock? = nil) {
-        if let userID = userID {
-            User.get(withID: userID) { (user) in
-                user.getMainPicture { (picture) in
-                    picture.getImage { (image) in
-                        if let block = block {
-                            block(image)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     func jsqMessageToSingleMessage(jsqMessage: JSQMessage, messageID: String?, withBlock block: SingleMessage.SingleMessageBlock? = nil) {
         SingleMessage.create(text: jsqMessage.text, senderID: jsqMessage.senderId, senderName: jsqMessage.senderDisplayName, messageID: messageID, withBlock: block)
     }
