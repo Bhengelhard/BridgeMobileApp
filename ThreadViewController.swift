@@ -245,19 +245,25 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                             
                                             // Send Push notification to connecter to let them know the conversation has begun
                                             Message.get(withID: messageID) { (message) in
+                                                // Make sure the message is not a DM - i.e. it has a connecterID
                                                 if let connecterID = message.connecterID {
+                                                    print("push sent to connecter")
                                                     PFCloudFunctions.pushNotification(parameters: ["userObjectId": connecterID, "alert": "\(senderDisplayName) and \(self.otherDisplayName) have conversed and are now friends!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                                                    
+                                                    // Add user's to eachother's friendlists
+                                                    PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1":message.user1ID, "userObjectId2":message.user2ID])
+                                                    print("users added to eachother's friendlists")
+                                                    
+                                                    // Show notification that user's are now friends and can introduce eachother if they want
+                                                    SingleMessage.create(text: "You have conversed with each other and are now friends", senderID: "", senderName: "", messageID: self.messageID) { (singleMessage) in
+                                                        singleMessage.save { (singleMessage) in
+                                                            self.collectionView.reloadData()
+                                                            print("message created")
+                                                        }
+                                                    }
+
                                                 }
-                                            }
-                                            
-                                            // Add user's to eachother's friendlists
-                                            PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: [:])
-                                            
-                                            // Show notification that user's are now friends and can introduce eachother if they want
-                                            SingleMessage.create(text: "You have conversed with each other and are now friends", senderID: "", senderName: "", messageID: self.messageID) { (singleMessage) in
-                                                singleMessage.save { (singleMessage) in
-                                                    self.collectionView.reloadData()
-                                                }
+                                                
                                             }
                                             
                                         })
