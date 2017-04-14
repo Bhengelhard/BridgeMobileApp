@@ -212,6 +212,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set app badge to 0
         application.applicationIconBadgeNumber = 0
         
+        // Set installation badge to 0
+        let installation = PFInstallation.current()
+        installation.badge = 0
+        installation.saveInBackground()
+        
 //        //Checking Reachability of internet access
 //        let reachability = Reachability()
 //        let isconnectedToNetwork = reachability.connectedToNetwork()

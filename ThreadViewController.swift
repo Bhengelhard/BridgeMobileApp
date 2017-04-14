@@ -443,7 +443,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                     if currentUser.id == message.user1ID {
                                         if message.user1HasSeenLastSingleMessage == false {
                                             // update badge count
-                                            DBSavingFunctions.decrementBadge()
+                                            //DBSavingFunctions.decrementBadge()
                                             
                                             message.user1HasSeenLastSingleMessage = true
                                             message.save()
@@ -454,7 +454,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                     } else {
                                         if message.user2HasSeenLastSingleMessage == false {
                                             // update badge count
-                                            DBSavingFunctions.decrementBadge()
+                                            //DBSavingFunctions.decrementBadge()
                                             
                                             message.user2HasSeenLastSingleMessage = true
                                             message.save()

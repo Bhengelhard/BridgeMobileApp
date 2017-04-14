@@ -185,7 +185,7 @@ class ThreadBackend {
                             if message.user1HasSeenLastSingleMessage == false {
                                 print("decrement badge 1")
                                 // update badge count
-                                DBSavingFunctions.decrementBadge()
+                                //DBSavingFunctions.decrementBadge()
                                 
                                 message.user1HasSeenLastSingleMessage = true
                             }
@@ -195,7 +195,7 @@ class ThreadBackend {
                             if message.user2HasSeenLastSingleMessage == false {
                                 print("decrement badge 2")
                                 // update badge count
-                                DBSavingFunctions.decrementBadge()
+                                //DBSavingFunctions.decrementBadge()
                                 
                                 message.user2HasSeenLastSingleMessage = true
                             }
