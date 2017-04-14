@@ -202,14 +202,13 @@ class Message: NSObject {
         query.whereKey("ids_in_message", containedIn: optionsForIdsInMessage)
         */
         
-        //query.getFirstObjectInBackground(block: { (object, error) in
         query.findObjectsInBackground { (parseMessages, error) in
             var isNew = true
             if let parseMessages = parseMessages {
                 if parseMessages.count > 0 {
                     print("message exists")
                     
-                    isNew = true
+                    isNew = false
                     let parseMessage = parseMessages[0]
                     let message = Message(parseMessage: parseMessage)
                     print("ids: \(message.user1ID) & \(message.user2ID)")
@@ -220,7 +219,9 @@ class Message: NSObject {
                 }
             }
             
-            if !isNew {
+            if isNew {
+                
+                print("is not new")
                 let parseMessage = PFObject(className: "Messages")
 
                 // set Message's ACL
@@ -278,6 +279,7 @@ class Message: NSObject {
                 let message = Message(parseMessage: parseMessage)
                 
                 if let block = block {
+                    print("block is called")
                     block(message, isNew)
                 }
             }

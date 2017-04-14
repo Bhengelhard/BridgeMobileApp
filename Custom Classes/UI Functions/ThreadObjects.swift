@@ -80,14 +80,16 @@ class ThreadObjects {
             // Displaying connecter info
             if let messageID = messageID {
                 Message.get(withID: messageID) { (message) in
+                    // Checking to make sure connecterID is not nil -> this makes sure DM's do not have nectedByLabel's
                     if let connecterID = message.connecterID {
                         User.get(withID: connecterID, withBlock: { (user) in
                             if let name = user.name {
-                                if connecterID == message.user1ID || connecterID == message.user2ID {
-                                    self.nectedByLabel.text = "This conversation was started by \(name)."
-                                } else {
-                                    self.nectedByLabel.text = "You were 'nected by \(name)."
-                                }
+//                                if connecterID == message.user1ID || connecterID == message.user2ID {
+//                                    self.nectedByLabel.text = "This conversation was started by \(name)."
+//                                } else {
+//                                    self.nectedByLabel.text = "You were 'nected by \(name)."
+//                                }
+                                self.nectedByLabel.text = "You were 'nected by \(name)."
                                 self.nectedByLabel.alpha = 1
                             }
                         })

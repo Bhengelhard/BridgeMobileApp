@@ -246,12 +246,12 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                             // Send Push notification to connecter to let them know the conversation has begun
                                             Message.get(withID: messageID) { (message) in
                                                 if let connecterID = message.connecterID {
-                                                    //PFCloudFunctions.pushNotification(parameters: ["userObjectId": connecterID, "alert": "\(senderDisplayName) and \(self.otherDisplayName) have conversed and are now friends!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
+                                                    PFCloudFunctions.pushNotification(parameters: ["userObjectId": connecterID, "alert": "\(senderDisplayName) and \(self.otherDisplayName) have conversed and are now friends!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
                                                 }
                                             }
                                             
                                             // Add user's to eachother's friendlists
-                                            //PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: [])
+                                            PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: [:])
                                             
                                             // Show notification that user's are now friends and can introduce eachother if they want
                                             SingleMessage.create(text: "You have conversed with each other and are now friends", senderID: "", senderName: "", messageID: self.messageID) { (singleMessage) in
@@ -278,7 +278,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                         }
                                         
                                         // Push notification to other user
-                                        PFCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": self.messageID])
+                                        PFCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
                                         
                                         print("sent the push notification")
                                         
@@ -435,11 +435,27 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                             Message.get(withID: id, withBlock: { (message) in
                                 User.getCurrent { (currentUser) in
                                     if currentUser.id == message.user1ID {
-                                        message.user1HasSeenLastSingleMessage = true
-                                        message.save()
+                                        if message.user1HasSeenLastSingleMessage == false {
+                                            // update badge count
+                                            DBSavingFunctions.decrementBadge()
+                                            
+                                            message.user1HasSeenLastSingleMessage = true
+                                            message.save()
+                                        }
+                                        
+                                        
+                                        
                                     } else {
-                                        message.user2HasSeenLastSingleMessage = true
-                                        message.save()
+                                        if message.user2HasSeenLastSingleMessage == false {
+                                            // update badge count
+                                            DBSavingFunctions.decrementBadge()
+                                            
+                                            message.user2HasSeenLastSingleMessage = true
+                                            message.save()
+                                        }
+                                        
+                                        
+                                        
                                     }
                                 }
                             })

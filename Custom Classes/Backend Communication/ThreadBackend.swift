@@ -182,9 +182,23 @@ class ThreadBackend {
                 User.getCurrent { (user) in
                     if let userID = user.id {
                         if userID == message.user1ID {
+                            if message.user1HasSeenLastSingleMessage == false {
+                                print("decrement badge 1")
+                                // update badge count
+                                DBSavingFunctions.decrementBadge()
+                                
+                                message.user1HasSeenLastSingleMessage = true
+                            }
                             message.user1HasSeenLastSingleMessage = true
+                           
                         } else if userID == message.user2ID {
-                            message.user2HasSeenLastSingleMessage = true
+                            if message.user2HasSeenLastSingleMessage == false {
+                                print("decrement badge 2")
+                                // update badge count
+                                DBSavingFunctions.decrementBadge()
+                                
+                                message.user2HasSeenLastSingleMessage = true
+                            }
                         }
                     }
                     message.save()

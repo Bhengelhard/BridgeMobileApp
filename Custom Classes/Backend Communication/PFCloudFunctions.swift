@@ -122,8 +122,7 @@ class PFCloudFunctions {
     }
 
 	/// Request that the server update the application badge using a push notification
-	func updateApplicationBadge ()
-	{
+	static func updateApplicationBadge () {
 		PFCloud.callFunction(inBackground: "applicationBadgePushNotification", 
 		                     withParameters: ["userObjectID": PFUser.current()!.objectId!])
 	}
