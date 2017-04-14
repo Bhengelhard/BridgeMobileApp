@@ -74,9 +74,9 @@ class User: NSObject {
             
             if let birthdayDate = formatter.date(from: birthday) {
                 //getting age from Birthday
-                let calendar: Calendar = Calendar.current
+                let calendar = Calendar.current as NSCalendar
                 let now = Date()
-                if let age = ((calendar as NSCalendar).components(.year, from: birthdayDate, to: now, options: [])).year {
+                if let age = (calendar.components(.year, from: birthdayDate, to: now, options: [])).year {
                     return String(age)
                 }
             }
@@ -100,6 +100,8 @@ class User: NSObject {
     var school: String?
     
     var displaySchool: Bool?
+    
+    var currentSchool: Bool?
     
     /// The relationship status of the User
     var relationshipStatus: RelationshipStatus?
@@ -194,6 +196,10 @@ class User: NSObject {
         
         if let parseDisplaySchool = parseUser["display_school"] as? Bool {
             displaySchool = parseDisplaySchool
+        }
+        
+        if let parseCurrentSchool = parseUser["current_school"] as? Bool {
+            currentSchool = parseCurrentSchool
         }
         
         if let parseRelationshipStatus = parseUser["relationship_status"] as? String {
@@ -407,6 +413,12 @@ class User: NSObject {
             parseUser["display_school"] = displaySchool
         } else {
             parseUser.remove(forKey: "display_school")
+        }
+        
+        if let currentSchool = currentSchool {
+            parseUser["current_school"] = currentSchool
+        } else {
+            parseUser.remove(forKey: "current_school")
         }
         
         if let displayRelationshipStatus = displayRelationshipStatus {
