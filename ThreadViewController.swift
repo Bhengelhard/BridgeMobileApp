@@ -149,21 +149,6 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
             // This is a beta feature that mostly works but to make things more stable it is diabled.
             collectionView.collectionViewLayout.springinessEnabled = false
             
-            let hud = MBProgressHUD.showAdded(to: view, animated: true)
-            hud.label.text = "Loading..."
-            
-            // reload collection view
-            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
-                self.scrollToBottom(animated: true)
-                if self.threadBackend.jsqMessages.count == 0 {
-                    if let layout = self.layout {
-                        layout.noMessagesView.alpha = 1
-                    }
-                }
-                
-                MBProgressHUD.hide(for: self.view, animated: true)
-            }
-            
             // set id and name of current user
             threadBackend.setSenderInfo { (id, name) in
                 if let id = id {
@@ -187,6 +172,24 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                 collectionView.reloadData()
             }
             //collectionView.backgroundColor = DisplayUtility.gradientColor(size: collectionView.frame.size)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        hud.label.text = "Loading..."
+        
+        threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
+            self.scrollToBottom(animated: true)
+            if self.threadBackend.jsqMessages.count == 0 {
+                if let layout = self.layout {
+                    layout.noMessagesView.alpha = 1
+                }
+            }
+            
+            MBProgressHUD.hide(for: self.view, animated: true)
         }
     }
     

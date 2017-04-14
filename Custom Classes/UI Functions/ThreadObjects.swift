@@ -82,7 +82,7 @@ class ThreadObjects {
                 Message.get(withID: messageID) { (message) in
                     // Checking to make sure connecterID is not nil -> this makes sure DM's do not have nectedByLabel's
                     if let connecterID = message.connecterID {
-                        User.get(withID: connecterID, withBlock: { (user) in
+                        User.get(withID: connecterID) { (user) in
                             if let name = user.name {
 //                                if connecterID == message.user1ID || connecterID == message.user2ID {
 //                                    self.nectedByLabel.text = "This conversation was started by \(name)."
@@ -92,7 +92,7 @@ class ThreadObjects {
                                 self.nectedByLabel.text = "You were 'nected by \(name)."
                                 self.nectedByLabel.alpha = 1
                             }
-                        })
+                        }
                     }
                 }
             }
