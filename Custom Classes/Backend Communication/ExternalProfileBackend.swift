@@ -98,6 +98,11 @@ class ExternalProfileBackend {
                 }
             }
             
+            var currentSchool = false
+            if let userCurrentSchool = user.currentSchool {
+                currentSchool = userCurrentSchool
+            }
+            
             var gender: String?
             if let displayGender = user.displayGender {
                 if displayGender {
@@ -124,7 +129,7 @@ class ExternalProfileBackend {
                 }
             }
             
-            let (text, numberOfLines) = ExternalProfileLogic.getFactsLabelTextAndNumberOfLines(age: age, city: city, work: work, school: school, gender: gender, relationshipStatus: relationshipStatus)
+            let (text, numberOfLines) = ExternalProfileLogic.getFactsLabelTextAndNumberOfLines(age: age, city: city, work: work, school: school, currentSchool: currentSchool, gender: gender, relationshipStatus: relationshipStatus)
             label.text = text
             label.numberOfLines = numberOfLines
         }

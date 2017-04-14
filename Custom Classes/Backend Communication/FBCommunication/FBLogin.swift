@@ -101,12 +101,33 @@ class FBLogin {
                             
                             // school
                             user.remove(forKey: "school")
+                            user.remove(forKey: "current_school")
                             if let educationHistory = result["education"] as? [AnyObject] {
                                 if let education = educationHistory.last {
                                     if let education = education as? [String: AnyObject] {
                                         if let school = education["school"] as? [String: AnyObject] {
                                             if let schoolName = school["name"] as? String {
                                                 user["school"] = schoolName
+                                                user["current_school"] = false
+                                            }
+                                        }
+                                        if let year = education["year"] as? [String: AnyObject] {
+                                            if let yearName = year["name"] as? String {
+                                                let formatter = DateFormatter()
+                                                formatter.locale = Locale(identifier: "en_US_POSIX")
+                                                formatter.dateFormat = "yyyy"
+                                                
+                                                if let graduationDate = formatter.date(from: yearName) {
+                                                    //getting age from Birthday
+                                                    let calendar = Calendar.current as NSCalendar
+                                                    let now = Date()
+                                                    let currentYear = calendar.component(.year, from: now)
+                                                    let graduationYear = calendar.component(.year, from: graduationDate)
+                                                    
+                                                    if graduationYear >= currentYear {
+                                                        user["current_school"] = true
+                                                    }
+                                                }
                                             }
                                         }
                                     }

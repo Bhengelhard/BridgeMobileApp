@@ -10,7 +10,7 @@ import UIKit
 
 class ExternalProfileLogic {
     
-    static func getFactsLabelTextAndNumberOfLines(age: String?, city: String?, work: String?, school: String?, gender: String?, relationshipStatus: String?) -> (String, Int) {
+    static func getFactsLabelTextAndNumberOfLines(age: String?, city: String?, work: String?, school: String?, currentSchool: Bool, gender: String?, relationshipStatus: String?) -> (String, Int) {
         var labelText = String()
         
         var selectedFields = [UserInfoField]()
@@ -61,7 +61,11 @@ class ExternalProfileLogic {
                 
             case .school:
                 if let school = school {
-                    labelText = "\(labelText)Goes to \(school)"
+                    if currentSchool {
+                        labelText = "\(labelText)Goes to \(school)"
+                    } else {
+                        labelText = "\(labelText)Went to \(school)"
+                    }
                 }
             
             case .gender:
