@@ -58,8 +58,8 @@ class LoginViewController: UIViewController {
     
     /// Authenticates user through Facebook Login
     func loginWithFB(_ sender: UIButton) {
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud.label.text = "Loading..."
+        //let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        //hud.label.text = "Loading..."
 
         let fbLogin = FBLogin()
         fbLogin.initialize(vc: self)

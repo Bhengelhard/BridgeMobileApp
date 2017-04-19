@@ -99,7 +99,7 @@ class SwipeViewController: UIViewController {
         // 2 second delay
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             // Get the first swipeCards
-            self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
+            self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 self.layout.loadingView.stopAnimating()
                 

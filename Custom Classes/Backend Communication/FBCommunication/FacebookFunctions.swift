@@ -107,7 +107,6 @@ class FacebookFunctions {
     // MARK: - Updating User's Friends
 
     func updateFacebookFriends(withBlock block: (() -> Void)? = nil) {
-        print("updating facebook friends")
         facebookFriends(withCursor: nil, fbFriendIDs: [], withBlock: {
             // Convert fbIds to parse objectIds
             self.updateFriendList(withBlock: block)
@@ -121,9 +120,10 @@ class FacebookFunctions {
             parameters["after"] = after!
         }
         
+        let connection = FBSDKGraphRequestConnection()
         let graphRequest = FBSDKGraphRequest(graphPath: "me/friends", parameters: parameters)
 
-        _ = graphRequest?.start { (connection, result, error) -> Void in
+        connection.add(graphRequest) { (_, result, error) in
             if error != nil {
                 print(error!)
             }
@@ -156,11 +156,12 @@ class FacebookFunctions {
                     if error != nil {
                         print(error!)
                     } else {
-                        
+                        self.updateFriendList(withBlock: block)
                     }
                 })
             }
         }
+        connection.start()
         
     }
     

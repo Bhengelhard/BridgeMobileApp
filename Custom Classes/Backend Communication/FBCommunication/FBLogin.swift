@@ -42,6 +42,15 @@ class FBLogin {
                 print("got to error")
             } else {
                 if let user = user {
+                    let hud = MBProgressHUD.showAdded(to: vc.view, animated: true)
+                    
+                    if user.isNew {
+                        hud.label.numberOfLines = 2
+                        hud.label.text = "Loading...\nThis may take a while."
+                    } else {
+                        hud.label.text = "Loading..."
+                    }
+                    
                     /* Check if the global variable geoPoint has been set to the user's location. If so, store it in Parse. Extremely important since the location would be used to get the user's current city in LocalUtility().getBridgePairings() which is indeed called in SignupViewController - cIgAr 08/18/16 */
                     /*
                     if let geoPoint = self.geoPoint {
@@ -58,14 +67,16 @@ class FBLogin {
                     LocalStorageUtility().getUserFriends()
                     
                     // get necessary facebook fields
+                    let connection = FBSDKGraphRequestConnection()
                     let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, birthday, location, education, work, relationship_status"], tokenString: FBSDKAccessToken.current().tokenString, version: nil, httpMethod: "GET")
-                    graphRequest!.start { (connection, result, error) -> Void in
+                    connection.add(graphRequest, completionHandler: { (_, result, error) in
                         if error != nil {
                             
                             print(error!)
                             print("got error")
                             
                         } else if let result = result as? [String: AnyObject] {
+                            print("results are not nil")
                             
                             // saves these to parse at every login
                             
@@ -189,35 +200,39 @@ class FBLogin {
                             }
                             
                             user.saveInBackground(block: { (success, error) in
-                                let fbFunctions = FacebookFunctions()
-
-                                if user.isNew {
-                                    if success == true {
-                                        fbFunctions.updateFacebookFriends(withBlock: { 
-                                            // Update BridgePairings Table to include new user
-                                            let pfCloudFunctions = PFCloudFunctions()
-                                            pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
-                                        })
-                                        
-                                        if let loginVC = vc as? LoginViewController {
-                                            loginVC.userIsNew = true
-                                        } else if let privacyPolicyVC = vc as? PrivacyPolicyViewController {
-                                            privacyPolicyVC.userIsNew = true
-                                        }
-                                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
-                                        
-                                    } else {
-                                        print(error ?? "error")
-                                    }
+                                if let error = error {
+                                    print("error - saving user in background - \(error)")
                                 } else {
-                                    //Updating the user's friends
-                                    fbFunctions.updateFacebookFriends()
+                                    if success {
+                                        let fbFunctions = FacebookFunctions()
+                                        if user.isNew {
+                                            if let loginVC = vc as? LoginViewController {
+                                                loginVC.userIsNew = true
+                                            } else if let privacyPolicyVC = vc as? PrivacyPolicyViewController {
+                                                privacyPolicyVC.userIsNew = true
+                                            }
+                                            
+                                            fbFunctions.updateFacebookFriends(withBlock: {
+                                                if let vc = self.vc {
+                                                    DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 1), execute: {
+                                                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
+                                                    })
+                                                }
+                                                
+                                                // Update BridgePairings Table to include new user
+                                                let pfCloudFunctions = PFCloudFunctions()
+                                                pfCloudFunctions.changeBridgePairingsOnInterestedInUpdate(parameters: [:])
+                                            })
+                                        } else {
+                                            //Updating the user's friends
+                                            fbFunctions.updateFacebookFriends()
+                                        }
+                                    }
                                 }
-                                
-                                
                             })
                         }
-                    }
+                    })
+                    connection.start()
                     
                 } else {
                     //self.activityIndicator.stopAnimating()
@@ -242,7 +257,9 @@ class FBLogin {
             
             if hasSignedUp == true {
                 if let vc = self.vc {
-                    vc.performSegue(withIdentifier: "showSwipe", sender: self)
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 1), execute: {
+                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
+                    })
                 }
             } else {
                 //If the user has already provided an access code, then do not display it again
@@ -253,7 +270,9 @@ class FBLogin {
                 }
                 //vc.performSegue(withIdentifier: "showSignUp", sender: self)
                 if let vc = self.vc {
-                    vc.performSegue(withIdentifier: "showSwipe", sender: self)
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 1), execute: {
+                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
+                    })
                 }
             }
             
