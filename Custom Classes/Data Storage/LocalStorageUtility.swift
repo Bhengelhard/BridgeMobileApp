@@ -130,8 +130,8 @@ class LocalStorageUtility{
             }
             else if let result = result  as? [String:AnyObject] {
                 let userId = result["id"]! as! String
-                let accessToken = FBSDKAccessToken.current().tokenString
-                let facebookFriendsUrl = "https://graph.facebook.com/\(userId)/friends?access_token=\(accessToken)"
+                //let accessToken = FBSDKAccessToken.current().tokenString
+                let facebookFriendsUrl = "https://graph.facebook.com/\(userId)/friends"//?access_token=\(accessToken)"
                 
                 if let fbfriendsUrl = URL(string: facebookFriendsUrl) {
                     

@@ -58,8 +58,8 @@ class SwipeLogic {
             location = gesture.location(in: view)
             layout.updateTopSwipeCardHorizontalConstraint(fromCenter: location.x - originalLocation.x)
             
-            //let transform = CGAffineTransform.identity// swipeCard.transform
-            //swipeCard.transform = transform.rotated(by: CGFloat(location.x - DisplayUtility.screenWidth/2)/(DisplayUtility.screenWidth/2) * CGFloat(M_PI/8))
+            let transform = CGAffineTransform.identity// swipeCard.transform
+            swipeCard.transform = transform.rotated(by: CGFloat(location.x - DisplayUtility.screenWidth/2)/(DisplayUtility.screenWidth/2) * CGFloat(M_PI/8))
             
            // let multiplier = CGFloat(0.98)
             let cardCenterX = swipeCard.center.x
@@ -122,7 +122,7 @@ class SwipeLogic {
             }
             // Reset the cards
             else {
-                //swipeCard.transform = CGAffineTransform.identity
+                swipeCard.transform = CGAffineTransform.identity
                 reset()
             }
         }
