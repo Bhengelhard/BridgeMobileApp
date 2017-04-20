@@ -126,7 +126,7 @@ class SwipeObjects {
                 NSFontAttributeName: Constants.Fonts.light18 ?? UIFont(),
                 NSForegroundColorAttributeName: Constants.Colors.necter.yellow,
                 NSUnderlineStyleAttributeName: 1]
-            let attributedString = NSAttributedString(string: "click here to refresh", attributes: attributes)
+            let attributedString = NSAttributedString(string: "check for more pairs", attributes: attributes)
             
             setAttributedTitle(attributedString, for: .normal)
         }
