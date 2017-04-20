@@ -96,13 +96,19 @@ class SwipeViewController: UIViewController {
         hud.label.text = "Finding best\npairs to 'nect..."
         hud.label.numberOfLines = 0
         
-        // 2 second delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            // Get the first swipeCards
-            self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
+        let dateBefore = Date()
+        // Get the first swipeCards
+        self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
+            let dateAfter = Date()
+            let timeInterval = dateAfter.timeIntervalSince(dateBefore)
+            var delay = 0.0
+            if timeInterval < 2.0 {
+                delay = 2.0 - timeInterval
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 self.layout.loadingView.stopAnimating()
-                
+            
                 self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
             }
         }
