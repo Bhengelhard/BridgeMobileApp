@@ -123,8 +123,10 @@ class LocalStorageUtility{
     
     func getUserFriends(){
         
+        let connection = FBSDKGraphRequestConnection()
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name"])
-        _ = graphRequest?.start{ (connection, result, error) -> Void in
+        
+        connection.add(graphRequest) { (_, result, error) in
             if error != nil {
                 print("Error: \(error!)")
             }
@@ -208,6 +210,7 @@ class LocalStorageUtility{
                 }
             }
         }
+        connection.start()
     }
 }
 
