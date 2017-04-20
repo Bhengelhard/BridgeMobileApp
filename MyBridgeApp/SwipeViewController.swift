@@ -106,10 +106,15 @@ class SwipeViewController: UIViewController {
                 delay = 2.0 - timeInterval
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                MBProgressHUD.hide(for: self.view, animated: true)
-                self.layout.loadingView.stopAnimating()
-            
-                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings)
+                if self.swipeBackend.topBridgePairing != nil {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    self.layout.loadingView.stopAnimating()
+                }
+                
+                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    self.layout.loadingView.stopAnimating()
+                }
             }
         }
     }
