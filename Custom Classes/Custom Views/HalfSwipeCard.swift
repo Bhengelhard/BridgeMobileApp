@@ -11,6 +11,7 @@ import UIKit
 
 class HalfSwipeCard: UIView {
     var photo: UIImage?
+    let nameLabel = UILabel()
     let photoView = UIImageView()
     
     override init(frame: CGRect) {
@@ -26,29 +27,9 @@ class HalfSwipeCard: UIView {
     }
     
     func initialize(name: String) {
-        self.layer.masksToBounds = true
-        self.backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
+        layer.masksToBounds = true
+        backgroundColor = UIColor(red: 234/255, green: 237/255, blue: 239/255, alpha: 1.0)
         
-        photoView.contentMode = .scaleAspectFill
-        photoView.clipsToBounds = true
-        
-        photoView.image = nil
-    
-        layoutHalfCard(name: name)
-
-    }
-    
-    func setImage(image: UIImage) {
-        photoView.image = image
-    }
-    
-    func layoutHalfCard(name: String) {
-        addSubview(photoView)
-        photoView.autoPinEdgesToSuperviewEdges()
-        
-        let nameLabel = UILabel()
-        //let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
-        nameLabel.text = DisplayUtility.firstNameLastNameInitial(name: name)
         nameLabel.textColor = UIColor.white
         nameLabel.font = UIFont(name: "BentonSans-Bold", size: 22)
         nameLabel.textAlignment = NSTextAlignment.left
@@ -56,7 +37,31 @@ class HalfSwipeCard: UIView {
         nameLabel.layer.shadowRadius = 0.5
         nameLabel.layer.shadowColor = UIColor.black.cgColor
         nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
-        self.addSubview(nameLabel)
+
+        
+        photoView.contentMode = .scaleAspectFill
+        photoView.clipsToBounds = true
+        
+        photoView.image = nil
+
+    }
+    
+    func setName(name: String) {
+        nameLabel.text = DisplayUtility.firstNameLastNameInitial(name: name)
+        layoutHalfCard()
+    }
+    
+    func setImage(image: UIImage) {
+        photoView.image = image
+    }
+    
+    func layoutHalfCard() {
+        addSubview(photoView)
+        photoView.autoPinEdgesToSuperviewEdges()
+        
+        //let nameLabel = UILabel(frame: CGRect(x: 0.1308*self.frame.width, y: 0, width: self.frame.width, height: 0.1*self.frame.height))//x: 0.1308*DisplayUtility.screenWidth, y: 0.7556*DisplayUtility.screenHeight, width: 0.8*DisplayUtility.screenWidth, height: 0.1*DisplayUtility.screenHeight))
+        //nameLabel.text = DisplayUtility.firstNameLastNameInitial(name: name)
+        addSubview(nameLabel)
         
         // Setting origin y value of nameLabel based on placement of connectionTypeIcon which is based on whether there is a status
         //nameLabel.center.y = 0.83*self.frame.height

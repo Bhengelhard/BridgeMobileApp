@@ -63,7 +63,6 @@ class SwipeBackend {
         User.getCurrent { (user) in
             if top {
                 BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
-                    print("got \(bridgePairings.count) bridge pairings")
                     if bridgePairings.count > 0 {
                         let bridgePairing = bridgePairings[0]
                         self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
@@ -72,7 +71,6 @@ class SwipeBackend {
                     }
                 }
             } else {
-                print("topBridgePairing is nil? \(self.topBridgePairing == nil)")
                 if let topBridgePairing = self.topBridgePairing {
                     BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptFriend1WithID: topBridgePairing.user1ID, exceptFriend2WithID: topBridgePairing.user2ID, exceptForBlocked: true) { (bridgePairings) in
                         if bridgePairings.count > 0 {
