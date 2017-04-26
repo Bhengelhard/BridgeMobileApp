@@ -51,6 +51,7 @@ class SwipeViewController: UIViewController {
                     let localBridgePairings = LocalBridgePairings()
                     localBridgePairings.setBridgePairing1ID(nil)
                     localBridgePairings.setBridgePairing2ID(nil)
+                    localBridgePairings.synchronize()
                     
                     user.hasResetPairs = true
                     user.save()
