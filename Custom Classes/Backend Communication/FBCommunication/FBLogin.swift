@@ -177,8 +177,8 @@ class FBLogin {
                                     user["fb_id"] = id
                                 }
                                 
-                                user["limit_card_count"] = 5
-                                user["has_reset_cards"] = true
+                                user["limit_pairs_count"] = 5
+                                user["has_reset_pairs"] = true
                                 
                             } else {
                                 if let hasLoggedIn = user["has_logged_in"] as? Bool {

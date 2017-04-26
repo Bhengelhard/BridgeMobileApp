@@ -65,8 +65,8 @@ class SwipeBackend {
         User.getCurrent { (user) in
             
             // if reached limit -> got no bridge pairings
-            if let limitCardCount = user.limitCardCount {
-                if limitCardCount <= 0 {
+            if let limitPairsCount = user.limitPairsCount {
+                if limitPairsCount <= 0 {
                     return self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                 }
             }
@@ -113,18 +113,11 @@ class SwipeBackend {
     
     private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         
-        // decrement user's limit card count
-        if let limitCardCount = user.limitCardCount {
-            user.limitCardCount = limitCardCount - 1
-            user.save()
-        }
         
         if top {
             print("got top from parse")
-            gotTopBridgePairing = true
         } else {
             print("got bottom from parse")
-            gotBottomBridgePairing = true
         }
         
         if let userID = user.id {
@@ -145,12 +138,20 @@ class SwipeBackend {
                     bridgePairing.getUser2 { (user2) in
                         if let user2PictureIDs = user2.pictureIDs {
                             if user2PictureIDs.count > 0 { // user2 pic exists
+                                // decrement user's limit card count
+                                if let limitPairsCount = user.limitPairsCount {
+                                    user.limitPairsCount = limitPairsCount - 1
+                                    user.save()
+                                }
+
                                 if top {
+                                    self.gotTopBridgePairing = true
                                     self.topBridgePairing = bridgePairing
                                     
                                     // store bridge pairing locally
                                     self.localBridgePairings.setBridgePairing1ID(bridgePairing.id)
                                 } else {
+                                    self.gotBottomBridgePairing = true
                                     self.bottomBridgePairing = bridgePairing
                                     
                                     // store bridge pairing locally

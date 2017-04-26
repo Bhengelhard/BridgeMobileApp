@@ -46,13 +46,13 @@ class SwipeViewController: UIViewController {
         
         User.getCurrent { (user) in
             // if user has not reset cards, set locally stored cards to nil
-            if let hasResetCards = user.hasResetCards {
-                if !hasResetCards {
+            if let hasResetPairs = user.hasResetPairs {
+                if !hasResetPairs {
                     let localBridgePairings = LocalBridgePairings()
                     localBridgePairings.setBridgePairing1ID(nil)
                     localBridgePairings.setBridgePairing2ID(nil)
                     
-                    user.hasResetCards = true
+                    user.hasResetPairs = true
                     user.save()
                 }
             }

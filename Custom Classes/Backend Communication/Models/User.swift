@@ -121,9 +121,9 @@ class User: NSObject {
     
     var blockingList: [String]?
     
-    var limitCardCount: Int?
+    var limitPairsCount: Int?
     
-    var hasResetCards: Bool?
+    var hasResetPairs: Bool?
     
     private var pictureIDsToPictures = [String: Picture]()
     
@@ -234,12 +234,12 @@ class User: NSObject {
             blockingList = parseBlockingList
         }
         
-        if let parselimitCardCount = parseUser["limit_card_count"] as? Int {
-            limitCardCount = parselimitCardCount
+        if let parseLimitPairsCount = parseUser["limit_pairs_count"] as? Int {
+            limitPairsCount = parseLimitPairsCount
         }
         
-        if let parseHasResetCards = parseUser["has_reset_cards"] as? Bool {
-            hasResetCards = parseHasResetCards
+        if let parsehasResetPairs = parseUser["has_reset_pairs"] as? Bool {
+            hasResetPairs = parsehasResetPairs
         }
         
         super.init()
@@ -469,16 +469,16 @@ class User: NSObject {
             parseUser.remove(forKey: "blocking_list")
         }
         
-        if let limitCardCount = limitCardCount {
-            parseUser["limit_card_count"] = limitCardCount
+        if let limitPairsCount = limitPairsCount {
+            parseUser["limit_pairs_count"] = limitPairsCount
         } else {
-            parseUser.remove(forKey: "limit_card_count")
+            parseUser.remove(forKey: "limit_pairs_count")
         }
         
-        if let hasResetCards = hasResetCards {
-            parseUser["has_reset_cards"] = hasResetCards
+        if let hasResetPairs = hasResetPairs {
+            parseUser["has_reset_pairs"] = hasResetPairs
         } else {
-            parseUser.remove(forKey: "has_reset_cards")
+            parseUser.remove(forKey: "has_reset_pairs")
         }
         
         parseUser.saveInBackground { (succeeded, error) in
