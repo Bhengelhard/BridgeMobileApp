@@ -59,7 +59,7 @@ class SwipeLogic {
             layout.updateTopSwipeCardHorizontalConstraint(fromCenter: location.x - originalLocation.x)
             
             let transform = CGAffineTransform.identity// swipeCard.transform
-            swipeCard.transform = transform.rotated(by: CGFloat(location.x - DisplayUtility.screenWidth/2)/(DisplayUtility.screenWidth/2) * CGFloat(M_PI/8))
+            //swipeCard.transform = transform.rotated(by: CGFloat(location.x - DisplayUtility.screenWidth/2)/(DisplayUtility.screenWidth/2) * CGFloat(M_PI/8))
             
            // let multiplier = CGFloat(0.98)
             let cardCenterX = swipeCard.center.x
@@ -122,7 +122,7 @@ class SwipeLogic {
             }
             // Reset the cards
             else {
-                swipeCard.transform = CGAffineTransform.identity
+                //swipeCard.transform = CGAffineTransform.identity
                 reset()
             }
         }
@@ -134,7 +134,7 @@ class SwipeLogic {
         let view = vc.view!
         let swipeBackend = vc.swipeBackend
         let layout = vc.layout
-        let noMoreBridgePairings: () -> Void  = vc.noMoreBridgePairings
+        let noMoreBridgePairings = vc.noMoreBridgePairings
         
         /*
         let swipeCard: SwipeCard
@@ -146,16 +146,14 @@ class SwipeLogic {
         
         let swipeCard = layout.topSwipeCard
         
-        if vc.swipeBackend.bottomBridgePairing == nil {
+        if !swipeBackend.gotBottomBridgePairing {
             layout.loadingView.startAnimating()
-            let hud = MBProgressHUD.showAdded(to: vc.view, animated: true)
+            let hud = MBProgressHUD.showAdded(to: view, animated: true)
             hud.mode = .customView
             hud.customView = layout.loadingView
             hud.label.text = "Finding best\npairs to 'nect..."
             hud.label.numberOfLines = 0
         }
-        
-        
         
         // create and save swipe
         var bridgePairingID: String?

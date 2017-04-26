@@ -44,7 +44,20 @@ class SwipeViewController: UIViewController {
         
         layout.inviteButton.setVC(vc: self)
         
-        getBridgePairings()
+        User.getCurrent { (user) in
+            // if user has not reset cards, set locally stored cards to nil
+            if let hasResetCards = user.hasResetCards {
+                if !hasResetCards {
+                    let localBridgePairings = LocalBridgePairings()
+                    localBridgePairings.setBridgePairing1ID(nil)
+                    localBridgePairings.setBridgePairing2ID(nil)
+                    
+                    user.hasResetCards = true
+                    user.save()
+                }
+            }
+            self.getBridgePairings()
+        }
         
         // Check for New Matches
         //Check for Connections Conversed and for the current User's New Matches
@@ -106,7 +119,7 @@ class SwipeViewController: UIViewController {
                 delay = 2.0 - timeInterval
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                if self.swipeBackend.topBridgePairing != nil {
+                if self.swipeBackend.gotTopBridgePairing {
                     MBProgressHUD.hide(for: self.view, animated: true)
                     self.layout.loadingView.stopAnimating()
                 }
