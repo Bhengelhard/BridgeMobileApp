@@ -261,8 +261,8 @@ class SwipeLogic {
             }
             
             layout.switchTopAndBottomCards()
-            layout.topSwipeCard.isUserInteractionEnabled = true
-            layout.bottomSwipeCard.isUserInteractionEnabled = false
+            //layout.topSwipeCard.isUserInteractionEnabled = true
+            //layout.bottomSwipeCard.isUserInteractionEnabled = false
             layout.topSwipeCard.overlay.removeFromSuperlayer()
             swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
                 MBProgressHUD.hide(for: vc.view, animated: true)

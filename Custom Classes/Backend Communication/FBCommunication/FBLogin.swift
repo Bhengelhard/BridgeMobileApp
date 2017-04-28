@@ -36,6 +36,7 @@ class FBLogin {
         
         //Log user in with permissions public_profile, email and user_friends
         let permissions = ["public_profile", "email", "user_friends", "user_photos", "user_birthday", "user_location", "user_education_history", "user_work_history", "user_relationships"]
+                
         PFFacebookUtils.logInInBackground(withReadPermissions: permissions) { (user, error) in
             if let error = error {
                 print("error - logging in in background - \(error)")
