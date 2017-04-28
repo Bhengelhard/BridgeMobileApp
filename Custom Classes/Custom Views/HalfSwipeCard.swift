@@ -51,7 +51,7 @@ class HalfSwipeCard: UIView {
         layoutHalfCard()
     }
     
-    func setImage(image: UIImage) {
+    func setImage(image: UIImage?) {
         photoView.image = image
     }
     

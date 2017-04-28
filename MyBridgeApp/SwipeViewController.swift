@@ -159,9 +159,18 @@ class SwipeViewController: UIViewController {
     }
     
     func presentExternalProfileVC(_ notification: Notification) {
-        if let userId = notification.object as? String {
+        /*if let userId = notification.object as? String {
             let externalProfileVC = ExternalProfileViewController()
             externalProfileVC.setUserID(userID: userId)
+            self.present(externalProfileVC, animated: true, completion: nil)
+        }*/
+        if let (userID, image) = notification.object as? (String, UIImage?) {
+            let externalProfileVC = ExternalProfileViewController()
+            if let image = image {
+                externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: userID)
+            } else {
+                externalProfileVC.setUserID(userID: userID)
+            }
             self.present(externalProfileVC, animated: true, completion: nil)
         }
     }

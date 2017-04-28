@@ -159,8 +159,8 @@ class SwipeLayout {
         topSwipeCardHorizontalConstraint = bottomSwipeCardHorizontalConstraint
         bottomSwipeCard = oldTopSwipeCard
         bottomSwipeCardHorizontalConstraint = oldTopSwipeCardHorizontalConstraint
-        
-        bottomSwipeCard.alpha = 0
+        //bottomSwipeCard.topHalf.photoView.image = nil
+        //bottomSwipeCard.bottomHalf.photoView.image = nil
         if let constraint = bottomSwipeCardHorizontalConstraint {
             constraint.constant = 0
         }
