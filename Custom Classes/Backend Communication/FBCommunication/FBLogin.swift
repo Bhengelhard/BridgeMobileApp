@@ -36,10 +36,10 @@ class FBLogin {
         
         //Log user in with permissions public_profile, email and user_friends
         let permissions = ["public_profile", "email", "user_friends", "user_photos", "user_birthday", "user_location", "user_education_history", "user_work_history", "user_relationships"]
+                
         PFFacebookUtils.logInInBackground(withReadPermissions: permissions) { (user, error) in
             if let error = error {
-                print(error)
-                print("got to error")
+                print("error - logging in in background - \(error)")
             } else {
                 if let user = user {
                     let hud = MBProgressHUD.showAdded(to: vc.view, animated: true)
@@ -69,6 +69,7 @@ class FBLogin {
                     // get necessary facebook fields
                     let connection = FBSDKGraphRequestConnection()
                     let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, birthday, location, education, work, relationship_status"], tokenString: FBSDKAccessToken.current().tokenString, version: nil, httpMethod: "GET")
+                    //let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, interested_in, name, gender, email, birthday, location, education, work, relationship_status"])
                     connection.add(graphRequest, completionHandler: { (_, result, error) in
                         if error != nil {
                             
@@ -213,11 +214,7 @@ class FBLogin {
                                             }
                                             
                                             fbFunctions.updateFacebookFriends(withBlock: {
-                                                if let vc = self.vc {
-                                                    DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 1), execute: {
-                                                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
-                                                    })
-                                                }
+                                                self.showSwipe()
                                                 
                                                 // Update BridgePairings Table to include new user
                                                 let pfCloudFunctions = PFCloudFunctions()
@@ -239,44 +236,22 @@ class FBLogin {
                     UIApplication.shared.endIgnoringInteractionEvents()
                 }
             }
-            MBProgressHUD.hide(for: vc.view, animated: true)
         }
         
     }
     
     func showSwipe() {
-        //setting hasSignedUp to false so the user will be sent back to the signUp page if they have not completed signing up
-        let hasSignedUp = localData.getHasSignedUp() ?? false
-        localData.setHasSignedUp(hasSignedUp)
-        localData.synchronize()
-
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.5 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: { () -> Void in
-            //stop the spinner animation and reactivate the interaction with user
-            //self.activityIndicator.stopAnimating()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.5 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
             UIApplication.shared.endIgnoringInteractionEvents()
             
-            if hasSignedUp == true {
-                if let vc = self.vc {
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 1), execute: {
-                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
-                    })
-                }
-            } else {
-                //If the user has already provided an access code, then do not display it again
-                let hasProvidedAccessCode = self.localData.getHasProvidedAccessCode() ?? false
-                if !hasProvidedAccessCode {
-                    self.localData.setHasProvidedAccessCode(true)
-                    self.localData.synchronize()
-                }
-                //vc.performSegue(withIdentifier: "showSignUp", sender: self)
-                if let vc = self.vc {
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 1), execute: {
-                        vc.performSegue(withIdentifier: "showSwipe", sender: self)
-                    })
-                }
+            if let vc = self.vc {
+                MBProgressHUD.hide(for: vc.view, animated: true)
+
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 1), execute: {
+                    vc.performSegue(withIdentifier: "showSwipe", sender: self)
+                })
             }
-            
-        })
+        }
     }
     
 }

@@ -18,6 +18,8 @@ class SwipeBackend {
     var topBridgePairing: BridgePairing?
     var bottomBridgePairing: BridgePairing?
     let localBridgePairings = LocalBridgePairings()
+    var gotTopBridgePairing = false
+    var gotBottomBridgePairing = false
     
     func setCityName(locationLabel: UILabel, locationCoordinates:[Double], pairing:UserInfoPair) {
         // We will store the city names to LocalData.  Not required now. But will ne be needed in fututre when when optimize.
@@ -61,9 +63,9 @@ class SwipeBackend {
     
     private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         User.getCurrent { (user) in
+            
             if top {
                 BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
-                    print("got \(bridgePairings.count) bridge pairings")
                     if bridgePairings.count > 0 {
                         let bridgePairing = bridgePairings[0]
                         self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
@@ -72,7 +74,6 @@ class SwipeBackend {
                     }
                 }
             } else {
-                print("topBridgePairing is nil? \(self.topBridgePairing == nil)")
                 if let topBridgePairing = self.topBridgePairing {
                     BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptFriend1WithID: topBridgePairing.user1ID, exceptFriend2WithID: topBridgePairing.user2ID, exceptForBlocked: true) { (bridgePairings) in
                         if bridgePairings.count > 0 {
@@ -104,6 +105,8 @@ class SwipeBackend {
     }
     
     private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+        
+        
         if top {
             print("got top from parse")
         } else {
@@ -127,13 +130,15 @@ class SwipeBackend {
                 if user1PictureIDs.count > 0 { // user1 pic exists
                     bridgePairing.getUser2 { (user2) in
                         if let user2PictureIDs = user2.pictureIDs {
-                            if user2PictureIDs.count > 0 { // user2 pic exists
+                            if user2PictureIDs.count > 0 { // user2 pic exists                                
                                 if top {
+                                    self.gotTopBridgePairing = true
                                     self.topBridgePairing = bridgePairing
                                     
                                     // store bridge pairing locally
                                     self.localBridgePairings.setBridgePairing1ID(bridgePairing.id)
                                 } else {
+                                    self.gotBottomBridgePairing = true
                                     self.bottomBridgePairing = bridgePairing
                                     
                                     // store bridge pairing locally
@@ -208,7 +213,7 @@ class SwipeBackend {
     
     /// set the bottom swipe card
     func setBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
-        
+        gotBottomBridgePairing = false
         // store old bottom as top locally
         topBridgePairing = bottomBridgePairing
         // store bridge pairing locally
@@ -227,10 +232,12 @@ class SwipeBackend {
     
     /// set the top swipe card upon opening app
     func setInitialTopSwipeCard(topSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+        gotTopBridgePairing = false
         if let bridgePairingID = localBridgePairings.getBridgePairing1ID() { // bridge pairing ID stored locally
             print("got top locally")
             BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
                 self.topBridgePairing = bridgePairing
+                self.gotTopBridgePairing = true
                 topSwipeCard.initialize(bridgePairing: bridgePairing)
                 if let completion = completion {
                     completion()
@@ -244,11 +251,16 @@ class SwipeBackend {
     
     /// set the bottom swipe card upon opening app
     func setInitialBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+        gotBottomBridgePairing = false
         if let bridgePairingID = localBridgePairings.getBridgePairing2ID() { // bridge pairing ID stored locally
             print("got bottom locally")
             BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
                 self.bottomBridgePairing = bridgePairing
+                self.gotBottomBridgePairing = true
                 bottomSwipeCard.initialize(bridgePairing: bridgePairing)
+                if let completion = completion {
+                    completion()
+                }
             }
         } else {
             print("bottom not stored locally")

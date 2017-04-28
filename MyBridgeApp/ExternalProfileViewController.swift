@@ -15,6 +15,7 @@ class ExternalProfileViewController: UIViewController {
     let layout = ExternalProfileLayout()
     let transitionManager = TransitionManager()
     var userID: String?
+    let externalProfileBackend = ExternalProfileBackend()
     
     var didSetupConstraints = false
     
@@ -60,19 +61,37 @@ class ExternalProfileViewController: UIViewController {
     
     // MARK: - Setters
     
-    /// set user ID and get user's information
+    func setMainProfilePictureAndUserID(image: UIImage, userID: String?) {
+        layout.profilePicturesVC.addImage(image: image)
+        setUserID(userID: userID, mainProfilePictureSet: true)
+    }
+    
     func setUserID(userID: String?) {
+        setUserID(userID: userID, mainProfilePictureSet: false)
+    }
+    
+    /// set user ID and get user's information
+    func setUserID(userID: String?, mainProfilePictureSet: Bool) {
         self.userID = userID
         
         if let userID = userID {
-            let externalProfileBackend = ExternalProfileBackend()
             
-            let hud = MBProgressHUD.showAdded(to: layout.profilePicturesVC.view, animated: true)
-            hud.label.text = "Loading..."
+            if !mainProfilePictureSet {
+                let hud = MBProgressHUD.showAdded(to: layout.profilePicturesVC.view, animated: true)
+                hud.label.text = "Loading..."
+            }
             
             // pictures
             externalProfileBackend.getImages(userID: userID) { (images) in
-                for image in images {
+                if !mainProfilePictureSet {
+                    if images.count > 0 {
+                        let mainImage = images[0]
+                        self.layout.profilePicturesVC.addImage(image: mainImage)
+                        MBProgressHUD.hide(for: self.layout.profilePicturesVC.view, animated: true)
+                    }
+                }
+                
+                for image in images[1..<images.count] {
                     self.layout.profilePicturesVC.addImage(image: image)
                 }
                 
@@ -82,7 +101,6 @@ class ExternalProfileViewController: UIViewController {
                     self.layout.profilePicturesVC.pageControl.alpha = 1
                 }
                 
-                MBProgressHUD.hide(for: self.layout.profilePicturesVC.view, animated: true)
             }
             
             // name

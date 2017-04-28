@@ -38,9 +38,6 @@ class LocalData {
     /// Indicates whether the current User has swiped left since signing up
     var firstTimeSwipingLeft:Bool? = nil
     
-    /// Indicates whether the current User has completed the sign up process
-    var hasSignedUp:Bool? = nil
-    
     /// Indicates the current User's most recent business status (a.k.a. request)
     var businessStatus:String? = nil
     
@@ -59,9 +56,6 @@ class LocalData {
     /// Indicates whether the user is interested in being connected for love
     var interestedInLove: Bool? = nil
     
-    /// Indicates whether the user has entered an access code
-    var hasProvidedAccessCode: Bool? = nil
-    
     // MARK: -
     init(){
         let userDefaults = UserDefaults.standard
@@ -77,36 +71,19 @@ class LocalData {
                 newBridgesPushNotifications = (userInfo as! UserInfo).newBridgesPushNotifications
                 firstTimeOnBridgeVC = (userInfo as! UserInfo).firstTimeOnBridgeVC
                 firstTimeSwipingLeft = (userInfo as! UserInfo).firstTimeSwipingLeft
-                hasSignedUp = (userInfo as! UserInfo).hasSignedUp
+                //hasSignedUp = (userInfo as! UserInfo).hasSignedUp
                 businessStatus = (userInfo as! UserInfo).businessStatus
                 loveStatus = (userInfo as! UserInfo).loveStatus
                 friendshipStatus = (userInfo as! UserInfo).friendshipStatus
                 numConnectionsNected = (userInfo as! UserInfo).numConnectionsNected
                 myGender = (userInfo as! UserInfo).myGender
                 interestedInLove = (userInfo as! UserInfo).interestedInLove
-                hasProvidedAccessCode = (userInfo as! UserInfo).hasProvidedAccessCode
+                //hasProvidedAccessCode = (userInfo as! UserInfo).hasProvidedAccessCode
             }
         }
     }
     
     // MARK: - Set and Get Functions
-    
-    //Saving whether the currentUser has provided an access code
-    func setHasProvidedAccessCode(_ hasProvidedAccessCode: Bool) {
-        self.hasProvidedAccessCode = hasProvidedAccessCode
-    }
-    func getHasProvidedAccessCode() -> Bool? {
-        let userDefaults = UserDefaults.standard
-        if let _ = userDefaults.object(forKey: "userInfo"){
-            let decoded  = userDefaults.object(forKey: "userInfo") as! Data
-            let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
-            return userInfo.hasProvidedAccessCode
-        }
-        else{
-            return nil
-        }
-    }
-    
     
     //Saving whether the currentUser's is interested in love
     func setInterestedInLove(_ interestedInLove: Bool) {
@@ -219,21 +196,6 @@ class LocalData {
             let decoded  = userDefaults.object(forKey: "userInfo") as! Data
             let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
             return userInfo.businessStatus
-        }
-        else{
-            return nil
-        }
-    }
-    
-    func setHasSignedUp(_ hasSignedUp:Bool){
-        self.hasSignedUp = hasSignedUp
-    }
-    func getHasSignedUp()->Bool? {
-        let userDefaults = UserDefaults.standard
-        if let _ = userDefaults.object(forKey: "userInfo"){
-            let decoded  = userDefaults.object(forKey: "userInfo") as! Data
-            let userInfo = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! UserInfo
-            return userInfo.hasSignedUp
         }
         else{
             return nil
@@ -415,7 +377,7 @@ class LocalData {
     // MARK: -
     // This function saves the local data to the device
     func synchronize(){
-        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeOnBridgeVC: firstTimeOnBridgeVC, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: hasSignedUp, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus, numConnectionsNected: numConnectionsNected, myGender: myGender, interestedInLove: interestedInLove, hasProvidedAccessCode: hasProvidedAccessCode)
+        let userInfo:UserInfo = UserInfo(username: username, friendlist: friendlist, mainProfilePicture: mainProfilePicture, pairings:pairings, interestedIn: interestedIn, profilePictureFromFb:profilePictureFromFb, newMessagesPushNotifications:newMessagesPushNotifications, newBridgesPushNotifications:newBridgesPushNotifications, firstTimeOnBridgeVC: firstTimeOnBridgeVC, firstTimeSwipingLeft: firstTimeSwipingLeft, hasSignedUp: false, businessStatus: businessStatus, loveStatus: loveStatus, friendshipStatus: friendshipStatus, numConnectionsNected: numConnectionsNected, myGender: myGender, interestedInLove: interestedInLove, hasProvidedAccessCode: false)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: userInfo)
         userDefaults.set(encodedData, forKey: "userInfo")

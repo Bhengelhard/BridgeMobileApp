@@ -36,7 +36,7 @@ class SwipeViewController: UIViewController {
         // Add Targets for Swipe Cards
         layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
         layout.bottomSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
-        layout.bottomSwipeCard.isUserInteractionEnabled = false
+        //layout.bottomSwipeCard.isUserInteractionEnabled = false
         layout.infoButton.addTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
@@ -106,7 +106,7 @@ class SwipeViewController: UIViewController {
                 delay = 2.0 - timeInterval
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                if self.swipeBackend.topBridgePairing != nil {
+                if self.swipeBackend.gotTopBridgePairing {
                     MBProgressHUD.hide(for: self.view, animated: true)
                     self.layout.loadingView.stopAnimating()
                 }
