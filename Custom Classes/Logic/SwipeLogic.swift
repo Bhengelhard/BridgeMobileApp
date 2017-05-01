@@ -261,8 +261,6 @@ class SwipeLogic {
             }
             
             layout.switchTopAndBottomCards()
-            //layout.topSwipeCard.isUserInteractionEnabled = true
-            //layout.bottomSwipeCard.isUserInteractionEnabled = false
             layout.bottomSwipeCard.alpha = 0
             layout.bottomSwipeCard.clear()
             layout.topSwipeCard.overlay.removeFromSuperlayer()

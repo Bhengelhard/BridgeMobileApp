@@ -582,7 +582,7 @@ class LocalBridgePairings {
     
     //Saving bridgePairing 1 ID
     func setBridgePairing1ID(_ bridgePairing1ID: String?) {
-        print("saving top locally with id: \(bridgePairing1ID == nil ? "nil" : bridgePairing1ID!)")
+        //print("saving top locally with id: \(bridgePairing1ID == nil ? "nil" : bridgePairing1ID!)")
         self.bridgePairing1ID = bridgePairing1ID
     }
     func getBridgePairing1ID() -> String? {
@@ -599,7 +599,7 @@ class LocalBridgePairings {
     
     //Saving bridgePairing 2 ID
     func setBridgePairing2ID(_ bridgePairing2ID: String?) {
-        print("saving bottom locally with id: \(bridgePairing2ID == nil ? "nil" : bridgePairing2ID!)")
+        //print("saving bottom locally with id: \(bridgePairing2ID == nil ? "nil" : bridgePairing2ID!)")
         self.bridgePairing2ID = bridgePairing2ID
     }
     func getBridgePairing2ID() -> String? {
@@ -617,7 +617,6 @@ class LocalBridgePairings {
     // MARK: -
     // This function saves the local data to the device
     func synchronize(){
-        print("synchronizing")
         let bridgePairings: BridgePairings = BridgePairings(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: bridgePairings)
