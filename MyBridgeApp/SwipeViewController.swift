@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import Parse
 
 /// The SwipeViewController class displays and handles swiping for introductions
 class SwipeViewController: UIViewController {
@@ -78,6 +79,12 @@ class SwipeViewController: UIViewController {
     }
     
     func getBridgePairings() {
+        layout.topSwipeCard.alpha = 0
+        layout.topSwipeCard.isUserInteractionEnabled = false
+        
+        layout.bottomSwipeCard.alpha = 0
+        layout.bottomSwipeCard.isUserInteractionEnabled = false
+        
         // Make no more bridge pairing objects invisible
         for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
             view.alpha = 0
@@ -159,9 +166,18 @@ class SwipeViewController: UIViewController {
     }
     
     func presentExternalProfileVC(_ notification: Notification) {
-        if let userId = notification.object as? String {
+        /*if let userId = notification.object as? String {
             let externalProfileVC = ExternalProfileViewController()
             externalProfileVC.setUserID(userID: userId)
+            self.present(externalProfileVC, animated: true, completion: nil)
+        }*/
+        if let (userID, image) = notification.object as? (String, UIImage?) {
+            let externalProfileVC = ExternalProfileViewController()
+            if let image = image {
+                externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: userID)
+            } else {
+                externalProfileVC.setUserID(userID: userID)
+            }
             self.present(externalProfileVC, animated: true, completion: nil)
         }
     }

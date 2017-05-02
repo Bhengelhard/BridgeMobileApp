@@ -130,6 +130,13 @@ class SwipeCard: UIView {
         return CGRect(x: originX, y: originY, width: width, height: height)
     }
     
+    func clear() {
+        topHalf.setImage(image: nil)
+        topHalf.setName(name: "")
+        bottomHalf.setImage(image: nil)
+        bottomHalf.setName(name: "")
+    }
+    
     // MARK: - Targets
     // Present External View Controller with ID of Top Half Card
     func topHalfCardtapped(_ gestureRecognizer: UITapGestureRecognizer) {

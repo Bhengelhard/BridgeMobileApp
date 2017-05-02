@@ -62,6 +62,13 @@ class SwipeBackend {
     }
     
     private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+        
+        if top {
+            gotTopBridgePairing = false
+        } else {
+            gotBottomBridgePairing = false
+        }
+        
         User.getCurrent { (user) in
             
             if top {
@@ -106,7 +113,6 @@ class SwipeBackend {
     
     private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         
-        
         if top {
             print("got top from parse")
         } else {
@@ -122,15 +128,20 @@ class SwipeBackend {
                 shownTo = [userID]
             }
             bridgePairing.shownTo = shownTo
-            bridgePairing.save()
         }
         
         bridgePairing.getUser1 { (user1) in
-            if let user1PictureIDs = user1.pictureIDs {
-                if user1PictureIDs.count > 0 { // user1 pic exists
-                    bridgePairing.getUser2 { (user2) in
+            bridgePairing.getUser2 { (user2) in
+                var hasPics = false
+                if let user1PictureIDs = user1.pictureIDs {
+                    if user1PictureIDs.count > 0 { // user1 pic exists
                         if let user2PictureIDs = user2.pictureIDs {
-                            if user2PictureIDs.count > 0 { // user2 pic exists                                
+                            if user2PictureIDs.count > 0 { // user2 pic exists  
+                                hasPics = true
+                                
+                                swipeCard.alpha = 1
+                                swipeCard.isUserInteractionEnabled = true
+                                
                                 if top {
                                     self.gotTopBridgePairing = true
                                     self.topBridgePairing = bridgePairing
@@ -149,42 +160,38 @@ class SwipeBackend {
                                 
                                 bridgePairing.checkedOut = true
                                 
-                                bridgePairing.save()
-                                
-                                swipeCard.alpha = 1
-                                
                                 swipeCard.initialize(bridgePairing: bridgePairing)
                                 //if !top {
                                 //    swipeCard.addOverlay()
                                 //}
-                                if let completion = completion {
-                                    completion()
+                                
+                                bridgePairing.save { (_) in
+                                    if let completion = completion {
+                                        completion()
+                                    }
                                 }
-                            } else {
-                                self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                             }
-                        } else {
-                            self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                         }
                     }
-                } else {
-                    self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                 }
-            } else {
-                self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                if !hasPics {
+                    bridgePairing.save { (_) in
+                        self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    }
+                }
             }
         }
     }
     
     private func gotNoBridgePairings(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
-        swipeCard.alpha = 0
-        
         if top {
             print("did not get top from parse")
+            gotTopBridgePairing = true
         } else {
             print("did not get bottom from parse")
+            gotBottomBridgePairing = true
         }
-        
+                
         if top {
             self.topBridgePairing = nil
             
@@ -202,12 +209,12 @@ class SwipeBackend {
         
         self.localBridgePairings.synchronize()
         
-        if let noMoreBridgePairings = noMoreBridgePairings {
-            noMoreBridgePairings()
-        }
-        
         if let completion = completion {
             completion()
+        }
+        
+        if let noMoreBridgePairings = noMoreBridgePairings {
+            noMoreBridgePairings()
         }
     }
     
@@ -269,7 +276,6 @@ class SwipeBackend {
     }
     
     func checkIn() {
-        print("checking in top card")
         if let topBridgePairing = topBridgePairing {
             topBridgePairing.checkedOut = false
             topBridgePairing.save()
