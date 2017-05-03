@@ -22,7 +22,7 @@ class ThreadViewController: UIViewController {
     var newMatchesTableViewCell: NewMatchesTableViewCell?
     
     var didSetupConstraints = false
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,7 +31,6 @@ class ThreadViewController: UIViewController {
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         messagesVC.layout = layout
-        
     }
     
     override func loadView() {
@@ -44,7 +43,6 @@ class ThreadViewController: UIViewController {
     
     override func updateViewConstraints() {
         didSetupConstraints = layout.initialize(view: view, messagesVC: messagesVC, didSetupConstraints: didSetupConstraints)
-        
         
         super.updateViewConstraints()
     }
@@ -103,7 +101,8 @@ class ThreadViewController: UIViewController {
                     if let userID = user.id {
                         let externalProfileVC = ExternalProfileViewController()
                         externalProfileVC.setUserID(userID: userID)
-                        self.present(externalProfileVC, animated: true, completion: nil)
+                        externalProfileVC.hideMessageButton()
+                        self.present(externalProfileVC, animated: true)
                     }
                 }
             }
@@ -114,11 +113,11 @@ class ThreadViewController: UIViewController {
 }
 
 class NecterJSQMessagesViewController: JSQMessagesViewController {
-    var threadBackend = ThreadBackend()
     var messageID: String?
     var incomingBubble: JSQMessagesBubbleImage!
     var outgoingBubble: JSQMessagesBubbleImage!
     var layout: ThreadLayout?
+    var threadBackend = ThreadBackend()
 
     var otherId = String()
     var otherDisplayName = String()
@@ -171,27 +170,31 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                 
                 collectionView.reloadData()
             }
+            
+            let hud = MBProgressHUD.showAdded(to: view, animated: true)
+            hud.label.text = "Loading..."
+            
+            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
+                self.scrollToBottom(animated: true)
+                if self.threadBackend.jsqMessages.count == 0 {
+                    if let layout = self.layout {
+                        layout.noMessagesView.alpha = 1
+                    }
+                }
+                
+                MBProgressHUD.hide(for: self.view, animated: true)
+            }
+            
             //collectionView.backgroundColor = DisplayUtility.gradientColor(size: collectionView.frame.size)
         }
     }
     
+    /*
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud.label.text = "Loading..."
         
-        threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
-            self.scrollToBottom(animated: true)
-            if self.threadBackend.jsqMessages.count == 0 {
-                if let layout = self.layout {
-                    layout.noMessagesView.alpha = 1
-                }
-            }
-            
-            MBProgressHUD.hide(for: self.view, animated: true)
-        }
-    }
+    }*/
     
     
     // MARK: JSQMessagesViewController method overrides

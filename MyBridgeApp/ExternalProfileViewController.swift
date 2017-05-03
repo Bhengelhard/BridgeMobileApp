@@ -16,6 +16,7 @@ class ExternalProfileViewController: UIViewController {
     let transitionManager = TransitionManager()
     var userID: String?
     let externalProfileBackend = ExternalProfileBackend()
+    var threadVC: ThreadViewController?
     
     var didSetupConstraints = false
     
@@ -60,7 +61,7 @@ class ExternalProfileViewController: UIViewController {
     }
     
     // MARK: - Setters
-    
+        
     func setMainProfilePictureAndUserID(image: UIImage, userID: String?) {
         layout.profilePicturesVC.addImage(image: image)
         setUserID(userID: userID, mainProfilePictureSet: true)
