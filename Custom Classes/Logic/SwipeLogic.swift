@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import Firebase
 
 class SwipeLogic {
     
@@ -130,6 +131,30 @@ class SwipeLogic {
     
     // Animate swiping and replace
     static func didSwipe(right: Bool, vc: SwipeViewController) {
+        
+        // Loging swiping as an event
+        let title = "swipe"
+        FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
+            kFIRParameterItemID: "id-\(title)" as NSObject,
+            kFIRParameterItemName: title as NSObject,
+            kFIRParameterContentType: "swipe" as NSObject
+            ])
+        
+        if right {
+            let title2 = "swipeRight"
+            FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
+                kFIRParameterItemID: "id-\(title2)" as NSObject,
+                kFIRParameterItemName: title2 as NSObject,
+                kFIRParameterContentType: "swipe" as NSObject
+                ])
+        } else {
+            let title2 = "swipeLeft"
+            FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
+                kFIRParameterItemID: "id-\(title2)" as NSObject,
+                kFIRParameterItemName: title2 as NSObject,
+                kFIRParameterContentType: "swipe" as NSObject
+                ])
+        }
         
         let view = vc.view!
         let swipeBackend = vc.swipeBackend
