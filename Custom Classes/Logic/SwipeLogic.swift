@@ -132,26 +132,19 @@ class SwipeLogic {
     // Animate swiping and replace
     static func didSwipe(right: Bool, vc: SwipeViewController) {
         
-        // Loging swiping as an event
-        let title = "swipe"
-        FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
-            kFIRParameterItemID: "id-\(title)" as NSObject,
-            kFIRParameterItemName: title as NSObject,
-            kFIRParameterContentType: "swipe" as NSObject
-            ])
-        
+        // Loging swiping right and left as events
         if right {
-            let title2 = "swipeRight"
+            let title = "swipeRight"
             FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
-                kFIRParameterItemID: "id-\(title2)" as NSObject,
-                kFIRParameterItemName: title2 as NSObject,
+                kFIRParameterItemID: "id-\(title)" as NSObject,
+                kFIRParameterItemName: title as NSObject,
                 kFIRParameterContentType: "swipe" as NSObject
                 ])
         } else {
-            let title2 = "swipeLeft"
+            let title = "swipeLeft"
             FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
-                kFIRParameterItemID: "id-\(title2)" as NSObject,
-                kFIRParameterItemName: title2 as NSObject,
+                kFIRParameterItemID: "id-\(title)" as NSObject,
+                kFIRParameterItemName: title as NSObject,
                 kFIRParameterContentType: "swipe" as NSObject
                 ])
         }
