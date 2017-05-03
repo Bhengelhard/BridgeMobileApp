@@ -34,7 +34,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         messagesBackend.reloadMessagesTable(tableView: layout.messagesTable)
         
         newMatchesTableViewCell.parentVC = self
-        newMatchesTableViewCell.tableView = layout.messagesTable
 
         messagesBackend.loadNewMatches(newMatchesTableViewCell: newMatchesTableViewCell)
 

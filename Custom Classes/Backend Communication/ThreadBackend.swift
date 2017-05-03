@@ -173,7 +173,6 @@ class ThreadBackend {
                                 // update badge count
                                 //DBSavingFunctions.decrementBadge()
                                 
-                                message.user1HasSeenLastSingleMessage = true
                             }
                             message.user1HasSeenLastSingleMessage = true
                            
@@ -182,9 +181,8 @@ class ThreadBackend {
                                 print("decrement badge 2")
                                 // update badge count
                                 //DBSavingFunctions.decrementBadge()
-                                
-                                message.user2HasSeenLastSingleMessage = true
                             }
+                            message.user2HasSeenLastSingleMessage = true
                         }
                     }
                     message.save()
