@@ -101,13 +101,9 @@ public final class ActivityData {
 
 /// Presenter that displays NVActivityIndicatorView as UI blocker.
 public final class NVActivityIndicatorPresenter {
-    private enum State {
-        case waitingToShow
-        case showed
-        case waitingToHide
-        case hidden
-    }
-
+    private var showTimer: Timer?
+    private var hideTimer: Timer?
+    private var isStopAnimatingCalled = false
     private let restorationIdentifier = "NVActivityIndicatorViewContainer"
     private let messageLabel: UILabel = {
         let label = UILabel()
@@ -119,13 +115,10 @@ public final class NVActivityIndicatorPresenter {
         return label
     }()
 
-    private var state: State = .hidden
-    private let startAnimatingGroup = DispatchGroup()
-
     /// Shared instance of `NVActivityIndicatorPresenter`.
     public static let sharedInstance = NVActivityIndicatorPresenter()
 
-    private init() {}
+    private init() { }
 
     // MARK: - Public interface
 
@@ -135,42 +128,40 @@ public final class NVActivityIndicatorPresenter {
      - parameter data: Information package used to display UI blocker.
      */
     public final func startAnimating(_ data: ActivityData) {
-        guard state == .hidden else { return }
-
-        state = .waitingToShow
-        startAnimatingGroup.enter()
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(data.displayTimeThreshold)) {
-            guard self.state == .waitingToShow else {
-                self.startAnimatingGroup.leave()
-
-                return
-            }
-
-            self.show(with: data)
-            self.startAnimatingGroup.leave()
-        }
+        guard showTimer == nil else { return }
+        isStopAnimatingCalled = false
+        showTimer = scheduledTimer(data.displayTimeThreshold, selector: #selector(showTimerFired(_:)), data: data)
     }
 
     /**
      Remove UI blocker.
      */
     public final func stopAnimating() {
-        _hide()
+        isStopAnimatingCalled = true
+        guard hideTimer == nil else { return }
+        hide()
     }
 
     /// Set message displayed under activity indicator view.
     ///
     /// - Parameter message: message displayed under activity indicator view.
     public final func setMessage(_ message: String?) {
-        guard state == .showed else {
-            startAnimatingGroup.notify(queue: DispatchQueue.main) {
-                self.messageLabel.text = message
-            }
-
-            return
-        }
-
         messageLabel.text = message
+    }
+
+    // MARK: - Timer events
+
+    @objc private func showTimerFired(_ timer: Timer) {
+        guard let activityData = timer.userInfo as? ActivityData else { return }
+        show(with: activityData)
+    }
+
+    @objc private func hideTimerFired(_ timer: Timer) {
+        hideTimer?.invalidate()
+        hideTimer = nil
+        if isStopAnimatingCalled {
+            hide()
+        }
     }
 
     // MARK: - Helpers
@@ -198,11 +189,11 @@ public final class NVActivityIndicatorPresenter {
             let yConstraint = NSLayoutConstraint(item: containerView, attribute: .centerY, relatedBy: .equal, toItem: activityIndicatorView, attribute: .centerY, multiplier: 1, constant: 0)
 
             containerView.addConstraints([xConstraint, yConstraint])
-        }())
+            }())
 
         messageLabel.font = activityData.messageFont
         messageLabel.textColor = activityData.textColor
-        messageLabel.text = activityData.message
+        setMessage(activityData.message)
         containerView.addSubview(messageLabel)
 
         // Add constraints for `messageLabel`.
@@ -211,17 +202,16 @@ public final class NVActivityIndicatorPresenter {
             let trailingConstraint = NSLayoutConstraint(item: containerView, attribute: .trailing, relatedBy: .equal, toItem: messageLabel, attribute: .trailing, multiplier: 1, constant: 8)
 
             containerView.addConstraints([leadingConstraint, trailingConstraint])
-        }())
+            }())
         ({
             let spacingConstraint = NSLayoutConstraint(item: messageLabel, attribute: .top, relatedBy: .equal, toItem: activityIndicatorView, attribute: .bottom, multiplier: 1, constant: 8)
 
             containerView.addConstraint(spacingConstraint)
-        }())
+            }())
 
         guard let keyWindow = UIApplication.shared.keyWindow else { return }
 
         keyWindow.addSubview(containerView)
-        state = .showed
 
         // Add constraints for `containerView`.
         ({
@@ -231,19 +221,9 @@ public final class NVActivityIndicatorPresenter {
             let bottomConstraint = NSLayoutConstraint(item: keyWindow, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1, constant: 0)
 
             keyWindow.addConstraints([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
-        }())
+            }())
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(activityData.minimumDisplayTime)) {
-            self._hide()
-        }
-    }
-
-    private func _hide() {
-        if state == .waitingToHide {
-            hide()
-        } else if state != .hidden {
-            state = .waitingToHide
-        }
+        hideTimer = scheduledTimer(activityData.minimumDisplayTime, selector: #selector(hideTimerFired(_:)), data: nil)
     }
 
     private func hide() {
@@ -251,8 +231,17 @@ public final class NVActivityIndicatorPresenter {
 
         for item in keyWindow.subviews
             where item.restorationIdentifier == restorationIdentifier {
-            item.removeFromSuperview()
+                item.removeFromSuperview()
         }
-        state = .hidden
+        showTimer?.invalidate()
+        showTimer = nil
+    }
+
+    private func scheduledTimer(_ timeInterval: Int, selector: Selector, data: ActivityData?) -> Timer {
+        return Timer.scheduledTimer(timeInterval: Double(timeInterval) / 1000,
+                                    target: self,
+                                    selector: selector,
+                                    userInfo: data,
+                                    repeats: false)
     }
 }
