@@ -189,12 +189,10 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         }
     }
     
-    /*
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        
-    }*/
+        self.scrollToBottom(animated: true)
+    }
     
     
     // MARK: JSQMessagesViewController method overrides

@@ -114,9 +114,17 @@ class SwipeBackend {
     private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         
         if top {
-            print("got top from parse")
+            if let bridgePairingID = bridgePairing.id {
+                print("got top from parse with id \(bridgePairingID)")
+            } else {
+                print("got top from parse")
+            }
         } else {
-            print("got bottom from parse")
+            if let bridgePairingID = bridgePairing.id {
+                print("got bottom from parse with id \(bridgePairingID)")
+            } else {
+                print("got bottom from parse")
+            }
         }
         
         if let userID = user.id {
@@ -241,8 +249,11 @@ class SwipeBackend {
     func setInitialTopSwipeCard(topSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         gotTopBridgePairing = false
         if let bridgePairingID = localBridgePairings.getBridgePairing1ID() { // bridge pairing ID stored locally
-            print("got top locally")
+            print("got top locally with id: \(bridgePairingID)")
             BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
+                topSwipeCard.alpha = 1
+                topSwipeCard.isUserInteractionEnabled = true
+                
                 self.topBridgePairing = bridgePairing
                 self.gotTopBridgePairing = true
                 topSwipeCard.initialize(bridgePairing: bridgePairing)
@@ -260,8 +271,11 @@ class SwipeBackend {
     func setInitialBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         gotBottomBridgePairing = false
         if let bridgePairingID = localBridgePairings.getBridgePairing2ID() { // bridge pairing ID stored locally
-            print("got bottom locally")
+            print("got bottom locally with id: \(bridgePairingID)")
             BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
+                bottomSwipeCard.alpha = 1
+                bottomSwipeCard.isUserInteractionEnabled = true
+                
                 self.bottomBridgePairing = bridgePairing
                 self.gotBottomBridgePairing = true
                 bottomSwipeCard.initialize(bridgePairing: bridgePairing)
