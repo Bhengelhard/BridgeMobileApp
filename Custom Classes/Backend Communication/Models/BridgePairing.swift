@@ -435,16 +435,9 @@ class BridgePairing: NSObject {
     }
     
     private func getPicture(withID id: String, withBlock block: Picture.PictureBlock? = nil) {
-        if let picture = pictureIDsToPictures[id] {
+        Picture.get(withID: id) { (picture) in
             if let block = block {
                 block(picture)
-            }
-        } else {
-            Picture.get(withID: id) { (picture) in
-                self.pictureIDsToPictures[id] = picture
-                if let block = block {
-                    block(picture)
-                }
             }
         }
     }
