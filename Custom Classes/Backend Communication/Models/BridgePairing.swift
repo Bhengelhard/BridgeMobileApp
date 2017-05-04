@@ -107,10 +107,7 @@ class BridgePairing: NSObject {
     var youMatchedNotificationViewedUser1: Bool?
     
     var youMatchedNotificationViewedUser2: Bool?
-    
-    private var userIDsToUsers = [String: User]()
-    private var pictureIDsToPictures = [String: Picture]()
-    
+        
     private init(parseBridgePairing: PFObject) {
         self.parseBridgePairing = parseBridgePairing
         
@@ -401,27 +398,22 @@ class BridgePairing: NSObject {
     /// Gets user in Message that is not the current user. Defaults to User 1.
     func getNonCurrentUser(withBlock block: User.UserBlock? = nil) {
         User.getCurrent { (currentUser) in
-            if currentUser.id == self.user1ID {
-                self.getUser2(withBlock: block)
-            } else {
-                self.getUser1(withBlock: block)
+            if let currentUser = currentUser {
+                if currentUser.id == self.user1ID {
+                    self.getUser2(withBlock: block)
+                } else {
+                    self.getUser1(withBlock: block)
+                }
             }
         }
     }
     
     private func getUser(withID id: String, withBlock block: User.UserBlock? = nil) {
-//        if let user = userIDsToUsers[id] {
-//            if let block = block {
-//                block(user)
-//            }
-//        } else {
-            User.get(withID: id) { (user) in
-                self.userIDsToUsers[id] = user
-                if let block = block {
-                    block(user)
-                }
+        User.get(withID: id) { (user) in
+            if let block = block {
+                block(user)
             }
-        //}
+        }
     }
     
     func getUser1Picture(withBlock block: Picture.PictureBlock? = nil) {

@@ -441,25 +441,20 @@ class Message: NSObject {
     /// Gets user in Message that is not the current user. Defaults to User 1.
     func getNonCurrentUser(withBlock block: User.UserBlock? = nil) {
         User.getCurrent { (currentUser) in
-            if currentUser.id == self.user1ID {
-                self.getUser2(withBlock: block)
-            } else {
-                self.getUser1(withBlock: block)
+            if let currentUser = currentUser {
+                if currentUser.id == self.user1ID {
+                    self.getUser2(withBlock: block)
+                } else {
+                    self.getUser1(withBlock: block)
+                }
             }
         }
     }
     
     private func getUser(withID id: String, withBlock block: User.UserBlock? = nil) {
-        if let user = userIDsToUsers[id] {
+        User.get(withID: id) { (user) in
             if let block = block {
                 block(user)
-            }
-        } else {
-            User.get(withID: id) { (user) in
-                self.userIDsToUsers[id] = user
-                if let block = block {
-                    block(user)
-                }
             }
         }
     }
