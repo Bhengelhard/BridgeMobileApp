@@ -181,8 +181,10 @@ class SwipeLogic {
             bridgePairingID = bridgePairing.id
         }
         User.getCurrent { (user) in
-            Swipe.create(bridgePairingID: bridgePairingID, swiperID: user.id, swipedRight: right) { (swipe) in
-                swipe.save()
+            if let user = user {
+                Swipe.create(bridgePairingID: bridgePairingID, swiperID: user.id, swipedRight: right) { (swipe) in
+                    swipe.save()
+                }
             }
         }
         
@@ -229,12 +231,14 @@ class SwipeLogic {
                                 var connecterID = ""
                                 var connecterName = ""
                                 User.getCurrent(withBlock: { (user) in
-                                    if let id = user.id {
-                                        connecterID = id
-                                    }
-                                    
-                                    if let name = user.name {
-                                        connecterName = name
+                                    if let user = user {
+                                        if let id = user.id {
+                                            connecterID = id
+                                        }
+                                        
+                                        if let name = user.name {
+                                            connecterName = name
+                                        }
                                     }
                                 })
                                 

@@ -70,40 +70,41 @@ class SwipeBackend {
         }
         
         User.getCurrent { (user) in
-            
-            if top {
-                BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
-                    if bridgePairings.count > 0 {
-                        let bridgePairing = bridgePairings[0]
-                        self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                    } else {
-                        self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                    }
-                }
-            } else {
-                if let topBridgePairing = self.topBridgePairing {
-                    BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptFriend1WithID: topBridgePairing.user1ID, exceptFriend2WithID: topBridgePairing.user2ID, exceptForBlocked: true) { (bridgePairings) in
-                        if bridgePairings.count > 0 {
-                            let bridgePairing = bridgePairings[0]
-                            self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                        } else {
-                            BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
-                                if bridgePairings.count > 0 {
-                                    let bridgePairing = bridgePairings[0]
-                                    self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                                } else {
-                                    self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                                }
-                            }
-                        }
-                    }
-                } else {
+            if let user = user {
+                if top {
                     BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
                         if bridgePairings.count > 0 {
                             let bridgePairing = bridgePairings[0]
                             self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                         } else {
                             self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                        }
+                    }
+                } else {
+                    if let topBridgePairing = self.topBridgePairing {
+                        BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptFriend1WithID: topBridgePairing.user1ID, exceptFriend2WithID: topBridgePairing.user2ID, exceptForBlocked: true) { (bridgePairings) in
+                            if bridgePairings.count > 0 {
+                                let bridgePairing = bridgePairings[0]
+                                self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                            } else {
+                                BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
+                                    if bridgePairings.count > 0 {
+                                        let bridgePairing = bridgePairings[0]
+                                        self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                                    } else {
+                                        self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
+                            if bridgePairings.count > 0 {
+                                let bridgePairing = bridgePairings[0]
+                                self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                            } else {
+                                self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                            }
                         }
                     }
                 }
@@ -141,41 +142,45 @@ class SwipeBackend {
         bridgePairing.getUser1 { (user1) in
             bridgePairing.getUser2 { (user2) in
                 var hasPics = false
-                if let user1PictureIDs = user1.pictureIDs {
-                    if user1PictureIDs.count > 0 { // user1 pic exists
-                        if let user2PictureIDs = user2.pictureIDs {
-                            if user2PictureIDs.count > 0 { // user2 pic exists  
-                                hasPics = true
-                                
-                                swipeCard.alpha = 1
-                                swipeCard.isUserInteractionEnabled = true
-                                
-                                if top {
-                                    self.gotTopBridgePairing = true
-                                    self.topBridgePairing = bridgePairing
-                                    
-                                    // store bridge pairing locally
-                                    self.localBridgePairings.setBridgePairing1ID(bridgePairing.id)
-                                } else {
-                                    self.gotBottomBridgePairing = true
-                                    self.bottomBridgePairing = bridgePairing
-                                    
-                                    // store bridge pairing locally
-                                    self.localBridgePairings.setBridgePairing2ID(bridgePairing.id)
-                                }
-                                
-                                self.localBridgePairings.synchronize()
-                                
-                                bridgePairing.checkedOut = true
-                                
-                                swipeCard.initialize(bridgePairing: bridgePairing)
-                                //if !top {
-                                //    swipeCard.addOverlay()
-                                //}
-                                
-                                bridgePairing.save { (_) in
-                                    if let completion = completion {
-                                        completion()
+                if let user1 = user1 {
+                    if let user2 = user2 {
+                        if let user1PictureIDs = user1.pictureIDs {
+                            if user1PictureIDs.count > 0 { // user1 pic exists
+                                if let user2PictureIDs = user2.pictureIDs {
+                                    if user2PictureIDs.count > 0 { // user2 pic exists  
+                                        hasPics = true
+                                        
+                                        swipeCard.alpha = 1
+                                        swipeCard.isUserInteractionEnabled = true
+                                        
+                                        if top {
+                                            self.gotTopBridgePairing = true
+                                            self.topBridgePairing = bridgePairing
+                                            
+                                            // store bridge pairing locally
+                                            self.localBridgePairings.setBridgePairing1ID(bridgePairing.id)
+                                        } else {
+                                            self.gotBottomBridgePairing = true
+                                            self.bottomBridgePairing = bridgePairing
+                                            
+                                            // store bridge pairing locally
+                                            self.localBridgePairings.setBridgePairing2ID(bridgePairing.id)
+                                        }
+                                        
+                                        self.localBridgePairings.synchronize()
+                                        
+                                        bridgePairing.checkedOut = true
+                                        
+                                        swipeCard.initialize(bridgePairing: bridgePairing)
+                                        //if !top {
+                                        //    swipeCard.addOverlay()
+                                        //}
+                                        
+                                        bridgePairing.save { (_) in
+                                            if let completion = completion {
+                                                completion()
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -298,8 +303,10 @@ class SwipeBackend {
     
     func getCurrentUserUnviewedMacthes(withBlock block: @escaping BridgePairing.BridgePairingsBlock) {
         User.getCurrent { (user) in
-            BridgePairing.getAll(withUser: user, bridgedOnly: true, whereUserHasNotViewedNotificationOnly: true) { (bridgePairings) in
-                block(bridgePairings)
+            if let user = user {
+                BridgePairing.getAll(withUser: user, bridgedOnly: true, whereUserHasNotViewedNotificationOnly: true) { (bridgePairings) in
+                    block(bridgePairings)
+                }
             }
         }
     }
