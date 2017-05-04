@@ -107,8 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadTheThread"), object: nil)
         NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadTheMessageTable"), object: nil)
-        //NotificationCenter.default.post(name: Notification.Name(rawValue: "updateBridgePage"), object: nil, userInfo: userInfo)
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "displayInboxIconNotification"), object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "displayInboxIconNotification"), object: nil)
         
         //Segueing to Appropriate View
         let messageType = userInfo["messageType"] as? String
