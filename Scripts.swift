@@ -37,6 +37,7 @@
 //    static func changeAllWithSingleMessageToHasPosted() {
 //        let query = PFQuery(className: "Messages")
 //        query.whereKeyExists("last_single_message")
+//
 //        query.limit = 10000
 //        query.findObjectsInBackground { (objects, error) in
 //            if error == nil {
@@ -44,6 +45,7 @@
 //                    for object in objects {
 //                        object["user1_has_posted"] = true
 //                        object["user2_has_posted"] = true
+//                        object.saveInBackground()
 //                    }
 //                }
 //                
