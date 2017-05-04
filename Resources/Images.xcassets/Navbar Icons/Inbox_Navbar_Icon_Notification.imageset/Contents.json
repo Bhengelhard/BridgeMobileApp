@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "filename" : "NavBar_InboxNotify.png",
+      "filename" : "NavBarNotification.png",
       "scale" : "1x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "NavBar_InboxNotify@2x.png",
+      "filename" : "NavBarNotification@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "NavBar_InboxNotify@3x.png",
+      "filename" : "NavBarNotification@3x.png",
       "scale" : "3x"
     }
   ],

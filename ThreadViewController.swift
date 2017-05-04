@@ -289,9 +289,7 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                                         
                                         // Push notification to other user
                                         PFCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
-                                        
-                                        print("sent the push notification")
-                                        
+                    
                                     })
                                 }
                                 
