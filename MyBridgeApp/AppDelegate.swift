@@ -4,6 +4,7 @@ import Parse
 import FBSDKCoreKit
 import FBSDKLoginKit
 import ParseFacebookUtilsV4
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //--------------------------------------
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Configure Firebase analytics
+        FIRApp.configure()
+        
         // Enable storing and querying data from Local Datastore.
         // Remove this line if you don't want to use Local Datastore features or want to use cachePolicy.
         Parse.enableLocalDatastore()
@@ -120,7 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = mainPageViewController
-            }else if application.applicationState == UIApplicationState.background {
+            } else if application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Background")
             } else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")

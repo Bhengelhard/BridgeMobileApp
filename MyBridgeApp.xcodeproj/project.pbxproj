@@ -16,6 +16,7 @@
 		302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799D91E579FC300AFFB90 /* SwipeViewController.swift */; };
 		302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799DB1E57A71800AFFB90 /* SwipeLayout.swift */; };
 		302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799DD1E57A72700AFFB90 /* SwipeObjects.swift */; };
+		30295A301EB9928000C649BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30295A2F1EB9928000C649BB /* GoogleService-Info.plist */; };
 		3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B01DD54E3F0077F7AC /* LocalData.swift */; };
 		3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */; };
 		3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B21DD54E3F0077F7AC /* PairInfo.swift */; };
@@ -126,6 +127,7 @@
 		302799D91E579FC300AFFB90 /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeViewController.swift; path = MyBridgeApp/SwipeViewController.swift; sourceTree = SOURCE_ROOT; };
 		302799DB1E57A71800AFFB90 /* SwipeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeLayout.swift; path = "Custom Classes/UI Functions/SwipeLayout.swift"; sourceTree = "<group>"; };
 		302799DD1E57A72700AFFB90 /* SwipeObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeObjects.swift; path = "Custom Classes/UI Functions/SwipeObjects.swift"; sourceTree = "<group>"; };
+		30295A2F1EB9928000C649BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3030C0B01DD54E3F0077F7AC /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalData.swift; path = "Custom Classes/Data Storage/LocalData.swift"; sourceTree = "<group>"; };
 		3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalStorageUtility.swift; path = "Custom Classes/Data Storage/LocalStorageUtility.swift"; sourceTree = "<group>"; };
 		3030C0B21DD54E3F0077F7AC /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PairInfo.swift; path = "Custom Classes/Data Storage/PairInfo.swift"; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */,
 				814C3AC81B69877600E307BB /* Images.xcassets */,
 				814C3AC91B69877600E307BB /* Info.plist */,
+				30295A2F1EB9928000C649BB /* GoogleService-Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -615,6 +618,7 @@
 			files = (
 				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
 				30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */,
+				30295A301EB9928000C649BB /* GoogleService-Info.plist in Resources */,
 				30A726F21E2683850070B620 /* Main.storyboard in Resources */,
 				30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */,
 			);
