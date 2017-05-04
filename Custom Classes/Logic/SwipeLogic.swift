@@ -97,7 +97,7 @@ class SwipeLogic {
             if swipeCard.center.x < 0.25*DisplayUtility.screenWidth {
                 // If this is the user's first time swiping left then display pop-up
                 let localData = LocalData()
-                let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
+                let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft() ?? false
                 if isFirstTimeSwipedLeft {
                     //show alert for swiping right here and then bridging or not
                     let alert = UIAlertController(title: "Don't Connect?", message: "Dragging a pair of pictures to the left indicates you do not want to introduce the friends shown.", preferredStyle: UIAlertControllerStyle.alert)
