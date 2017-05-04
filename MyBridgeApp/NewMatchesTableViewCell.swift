@@ -19,7 +19,6 @@ class NewMatchesTableViewCell: UITableViewCell {
     let gradientLayer = DisplayUtility.gradientLayer()
     var newMatchViews = [NewMatchView]()
     var noNewMatchesLabel = UILabel()
-    var tableView: UITableView?
     var shouldSetUpConstraints = true
     
     init() {
@@ -216,7 +215,6 @@ class NewMatchesTableViewCell: UITableViewCell {
             if let view = gesture.view {
                 if let newMatchView = view as? NewMatchView {
                     messagesVC.goToThread(messageID: newMatchView.message.id)
-
                 }
             }
         }
