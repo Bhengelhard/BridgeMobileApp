@@ -338,15 +338,22 @@ class Message: NSObject {
         if let userID = user.id {
             let subQuery1 = PFQuery(className: "Messages")
             subQuery1.whereKey("user1_objectId", equalTo: userID)
+            // Include only messages where the current user has yet to post
+            subQuery1.whereKey("user1_has_posted", notEqualTo: true)
             let subQuery2 = PFQuery(className: "Messages")
             subQuery2.whereKey("user2_objectId", equalTo: userID)
+            // Include only messages where the current user has yet to post
+            subQuery2.whereKey("user2_has_posted", notEqualTo: true)
             
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
-            query.whereKeyDoesNotExist("last_single_message")
+            
+   
+            
             
             // Do not include any messages that are direct messages -> DMs that are unstarted will not display in New Matches view or messages table
             query.whereKeyExists("bridge_builder")
+            
             
             query.order(byDescending: "updatedAt")
             query.limit = limit

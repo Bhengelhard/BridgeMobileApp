@@ -25,8 +25,6 @@ class SwipeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Scripts.removeFromAllShownTos(userID: "4KJMpbpHnB")
-
         // Listeners
         // Listener for presentingExternalProfileVC
         NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC(_:)), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
@@ -55,7 +53,7 @@ class SwipeViewController: UIViewController {
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
         //dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
         
-        swipeBackend.getCurrentUserUnviewedMacthes { (bridgePairings) in
+        swipeBackend.getCurrentUserUnviewedMatches { (bridgePairings) in
             User.getCurrent { (currentUser) in
                 for bridgePairing in bridgePairings {
                     // create poppup view

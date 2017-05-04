@@ -296,7 +296,7 @@ class SwipeBackend {
         }
     }
     
-    func getCurrentUserUnviewedMacthes(withBlock block: @escaping BridgePairing.BridgePairingsBlock) {
+    func getCurrentUserUnviewedMatches(withBlock block: @escaping BridgePairing.BridgePairingsBlock) {
         User.getCurrent { (user) in
             BridgePairing.getAll(withUser: user, bridgedOnly: true, whereUserHasNotViewedNotificationOnly: true) { (bridgePairings) in
                 block(bridgePairings)
