@@ -24,6 +24,8 @@ class SwipeViewController: UIViewController {
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Scripts.removeFromAllShownTos(userID: "4KJMpbpHnB")
 
         // Listeners
         // Listener for presentingExternalProfileVC

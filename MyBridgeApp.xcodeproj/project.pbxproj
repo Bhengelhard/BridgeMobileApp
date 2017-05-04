@@ -77,6 +77,7 @@
 		81BA81791A49E0DB00E65899 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81781A49E0DB00E65899 /* AudioToolbox.framework */; };
 		81BA817B1A49E0E500E65899 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */; };
 		81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */; };
+		900DD61F1EBBC16900BD7E23 /* Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900DD61E1EBBC16900BD7E23 /* Scripts.swift */; };
 		9026A0681DDF83F1007CE4D9 /* NewMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9026A0671DDF83F1007CE4D9 /* NewMatch.swift */; };
 		9028FA3E1E4D2CC7002CC80F /* ReportUserMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9028FA3D1E4D2CC7002CC80F /* ReportUserMenu.swift */; };
 		903477BB1E652CB8007E2CAE /* SwipeBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903477BA1E652CB8007E2CAE /* SwipeBackend.swift */; };
@@ -192,6 +193,7 @@
 		81BA81781A49E0DB00E65899 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		81BA817A1A49E0E500E65899 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
+		900DD61E1EBBC16900BD7E23 /* Scripts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scripts.swift; sourceTree = "<group>"; };
 		9026A0671DDF83F1007CE4D9 /* NewMatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMatch.swift; path = "Custom Classes/Data Storage/NewMatch.swift"; sourceTree = "<group>"; };
 		9028FA3D1E4D2CC7002CC80F /* ReportUserMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportUserMenu.swift; path = "Custom Classes/Custom Views/ReportUserMenu.swift"; sourceTree = "<group>"; };
 		903477BA1E652CB8007E2CAE /* SwipeBackend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeBackend.swift; path = "Custom Classes/Backend Communication/SwipeBackend.swift"; sourceTree = "<group>"; };
@@ -450,6 +452,7 @@
 				90CD18BB1E8C328C00864519 /* MyBridgeApp-Bridging-Header.h */,
 				67AD26D51E31353400252575 /* Constants.swift */,
 				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
+				900DD61D1EBBC15900BD7E23 /* Scripts */,
 				67AD26D71E31353D00252575 /* Types */,
 				E9D6DF201D78820F00138A1F /* Custom Classes */,
 				81BA81471A49DA1800E65899 /* MyBridgeApp */,
@@ -505,6 +508,14 @@
 				81BA81761A49E0D500E65899 /* libsqlite3.dylib */,
 			);
 			name = "System Frameworks";
+			sourceTree = "<group>";
+		};
+		900DD61D1EBBC15900BD7E23 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				900DD61E1EBBC16900BD7E23 /* Scripts.swift */,
+			);
+			name = Scripts;
 			sourceTree = "<group>";
 		};
 		9034769B1E53988A0065B973 /* Models */ = {
@@ -697,6 +708,7 @@
 				302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */,
 				30A217DE1E7B442000CEBA80 /* EditProfileInfoBackend.swift in Sources */,
 				30BF6FF11E5BDD860008C2B5 /* MessagesViewController.swift in Sources */,
+				900DD61F1EBBC16900BD7E23 /* Scripts.swift in Sources */,
 				30BF6FED1E5BDB8A0008C2B5 /* MyProfileLayout.swift in Sources */,
 				3030C0B91DD54E3F0077F7AC /* UserInfoPair.swift in Sources */,
 				30BF6FF51E5BDDBD0008C2B5 /* MessagesObjects.swift in Sources */,
