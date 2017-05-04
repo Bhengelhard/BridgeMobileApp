@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let parseConfiguration = ParseClientConfiguration(block: { (ParseMutableClientConfiguration) -> Void in
             ParseMutableClientConfiguration.applicationId = "mybridgeapp230sd80sdfasjhfasjh3j39d893j2129djm4"
             ParseMutableClientConfiguration.clientKey = "kekdk39ds92j3ls0dk3947kk332"
-            ParseMutableClientConfiguration.server = "https://necter.herokuapp.com/parse"
+            ParseMutableClientConfiguration.server = "https://mybridgeapp.herokuapp.com/parse"
 //            ParseMutableClientConfiguration.applicationId = "mybridgeapp3498735421846jhlkjsdhf23d"
 //            ParseMutableClientConfiguration.clientKey = "euchnfbe73723ndn77sdkj3763"
 //            ParseMutableClientConfiguration.server = "https://mybridgeapp.herokuapp.com/parse"
