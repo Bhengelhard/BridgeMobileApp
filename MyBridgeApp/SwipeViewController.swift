@@ -24,6 +24,8 @@ class SwipeViewController: UIViewController {
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Scripts.removeFromAllShownTos(userID: "4KJMpbpHnB")
 
         // Listeners
         // Listener for presentingExternalProfileVC
@@ -32,7 +34,7 @@ class SwipeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "presentThreadVC"), object: nil)
         
         // Listener for updating inbox Icon
-//        NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "pushNotification"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(displayInboxIconNotification(_:)), name: NSNotification.Name(rawValue: "displayInboxIconNotification"), object: nil)
         
         // Add Targets for Swipe Cards
         layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
@@ -208,7 +210,13 @@ class SwipeViewController: UIViewController {
         }
     }
     
-    // MARK: - Navigation
+    // Upon Push Notification, display inbox Icon with notification dot
+    func displayInboxIconNotification(_ notification: Notification) {
+        print("displayInboxIconNotification")
+        layout.navBar.rightButton.setImage(#imageLiteral(resourceName: "Inbox_Navbar_Icon_Notification"), for: .normal)
+    }
+    
+    // MARK: - Navigationza
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination

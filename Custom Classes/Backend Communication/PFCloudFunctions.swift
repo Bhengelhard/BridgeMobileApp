@@ -113,6 +113,7 @@ class PFCloudFunctions {
         print("push notification called")
         PFCloud.callFunction(inBackground: "pushNotification", withParameters: parameters, block: {
             (response: Any?, error: Error?) in
+            print("cloud function called")
             if error == nil {
                 if let response = response as? String {
                     print(response)
