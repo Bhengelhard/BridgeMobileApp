@@ -140,30 +140,34 @@ class ExternalProfileViewController: UIViewController {
         print("messageButtonTapped")
         
         User.getCurrent { (currentUser) in
-            if let userID = self.userID {
-                User.get(withID: userID) { (otherUser) in
-                    // Create message with both of the retrieved users
-                    Message.create(user1ID: currentUser.id, user2ID: otherUser.id, connecterID: nil, user1Name: currentUser.name, user2Name: otherUser.name, user1PictureID: nil, user2PictureID: nil, lastSingleMessage: nil, user1HasSeenLastSingleMessage: true, user2HasSeenLastSingleMessage: false, user1HasPosted: false, user2HasPosted: false) { (message, isNew) in
-                        if isNew {
-                            message.save(withBlock: { (savedMessage) in
-                                print("message saved")
-                                if let messageId = savedMessage.id {
-                                    print("messageId: \(messageId)")
-                                    let threadVC = ThreadViewController()
-                                    threadVC.setMessageID(messageID: messageId)
-                                    self.present(threadVC, animated: true, completion: nil)
+            if let currentUser = currentUser {
+                if let userID = self.userID {
+                    User.get(withID: userID) { (otherUser) in
+                        if let otherUser = otherUser {
+                            // Create message with both of the retrieved users
+                            Message.create(user1ID: currentUser.id, user2ID: otherUser.id, connecterID: nil, user1Name: currentUser.name, user2Name: otherUser.name, user1PictureID: nil, user2PictureID: nil, lastSingleMessage: nil, user1HasSeenLastSingleMessage: true, user2HasSeenLastSingleMessage: false, user1HasPosted: false, user2HasPosted: false) { (message, isNew) in
+                                if isNew {
+                                    message.save(withBlock: { (savedMessage) in
+                                        print("message saved")
+                                        if let messageId = savedMessage.id {
+                                            print("messageId: \(messageId)")
+                                            let threadVC = ThreadViewController()
+                                            threadVC.setMessageID(messageID: messageId)
+                                            self.present(threadVC, animated: true, completion: nil)
+                                        }
+                                    })
+                                } else {
+                                    print("message didn't need to be saved")
+                                    print("message.id: \(message.id)")
+                                    if let messageId = message.id {
+                                        let threadVC = ThreadViewController()
+                                        threadVC.setMessageID(messageID: messageId)
+                                        self.present(threadVC, animated: true, completion: nil)
+                                    }
                                 }
-                            })
-                        } else {
-                            print("message didn't need to be saved")
-                            print("message.id: \(message.id)")
-                            if let messageId = message.id {
-                                let threadVC = ThreadViewController()
-                                threadVC.setMessageID(messageID: messageId)
-                                self.present(threadVC, animated: true, completion: nil)
+                                
                             }
                         }
-                        
                     }
                 }
             }

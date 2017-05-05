@@ -67,11 +67,13 @@ class EditProfileViewController: UIViewController {
             }
         }
         User.getCurrent { (user) in
-            self.layout.table.editProfilePicturesCell.setPicturesToUser(user: user) {
-                user.aboutMe = self.layout.table.aboutMeTableCell.textView.text
-                user.lookingFor = self.layout.table.lookingForTableCell.textView.text
-                user.save { (_) in
-                    self.dismiss(animated: true, completion: nil)
+            if let user = user {
+                self.layout.table.editProfilePicturesCell.setPicturesToUser(user: user) {
+                    user.aboutMe = self.layout.table.aboutMeTableCell.textView.text
+                    user.lookingFor = self.layout.table.lookingForTableCell.textView.text
+                    user.save { (_) in
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
             }
         }

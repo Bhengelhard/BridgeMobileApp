@@ -62,14 +62,16 @@ class MyProfileViewController: UIViewController {
     // Present ExternalUserViewController
     func profilePictureTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         User.getCurrent { (user) in
-            let externalProfileVC = ExternalProfileViewController()
-            if let image = self.layout.profilePicture.hexBackgroundImage {
-                externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: user.id)
-            } else {
-                externalProfileVC.setUserID(userID: user.id)
+            if let user = user {
+                let externalProfileVC = ExternalProfileViewController()
+                if let image = self.layout.profilePicture.hexBackgroundImage {
+                    externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: user.id)
+                } else {
+                    externalProfileVC.setUserID(userID: user.id)
+                }
+                externalProfileVC.hideMessageButton()
+                self.present(externalProfileVC, animated: true, completion: nil)
             }
-            externalProfileVC.hideMessageButton()
-            self.present(externalProfileVC, animated: true, completion: nil)
         }
     }
     

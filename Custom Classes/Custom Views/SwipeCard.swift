@@ -52,12 +52,14 @@ class SwipeCard: UIView {
         topHalf.layer.mask = topHalfShape
         
         bridgePairing.getUser1 { (user) in
-            if let name = user.name {
-                self.topHalf.setName(name: name)
-            }
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    self.topHalf.setImage(image: image)
+            if let user = user {
+                if let name = user.name {
+                    self.topHalf.setName(name: name)
+                }
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.topHalf.setImage(image: image)
+                    }
                 }
             }
         }
@@ -73,12 +75,14 @@ class SwipeCard: UIView {
         bottomHalf.layer.mask = bottomHalfShape
         
         bridgePairing.getUser2 { (user) in
-            if let name = user.name {
-                self.bottomHalf.setName(name: name)
-            }
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    self.bottomHalf.setImage(image: image)
+            if let user = user {
+                if let name = user.name {
+                    self.bottomHalf.setName(name: name)
+                }
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.bottomHalf.setImage(image: image)
+                    }
                 }
             }
         }
