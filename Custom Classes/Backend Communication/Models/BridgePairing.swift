@@ -365,7 +365,7 @@ class BridgePairing: NSObject {
                 } else if let parseBridgePairings = parseBridgePairings {
                     var bridgePairings = [BridgePairing]()
                     for parseBridgePairing in parseBridgePairings {
-                        print(parseBridgePairing["score"])
+                        //print(parseBridgePairing["score"])
                         let bridgePairing = BridgePairing(parseBridgePairing: parseBridgePairing)
                         bridgePairings.append(bridgePairing)
                     }

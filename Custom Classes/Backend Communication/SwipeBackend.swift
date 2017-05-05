@@ -141,14 +141,14 @@ class SwipeBackend {
         
         bridgePairing.getUser1 { (user1) in
             bridgePairing.getUser2 { (user2) in
-                var hasPics = false
+                var usersExistAndHavePics = false
                 if let user1 = user1 {
                     if let user2 = user2 {
                         if let user1PictureIDs = user1.pictureIDs {
                             if user1PictureIDs.count > 0 { // user1 pic exists
                                 if let user2PictureIDs = user2.pictureIDs {
                                     if user2PictureIDs.count > 0 { // user2 pic exists  
-                                        hasPics = true
+                                        usersExistAndHavePics = true
                                         
                                         swipeCard.alpha = 1
                                         swipeCard.isUserInteractionEnabled = true
@@ -176,7 +176,7 @@ class SwipeBackend {
                                         //    swipeCard.addOverlay()
                                         //}
                                         
-                                        bridgePairing.save { (_) in
+                                        bridgePairing.save { (bridgePairing) in
                                             if let completion = completion {
                                                 completion()
                                             }
@@ -187,7 +187,7 @@ class SwipeBackend {
                         }
                     }
                 }
-                if !hasPics {
+                if !usersExistAndHavePics {
                     bridgePairing.save { (_) in
                         self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                     }
