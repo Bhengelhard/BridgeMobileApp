@@ -101,9 +101,15 @@ class ThreadViewController: UIViewController {
                     if let user = user {
                         if let userID = user.id {
                             let externalProfileVC = ExternalProfileViewController()
-                            externalProfileVC.setUserID(userID: userID)
                             externalProfileVC.hideMessageButton()
-                            self.present(externalProfileVC, animated: true)
+
+                            if let image = self.layout.navBar.titleImageView.image {
+                                externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: userID)
+                                self.present(externalProfileVC, animated: true)
+                            } else {
+                                externalProfileVC.setUserID(userID: userID)
+                                self.present(externalProfileVC, animated: true)
+                            }
                         }
                     }
                 }

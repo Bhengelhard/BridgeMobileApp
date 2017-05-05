@@ -24,6 +24,9 @@ class ExternalProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        layout.profilePicturesVC.view.isUserInteractionEnabled = false
+        self.layout.profilePicturesVC.pageControl.alpha = 0
+        
         layout.dismissButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
         layout.messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
         
@@ -96,9 +99,8 @@ class ExternalProfileViewController: UIViewController {
                     self.layout.profilePicturesVC.addImage(image: image)
                 }
                 
-                if images.count <= 1 {
-                    self.layout.profilePicturesVC.pageControl.alpha = 0
-                } else {
+                if images.count > 1 {
+                    self.layout.profilePicturesVC.view.isUserInteractionEnabled = true
                     self.layout.profilePicturesVC.pageControl.alpha = 1
                 }
                 
