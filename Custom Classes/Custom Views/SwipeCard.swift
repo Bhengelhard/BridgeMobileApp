@@ -52,12 +52,14 @@ class SwipeCard: UIView {
         topHalf.layer.mask = topHalfShape
         
         bridgePairing.getUser1 { (user) in
-            if let name = user.name {
-                self.topHalf.setName(name: name)
-            }
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    self.topHalf.setImage(image: image)
+            if let user = user {
+                if let name = user.name {
+                    self.topHalf.setName(name: name)
+                }
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.topHalf.setImage(image: image)
+                    }
                 }
             }
         }
@@ -73,12 +75,14 @@ class SwipeCard: UIView {
         bottomHalf.layer.mask = bottomHalfShape
         
         bridgePairing.getUser2 { (user) in
-            if let name = user.name {
-                self.bottomHalf.setName(name: name)
-            }
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    self.bottomHalf.setImage(image: image)
+            if let user = user {
+                if let name = user.name {
+                    self.bottomHalf.setName(name: name)
+                }
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.bottomHalf.setImage(image: image)
+                    }
                 }
             }
         }
@@ -141,18 +145,26 @@ class SwipeCard: UIView {
     // Present External View Controller with ID of Top Half Card
     func topHalfCardtapped(_ gestureRecognizer: UITapGestureRecognizer) {
         print("top half card tapped")
-        if let userId = bridgePairing?.user1ID {
+        if let userID = bridgePairing?.user1ID {
             // Notify SwipeViewController to present the tapped User
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userId)
+            if let image = topHalf.photoView.image {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: (userID, image))
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userID)
+            }
         }
     }
     
     // Present External View Controller with ID of Bottom Half Card
     func bottomHalfCardtapped(_ gestureRecognizer: UITapGestureRecognizer) {
         print("bottom half card tapped")
-        if let userId = bridgePairing?.user2ID {
+        if let userID = bridgePairing?.user2ID {
             // Notify SwipeViewController to present the tapped User
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userId)
+            if let image = bottomHalf.photoView.image {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: (userID, image))
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userID)
+            }
         }
     }
 }

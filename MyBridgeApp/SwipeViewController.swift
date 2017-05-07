@@ -55,23 +55,27 @@ class SwipeViewController: UIViewController {
         
         swipeBackend.getCurrentUserUnviewedMatches { (bridgePairings) in
             User.getCurrent { (currentUser) in
-                for bridgePairing in bridgePairings {
-                    // create poppup view
-                    bridgePairing.getNonCurrentUser { (otherUser) in
-                        if let currentUserID = currentUser.id, let otherUserID = otherUser.id, let connecterName = bridgePairing.connecterName, let otherUserName = otherUser.name {
-                            let youMatchedPopUp = PopupView(includesCurrentUser: true, user1Id: currentUserID, user2Id: otherUserID, textString: "\(connecterName) 'nected you with \(otherUserName)!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
-                            self.view.addSubview(youMatchedPopUp)
-                            youMatchedPopUp.autoPinEdgesToSuperviewEdges()
+                if let currentUser = currentUser {
+                    for bridgePairing in bridgePairings {
+                        // create poppup view
+                        bridgePairing.getNonCurrentUser { (otherUser) in
+                            if let otherUser = otherUser {
+                                if let currentUserID = currentUser.id, let otherUserID = otherUser.id, let connecterName = bridgePairing.connecterName, let otherUserName = otherUser.name {
+                                    let youMatchedPopUp = PopupView(includesCurrentUser: true, user1Id: currentUserID, user2Id: otherUserID, textString: "\(connecterName) 'nected you with \(otherUserName)!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
+                                    self.view.addSubview(youMatchedPopUp)
+                                    youMatchedPopUp.autoPinEdgesToSuperviewEdges()
+                                }
+                            }
                         }
+                        
+                        // set viewed notification to true
+                        if currentUser.id == bridgePairing.user1ID {
+                            bridgePairing.youMatchedNotificationViewedUser1 = true
+                        } else {
+                            bridgePairing.youMatchedNotificationViewedUser2 = true
+                        }
+                        bridgePairing.save()
                     }
-                    
-                    // set viewed notification to true
-                    if currentUser.id == bridgePairing.user1ID {
-                        bridgePairing.youMatchedNotificationViewedUser1 = true
-                    } else {
-                        bridgePairing.youMatchedNotificationViewedUser2 = true
-                    }
-                    bridgePairing.save()
                 }
             }
         }
@@ -171,14 +175,13 @@ class SwipeViewController: UIViewController {
             externalProfileVC.setUserID(userID: userId)
             self.present(externalProfileVC, animated: true, completion: nil)
         }*/
-        if let (userID, image) = notification.object as? (String, UIImage?) {
-            let externalProfileVC = ExternalProfileViewController()
-            if let image = image {
-                externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: userID)
-            } else {
-                externalProfileVC.setUserID(userID: userID)
-            }
+        let externalProfileVC = ExternalProfileViewController()
+        if let (userID, image) = notification.object as? (String, UIImage) { // pass image through
+            externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: userID)
             self.present(externalProfileVC, animated: true, completion: nil)
+        } else if let userID = notification.object as? String {
+            externalProfileVC.setUserID(userID: userID)
+            self.present(externalProfileVC, animated: true, completion: nil) // must download image
         }
     }
     

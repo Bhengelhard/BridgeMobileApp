@@ -38,19 +38,21 @@ class MessagesBackend {
         messageProfilePictures = [String: UIImage?]()
         
         User.getCurrent { (user) in
-            Message.countAllStarted(withUser: user) { (count) in
-                self.totalElements = count
-                
-                // get rid of no messages label, if applicable
-                if let messagesTableView = tableView as? MessagesObjects.MessagesTable {
-                    if count == 0 {
-                        messagesTableView.noMessagesLabel.alpha = 1
-                    } else {
-                        messagesTableView.noMessagesLabel.alpha = 0
+            if let user = user {
+                Message.countAllStarted(withUser: user) { (count) in
+                    self.totalElements = count
+                    
+                    // get rid of no messages label, if applicable
+                    if let messagesTableView = tableView as? MessagesObjects.MessagesTable {
+                        if count == 0 {
+                            messagesTableView.noMessagesLabel.alpha = 1
+                        } else {
+                            messagesTableView.noMessagesLabel.alpha = 0
+                        }
                     }
+                    
+                    self.refreshMessagesTable(tableView: tableView)
                 }
-                
-                self.refreshMessagesTable(tableView: tableView)
             }
         }
     }
@@ -58,71 +60,75 @@ class MessagesBackend {
     // get next batch of messages and add to messages table
     func refreshMessagesTable(tableView: UITableView) {
         User.getCurrent { (user) in
-            Message.getAllStarted(withUser: user, withLimit: self.noOfElementsPerRefresher, withSkip: self.noOfElementsFetched) { (messages) in
-                self.noOfElementsFetched += messages.count
-                for message in messages {
-                    if let messageID = message.id {
-                        // save message position
-                        self.messagePositionToIDMapping[self.noOfElementsProcessed] = messageID
-                        self.noOfElementsProcessed += 1
-                        
-                        // save name of other user in message
-                        if let userID = user.id {
-                            if let messageUser1ID = message.user1ID {
-                                if messageUser1ID == userID { // current user is user1
-                                    // we want user2's name
-                                    if let messageUser2Name = message.user2Name {
-                                        self.messageNames[messageID] = messageUser2Name
+            if let user = user {
+                Message.getAllStarted(withUser: user, withLimit: self.noOfElementsPerRefresher, withSkip: self.noOfElementsFetched) { (messages) in
+                    self.noOfElementsFetched += messages.count
+                    for message in messages {
+                        if let messageID = message.id {
+                            // save message position
+                            self.messagePositionToIDMapping[self.noOfElementsProcessed] = messageID
+                            self.noOfElementsProcessed += 1
+                            
+                            // save name of other user in message
+                            if let userID = user.id {
+                                if let messageUser1ID = message.user1ID {
+                                    if messageUser1ID == userID { // current user is user1
+                                        // we want user2's name
+                                        if let messageUser2Name = message.user2Name {
+                                            self.messageNames[messageID] = messageUser2Name
+                                        }
+                                    }
+                                }
+                                if let messageUser2ID = message.user2ID {
+                                    if messageUser2ID == userID { // current user is user2
+                                        // we want user1's name
+                                        if let messageUser1Name = message.user1Name {
+                                            self.messageNames[messageID] = messageUser1Name
+                                        }
                                     }
                                 }
                             }
-                            if let messageUser2ID = message.user2ID {
-                                if messageUser2ID == userID { // current user is user2
-                                    // we want user1's name
-                                    if let messageUser1Name = message.user1Name {
-                                        self.messageNames[messageID] = messageUser1Name
+                            
+                            // save profile picture of other user in message
+                            message.getNonCurrentUser { (otherUser) in
+                                if let otherUser = otherUser {
+                                    otherUser.getMainPicture { (picture) in
+                                        picture.getImage { (image) in
+                                            self.messageProfilePictures[messageID] = image
+                                            tableView.reloadData()
+                                        }
                                     }
                                 }
                             }
-                        }
-                        
-                        // save profile picture of other user in message
-                        message.getNonCurrentUser { (otherUser) in
-                            otherUser.getMainPicture { (picture) in
-                                picture.getImage { (image) in
-                                    self.messageProfilePictures[messageID] = image
-                                    tableView.reloadData()
-                                }
+                            
+                            // save message snapshot
+                            if let messageLastSingleMessage = message.lastSingleMessage {
+                                self.messageSnapshots[messageID] = messageLastSingleMessage
                             }
-                        }
-                        
-                        // save message snapshot
-                        if let messageLastSingleMessage = message.lastSingleMessage {
-                            self.messageSnapshots[messageID] = messageLastSingleMessage
-                        }
-                        
-                        // save notification dot
-                        if let userID = user.id {
-                            if let messageUser1ID = message.user1ID {
-                                if messageUser1ID == userID { // current user is user1
-                                    // we want whether user1 has seen last single message
-                                    if let messageUser1HasSeenLastSingleMessage = message.user1HasSeenLastSingleMessage {
-                                        self.messageNotificationDots[messageID] = !messageUser1HasSeenLastSingleMessage
+                            
+                            // save notification dot
+                            if let userID = user.id {
+                                if let messageUser1ID = message.user1ID {
+                                    if messageUser1ID == userID { // current user is user1
+                                        // we want whether user1 has seen last single message
+                                        if let messageUser1HasSeenLastSingleMessage = message.user1HasSeenLastSingleMessage {
+                                            self.messageNotificationDots[messageID] = !messageUser1HasSeenLastSingleMessage
+                                        }
                                     }
                                 }
-                            }
-                            if let messageUser2ID = message.user2ID {
-                                if messageUser2ID == userID { // current user is user2
-                                    // we want whether user2 has seen last single message
-                                    if let messageUser2HasSeenLastSingleMessage = message.user2HasSeenLastSingleMessage {
-                                        self.messageNotificationDots[messageID] = !messageUser2HasSeenLastSingleMessage
+                                if let messageUser2ID = message.user2ID {
+                                    if messageUser2ID == userID { // current user is user2
+                                        // we want whether user2 has seen last single message
+                                        if let messageUser2HasSeenLastSingleMessage = message.user2HasSeenLastSingleMessage {
+                                            self.messageNotificationDots[messageID] = !messageUser2HasSeenLastSingleMessage
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    tableView.reloadData()
                 }
-                tableView.reloadData()
             }
         }
     }
@@ -130,9 +136,11 @@ class MessagesBackend {
     func loadNewMatches(newMatchesTableViewCell: NewMatchesTableViewCell) {
         newMatchesTableViewCell.reset()
         User.getCurrent { (user) in
-            Message.getAllUnstarted(withUser: user) { (messages) in
-                for message in messages {
-                    newMatchesTableViewCell.addUserInMessage(message: message)
+            if let user = user {
+                Message.getAllUnstarted(withUser: user) { (messages) in
+                    for message in messages {
+                        newMatchesTableViewCell.addUserInMessage(message: message)
+                    }
                 }
             }
         }

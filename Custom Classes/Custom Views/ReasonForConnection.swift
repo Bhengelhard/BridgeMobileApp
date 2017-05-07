@@ -132,30 +132,31 @@ class ReasonForConnection: UIView, UITextViewDelegate {
         
         // Get the current user's information and create a message from the current user to send to the other user's in a message
         User.getCurrent { (user) in
-            let id = user.id
-            let name = user.name
-            if let text = self.reasonForConnectionTextView.text {
-                SingleMessage.create(text: text, senderID: id, senderName: name, messageID: self.messageID, withBlock: { (singleMessage) in
-                    singleMessage.save()
-                    
-                    
-                    if let messageID = self.messageID {
-                        if let user2ID = self.user2ID, let user2Name = self.user2Name {
-                            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"\(name) has sent you and \(user2Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+            if let user = user {
+                let id = user.id
+                let name = user.name
+                if let text = self.reasonForConnectionTextView.text {
+                    SingleMessage.create(text: text, senderID: id, senderName: name, messageID: self.messageID, withBlock: { (singleMessage) in
+                        singleMessage.save()
+                        
+                        
+                        if let messageID = self.messageID {
+                            if let user2ID = self.user2ID, let user2Name = self.user2Name {
+                                PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"\(name) has sent you and \(user2Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                            }
+                            
+                            if let user1ID = self.user1ID, let user1Name = self.user1Name{
+                                PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(name) has sent you and \(user1Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                            }
+                            
                         }
                         
-                        if let user1ID = self.user1ID, let user1Name = self.user1Name{
-                            PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(name) has sent you and \(user1Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
-                        }
-                        
-                    }
-                    
-                })
-            }
+                    })
+                }
 
-            
+                
+            }
         }
-        
         
         self.removeFromSuperview()
     }
@@ -208,44 +209,46 @@ class ReasonForConnection: UIView, UITextViewDelegate {
                 
                 // update current user has posted and other user has seen last single message
                 User.getCurrent { (user) in
-                    var shouldCallBlock = false
-                    if let userID = user.id {
-                        if userID == message.user1ID {
-                            // check if both have posted for the first time
-                            if let user2HasPosted = message.user2HasPosted {
-                                if user2HasPosted { // user 2 has already posted
-                                    if let user1HasPosted = message.user1HasPosted {
-                                        if !user1HasPosted { // this is user 1's first post
+                    if let user = user {
+                        var shouldCallBlock = false
+                        if let userID = user.id {
+                            if userID == message.user1ID {
+                                // check if both have posted for the first time
+                                if let user2HasPosted = message.user2HasPosted {
+                                    if user2HasPosted { // user 2 has already posted
+                                        if let user1HasPosted = message.user1HasPosted {
+                                            if !user1HasPosted { // this is user 1's first post
+                                                shouldCallBlock = true
+                                            }
+                                        } else { // user1HasPosted == nil -> this is user 1's first post
                                             shouldCallBlock = true
                                         }
-                                    } else { // user1HasPosted == nil -> this is user 1's first post
-                                        shouldCallBlock = true
                                     }
                                 }
-                            }
-                            message.user1HasPosted = true
-                            message.user2HasSeenLastSingleMessage = false
-                        } else if userID == message.user2ID {
-                            // check if both have posted for the first time
-                            if let user1HasPosted = message.user1HasPosted {
-                                if user1HasPosted { // user 1 has already posted
-                                    if let user2HasPosted = message.user2HasPosted {
-                                        if !user2HasPosted { // this is user 2's first post
+                                message.user1HasPosted = true
+                                message.user2HasSeenLastSingleMessage = false
+                            } else if userID == message.user2ID {
+                                // check if both have posted for the first time
+                                if let user1HasPosted = message.user1HasPosted {
+                                    if user1HasPosted { // user 1 has already posted
+                                        if let user2HasPosted = message.user2HasPosted {
+                                            if !user2HasPosted { // this is user 2's first post
+                                                shouldCallBlock = true
+                                            }
+                                        } else { // user2HasPosted == nil -> this is user 2's first post
                                             shouldCallBlock = true
                                         }
-                                    } else { // user2HasPosted == nil -> this is user 2's first post
-                                        shouldCallBlock = true
                                     }
                                 }
+                                message.user2HasPosted = true
+                                message.user1HasSeenLastSingleMessage = false
                             }
-                            message.user2HasPosted = true
-                            message.user1HasSeenLastSingleMessage = false
                         }
-                    }
-                    message.save { (message) in
-                        if shouldCallBlock {
-                            if let block = block {
-                                block()
+                        message.save { (message) in
+                            if shouldCallBlock {
+                                if let block = block {
+                                    block()
+                                }
                             }
                         }
                     }
