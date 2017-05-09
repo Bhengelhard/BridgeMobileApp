@@ -17,115 +17,310 @@ class SwipeBackend {
     var bottomSwipeCard = SwipeCard()
     var topBridgePairing: BridgePairing?
     var bottomBridgePairing: BridgePairing?
+    var reserveBridgePairing: BridgePairing?
     let localBridgePairings = LocalBridgePairings()
     var gotTopBridgePairing = false
     var gotBottomBridgePairing = false
+    var gotReserveBridgeParing = false
+    var downloadOnSwipe = false
     
-    func setCityName(locationLabel: UILabel, locationCoordinates:[Double], pairing:UserInfoPair) {
-        // We will store the city names to LocalData.  Not required now. But will ne be needed in fututre when when optimize.
-        if locationLabel.tag == 0 && pairing.user1?.city != nil {
-            DispatchQueue.main.async(execute: {
-                locationLabel.text = (pairing.user1?.city)!
-            })
-        }
-        else if  locationLabel.tag == 1 && pairing.user2?.city != nil {
-            DispatchQueue.main.async(execute: {
-                locationLabel.text = (pairing.user2?.city)!
-            })
-        }
-        else {
-            var longitude: CLLocationDegrees = -122.0312186
-            var latitude: CLLocationDegrees = 37.33233141
-            if locationCoordinates.count == 2 {
-                longitude = locationCoordinates[1]
-                latitude = locationCoordinates[0]
+    
+    private func getTopBridgePairing(noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+        User.getCurrent { (user) in
+            if let user = user {
+                BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
+                    if bridgePairings.count > 0 {
+                        let bridgePairing = bridgePairings[0]
+                        self.gotTopBridgePairing(bridgePairing: bridgePairing, user: user, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    } else {
+                        self.gotNoBridgePairings(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    }
+                }
             }
-            
-            let location = CLLocation(latitude: latitude, longitude: longitude) //changed!!!
-            CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
-                if error != nil {
-                    print("Reverse geocoder failed with error" + error!.localizedDescription)
-                    return
-                }
-                
-                if placemarks!.count > 0 {
-                    let pm = placemarks![0]
-                    DispatchQueue.main.async(execute: {
-                        locationLabel.text = pm.locality
-                    })
-                }
-                else {
-                    print("Problem with the data received from geocoder")
-                }
-            })
         }
     }
     
-    private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
-        
-        if top {
-            gotTopBridgePairing = false
-        } else {
-            gotBottomBridgePairing = false
-        }
-        
+    private func getTwoBridgePairings(noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         User.getCurrent { (user) in
             if let user = user {
-                if top {
-                    BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
-                        if bridgePairings.count > 0 {
-                            let bridgePairing = bridgePairings[0]
-                            self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                        } else {
-                            self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                        }
+                BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 2, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
+                    if bridgePairings.count > 1 {
+                        let bridgePairing1 = bridgePairings[0]
+                        let bridgePairing2 = bridgePairings[1]
+                        self.gotTwoBridgePairings(bridgePairing1: bridgePairing1, bridgePairing2: bridgePairing2, user: user, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    } else if bridgePairings.count > 0 {
+                        let bridgePairing = bridgePairings[0]
+                        self.gotBottomBridgePairing(bridgePairing: bridgePairing, user: user, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    } else {
+                        self.gotNoBridgePairings(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                     }
-                } else {
-                    if let topBridgePairing = self.topBridgePairing {
-                        BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptFriend1WithID: topBridgePairing.user1ID, exceptFriend2WithID: topBridgePairing.user2ID, exceptForBlocked: true) { (bridgePairings) in
-                            if bridgePairings.count > 0 {
-                                let bridgePairing = bridgePairings[0]
-                                self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                            } else {
-                                BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
-                                    if bridgePairings.count > 0 {
-                                        let bridgePairing = bridgePairings[0]
-                                        self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                                    } else {
-                                        self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                }
+            }
+        }
+    }
+    
+    private func getReserveBridgePairing(noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+        User.getCurrent { (user) in
+            if let user = user {
+                BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
+                    if bridgePairings.count > 0 {
+                        let bridgePairing = bridgePairings[0]
+                        self.gotReserveBridgePairing(bridgePairing: bridgePairing, user: user, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    } else {
+                        self.gotNoBridgePairings(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func gotTopBridgePairing(bridgePairing: BridgePairing, user: User, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+        print("got one bridge pairing from parse")
+        
+        if let id = bridgePairing.id {
+            print("top bridgePairing id: \(id)")
+        }
+        
+        if let userID = user.id {
+            var shownTo: [String]
+            if let bridgePairingShownTo = bridgePairing.shownTo {
+                shownTo = bridgePairingShownTo
+                shownTo.append(userID)
+            } else {
+                shownTo = [userID]
+            }
+            bridgePairing.shownTo = shownTo
+        }
+        
+        bridgePairing.getUser1 { (user1) in
+            bridgePairing.getUser2 { (user2) in
+                var usersExistAndHavePics = false
+                if let user1 = user1 {
+                    if let user2 = user2 {
+                        if let user1PictureIDs = user1.pictureIDs {
+                            if user1PictureIDs.count > 0 { // user1 pic exists
+                                if let user2PictureIDs = user2.pictureIDs {
+                                    if user2PictureIDs.count > 0 { // user2 pic exists
+                                        usersExistAndHavePics = true
+                                        
+                                        bridgePairing.checkedOut = true
+                                        
+                                        self.topSwipeCard.alpha = 1
+                                        self.topSwipeCard.isUserInteractionEnabled = true
+                                        
+                                        self.gotTopBridgePairing = true
+                                        self.topBridgePairing = bridgePairing
+                                        
+                                        // store bridge pairing locally
+                                        self.localBridgePairings.setBridgePairing1ID(bridgePairing.id)
+                                        self.localBridgePairings.synchronize()
+                                        
+                                        self.topSwipeCard.initialize(bridgePairing: bridgePairing)
+                                        
+                                        bridgePairing.save { (_) in
+                                            if let completion = completion {
+                                                completion()
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    } else {
-                        BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
-                            if bridgePairings.count > 0 {
-                                let bridgePairing = bridgePairings[0]
-                                self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                            } else {
-                                self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-                            }
-                        }
+                    }
+                }
+                if !usersExistAndHavePics {
+                    bridgePairing.save { (_) in
+                        self.getTopBridgePairing(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                     }
                 }
             }
         }
     }
     
-    private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+    private func gotTwoBridgePairings(bridgePairing1: BridgePairing, bridgePairing2: BridgePairing, user: User, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+        print("got two bridge pairings from parse")
         
-        if top {
-            if let bridgePairingID = bridgePairing.id {
-                print("got top from parse with id \(bridgePairingID)")
+        if let id = bridgePairing1.id {
+            print("bottom bridgePairing id: \(id)")
+        }
+        
+        if let id = bridgePairing2.id {
+            print("reserve bridgePairing id: \(id)")
+        }
+        
+        if let userID = user.id {
+            var shownTo1: [String]
+            if let bridgePairingShownTo1 = bridgePairing1.shownTo {
+                shownTo1 = bridgePairingShownTo1
+                shownTo1.append(userID)
             } else {
-                print("got top from parse")
+                shownTo1 = [userID]
             }
-        } else {
-            if let bridgePairingID = bridgePairing.id {
-                print("got bottom from parse with id \(bridgePairingID)")
+            bridgePairing1.shownTo = shownTo1
+        }
+        
+        bridgePairing1.save { (_) in
+            bridgePairing1.getUser1 { (user1) in
+                bridgePairing1.getUser2 { (user2) in
+                    var bridgePairing1UsersExistAndHavePics = false
+                    if let user1 = user1 {
+                        if let user2 = user2 {
+                            if let user1PictureIDs = user1.pictureIDs {
+                                if user1PictureIDs.count > 0 { // user1 pic exists
+                                    if let user2PictureIDs = user2.pictureIDs {
+                                        if user2PictureIDs.count > 0 { // user2 pic exists
+                                            bridgePairing1UsersExistAndHavePics = true
+                                            
+                                            bridgePairing1.checkedOut = true
+                                            
+                                            self.bottomSwipeCard.alpha = 1
+                                            self.bottomSwipeCard.isUserInteractionEnabled = true
+                                            
+                                            self.gotBottomBridgePairing = true
+                                            self.bottomBridgePairing = bridgePairing1
+                                                
+                                            // store bridge pairing locally
+                                            self.localBridgePairings.setBridgePairing2ID(bridgePairing1.id)
+                                            self.localBridgePairings.synchronize()
+                                            
+                                            self.bottomSwipeCard.initialize(bridgePairing: bridgePairing1)
+                                            
+                                            bridgePairing1.save { (_) in
+                                                
+                                                if let userID = user.id {
+                                                    var shownTo2: [String]
+                                                    if let bridgePairingShownTo2 = bridgePairing2.shownTo {
+                                                        shownTo2 = bridgePairingShownTo2
+                                                        shownTo2.append(userID)
+                                                    } else {
+                                                        shownTo2 = [userID]
+                                                    }
+                                                    bridgePairing2.shownTo = shownTo2
+                                                }
+                                                
+                                                bridgePairing2.save { (_) in
+                                                    bridgePairing2.getUser1 { (user1) in
+                                                        bridgePairing2.getUser2 { (user2) in
+                                                            var bridgePairing2UsersExistAndHavePics = false
+                                                            if let user1 = user1 {
+                                                                if let user2 = user2 {
+                                                                    if let user1PictureIDs = user1.pictureIDs {
+                                                                        if user1PictureIDs.count > 0 { // user1 pic exists
+                                                                            if let user2PictureIDs = user2.pictureIDs {
+                                                                                if user2PictureIDs.count > 0 { // user2 pic exists
+                                                                                    bridgePairing2UsersExistAndHavePics = true
+                                                                                    
+                                                                                    bridgePairing2.checkedOut = true
+                                                                                    
+                                                                                    self.reserveBridgePairing = bridgePairing2
+                                                                                    
+                                                                                    bridgePairing2.save { (_) in
+                                                                                        if let completion = completion {
+                                                                                            completion()
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            if !bridgePairing2UsersExistAndHavePics {
+                                                                self.getReserveBridgePairing(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if !bridgePairing1UsersExistAndHavePics {
+                        self.getTwoBridgePairings(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func gotBottomBridgePairing(bridgePairing: BridgePairing, user: User, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+        print("got one bridge pairing from parse")
+        
+        if let id = bridgePairing.id {
+            print("bottom bridgePairing id: \(id)")
+        }
+        
+        if let userID = user.id {
+            var shownTo: [String]
+            if let bridgePairingShownTo = bridgePairing.shownTo {
+                shownTo = bridgePairingShownTo
+                shownTo.append(userID)
             } else {
-                print("got bottom from parse")
+                shownTo = [userID]
             }
+            bridgePairing.shownTo = shownTo
+        }
+        
+        bridgePairing.getUser1 { (user1) in
+            bridgePairing.getUser2 { (user2) in
+                var usersExistAndHavePics = false
+                if let user1 = user1 {
+                    if let user2 = user2 {
+                        if let user1PictureIDs = user1.pictureIDs {
+                            if user1PictureIDs.count > 0 { // user1 pic exists
+                                if let user2PictureIDs = user2.pictureIDs {
+                                    if user2PictureIDs.count > 0 { // user2 pic exists
+                                        usersExistAndHavePics = true
+                                        
+                                        bridgePairing.checkedOut = true
+                                        
+                                        self.bottomSwipeCard.alpha = 1
+                                        self.bottomSwipeCard.isUserInteractionEnabled = true
+                                        
+                                        self.gotBottomBridgePairing = true
+                                        self.bottomBridgePairing = bridgePairing
+                                        
+                                        // store bridge pairing locally
+                                        self.localBridgePairings.setBridgePairing2ID(bridgePairing.id)
+                                        self.localBridgePairings.synchronize()
+                                        
+                                        self.bottomSwipeCard.initialize(bridgePairing: bridgePairing)
+                                        
+                                        self.reserveBridgePairing = nil
+                                        
+                                        bridgePairing.save { (_) in
+                                            if let completion = completion {
+                                                completion()
+                                            }
+                                            
+                                            if let noMoreBridgePairings = noMoreBridgePairings {
+                                                noMoreBridgePairings()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if !usersExistAndHavePics {
+                    bridgePairing.save { (_) in
+                        self.gotNoBridgePairings(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func gotReserveBridgePairing(bridgePairing: BridgePairing, user: User, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+        print("got one bridge pairing from parse")
+        
+        if let id = bridgePairing.id {
+            print("reserve bridgePairing id: \(id)")
         }
         
         if let userID = user.id {
@@ -150,33 +345,11 @@ class SwipeBackend {
                                     if user2PictureIDs.count > 0 { // user2 pic exists  
                                         usersExistAndHavePics = true
                                         
-                                        swipeCard.alpha = 1
-                                        swipeCard.isUserInteractionEnabled = true
-                                        
-                                        if top {
-                                            self.gotTopBridgePairing = true
-                                            self.topBridgePairing = bridgePairing
-                                            
-                                            // store bridge pairing locally
-                                            self.localBridgePairings.setBridgePairing1ID(bridgePairing.id)
-                                        } else {
-                                            self.gotBottomBridgePairing = true
-                                            self.bottomBridgePairing = bridgePairing
-                                            
-                                            // store bridge pairing locally
-                                            self.localBridgePairings.setBridgePairing2ID(bridgePairing.id)
-                                        }
-                                        
-                                        self.localBridgePairings.synchronize()
-                                        
                                         bridgePairing.checkedOut = true
                                         
-                                        swipeCard.initialize(bridgePairing: bridgePairing)
-                                        //if !top {
-                                        //    swipeCard.addOverlay()
-                                        //}
+                                        self.reserveBridgePairing = bridgePairing
                                         
-                                        bridgePairing.save { (bridgePairing) in
+                                        bridgePairing.save { (_) in
                                             if let completion = completion {
                                                 completion()
                                             }
@@ -189,38 +362,23 @@ class SwipeBackend {
                 }
                 if !usersExistAndHavePics {
                     bridgePairing.save { (_) in
-                        self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                        self.getReserveBridgePairing(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                     }
                 }
             }
         }
     }
     
-    private func gotNoBridgePairings(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
-        if top {
-            print("did not get top from parse")
-            gotTopBridgePairing = true
-        } else {
-            print("did not get bottom from parse")
-            gotBottomBridgePairing = true
-        }
-                
-        if top {
-            self.topBridgePairing = nil
-            
-            // store bridge pairing locally
-            self.localBridgePairings.setBridgePairing1ID(nil)
-            
-            // bottom should always be nil if top is
-            self.localBridgePairings.setBridgePairing2ID(nil)
-        } else {
-            self.bottomBridgePairing = nil
-            
-            // store bridge pairing locally
-            self.localBridgePairings.setBridgePairing2ID(nil)
-        }
+    private func gotNoBridgePairings(noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+        print("got no bridge pairings from parse")
         
+        self.gotBottomBridgePairing = true
+        
+        self.bottomBridgePairing = nil
+        self.localBridgePairings.setBridgePairing2ID(nil)
         self.localBridgePairings.synchronize()
+        
+        self.reserveBridgePairing = nil
         
         if let completion = completion {
             completion()
@@ -231,74 +389,104 @@ class SwipeBackend {
         }
     }
     
-    /// set the bottom swipe card
-    func setBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
-        gotBottomBridgePairing = false
-        // store old bottom as top locally
+    
+    // user just swiped, get two new cards every other swipe
+    func updateAfterSwipe(topSwipeCard: SwipeCard, bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+        print("\nupdate after swipe, download: \(downloadOnSwipe)")
+        self.topSwipeCard = topSwipeCard
+        self.bottomSwipeCard = bottomSwipeCard
+        
+        bottomSwipeCard.alpha = 0
+        bottomSwipeCard.isUserInteractionEnabled = false
+        bottomSwipeCard.clear()
+        
         topBridgePairing = bottomBridgePairing
-        // store bridge pairing locally
-        if let bridgePairing = topBridgePairing {
-            localBridgePairings.setBridgePairing1ID(bridgePairing.id)
+        bottomBridgePairing = reserveBridgePairing
+        reserveBridgePairing = nil
+        
+        // store bridge pairings locally
+        if let topBridgePairing = topBridgePairing {
+            localBridgePairings.setBridgePairing1ID(topBridgePairing.id)
+            
+            topSwipeCard.alpha = 1
+            topSwipeCard.isUserInteractionEnabled = true
         } else {
             localBridgePairings.setBridgePairing1ID(nil)
+        }
+        
+        if let bottomBridgePairing = bottomBridgePairing {
+            localBridgePairings.setBridgePairing2ID(bottomBridgePairing.id)
             
-            // bottom should always be nil if top is
+            bottomSwipeCard.alpha = 1
+            bottomSwipeCard.isUserInteractionEnabled = true
+        } else {
             localBridgePairings.setBridgePairing2ID(nil)
         }
+        
         localBridgePairings.synchronize()
         
-        getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+        if downloadOnSwipe {
+            downloadOnSwipe = false
+            gotBottomBridgePairing = false
+            getTwoBridgePairings(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+        } else {
+            downloadOnSwipe = true
+            if let bottomBridgePairing = bottomBridgePairing {
+                bottomSwipeCard.initialize(bridgePairing: bottomBridgePairing)
+            }
+        }
     }
     
-    /// set the top swipe card upon opening app
-    func setInitialTopSwipeCard(topSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
-        gotTopBridgePairing = false
-        if let bridgePairingID = localBridgePairings.getBridgePairing1ID() { // bridge pairing ID stored locally
-            print("got top locally with id: \(bridgePairingID)")
-            BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
-                topSwipeCard.alpha = 1
-                topSwipeCard.isUserInteractionEnabled = true
+    func getInitialBridgePairings(topSwipeCard: SwipeCard, bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+        print("\ngetting initial bridge pairings")
+        
+        self.topSwipeCard = topSwipeCard
+        self.bottomSwipeCard = bottomSwipeCard
+        
+        downloadOnSwipe = false
+        
+        if let topBridgePairingID = localBridgePairings.getBridgePairing1ID() {
+            print("got top locally with id: \(topBridgePairingID)")
+            BridgePairing.get(withID: topBridgePairingID) { (topBridgePairing) in
+                self.topSwipeCard.alpha = 1
+                self.topSwipeCard.isUserInteractionEnabled = true
                 
-                self.topBridgePairing = bridgePairing
+                self.topBridgePairing = topBridgePairing
                 self.gotTopBridgePairing = true
-                topSwipeCard.initialize(bridgePairing: bridgePairing)
-                if let completion = completion {
-                    completion()
-                }
-            }
-        } else {
-            print("top not stored locally")
-            getNextBridgePairing(swipeCard: topSwipeCard, top: true, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
-        }
-    }
-    
-    /// set the bottom swipe card upon opening app
-    func setInitialBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
-        gotBottomBridgePairing = false
-        if let bridgePairingID = localBridgePairings.getBridgePairing2ID() { // bridge pairing ID stored locally
-            print("got bottom locally with id: \(bridgePairingID)")
-            BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
-                bottomSwipeCard.alpha = 1
-                bottomSwipeCard.isUserInteractionEnabled = true
                 
-                self.bottomBridgePairing = bridgePairing
-                self.gotBottomBridgePairing = true
-                bottomSwipeCard.initialize(bridgePairing: bridgePairing)
-                if let completion = completion {
-                    completion()
+                self.topSwipeCard.initialize(bridgePairing: topBridgePairing)
+                
+                if let bottomBridgePairingID = self.localBridgePairings.getBridgePairing2ID() {
+                    print("got bottom locally with id: \(bottomBridgePairingID)")
+                    BridgePairing.get(withID: bottomBridgePairingID) { (bottomBridgePairing) in
+                        self.bottomSwipeCard.alpha = 1
+                        self.bottomSwipeCard.isUserInteractionEnabled = true
+                        
+                        self.bottomBridgePairing = bottomBridgePairing
+                        self.gotBottomBridgePairing = true
+                        
+                        self.bottomSwipeCard.initialize(bridgePairing: bottomBridgePairing)
+                        
+                        if let completion = completion {
+                            completion()
+                        }
+                    }
+                } else {
+                    print("bottom not stored locally")
+                    self.getTwoBridgePairings(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                 }
             }
         } else {
-            print("bottom not stored locally")
-            getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+            print("top and bottom not stored locally")
+            getTopBridgePairing(noMoreBridgePairings: noMoreBridgePairings) {
+                self.getTwoBridgePairings(noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+            }
         }
     }
     
-    func checkIn() {
-        if let topBridgePairing = topBridgePairing {
-            topBridgePairing.checkedOut = false
-            topBridgePairing.save()
-        }
+    func checkIn(bridgePairing: BridgePairing) {
+        bridgePairing.checkedOut = false
+        bridgePairing.save()
     }
     
     func getCurrentUserUnviewedMatches(withBlock block: @escaping BridgePairing.BridgePairingsBlock) {

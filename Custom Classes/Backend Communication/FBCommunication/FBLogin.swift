@@ -77,7 +77,6 @@ class FBLogin {
                             print("got error")
                             
                         } else if let result = result as? [String: AnyObject] {
-                            print("results are not nil")
                             
                             // saves these to parse at every login
                             

@@ -279,14 +279,14 @@ class SwipeLogic {
             // Swiped Left
             else {
                 // Only check back in if user swiped left
-                swipeBackend.checkIn()
+                if let bridgePairing = swipeCard.bridgePairing {
+                    swipeBackend.checkIn(bridgePairing: bridgePairing)
+                }
             }
             
             layout.switchTopAndBottomCards()
-            layout.bottomSwipeCard.alpha = 0
-            layout.bottomSwipeCard.clear()
-            layout.bottomSwipeCard.isUserInteractionEnabled = false
-            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
+            
+            swipeBackend.updateAfterSwipe(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
                 MBProgressHUD.hide(for: vc.view, animated: true)
             }
         })

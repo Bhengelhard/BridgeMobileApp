@@ -42,6 +42,7 @@ class SwipeViewController: UIViewController {
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
         layout.refreshButton.addTarget(self, action: #selector(refreshButtonTapped(_:)), for: .touchUpInside)
+        layout.navBar.titleButton.addTarget(self, action: #selector(necterIconTapped(_:)), for: .touchUpInside)
         
         layout.inviteButton.setVC(vc: self)
         
@@ -109,7 +110,7 @@ class SwipeViewController: UIViewController {
         
         let dateBefore = Date()
         // Get the first swipeCards
-        self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
+        self.swipeBackend.getInitialBridgePairings(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
             let dateAfter = Date()
             let timeInterval = dateAfter.timeIntervalSince(dateBefore)
             var delay = 0.0
@@ -117,15 +118,8 @@ class SwipeViewController: UIViewController {
                 delay = 2.0 - timeInterval
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                if self.swipeBackend.gotTopBridgePairing {
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                    self.layout.loadingView.stopAnimating()
-                }
-                
-                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                    self.layout.loadingView.stopAnimating()
-                }
+                MBProgressHUD.hide(for: self.view, animated: true)
+                self.layout.loadingView.stopAnimating()
             }
         }
     }
@@ -154,6 +148,12 @@ class SwipeViewController: UIViewController {
     }
     
     func infoButtonTapped(_ sender: UIButton) {
+        presentAppInstructions()
+    }
+    func necterIconTapped(_ sender: UIButton) {
+        presentAppInstructions()
+    }
+    func presentAppInstructions() {
         let alert = UIAlertController(title: "How to NECT:", message: "Our algorithm pairs two of your friends.\nSwipe right to introduce them.\nSwipe left to see the next pair.", preferredStyle: UIAlertControllerStyle.alert)
         //Create the actions
         alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in
