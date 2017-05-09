@@ -484,11 +484,9 @@ class SwipeBackend {
         }
     }
     
-    func checkIn() {
-        if let topBridgePairing = topBridgePairing {
-            topBridgePairing.checkedOut = false
-            topBridgePairing.save()
-        }
+    func checkIn(bridgePairing: BridgePairing) {
+        bridgePairing.checkedOut = false
+        bridgePairing.save()
     }
     
     func getCurrentUserUnviewedMatches(withBlock block: @escaping BridgePairing.BridgePairingsBlock) {
