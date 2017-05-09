@@ -26,9 +26,14 @@ class SwipeCard: UIView {
     init () {
         super.init(frame: CGRect())
 
-        self.frame = swipeCardFrame()
-		self.clipsToBounds = true
+        frame = swipeCardFrame()
+		clipsToBounds = true
         
+        //topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
+        //bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
+        
+        self.addSubview(topHalf)
+        self.addSubview(bottomHalf)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -36,12 +41,16 @@ class SwipeCard: UIView {
     }
     
     func initialize(bridgePairing: BridgePairing) {
+        if let id = bridgePairing.id {
+            print("initializing swipe card with bridgePairing id = \(id)")
+        }
+        
         self.bridgePairing = bridgePairing
         
         let swipCardCornerRadius: CGFloat = 12
         self.layer.cornerRadius = swipCardCornerRadius
         
-        topHalf = HalfSwipeCard()
+        //topHalf = HalfSwipeCard()
         topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         topHalf.initialize(name: bridgePairing.user1Name!)
         
@@ -64,7 +73,7 @@ class SwipeCard: UIView {
             }
         }
         
-        bottomHalf = HalfSwipeCard()
+        //bottomHalf = HalfSwipeCard()
         bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         bottomHalf.initialize(name: bridgePairing.user2Name!)
         
@@ -87,8 +96,8 @@ class SwipeCard: UIView {
             }
         }
         
-        self.addSubview(topHalf)
-        self.addSubview(bottomHalf)
+        //self.addSubview(topHalf)
+        //self.addSubview(bottomHalf)
         
         var shadowLayer: CAShapeLayer!
         
