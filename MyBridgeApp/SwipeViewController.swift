@@ -111,7 +111,7 @@ class SwipeViewController: UIViewController {
         
         let dateBefore = Date()
         // Get the first swipeCards
-        self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
+        self.swipeBackend.getInitialBridgePairings(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
             let dateAfter = Date()
             let timeInterval = dateAfter.timeIntervalSince(dateBefore)
             var delay = 0.0
@@ -119,15 +119,8 @@ class SwipeViewController: UIViewController {
                 delay = 2.0 - timeInterval
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                if self.swipeBackend.gotTopBridgePairing {
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                    self.layout.loadingView.stopAnimating()
-                }
-                
-                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                    self.layout.loadingView.stopAnimating()
-                }
+                MBProgressHUD.hide(for: self.view, animated: true)
+                self.layout.loadingView.stopAnimating()
             }
         }
     }
