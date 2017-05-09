@@ -13,6 +13,8 @@ class HalfSwipeCard: UIView {
     var photo: UIImage?
     let nameLabel = UILabel()
     let photoView = UIImageView()
+    var nameLabelWidthConstraint: NSLayoutConstraint?
+    var nameLabelHeightConstraint: NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,7 +39,6 @@ class HalfSwipeCard: UIView {
         nameLabel.layer.shadowRadius = 0.5
         nameLabel.layer.shadowColor = UIColor.black.cgColor
         nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: 0.5)
-
         
         photoView.contentMode = .scaleAspectFill
         photoView.clipsToBounds = true
@@ -47,7 +48,7 @@ class HalfSwipeCard: UIView {
     }
     
     func setName(name: String) {
-        nameLabel.text = DisplayUtility.firstNameLastNameInitial(name: name)
+        nameLabel.text = name
         layoutHalfCard()
     }
     
@@ -66,10 +67,23 @@ class HalfSwipeCard: UIView {
         // Setting origin y value of nameLabel based on placement of connectionTypeIcon which is based on whether there is a status
         //nameLabel.center.y = 0.83*self.frame.height
         nameLabel.sizeToFit()
-        nameLabel.autoSetDimensions(to: nameLabel.frame.size)
+        
+        if let constraint = nameLabelWidthConstraint {
+            constraint.constant = nameLabel.frame.width
+        } else {
+            nameLabelWidthConstraint = nameLabel.autoSetDimension(.width, toSize: nameLabel.frame.width)
+        }
+        
+        if let constraint = nameLabelHeightConstraint {
+            constraint.constant = nameLabel.frame.height
+        } else {
+            nameLabelHeightConstraint = nameLabel.autoSetDimension(.height, toSize: nameLabel.frame.height)
+        }
+        //nameLabel.autoSetDimensions(to: nameLabel.frame.size)
         nameLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: 10)
         nameLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 10)
 
+        setNeedsLayout()
     }
     
     func callbackToSetPhoto(_ image: UIImage) -> Void {

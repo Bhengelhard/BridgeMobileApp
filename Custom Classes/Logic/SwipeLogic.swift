@@ -279,7 +279,9 @@ class SwipeLogic {
             // Swiped Left
             else {
                 // Only check back in if user swiped left
-                swipeBackend.checkIn()
+                if let bridgePairing = swipeCard.bridgePairing {
+                    swipeBackend.checkIn(bridgePairing: bridgePairing)
+                }
             }
             
             layout.switchTopAndBottomCards()

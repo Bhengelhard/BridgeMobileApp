@@ -26,14 +26,23 @@ class SwipeCard: UIView {
     init () {
         super.init(frame: CGRect())
 
-        frame = swipeCardFrame()
+        //frame = swipeCardFrame()
 		clipsToBounds = true
         
         //topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         //bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         
         self.addSubview(topHalf)
+        topHalf.autoPinEdge(toSuperviewEdge: .top)
+        topHalf.autoPinEdge(toSuperviewEdge: .left)
+        topHalf.autoPinEdge(toSuperviewEdge: .right)
+        topHalf.autoMatch(.height, to: .height, of: self, withMultiplier: 0.5)
+        
         self.addSubview(bottomHalf)
+        bottomHalf.autoPinEdge(.top, to: .bottom, of: topHalf)
+        bottomHalf.autoPinEdge(toSuperviewEdge: .left)
+        bottomHalf.autoPinEdge(toSuperviewEdge: .right)
+        bottomHalf.autoPinEdge(toSuperviewEdge: .bottom)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -51,7 +60,7 @@ class SwipeCard: UIView {
         self.layer.cornerRadius = swipCardCornerRadius
         
         //topHalf = HalfSwipeCard()
-        topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
+        //topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         topHalf.initialize(name: bridgePairing.user1Name!)
         
         //applying rounded corners to the topHalf
@@ -62,7 +71,7 @@ class SwipeCard: UIView {
         
         bridgePairing.getUser1 { (user) in
             if let user = user {
-                if let name = user.name {
+                if let name = user.firstNameLastNameInitial {
                     self.topHalf.setName(name: name)
                 }
                 user.getMainPicture { (picture) in
@@ -74,7 +83,7 @@ class SwipeCard: UIView {
         }
         
         //bottomHalf = HalfSwipeCard()
-        bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
+        //bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         bottomHalf.initialize(name: bridgePairing.user2Name!)
         
         //applying rounded corners to the bottomHalf
@@ -85,7 +94,7 @@ class SwipeCard: UIView {
         
         bridgePairing.getUser2 { (user) in
             if let user = user {
-                if let name = user.name {
+                if let name = user.firstNameLastNameInitial {
                     self.bottomHalf.setName(name: name)
                 }
                 user.getMainPicture { (picture) in
@@ -144,10 +153,24 @@ class SwipeCard: UIView {
     }
     
     func clear() {
+        if let bridgePairing = bridgePairing {
+            if let id = bridgePairing.id {
+                print("clearing swipe card with bridgePairing id = \(id)")
+            }
+        } else {
+            print("clearing swipe card")
+        }
         topHalf.setImage(image: nil)
+        topHalf.photoView.removeFromSuperview()
+        
         topHalf.setName(name: "")
+        topHalf.nameLabel.removeFromSuperview()
+        
         bottomHalf.setImage(image: nil)
+        bottomHalf.photoView.removeFromSuperview()
+        
         bottomHalf.setName(name: "")
+        bottomHalf.nameLabel.removeFromSuperview()
     }
     
     // MARK: - Targets
