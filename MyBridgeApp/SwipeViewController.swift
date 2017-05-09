@@ -42,6 +42,7 @@ class SwipeViewController: UIViewController {
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
         layout.refreshButton.addTarget(self, action: #selector(refreshButtonTapped(_:)), for: .touchUpInside)
+        layout.navBar.titleButton.addTarget(self, action: #selector(necterIconTapped(_:)), for: .touchUpInside)
         
         layout.inviteButton.setVC(vc: self)
         
@@ -147,6 +148,12 @@ class SwipeViewController: UIViewController {
     }
     
     func infoButtonTapped(_ sender: UIButton) {
+        presentAppInstructions()
+    }
+    func necterIconTapped(_ sender: UIButton) {
+        presentAppInstructions()
+    }
+    func presentAppInstructions() {
         let alert = UIAlertController(title: "How to NECT:", message: "Our algorithm pairs two of your friends.\nSwipe right to introduce them.\nSwipe left to see the next pair.", preferredStyle: UIAlertControllerStyle.alert)
         //Create the actions
         alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in

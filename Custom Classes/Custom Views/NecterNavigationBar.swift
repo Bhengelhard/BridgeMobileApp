@@ -17,6 +17,7 @@ class NecterNavigationBar: UINavigationBar {
     let leftButton = UIButton()
     let navItem = UINavigationItem()
     let titleImageView = UIImageView()
+    let titleButton = UIButton()
     
     init() {
         super.init(frame: CGRect())
@@ -31,6 +32,8 @@ class NecterNavigationBar: UINavigationBar {
         // Setting the navigation Bar Title Image
         //titleImageView.frame.size = CGSize(width: 40, height: 40)
         //titleImageView.contentMode = .scaleAspectFit
+        titleButton.contentMode = .scaleAspectFill
+        titleButton.clipsToBounds = true
         titleImageView.contentMode = .scaleAspectFill
         titleImageView.clipsToBounds = true
         
@@ -58,6 +61,16 @@ class NecterNavigationBar: UINavigationBar {
     }
     
     override func updateConstraints() {
+        addSubview(titleButton)
+        titleButton.autoAlignAxis(toSuperviewAxis: .vertical)
+        if let titleView = navItem.titleView {
+            titleButton.autoAlignAxis(.horizontal, toSameAxisOf: titleView)
+        } else {
+            titleButton.autoAlignAxis(toSuperviewAxis: .horizontal)
+        }
+        titleButton.autoSetDimension(.width, toSize: 35)
+        titleButton.autoMatch(.height, to: .width, of: titleButton)
+        
         addSubview(titleImageView)
         titleImageView.autoAlignAxis(toSuperviewAxis: .vertical)
         if let titleView = navItem.titleView {
@@ -67,12 +80,13 @@ class NecterNavigationBar: UINavigationBar {
         }
         titleImageView.autoSetDimension(.width, toSize: 35)
         titleImageView.autoMatch(.height, to: .width, of: titleImageView)
-                
+        
         super.updateConstraints()
     }
     
     func setTitleImage(image: UIImage) {
-        titleImageView.image = image
+        //titleImageView.image = image
+        titleButton.setImage(image, for: .normal)
         navItem.titleView = UIView()
         
         setNeedsUpdateConstraints()
