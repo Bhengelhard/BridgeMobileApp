@@ -344,7 +344,19 @@ class SwipeBackend {
                                         
                                         bridgePairing.checkedOut = true
                                         
-                                        self.reserveBridgePairing = bridgePairing
+                                        if self.downloadOnSwipe { // user has already swiped
+                                            // store bottom bride pairing locally
+                                            self.localBridgePairings.setBridgePairing2ID(bridgePairing.id)
+                                            self.localBridgePairings.synchronize()
+                                            
+                                            bottomSwipeCard.alpha = 1
+                                            bottomSwipeCard.isUserInteractionEnabled = true
+                                            bottomSwipeCard.initialize(bridgePairing: bridgePairing)
+                                            
+                                            self.reserveBridgePairing = nil
+                                        } else {
+                                            self.reserveBridgePairing = bridgePairing
+                                        }
                                         
                                         bridgePairing.save { (_) in
                                             if let completion = completion {
@@ -397,10 +409,8 @@ class SwipeBackend {
         bottomSwipeCard.clear()
         
         topBridgePairing = bottomBridgePairing
-        bottomBridgePairing = reserveBridgePairing
-        reserveBridgePairing = nil
         
-        // store bridge pairings locally
+        // store top bridge pairing locally
         if let topBridgePairing = topBridgePairing {
             localBridgePairings.setBridgePairing1ID(topBridgePairing.id)
             
@@ -409,26 +419,33 @@ class SwipeBackend {
         } else {
             localBridgePairings.setBridgePairing1ID(nil)
         }
-        
-        if let bottomBridgePairing = bottomBridgePairing {
-            localBridgePairings.setBridgePairing2ID(bottomBridgePairing.id)
-            
-            bottomSwipeCard.alpha = 1
-            bottomSwipeCard.isUserInteractionEnabled = true
-        } else {
-            localBridgePairings.setBridgePairing2ID(nil)
-        }
-        
         localBridgePairings.synchronize()
         
         if downloadOnSwipe {
             downloadOnSwipe = false
+            
+            bottomBridgePairing = nil
+            
+            // store bottom bridge pairing locally
+            localBridgePairings.setBridgePairing2ID(nil)
+            localBridgePairings.synchronize()
+            
             doneGettingBottomBridgePairing = false
             getTwoBridgePairings(topSwipeCard: topSwipeCard, bottomSwipeCard: bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
         } else {
             downloadOnSwipe = true
+            bottomBridgePairing = reserveBridgePairing
             if let bottomBridgePairing = bottomBridgePairing {
+                
+                // store bottom bride pairing locally
+                localBridgePairings.setBridgePairing2ID(bottomBridgePairing.id)
+                localBridgePairings.synchronize()
+                
+                bottomSwipeCard.alpha = 1
+                bottomSwipeCard.isUserInteractionEnabled = true
                 bottomSwipeCard.initialize(bridgePairing: bottomBridgePairing)
+                
+                reserveBridgePairing = nil
             }
         }
     }
@@ -460,9 +477,7 @@ class SwipeBackend {
                         
                         bottomSwipeCard.initialize(bridgePairing: bottomBridgePairing)
                         
-                        if let completion = completion {
-                            completion()
-                        }
+                        self.getReserveBridgePairing(topSwipeCard: topSwipeCard, bottomSwipeCard: bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
                     }
                 } else {
                     print("bottom not stored locally")
