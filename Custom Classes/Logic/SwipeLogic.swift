@@ -135,19 +135,12 @@ class SwipeLogic {
         // Loging swiping right and left as events
         if right {
             let title = "swipeRight"
-            FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
-                kFIRParameterItemID: "id-\(title)" as NSObject,
-                kFIRParameterItemName: title as NSObject,
-                kFIRParameterContentType: "swipe" as NSObject
-                ])
+            FirebaseLogs.swiped(title: title)
         } else {
             let title = "swipeLeft"
-            FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
-                kFIRParameterItemID: "id-\(title)" as NSObject,
-                kFIRParameterItemName: title as NSObject,
-                kFIRParameterContentType: "swipe" as NSObject
-                ])
+            FirebaseLogs.swiped(title: title)
         }
+        
         
         let view = vc.view!
         let swipeBackend = vc.swipeBackend
@@ -205,9 +198,6 @@ class SwipeLogic {
             
             if right {
                 if let bridgePairing = swipeCard.bridgePairing {
-                    // set bridged to true
-                    bridgePairing.bridged = true
-                    bridgePairing.save()
                     
                     if let user1ID = bridgePairing.user1ID {
                         print("got user1ID")
@@ -232,13 +222,22 @@ class SwipeLogic {
                                 var connecterName = ""
                                 User.getCurrent(withBlock: { (user) in
                                     if let user = user {
+                                        
+                                        // set bridged to true
+                                        bridgePairing.bridged = true
+                                        
                                         if let id = user.id {
                                             connecterID = id
+                                            bridgePairing.connecterID = id
                                         }
                                         
                                         if let name = user.name {
                                             connecterName = name
+                                            bridgePairing.connecterName = name
                                         }
+                                        
+                                        bridgePairing.save()
+                                       
                                     }
                                 })
                                 
