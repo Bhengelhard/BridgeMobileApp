@@ -18,6 +18,7 @@ class SwipeBackend {
     let localBridgePairings = LocalBridgePairings()
     var doneGettingTopBridgePairing = false
     var doneGettingBottomBridgePairing = false
+    var doneGettingReserveBridgePairing = false
     var gotReserveBridgeParing = false
     var downloadOnSwipe = false
     
@@ -209,7 +210,22 @@ class SwipeBackend {
                                                                                     
                                                                                     bridgePairing2.checkedOut = true
                                                                                     
-                                                                                    self.reserveBridgePairing = bridgePairing2
+                                                                                    if self.downloadOnSwipe { // user has already swiped
+                                                                                        // store bottom bride pairing locally
+                                                                                        self.localBridgePairings.setBridgePairing2ID(bridgePairing2.id)
+                                                                                        self.localBridgePairings.synchronize()
+                                                                                        
+                                                                                        bottomSwipeCard.alpha = 1
+                                                                                        bottomSwipeCard.isUserInteractionEnabled = true
+                                                                                        
+                                                                                        self.doneGettingReserveBridgePairing = true
+                                                                                        
+                                                                                        bottomSwipeCard.initialize(bridgePairing: bridgePairing2)
+                                                                                        
+                                                                                        self.reserveBridgePairing = nil
+                                                                                    } else {
+                                                                                        self.reserveBridgePairing = bridgePairing2
+                                                                                    }
                                                                                     
                                                                                     bridgePairing2.save { (_) in
                                                                                         if let completion = completion {
@@ -351,6 +367,9 @@ class SwipeBackend {
                                             
                                             bottomSwipeCard.alpha = 1
                                             bottomSwipeCard.isUserInteractionEnabled = true
+                                            
+                                            self.doneGettingReserveBridgePairing = true
+                                            
                                             bottomSwipeCard.initialize(bridgePairing: bridgePairing)
                                             
                                             self.reserveBridgePairing = nil
@@ -426,6 +445,8 @@ class SwipeBackend {
             
             bottomBridgePairing = nil
             
+            doneGettingReserveBridgePairing = false
+            
             // store bottom bridge pairing locally
             localBridgePairings.setBridgePairing2ID(nil)
             localBridgePairings.synchronize()
@@ -434,16 +455,17 @@ class SwipeBackend {
             getTwoBridgePairings(topSwipeCard: topSwipeCard, bottomSwipeCard: bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
         } else {
             downloadOnSwipe = true
-            bottomBridgePairing = reserveBridgePairing
-            if let bottomBridgePairing = bottomBridgePairing {
+
+            if doneGettingReserveBridgePairing {
+                bottomBridgePairing = reserveBridgePairing
                 
                 // store bottom bride pairing locally
-                localBridgePairings.setBridgePairing2ID(bottomBridgePairing.id)
+                //localBridgePairings.setBridgePairing2ID(bottomBridgePairing.id)
                 localBridgePairings.synchronize()
                 
                 bottomSwipeCard.alpha = 1
                 bottomSwipeCard.isUserInteractionEnabled = true
-                bottomSwipeCard.initialize(bridgePairing: bottomBridgePairing)
+                //bottomSwipeCard.initialize(bridgePairing: bottomBridgePairing)
                 
                 reserveBridgePairing = nil
             }
