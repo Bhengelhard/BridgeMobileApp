@@ -64,7 +64,7 @@ class SwipeBackend {
     private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         User.getCurrent { (user) in
             
-            // if reached limit -> got no bridge pairings (TODO: change to WAY TO 'NECT)
+            // if reached limit -> got no bridge pairings (TODO: change to WAY TO NECT - "want to make tomorrow's necting even better...?")
             if let limitPairsCount = user.limitPairsCount {
                 if limitPairsCount <= 0 {
                     return self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
@@ -190,6 +190,8 @@ class SwipeBackend {
     }
     
     private func gotNoBridgePairings(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+        // TODO: if limit == 5 -> NOBODY TO NECT, else -> NO MORE NECTS
+        
         swipeCard.alpha = 0
         
         if top {
