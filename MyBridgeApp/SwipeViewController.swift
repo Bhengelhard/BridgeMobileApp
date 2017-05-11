@@ -54,6 +54,21 @@ class SwipeViewController: UIViewController {
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
         //dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
         
+        
+        // TODO: Check if it's possible to combine this with the getCurrentUserUnviewMatchesNotification
+        // TODO: Make it so the notification only goes away when the user reads a message instead of just clicking on the inbox -> this could be by re-running the below check the same times as reloading the messages table.
+        // Check if the current user has a notification
+        User.getCurrent { (user) in
+            Message.getCurrentUserNotificationStatus(withUser: user!) { (hasNotification) in
+                if hasNotification {
+                    self.layout.navBar.rightButton.setImage(#imageLiteral(resourceName: "Inbox_Navbar_Icon_Notification"), for: .normal)
+                } else {
+                    self.layout.navBar.rightButton.setImage(#imageLiteral(resourceName: "Messages_Navbar_Inactive"), for: .normal)
+                }
+            }
+        }
+
+        
         swipeBackend.getCurrentUserUnviewedMatches { (bridgePairings) in
             User.getCurrent { (currentUser) in
                 if let currentUser = currentUser {

@@ -493,6 +493,35 @@ class Message: NSObject {
         }
     }
     
+    // Determine whether the user has an unread messages or unread newMatches
+    static func getCurrentUserNotificationStatus(withUser user: User, withBlock block: ((Bool) -> Void)? = nil) {
+        if let userID = user.id {
+            let subQuery1 = PFQuery(className: "Messages")
+            subQuery1.whereKey("user1_objectId", equalTo: userID)
+            subQuery1.whereKey("user1_has_seen_last_single_message", notEqualTo: true)
+            let subQuery2 = PFQuery(className: "Messages")
+            subQuery2.whereKey("user2_objectId", equalTo: userID)
+            subQuery2.whereKey("user2_has_seen_last_single_message", notEqualTo: true)
+            
+            let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            query.countObjectsInBackground(block: { (count, error) in
+                if let error = error {
+                    print("error counting messages - \(error)")
+                } else {
+                    var notificationStatus = false
+                    if count > 0 {
+                        notificationStatus = true
+                    } else {
+                        notificationStatus = false
+                    }
+                    if let block = block {
+                        block(notificationStatus)
+                    }
+                }
+            })
+        }
+    }
+    
     func save(withBlock block: MessageBlock? = nil) {
         if let user1ID = user1ID {
             parseMessage["user1_objectId"] = user1ID
