@@ -19,16 +19,30 @@ class SwipeCard: UIView {
     var cardsPredictedType: String?
     var topHalf = HalfSwipeCard()
     var bottomHalf = HalfSwipeCard()
-	var overlay = CALayer()
-	let defaultOverlayOpacity: Float = 0.75
+    var overlay = CALayer()
+    let defaultOverlayOpacity: Float = 0.75
     var bridgePairing: BridgePairing?
     
     init () {
         super.init(frame: CGRect())
-
-        self.frame = swipeCardFrame()
-		self.clipsToBounds = true
         
+        //frame = swipeCardFrame()
+        clipsToBounds = true
+        
+        //topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
+        //bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
+        
+        self.addSubview(topHalf)
+        topHalf.autoPinEdge(toSuperviewEdge: .top)
+        topHalf.autoPinEdge(toSuperviewEdge: .left)
+        topHalf.autoPinEdge(toSuperviewEdge: .right)
+        topHalf.autoMatch(.height, to: .height, of: self, withMultiplier: 0.5)
+        
+        self.addSubview(bottomHalf)
+        bottomHalf.autoPinEdge(.top, to: .bottom, of: topHalf)
+        bottomHalf.autoPinEdge(toSuperviewEdge: .left)
+        bottomHalf.autoPinEdge(toSuperviewEdge: .right)
+        bottomHalf.autoPinEdge(toSuperviewEdge: .bottom)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -36,13 +50,17 @@ class SwipeCard: UIView {
     }
     
     func initialize(bridgePairing: BridgePairing) {
+        if let id = bridgePairing.id {
+            print("initializing swipe card with bridgePairing id = \(id)")
+        }
+        
         self.bridgePairing = bridgePairing
         
         let swipCardCornerRadius: CGFloat = 12
         self.layer.cornerRadius = swipCardCornerRadius
         
-        topHalf = HalfSwipeCard()
-        topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
+        //topHalf = HalfSwipeCard()
+        //topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         topHalf.initialize(name: bridgePairing.user1Name!)
         
         //applying rounded corners to the topHalf
@@ -52,18 +70,20 @@ class SwipeCard: UIView {
         topHalf.layer.mask = topHalfShape
         
         bridgePairing.getUser1 { (user) in
-            if let name = user.name {
-                self.topHalf.setName(name: name)
-            }
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    self.topHalf.setImage(image: image)
+            if let user = user {
+                if let name = user.firstNameLastNameInitial {
+                    self.topHalf.setName(name: name)
+                }
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.topHalf.setImage(image: image)
+                    }
                 }
             }
         }
         
-        bottomHalf = HalfSwipeCard()
-        bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
+        //bottomHalf = HalfSwipeCard()
+        //bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         bottomHalf.initialize(name: bridgePairing.user2Name!)
         
         //applying rounded corners to the bottomHalf
@@ -73,18 +93,20 @@ class SwipeCard: UIView {
         bottomHalf.layer.mask = bottomHalfShape
         
         bridgePairing.getUser2 { (user) in
-            if let name = user.name {
-                self.bottomHalf.setName(name: name)
-            }
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    self.bottomHalf.setImage(image: image)
+            if let user = user {
+                if let name = user.firstNameLastNameInitial {
+                    self.bottomHalf.setName(name: name)
+                }
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.bottomHalf.setImage(image: image)
+                    }
                 }
             }
         }
         
-        self.addSubview(topHalf)
-        self.addSubview(bottomHalf)
+        //self.addSubview(topHalf)
+        //self.addSubview(bottomHalf)
         
         var shadowLayer: CAShapeLayer!
         
@@ -130,22 +152,52 @@ class SwipeCard: UIView {
         return CGRect(x: originX, y: originY, width: width, height: height)
     }
     
+    func clear() {
+        if let bridgePairing = bridgePairing {
+            if let id = bridgePairing.id {
+                print("clearing swipe card with bridgePairing id = \(id)")
+            }
+        } else {
+            print("clearing swipe card")
+        }
+        topHalf.setImage(image: nil)
+        topHalf.photoView.removeFromSuperview()
+        
+        topHalf.setName(name: "")
+        topHalf.nameLabel.removeFromSuperview()
+        
+        bottomHalf.setImage(image: nil)
+        bottomHalf.photoView.removeFromSuperview()
+        
+        bottomHalf.setName(name: "")
+        bottomHalf.nameLabel.removeFromSuperview()
+    }
+    
     // MARK: - Targets
     // Present External View Controller with ID of Top Half Card
     func topHalfCardtapped(_ gestureRecognizer: UITapGestureRecognizer) {
         print("top half card tapped")
-        if let userId = bridgePairing?.user1ID {
+        if let userID = bridgePairing?.user1ID {
             // Notify SwipeViewController to present the tapped User
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userId)
+            if let image = topHalf.photoView.image {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: (userID, image))
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userID)
+            }
         }
     }
     
     // Present External View Controller with ID of Bottom Half Card
     func bottomHalfCardtapped(_ gestureRecognizer: UITapGestureRecognizer) {
         print("bottom half card tapped")
-        if let userId = bridgePairing?.user2ID {
+        if let userID = bridgePairing?.user2ID {
             // Notify SwipeViewController to present the tapped User
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userId)
+            if let image = bottomHalf.photoView.image {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: (userID, image))
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "presentExternalProfileVC"), object: userID)
+            }
         }
     }
 }
+
