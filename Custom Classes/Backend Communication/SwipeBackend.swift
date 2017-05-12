@@ -367,7 +367,7 @@ class SwipeBackend {
     func swiped(topSwipepCard: SwipeCard, bottomSwipeCard: SwipeCard) {
         bottomSwipeCard.alpha = 0
         bottomSwipeCard.isUserInteractionEnabled = false
-        //bottomSwipeCard.clear()
+        bottomSwipeCard.clear()
         
         if bridgePairingIDs.count > 0 {
             let bridgePairingID = bridgePairingIDs[0]
