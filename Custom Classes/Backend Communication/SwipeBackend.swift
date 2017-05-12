@@ -17,6 +17,8 @@ class SwipeBackend {
     var bottomSwipeCard = SwipeCard()
     var topBridgePairing: BridgePairing?
     var bottomBridgePairing: BridgePairing?
+    var bridgePairingDict = [String: BridgePairing]()
+    var bridgePairingIDs = [String]()
     let localBridgePairings = LocalBridgePairings()
     var gotTopBridgePairing = false
     var gotBottomBridgePairing = false
@@ -219,7 +221,7 @@ class SwipeBackend {
                 if let limitMet = limitMet {
                     limitMet()
                 }
-            } else if limitPairsCount < 5 {
+            } else if limitPairsCount < Constants.cardLimit {
                 if let noMoreBridgePairings = noMoreBridgePairings {
                     noMoreBridgePairings()
                 }
@@ -292,6 +294,100 @@ class SwipeBackend {
         } else {
             print("bottom not stored locally")
             getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
+        }
+    }
+    
+    func getBridgePairings(numberStored: Int, topSwipeCard: SwipeCard, bottomSwipeCard: SwipeCard, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+        
+        // get locally stored bridge pairing ids
+        if let bridgePairingIDs = localBridgePairings.getBridgePairingIDs() {
+            self.bridgePairingIDs = bridgePairingIDs
+        }
+        
+        // retrieve nd save bridge pairings
+        for bridgePairingID in bridgePairingIDs {
+            BridgePairing.get(withID: bridgePairingID) { (bridgePairing) in
+                self.bridgePairingDict[bridgePairingID] = bridgePairing
+            }
+        }
+        
+        // get remainder of bridge pairings
+        User.getCurrent { (user) in
+            if let limitPairsCount = user.limitPairsCount {
+                if limitPairsCount > 0 {
+                    let remainingPairs = limitPairsCount - self.bridgePairingIDs.count
+                    BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: remainingPairs, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
+                        for bridgePairing in bridgePairings {
+                            if let id = bridgePairing.id {
+                                self.bridgePairingIDs.append(id)
+                                self.bridgePairingDict[id] = bridgePairing
+                                
+                                if let userID = user.id {
+                                    var shownTo: [String]
+                                    if let bridgePairingShownTo = bridgePairing.shownTo {
+                                        shownTo = bridgePairingShownTo
+                                        shownTo.append(userID)
+                                    } else {
+                                        shownTo = [userID]
+                                    }
+                                    bridgePairing.shownTo = shownTo
+                                    bridgePairing.save()
+                                }
+                            }
+                        }
+                        
+                        // store locally
+                        self.localBridgePairings.setBridgePairingIDs(self.bridgePairingIDs)
+                        self.localBridgePairings.synchronize()
+                        
+                        if self.bridgePairingIDs.count == 0 { // no pairings
+                            self.gotNoBridgePairings(user: user, swipeCard: bottomSwipeCard, top: true, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
+                        } else {
+                            topSwipeCard.alpha = 1
+                            topSwipeCard.isUserInteractionEnabled = false
+                            if let bridgePairing = self.bridgePairingDict[self.bridgePairingIDs[0]] {
+                                topSwipeCard.initialize(bridgePairing: bridgePairing)
+                            }
+                            
+                            if self.bridgePairingIDs.count == 1 { // one pairing
+                                self.gotNoBridgePairings(user: user, swipeCard: bottomSwipeCard, top: true, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
+                            } else { // more than one pairing
+                                bottomSwipeCard.alpha = 1
+                                if let bridgePairing = self.bridgePairingDict[self.bridgePairingIDs[1]] {
+                                    bottomSwipeCard.initialize(bridgePairing: bridgePairing)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func swiped(topSwipepCard: SwipeCard, bottomSwipeCard: SwipeCard) {
+        bottomSwipeCard.alpha = 0
+        bottomSwipeCard.isUserInteractionEnabled = false
+        //bottomSwipeCard.clear()
+        
+        if bridgePairingIDs.count > 0 {
+            let bridgePairingID = bridgePairingIDs[0]
+            bridgePairingDict.removeValue(forKey: bridgePairingID)
+            bridgePairingIDs.remove(at: 0)
+            
+            localBridgePairings.setBridgePairingIDs(bridgePairingIDs)
+            localBridgePairings.synchronize()
+            
+            if bridgePairingIDs.count > 0 {
+                topSwipepCard.isUserInteractionEnabled = true
+            }
+            
+            if bridgePairingIDs.count > 1 {
+                let newBridgePairingID = bridgePairingIDs[1]
+                if let newBridgePairing = bridgePairingDict[newBridgePairingID] {
+                    bottomSwipeCard.alpha = 1
+                    bottomSwipeCard.initialize(bridgePairing: newBridgePairing)
+                }
+            }
         }
     }
     

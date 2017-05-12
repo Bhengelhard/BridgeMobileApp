@@ -566,6 +566,7 @@ class LocalBridgePairings {
     /// Indicates whether the user has entered an access code
     var bridgePairing1ID: String?
     var bridgePairing2ID: String?
+    var bridgePairingIDs: [String]?
     
     // MARK: -
     init() {
@@ -574,6 +575,7 @@ class LocalBridgePairings {
             if let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded as! Data) {
                 bridgePairing1ID = (bridgePairings as! BridgePairings).bridgePairing1ID
                 bridgePairing2ID = (bridgePairings as! BridgePairings).bridgePairing2ID
+                bridgePairingIDs = (bridgePairings as! BridgePairings).bridgePairingIDs
             }
         }
     }
@@ -614,11 +616,26 @@ class LocalBridgePairings {
         }
     }
     
+    func setBridgePairingIDs(_ bridgePairingIDs: [String]?) {
+        self.bridgePairingIDs = bridgePairingIDs
+    }
+    func getBridgePairingIDs() -> [String]? {
+        let userDefaults = UserDefaults.standard
+        if let _ = userDefaults.object(forKey: "bridgePairings") {
+            let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
+            let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
+            return bridgePairings.bridgePairingIDs
+        }
+        else{
+            return nil
+        }
+    }
+    
     // MARK: -
     // This function saves the local data to the device
     func synchronize(){
         print("synchronizing")
-        let bridgePairings: BridgePairings = BridgePairings(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID)
+        let bridgePairings: BridgePairings = BridgePairings(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID, bridgePairingIDs: bridgePairingIDs)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: bridgePairings)
         userDefaults.set(encodedData, forKey: "bridgePairings")
@@ -631,20 +648,24 @@ class LocalBridgePairings {
 class BridgePairings:NSObject, NSCoding {
     var bridgePairing1ID: String?
     var bridgePairing2ID: String?
+    var bridgePairingIDs: [String]?
     
-    init(bridgePairing1ID: String?, bridgePairing2ID: String?) {
+    init(bridgePairing1ID: String?, bridgePairing2ID: String?, bridgePairingIDs: [String]?) {
         self.bridgePairing1ID = bridgePairing1ID
         self.bridgePairing2ID = bridgePairing2ID
+        self.bridgePairingIDs = bridgePairingIDs
     }
     
     required convenience init(coder aDecoder: NSCoder) {
         let bridgePairing1ID = aDecoder.decodeObject(forKey: "bridgePairing1ID") as! String?
         let bridgePairing2ID = aDecoder.decodeObject(forKey: "bridgePairing2ID") as! String?
-        self.init(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID)
+        let bridgePairingIDs = aDecoder.decodeObject(forKey: "bridgePairingIDs") as! [String]?
+        self.init(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID, bridgePairingIDs: bridgePairingIDs)
     }
     func encode(with aCoder: NSCoder) {
         aCoder.encode(bridgePairing1ID, forKey: "bridgePairing1ID")
         aCoder.encode(bridgePairing2ID, forKey: "bridgePairing2ID")
+        aCoder.encode(bridgePairing2ID, forKey: "bridgePairingIDs")
     }
     
 }
