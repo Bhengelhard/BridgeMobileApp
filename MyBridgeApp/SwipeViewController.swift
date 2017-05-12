@@ -124,7 +124,21 @@ class SwipeViewController: UIViewController {
         hud.label.numberOfLines = 0
         
         let dateBefore = Date()
+        self.swipeBackend.getBridgePairings(topSwipeCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings) {
+            let dateAfter = Date()
+            let timeInterval = dateAfter.timeIntervalSince(dateBefore)
+            var delay = 0.0
+            if timeInterval < 2.0 {
+                delay = 2.0 - timeInterval
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                MBProgressHUD.hide(for: self.view, animated: true)
+                self.layout.loadingView.stopAnimating()
+            }
+        }
+        
         // Get the first swipeCards
+        /*
         self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings) {
             let dateAfter = Date()
             let timeInterval = dateAfter.timeIntervalSince(dateBefore)
@@ -143,7 +157,7 @@ class SwipeViewController: UIViewController {
                     self.layout.loadingView.stopAnimating()
                 }
             }
-        }
+        }*/
     }
     
     override func loadView() {
@@ -199,8 +213,6 @@ class SwipeViewController: UIViewController {
     }
     
     func limitMet() {
-        print("limit met")
-        
         MBProgressHUD.hide(for: self.view, animated: true)
         self.layout.loadingView.stopAnimating()
         
@@ -217,7 +229,7 @@ class SwipeViewController: UIViewController {
         }
         
         // both cards gone
-        if swipeBackend.topBridgePairing == nil && swipeBackend.bottomBridgePairing == nil {
+        if layout.topSwipeCard.bridgePairing == nil && layout.bottomSwipeCard.bridgePairing == nil {
             layout.friendsImage.alpha = 1
             layout.inviteButton.alpha = 1
             
@@ -250,7 +262,7 @@ class SwipeViewController: UIViewController {
         }
         
         // both cards gone
-        if swipeBackend.topBridgePairing == nil && swipeBackend.bottomBridgePairing == nil {
+        if layout.topSwipeCard.bridgePairing == nil && layout.bottomSwipeCard.bridgePairing == nil {
             layout.friendsImage.alpha = 1
             layout.inviteButton.alpha = 1
             
@@ -277,7 +289,7 @@ class SwipeViewController: UIViewController {
         }
         
         // both cards gone
-        if swipeBackend.topBridgePairing == nil && swipeBackend.bottomBridgePairing == nil {
+        if layout.topSwipeCard.bridgePairing == nil && layout.bottomSwipeCard.bridgePairing == nil {
             layout.friendsImage.alpha = 1
             layout.inviteButton.alpha = 1
             

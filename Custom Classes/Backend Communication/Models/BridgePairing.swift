@@ -610,23 +610,32 @@ class LocalBridgePairings {
             let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
             let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
             return bridgePairings.bridgePairing2ID
-        }
-        else{
+        } else {
             return nil
         }
     }
     
     func setBridgePairingIDs(_ bridgePairingIDs: [String]?) {
         self.bridgePairingIDs = bridgePairingIDs
+        if let bridgePairingIDs = bridgePairingIDs {
+            print("setting bridge pairing ids locally: \(bridgePairingIDs.debugDescription)")
+        } else {
+            print("setting bridge pairing ids locally: nil")
+        }
     }
     func getBridgePairingIDs() -> [String]? {
         let userDefaults = UserDefaults.standard
         if let _ = userDefaults.object(forKey: "bridgePairings") {
             let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
             let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
+            if let bridgePairingIDs = bridgePairings.bridgePairingIDs {
+                print("got bridge pairing ids locally: \(bridgePairingIDs.debugDescription)")
+            } else {
+                print("got bridge pairing ids locally: nil")
+            }
             return bridgePairings.bridgePairingIDs
-        }
-        else{
+        } else {
+            print("got bridge pairing ids locally: nil")
             return nil
         }
     }
@@ -635,7 +644,7 @@ class LocalBridgePairings {
     // This function saves the local data to the device
     func synchronize(){
         print("synchronizing")
-        let bridgePairings: BridgePairings = BridgePairings(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID, bridgePairingIDs: bridgePairingIDs)
+        let bridgePairings = BridgePairings(bridgePairing1ID: bridgePairing1ID, bridgePairing2ID: bridgePairing2ID, bridgePairingIDs: bridgePairingIDs)
         let userDefaults = UserDefaults.standard
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: bridgePairings)
         userDefaults.set(encodedData, forKey: "bridgePairings")
@@ -645,7 +654,7 @@ class LocalBridgePairings {
 }
 
 
-class BridgePairings:NSObject, NSCoding {
+class BridgePairings: NSObject, NSCoding {
     var bridgePairing1ID: String?
     var bridgePairing2ID: String?
     var bridgePairingIDs: [String]?
@@ -665,7 +674,7 @@ class BridgePairings:NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(bridgePairing1ID, forKey: "bridgePairing1ID")
         aCoder.encode(bridgePairing2ID, forKey: "bridgePairing2ID")
-        aCoder.encode(bridgePairing2ID, forKey: "bridgePairingIDs")
+        aCoder.encode(bridgePairingIDs, forKey: "bridgePairingIDs")
     }
     
 }

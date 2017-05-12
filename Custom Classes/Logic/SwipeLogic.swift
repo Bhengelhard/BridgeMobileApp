@@ -146,12 +146,12 @@ class SwipeLogic {
         let swipeCard = layout.topSwipeCard
         
         if !swipeBackend.gotBottomBridgePairing {
-            layout.loadingView.startAnimating()
+            /*layout.loadingView.startAnimating()
             let hud = MBProgressHUD.showAdded(to: view, animated: true)
             hud.mode = .customView
             hud.customView = layout.loadingView
             hud.label.text = "Finding best\npairs to 'nect..."
-            hud.label.numberOfLines = 0
+            hud.label.numberOfLines = 0*/
         }
         
         // create and save swipe
@@ -261,8 +261,12 @@ class SwipeLogic {
             layout.topSwipeCard.isUserInteractionEnabled = true
             layout.bottomSwipeCard.isUserInteractionEnabled = false
             layout.topSwipeCard.overlay.removeFromSuperlayer()
-            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, limitMet: vc.limitMet, noMoreBridgePairings: vc.noMoreBridgePairings, noBridgePairings: vc.noBridgePairings) {
+            /*swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, limitMet: vc.limitMet, noMoreBridgePairings: vc.noMoreBridgePairings, noBridgePairings: vc.noBridgePairings) {
                 MBProgressHUD.hide(for: vc.view, animated: true)
+            }*/
+            
+            swipeBackend.swiped(topSwipepCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard, limitMet: vc.limitMet, noMoreBridgePairings: vc.noMoreBridgePairings, noBridgePairings: vc.noBridgePairings) {
+                //MBProgressHUD.hide(for: vc.view, animated: true)
             }
         })
     }

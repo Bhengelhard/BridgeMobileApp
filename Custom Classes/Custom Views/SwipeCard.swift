@@ -156,6 +156,8 @@ class SwipeCard: UIView {
         } else {
             print("clearing swipe card")
         }
+        bridgePairing = nil
+        
         topHalf.setImage(image: nil)
         topHalf.photoView.removeFromSuperview()
         
