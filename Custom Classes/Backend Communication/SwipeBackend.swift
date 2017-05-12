@@ -61,13 +61,11 @@ class SwipeBackend {
         }
     }
     
-    private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+    private func getNextBridgePairing(swipeCard: SwipeCard, top: Bool, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         User.getCurrent { (user) in
-            
-            // if reached limit -> got no bridge pairings (TODO: change to WAY TO NECT - "want to make tomorrow's necting even better...?")
             if let limitPairsCount = user.limitPairsCount {
                 if limitPairsCount <= 0 {
-                    return self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    return self.gotNoBridgePairings(user: user, swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                 }
             }
             
@@ -75,9 +73,9 @@ class SwipeBackend {
                 BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
                     if bridgePairings.count > 0 {
                         let bridgePairing = bridgePairings[0]
-                        self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                        self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                     } else {
-                        self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                        self.gotNoBridgePairings(user: user, swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                     }
                 }
             } else {
@@ -85,14 +83,14 @@ class SwipeBackend {
                     BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptFriend1WithID: topBridgePairing.user1ID, exceptFriend2WithID: topBridgePairing.user2ID, exceptForBlocked: true) { (bridgePairings) in
                         if bridgePairings.count > 0 {
                             let bridgePairing = bridgePairings[0]
-                            self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                            self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                         } else {
                             BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
                                 if bridgePairings.count > 0 {
                                     let bridgePairing = bridgePairings[0]
-                                    self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                                    self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                                 } else {
-                                    self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                                    self.gotNoBridgePairings(user: user, swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                                 }
                             }
                         }
@@ -101,9 +99,9 @@ class SwipeBackend {
                     BridgePairing.getAllWithFriends(ofUser: user, notShownOnly: true, withLimit: 1, notCheckedOutOnly: true, exceptForBlocked: true) { (bridgePairings) in
                         if bridgePairings.count > 0 {
                             let bridgePairing = bridgePairings[0]
-                            self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                            self.gotBridgePairing(bridgePairing: bridgePairing, user: user, swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                         } else {
-                            self.gotNoBridgePairings(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                            self.gotNoBridgePairings(user: user, swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                         }
                     }
                 }
@@ -111,7 +109,7 @@ class SwipeBackend {
         }
     }
     
-    private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
+    private func gotBridgePairing(bridgePairing: BridgePairing, user: User, swipeCard: SwipeCard, top: Bool, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         
         
         if top {
@@ -174,23 +172,22 @@ class SwipeBackend {
                                     completion()
                                 }
                             } else {
-                                self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                                self.getNextBridgePairing(swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                             }
                         } else {
-                            self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                            self.getNextBridgePairing(swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                         }
                     }
                 } else {
-                    self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                    self.getNextBridgePairing(swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                 }
             } else {
-                self.getNextBridgePairing(swipeCard: swipeCard, top: top, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+                self.getNextBridgePairing(swipeCard: swipeCard, top: top, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
             }
         }
     }
     
-    private func gotNoBridgePairings(swipeCard: SwipeCard, top: Bool, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
-        // TODO: if limit == 5 -> NOBODY TO NECT, else -> NO MORE NECTS
+    private func gotNoBridgePairings(user: User, swipeCard: SwipeCard, top: Bool, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         
         swipeCard.alpha = 0
         
@@ -217,17 +214,32 @@ class SwipeBackend {
         
         self.localBridgePairings.synchronize()
         
-        if let noMoreBridgePairings = noMoreBridgePairings {
+        if let limitPairsCount = user.limitPairsCount {
+            if limitPairsCount <= 0 {
+                if let limitMet = limitMet {
+                    limitMet()
+                }
+            } else if limitPairsCount < 5 {
+                if let noMoreBridgePairings = noMoreBridgePairings {
+                    noMoreBridgePairings()
+                }
+            } else {
+                if let noBridgePairings = noBridgePairings {
+                    noBridgePairings()
+                }
+            }
+        } else if let noMoreBridgePairings = noMoreBridgePairings {
             noMoreBridgePairings()
         }
         
+        /*
         if let completion = completion {
             completion()
-        }
+        }*/
     }
     
     /// set the bottom swipe card
-    func setBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+    func setBottomSwipeCard(bottomSwipeCard: SwipeCard, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         gotBottomBridgePairing = false
         // store old bottom as top locally
         topBridgePairing = bottomBridgePairing
@@ -242,11 +254,11 @@ class SwipeBackend {
         }
         localBridgePairings.synchronize()
         
-        getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+        getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
     }
     
     /// set the top swipe card upon opening app
-    func setInitialTopSwipeCard(topSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+    func setInitialTopSwipeCard(topSwipeCard: SwipeCard, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         gotTopBridgePairing = false
         if let bridgePairingID = localBridgePairings.getBridgePairing1ID() { // bridge pairing ID stored locally
             print("got top locally")
@@ -260,12 +272,12 @@ class SwipeBackend {
             }
         } else {
             print("top not stored locally")
-            getNextBridgePairing(swipeCard: topSwipeCard, top: true, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+            getNextBridgePairing(swipeCard: topSwipeCard, top: true, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
         }
     }
     
     /// set the bottom swipe card upon opening app
-    func setInitialBottomSwipeCard(bottomSwipeCard: SwipeCard, noMoreBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
+    func setInitialBottomSwipeCard(bottomSwipeCard: SwipeCard, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         gotBottomBridgePairing = false
         if let bridgePairingID = localBridgePairings.getBridgePairing2ID() { // bridge pairing ID stored locally
             print("got bottom locally")
@@ -279,7 +291,7 @@ class SwipeBackend {
             }
         } else {
             print("bottom not stored locally")
-            getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, noMoreBridgePairings: noMoreBridgePairings, completion: completion)
+            getNextBridgePairing(swipeCard: bottomSwipeCard, top: false, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
         }
     }
     

@@ -8,6 +8,7 @@
 
 import UIKit
 import NVActivityIndicatorView
+import CountdownLabel
 
 class SwipeObjects {
     
@@ -64,6 +65,80 @@ class SwipeObjects {
             super.init(frame: CGRect())
             
             self.setImage(#imageLiteral(resourceName: "Information_Icon"), for: .normal)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    class BigLabel: UILabel {
+        init(text: String) {
+            super.init(frame: CGRect())
+            
+            self.text = text
+            textColor = Constants.Colors.necter.textGray
+            textAlignment = .center
+            font = Constants.Fonts.bold48
+            numberOfLines = 0
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    class SmallLabel: UILabel {
+        init(text: String) {
+            super.init(frame: CGRect())
+            
+            self.text = text
+            textColor = Constants.Colors.necter.textGray
+            textAlignment = .center
+            font = Constants.Fonts.light24
+            numberOfLines = 0
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+    }
+    
+    class SwipeCountdownLabelView: UIView, CountdownLabelDelegate {
+        let countdownLabel: CountdownLabel
+        
+        init() {
+            
+            let currentDate = Date()
+            var targetDate = Date()
+            let calendar = Calendar(identifier: .gregorian)
+            
+            if let newDate = calendar.date(bySetting: .hour, value: 17, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
+                targetDate = newDate
+            }
+            
+            if calendar.component(.hour, from: currentDate) >= 17 { // Move target to next day
+                if let newDate = calendar.date(byAdding: .day, value: 1, to: targetDate) {
+                    targetDate = newDate
+                }
+            }
+            
+            countdownLabel = CountdownLabel(frame: CGRect(), fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            
+            super.init(frame: CGRect())
+            
+            countdownLabel.textColor = Constants.Colors.necter.textGray
+            countdownLabel.textAlignment = .center
+            countdownLabel.font = Constants.Fonts.bold48
+            
+            addSubview(countdownLabel)
+            countdownLabel.sizeToFit()
+            countdownLabel.autoPinEdgesToSuperviewEdges()
+        }
+        
+        func startCountdown() {
+            countdownLabel.start()
         }
         
         required init?(coder aDecoder: NSCoder) {

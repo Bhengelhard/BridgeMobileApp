@@ -134,7 +134,6 @@ class SwipeLogic {
         let view = vc.view!
         let swipeBackend = vc.swipeBackend
         let layout = vc.layout
-        let noMoreBridgePairings = vc.noMoreBridgePairings
         
         /*
         let swipeCard: SwipeCard
@@ -262,7 +261,7 @@ class SwipeLogic {
             layout.topSwipeCard.isUserInteractionEnabled = true
             layout.bottomSwipeCard.isUserInteractionEnabled = false
             layout.topSwipeCard.overlay.removeFromSuperlayer()
-            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, noMoreBridgePairings: noMoreBridgePairings) {
+            swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, limitMet: vc.limitMet, noMoreBridgePairings: vc.noMoreBridgePairings, noBridgePairings: vc.noBridgePairings) {
                 MBProgressHUD.hide(for: vc.view, animated: true)
             }
         })

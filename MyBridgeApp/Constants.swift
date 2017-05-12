@@ -55,6 +55,8 @@ struct Constants {
         
         /// BentonSansBold Size 24
         static let bold24 = UIFont(name: "BentonSans-Bold", size: 24)
-    }
-    
+        
+        /// BentonSansBold Size 48
+        static let bold48 = UIFont(name: "BentonSans-Bold", size: 48)
+    }    
 }

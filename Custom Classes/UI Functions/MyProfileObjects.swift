@@ -143,23 +143,6 @@ class MyProfileObjects {
             print("SettingsButton tapped")
         }
         
-    }
-    
-    /// Hexagon designed images of potential friends to add to the app
-    class FriendsImage: UIImageView {
-        
-        init() {
-            super.init(frame: CGRect())
-            
-            self.image = #imageLiteral(resourceName: "Profile_Friends_Hexagons")
-            self.contentMode = .scaleAspectFill
-            
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-    }
+    }    
     
 }

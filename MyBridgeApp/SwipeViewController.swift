@@ -24,6 +24,23 @@ class SwipeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        for view in layout.cardsLimitMetViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noMoreCardsViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noCardsViews {
+            view.alpha = 0
+        }
+        
+        layout.friendsImage.alpha = 0
+        layout.inviteButton.alpha = 0
+        
+        layout.countdownLabelView.startCountdown()
+        
         // Listeners
         // Listener for presentingExternalProfileVC
         NotificationCenter.default.addObserver(self, selector: #selector(presentExternalProfileVC(_:)), name: NSNotification.Name(rawValue: "presentExternalProfileVC"), object: nil)
@@ -40,7 +57,6 @@ class SwipeViewController: UIViewController {
         layout.infoButton.addTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
-        layout.refreshButton.addTarget(self, action: #selector(refreshButtonTapped(_:)), for: .touchUpInside)
         
         layout.inviteButton.setVC(vc: self)
         
@@ -54,10 +70,18 @@ class SwipeViewController: UIViewController {
                     localBridgePairings.synchronize()
                     
                     user.hasResetPairs = true
-                    user.save()
+                    user.save { (_) in
+                        self.getBridgePairings()
+                    }
+                } else {
+                    self.getBridgePairings()
+                }
+            } else {
+                user.hasResetPairs = true
+                user.save { (_) in
+                    self.getBridgePairings()
                 }
             }
-            self.getBridgePairings()
         }
         
         // Check for New Matches
@@ -92,17 +116,6 @@ class SwipeViewController: UIViewController {
     }
     
     func getBridgePairings() {
-        // Make no more bridge pairing objects invisible
-        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
-            view.alpha = 0
-        }
-        
-        // Make nect buttons visible
-        for view in [layout.passButton, layout.infoButton, layout.nectButton] {
-            view.alpha = 1
-        }
-
-        
         layout.loadingView.startAnimating()
         let hud = MBProgressHUD.showAdded(to: view, animated: true)
         hud.mode = .customView
@@ -112,7 +125,7 @@ class SwipeViewController: UIViewController {
         
         let dateBefore = Date()
         // Get the first swipeCards
-        self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: self.layout.topSwipeCard, noMoreBridgePairings: nil) {
+        self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings) {
             let dateAfter = Date()
             let timeInterval = dateAfter.timeIntervalSince(dateBefore)
             var delay = 0.0
@@ -125,7 +138,7 @@ class SwipeViewController: UIViewController {
                     self.layout.loadingView.stopAnimating()
                 }
                 
-                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, noMoreBridgePairings: self.noMoreBridgePairings) {
+                self.swipeBackend.setInitialBottomSwipeCard(bottomSwipeCard: self.layout.bottomSwipeCard, limitMet: self.limitMet, noMoreBridgePairings: self.noMoreBridgePairings, noBridgePairings: self.noBridgePairings) {
                     MBProgressHUD.hide(for: self.view, animated: true)
                     self.layout.loadingView.stopAnimating()
                 }
@@ -185,13 +198,89 @@ class SwipeViewController: UIViewController {
         layout.recenterTopSwipeCard()
     }
     
-    func noMoreBridgePairings() {
-        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
+    func limitMet() {
+        print("limit met")
+        
+        MBProgressHUD.hide(for: self.view, animated: true)
+        self.layout.loadingView.stopAnimating()
+        
+        for view in layout.noMoreCardsViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noCardsViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.cardsLimitMetViews {
             view.alpha = 1
         }
         
         // both cards gone
         if swipeBackend.topBridgePairing == nil && swipeBackend.bottomBridgePairing == nil {
+            layout.friendsImage.alpha = 1
+            layout.inviteButton.alpha = 1
+            
+            for view in [layout.passButton, layout.infoButton, layout.nectButton] {
+                view.alpha = 0
+            }
+        }
+        
+    }
+    
+    func noMoreBridgePairings() {
+        MBProgressHUD.hide(for: self.view, animated: true)
+        self.layout.loadingView.stopAnimating()
+        
+        /*
+        for view in [layout.noMoreBridgePairingsLabel, layout.orLabel1, layout.inviteButton, layout.orLabel2, layout.refreshButton] {
+            view.alpha = 1
+        }*/
+
+        for view in layout.cardsLimitMetViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noCardsViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noMoreCardsViews {
+            view.alpha = 1
+        }
+        
+        // both cards gone
+        if swipeBackend.topBridgePairing == nil && swipeBackend.bottomBridgePairing == nil {
+            layout.friendsImage.alpha = 1
+            layout.inviteButton.alpha = 1
+            
+            for view in [layout.passButton, layout.infoButton, layout.nectButton] {
+                view.alpha = 0
+            }
+        }
+    }
+    
+    func noBridgePairings() {
+        MBProgressHUD.hide(for: self.view, animated: true)
+        self.layout.loadingView.stopAnimating()
+        
+        for view in layout.cardsLimitMetViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noMoreCardsViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noCardsViews {
+            view.alpha = 1
+        }
+        
+        // both cards gone
+        if swipeBackend.topBridgePairing == nil && swipeBackend.bottomBridgePairing == nil {
+            layout.friendsImage.alpha = 1
+            layout.inviteButton.alpha = 1
+            
             for view in [layout.passButton, layout.infoButton, layout.nectButton] {
                 view.alpha = 0
             }

@@ -20,14 +20,37 @@ class SwipeLayout {
     let infoButton = SwipeObjects.InfoButton()
     let connectIcon = UIImageView(image: #imageLiteral(resourceName: "Necter_Icon"))
     let disconnectIcon = UIImageView(image: #imageLiteral(resourceName: "Disconnect_Icon"))
-    let noMoreBridgePairingsLabel = SwipeObjects.NoMoreBridgePairingsLabel()
-    let orLabel1 = SwipeObjects.OrLabel()
-    let inviteButton = ReusableObjects.InviteButton()
-    let orLabel2 = SwipeObjects.OrLabel()
-    let refreshButton = SwipeObjects.RefreshButton()
     let loadingView = SwipeObjects.LoadingBridgePairingsView()
     var topSwipeCardHorizontalConstraint: NSLayoutConstraint?
     var bottomSwipeCardHorizontalConstraint: NSLayoutConstraint?
+    
+    // no more bridge pairings views
+    
+    let wayToNectLabel = SwipeObjects.BigLabel(text: "WAY TO NECT!")
+    let noMoreNectsLabel = SwipeObjects.BigLabel(text: "NO MORE NECTS?")
+    let nobodyToNectLabel = SwipeObjects.BigLabel(text: "NOBODY TO NECT?")
+    
+    let comeBackLabel = SwipeObjects.SmallLabel(text: "come back at 5pm EST for your next batch")
+    let getFriendsLabelNoMore = SwipeObjects.SmallLabel(text: "get friends on necter before your next batch")
+    let getFriendsLabelNone = SwipeObjects.SmallLabel(text: "get friends on necter before your next batch")
+    
+    let countdownLabelView = SwipeObjects.SwipeCountdownLabelView()
+    
+    let tomorrowsNectingLabel = SwipeObjects.SmallLabel(text: "Want to make tomorrow's necting even better?")
+    let toGetNectingLabel = SwipeObjects.SmallLabel(text: "To get necting...")
+    
+    let friendsImage = ReusableObjects.FriendsImage()
+    let inviteButton = ReusableObjects.InviteButton()
+    
+    var cardsLimitMetViews: [UIView]
+    var noMoreCardsViews: [UIView]
+    var noCardsViews: [UIView]
+
+    init() {
+        cardsLimitMetViews = [wayToNectLabel, comeBackLabel, countdownLabelView, tomorrowsNectingLabel]
+        noMoreCardsViews = [noMoreNectsLabel, getFriendsLabelNoMore, countdownLabelView, toGetNectingLabel]
+        noCardsViews = [nobodyToNectLabel, getFriendsLabelNone, countdownLabelView, toGetNectingLabel]
+    }
     
     /// Sets the initial layout constraints
     func initialize(view: UIView, didSetupConstraints: Bool) -> Bool {
@@ -44,32 +67,60 @@ class SwipeLayout {
             navBar.autoMatch(.width, to: .width, of: view)
             navBar.autoSetDimension(.height, toSize: 64)
             
-            // Layout invite friends button
+            // Layout friendsImage to pin to the bottom of the view
+            view.addSubview(friendsImage)
+            friendsImage.autoPinEdge(toSuperviewEdge: .left)
+            friendsImage.autoPinEdge(toSuperviewEdge: .right)
+            friendsImage.autoPinEdge(toSuperviewEdge: .bottom)
+            //friendsImage.alpha = 0
+            
+            // Layout inviteButton to center of the friendsImage
             view.addSubview(inviteButton)
-            inviteButton.autoCenterInSuperview()
+            inviteButton.autoAlignAxis(.horizontal, toSameAxisOf: friendsImage, withOffset: 20)
+            inviteButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
+            //inviteButton.alpha = 0
+
+            view.addSubview(tomorrowsNectingLabel)
+            tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -10)
+            tomorrowsNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+            tomorrowsNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+            //tomorrowsNectingLabel.alpha = 0
             
-            // Layout first or label
-            view.addSubview(orLabel1)
-            orLabel1.autoAlignAxis(toSuperviewAxis: .vertical)
-            orLabel1.autoPinEdge(.bottom, to: .top, of: inviteButton, withOffset: -25)
+            view.addSubview(toGetNectingLabel)
+            toGetNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -10)
+            toGetNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+            toGetNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+            //toGetNectingLabel.alpha = 0
             
-            // Layout no more bridge pairings label
-            view.addSubview(noMoreBridgePairingsLabel)
-            noMoreBridgePairingsLabel.autoAlignAxis(toSuperviewAxis: .vertical)
-            noMoreBridgePairingsLabel.autoPinEdge(.bottom, to: .top, of: orLabel1, withOffset: -25)
-            noMoreBridgePairingsLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+            let bigLabels = [wayToNectLabel, noMoreNectsLabel, nobodyToNectLabel]
             
-            // Layout second or label
-            view.addSubview(orLabel2)
-            orLabel2.autoAlignAxis(toSuperviewAxis: .vertical)
-            orLabel2.autoPinEdge(.top, to: .bottom, of: inviteButton, withOffset: 25)
+            for bigLabel in bigLabels {
+                view.addSubview(bigLabel)
+                bigLabel.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 20)
+                bigLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+                bigLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+                //bigLabel.alpha = 0
+            }
             
-            // Layout refresh button
-            view.addSubview(refreshButton)
-            refreshButton.autoAlignAxis(toSuperviewAxis: .vertical)
-            refreshButton.autoPinEdge(.top, to: .bottom, of: orLabel2, withOffset: 25)
+            let smallLabels  = [comeBackLabel, getFriendsLabelNoMore, getFriendsLabelNone]
             
+            for i in 0..<smallLabels.count {
+                let smallLabel = smallLabels[i]
+                view.addSubview(smallLabel)
+                
+                let bigLabel = bigLabels[i]
+                smallLabel.autoPinEdge(.top, to: .bottom, of: bigLabel, withOffset: 20)
+                smallLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+                smallLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+                //smallLabel.alpha = 0
+            }
+            
+            view.addSubview(countdownLabelView)
+            countdownLabelView.autoPinEdge(toSuperviewEdge: .left)
+            countdownLabelView.autoPinEdge(toSuperviewEdge: .right)
+            countdownLabelView.autoAlignAxis(toSuperviewAxis: .horizontal)
+                        
             view.addSubview(infoButton)
             view.addSubview(passButton)
             view.addSubview(nectButton)

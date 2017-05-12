@@ -12,5 +12,5 @@ target 'MyBridgeApp' do
   pod 'JSQMessagesViewController'
   pod 'MBProgressHUD', '~> 1.0.0'
   pod 'NVActivityIndicatorView'
-  pod 'CountdownLabel'
+  #pod 'CountdownLabel'
 end

@@ -18,7 +18,7 @@ class MyProfileLayout {
 //    let reputationScore = MyProfileObjects.ReputationScore()
     let name = MyProfileObjects.Name()
     let settingsButton = MyProfileObjects.SettingsButton()
-    let friendsImage = MyProfileObjects.FriendsImage()
+    let friendsImage = ReusableObjects.FriendsImage()
     let inviteButton = ReusableObjects.InviteButton()
     
     // MARK: - Layout
