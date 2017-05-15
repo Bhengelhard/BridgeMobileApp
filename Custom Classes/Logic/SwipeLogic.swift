@@ -132,14 +132,14 @@ class SwipeLogic {
     // Animate swiping and replace
     static func didSwipe(right: Bool, vc: SwipeViewController) {
         
-        // Loging swiping right and left as events
+        // Logging swiping right and left as events
+        let title: String
         if right {
-            let title = "swipeRight"
-            FirebaseLogs.swiped(title: title)
+            title = "swipeRight"
         } else {
-            let title = "swipeLeft"
-            FirebaseLogs.swiped(title: title)
+            title = "swipeLeft"
         }
+        FirebaseLogs.swiped(title: title)
         
         
         let view = vc.view!
@@ -147,17 +147,10 @@ class SwipeLogic {
         let layout = vc.layout
         let noMoreBridgePairings: () -> Void  = vc.noMoreBridgePairings
         
-        /*
-        let swipeCard: SwipeCard
-        if layout.bottomSwipeCard.isUserInteractionEnabled {
-            swipeCard = layout.bottomSwipeCard
-        } else {
-            swipeCard = layout.topSwipeCard
-        }*/
         
         let swipeCard = layout.topSwipeCard
         
-        if !vc.swipeBackend.gotBottomBridgePairing {
+        if !vc.swipeBackend.doneGettingBottomBridgePairing {
             layout.loadingView.startAnimating()
             let hud = MBProgressHUD.showAdded(to: vc.view, animated: true)
             hud.mode = .customView
@@ -165,8 +158,6 @@ class SwipeLogic {
             hud.label.text = "Finding best\npairs to 'nect..."
             hud.label.numberOfLines = 0
         }
-        
-        
         
         // create and save swipe
         var bridgePairingID: String?
