@@ -68,7 +68,6 @@ class LoginViewController: UIViewController {
     // MARK: - Backend Functions
     // Update Facebook Friends and Return whether user is SignedIn
     func authenticateUser() {
-        print("authenticating User")
         
         //Checking if user is already logged in
         PFUser.current()?.fetchInBackground(block: { (currentUser, error) in
@@ -76,7 +75,6 @@ class LoginViewController: UIViewController {
                 if currentUser.objectId != nil {
                     if let hasLoggedIn = currentUser["has_logged_in"] as? Bool {
                         if hasLoggedIn {
-                            print("has logged in")
                             //Updating the user's friends
                             let fbFunctions = FacebookFunctions()
                             fbFunctions.updateFacebookFriends()

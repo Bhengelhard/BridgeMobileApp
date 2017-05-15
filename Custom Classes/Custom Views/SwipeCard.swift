@@ -51,7 +51,7 @@ class SwipeCard: UIView {
     
     func initialize(bridgePairing: BridgePairing) {
         if let id = bridgePairing.id {
-            print("initializing swipe card with bridgePairing id = \(id)")
+            //print("initializing swipe card with bridgePairing id = \(id)")
         }
         
         self.bridgePairing = bridgePairing
