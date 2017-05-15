@@ -62,6 +62,7 @@
 		30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */; };
 		30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */; };
 		30BFA0BD1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0BC1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift */; };
+		30C0C48A1EC9FE36002F7174 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30C0C4891EC9FE36002F7174 /* AdSupport.framework */; };
 		30D82B5C1E6F92E3000F7075 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B5B1E6F92E3000F7075 /* WebViewController.swift */; };
 		30D82B621E6FCFC1000F7075 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B611E6FCFC1000F7075 /* PopupView.swift */; };
 		30D82B641E70D611000F7075 /* PopupObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B631E70D611000F7075 /* PopupObjects.swift */; };
@@ -176,6 +177,7 @@
 		30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLogin.swift; path = "Custom Classes/Backend Communication/FBCommunication/FBLogin.swift"; sourceTree = "<group>"; };
 		30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = Types/BridgeType.swift; sourceTree = "<group>"; };
 		30BFA0BC1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTitleTableViewCell.swift; path = MyBridgeApp/MessagesTitleTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		30C0C4891EC9FE36002F7174 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		30D82B5B1E6F92E3000F7075 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebViewController.swift; path = MyBridgeApp/WebViewController.swift; sourceTree = SOURCE_ROOT; };
 		30D82B611E6FCFC1000F7075 /* PopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopupView.swift; path = "Custom Classes/Custom Views/PopupView.swift"; sourceTree = "<group>"; };
 		30D82B631E70D611000F7075 /* PopupObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopupObjects.swift; path = "Custom Classes/UI Functions/PopupObjects.swift"; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30C0C48A1EC9FE36002F7174 /* AdSupport.framework in Frameworks */,
 				E9D6DF171D7880FC00138A1F /* FBSDKCoreKit.framework in Frameworks */,
 				E9D6DF1B1D78810800138A1F /* ParseFacebookUtilsV4.framework in Frameworks */,
 				81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */,
@@ -489,6 +492,7 @@
 		81BA816A1A49DB5600E65899 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				30C0C4891EC9FE36002F7174 /* AdSupport.framework */,
 				E9D6DF141D7880EA00138A1F /* Bolts.framework */,
 				E9D6DF1E1D78811900138A1F /* Parse.framework */,
 				E9D6DF161D7880FC00138A1F /* FBSDKCoreKit.framework */,
