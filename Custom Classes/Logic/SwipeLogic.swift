@@ -132,39 +132,28 @@ class SwipeLogic {
     // Animate swiping and replace
     static func didSwipe(right: Bool, vc: SwipeViewController) {
         
-        // Loging swiping right and left as events
+        // Logging swiping right and left as events
+        let title: String
         if right {
-            let title = "swipeRight"
-            FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
-                kFIRParameterItemID: "id-\(title)" as NSObject,
-                kFIRParameterItemName: title as NSObject,
-                kFIRParameterContentType: "swipe" as NSObject
-                ])
+            title = "swipeRight"
         } else {
-            let title = "swipeLeft"
-            FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
-                kFIRParameterItemID: "id-\(title)" as NSObject,
-                kFIRParameterItemName: title as NSObject,
-                kFIRParameterContentType: "swipe" as NSObject
-                ])
+            title = "swipeLeft"
         }
+        FIRAnalytics.logEvent(withName: kFIREventSelectContent, parameters: [
+            kFIRParameterItemID: "id-\(title)" as NSObject,
+            kFIRParameterItemName: title as NSObject,
+            kFIRParameterContentType: "swipe" as NSObject
+        ])
         
         let view = vc.view!
         let swipeBackend = vc.swipeBackend
         let layout = vc.layout
         let noMoreBridgePairings: () -> Void  = vc.noMoreBridgePairings
         
-        /*
-        let swipeCard: SwipeCard
-        if layout.bottomSwipeCard.isUserInteractionEnabled {
-            swipeCard = layout.bottomSwipeCard
-        } else {
-            swipeCard = layout.topSwipeCard
-        }*/
         
         let swipeCard = layout.topSwipeCard
         
-        if !vc.swipeBackend.gotBottomBridgePairing {
+        if !vc.swipeBackend.doneGettingBottomBridgePairing {
             layout.loadingView.startAnimating()
             let hud = MBProgressHUD.showAdded(to: vc.view, animated: true)
             hud.mode = .customView
