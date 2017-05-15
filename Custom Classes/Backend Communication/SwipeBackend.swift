@@ -372,12 +372,12 @@ class SwipeBackend {
                                             topSwipeCard.alpha = 1
                                             topSwipeCard.isUserInteractionEnabled = true
                                             
-                                            topSwipeCard.initialize(bridgePairing: bridgePairing2)
+                                            topSwipeCard.initialize(bridgePairing: bridgePairing)
                                             
                                             self.reserveBridgePairing = nil
                                         } else {
                                             self.reserveBridgePairingUsed = true
-                                            self.reserveBridgePairing = bridgePairing2
+                                            self.reserveBridgePairing = bridgePairing
                                         }
                                         
                                         bridgePairing.save { (_) in
@@ -385,7 +385,7 @@ class SwipeBackend {
                                                 completion()
                                             }
                                         }
-                                    }
+                                     }
                                 }
                             }
                         }
