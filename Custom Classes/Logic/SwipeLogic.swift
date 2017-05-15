@@ -47,6 +47,7 @@ class SwipeLogic {
         } else {
             disconnectIcon.alpha = 0
             connectIcon.alpha = 0
+            
         }
         
         var location = CGPoint()
