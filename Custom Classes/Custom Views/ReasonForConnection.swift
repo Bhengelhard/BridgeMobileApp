@@ -140,13 +140,13 @@ class ReasonForConnection: UIView, UITextViewDelegate {
                         singleMessage.save()
                         
                         
-                        if let messageID = self.messageID {
-                            if let user2ID = self.user2ID, let user2Name = self.user2Name {
-                                PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"\(name) has sent you and \(user2Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                        if let messageID = self.messageID, let name = name {
+                            if let user2ID = self.user2ID, let user1Name = self.user1Name {
+                                PFCloudFunctions.pushNotification(parameters: ["userObjectId": user2ID,"alert":"\(name) sent you and \(user1Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
                             }
                             
-                            if let user1ID = self.user1ID, let user1Name = self.user1Name{
-                                PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(name) has sent you and \(user1Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                            if let user1ID = self.user1ID, let user2Name = self.user2Name{
+                                PFCloudFunctions.pushNotification(parameters: ["userObjectId": user1ID,"alert":"\(name) sent you and \(user2Name) a message.", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
                             }
                             
                         }
