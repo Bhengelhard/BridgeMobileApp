@@ -21,7 +21,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
         let messageComposeVC = MFMessageComposeViewController()
         messageComposeVC.messageComposeDelegate = self  //  Make sure to set this property to self, so that the controller can be dismissed!
         //messageComposeVC.recipients = textMessageRecipients
-        messageComposeVC.body = "Are you on necter? Sweet app for connecting friends and finding things you're looking for.\n\nhttp://apple.co/2jfIAkR"
+        messageComposeVC.body = "Hey, are you on necter? It's an app to meet new people. Thought I might intro you to someone.\n\nhttp://download.necter.social?utm_source=app&utm_medium=profile_referral"
         return messageComposeVC
     }
     
