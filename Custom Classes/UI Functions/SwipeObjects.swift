@@ -108,6 +108,8 @@ class SwipeObjects {
     class SwipeCountdownLabelView: UIView, CountdownLabelDelegate {
         let countdownLabel: CountdownLabel
         
+        var countdownFinishedCompletion: (() -> Void)?
+        
         init() {
             
             let currentDate = Date()
@@ -124,9 +126,12 @@ class SwipeObjects {
                 }
             }
             
-            countdownLabel = CountdownLabel(frame: CGRect(), fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            //countdownLabel = CountdownLabel(frame: CGRect(), fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            countdownLabel = CountdownLabel(frame: CGRect(), minutes: 10)
             
             super.init(frame: CGRect())
+            
+            countdownLabel.countdownDelegate = self
             
             countdownLabel.textColor = Constants.Colors.necter.textGray
             countdownLabel.textAlignment = .center
@@ -137,6 +142,26 @@ class SwipeObjects {
             countdownLabel.autoPinEdgesToSuperviewEdges()
         }
         
+        func resetCountdownTime() {
+            let currentDate = Date()
+            var targetDate = Date()
+            let calendar = Calendar(identifier: .gregorian)
+            
+            if let newDate = calendar.date(bySetting: .hour, value: 17, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
+                targetDate = newDate
+            }
+            
+            if calendar.component(.hour, from: currentDate) >= 17 { // Move target to next day
+                if let newDate = calendar.date(byAdding: .day, value: 1, to: targetDate) {
+                    targetDate = newDate
+                }
+            }
+            
+            //countdownLabel.setCountDownDate(fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            countdownLabel.setCountDownTime(minutes: 10)
+            countdownLabel.start()
+        }
+        
         func startCountdown() {
             countdownLabel.start()
         }
@@ -144,38 +169,17 @@ class SwipeObjects {
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-    }
-    
-    class NoMoreBridgePairingsLabel: UILabel {
-        init() {
-            super.init(frame: CGRect())
-            
-            text = "You have no more pairs to NECT. Please check back tomorrow"
-            textColor = Constants.Colors.necter.textGray
-            textAlignment = .center
-            font = UIFont(name: "BentonSans-Bold", size: 22)
-            numberOfLines = 0
-        }
         
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
+        func countingAt(timeCounted: TimeInterval, timeRemaining: TimeInterval) {
+            if timeRemaining == 0 {
+                if let countdownFinishedCompletion = countdownFinishedCompletion {
+                    countdownFinishedCompletion()
+                }
+                resetCountdownTime()
+            }
         }
     }
     
-    class OrLabel: UILabel {
-        init() {
-            super.init(frame: CGRect())
-            
-            text = "or"
-            textColor = Constants.Colors.necter.textGray
-            textAlignment = .center
-            font = UIFont(name: "BentonSans-Bold", size: 22)
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-    }
     /*
     var attrs = [
         NSFontAttributeName : UIFont.systemFontOfSize(19.0),
@@ -191,7 +195,6 @@ class SwipeObjects {
         attributedString.appendAttributedString(buttonTitleStr)
         yourButton.setAttributedTitle(attributedString, forState: .Normal)
     }
-*/
     
     class RefreshButton: UIButton {
         init() {
@@ -209,7 +212,7 @@ class SwipeObjects {
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-    }
+    }*/
     
     class LoadingBridgePairingsView: UIView {
         let activityIndicatorView: NVActivityIndicatorView

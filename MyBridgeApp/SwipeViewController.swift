@@ -39,6 +39,7 @@ class SwipeViewController: UIViewController {
         layout.friendsImage.alpha = 0
         layout.inviteButton.alpha = 0
         
+        layout.countdownLabelView.countdownFinishedCompletion = checkHasResetPairs
         layout.countdownLabelView.startCountdown()
         
         // Listeners
@@ -53,6 +54,7 @@ class SwipeViewController: UIViewController {
         // Add Targets for Swipe Cards
         layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
         layout.bottomSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
+        layout.topSwipeCard.isUserInteractionEnabled = false
         layout.bottomSwipeCard.isUserInteractionEnabled = false
         layout.infoButton.addTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
@@ -115,7 +117,52 @@ class SwipeViewController: UIViewController {
 
     }
     
+    func checkHasResetPairs() {
+        User.getCurrent { (user) in
+            // if user has not reset cards, set locally stored cards to nil
+            if let hasResetPairs = user.hasResetPairs {
+                if !hasResetPairs {
+                    let localBridgePairings = LocalBridgePairings()
+                    localBridgePairings.setBridgePairing1ID(nil)
+                    localBridgePairings.setBridgePairing2ID(nil)
+                    localBridgePairings.synchronize()
+                    
+                    user.hasResetPairs = true
+                    user.save { (_) in
+                        self.getBridgePairings()
+                    }
+                } else {
+                    self.getBridgePairings()
+                }
+            } else {
+                user.hasResetPairs = true
+                user.save { (_) in
+                    self.getBridgePairings()
+                }
+            }
+        }
+    }
+    
     func getBridgePairings() {
+        for view in layout.cardsLimitMetViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noMoreCardsViews {
+            view.alpha = 0
+        }
+        
+        for view in layout.noCardsViews {
+            view.alpha = 0
+        }
+        
+        layout.friendsImage.alpha = 0
+        layout.inviteButton.alpha = 0
+        
+        for view in [layout.passButton, layout.infoButton, layout.nectButton] {
+            view.alpha = 1
+        }
+        
         layout.loadingView.startAnimating()
         let hud = MBProgressHUD.showAdded(to: view, animated: true)
         hud.mode = .customView
@@ -213,6 +260,8 @@ class SwipeViewController: UIViewController {
     }
     
     func limitMet() {
+        print("limit met")
+        
         MBProgressHUD.hide(for: self.view, animated: true)
         self.layout.loadingView.stopAnimating()
         
@@ -241,6 +290,7 @@ class SwipeViewController: UIViewController {
     }
     
     func noMoreBridgePairings() {
+        print("no more bridge pairings")
         MBProgressHUD.hide(for: self.view, animated: true)
         self.layout.loadingView.stopAnimating()
         
@@ -273,6 +323,7 @@ class SwipeViewController: UIViewController {
     }
     
     func noBridgePairings() {
+        print("no bridge pairings")
         MBProgressHUD.hide(for: self.view, animated: true)
         self.layout.loadingView.stopAnimating()
         

@@ -360,7 +360,7 @@ class SwipeBackend {
                                 
                                 if self.bridgePairingIDs.count == 0 { // no pairings
                                     self.gotNoBridgePairings(user: user, swipeCard: bottomSwipeCard, top: true, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
-                                } else {
+                                } else { // at least one pairing
                                     topSwipeCard.alpha = 1
                                     topSwipeCard.isUserInteractionEnabled = true
                                     if let bridgePairing = self.bridgePairingDict[self.bridgePairingIDs[0]] {
@@ -368,7 +368,7 @@ class SwipeBackend {
                                         self.topBridgePairing = bridgePairing
                                     }
                                     
-                                    if self.bridgePairingIDs.count == 1 { // one pairing
+                                    if self.bridgePairingIDs.count == 1 { // exactly one pairing
                                         self.gotNoBridgePairings(user: user, swipeCard: bottomSwipeCard, top: true, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings, completion: completion)
                                     } else { // more than one pairing
                                         bottomSwipeCard.alpha = 1
