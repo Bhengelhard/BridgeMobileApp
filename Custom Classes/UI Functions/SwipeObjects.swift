@@ -126,8 +126,8 @@ class SwipeObjects {
                 }
             }
             
-            //countdownLabel = CountdownLabel(frame: CGRect(), fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
-            countdownLabel = CountdownLabel(frame: CGRect(), minutes: 10)
+            countdownLabel = CountdownLabel(frame: CGRect(), fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            //countdownLabel = CountdownLabel(frame: CGRect(), minutes: 10)
             
             super.init(frame: CGRect())
             
@@ -157,8 +157,8 @@ class SwipeObjects {
                 }
             }
             
-            //countdownLabel.setCountDownDate(fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
-            countdownLabel.setCountDownTime(minutes: 10)
+            countdownLabel.setCountDownDate(fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            //countdownLabel.setCountDownTime(minutes: 10)
             countdownLabel.start()
         }
         
