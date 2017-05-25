@@ -7,7 +7,7 @@
 //
 
 //import Parse
-//
+
 //class Scripts {
 //    static func removeFromAllShownTos(userID: String) {
 //        print("removing \(userID) from all shown_tos...")
@@ -93,6 +93,7 @@
 //        query.whereKey("Bridged", notEqualTo: true)
 //        query.whereKeyExists("user1_city")
 //        query.whereKeyExists("user2_city")
+//        query.whereKey("score", lessThan: 500)
 //        
 //        query.limit = 10000
 //        query.findObjectsInBackground { (objects, error) in
