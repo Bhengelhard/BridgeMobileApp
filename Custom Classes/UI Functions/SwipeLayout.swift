@@ -82,7 +82,7 @@ class SwipeLayout {
             //inviteButton.alpha = 0
 
             view.addSubview(tomorrowsNectingLabel)
-            tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -10)
+            tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -40)
             tomorrowsNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
             tomorrowsNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
             //tomorrowsNectingLabel.alpha = 0
@@ -119,6 +119,7 @@ class SwipeLayout {
             view.addSubview(countdownLabelView)
             countdownLabelView.autoPinEdge(toSuperviewEdge: .left)
             countdownLabelView.autoPinEdge(toSuperviewEdge: .right)
+            //countdownLabelView.autoPinEdge(.top, to: .bottom, of: smallLabels[0], withOffset: 20)
             countdownLabelView.autoAlignAxis(toSuperviewAxis: .horizontal)
                         
             view.addSubview(infoButton)
