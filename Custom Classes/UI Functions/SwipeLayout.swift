@@ -27,17 +27,17 @@ class SwipeLayout {
     // no more bridge pairings views
     
     let wayToNectLabel = SwipeObjects.BigLabel(text: "WAY TO NECT!")
-    let noMoreNectsLabel = SwipeObjects.BigLabel(text: "NO MORE NECTS?")
-    let nobodyToNectLabel = SwipeObjects.BigLabel(text: "NOBODY TO NECT?")
+    let noMoreNectsLabel = SwipeObjects.BigLabel(text: "RAN OUT OF NECTS")
+    let nobodyToNectLabel = SwipeObjects.BigLabel(text: "NOBODY TO NECT")
     
-    let comeBackLabel = SwipeObjects.SmallLabel(text: "come back at 5pm EST for your next batch")
-    let getFriendsLabelNoMore = SwipeObjects.SmallLabel(text: "get friends on necter before your next batch")
-    let getFriendsLabelNone = SwipeObjects.SmallLabel(text: "get friends on necter before your next batch")
+    let comeBackLabel = SwipeObjects.SmallLabel(text: "Come back at 5pm est for your next batch.")
+    let getFriendsLabelNoMore = SwipeObjects.SmallLabel(text: "Your next batch is currently empty!")
+    let getFriendsLabelNone = SwipeObjects.SmallLabel(text: "Your next batch is currently empty!")
     
     let countdownLabelView = SwipeObjects.SwipeCountdownLabelView()
     
-    let tomorrowsNectingLabel = SwipeObjects.SmallLabel(text: "Want to make tomorrow's necting even better?")
-    let toGetNectingLabel = SwipeObjects.SmallLabel(text: "To get necting...")
+    let tomorrowsNectingLabel = SwipeObjects.SmallLabel(text: "Want to make tomorrow's necting even better...?")
+    let toGetNectingLabel = SwipeObjects.SmallLabel(text: "To get necting, invite friends before 5pm est...")
     
     let friendsImage = ReusableObjects.FriendsImage()
     let inviteButton = ReusableObjects.InviteButton()
@@ -82,13 +82,13 @@ class SwipeLayout {
             //inviteButton.alpha = 0
 
             view.addSubview(tomorrowsNectingLabel)
-            tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -40)
+            tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -30)
             tomorrowsNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
             tomorrowsNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
             //tomorrowsNectingLabel.alpha = 0
             
             view.addSubview(toGetNectingLabel)
-            toGetNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -10)
+            toGetNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -30)
             toGetNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
             toGetNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
             //toGetNectingLabel.alpha = 0
@@ -119,8 +119,8 @@ class SwipeLayout {
             view.addSubview(countdownLabelView)
             countdownLabelView.autoPinEdge(toSuperviewEdge: .left)
             countdownLabelView.autoPinEdge(toSuperviewEdge: .right)
-            //countdownLabelView.autoPinEdge(.top, to: .bottom, of: smallLabels[0], withOffset: 20)
-            countdownLabelView.autoAlignAxis(toSuperviewAxis: .horizontal)
+            countdownLabelView.autoPinEdge(.top, to: .bottom, of: smallLabels[0], withOffset: 20)
+            //countdownLabelView.autoAlignAxis(toSuperviewAxis: .horizontal)
                         
             view.addSubview(infoButton)
             view.addSubview(passButton)
