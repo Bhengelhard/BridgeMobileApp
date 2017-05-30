@@ -25,10 +25,10 @@ class SwipeCard: UIView {
     
     init () {
         super.init(frame: CGRect())
-        
+
         //frame = swipeCardFrame()
-        clipsToBounds = true
-        
+		clipsToBounds = true
+
         //topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         //bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         
@@ -51,7 +51,7 @@ class SwipeCard: UIView {
     
     func initialize(bridgePairing: BridgePairing) {
         if let id = bridgePairing.id {
-            print("initializing swipe card with bridgePairing id = \(id)")
+            //print("initializing swipe card with bridgePairing id = \(id)")
         }
         
         self.bridgePairing = bridgePairing
@@ -70,12 +70,14 @@ class SwipeCard: UIView {
         topHalf.layer.mask = topHalfShape
         
         bridgePairing.getUser1 { (user) in
-            if let name = user.firstNameLastNameInitial {
-                self.topHalf.setName(name: name)
-            }
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    self.topHalf.setImage(image: image)
+            if let user = user {
+                if let name = user.firstNameLastNameInitial {
+                    self.topHalf.setName(name: name)
+                }
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.topHalf.setImage(image: image)
+                    }
                 }
             }
         }
@@ -91,12 +93,14 @@ class SwipeCard: UIView {
         bottomHalf.layer.mask = bottomHalfShape
         
         bridgePairing.getUser2 { (user) in
-            if let name = user.firstNameLastNameInitial {
-                self.bottomHalf.setName(name: name)
-            }
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    self.bottomHalf.setImage(image: image)
+            if let user = user {
+                if let name = user.firstNameLastNameInitial {
+                    self.bottomHalf.setName(name: name)
+                }
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        self.bottomHalf.setImage(image: image)
+                    }
                 }
             }
         }

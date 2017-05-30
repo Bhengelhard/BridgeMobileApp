@@ -25,10 +25,12 @@ class ThreadBackend {
                         }
                         if let senderID = singleMessage.senderID {
                             User.get(withID: senderID) { (user) in
-                                user.getMainPicture { (picture) in
-                                    picture.getImage { (image) in
-                                        self.avatarImagesDict[senderID] = image
-                                        collectionView.reloadData()
+                                if let user = user {
+                                    user.getMainPicture { (picture) in
+                                        picture.getImage { (image) in
+                                            self.avatarImagesDict[senderID] = image
+                                            collectionView.reloadData()
+                                        }
                                     }
                                 }
                             }
@@ -46,7 +48,9 @@ class ThreadBackend {
     
     func setSenderInfo(withBlock block: @escaping (String?, String?) -> Void) {
         User.getCurrent { (user) in
-            block(user.id, user.name)
+            if let user = user {
+                block(user.id, user.name)
+            }
         }
     }
     
@@ -54,7 +58,9 @@ class ThreadBackend {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
                 message.getNonCurrentUser { (user) in
-                    block(user.id, user.name)
+                    if let user = user {
+                        block(user.id, user.name)
+                    }
                 }
             }
         }
@@ -62,10 +68,12 @@ class ThreadBackend {
     
     func getCurrentUserPicture(withBlock block: Picture.ImageBlock? = nil) {
         User.getCurrent { (user) in
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    if let block = block {
-                        block(image)
+            if let user = user {
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        if let block = block {
+                            block(image)
+                        }
                     }
                 }
             }
@@ -76,10 +84,12 @@ class ThreadBackend {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
                 message.getNonCurrentUser { (user) in
-                    user.getMainPicture { (picture) in
-                        picture.getImage { (image) in
-                            if let block = block {
-                                block(image)
+                    if let user = user {
+                        user.getMainPicture { (picture) in
+                            picture.getImage { (image) in
+                                if let block = block {
+                                    block(image)
+                                }
                             }
                         }
                     }
@@ -103,56 +113,60 @@ class ThreadBackend {
                 
                 // update current user has posted and other user has seen last single message
                 User.getCurrent { (currentUser) in
-                    message.getNonCurrentUser { (otherUser) in
-                        var shouldCallBlock = false
-                        if let currentUserID = currentUser.id, let otherUserID = otherUser.id {
-                            if currentUserID == message.user1ID {
-                                // check if both have posted for the first time
-                                if let user2HasPosted = message.user2HasPosted {
-                                    if user2HasPosted { // user 2 has already posted
-                                        if let user1HasPosted = message.user1HasPosted {
-                                            if !user1HasPosted { // this is user 1's first post
-                                                shouldCallBlock = true
-                                            }
-                                        } else { // user1HasPosted == nil -> this is user 1's first post
-                                            shouldCallBlock = true
-                                        }
-                                    }
-                                }
-                                message.user1HasPosted = true
-                                message.user2HasSeenLastSingleMessage = false
-                            } else if currentUserID == message.user2ID {
-                                // check if both have posted for the first time
-                                if let user1HasPosted = message.user1HasPosted {
-                                    if user1HasPosted { // user 1 has already posted
+                        if let currentUser = currentUser {
+                        message.getNonCurrentUser { (otherUser) in
+                            if let otherUser = otherUser {
+                                var shouldCallBlock = false
+                                if let currentUserID = currentUser.id, let otherUserID = otherUser.id {
+                                    if currentUserID == message.user1ID {
+                                        // check if both have posted for the first time
                                         if let user2HasPosted = message.user2HasPosted {
-                                            if !user2HasPosted { // this is user 2's first post
-                                                shouldCallBlock = true
+                                            if user2HasPosted { // user 2 has already posted
+                                                if let user1HasPosted = message.user1HasPosted {
+                                                    if !user1HasPosted { // this is user 1's first post
+                                                        shouldCallBlock = true
+                                                    }
+                                                } else { // user1HasPosted == nil -> this is user 1's first post
+                                                    shouldCallBlock = true
+                                                }
                                             }
-                                        } else { // user2HasPosted == nil -> this is user 2's first post
-                                            shouldCallBlock = true
+                                        }
+                                        message.user1HasPosted = true
+                                        message.user2HasSeenLastSingleMessage = false
+                                    } else if currentUserID == message.user2ID {
+                                        // check if both have posted for the first time
+                                        if let user1HasPosted = message.user1HasPosted {
+                                            if user1HasPosted { // user 1 has already posted
+                                                if let user2HasPosted = message.user2HasPosted {
+                                                    if !user2HasPosted { // this is user 2's first post
+                                                        shouldCallBlock = true
+                                                    }
+                                                } else { // user2HasPosted == nil -> this is user 2's first post
+                                                    shouldCallBlock = true
+                                                }
+                                            }
+                                        }
+                                        message.user2HasPosted = true
+                                        message.user1HasSeenLastSingleMessage = false
+                                        
+                                    }
+                                    if let currentUserFriendList = currentUser.friendList {
+                                        if currentUserFriendList.contains(otherUserID) {
+                                            if let otherUserFriendList = otherUser.friendList {
+                                                if otherUserFriendList.contains(currentUserID) {
+                                                    shouldCallBlock = false
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                                message.user2HasPosted = true
-                                message.user1HasSeenLastSingleMessage = false
-                                
-                            }
-                            if let currentUserFriendList = currentUser.friendList {
-                                if currentUserFriendList.contains(otherUserID) {
-                                    if let otherUserFriendList = otherUser.friendList {
-                                        if otherUserFriendList.contains(currentUserID) {
-                                            shouldCallBlock = false
-                                        }
-                                    }
-                                }
-                            }
 
-                        }
-                        message.save { (message) in
-                            if shouldCallBlock {
-                                if let block = block {
-                                    block()
+                                }
+                                message.save { (message) in
+                                    if shouldCallBlock {
+                                        if let block = block {
+                                            block()
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -166,28 +180,28 @@ class ThreadBackend {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message) in
                 User.getCurrent { (user) in
-                    if let userID = user.id {
-                        if userID == message.user1ID {
-                            if message.user1HasSeenLastSingleMessage == false {
-                                print("decrement badge 1")
-                                // update badge count
-                                //DBSavingFunctions.decrementBadge()
-                                
+                    if let user = user {
+                        if let userID = user.id {
+                            if userID == message.user1ID {
+                                if message.user1HasSeenLastSingleMessage == false {
+                                    print("decrement badge 1")
+                                    // update badge count
+                                    //DBSavingFunctions.decrementBadge()
+                                    
+                                }
                                 message.user1HasSeenLastSingleMessage = true
-                            }
-                            message.user1HasSeenLastSingleMessage = true
-                           
-                        } else if userID == message.user2ID {
-                            if message.user2HasSeenLastSingleMessage == false {
-                                print("decrement badge 2")
-                                // update badge count
-                                //DBSavingFunctions.decrementBadge()
-                                
+                               
+                            } else if userID == message.user2ID {
+                                if message.user2HasSeenLastSingleMessage == false {
+                                    print("decrement badge 2")
+                                    // update badge count
+                                    //DBSavingFunctions.decrementBadge()
+                                }
                                 message.user2HasSeenLastSingleMessage = true
                             }
                         }
+                        message.save()
                     }
-                    message.save()
                 }
             }
         }

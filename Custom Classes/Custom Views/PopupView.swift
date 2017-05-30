@@ -51,12 +51,14 @@ class PopupView: UIView {
         super.init(frame: CGRect())
         
         User.get(withID: user1Id) { (user) in
-            self.user1Name = user.name
-            if user1Image == nil {
-                user.getMainPicture { (picture) in
-                    picture.getImage { (image) in
-                        self.user1Image = image
-                        self.user1Hexagon.setBackgroundImage(image: image)
+            if let user = user {
+                self.user1Name = user.name
+                if user1Image == nil {
+                    user.getMainPicture { (picture) in
+                        picture.getImage { (image) in
+                            self.user1Image = image
+                            self.user1Hexagon.setBackgroundImage(image: image)
+                        }
                     }
                 }
             }
@@ -66,17 +68,19 @@ class PopupView: UIView {
             print("id = user2Id")
             
         User.get(withID: user2Id) { (user) in
-            print("user2 user retrived")
-            self.user2Name = user.name
-            if user2Image == nil {
-                user.getPicture(atIndex: 0, withBlock: { (picture) in
-                    picture.getImage(withBlock: { (image) in
-                        self.user2Image = image
-                        self.user2Hexagon.setBackgroundImage(image: image)
-                        print("got user2Image")
-                    
+            if let user = user {
+                print("user2 user retrived")
+                self.user2Name = user.name
+                if user2Image == nil {
+                    user.getPicture(atIndex: 0, withBlock: { (picture) in
+                        picture.getImage(withBlock: { (image) in
+                            self.user2Image = image
+                            self.user2Hexagon.setBackgroundImage(image: image)
+                            print("got user2Image")
+                        
+                        })
                     })
-                })
+                }
             }
         }
         
@@ -194,44 +198,45 @@ class PopupView: UIView {
             
             // Set picID of currentUser
             User.getCurrent { (user1) in
-                print("user1.id: \(user1.id)")
-                
-                if let picIDs1 = user1.pictureIDs {
-                    if let picID1 = picIDs1[0] as? String {
-                        user1PictureID = picID1
+                if let user1 = user1 {
+                    print("user1.id: \(user1.id)")
+                    if let picIDs1 = user1.pictureIDs {
+                        if let picID1 = picIDs1[0] as? String {
+                            user1PictureID = picID1
+                        }
                     }
                 }
-                
-                
             }
             
             // Set picID of otherUser
-            User.get(withID: user2ID, withBlock: { (user2) in
-                print("user2.id: \(user2.id)")
-                if let picIDs2 = user2.pictureIDs {
-                    if let picID2 = picIDs2[0] as? String {
-                        user2PictureID = picID2
+            User.get(withID: user2ID) { (user2) in
+                if let user2 = user2 {
+                    print("user2.id: \(user2.id)")
+                    if let picIDs2 = user2.pictureIDs {
+                        if let picID2 = picIDs2[0] as? String {
+                            user2PictureID = picID2
+                        }
                     }
-                }
-                
-                // Create message with both of the retrieved users
-                Message.create(user1ID: self.user1ID, user2ID: self.user2ID, connecterID: nil, user1Name: self.user1Name, user2Name: self.user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil) { (message, isNew) in
-                    if isNew {
-                        message.save(withBlock: { (message) in
+                    
+                    // Create message with both of the retrieved users
+                    Message.create(user1ID: self.user1ID, user2ID: self.user2ID, connecterID: nil, user1Name: self.user1Name, user2Name: self.user2Name, user1PictureID: user1PictureID, user2PictureID: user2PictureID, lastSingleMessage: nil, user1HasSeenLastSingleMessage: nil, user2HasSeenLastSingleMessage: nil, user1HasPosted: nil, user2HasPosted: nil) { (message, isNew) in
+                        if isNew {
+                            message.save(withBlock: { (message) in
+                                if let messageID = message.id {
+                                    print("messageId: \(messageID)")
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "presentThreadVC"), object: messageID)
+                                }
+                            })
+                        } else {
                             if let messageID = message.id {
                                 print("messageId: \(messageID)")
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "presentThreadVC"), object: messageID)
                             }
-                        })
-                    } else {
-                        if let messageID = message.id {
-                            print("messageId: \(messageID)")
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentThreadVC"), object: messageID)
                         }
+                        
                     }
-                    
                 }
-            })
+            }
         }
         
 

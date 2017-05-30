@@ -12,5 +12,10 @@ target 'MyBridgeApp' do
   pod 'JSQMessagesViewController'
   pod 'MBProgressHUD', '~> 1.0.0'
   pod 'NVActivityIndicatorView'
+  #pod 'FBSDKCoreKit'
+  #pod 'FBSDKLoginKit'
+  #pod 'FBSDKShareKit'
+  pod 'Firebase/Core'
   pod 'CountdownLabel'
+  
 end

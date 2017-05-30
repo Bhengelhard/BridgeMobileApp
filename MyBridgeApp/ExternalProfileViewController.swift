@@ -15,12 +15,17 @@ class ExternalProfileViewController: UIViewController {
     let layout = ExternalProfileLayout()
     let transitionManager = TransitionManager()
     var userID: String?
+    let externalProfileBackend = ExternalProfileBackend()
+    var threadVC: ThreadViewController?
     
     var didSetupConstraints = false
     
     // MARK: - Override Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        layout.profilePicturesVC.view.isUserInteractionEnabled = false
+        self.layout.profilePicturesVC.pageControl.alpha = 0
         
         layout.dismissButton.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
         layout.messageButton.addTarget(self, action: #selector(messageButtonTapped(_:)), for: .touchUpInside)
@@ -59,30 +64,46 @@ class ExternalProfileViewController: UIViewController {
     }
     
     // MARK: - Setters
+        
+    func setMainProfilePictureAndUserID(image: UIImage, userID: String?) {
+        layout.profilePicturesVC.addImage(image: image)
+        setUserID(userID: userID, mainProfilePictureSet: true)
+    }
+    
+    func setUserID(userID: String?) {
+        setUserID(userID: userID, mainProfilePictureSet: false)
+    }
     
     /// set user ID and get user's information
-    func setUserID(userID: String?) {
+    func setUserID(userID: String?, mainProfilePictureSet: Bool) {
         self.userID = userID
         
         if let userID = userID {
-            let externalProfileBackend = ExternalProfileBackend()
             
-            let hud = MBProgressHUD.showAdded(to: layout.profilePicturesVC.view, animated: true)
-            hud.label.text = "Loading..."
+            if !mainProfilePictureSet {
+                let hud = MBProgressHUD.showAdded(to: layout.profilePicturesVC.view, animated: true)
+                hud.label.text = "Loading..."
+            }
             
             // pictures
             externalProfileBackend.getImages(userID: userID) { (images) in
-                for image in images {
+                if !mainProfilePictureSet {
+                    if images.count > 0 {
+                        let mainImage = images[0]
+                        self.layout.profilePicturesVC.addImage(image: mainImage)
+                        MBProgressHUD.hide(for: self.layout.profilePicturesVC.view, animated: true)
+                    }
+                }
+                
+                for image in images[1..<images.count] {
                     self.layout.profilePicturesVC.addImage(image: image)
                 }
                 
-                if images.count <= 1 {
-                    self.layout.profilePicturesVC.pageControl.alpha = 0
-                } else {
+                if images.count > 1 {
+                    self.layout.profilePicturesVC.view.isUserInteractionEnabled = true
                     self.layout.profilePicturesVC.pageControl.alpha = 1
                 }
                 
-                MBProgressHUD.hide(for: self.layout.profilePicturesVC.view, animated: true)
             }
             
             // name
@@ -121,30 +142,34 @@ class ExternalProfileViewController: UIViewController {
         print("messageButtonTapped")
         
         User.getCurrent { (currentUser) in
-            if let userID = self.userID {
-                User.get(withID: userID) { (otherUser) in
-                    // Create message with both of the retrieved users
-                    Message.create(user1ID: currentUser.id, user2ID: otherUser.id, connecterID: nil, user1Name: currentUser.name, user2Name: otherUser.name, user1PictureID: nil, user2PictureID: nil, lastSingleMessage: nil, user1HasSeenLastSingleMessage: true, user2HasSeenLastSingleMessage: false, user1HasPosted: false, user2HasPosted: false) { (message, isNew) in
-                        if isNew {
-                            message.save(withBlock: { (savedMessage) in
-                                print("message saved")
-                                if let messageId = savedMessage.id {
-                                    print("messageId: \(messageId)")
-                                    let threadVC = ThreadViewController()
-                                    threadVC.setMessageID(messageID: messageId)
-                                    self.present(threadVC, animated: true, completion: nil)
+            if let currentUser = currentUser {
+                if let userID = self.userID {
+                    User.get(withID: userID) { (otherUser) in
+                        if let otherUser = otherUser {
+                            // Create message with both of the retrieved users
+                            Message.create(user1ID: currentUser.id, user2ID: otherUser.id, connecterID: nil, user1Name: currentUser.name, user2Name: otherUser.name, user1PictureID: nil, user2PictureID: nil, lastSingleMessage: nil, user1HasSeenLastSingleMessage: true, user2HasSeenLastSingleMessage: false, user1HasPosted: false, user2HasPosted: false) { (message, isNew) in
+                                if isNew {
+                                    message.save(withBlock: { (savedMessage) in
+                                        print("message saved")
+                                        if let messageId = savedMessage.id {
+                                            print("messageId: \(messageId)")
+                                            let threadVC = ThreadViewController()
+                                            threadVC.setMessageID(messageID: messageId)
+                                            self.present(threadVC, animated: true, completion: nil)
+                                        }
+                                    })
+                                } else {
+                                    print("message didn't need to be saved")
+                                    print("message.id: \(message.id)")
+                                    if let messageId = message.id {
+                                        let threadVC = ThreadViewController()
+                                        threadVC.setMessageID(messageID: messageId)
+                                        self.present(threadVC, animated: true, completion: nil)
+                                    }
                                 }
-                            })
-                        } else {
-                            print("message didn't need to be saved")
-                            print("message.id: \(message.id)")
-                            if let messageId = message.id {
-                                let threadVC = ThreadViewController()
-                                threadVC.setMessageID(messageID: messageId)
-                                self.present(threadVC, animated: true, completion: nil)
+                                
                             }
                         }
-                        
                     }
                 }
             }

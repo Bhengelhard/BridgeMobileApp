@@ -22,7 +22,7 @@ class ThreadViewController: UIViewController {
     var newMatchesTableViewCell: NewMatchesTableViewCell?
     
     var didSetupConstraints = false
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,7 +31,6 @@ class ThreadViewController: UIViewController {
         
         layout.navBar.leftButton.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
         messagesVC.layout = layout
-        
     }
     
     override func loadView() {
@@ -44,7 +43,6 @@ class ThreadViewController: UIViewController {
     
     override func updateViewConstraints() {
         didSetupConstraints = layout.initialize(view: view, messagesVC: messagesVC, didSetupConstraints: didSetupConstraints)
-        
         
         super.updateViewConstraints()
     }
@@ -100,10 +98,19 @@ class ThreadViewController: UIViewController {
         if let messageID = messagesVC.messageID {
             Message.get(withID: messageID) { (message) in
                 message.getNonCurrentUser { (user) in
-                    if let userID = user.id {
-                        let externalProfileVC = ExternalProfileViewController()
-                        externalProfileVC.setUserID(userID: userID)
-                        self.present(externalProfileVC, animated: true, completion: nil)
+                    if let user = user {
+                        if let userID = user.id {
+                            let externalProfileVC = ExternalProfileViewController()
+                            externalProfileVC.hideMessageButton()
+
+                            if let image = self.layout.navBar.titleImageView.image {
+                                externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: userID)
+                                self.present(externalProfileVC, animated: true)
+                            } else {
+                                externalProfileVC.setUserID(userID: userID)
+                                self.present(externalProfileVC, animated: true)
+                            }
+                        }
                     }
                 }
             }
@@ -114,11 +121,11 @@ class ThreadViewController: UIViewController {
 }
 
 class NecterJSQMessagesViewController: JSQMessagesViewController {
-    var threadBackend = ThreadBackend()
     var messageID: String?
     var incomingBubble: JSQMessagesBubbleImage!
     var outgoingBubble: JSQMessagesBubbleImage!
     var layout: ThreadLayout?
+    var threadBackend = ThreadBackend()
 
     var otherId = String()
     var otherDisplayName = String()
@@ -171,26 +178,28 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                 
                 collectionView.reloadData()
             }
+            
+            let hud = MBProgressHUD.showAdded(to: view, animated: true)
+            hud.label.text = "Loading..."
+            
+            threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
+                self.scrollToBottom(animated: true)
+                if self.threadBackend.jsqMessages.count == 0 {
+                    if let layout = self.layout {
+                        layout.noMessagesView.alpha = 1
+                    }
+                }
+                
+                MBProgressHUD.hide(for: self.view, animated: true)
+            }
+            
             //collectionView.backgroundColor = DisplayUtility.gradientColor(size: collectionView.frame.size)
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud.label.text = "Loading..."
-        
-        threadBackend.reloadSingleMessages(collectionView: collectionView, messageID: messageID) {
-            self.scrollToBottom(animated: true)
-            if self.threadBackend.jsqMessages.count == 0 {
-                if let layout = self.layout {
-                    layout.noMessagesView.alpha = 1
-                }
-            }
-            
-            MBProgressHUD.hide(for: self.view, animated: true)
-        }
+        self.scrollToBottom(animated: true)
     }
     
     
@@ -201,100 +210,102 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
         if let messageID = messageID {
             Message.get(withID: messageID) { (message)  in
                 message.getNonCurrentUser { (otherUser) in
-                    User.getCurrent { (currentUser) in
-                        var showedAlert = false
-                        if let currentUserBlockingList = currentUser.blockingList {
-                            if let otherUserID = otherUser.id {
-                                if currentUserBlockingList.contains(otherUserID) {
-                                    if let otherUserFirstName = otherUser.firstName {
-                                        let alert = UIAlertController(title: nil, message: "You must unblock \(otherUserFirstName) in order to send messages.", preferredStyle: .alert)
-                                        alert.addAction(UIAlertAction(title: "OK", style: .default))
-                                        self.present(alert, animated: true, completion: nil)
-                                        showedAlert = true
-                                    }
-                                }
-                            }
-                        }
-                        if !showedAlert {
-                            if let otherUserBlockingList = otherUser.blockingList {
-                                if let currentUserID = currentUser.id {
-                                    if otherUserBlockingList.contains(currentUserID) {
-                                        if let currentUserFirstName = currentUser.firstName {
-                                            let alert = UIAlertController(title: nil, message: "\(currentUserFirstName) is not taking messages right now.", preferredStyle: .alert)
-                                            alert.addAction(UIAlertAction(title: "OK", style: .default))
-                                            self.present(alert, animated: true, completion: nil)
-                                            showedAlert = true
+                    if let otherUser = otherUser {
+                        User.getCurrent { (currentUser) in
+                            if let currentUser = currentUser {
+                                var showedAlert = false
+                                if let currentUserBlockingList = currentUser.blockingList {
+                                    if let otherUserID = otherUser.id {
+                                        if currentUserBlockingList.contains(otherUserID) {
+                                            if let otherUserFirstName = otherUser.firstName {
+                                                let alert = UIAlertController(title: nil, message: "You must unblock \(otherUserFirstName) in order to send messages.", preferredStyle: .alert)
+                                                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                                                self.present(alert, animated: true, completion: nil)
+                                                showedAlert = true
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        }
-                        if !showedAlert { // send message successfully
-                            
-                            if let layout = self.layout {
-                                layout.noMessagesView.alpha = 0
-                            }
-                            
-                            if let jsqMessage = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
-                                self.threadBackend.jsqMessages.append(jsqMessage)
-                                
-                                // save single message
-                                self.threadBackend.jsqMessageToSingleMessage(jsqMessage: jsqMessage, messageID: messageID) { (singleMessage) in
-                                    singleMessage.save(withBlock: { (singleMessage) in
-                                        let lastSingleMessageAt = singleMessage.createdAt
-                                        // update message's snapshot and info about user has sent and user has seen last single message
-                                        self.threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, lastSingleMessageAt: lastSingleMessageAt, withBothHavePostedForFirstTimeAndWereNotFriendsBlock: {
-                                            // BOTH HAVE POSTED FOR FIRST TIME AND WERE NOT FRIENDS
-                                            
-                                            // Send Push notification to connecter to let them know the conversation has begun
-                                            Message.get(withID: messageID) { (message) in
-                                                // Make sure the message is not a DM - i.e. it has a connecterID
-                                                if let connecterID = message.connecterID {
-                                                    print("push sent to connecter")
-                                                    PFCloudFunctions.pushNotification(parameters: ["userObjectId": connecterID, "alert": "\(senderDisplayName) and \(self.otherDisplayName) have conversed and are now friends!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                                if !showedAlert {
+                                    if let otherUserBlockingList = otherUser.blockingList {
+                                        if let currentUserID = currentUser.id {
+                                            if otherUserBlockingList.contains(currentUserID) {
+                                                if let currentUserFirstName = currentUser.firstName {
+                                                    let alert = UIAlertController(title: nil, message: "\(currentUserFirstName) is not taking messages right now.", preferredStyle: .alert)
+                                                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                                                    self.present(alert, animated: true, completion: nil)
+                                                    showedAlert = true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if !showedAlert { // send message successfully
+                                    
+                                    if let layout = self.layout {
+                                        layout.noMessagesView.alpha = 0
+                                    }
+                                    
+                                    if let jsqMessage = JSQMessage(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text) {
+                                        self.threadBackend.jsqMessages.append(jsqMessage)
+                                        
+                                        // save single message
+                                        self.threadBackend.jsqMessageToSingleMessage(jsqMessage: jsqMessage, messageID: messageID) { (singleMessage) in
+                                            singleMessage.save(withBlock: { (singleMessage) in
+                                                let lastSingleMessageAt = singleMessage.createdAt
+                                                // update message's snapshot and info about user has sent and user has seen last single message
+                                                self.threadBackend.updateMessageAfterSingleMessageSent(messageID: messageID, snapshot: jsqMessage.text, lastSingleMessageAt: lastSingleMessageAt, withBothHavePostedForFirstTimeAndWereNotFriendsBlock: {
+                                                    // BOTH HAVE POSTED FOR FIRST TIME AND WERE NOT FRIENDS
                                                     
-                                                    // Add user's to eachother's friendlists
-                                                    PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1":message.user1ID, "userObjectId2":message.user2ID])
-                                                    print("users added to eachother's friendlists")
-                                                    
-                                                    // Show notification that user's are now friends and can introduce eachother if they want
-                                                    SingleMessage.create(text: "You have conversed with each other and are now friends", senderID: "", senderName: "", messageID: self.messageID) { (singleMessage) in
-                                                        singleMessage.save { (singleMessage) in
-                                                            self.collectionView.reloadData()
-                                                            print("message created")
-                                                        }
-                                                    }
+                                                    // Send Push notification to connecter to let them know the conversation has begun
+                                                    Message.get(withID: messageID) { (message) in
+                                                        // Make sure the message is not a DM - i.e. it has a connecterID
+                                                        if let connecterID = message.connecterID {
+                                                            print("push sent to connecter")
+                                                            PFCloudFunctions.pushNotification(parameters: ["userObjectId": connecterID, "alert": "\(senderDisplayName) and \(self.otherDisplayName) have conversed and are now friends!", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                                                            
+                                                            // Add user's to eachother's friendlists
+                                                            PFCloudFunctions.addIntroducedUsersToEachothersFriendLists(parameters: ["userObjectId1":message.user1ID, "userObjectId2":message.user2ID])
+                                                            print("users added to eachother's friendlists")
+                                                            
+                                                            // Show notification that user's are now friends and can introduce eachother if they want
+                                                            SingleMessage.create(text: "You have conversed with each other and are now friends", senderID: "", senderName: "", messageID: self.messageID) { (singleMessage) in
+                                                                singleMessage.save { (singleMessage) in
+                                                                    self.collectionView.reloadData()
+                                                                    print("message created")
+                                                                }
+                                                            }
 
+                                                        }
+                                                        
+                                                    }
+                                                    
+                                                })
+                                            })
+                                            
+                                        }
+                                        
+                                        
+                                        
+                                        if let id = self.messageID {
+                                            Message.get(withID: id, withBlock: { (message) in
+                                                // Getting information for push notification
+                                                var otherUserID: String?
+                                                if senderId == message.user1ID {
+                                                    otherUserID = message.user2ID
+                                                } else {
+                                                    otherUserID = message.user1ID
                                                 }
                                                 
-                                            }
-                                            
-                                        })
-                                    })
-                                    
-                                }
-                                
-                                
-                                
-                                if let id = self.messageID {
-                                    Message.get(withID: id, withBlock: { (message) in
-                                        // Getting information for push notification
-                                        var otherUserID: String?
-                                        if senderId == message.user1ID {
-                                            otherUserID = message.user2ID
-                                        } else {
-                                            otherUserID = message.user1ID
+                                                // Push notification to other user
+                                                PFCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
+                            
+                                            })
                                         }
                                         
-                                        // Push notification to other user
-                                        PFCloudFunctions.pushNotification(parameters: ["userObjectId": otherUserID,"alert":"\(senderDisplayName) has sent you a message: \(text)", "badge": "Increment",  "messageType" : "SingleMessage",  "messageId": messageID])
-                                        
-                                        print("sent the push notification")
-                                        
-                                    })
+                                        self.finishSendingMessage(animated: true)
+                                    }
                                 }
-                                
-                                self.finishSendingMessage(animated: true)
                             }
                         }
                     }
@@ -443,28 +454,27 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                         if let id = self.messageID {
                             Message.get(withID: id, withBlock: { (message) in
                                 User.getCurrent { (currentUser) in
-                                    if currentUser.id == message.user1ID {
-                                        if message.user1HasSeenLastSingleMessage == false {
-                                            // update badge count
-                                            //DBSavingFunctions.decrementBadge()
+                                    if let currentUser = currentUser {
+                                        if currentUser.id == message.user1ID {
+                                            if message.user1HasSeenLastSingleMessage == false {
+                                                // update badge count
+                                                //DBSavingFunctions.decrementBadge()
+                                                
+                                                message.user1HasSeenLastSingleMessage = true
+                                                message.save()
+                                            }
+                                        } else {
+                                            if message.user2HasSeenLastSingleMessage == false {
+                                                // update badge count
+                                                //DBSavingFunctions.decrementBadge()
+                                                
+                                                message.user2HasSeenLastSingleMessage = true
+                                                message.save()
+                                            }
                                             
-                                            message.user1HasSeenLastSingleMessage = true
-                                            message.save()
-                                        }
-                                        
-                                        
-                                        
-                                    } else {
-                                        if message.user2HasSeenLastSingleMessage == false {
-                                            // update badge count
-                                            //DBSavingFunctions.decrementBadge()
                                             
-                                            message.user2HasSeenLastSingleMessage = true
-                                            message.save()
+                                            
                                         }
-                                        
-                                        
-                                        
                                     }
                                 }
                             })

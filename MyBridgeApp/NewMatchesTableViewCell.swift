@@ -19,7 +19,6 @@ class NewMatchesTableViewCell: UITableViewCell {
     let gradientLayer = DisplayUtility.gradientLayer()
     var newMatchViews = [NewMatchView]()
     var noNewMatchesLabel = UILabel()
-    var tableView: UITableView?
     var shouldSetUpConstraints = true
     
     init() {
@@ -183,26 +182,28 @@ class NewMatchesTableViewCell: UITableViewCell {
         newMatchView.addGestureRecognizer(newMatchGR)
         
         message.getNonCurrentUser { (user) in
-            user.getMainPicture { (picture) in
-                picture.getImage { (image) in
-                    newMatchView.profileImageView.image = image
-                }
-            }
-            
-            if let firstName = user.firstName {
-                newMatchView.nameLabel.text = firstName
-            }
-            
-            if user.id == message.user1ID { // user is user1; you are user2
-                if let hasSeenLastSingleMessage = message.user2HasSeenLastSingleMessage {
-                    if hasSeenLastSingleMessage {
-                        newMatchView.notificationDot.alpha = 0
+                if let user = user {
+                user.getMainPicture { (picture) in
+                    picture.getImage { (image) in
+                        newMatchView.profileImageView.image = image
                     }
                 }
-            } else { // user is user2; you are user1
-                if let hasSeenLastSingleMessage = message.user1HasSeenLastSingleMessage {
-                    if hasSeenLastSingleMessage {
-                        newMatchView.notificationDot.alpha = 0
+                
+                if let firstName = user.firstName {
+                    newMatchView.nameLabel.text = firstName
+                }
+                
+                if user.id == message.user1ID { // user is user1; you are user2
+                    if let hasSeenLastSingleMessage = message.user2HasSeenLastSingleMessage {
+                        if hasSeenLastSingleMessage {
+                            newMatchView.notificationDot.alpha = 0
+                        }
+                    }
+                } else { // user is user2; you are user1
+                    if let hasSeenLastSingleMessage = message.user1HasSeenLastSingleMessage {
+                        if hasSeenLastSingleMessage {
+                            newMatchView.notificationDot.alpha = 0
+                        }
                     }
                 }
             }
@@ -216,7 +217,6 @@ class NewMatchesTableViewCell: UITableViewCell {
             if let view = gesture.view {
                 if let newMatchView = view as? NewMatchView {
                     messagesVC.goToThread(messageID: newMatchView.message.id)
-
                 }
             }
         }

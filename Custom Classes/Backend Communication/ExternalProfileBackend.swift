@@ -13,8 +13,10 @@ class ExternalProfileBackend {
     /// get user's images
     func getImages(userID: String, withBlock block: Picture.ImagesBlock? = nil) {
         User.get(withID: userID) { (user) in
-            Picture.getAll(withUser: user) { (pictures) in
-                self.getImages(pictures: pictures, imagesSoFar: [], index: 0, withBlock: block)
+            if let user = user {
+                Picture.getAll(withUser: user) { (pictures) in
+                    self.getImages(pictures: pictures, imagesSoFar: [], index: 0, withBlock: block)
+                }
             }
         }
     }
@@ -37,8 +39,10 @@ class ExternalProfileBackend {
     /// set the name label to display the user's name
     func setName(userID: String, label: UILabel) {
         User.get(withID: userID) { (user) in
-            if let name = user.name {
-                label.text = name
+            if let user = user {
+                if let name = user.name {
+                    label.text = name
+                }
             }
         }
     }
@@ -46,148 +50,152 @@ class ExternalProfileBackend {
     /// set the facts label to display the user's facts
     func setFacts(userID: String, label: UILabel) {
         User.get(withID: userID) { (user) in
-            var age: String?
-            if let displayAge = user.displayAge {
-                if displayAge {
+            if let user = user {
+                var age: String?
+                if let displayAge = user.displayAge {
+                    if displayAge {
+                        if let userAge = user.age {
+                            age = userAge
+                        }
+                    }
+                } else {
                     if let userAge = user.age {
                         age = userAge
                     }
                 }
-            } else {
-                if let userAge = user.age {
-                    age = userAge
-                }
-            }
-            
-            var city: String?
-            if let displayCity = user.displayCity {
-                if displayCity {
+                
+                var city: String?
+                if let displayCity = user.displayCity {
+                    if displayCity {
+                        if let userCity = user.city {
+                            city = userCity
+                        }
+                    }
+                } else {
                     if let userCity = user.city {
                         city = userCity
                     }
                 }
-            } else {
-                if let userCity = user.city {
-                    city = userCity
-                }
-            }
-            
-            var work: String?
-            if let displayWork = user.displayWork {
-                if displayWork {
+                
+                var work: String?
+                if let displayWork = user.displayWork {
+                    if displayWork {
+                        if let userWork = user.work {
+                            work = userWork
+                        }
+                    }
+                } else {
                     if let userWork = user.work {
                         work = userWork
                     }
                 }
-            } else {
-                if let userWork = user.work {
-                    work = userWork
-                }
-            }
-            
-            var school: String?
-            if let displaySchool = user.displaySchool {
-                if displaySchool {
+                
+                var school: String?
+                if let displaySchool = user.displaySchool {
+                    if displaySchool {
+                        if let userSchool = user.school {
+                            school = userSchool
+                        }
+                    }
+                } else {
                     if let userSchool = user.school {
                         school = userSchool
                     }
                 }
-            } else {
-                if let userSchool = user.school {
-                    school = userSchool
+                
+                var currentSchool = false
+                if let userCurrentSchool = user.currentSchool {
+                    currentSchool = userCurrentSchool
                 }
-            }
-            
-            var currentSchool = false
-            if let userCurrentSchool = user.currentSchool {
-                currentSchool = userCurrentSchool
-            }
-            
-            var gender: String?
-            if let displayGender = user.displayGender {
-                if displayGender {
+                
+                var gender: String?
+                if let displayGender = user.displayGender {
+                    if displayGender {
+                        if let userGender = user.gender {
+                            gender = userGender.rawValue
+                        }
+                    }
+                } else {
                     if let userGender = user.gender {
                         gender = userGender.rawValue
                     }
                 }
-            } else {
-                if let userGender = user.gender {
-                    gender = userGender.rawValue
-                }
-            }
-            
-            var relationshipStatus: String?
-            if let displayRelationshipStatus = user.displayRelationshipStatus {
-                if displayRelationshipStatus {
+                
+                var relationshipStatus: String?
+                if let displayRelationshipStatus = user.displayRelationshipStatus {
+                    if displayRelationshipStatus {
+                        if let userRelationshipStatus = user.relationshipStatus {
+                            relationshipStatus = userRelationshipStatus.rawValue
+                        }
+                    }
+                } else {
                     if let userRelationshipStatus = user.relationshipStatus {
                         relationshipStatus = userRelationshipStatus.rawValue
                     }
                 }
-            } else {
-                if let userRelationshipStatus = user.relationshipStatus {
-                    relationshipStatus = userRelationshipStatus.rawValue
-                }
+                
+                let (text, numberOfLines) = ExternalProfileLogic.getFactsLabelTextAndNumberOfLines(age: age, city: city, work: work, school: school, currentSchool: currentSchool, gender: gender, relationshipStatus: relationshipStatus)
+                label.text = text
+                label.numberOfLines = numberOfLines
             }
-            
-            let (text, numberOfLines) = ExternalProfileLogic.getFactsLabelTextAndNumberOfLines(age: age, city: city, work: work, school: school, currentSchool: currentSchool, gender: gender, relationshipStatus: relationshipStatus)
-            label.text = text
-            label.numberOfLines = numberOfLines
         }
     }
     
     func getFieldShouldDisplayAndValue(userID: String, field: UserInfoField, completion: @escaping (Bool, String?) -> Void) {
         User.get(withID: userID) { (user) in
-            switch field {
-            case .age:
-                if let displayAge = user.displayAge {
-                    completion(displayAge, user.age)
-                } else {
-                    completion(true, user.age)
-                }
-            case .city:
-                if let displayCity = user.displayCity {
-                    completion(displayCity, user.city)
-                } else {
-                    completion(true, user.city)
-                }
-            case .work:
-                if let displayWork = user.displayWork {
-                    completion(displayWork, user.work)
-                } else {
-                    completion(true, user.work)
-                }
-            case .school:
-                if let displaySchool = user.displaySchool {
-                    completion(displaySchool, user.school)
-                } else {
-                    completion(true, user.school)
-                }
-            case .gender:
-                if let displayGender = user.displayGender {
-                    if let gender = user.gender {
-                        completion(displayGender, gender.rawValue)
+            if let user = user {
+                switch field {
+                case .age:
+                    if let displayAge = user.displayAge {
+                        completion(displayAge, user.age)
                     } else {
-                        completion(displayGender, nil)
+                        completion(true, user.age)
                     }
-                } else {
-                    if let gender = user.gender {
-                        completion(true, gender.rawValue)
+                case .city:
+                    if let displayCity = user.displayCity {
+                        completion(displayCity, user.city)
                     } else {
-                        completion(true, nil)
+                        completion(true, user.city)
                     }
-                }
-            case .relationshipStatus:
-                if let displayRelationshipStatus = user.displayRelationshipStatus {
-                    if let relationshipStatus = user.relationshipStatus {
-                        completion(displayRelationshipStatus, relationshipStatus.rawValue)
+                case .work:
+                    if let displayWork = user.displayWork {
+                        completion(displayWork, user.work)
                     } else {
-                        completion(displayRelationshipStatus, nil)
+                        completion(true, user.work)
                     }
-                } else {
-                    if let relationshipStatus = user.relationshipStatus {
-                        completion(true, relationshipStatus.rawValue)
+                case .school:
+                    if let displaySchool = user.displaySchool {
+                        completion(displaySchool, user.school)
                     } else {
-                        completion(true, nil)
+                        completion(true, user.school)
+                    }
+                case .gender:
+                    if let displayGender = user.displayGender {
+                        if let gender = user.gender {
+                            completion(displayGender, gender.rawValue)
+                        } else {
+                            completion(displayGender, nil)
+                        }
+                    } else {
+                        if let gender = user.gender {
+                            completion(true, gender.rawValue)
+                        } else {
+                            completion(true, nil)
+                        }
+                    }
+                case .relationshipStatus:
+                    if let displayRelationshipStatus = user.displayRelationshipStatus {
+                        if let relationshipStatus = user.relationshipStatus {
+                            completion(displayRelationshipStatus, relationshipStatus.rawValue)
+                        } else {
+                            completion(displayRelationshipStatus, nil)
+                        }
+                    } else {
+                        if let relationshipStatus = user.relationshipStatus {
+                            completion(true, relationshipStatus.rawValue)
+                        } else {
+                            completion(true, nil)
+                        }
                     }
                 }
             }
@@ -197,9 +205,11 @@ class ExternalProfileBackend {
     /// set the about me label to display a summary about the user
     func setAboutMe(userID: String, label: UILabel) {
         User.get(withID: userID) { (user) in
-            if let aboutMe = user.aboutMe {
-                if aboutMe != "" {
-                    label.text = "About Me: \(aboutMe)"
+            if let user = user {
+                if let aboutMe = user.aboutMe {
+                    if aboutMe != "" {
+                        label.text = "About Me: \(aboutMe)"
+                    }
                 }
             }
         }
@@ -208,9 +218,11 @@ class ExternalProfileBackend {
     /// set the looking for label to display what the user is looking for
     func setLookingFor(userID: String, label: UILabel) {
         User.get(withID: userID) { (user) in
-            if let lookingFor = user.lookingFor {
-                if lookingFor != "" {
-                    label.text = "Looking For: \(lookingFor)"
+            if let user = user {
+                if let lookingFor = user.lookingFor {
+                    if lookingFor != "" {
+                        label.text = "Looking For: \(lookingFor)"
+                    }
                 }
             }
         }

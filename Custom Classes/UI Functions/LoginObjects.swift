@@ -29,10 +29,10 @@ class LoginObjects {
     
     class TutorialsPageViewController: ReusableObjects.NecterPageViewController {
         
-        let initialVC = TutorialViewController(image: #imageLiteral(resourceName: "Initial_Tutorial"), text: "Introduce friends that go well together.")
+        let initialVC = TutorialViewController(image: #imageLiteral(resourceName: "Initial_Tutorial"), text: "Meet new people through your friends.")
         let swipeRightVC = TutorialViewController(image: #imageLiteral(resourceName: "Swipe_Right_Tutorial"), text: "Swipe right to introduce.")
         let swipeLeftVC = TutorialViewController(image: #imageLiteral(resourceName: "Swipe_Left_Tutorial"), text: "Swipe left to see the next pair.")
-        let chatVC = TutorialViewController(image: #imageLiteral(resourceName: "Chat_Tutorial"), text: "Get to know the people you're introduced to")
+        let chatVC = TutorialViewController(image: #imageLiteral(resourceName: "Chat_Tutorial"), text: "Make good intros, meet good people.")
         
         init() {
             super.init(arrayOfVCs: [initialVC, swipeRightVC, swipeLeftVC, chatVC], startingIndex: 0, withPageControl: true, circular: true)
@@ -73,7 +73,12 @@ class LoginObjects {
             imageView.autoAlignAxis(.vertical, toSameAxisOf: view)
             imageView.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: -30)
             imageView.autoPinEdge(.top, to: .bottom, of: label, withOffset: 20)
-            imageView.autoMatch(.width, to: .height, of: imageView, withMultiplier: 0.75)
+            if image == #imageLiteral(resourceName: "Chat_Tutorial") {
+                imageView.autoMatch(.width, to: .height, of: imageView, withMultiplier: 0.56)
+            } else {
+                imageView.autoMatch(.width, to: .height, of: imageView, withMultiplier: 0.75)
+            }
+            
 
         }
         

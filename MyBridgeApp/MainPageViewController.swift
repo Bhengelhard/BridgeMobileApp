@@ -97,6 +97,9 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
     
     // Segue from SwipeViewController to MessagesViewController via the PageViewController
     func swipeRightButtonTapped(_ sender: UIButton) {
+        if let swipeVC = arrayOfVCs[1] as? SwipeViewController {
+            swipeVC.layout.navBar.rightButton.setImage(#imageLiteral(resourceName: "Messages_Navbar_Inactive"), for: .normal)
+        }
         setViewControllers([arrayOfVCs[2]], direction: .forward, animated: true, completion: nil)
     }
     // Segue from SwipeViewController to MyProfileViewController via the PageViewController
@@ -104,8 +107,11 @@ class MainPageViewController: UIPageViewController, UIPageViewControllerDataSour
         setViewControllers([arrayOfVCs[0]], direction: .reverse, animated: true, completion: nil)
     }
     
-    // Segue from MyProfileViewController to SwipeViewController via the PageViewController
+    // Segue from MessagesViewController to SwipeViewController via the PageViewController
     func messagesLeftButtonTapped(_ sender: UIButton) {
+        if let swipeVC = arrayOfVCs[1] as? SwipeViewController {
+            swipeVC.layout.navBar.rightButton.setImage(#imageLiteral(resourceName: "Messages_Navbar_Inactive"), for: .normal)
+        }
         setViewControllers([arrayOfVCs[1]], direction: .reverse, animated: true, completion: nil)
     }
     

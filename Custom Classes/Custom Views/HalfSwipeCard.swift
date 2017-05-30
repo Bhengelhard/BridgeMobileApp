@@ -82,7 +82,6 @@ class HalfSwipeCard: UIView {
         //nameLabel.autoSetDimensions(to: nameLabel.frame.size)
         nameLabel.autoPinEdge(toSuperviewEdge: .bottom, withInset: 10)
         nameLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 10)
-        
         setNeedsLayout()
     }
     

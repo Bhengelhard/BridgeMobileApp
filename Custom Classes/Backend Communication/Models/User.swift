@@ -12,8 +12,8 @@ import Foundation
 /// a Necter User
 class User: NSObject {
     
-    typealias UserBlock = (User) -> Void
-    typealias UsersBlock = ([User]) -> Void
+    typealias UserBlock = (User?) -> Void
+    typealias UsersBlock = ([User]?) -> Void
     
     private let parseUser: PFUser
     
@@ -255,6 +255,9 @@ class User: NSObject {
             }
         } else {
             print("error getting current user")
+            if let block = block {
+                block(nil)
+            }
         }
     }
     
@@ -267,10 +270,17 @@ class User: NSObject {
         query.getObjectInBackground(withId: id) { (parseObject, error) in
             if let error = error {
                 print("error getting user with id \(id) - \(error)")
+                if let block = block {
+                    block(nil)
+                }
             } else if let parseUser = parseObject as? PFUser {
                 let user = User(parseUser: parseUser)
                 if let block = block {
                     block(user)
+                }
+            } else {
+                if let block = block {
+                    block(nil)
                 }
             }
         }
@@ -284,6 +294,9 @@ class User: NSObject {
             query.findObjectsInBackground(block: { (parseObjects, error) in
                 if let error = error {
                     print("error finding users - \(error)")
+                    if let block = block {
+                        block(nil)
+                    }
                 } else if let parseObjects = parseObjects {
                     var users = [User]()
                     for parseObject in parseObjects {
@@ -294,6 +307,10 @@ class User: NSObject {
                     }
                     if let block = block {
                         block(users)
+                    }
+                } else {
+                    if let block = block {
+                        block(nil)
                     }
                 }
             })
@@ -484,10 +501,17 @@ class User: NSObject {
         parseUser.saveInBackground { (succeeded, error) in
             if let error = error {
                 print("error saving user - \(error)")
+                if let block = block {
+                    block(nil)
+                }
             } else if succeeded {
                 self.id = self.parseUser.objectId
                 if let block = block {
                     block(self)
+                }
+            } else {
+                if let block = block {
+                    block(nil)
                 }
             }
         }

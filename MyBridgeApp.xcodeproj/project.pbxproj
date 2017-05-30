@@ -16,6 +16,9 @@
 		302799DA1E579FC300AFFB90 /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799D91E579FC300AFFB90 /* SwipeViewController.swift */; };
 		302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799DB1E57A71800AFFB90 /* SwipeLayout.swift */; };
 		302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799DD1E57A72700AFFB90 /* SwipeObjects.swift */; };
+		30295A301EB9928000C649BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30295A2F1EB9928000C649BB /* GoogleService-Info.plist */; };
+		302DCD361EC3BE8F00CB392D /* FirebaseLogs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302DCD351EC3BE8F00CB392D /* FirebaseLogs.swift */; };
+		302DCD381EC3BEA500CB392D /* Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302DCD371EC3BEA500CB392D /* Scripts.swift */; };
 		3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B01DD54E3F0077F7AC /* LocalData.swift */; };
 		3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */; };
 		3030C0B71DD54E3F0077F7AC /* PairInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B21DD54E3F0077F7AC /* PairInfo.swift */; };
@@ -59,6 +62,7 @@
 		30BFA0B31E4BBB9600A17F5E /* FBLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */; };
 		30BFA0B51E4CCC1500A17F5E /* BridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */; };
 		30BFA0BD1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BFA0BC1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift */; };
+		30C0C48A1EC9FE36002F7174 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30C0C4891EC9FE36002F7174 /* AdSupport.framework */; };
 		30D82B5C1E6F92E3000F7075 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B5B1E6F92E3000F7075 /* WebViewController.swift */; };
 		30D82B621E6FCFC1000F7075 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B611E6FCFC1000F7075 /* PopupView.swift */; };
 		30D82B641E70D611000F7075 /* PopupObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D82B631E70D611000F7075 /* PopupObjects.swift */; };
@@ -126,6 +130,9 @@
 		302799D91E579FC300AFFB90 /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeViewController.swift; path = MyBridgeApp/SwipeViewController.swift; sourceTree = SOURCE_ROOT; };
 		302799DB1E57A71800AFFB90 /* SwipeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeLayout.swift; path = "Custom Classes/UI Functions/SwipeLayout.swift"; sourceTree = "<group>"; };
 		302799DD1E57A72700AFFB90 /* SwipeObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeObjects.swift; path = "Custom Classes/UI Functions/SwipeObjects.swift"; sourceTree = "<group>"; };
+		30295A2F1EB9928000C649BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		302DCD351EC3BE8F00CB392D /* FirebaseLogs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FirebaseLogs.swift; path = Scripts/FirebaseLogs.swift; sourceTree = "<group>"; };
+		302DCD371EC3BEA500CB392D /* Scripts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Scripts.swift; path = Scripts/Scripts.swift; sourceTree = "<group>"; };
 		3030C0B01DD54E3F0077F7AC /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalData.swift; path = "Custom Classes/Data Storage/LocalData.swift"; sourceTree = "<group>"; };
 		3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalStorageUtility.swift; path = "Custom Classes/Data Storage/LocalStorageUtility.swift"; sourceTree = "<group>"; };
 		3030C0B21DD54E3F0077F7AC /* PairInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PairInfo.swift; path = "Custom Classes/Data Storage/PairInfo.swift"; sourceTree = "<group>"; };
@@ -170,6 +177,7 @@
 		30BFA0B11E4BBB9600A17F5E /* FBLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLogin.swift; path = "Custom Classes/Backend Communication/FBCommunication/FBLogin.swift"; sourceTree = "<group>"; };
 		30BFA0B41E4CCC1500A17F5E /* BridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BridgeType.swift; path = Types/BridgeType.swift; sourceTree = "<group>"; };
 		30BFA0BC1E4CD60D00A17F5E /* MessagesTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTitleTableViewCell.swift; path = MyBridgeApp/MessagesTitleTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		30C0C4891EC9FE36002F7174 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		30D82B5B1E6F92E3000F7075 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebViewController.swift; path = MyBridgeApp/WebViewController.swift; sourceTree = SOURCE_ROOT; };
 		30D82B611E6FCFC1000F7075 /* PopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopupView.swift; path = "Custom Classes/Custom Views/PopupView.swift"; sourceTree = "<group>"; };
 		30D82B631E70D611000F7075 /* PopupObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopupObjects.swift; path = "Custom Classes/UI Functions/PopupObjects.swift"; sourceTree = "<group>"; };
@@ -237,6 +245,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30C0C48A1EC9FE36002F7174 /* AdSupport.framework in Frameworks */,
 				E9D6DF171D7880FC00138A1F /* FBSDKCoreKit.framework in Frameworks */,
 				E9D6DF1B1D78810800138A1F /* ParseFacebookUtilsV4.framework in Frameworks */,
 				81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */,
@@ -437,6 +446,7 @@
 				E9D6DF551D7883FD00138A1F /* MyBridgeAppDataModel.xcdatamodeld */,
 				814C3AC81B69877600E307BB /* Images.xcassets */,
 				814C3AC91B69877600E307BB /* Info.plist */,
+				30295A2F1EB9928000C649BB /* GoogleService-Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -447,6 +457,7 @@
 				90CD18BB1E8C328C00864519 /* MyBridgeApp-Bridging-Header.h */,
 				67AD26D51E31353400252575 /* Constants.swift */,
 				CB5829441CAA26D900DC86C9 /* AppDelegate.swift */,
+				900DD61D1EBBC15900BD7E23 /* Scripts */,
 				67AD26D71E31353D00252575 /* Types */,
 				E9D6DF201D78820F00138A1F /* Custom Classes */,
 				81BA81471A49DA1800E65899 /* MyBridgeApp */,
@@ -481,6 +492,7 @@
 		81BA816A1A49DB5600E65899 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				30C0C4891EC9FE36002F7174 /* AdSupport.framework */,
 				E9D6DF141D7880EA00138A1F /* Bolts.framework */,
 				E9D6DF1E1D78811900138A1F /* Parse.framework */,
 				E9D6DF161D7880FC00138A1F /* FBSDKCoreKit.framework */,
@@ -502,6 +514,15 @@
 				81BA81761A49E0D500E65899 /* libsqlite3.dylib */,
 			);
 			name = "System Frameworks";
+			sourceTree = "<group>";
+		};
+		900DD61D1EBBC15900BD7E23 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				302DCD371EC3BEA500CB392D /* Scripts.swift */,
+				302DCD351EC3BE8F00CB392D /* FirebaseLogs.swift */,
+			);
+			name = Scripts;
 			sourceTree = "<group>";
 		};
 		9034769B1E53988A0065B973 /* Models */ = {
@@ -615,6 +636,7 @@
 			files = (
 				814C3ACB1B69877600E307BB /* Images.xcassets in Resources */,
 				30E2AF751DDA156C0023AA95 /* BentonSans-Bold.otf in Resources */,
+				30295A301EB9928000C649BB /* GoogleService-Info.plist in Resources */,
 				30A726F21E2683850070B620 /* Main.storyboard in Resources */,
 				30E2AF761DDA156C0023AA95 /* BentonSans-Light.otf in Resources */,
 			);
@@ -711,7 +733,9 @@
 				90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */,
 				9043B77C1E56ABC100D76BCE /* Message.swift in Sources */,
 				9028FA3E1E4D2CC7002CC80F /* ReportUserMenu.swift in Sources */,
+				302DCD361EC3BE8F00CB392D /* FirebaseLogs.swift in Sources */,
 				30A727061E29540F0070B620 /* MessageComposer.swift in Sources */,
+				302DCD381EC3BEA500CB392D /* Scripts.swift in Sources */,
 				30BF6FFF1E5BDF710008C2B5 /* EditProfileLayout.swift in Sources */,
 				300A1D7E1E53EB6C0071FED7 /* LoginLayout.swift in Sources */,
 				9043B77B1E56ABC100D76BCE /* BridgePairing.swift in Sources */,

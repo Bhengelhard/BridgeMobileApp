@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import Parse
 
 /// The SwipeViewController class displays and handles swiping for introductions
 class SwipeViewController: UIViewController {
@@ -49,7 +50,7 @@ class SwipeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "presentThreadVC"), object: nil)
         
         // Listener for updating inbox Icon
-//        NotificationCenter.default.addObserver(self, selector: #selector(presentThreadVC(_:)), name: NSNotification.Name(rawValue: "pushNotification"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(displayInboxIconNotification(_:)), name: NSNotification.Name(rawValue: "displayInboxIconNotification"), object: nil)
         
         // Add Targets for Swipe Cards
         layout.topSwipeCard.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(swipeGesture(_:))))
@@ -59,29 +60,32 @@ class SwipeViewController: UIViewController {
         layout.infoButton.addTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
         layout.passButton.addTarget(self, action: #selector(passButtonTapped(_:)), for: .touchUpInside)
         layout.nectButton.addTarget(self, action: #selector(nectButtonTapped(_:)), for: .touchUpInside)
+        layout.navBar.titleButton.addTarget(self, action: #selector(necterIconTapped(_:)), for: .touchUpInside)
         
         layout.inviteButton.setVC(vc: self)
         
         User.getCurrent { (user) in
-            // if user has not reset cards, set locally stored cards to nil
-            if let hasResetPairs = user.hasResetPairs {
-                if !hasResetPairs {
-                    let localBridgePairings = LocalBridgePairings()
-                    localBridgePairings.setBridgePairing1ID(nil)
-                    localBridgePairings.setBridgePairing2ID(nil)
-                    localBridgePairings.synchronize()
-                    
+            if let user = user {
+                // if user has not reset cards, set locally stored cards to nil
+                if let hasResetPairs = user.hasResetPairs {
+                    if !hasResetPairs {
+                        let localBridgePairings = LocalBridgePairings()
+                        localBridgePairings.setBridgePairing1ID(nil)
+                        localBridgePairings.setBridgePairing2ID(nil)
+                        localBridgePairings.synchronize()
+                        
+                        user.hasResetPairs = true
+                        user.save { (_) in
+                            self.getBridgePairings()
+                        }
+                    } else {
+                        self.getBridgePairings()
+                    }
+                } else {
                     user.hasResetPairs = true
                     user.save { (_) in
                         self.getBridgePairings()
                     }
-                } else {
-                    self.getBridgePairings()
-                }
-            } else {
-                user.hasResetPairs = true
-                user.save { (_) in
-                    self.getBridgePairings()
                 }
             }
         }
@@ -92,25 +96,44 @@ class SwipeViewController: UIViewController {
         dbRetrievingFunctions.queryForConnectionsConversed(vc: self)
         //dbRetrievingFunctions.queryForCurrentUserMatches(vc: self)
         
-        swipeBackend.getCurrentUserUnviewedMacthes { (bridgePairings) in
+        
+        // TODO: Check if it's possible to combine this with the getCurrentUserUnviewMatchesNotification
+        // TODO: Make it so the notification only goes away when the user reads a message instead of just clicking on the inbox -> this could be by re-running the below check the same times as reloading the messages table.
+        // Check if the current user has a notification
+        User.getCurrent { (user) in
+            Message.getCurrentUserNotificationStatus(withUser: user!) { (hasNotification) in
+                if hasNotification {
+                    self.layout.navBar.rightButton.setImage(#imageLiteral(resourceName: "Inbox_Navbar_Icon_Notification"), for: .normal)
+                } else {
+                    self.layout.navBar.rightButton.setImage(#imageLiteral(resourceName: "Messages_Navbar_Inactive"), for: .normal)
+                }
+            }
+        }
+
+        
+        swipeBackend.getCurrentUserUnviewedMatches { (bridgePairings) in
             User.getCurrent { (currentUser) in
-                for bridgePairing in bridgePairings {
-                    // create poppup view
-                    bridgePairing.getNonCurrentUser { (otherUser) in
-                        if let currentUserID = currentUser.id, let otherUserID = otherUser.id, let connecterName = bridgePairing.connecterName, let otherUserName = otherUser.name {
-                            let youMatchedPopUp = PopupView(includesCurrentUser: true, user1Id: currentUserID, user2Id: otherUserID, textString: "\(connecterName) 'nected you with \(otherUserName)!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
-                            self.view.addSubview(youMatchedPopUp)
-                            youMatchedPopUp.autoPinEdgesToSuperviewEdges()
+                if let currentUser = currentUser {
+                    for bridgePairing in bridgePairings {
+                        // create poppup view
+                        bridgePairing.getNonCurrentUser { (otherUser) in
+                            if let otherUser = otherUser {
+                                if let currentUserID = currentUser.id, let otherUserID = otherUser.id, let connecterName = bridgePairing.connecterName, let otherUserName = otherUser.name {
+                                    let youMatchedPopUp = PopupView(includesCurrentUser: true, user1Id: currentUserID, user2Id: otherUserID, textString: "\(connecterName) 'nected you with \(otherUserName)!", titleImage: #imageLiteral(resourceName: "You_Matched"), user1Image: nil, user2Image: nil)
+                                    self.view.addSubview(youMatchedPopUp)
+                                    youMatchedPopUp.autoPinEdgesToSuperviewEdges()
+                                }
+                            }
                         }
+                        
+                        // set viewed notification to true
+                        if currentUser.id == bridgePairing.user1ID {
+                            bridgePairing.youMatchedNotificationViewedUser1 = true
+                        } else {
+                            bridgePairing.youMatchedNotificationViewedUser2 = true
+                        }
+                        bridgePairing.save()
                     }
-                    
-                    // set viewed notification to true
-                    if currentUser.id == bridgePairing.user1ID {
-                        bridgePairing.youMatchedNotificationViewedUser1 = true
-                    } else {
-                        bridgePairing.youMatchedNotificationViewedUser2 = true
-                    }
-                    bridgePairing.save()
                 }
             }
         }
@@ -119,25 +142,27 @@ class SwipeViewController: UIViewController {
     
     func checkHasResetPairs() {
         User.getCurrent { (user) in
-            // if user has not reset cards, set locally stored cards to nil
-            if let hasResetPairs = user.hasResetPairs {
-                if !hasResetPairs {
-                    let localBridgePairings = LocalBridgePairings()
-                    localBridgePairings.setBridgePairing1ID(nil)
-                    localBridgePairings.setBridgePairing2ID(nil)
-                    localBridgePairings.synchronize()
-                    
+            if let user = user {
+                // if user has not reset cards, set locally stored cards to nil
+                if let hasResetPairs = user.hasResetPairs {
+                    if !hasResetPairs {
+                        let localBridgePairings = LocalBridgePairings()
+                        localBridgePairings.setBridgePairing1ID(nil)
+                        localBridgePairings.setBridgePairing2ID(nil)
+                        localBridgePairings.synchronize()
+                        
+                        user.hasResetPairs = true
+                        user.save { (_) in
+                            self.getBridgePairings()
+                        }
+                    } else {
+                        self.getBridgePairings()
+                    }
+                } else {
                     user.hasResetPairs = true
                     user.save { (_) in
                         self.getBridgePairings()
                     }
-                } else {
-                    self.getBridgePairings()
-                }
-            } else {
-                user.hasResetPairs = true
-                user.save { (_) in
-                    self.getBridgePairings()
                 }
             }
         }
@@ -184,8 +209,8 @@ class SwipeViewController: UIViewController {
             }
         }
         
-        // Get the first swipeCards
         /*
+        // Get the first swipeCards
         self.swipeBackend.setInitialTopSwipeCard(topSwipeCard: layout.topSwipeCard, limitMet: limitMet, noMoreBridgePairings: noMoreBridgePairings, noBridgePairings: noBridgePairings) {
             let dateAfter = Date()
             let timeInterval = dateAfter.timeIntervalSince(dateBefore)
@@ -231,6 +256,12 @@ class SwipeViewController: UIViewController {
     }
     
     func infoButtonTapped(_ sender: UIButton) {
+        presentAppInstructions()
+    }
+    func necterIconTapped(_ sender: UIButton) {
+        presentAppInstructions()
+    }
+    func presentAppInstructions() {
         let alert = UIAlertController(title: "How to NECT:", message: "Our algorithm pairs two of your friends.\nSwipe right to introduce them.\nSwipe left to see the next pair.", preferredStyle: UIAlertControllerStyle.alert)
         //Create the actions
         alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in
@@ -247,10 +278,18 @@ class SwipeViewController: UIViewController {
     }
     
     func presentExternalProfileVC(_ notification: Notification) {
-        if let userId = notification.object as? String {
+        /*if let userId = notification.object as? String {
             let externalProfileVC = ExternalProfileViewController()
             externalProfileVC.setUserID(userID: userId)
             self.present(externalProfileVC, animated: true, completion: nil)
+        }*/
+        let externalProfileVC = ExternalProfileViewController()
+        if let (userID, image) = notification.object as? (String, UIImage) { // pass image through
+            externalProfileVC.setMainProfilePictureAndUserID(image: image, userID: userID)
+            self.present(externalProfileVC, animated: true, completion: nil)
+        } else if let userID = notification.object as? String {
+            externalProfileVC.setUserID(userID: userID)
+            self.present(externalProfileVC, animated: true, completion: nil) // must download image
         }
     }
     
@@ -358,7 +397,13 @@ class SwipeViewController: UIViewController {
         }
     }
     
-    // MARK: - Navigation
+    // Upon Push Notification, display inbox Icon with notification dot
+    func displayInboxIconNotification(_ notification: Notification) {
+        print("displayInboxIconNotification")
+        layout.navBar.rightButton.setImage(#imageLiteral(resourceName: "Inbox_Navbar_Icon_Notification"), for: .normal)
+    }
+    
+    // MARK: - Navigationza
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination

@@ -14,7 +14,7 @@ import UIKit
     @objc optional func countdownFinished()
     @objc optional func countdownCancelled()
     @objc optional func countingAt(timeCounted timeCounted: TimeInterval, timeRemaining: TimeInterval)
-
+    
 }
 extension TimeInterval {
     var int: Int {
@@ -157,7 +157,7 @@ public class CountdownLabel: LTMorphingLabel {
         self.fromDate = fromDate
         
         targetTime = targetDate.timeIntervalSince(fromDate as Date)
-        currentTime = targetDate.timeIntervalSince(fromDate as Date) 
+        currentTime = targetDate.timeIntervalSince(fromDate as Date)
         diffDate = date1970.addingTimeInterval(targetTime)
         
         updateLabel()
@@ -272,7 +272,7 @@ extension CountdownLabel {
     
     func updateText() {
         guard diffDate != nil else { return }
-
+        
         // if time is before start
         let formattedText = timeCounted < 0
             ? dateFormatter.string(from: date1970.addingTimeInterval(0) as Date)
@@ -310,10 +310,10 @@ extension CountdownLabel {
         
         // create
         timer = Timer.scheduledTimer(timeInterval: defaultFireInterval,
-                                                       target: self,
-                                                       selector: #selector(updateLabel),
-                                                       userInfo: nil,
-                                                       repeats: true)
+                                     target: self,
+                                     selector: #selector(updateLabel),
+                                     userInfo: nil,
+                                     repeats: true)
         
         // register to NSrunloop
         RunLoop.current.add(timer, forMode: RunLoopMode.commonModes)
@@ -367,7 +367,7 @@ public class CountdownAttributedText: NSObject {
     internal let text: String
     internal let replacement: String
     internal let attributes: [String: AnyObject]?
-   
+    
     public init(text: String, replacement: String, attributes: [String: AnyObject]? = nil) {
         self.text = text
         self.replacement = replacement

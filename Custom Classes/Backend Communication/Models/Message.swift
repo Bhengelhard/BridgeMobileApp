@@ -338,15 +338,22 @@ class Message: NSObject {
         if let userID = user.id {
             let subQuery1 = PFQuery(className: "Messages")
             subQuery1.whereKey("user1_objectId", equalTo: userID)
+            // Include only messages where the current user has yet to post
+            subQuery1.whereKey("user1_has_posted", notEqualTo: true)
             let subQuery2 = PFQuery(className: "Messages")
             subQuery2.whereKey("user2_objectId", equalTo: userID)
+            // Include only messages where the current user has yet to post
+            subQuery2.whereKey("user2_has_posted", notEqualTo: true)
             
             
             let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
-            query.whereKeyDoesNotExist("last_single_message")
+            
+   
+            
             
             // Do not include any messages that are direct messages -> DMs that are unstarted will not display in New Matches view or messages table
             query.whereKeyExists("bridge_builder")
+            
             
             query.order(byDescending: "updatedAt")
             query.limit = limit
@@ -441,25 +448,20 @@ class Message: NSObject {
     /// Gets user in Message that is not the current user. Defaults to User 1.
     func getNonCurrentUser(withBlock block: User.UserBlock? = nil) {
         User.getCurrent { (currentUser) in
-            if currentUser.id == self.user1ID {
-                self.getUser2(withBlock: block)
-            } else {
-                self.getUser1(withBlock: block)
+            if let currentUser = currentUser {
+                if currentUser.id == self.user1ID {
+                    self.getUser2(withBlock: block)
+                } else {
+                    self.getUser1(withBlock: block)
+                }
             }
         }
     }
     
     private func getUser(withID id: String, withBlock block: User.UserBlock? = nil) {
-        if let user = userIDsToUsers[id] {
+        User.get(withID: id) { (user) in
             if let block = block {
                 block(user)
-            }
-        } else {
-            User.get(withID: id) { (user) in
-                self.userIDsToUsers[id] = user
-                if let block = block {
-                    block(user)
-                }
             }
         }
     }
@@ -488,6 +490,35 @@ class Message: NSObject {
                     block(picture)
                 }
             }
+        }
+    }
+    
+    // Determine whether the user has an unread messages or unread newMatches
+    static func getCurrentUserNotificationStatus(withUser user: User, withBlock block: ((Bool) -> Void)? = nil) {
+        if let userID = user.id {
+            let subQuery1 = PFQuery(className: "Messages")
+            subQuery1.whereKey("user1_objectId", equalTo: userID)
+            subQuery1.whereKey("user1_has_seen_last_single_message", notEqualTo: true)
+            let subQuery2 = PFQuery(className: "Messages")
+            subQuery2.whereKey("user2_objectId", equalTo: userID)
+            subQuery2.whereKey("user2_has_seen_last_single_message", notEqualTo: true)
+            
+            let query = PFQuery.orQuery(withSubqueries: [subQuery1, subQuery2])
+            query.countObjectsInBackground(block: { (count, error) in
+                if let error = error {
+                    print("error counting messages - \(error)")
+                } else {
+                    var notificationStatus = false
+                    if count > 0 {
+                        notificationStatus = true
+                    } else {
+                        notificationStatus = false
+                    }
+                    if let block = block {
+                        block(notificationStatus)
+                    }
+                }
+            })
         }
     }
     

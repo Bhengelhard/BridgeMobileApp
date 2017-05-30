@@ -4,6 +4,7 @@ import Parse
 import FBSDKCoreKit
 import FBSDKLoginKit
 import ParseFacebookUtilsV4
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //--------------------------------------
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Configure Firebase analytics
+        FIRApp.configure()
+        
         // Enable storing and querying data from Local Datastore.
         // Remove this line if you don't want to use Local Datastore features or want to use cachePolicy.
         Parse.enableLocalDatastore()
@@ -22,10 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let parseConfiguration = ParseClientConfiguration(block: { (ParseMutableClientConfiguration) -> Void in
             ParseMutableClientConfiguration.applicationId = "mybridgeapp230sd80sdfasjhfasjh3j39d893j2129djm4"
             ParseMutableClientConfiguration.clientKey = "kekdk39ds92j3ls0dk3947kk332"
-            ParseMutableClientConfiguration.server = "https://necter.herokuapp.com/parse"
-//            ParseMutableClientConfiguration.applicationId = "mybridgeapp3498735421846jhlkjsdhf23d"
-//            ParseMutableClientConfiguration.clientKey = "euchnfbe73723ndn77sdkj3763"
-//            ParseMutableClientConfiguration.server = "https://mybridgeapp.herokuapp.com/parse"
+            ParseMutableClientConfiguration.server = "https://mybridgeapp.herokuapp.com/parse"
         })
         
         Parse.initialize(with: parseConfiguration)
@@ -106,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadTheThread"), object: nil)
         NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadTheMessageTable"), object: nil)
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "updateBridgePage"), object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "displayInboxIconNotification"), object: nil)
         
         //Segueing to Appropriate View
         let messageType = userInfo["messageType"] as? String
@@ -120,7 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if application.applicationState == UIApplicationState.inactive {
                 print("UIApplicationState.Inactive but ")
                 self.window?.rootViewController = mainPageViewController
-            }else if application.applicationState == UIApplicationState.background {
+            } else if application.applicationState == UIApplicationState.background {
                 print("UIApplicationState.Background")
             } else if application.applicationState == UIApplicationState.active {
                 print("UIApplicationState.Active")
@@ -206,9 +207,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBSDKAppEvents.activateApp()
-        
-        print("applicationDidBecomeActive")
-        
+                
         // Set app badge to 0
         application.applicationIconBadgeNumber = 0
         

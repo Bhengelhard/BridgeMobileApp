@@ -41,16 +41,16 @@ struct Constants {
 	}
     
     struct Fonts {
-        /// BentonSansLight Size 14
+        /// Helvetica Neue Size 14
         static let light14 = UIFont(name: "Helvetica Neue", size: 14)
         
-        /// BentonSansLight Size 18
+        /// Helvetica Neue Size 18
         static let light18 = UIFont(name: "Helvetica Neue", size: 18)
         
-        /// BentonSansLight Size 24
+        /// Helvetica Neue Size 24
         static let light24 = UIFont(name: "Helvetica Neue", size: 24)
         
-        /// BentonSansBold Size 16
+        /// Helvetica Neue Size 16
         static let bold16 = UIFont(name: "BentonSans-Bold", size: 16)
         
         /// BentonSansBold Size 24

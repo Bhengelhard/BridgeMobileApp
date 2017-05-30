@@ -8,6 +8,7 @@
 
 import UIKit
 import MBProgressHUD
+import Firebase
 
 class SwipeLogic {
     
@@ -46,6 +47,7 @@ class SwipeLogic {
         } else {
             disconnectIcon.alpha = 0
             connectIcon.alpha = 0
+            
         }
         
         var location = CGPoint()
@@ -96,7 +98,7 @@ class SwipeLogic {
             if swipeCard.center.x < 0.25*DisplayUtility.screenWidth {
                 // If this is the user's first time swiping left then display pop-up
                 let localData = LocalData()
-                let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft()!
+                let isFirstTimeSwipedLeft : Bool = localData.getFirstTimeSwipingLeft() ?? false
                 if isFirstTimeSwipedLeft {
                     //show alert for swiping right here and then bridging or not
                     let alert = UIAlertController(title: "Don't Connect?", message: "Dragging a pair of pictures to the left indicates you do not want to introduce the friends shown.", preferredStyle: UIAlertControllerStyle.alert)
@@ -131,28 +133,22 @@ class SwipeLogic {
     // Animate swiping and replace
     static func didSwipe(right: Bool, vc: SwipeViewController) {
         
+        // Logging swiping right and left as events
+        let title: String
+        if right {
+            title = "swipeRight"
+        } else {
+            title = "swipeLeft"
+        }
+        FirebaseLogs.swiped(title: title)
+        
+        
         let view = vc.view!
         let swipeBackend = vc.swipeBackend
         let layout = vc.layout
         
-        /*
-        let swipeCard: SwipeCard
-        if layout.bottomSwipeCard.isUserInteractionEnabled {
-            swipeCard = layout.bottomSwipeCard
-        } else {
-            swipeCard = layout.topSwipeCard
-        }*/
         
         let swipeCard = layout.topSwipeCard
-        
-        if !swipeBackend.gotBottomBridgePairing {
-            /*layout.loadingView.startAnimating()
-            let hud = MBProgressHUD.showAdded(to: view, animated: true)
-            hud.mode = .customView
-            hud.customView = layout.loadingView
-            hud.label.text = "Finding best\npairs to 'nect..."
-            hud.label.numberOfLines = 0*/
-        }
         
         // create and save swipe
         var bridgePairingID: String?
@@ -160,12 +156,12 @@ class SwipeLogic {
             bridgePairingID = bridgePairing.id
         }
         User.getCurrent { (user) in
-            Swipe.create(bridgePairingID: bridgePairingID, swiperID: user.id, swipedRight: right) { (swipe) in
-                swipe.save()
+            if let user = user {
+                Swipe.create(bridgePairingID: bridgePairingID, swiperID: user.id, swipedRight: right) { (swipe) in
+                    swipe.save()
+                }
             }
         }
-        
-
         
         UIView.animate(withDuration: 0.4, animations: {
             
@@ -182,9 +178,6 @@ class SwipeLogic {
             
             if right {
                 if let bridgePairing = swipeCard.bridgePairing {
-                    // set bridged to true
-                    bridgePairing.bridged = true
-                    bridgePairing.save()
                     
                     if let user1ID = bridgePairing.user1ID {
                         print("got user1ID")
@@ -208,12 +201,23 @@ class SwipeLogic {
                                 var connecterID = ""
                                 var connecterName = ""
                                 User.getCurrent(withBlock: { (user) in
-                                    if let id = user.id {
-                                        connecterID = id
-                                    }
-                                    
-                                    if let name = user.name {
-                                        connecterName = name
+                                    if let user = user {
+                                        
+                                        // set bridged to true
+                                        bridgePairing.bridged = true
+                                        
+                                        if let id = user.id {
+                                            connecterID = id
+                                            bridgePairing.connecterID = id
+                                        }
+                                        
+                                        if let name = user.name {
+                                            connecterName = name
+                                            bridgePairing.connecterName = name
+                                        }
+                                        
+                                        bridgePairing.save()
+                                       
                                     }
                                 })
                                 
@@ -254,16 +258,12 @@ class SwipeLogic {
             // Swiped Left
             else {
                 // Only check back in if user swiped left
-                swipeBackend.checkIn()
+                if let bridgePairing = swipeCard.bridgePairing {
+                    swipeBackend.checkIn(bridgePairing: bridgePairing)
+                }
             }
             
             layout.switchTopAndBottomCards()
-            layout.topSwipeCard.isUserInteractionEnabled = true
-            layout.bottomSwipeCard.isUserInteractionEnabled = false
-            layout.topSwipeCard.overlay.removeFromSuperlayer()
-            /*swipeBackend.setBottomSwipeCard(bottomSwipeCard: layout.bottomSwipeCard, limitMet: vc.limitMet, noMoreBridgePairings: vc.noMoreBridgePairings, noBridgePairings: vc.noBridgePairings) {
-                MBProgressHUD.hide(for: vc.view, animated: true)
-            }*/
             
             swipeBackend.swiped(topSwipepCard: layout.topSwipeCard, bottomSwipeCard: layout.bottomSwipeCard, limitMet: vc.limitMet, noMoreBridgePairings: vc.noMoreBridgePairings, noBridgePairings: vc.noBridgePairings) {
                 //MBProgressHUD.hide(for: vc.view, animated: true)

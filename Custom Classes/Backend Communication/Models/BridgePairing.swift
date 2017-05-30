@@ -107,10 +107,7 @@ class BridgePairing: NSObject {
     var youMatchedNotificationViewedUser1: Bool?
     
     var youMatchedNotificationViewedUser2: Bool?
-    
-    private var userIDsToUsers = [String: User]()
-    private var pictureIDsToPictures = [String: Picture]()
-    
+        
     private init(parseBridgePairing: PFObject) {
         self.parseBridgePairing = parseBridgePairing
         
@@ -361,12 +358,14 @@ class BridgePairing: NSObject {
                 query.whereKey("user2_objectId", notContainedIn: [friend1ID, friend2ID])
             }
             
+            query.order(byDescending: "score")
             query.findObjectsInBackground { (parseBridgePairings, error) in
                 if let error = error {
                     print("error getting bridge pairings - \(error)")
                 } else if let parseBridgePairings = parseBridgePairings {
                     var bridgePairings = [BridgePairing]()
                     for parseBridgePairing in parseBridgePairings {
+                        //print(parseBridgePairing["score"])
                         let bridgePairing = BridgePairing(parseBridgePairing: parseBridgePairing)
                         bridgePairings.append(bridgePairing)
                     }
@@ -399,27 +398,22 @@ class BridgePairing: NSObject {
     /// Gets user in Message that is not the current user. Defaults to User 1.
     func getNonCurrentUser(withBlock block: User.UserBlock? = nil) {
         User.getCurrent { (currentUser) in
-            if currentUser.id == self.user1ID {
-                self.getUser2(withBlock: block)
-            } else {
-                self.getUser1(withBlock: block)
+            if let currentUser = currentUser {
+                if currentUser.id == self.user1ID {
+                    self.getUser2(withBlock: block)
+                } else {
+                    self.getUser1(withBlock: block)
+                }
             }
         }
     }
     
     private func getUser(withID id: String, withBlock block: User.UserBlock? = nil) {
-//        if let user = userIDsToUsers[id] {
-//            if let block = block {
-//                block(user)
-//            }
-//        } else {
-            User.get(withID: id) { (user) in
-                self.userIDsToUsers[id] = user
-                if let block = block {
-                    block(user)
-                }
+        User.get(withID: id) { (user) in
+            if let block = block {
+                block(user)
             }
-        //}
+        }
     }
     
     func getUser1Picture(withBlock block: Picture.PictureBlock? = nil) {
@@ -441,16 +435,9 @@ class BridgePairing: NSObject {
     }
     
     private func getPicture(withID id: String, withBlock block: Picture.PictureBlock? = nil) {
-        if let picture = pictureIDsToPictures[id] {
+        Picture.get(withID: id) { (picture) in
             if let block = block {
                 block(picture)
-            }
-        } else {
-            Picture.get(withID: id) { (picture) in
-                self.pictureIDsToPictures[id] = picture
-                if let block = block {
-                    block(picture)
-                }
             }
         }
     }
@@ -584,7 +571,7 @@ class LocalBridgePairings {
     
     //Saving bridgePairing 1 ID
     func setBridgePairing1ID(_ bridgePairing1ID: String?) {
-        print("saving top locally with id: \(bridgePairing1ID == nil ? "nil" : bridgePairing1ID!)")
+        //print("saving top locally with id: \(bridgePairing1ID == nil ? "nil" : bridgePairing1ID!)")
         self.bridgePairing1ID = bridgePairing1ID
     }
     func getBridgePairing1ID() -> String? {
@@ -601,7 +588,7 @@ class LocalBridgePairings {
     
     //Saving bridgePairing 2 ID
     func setBridgePairing2ID(_ bridgePairing2ID: String?) {
-        print("saving bottom locally with id: \(bridgePairing2ID == nil ? "nil" : bridgePairing2ID!)")
+        //print("saving bottom locally with id: \(bridgePairing2ID == nil ? "nil" : bridgePairing2ID!)")
         self.bridgePairing2ID = bridgePairing2ID
     }
     func getBridgePairing2ID() -> String? {

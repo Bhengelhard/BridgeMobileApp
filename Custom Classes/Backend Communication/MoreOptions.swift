@@ -73,42 +73,46 @@ class MoreOptions {
                 }
                 
                 User.getCurrent { (currentUser) in
-                    message.getNonCurrentUser { (otherUser) in
-                        if let otherUserID = otherUser.id {
-                            if let currentUserFriendList = currentUser.friendList {
-                                if currentUserFriendList.contains(otherUserID) {
-                                    addMoreMenu.addAction(unfollowAction)
-                                } else {
-                                    addMoreMenu.addAction(followAction)
+                    if let currentUser = currentUser {
+                        message.getNonCurrentUser { (otherUser) in
+                            if let otherUser = otherUser {
+                                if let otherUserID = otherUser.id {
+                                    if let currentUserFriendList = currentUser.friendList {
+                                        if currentUserFriendList.contains(otherUserID) {
+                                            addMoreMenu.addAction(unfollowAction)
+                                        } else {
+                                            addMoreMenu.addAction(followAction)
+                                        }
+                                    } else {
+                                        addMoreMenu.addAction(followAction)
+                                    }
+                                    
+                                    if let currentUserBlockingList = currentUser.blockingList {
+                                        if currentUserBlockingList.contains(otherUserID) {
+                                            addMoreMenu.addAction(unblockAction)
+                                        } else {
+                                            addMoreMenu.addAction(blockAction)
+                                        }
+                                    } else {
+                                        addMoreMenu.addAction(blockAction)
+                                    }
+                                    
+                                    if let currentUserReportedList = currentUser.reportedList {
+                                        if currentUserReportedList.contains(otherUserID) {
+                                            addMoreMenu.addAction(reportedAction)
+                                        } else {
+                                            addMoreMenu.addAction(reportAction)
+                                        }
+                                    } else {
+                                        addMoreMenu.addAction(reportAction)
+                                    }
                                 }
-                            } else {
-                                addMoreMenu.addAction(followAction)
-                            }
-                            
-                            if let currentUserBlockingList = currentUser.blockingList {
-                                if currentUserBlockingList.contains(otherUserID) {
-                                    addMoreMenu.addAction(unblockAction)
-                                } else {
-                                    addMoreMenu.addAction(blockAction)
-                                }
-                            } else {
-                                addMoreMenu.addAction(blockAction)
-                            }
-                            
-                            if let currentUserReportedList = currentUser.reportedList {
-                                if currentUserReportedList.contains(otherUserID) {
-                                    addMoreMenu.addAction(reportedAction)
-                                } else {
-                                    addMoreMenu.addAction(reportAction)
-                                }
-                            } else {
-                                addMoreMenu.addAction(reportAction)
+                                addMoreMenu.addAction(cancelAction)
+                                self.vc.present(addMoreMenu, animated: true, completion: nil)
+                                
+                                MBProgressHUD.hide(for: self.vc.view, animated: true)
                             }
                         }
-                        addMoreMenu.addAction(cancelAction)
-                        self.vc.present(addMoreMenu, animated: true, completion: nil)
-                        
-                        MBProgressHUD.hide(for: self.vc.view, animated: true)
                     }
                 }
             }
@@ -120,29 +124,33 @@ class MoreOptions {
     func follow(message: Message) {
         // add otherUser to currentUser's friend list
         message.getNonCurrentUser { (otherUser) in
-            if let firstName = otherUser.firstName {
-                let alert = UIAlertController(title: "Followed \(firstName)?", message: "You will be able to 'nect \(firstName) with your friends.", preferredStyle: UIAlertControllerStyle.alert)
-                
-                alert.addAction(UIAlertAction(title: "Follow", style: .default) { (_) in
-                    let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
-                    hud.label.text = "Loading..."
+            if let otherUser = otherUser {
+                if let firstName = otherUser.firstName {
+                    let alert = UIAlertController(title: "Followed \(firstName)?", message: "You will be able to 'nect \(firstName) with your friends.", preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    alert.addAction(UIAlertAction(title: "Follow", style: .default) { (_) in
+                        let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
+                        hud.label.text = "Loading..."
 
-                    User.getCurrent { (currentUser) in
-                        if let otherUserID = otherUser.id, var currentUserFriendList = currentUser.friendList {
-                            if !currentUserFriendList.contains(otherUserID) {
-                                currentUserFriendList.append(otherUserID)
-                                currentUser.friendList = currentUserFriendList
+                        User.getCurrent { (currentUser) in
+                            if let currentUser = currentUser {
+                                if let otherUserID = otherUser.id, var currentUserFriendList = currentUser.friendList {
+                                    if !currentUserFriendList.contains(otherUserID) {
+                                        currentUserFriendList.append(otherUserID)
+                                        currentUser.friendList = currentUserFriendList
+                                    }
+                                }
+                                currentUser.save { (_) in
+                                    MBProgressHUD.hide(for: self.vc.view, animated: true)
+                                }
                             }
                         }
-                        currentUser.save { (_) in
-                            MBProgressHUD.hide(for: self.vc.view, animated: true)
-                        }
-                    }
-                })
+                    })
+                        
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
                     
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                
-                self.vc.present(alert, animated: true, completion: nil)
+                    self.vc.present(alert, animated: true, completion: nil)
+                }
             }
         }
     }
@@ -150,31 +158,35 @@ class MoreOptions {
     func unfollow(message: Message) {
         // remove otherUser from currentUser's friend list
         message.getNonCurrentUser { (otherUser) in
-            if let firstName = otherUser.firstName {
-                let alert = UIAlertController(title: "Unfollowed \(firstName)?", message: "You will no longer be able to 'nect \(firstName) with your friends.", preferredStyle: UIAlertControllerStyle.alert)
-                
-                alert.addAction(UIAlertAction(title: "Unfollow", style: .destructive) { (_) in
-                    let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
-                    hud.label.text = "Loading..."
+            if let otherUser = otherUser {
+                if let firstName = otherUser.firstName {
+                    let alert = UIAlertController(title: "Unfollowed \(firstName)?", message: "You will no longer be able to 'nect \(firstName) with your friends.", preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    alert.addAction(UIAlertAction(title: "Unfollow", style: .destructive) { (_) in
+                        let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
+                        hud.label.text = "Loading..."
 
-                    User.getCurrent { (currentUser) in
-                        if let otherUserID = otherUser.id {
-                            if var currentUserFriendList = currentUser.friendList {
-                                if let index = currentUserFriendList.index(of: otherUserID) {
-                                    currentUserFriendList.remove(at: index)
-                                    currentUser.friendList = currentUserFriendList
+                        User.getCurrent { (currentUser) in
+                            if let currentUser = currentUser {
+                                if let otherUserID = otherUser.id {
+                                    if var currentUserFriendList = currentUser.friendList {
+                                        if let index = currentUserFriendList.index(of: otherUserID) {
+                                            currentUserFriendList.remove(at: index)
+                                            currentUser.friendList = currentUserFriendList
+                                        }
+                                    }
+                                }
+                                currentUser.save { (_) in
+                                    MBProgressHUD.hide(for: self.vc.view, animated: true)
                                 }
                             }
                         }
-                        currentUser.save { (_) in
-                            MBProgressHUD.hide(for: self.vc.view, animated: true)
-                        }
-                    }
-                })
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                
-                self.vc.present(alert, animated: true, completion: nil)
+                    })
+                    
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    
+                    self.vc.present(alert, animated: true, completion: nil)
+                }
             }
         }
     }
@@ -183,47 +195,51 @@ class MoreOptions {
     func block(message: Message) {
         // block both users from introducing and messaging
         message.getNonCurrentUser { (otherUser) in
-            if let firstName = otherUser.firstName {
-                let alert = UIAlertController(title: "Block \(firstName)?", message: "You and \(firstName) will no longer be able to introduce or message each other.", preferredStyle: UIAlertControllerStyle.alert)
-                
-                alert.addAction(UIAlertAction(title: "Block", style: .destructive) { (_) in
-                    let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
-                    hud.label.text = "Loading..."
+            if let otherUser = otherUser {
+                if let firstName = otherUser.firstName {
+                    let alert = UIAlertController(title: "Block \(firstName)?", message: "You and \(firstName) will no longer be able to introduce or message each other.", preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    alert.addAction(UIAlertAction(title: "Block", style: .destructive) { (_) in
+                        let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
+                        hud.label.text = "Loading..."
 
-                    User.getCurrent { (currentUser) in
-                        if let otherUserID = otherUser.id {
-                            if var currentUserBlockingList = currentUser.blockingList {
-                                if !currentUserBlockingList.contains(otherUserID) {
-                                    currentUserBlockingList.append(otherUserID)
-                                    currentUser.blockingList = currentUserBlockingList
-                                }
-                            } else {
-                                currentUser.blockingList = [otherUserID]
-                            }
-                            currentUser.save { (_) in
-                                MBProgressHUD.hide(for: self.vc.view, animated: true)
-                            }
-                            
-                            BridgePairing.getAll(withUser: currentUser) { (bridgePairings) in
-                                for bridgePairing in bridgePairings {
-                                    if var blockedList = bridgePairing.blockedList {
-                                        if !blockedList.contains(otherUserID) {
-                                            blockedList.append(otherUserID)
-                                            bridgePairing.blockedList = blockedList
+                        User.getCurrent { (currentUser) in
+                            if let currentUser = currentUser {
+                                if let otherUserID = otherUser.id {
+                                    if var currentUserBlockingList = currentUser.blockingList {
+                                        if !currentUserBlockingList.contains(otherUserID) {
+                                            currentUserBlockingList.append(otherUserID)
+                                            currentUser.blockingList = currentUserBlockingList
                                         }
                                     } else {
-                                        bridgePairing.blockedList = [otherUserID]
+                                        currentUser.blockingList = [otherUserID]
                                     }
-                                    bridgePairing.save()
+                                    currentUser.save { (_) in
+                                        MBProgressHUD.hide(for: self.vc.view, animated: true)
+                                    }
+                                    
+                                    BridgePairing.getAll(withUser: currentUser) { (bridgePairings) in
+                                        for bridgePairing in bridgePairings {
+                                            if var blockedList = bridgePairing.blockedList {
+                                                if !blockedList.contains(otherUserID) {
+                                                    blockedList.append(otherUserID)
+                                                    bridgePairing.blockedList = blockedList
+                                                }
+                                            } else {
+                                                bridgePairing.blockedList = [otherUserID]
+                                            }
+                                            bridgePairing.save()
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                })
+                    })
+                        
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
                     
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                
-                self.vc.present(alert, animated: true, completion: nil)
+                    self.vc.present(alert, animated: true, completion: nil)
+                }
             }
         }
     }
@@ -231,43 +247,47 @@ class MoreOptions {
     func unblock(message: Message) {
         // unblock both users from introducing and messaging
         message.getNonCurrentUser { (otherUser) in
-            if let firstName = otherUser.firstName {
-                let alert = UIAlertController(title: "Unblock \(firstName)?", message: "You and \(firstName) will be able to introduce and message each other.", preferredStyle: UIAlertControllerStyle.alert)
-                
-                alert.addAction(UIAlertAction(title: "Unblock", style: .default) { (_) in
-                    let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
-                    hud.label.text = "Loading..."
+            if let otherUser = otherUser {
+                if let firstName = otherUser.firstName {
+                    let alert = UIAlertController(title: "Unblock \(firstName)?", message: "You and \(firstName) will be able to introduce and message each other.", preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    alert.addAction(UIAlertAction(title: "Unblock", style: .default) { (_) in
+                        let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
+                        hud.label.text = "Loading..."
 
-                    User.getCurrent { (currentUser) in
-                        if let otherUserID = otherUser.id {
-                            if var currentUserBlockingList = currentUser.blockingList {
-                                if  let index = currentUserBlockingList.index(of: otherUserID) {
-                                    currentUserBlockingList.remove(at: index)
-                                    currentUser.blockingList = currentUserBlockingList
-                                }
-                            }
-                            currentUser.save { (_) in
-                                MBProgressHUD.hide(for: self.vc.view, animated: true)
-                            }
-                            
-                            BridgePairing.getAll(withUser: currentUser) { (bridgePairings) in
-                                for bridgePairing in bridgePairings {
-                                    if var blockedList = bridgePairing.blockedList {
-                                        if  let index = blockedList.index(of: otherUserID) {
-                                            blockedList.remove(at: index)
-                                            bridgePairing.blockedList = blockedList
+                        User.getCurrent { (currentUser) in
+                            if let currentUser = currentUser {
+                                if let otherUserID = otherUser.id {
+                                    if var currentUserBlockingList = currentUser.blockingList {
+                                        if  let index = currentUserBlockingList.index(of: otherUserID) {
+                                            currentUserBlockingList.remove(at: index)
+                                            currentUser.blockingList = currentUserBlockingList
                                         }
                                     }
-                                    bridgePairing.save()
+                                    currentUser.save { (_) in
+                                        MBProgressHUD.hide(for: self.vc.view, animated: true)
+                                    }
+                                    
+                                    BridgePairing.getAll(withUser: currentUser) { (bridgePairings) in
+                                        for bridgePairing in bridgePairings {
+                                            if var blockedList = bridgePairing.blockedList {
+                                                if  let index = blockedList.index(of: otherUserID) {
+                                                    blockedList.remove(at: index)
+                                                    bridgePairing.blockedList = blockedList
+                                                }
+                                            }
+                                            bridgePairing.save()
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                })
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                
-                self.vc.present(alert, animated: true, completion: nil)
+                    })
+                    
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    
+                    self.vc.present(alert, animated: true, completion: nil)
+                }
             }
         }
     }
@@ -275,33 +295,37 @@ class MoreOptions {
     func report(message: Message) {
         // report otherUser for misconduct
         message.getNonCurrentUser { (otherUser) in
-            if let firstName = otherUser.firstName {
-                let alert = UIAlertController(title: "Report \(firstName)?", message: "Are you sure you want to report \(firstName) for misconduct?", preferredStyle: UIAlertControllerStyle.alert)
-                
-                alert.addAction(UIAlertAction(title: "Report", style: .destructive) { (_) in
-                    let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
-                    hud.label.text = "Loading..."
+            if let otherUser = otherUser {
+                if let firstName = otherUser.firstName {
+                    let alert = UIAlertController(title: "Report \(firstName)?", message: "Are you sure you want to report \(firstName) for misconduct?", preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    alert.addAction(UIAlertAction(title: "Report", style: .destructive) { (_) in
+                        let hud = MBProgressHUD.showAdded(to: self.vc.view, animated: true)
+                        hud.label.text = "Loading..."
 
-                    User.getCurrent { (currentUser) in
-                        if let otherUserID = otherUser.id {
-                            if var currentUserReportedList = currentUser.reportedList {
-                                if !currentUserReportedList.contains(otherUserID) {
-                                    currentUserReportedList.append(otherUserID)
-                                    currentUser.reportedList = currentUserReportedList
+                        User.getCurrent { (currentUser) in
+                            if let currentUser = currentUser {
+                                if let otherUserID = otherUser.id {
+                                    if var currentUserReportedList = currentUser.reportedList {
+                                        if !currentUserReportedList.contains(otherUserID) {
+                                            currentUserReportedList.append(otherUserID)
+                                            currentUser.reportedList = currentUserReportedList
+                                        }
+                                    } else {
+                                        currentUser.reportedList = [otherUserID]
+                                    }
                                 }
-                            } else {
-                                currentUser.reportedList = [otherUserID]
+                                currentUser.save { (_) in
+                                    MBProgressHUD.hide(for: self.vc.view, animated: true)
+                                }
                             }
                         }
-                        currentUser.save { (_) in
-                            MBProgressHUD.hide(for: self.vc.view, animated: true)
-                        }
-                    }
-                })
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                
-                self.vc.present(alert, animated: true, completion: nil)
+                    })
+                    
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    
+                    self.vc.present(alert, animated: true, completion: nil)
+                }
             }
         }
     }

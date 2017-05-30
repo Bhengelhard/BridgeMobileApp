@@ -23,24 +23,27 @@ class MyProfileBackend {
         if !storedLocally {
         */
             User.getCurrent { (user) in
-                // Setting the user's profile picture
-                user.getMainPicture { (picture) in
-                    picture.getImage { (image) in
-                        hexView.setBackgroundImage(image: image)
+                if let user = user {
+                    // Setting the user's profile picture
+                    user.getMainPicture { (picture) in
+                        picture.getImage { (image) in
+                            hexView.setBackgroundImage(image: image)
+                        }
                     }
+                    
+                    // Setting the user's name
+                    label.text = user.name
                 }
-                
-                // Setting the user's name
-                label.text = user.name
-                
             }
         //}
     }
     
     func setReputationScore(button: UIButton) {
         User.getCurrent { (user) in
-            if let reputation = user.reputation {
-                button.setTitle("\(reputation)", for: .normal)
+            if let user = user {
+                if let reputation = user.reputation {
+                    button.setTitle("\(reputation)", for: .normal)
+                }
             }
         }
     }
