@@ -262,7 +262,7 @@ class SwipeViewController: UIViewController {
         presentAppInstructions()
     }
     func presentAppInstructions() {
-        let alert = UIAlertController(title: "How to NECT:", message: "Our algorithm pairs two of your friends.\nSwipe right to introduce them.\nSwipe left to see the next pair.", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "How to NECT:", message: "Our algorithm provides 5 pairs of your friends each day.\nSwipe right to introduce them.\nSwipe left to see the next pair.", preferredStyle: UIAlertControllerStyle.alert)
         //Create the actions
         alert.addAction(UIAlertAction(title: "Got it", style: .default, handler: { (action) in
         }))
