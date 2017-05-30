@@ -116,11 +116,19 @@ class SwipeObjects {
             var targetDate = Date()
             let calendar = Calendar(identifier: .gregorian)
             
-            if let newDate = calendar.date(bySetting: .hour, value: 17, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
+            let secondsFromGMT: Int = TimeZone.current.secondsFromGMT()
+            let minutesFromGMT = secondsFromGMT/60
+            let hoursFromGMT = minutesFromGMT/60
+            let hoursFromEST = hoursFromGMT + 4
+            
+            print(hoursFromGMT)
+            print(hoursFromEST)
+            
+            if let newDate = calendar.date(bySetting: .hour, value: 17+hoursFromEST, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
                 targetDate = newDate
             }
-            
-            if calendar.component(.hour, from: currentDate) >= 17 { // Move target to next day
+                        
+            if calendar.component(.hour, from: currentDate) >= 17+hoursFromEST { // Move target to next day
                 if let newDate = calendar.date(byAdding: .day, value: 1, to: targetDate) {
                     targetDate = newDate
                 }
@@ -147,11 +155,16 @@ class SwipeObjects {
             var targetDate = Date()
             let calendar = Calendar(identifier: .gregorian)
             
-            if let newDate = calendar.date(bySetting: .hour, value: 17, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
+            let secondsFromGMT: Int = TimeZone.current.secondsFromGMT()
+            let minutesFromGMT = secondsFromGMT/60
+            let hoursFromGMT = minutesFromGMT/60
+            let hoursFromEST = hoursFromGMT + 4
+            
+            if let newDate = calendar.date(bySetting: .hour, value: 17+hoursFromEST, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
                 targetDate = newDate
             }
             
-            if calendar.component(.hour, from: currentDate) >= 17 { // Move target to next day
+            if calendar.component(.hour, from: currentDate) >= 17+hoursFromEST { // Move target to next day
                 if let newDate = calendar.date(byAdding: .day, value: 1, to: targetDate) {
                     targetDate = newDate
                 }
