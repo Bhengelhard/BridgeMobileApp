@@ -81,17 +81,36 @@ class SwipeLayout {
             inviteButton.autoSetDimensions(to: CGSize(width: 241.5, height: 42.5))
             //inviteButton.alpha = 0
 
-            view.addSubview(tomorrowsNectingLabel)
-            tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -30)
-            tomorrowsNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
-            tomorrowsNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
-            //tomorrowsNectingLabel.alpha = 0
+            // Change placement of tomorrowNectingLabel and toGetNectingLabel based on device size
+            if UIDevice.current.modelName == "iPhone 6 Plus" || UIDevice.current.modelName == "iPhone 6s Plus" || UIDevice.current.modelName == "iPhone 7 Plus" {
+                
+                view.addSubview(tomorrowsNectingLabel)
+                tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -50)
+                tomorrowsNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+                tomorrowsNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+                //tomorrowsNectingLabel.alpha = 0
+                
+                view.addSubview(toGetNectingLabel)
+                toGetNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -50)
+                toGetNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+                toGetNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+                //toGetNectingLabel.alpha = 0
+                
+            } else {
+                view.addSubview(tomorrowsNectingLabel)
+                tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -20)
+                tomorrowsNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+                tomorrowsNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+                //tomorrowsNectingLabel.alpha = 0
+                
+                view.addSubview(toGetNectingLabel)
+                toGetNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -20)
+                toGetNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+                toGetNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
+                //toGetNectingLabel.alpha = 0
+            }
             
-            view.addSubview(toGetNectingLabel)
-            toGetNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -30)
-            toGetNectingLabel.autoAlignAxis(toSuperviewAxis: .vertical)
-            toGetNectingLabel.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
-            //toGetNectingLabel.alpha = 0
+            
             
             let bigLabels = [wayToNectLabel, noMoreNectsLabel, nobodyToNectLabel]
             
