@@ -95,8 +95,10 @@ class ExternalProfileViewController: UIViewController {
                     }
                 }
                 
-                for image in images[1..<images.count] {
-                    self.layout.profilePicturesVC.addImage(image: image)
+                if images.count > 0 {
+                    for image in images[1..<images.count] {
+                        self.layout.profilePicturesVC.addImage(image: image)
+                    }
                 }
                 
                 if images.count > 1 {

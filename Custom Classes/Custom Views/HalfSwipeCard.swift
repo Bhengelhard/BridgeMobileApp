@@ -43,7 +43,7 @@ class HalfSwipeCard: UIView {
         photoView.contentMode = .scaleAspectFill
         photoView.clipsToBounds = true
         
-        photoView.image = nil
+        photoView.image = #imageLiteral(resourceName: "No_Profile_Picture")
         
     }
     
