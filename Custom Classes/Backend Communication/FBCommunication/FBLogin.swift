@@ -62,6 +62,8 @@ class FBLogin {
                     //installation.setDeviceTokenFromData(deviceToken)
                     installation["user"] = PFUser.current()
                     installation["userObjectId"] = PFUser.current()?.objectId
+                    //installation in parse sets AppVersion to Build Number
+                    
                     installation.saveInBackground()
                     
                     LocalStorageUtility().getUserFriends()

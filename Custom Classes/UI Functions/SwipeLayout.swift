@@ -82,7 +82,7 @@ class SwipeLayout {
             //inviteButton.alpha = 0
 
             // Change placement of tomorrowNectingLabel and toGetNectingLabel based on device size
-            if UIDevice.current.modelName == "iPhone 6 Plus" || UIDevice.current.modelName == "iPhone 6s Plus" || UIDevice.current.modelName == "iPhone 7 Plus" {
+            if UIDevice.current.modelName == "iPhone 6 Plus" || UIDevice.current.modelName == "iPhone 6s Plus" || UIDevice.current.modelName == "iPhone 7 Plus" || UIDevice.current.modelName == "Simulator" {
                 
                 view.addSubview(tomorrowsNectingLabel)
                 tomorrowsNectingLabel.autoPinEdge(.bottom, to: .top, of: friendsImage, withOffset: -50)
