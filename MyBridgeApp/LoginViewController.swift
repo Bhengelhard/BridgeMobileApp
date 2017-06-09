@@ -75,6 +75,11 @@ class LoginViewController: UIViewController {
                 if currentUser.objectId != nil {
                     if let hasLoggedIn = currentUser["has_logged_in"] as? Bool {
                         if hasLoggedIn {
+                            // Record Login with Firebase
+                            if let id = currentUser.objectId {
+                                FirebaseLogs.loggedIn(userObjectID: id)
+                            }
+                            
                             //Updating the user's friends
                             let fbFunctions = FacebookFunctions()
                             fbFunctions.updateFacebookFriends()

@@ -140,7 +140,12 @@ class SwipeLogic {
         } else {
             title = "swipeLeft"
         }
-        FirebaseLogs.swiped(title: title)
+        
+        User.getCurrent { (user) in
+            if let userObjectID = user?.id {
+                FirebaseLogs.swiped(title: title, userObjectID: userObjectID)
+            }
+        }
         
         
         let view = vc.view!

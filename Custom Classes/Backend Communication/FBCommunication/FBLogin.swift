@@ -211,6 +211,12 @@ class FBLogin {
                                     if success {
                                         let fbFunctions = FacebookFunctions()
                                         if user.isNew {
+                                            
+                                            // Record SignUp with Firebase
+                                            if let id = user.objectId {
+                                                FirebaseLogs.signedUp(userObjectID: id)
+                                            }
+                                            
                                             if let loginVC = vc as? LoginViewController {
                                                 loginVC.userIsNew = true
                                             } else if let privacyPolicyVC = vc as? PrivacyPolicyViewController {
@@ -234,6 +240,11 @@ class FBLogin {
                         }
                     })
                     connection.start()
+                    
+                    // Record Login with Firebase
+                    if let id = user.objectId {
+                        FirebaseLogs.loggedIn(userObjectID: id)
+                    }
                     
                 } else {
                     //self.activityIndicator.stopAnimating()

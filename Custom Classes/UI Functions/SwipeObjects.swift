@@ -126,15 +126,22 @@ class SwipeObjects {
             
             if let newDate = calendar.date(bySetting: .hour, value: 17+hoursFromEST, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
                 targetDate = newDate
+                print("target date set in 1")
+                print(targetDate)
             }
                         
             if calendar.component(.hour, from: currentDate) >= 17+hoursFromEST { // Move target to next day
                 if let newDate = calendar.date(byAdding: .day, value: 1, to: targetDate) {
                     targetDate = newDate
+                    print("target date set in 2")
+                    print(targetDate)
                 }
             }
             
             countdownLabel = CountdownLabel(frame: CGRect(), fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            print(currentDate)
+            print(targetDate)
+            print(countdownLabel.text!)
             //countdownLabel = CountdownLabel(frame: CGRect(), minutes: 10)
             
             super.init(frame: CGRect())
