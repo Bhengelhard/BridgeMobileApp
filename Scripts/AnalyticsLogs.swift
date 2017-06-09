@@ -1,15 +1,15 @@
 //
-//  FirebaseLogs.swift
+//  AnalyticsLogs.swift
 //  MyBridgeApp
 //
 //  Created by Blake Engelhard on 5/10/17.
-//  Copyright © 2017 Parse. All rights reserved.
+//  Copyright © 2017 BHE Ventures LLC. All rights reserved.
 //
 
 import Firebase
 import FBSDKCoreKit
 
-class FirebaseLogs {
+class AnalyticsLogs {
     
     static func swiped (title: String, userObjectID: String) {
         print("Firebase recorded swipe")

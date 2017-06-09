@@ -17,7 +17,7 @@
 		302799DC1E57A71800AFFB90 /* SwipeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799DB1E57A71800AFFB90 /* SwipeLayout.swift */; };
 		302799DE1E57A72700AFFB90 /* SwipeObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302799DD1E57A72700AFFB90 /* SwipeObjects.swift */; };
 		30295A301EB9928000C649BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30295A2F1EB9928000C649BB /* GoogleService-Info.plist */; };
-		302DCD361EC3BE8F00CB392D /* FirebaseLogs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302DCD351EC3BE8F00CB392D /* FirebaseLogs.swift */; };
+		302DCD361EC3BE8F00CB392D /* AnalyticsLogs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302DCD351EC3BE8F00CB392D /* AnalyticsLogs.swift */; };
 		302DCD381EC3BEA500CB392D /* Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302DCD371EC3BEA500CB392D /* Scripts.swift */; };
 		3030C0B51DD54E3F0077F7AC /* LocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B01DD54E3F0077F7AC /* LocalData.swift */; };
 		3030C0B61DD54E3F0077F7AC /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */; };
@@ -131,7 +131,7 @@
 		302799DB1E57A71800AFFB90 /* SwipeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeLayout.swift; path = "Custom Classes/UI Functions/SwipeLayout.swift"; sourceTree = "<group>"; };
 		302799DD1E57A72700AFFB90 /* SwipeObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeObjects.swift; path = "Custom Classes/UI Functions/SwipeObjects.swift"; sourceTree = "<group>"; };
 		30295A2F1EB9928000C649BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		302DCD351EC3BE8F00CB392D /* FirebaseLogs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FirebaseLogs.swift; path = Scripts/FirebaseLogs.swift; sourceTree = "<group>"; };
+		302DCD351EC3BE8F00CB392D /* AnalyticsLogs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnalyticsLogs.swift; path = Scripts/AnalyticsLogs.swift; sourceTree = "<group>"; };
 		302DCD371EC3BEA500CB392D /* Scripts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Scripts.swift; path = Scripts/Scripts.swift; sourceTree = "<group>"; };
 		3030C0B01DD54E3F0077F7AC /* LocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalData.swift; path = "Custom Classes/Data Storage/LocalData.swift"; sourceTree = "<group>"; };
 		3030C0B11DD54E3F0077F7AC /* LocalStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalStorageUtility.swift; path = "Custom Classes/Data Storage/LocalStorageUtility.swift"; sourceTree = "<group>"; };
@@ -520,7 +520,7 @@
 			isa = PBXGroup;
 			children = (
 				302DCD371EC3BEA500CB392D /* Scripts.swift */,
-				302DCD351EC3BE8F00CB392D /* FirebaseLogs.swift */,
+				302DCD351EC3BE8F00CB392D /* AnalyticsLogs.swift */,
 			);
 			name = Scripts;
 			sourceTree = "<group>";
@@ -733,7 +733,7 @@
 				90C931031DF9BAEE00D25740 /* FilterInfo.swift in Sources */,
 				9043B77C1E56ABC100D76BCE /* Message.swift in Sources */,
 				9028FA3E1E4D2CC7002CC80F /* ReportUserMenu.swift in Sources */,
-				302DCD361EC3BE8F00CB392D /* FirebaseLogs.swift in Sources */,
+				302DCD361EC3BE8F00CB392D /* AnalyticsLogs.swift in Sources */,
 				30A727061E29540F0070B620 /* MessageComposer.swift in Sources */,
 				302DCD381EC3BEA500CB392D /* Scripts.swift in Sources */,
 				30BF6FFF1E5BDF710008C2B5 /* EditProfileLayout.swift in Sources */,

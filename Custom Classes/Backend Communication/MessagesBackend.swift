@@ -3,7 +3,7 @@
 //  MyBridgeApp
 //
 //  Created by Douglas Dolitsky on 2/22/17.
-//  Copyright © 2017 Parse. All rights reserved.
+//  Copyright © 2017 BHE Ventures LLC. All rights reserved.
 //
 
 import UIKit

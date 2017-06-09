@@ -77,7 +77,7 @@ class LoginViewController: UIViewController {
                         if hasLoggedIn {
                             // Record Login with Firebase
                             if let id = currentUser.objectId {
-                                FirebaseLogs.loggedIn(userObjectID: id)
+                                AnalyticsLogs.loggedIn(userObjectID: id)
                             }
                             
                             //Updating the user's friends

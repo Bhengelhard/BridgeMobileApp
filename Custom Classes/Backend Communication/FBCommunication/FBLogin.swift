@@ -214,7 +214,7 @@ class FBLogin {
                                             
                                             // Record SignUp with Firebase
                                             if let id = user.objectId {
-                                                FirebaseLogs.signedUp(userObjectID: id)
+                                                AnalyticsLogs.signedUp(userObjectID: id)
                                             }
                                             
                                             if let loginVC = vc as? LoginViewController {
@@ -243,7 +243,7 @@ class FBLogin {
                     
                     // Record Login with Firebase
                     if let id = user.objectId {
-                        FirebaseLogs.loggedIn(userObjectID: id)
+                        AnalyticsLogs.loggedIn(userObjectID: id)
                     }
                     
                 } else {

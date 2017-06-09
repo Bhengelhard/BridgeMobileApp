@@ -3,7 +3,7 @@
 //  MyBridgeApp
 //
 //  Created by Douglas Dolitsky on 2/27/17.
-//  Copyright © 2017 Parse. All rights reserved.
+//  Copyright © 2017 BHE Ventures LLC. All rights reserved.
 //
 
 import UIKit
@@ -143,7 +143,7 @@ class SwipeLogic {
         
         User.getCurrent { (user) in
             if let userObjectID = user?.id {
-                FirebaseLogs.swiped(title: title, userObjectID: userObjectID)
+                AnalyticsLogs.swiped(title: title, userObjectID: userObjectID)
             }
         }
         
