@@ -7,6 +7,7 @@
 //
 
 import Firebase
+import FBSDKCoreKit
 
 class FirebaseLogs {
     
@@ -17,6 +18,9 @@ class FirebaseLogs {
             kFIRParameterItemName: "swipe" as NSObject,
             kFIRParameterContentType: title as NSObject
             ])
+        
+        // logging swipeRight and swipeLeft event with FBSDK
+        FBSDKAppEvents.logEvent(title)
     }
     
     static func loggedIn (userObjectID: String) {
@@ -26,6 +30,9 @@ class FirebaseLogs {
             kFIRParameterItemName: "login" as NSObject,
             kFIRParameterContentType: "login"as NSObject
             ])
+        
+        // logging login event with FBSDK
+        FBSDKAppEvents.logEvent("login")
     }
     
     static func signedUp (userObjectID: String) {
@@ -35,5 +42,8 @@ class FirebaseLogs {
             kFIRParameterItemName: "signup" as NSObject,
             kFIRParameterContentType: "signup"as NSObject
             ])
+        
+        // logging signup event with FBSDK
+        FBSDKAppEvents.logEvent("signup")
     }
 }
