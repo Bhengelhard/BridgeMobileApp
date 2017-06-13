@@ -616,11 +616,17 @@ class LocalBridgePairings {
             let decoded  = userDefaults.object(forKey: "bridgePairings") as! Data
             let bridgePairings = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! BridgePairings
             if let bridgePairingIDs = bridgePairings.bridgePairingIDs {
-                print("got bridge pairing ids locally: \(bridgePairingIDs.debugDescription)")
+                if bridgePairingIDs == [] {
+                    print("got bridge pairing ids locally: nil")
+                    return nil
+                } else {
+                    print("got bridge pairing ids locally: \(bridgePairingIDs.debugDescription)")
+                    return bridgePairings.bridgePairingIDs
+                }
             } else {
                 print("got bridge pairing ids locally: nil")
+                return nil
             }
-            return bridgePairings.bridgePairingIDs
         } else {
             print("got bridge pairing ids locally: nil")
             return nil

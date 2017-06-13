@@ -261,6 +261,24 @@ class User: NSObject {
         }
     }
     
+    /// Fetches the currently logged in User and calls the given block on the result.
+    /// - parameter block: the block to call on the result
+    static func fetchCurrent(withBlock block: UserBlock? = nil) {
+        PFUser.current()?.fetchInBackground(block: { (fetchedUser, error) in
+            if let parseUser = fetchedUser as? PFUser {
+                let user = User(parseUser: parseUser)
+                if let block = block {
+                    block(user)
+                }
+            } else {
+                print("error getting current user")
+                if let block = block {
+                    block(nil)
+                }
+            }
+        })
+    }
+    
     /// Gets the User with the provided objectId and calls the given block on the
     /// result.
     /// - parameter id: the objectId of the User

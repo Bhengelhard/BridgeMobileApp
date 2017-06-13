@@ -24,8 +24,8 @@ class SwipeBackend {
     private func gotNoBridgePairings(user: User, swipeCard: SwipeCard, top: Bool, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)?) {
         
         //swipeCard.alpha = 0
-        
         if let limitPairsCount = user.limitPairsCount {
+            print("limitPairsCount - \(limitPairsCount)")
             if limitPairsCount <= 0 {
                 if let limitMet = limitMet {
                     limitMet()
@@ -60,6 +60,8 @@ class SwipeBackend {
     
     func getBridgePairings(topSwipeCard: SwipeCard, bottomSwipeCard: SwipeCard, limitMet: (() -> Void)?, noMoreBridgePairings: (() -> Void)?, noBridgePairings: (() -> Void)?, completion: (() -> Void)? = nil) {
         
+        print("get bridgepairings called")
+        
         topBridgePairing = nil
         bottomBridgePairing = nil
         
@@ -72,7 +74,7 @@ class SwipeBackend {
         populateBridgePairingDictWithIDs(bridgePairingIDs: bridgePairingIDs, startingAt: 0) {
         
             // get remainder of bridge pairings
-            User.getCurrent { (user) in
+            User.fetchCurrent { (user) in
                 if let user = user {
                     if let limitPairsCount = user.limitPairsCount {
                         if limitPairsCount > 0 {

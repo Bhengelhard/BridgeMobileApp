@@ -141,8 +141,10 @@ class SwipeViewController: UIViewController {
     }
     
     func checkHasResetPairs() {
+        print("checkHasResetPairs")
         User.getCurrent { (user) in
             if let user = user {
+                print("got current user")
                 // if user has not reset cards, set locally stored cards to nil
                 if let hasResetPairs = user.hasResetPairs {
                     if !hasResetPairs {
@@ -153,14 +155,17 @@ class SwipeViewController: UIViewController {
                         
                         user.hasResetPairs = true
                         user.save { (_) in
+                            print("getting bridge pairings")
                             self.getBridgePairings()
                         }
                     } else {
+                        print("getting bridge pairings 2")
                         self.getBridgePairings()
                     }
                 } else {
                     user.hasResetPairs = true
                     user.save { (_) in
+                        print("getting bridge pairings 3")
                         self.getBridgePairings()
                     }
                 }
@@ -169,6 +174,7 @@ class SwipeViewController: UIViewController {
     }
     
     func getBridgePairings() {
+        print("get Bridge Pairings ran")
         for view in layout.cardsLimitMetViews {
             view.alpha = 0
         }
@@ -200,6 +206,7 @@ class SwipeViewController: UIViewController {
             let dateAfter = Date()
             let timeInterval = dateAfter.timeIntervalSince(dateBefore)
             var delay = 0.0
+            print("timeInterval - \(timeInterval)")
             if timeInterval < 2.0 {
                 delay = 2.0 - timeInterval
             }

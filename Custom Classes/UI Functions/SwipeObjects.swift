@@ -106,46 +106,23 @@ class SwipeObjects {
     }
     
     class SwipeCountdownLabelView: UIView, CountdownLabelDelegate {
-        let countdownLabel: CountdownLabel
+        var countdownLabel: CountdownLabel
         
         var countdownFinishedCompletion: (() -> Void)?
         
         init() {
-            
-            let currentDate = Date()
-            var targetDate = Date()
-            let calendar = Calendar(identifier: .gregorian)
-            
-            let secondsFromGMT: Int = TimeZone.current.secondsFromGMT()
-            let minutesFromGMT = secondsFromGMT/60
-            let hoursFromGMT = minutesFromGMT/60
-            let hoursFromEST = hoursFromGMT + 4
-            
-            print(hoursFromGMT)
-            print(hoursFromEST)
-            
-            if let newDate = calendar.date(bySetting: .hour, value: 17+hoursFromEST, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
-                targetDate = newDate
-                print("target date set in 1")
-                print(targetDate)
-            }
-                        
-            if calendar.component(.hour, from: currentDate) >= 17+hoursFromEST { // Move target to next day
-                if let newDate = calendar.date(byAdding: .day, value: 1, to: targetDate) {
-                    targetDate = newDate
-                    print("target date set in 2")
-                    print(targetDate)
-                }
-            }
-            
-            countdownLabel = CountdownLabel(frame: CGRect(), fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
-            print(currentDate)
-            print(targetDate)
-            print(countdownLabel.text!)
-            //countdownLabel = CountdownLabel(frame: CGRect(), minutes: 10)
+            countdownLabel = CountdownLabel(frame: CGRect())
             
             super.init(frame: CGRect())
             
+            let currentDate = Date()
+            let targetDate = getTargetDate(currentDate: currentDate)
+            countdownLabel = CountdownLabel(frame: CGRect(), fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            print(currentDate)
+            print(targetDate)
+            //countdownLabel = CountdownLabel(frame: CGRect(), minutes: 20)
+            print(countdownLabel.text!)
+
             countdownLabel.countdownDelegate = self
             
             countdownLabel.textColor = Constants.Colors.necter.textGray
@@ -155,10 +132,21 @@ class SwipeObjects {
             addSubview(countdownLabel)
             countdownLabel.sizeToFit()
             countdownLabel.autoPinEdgesToSuperviewEdges()
+            
         }
         
         func resetCountdownTime() {
+            
+            print("resetCountdownTime")
             let currentDate = Date()
+            let targetDate = getTargetDate(currentDate: currentDate)
+            
+            countdownLabel.setCountDownDate(fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
+            //countdownLabel.setCountDownTime(minutes: 20)
+            countdownLabel.start()
+        }
+        
+        func getTargetDate (currentDate: Date) -> Date {
             var targetDate = Date()
             let calendar = Calendar(identifier: .gregorian)
             
@@ -177,9 +165,7 @@ class SwipeObjects {
                 }
             }
             
-            countdownLabel.setCountDownDate(fromDate: currentDate as NSDate, targetDate: targetDate as NSDate)
-            //countdownLabel.setCountDownTime(minutes: 10)
-            countdownLabel.start()
+            return targetDate
         }
         
         func startCountdown() {
@@ -193,6 +179,7 @@ class SwipeObjects {
         func countingAt(timeCounted: TimeInterval, timeRemaining: TimeInterval) {
             if timeRemaining == 0 {
                 if let countdownFinishedCompletion = countdownFinishedCompletion {
+                    print("countdownFinishedCompletion")
                     countdownFinishedCompletion()
                 }
                 resetCountdownTime()
