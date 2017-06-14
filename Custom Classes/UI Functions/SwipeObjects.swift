@@ -147,25 +147,37 @@ class SwipeObjects {
         }
         
         func getTargetDate (currentDate: Date) -> Date {
-            var targetDate = Date()
+            // initializing the user's calendar
             let calendar = Calendar(identifier: .gregorian)
             
+            // Determining 5pm est in the user's current timezone set to GMT for swift Date protocol
             let secondsFromGMT: Int = TimeZone.current.secondsFromGMT()
             let minutesFromGMT = secondsFromGMT/60
             let hoursFromGMT = minutesFromGMT/60
             let hoursFromEST = hoursFromGMT + 4
+            var hourValue = 17+hoursFromEST
             
-            if let newDate = calendar.date(bySetting: .hour, value: 17+hoursFromEST, of: targetDate) { // 21:00 GMT = 17:00 EST = 5:00 PM EST
-                targetDate = newDate
+            // Setting hourValue if adjusted hour value is greater than or equal to 24
+            if hourValue >= 24 {
+                hourValue = hourValue-24
             }
             
-            if calendar.component(.hour, from: currentDate) >= 17+hoursFromEST { // Move target to next day
-                if let newDate = calendar.date(byAdding: .day, value: 1, to: targetDate) {
-                    targetDate = newDate
-                }
+            // Setting date componenets for the targetDate with the determined hourValue
+            var dateComponents = calendar.dateComponents([.year, .month, .day], from: currentDate)
+            dateComponents.hour = hourValue
+            dateComponents.minute = 0
+            dateComponents.second = 0
+            
+            // Moving target to next day if the targetDate has already passed for the currentDay
+            if calendar.component(.hour, from: currentDate) >= hourValue {
+                let dayFromCurrentDate = calendar.component(.day, from: currentDate)
+                dateComponents.day = dayFromCurrentDate + 1
             }
             
-            return targetDate
+            // Setting and returning the target Date
+            // FIXME: Force unwrap used instead of error message sent to user
+            return calendar.date(from: dateComponents)!
+            
         }
         
         func startCountdown() {
