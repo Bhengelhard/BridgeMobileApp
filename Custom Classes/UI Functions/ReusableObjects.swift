@@ -85,7 +85,7 @@ class ReusableObjects {
                 pageControl.numberOfPages = arrayOfVCs.count
                 pageControl.currentPage = startingIndex
                 pageControl.pageIndicatorTintColor = UIColor.lightGray
-                pageControl.currentPageIndicatorTintColor = DisplayUtility.gradientColor(size: pageControl.frame.size)
+                pageControl.currentPageIndicatorTintColor = Constants.Colors.necter.orange
                 
                 view.addSubview(pageControl)
             }
@@ -155,7 +155,11 @@ class ReusableObjects {
         init() {
             super.init(frame: CGRect())
             
-            setImage(#imageLiteral(resourceName: "Profile_Invite_Button"), for: .normal)
+            //setImage(#imageLiteral(resourceName: "Profile_Invite_Button"), for: .normal)
+            self.backgroundColor = Constants.Colors.necter.orange
+            self.setTitle("INVITE FRIENDS", for: .normal)
+            self.titleLabel?.font = Constants.Fonts.bold24
+            
             layer.shadowColor = UIColor.black.cgColor
             layer.shadowOpacity = 0.4
             layer.shadowOffset = .init(width: 1, height: 1)

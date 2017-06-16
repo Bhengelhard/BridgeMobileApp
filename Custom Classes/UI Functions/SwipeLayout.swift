@@ -58,7 +58,7 @@ class SwipeLayout {
             self.view = view
             
             // MARK: Layout Objects
-            let margin: CGFloat = 20
+            let margin: CGFloat = 15
             
             // Layout the navigation bar at the top of the view for navigating from the SwipeViewController to the MessagesViewController and the MyProfileViewController
             view.addSubview(navBar)
@@ -168,16 +168,16 @@ class SwipeLayout {
             
             // Layout top swipe card
             view.addSubview(topSwipeCard)
-            topSwipeCard.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 15)
-            topSwipeCard.autoPinEdge(.bottom, to: .top, of: nectButton, withOffset: -10)
+            topSwipeCard.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: margin)
+            topSwipeCard.autoPinEdge(.bottom, to: .top, of: nectButton, withOffset: -margin)
             topSwipeCard.autoSetDimension(.width, toSize: view.frame.width - 40)
             topSwipeCardHorizontalConstraint = topSwipeCard.autoAlignAxis(toSuperviewAxis: .vertical)
             //topSwipeCardHorizontalConstraint = topSwipeCard.autoPinEdge(toSuperviewEdge: .left, withInset: view.frame.width/2 - topSwipeCard.frame.width/2)
             
             // Layout bottom swipe card
             view.insertSubview(bottomSwipeCard, belowSubview: topSwipeCard)
-            bottomSwipeCard.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: 15)
-            bottomSwipeCard.autoPinEdge(.bottom, to: .top, of: nectButton, withOffset: -10)
+            bottomSwipeCard.autoPinEdge(.top, to: .bottom, of: navBar, withOffset: margin)
+            bottomSwipeCard.autoPinEdge(.bottom, to: .top, of: nectButton, withOffset: -margin)
             bottomSwipeCard.autoSetDimension(.width, toSize: view.frame.width - 40)
             bottomSwipeCardHorizontalConstraint = bottomSwipeCard.autoAlignAxis(toSuperviewAxis: .vertical)
             //bottomSwipeCardHorizontalConstraint = bottomSwipeCard.autoPinEdge(toSuperviewEdge: .left, withInset: view.frame.width/2 - bottomSwipeCard.frame.width/2)

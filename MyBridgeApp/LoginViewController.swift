@@ -68,33 +68,31 @@ class LoginViewController: UIViewController {
     // MARK: - Backend Functions
     // Update Facebook Friends and Return whether user is SignedIn
     func authenticateUser() {
+        //let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        //hud.label.text = "Loading..."
+        //print("Authentication should display")
         
         //Checking if user is already logged in
-        PFUser.current()?.fetchInBackground(block: { (currentUser, error) in
-            if let currentUser = currentUser as? PFUser {
-                if currentUser.objectId != nil {
-                    if let hasLoggedIn = currentUser["has_logged_in"] as? Bool {
-                        if hasLoggedIn {
-                            // Record Login with Firebase
-                            if let id = currentUser.objectId {
-                                AnalyticsLogs.loggedIn(userObjectID: id)
-                            }
-                            
-                            //Updating the user's friends
-                            let fbFunctions = FacebookFunctions()
-                            fbFunctions.updateFacebookFriends()
-                            
-                            // Segue to SwipeViewController
-                            self.performSegue(withIdentifier: "showSwipe", sender: self)
-                        } else {
-                            PFUser.logOutInBackground()
-                        }
-                    } else {
-                        PFUser.logOutInBackground()
+        User.fetchCurrent { (user) in
+            if let user = user {
+                if user.id != nil {
+                    // Record Login with Firebase
+                    if let id = user.id {
+                        AnalyticsLogs.loggedIn(userObjectID: id)
                     }
+                    
+                    //Updating the user's friends
+                    let fbFunctions = FacebookFunctions()
+                    fbFunctions.updateFacebookFriends()
+                    
+                    // Hide Authentication Popup and Segue to SwipeViewController
+                    //hud.hide(animated: false)
+                    print("Authentication should hide 1")
+                    self.performSegue(withIdentifier: "showSwipe", sender: self)
+                    
                 }
             }
-        })
+        }
     }
 
     // MARK: - Navigation

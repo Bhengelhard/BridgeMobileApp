@@ -15,7 +15,6 @@ class MyProfileLayout {
     let profilePictureBackground = MyProfileObjects.ProfilePictureBackground()
     let profilePicture = MyProfileObjects.ProfilePicture()
     let editProfileButton = MyProfileObjects.EditProfileButton()
-//    let reputationScore = MyProfileObjects.ReputationScore()
     let name = MyProfileObjects.Name()
     let settingsButton = MyProfileObjects.SettingsButton()
     let friendsImage = ReusableObjects.FriendsImage()

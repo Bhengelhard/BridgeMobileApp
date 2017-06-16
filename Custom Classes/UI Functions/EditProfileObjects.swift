@@ -17,8 +17,7 @@ class EditProfileObjects {
             
             rightButton.setTitle("Done", for: .normal)
             rightButton.sizeToFit()
-            let gradientColor = DisplayUtility.gradientColor(size: rightButton.frame.size)
-            rightButton.setTitleColor(gradientColor, for: .normal)
+            rightButton.setTitleColor(Constants.Colors.necter.orange, for: .normal)
             
             navItem.title = "Edit Profile"
         }

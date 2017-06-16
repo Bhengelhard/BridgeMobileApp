@@ -18,8 +18,7 @@ class EditProfileInfoObjects {
             rightButton.setTitle("Done", for: .normal)
             //rightButton.titleLabel?.font = Constants.Fonts.light18
             rightButton.sizeToFit()
-            let gradientColor = DisplayUtility.gradientColor(size: rightButton.frame.size)
-            rightButton.setTitleColor(gradientColor, for: .normal)
+            rightButton.setTitleColor(Constants.Colors.necter.orange, for: .normal)
             
             shadowImage = nil
                         

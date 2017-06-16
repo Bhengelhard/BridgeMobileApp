@@ -46,7 +46,7 @@ class FBLogin {
                     
                     if user.isNew {
                         hud.label.numberOfLines = 2
-                        hud.label.text = "Loading...\nThis may take a while."
+                        hud.label.text = "Loading...\nThis may take a moment."
                     } else {
                         hud.label.text = "Loading..."
                     }

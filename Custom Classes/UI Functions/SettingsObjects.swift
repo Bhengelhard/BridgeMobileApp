@@ -17,8 +17,7 @@ class SettingsObjects {
             
             rightButton.setTitle("Done", for: .normal)
             rightButton.sizeToFit()
-            let gradientColor = DisplayUtility.gradientColor(size: rightButton.frame.size)
-            rightButton.setTitleColor(gradientColor, for: .normal)
+            rightButton.setTitleColor(Constants.Colors.necter.orange, for: .normal)
 
             navItem.title = "Settings"
         }
@@ -250,12 +249,10 @@ class SettingsObjects {
         
         // Helper Functions
         func setUpButton(button: UIButton, text: String) {
-            let gradientColor = DisplayUtility.gradientColor(size: buttonSize)
-            button.backgroundColor = gradientColor
+            button.backgroundColor = Constants.Colors.necter.orange
             button.setTitle(text, for: .normal)
             button.setTitleColor(UIColor.white, for: .normal)
             button.titleLabel?.font = Constants.Fonts.bold16
-            button.layer.cornerRadius = 12
         }
         
         // Targets

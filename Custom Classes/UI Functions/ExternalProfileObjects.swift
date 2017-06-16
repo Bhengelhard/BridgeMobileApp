@@ -300,12 +300,11 @@ class ExternalProfileObjects {
             self.setTitle("MESSAGE", for: .normal)
             self.titleLabel?.font = Constants.Fonts.bold24
             self.contentVerticalAlignment = UIControlContentVerticalAlignment.bottom
-            self.layer.cornerRadius = 18
-            self.backgroundColor = DisplayUtility.gradientColor(size: size)
+            self.backgroundColor = Constants.Colors.necter.orange
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
-            self.layer.shadowColor = UIColor.black.cgColor
-            self.layer.shadowOpacity = 0.4
-            self.layer.shadowOffset = .init(width: 1, height: 1)
+//            self.layer.shadowColor = UIColor.black.cgColor
+//            self.layer.shadowOpacity = 0.4
+//            self.layer.shadowOffset = .init(width: 1, height: 1)
             
         }
         

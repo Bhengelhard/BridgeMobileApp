@@ -76,7 +76,7 @@ class PopupViewObjects {
             self.setTitle(title, for: .normal)
             self.setTitleColor(UIColor.white, for: .normal)
             self.titleLabel?.font = Constants.Fonts.bold16
-            self.backgroundColor = DisplayUtility.gradientColor(size: size)
+            self.backgroundColor = Constants.Colors.necter.orange
             self.layer.cornerRadius = 18
             self.layer.shadowColor = UIColor.black.cgColor
             self.layer.shadowOpacity = 0.4
@@ -98,7 +98,7 @@ class PopupViewObjects {
             self.setTitle("KEEP SWIPING", for: .normal)
             self.setTitleColor(UIColor.white, for: .normal)
             self.titleLabel?.font = Constants.Fonts.bold16
-            self.layer.borderColor = DisplayUtility.gradientColor(size: size).cgColor
+            self.layer.borderColor = Constants.Colors.necter.orange.cgColor
             self.layer.borderWidth = 2
             self.layer.cornerRadius = 18
             self.layer.shadowColor = UIColor.black.cgColor

@@ -125,6 +125,8 @@ class User: NSObject {
     
     var hasResetPairs: Bool?
     
+    var hasLoggedIn: Bool?
+    
     private var pictureIDsToPictures = [String: Picture]()
     
     private init(parseUser: PFUser) {
@@ -240,6 +242,10 @@ class User: NSObject {
         
         if let parsehasResetPairs = parseUser["has_reset_pairs"] as? Bool {
             hasResetPairs = parsehasResetPairs
+        }
+        
+        if let parseHasLoggedIn = parseUser["has_logged_in"] as? Bool {
+            hasLoggedIn = parseHasLoggedIn
         }
         
         super.init()

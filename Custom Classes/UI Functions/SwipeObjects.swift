@@ -45,13 +45,15 @@ class SwipeObjects {
             self.setTitleColor(UIColor.white, for: .normal)
             self.titleLabel?.font = Constants.Fonts.bold24
             self.contentVerticalAlignment = UIControlContentVerticalAlignment.bottom
-            self.layer.cornerRadius = 15
             
             if text == "NECT" {
-                self.backgroundColor = DisplayUtility.gradientColor(size: self.size)
+                self.backgroundColor = Constants.Colors.necter.orange
             } else {
                 self.backgroundColor = Constants.Colors.necter.buttonGray
             }
+            
+            // Effect when highlighted
+            self.showsTouchWhenHighlighted = true
         }
         
         required init?(coder aDecoder: NSCoder) {

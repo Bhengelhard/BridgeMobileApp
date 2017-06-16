@@ -193,7 +193,6 @@ class NecterJSQMessagesViewController: JSQMessagesViewController {
                 MBProgressHUD.hide(for: self.view, animated: true)
             }
             
-            //collectionView.backgroundColor = DisplayUtility.gradientColor(size: collectionView.frame.size)
         }
     }
     

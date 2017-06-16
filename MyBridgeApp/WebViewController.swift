@@ -48,8 +48,7 @@ class WebViewController: UIViewController {
         // Setting Necter Navbar
         navBar.rightButton.setTitle("Done", for: .normal)
         navBar.rightButton.sizeToFit()
-        let gradientColor = DisplayUtility.gradientColor(size: navBar.rightButton.frame.size)
-        navBar.rightButton.setTitleColor(gradientColor, for: .normal)
+        navBar.rightButton.setTitleColor(Constants.Colors.necter.orange, for: .normal)
         navBar.navItem.title = titleString
         navBar.rightButton.addTarget(self, action: #selector(doneTapped(_:)), for: .touchUpInside)
         

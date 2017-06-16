@@ -32,7 +32,7 @@ class ReasonForConnection: UIView, UITextViewDelegate {
         
         self.backgroundColor = Constants.Colors.necter.backgroundGray
         self.layer.cornerRadius = 8
-        self.layer.borderColor = Constants.Colors.necter.textDarkGray.cgColor //DisplayUtility.gradientColor(size: self.frame.size).cgColor
+        self.layer.borderColor = Constants.Colors.necter.textDarkGray.cgColor
         self.layer.borderWidth = 3
         self.clipsToBounds = true
         
@@ -187,7 +187,6 @@ class ReasonForConnection: UIView, UITextViewDelegate {
             textView.textColor = UIColor.black //Constants.Colors.necter.textDarkGray
             sendButton.isEnabled = true
             sendButton.isSelected = true
-            //sendButton.backgroundColor = DisplayUtility.gradientColor(size: sendButton.frame.size)
         }
         
         return true

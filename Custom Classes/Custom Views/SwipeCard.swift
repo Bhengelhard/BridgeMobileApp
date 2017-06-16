@@ -26,11 +26,7 @@ class SwipeCard: UIView {
     init () {
         super.init(frame: CGRect())
 
-        //frame = swipeCardFrame()
 		clipsToBounds = true
-
-        //topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
-        //bottomHalf.frame = CGRect(x: 0, y: 0.5*self.frame.height, width: self.frame.width, height: 0.5*self.frame.height)
         
         self.addSubview(topHalf)
         topHalf.autoPinEdge(toSuperviewEdge: .top)
@@ -59,8 +55,6 @@ class SwipeCard: UIView {
         let swipCardCornerRadius: CGFloat = 12
         self.layer.cornerRadius = swipCardCornerRadius
         
-        //topHalf = HalfSwipeCard()
-        //topHalf.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5*self.frame.height)
         topHalf.initialize(name: bridgePairing.user1Name!)
         
         //applying rounded corners to the topHalf
