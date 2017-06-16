@@ -19,7 +19,12 @@ class ReusableObjects {
         init() {
             super.init(frame: CGRect())
             
-            self.setImage(#imageLiteral(resourceName: "FB_Login_Button"), for: .normal)
+            //self.setImage(#imageLiteral(resourceName: "FB_Login_Button"), for: .normal)
+            let facebookBlue = UIColor(red: 59/255, green: 89/255, blue: 152/255, alpha: 1.0)
+            self.backgroundColor = facebookBlue
+            self.setTitle("CONNECT WITH FACEBOOK", for: .normal)
+            self.titleLabel?.font = Constants.Fonts.bold16
+            self.showsTouchWhenHighlighted = true
             
         }
         
@@ -159,6 +164,7 @@ class ReusableObjects {
             self.backgroundColor = Constants.Colors.necter.orange
             self.setTitle("INVITE FRIENDS", for: .normal)
             self.titleLabel?.font = Constants.Fonts.bold24
+            self.showsTouchWhenHighlighted = true
             
             layer.shadowColor = UIColor.black.cgColor
             layer.shadowOpacity = 0.4

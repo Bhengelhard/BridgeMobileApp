@@ -253,6 +253,7 @@ class SettingsObjects {
             button.setTitle(text, for: .normal)
             button.setTitleColor(UIColor.white, for: .normal)
             button.titleLabel?.font = Constants.Fonts.bold16
+            button.showsTouchWhenHighlighted = true
         }
         
         // Targets

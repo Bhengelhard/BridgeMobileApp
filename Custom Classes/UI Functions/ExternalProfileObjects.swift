@@ -302,6 +302,7 @@ class ExternalProfileObjects {
             self.contentVerticalAlignment = UIControlContentVerticalAlignment.bottom
             self.backgroundColor = Constants.Colors.necter.orange
             self.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+            self.showsTouchWhenHighlighted = true
 //            self.layer.shadowColor = UIColor.black.cgColor
 //            self.layer.shadowOpacity = 0.4
 //            self.layer.shadowOffset = .init(width: 1, height: 1)
